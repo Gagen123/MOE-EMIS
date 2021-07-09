@@ -40,6 +40,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/insertWorkflow', ['uses' => 'WorkflowController@insertWorkflow']);
         $router->post('/updateTaskDetails', ['uses' => 'WorkflowController@updateTaskDetails']);
         $router->post('/insertNotification', ['uses' => 'WorkflowController@insertNotification']);
+        $router->post('/visitedNotification', ['uses' => 'WorkflowController@visitedNotification']);
         $router->post('/updateNextNotification', ['uses' => 'WorkflowController@updateNextNotification']);
     });
     $router->group(['prefix' => 'common'], function () use ($router){

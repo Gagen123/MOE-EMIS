@@ -263,10 +263,7 @@ class StaffLeadershipSerivcesController extends Controller{
         return $response_data;
     }
 
-    public function getleadershipDetailsForFeedback($id=""){
-        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getleadershipDetailsForFeedback/'.$id);
-        return $response_data;
-    }
+
 
     public function saveData(Request $request){
         $rules = [
@@ -306,6 +303,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'leadership_type'               =>  $request->leadership_type,
             'answer_type'                   =>  $request->answer_type,
             'answer'                        =>  $request->answer,
+            'display_order'                 =>  $request->display_order,
             'record_type'                   =>  $request->record_type,
             'action_type'                   =>  $request->action_type,
             'user_id'                       =>  $this->userId()
@@ -430,11 +428,49 @@ class StaffLeadershipSerivcesController extends Controller{
         if($request->action_type=="shortlist"){
             $current_status="Shortlisted";
         }
+        if($request->action_type=="interview"){
+            $current_status="Interviewed";
+        }
+        if($request->action_type=="select"){
+            $current_status="Selected";
+            $workflow_data=[
+                'db_name'           =>  'staff_database',
+                'table_name'        =>  'staff_leadership_application',
+                'service_name'      =>  'Leadership Selection',
+                'application_number'=>  $request->application_number,
+                'screen_id'         =>  $request->application_number,
+                'status_id'         =>  11,
+                'remarks'           =>  $request->verification_remarks,
+                'user_dzo_id'       =>  $this->getUserDzoId(),
+                'access_level'      =>  $this->getAccessLevel(),
+                'working_agency_id' =>  $this->getWrkingAgencyId(),
+                'action_by'         =>  $this->userId(),
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
+        if($request->action_type=="reject"){
+            $current_status="Rejected";
+            $workflow_data=[
+                'db_name'           =>  'staff_database',
+                'table_name'        =>  'staff_leadership_application',
+                'service_name'      =>  'Leadership Selection',
+                'application_number'=>  $request->application_number,
+                'screen_id'         =>  $request->application_number,
+                'status_id'         =>  0,
+                'remarks'           =>  $request->verification_remarks,
+                'user_dzo_id'       =>  $this->getUserDzoId(),
+                'access_level'      =>  $this->getAccessLevel(),
+                'working_agency_id' =>  $this->getWrkingAgencyId(),
+                'action_by'         =>  $this->userId(),
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
+
          //Notification to applicant
-         $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
-                    // dd($feed->participant,$appRole_id,$feed->partifipant_from);
-                    $staff_user_id=$staff_user_id[0]->user_id.',';
-         $notification_data=[
+        $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
+        // dd($feed->participant,$appRole_id,$feed->partifipant_from);
+        $staff_user_id=$staff_user_id[0]->user_id.',';
+        $notification_data=[
             'notification_for'              =>  'Updates on Leadership Selection',
             'notification_access_type'      =>  'all',
             'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
@@ -469,6 +505,8 @@ class StaffLeadershipSerivcesController extends Controller{
             'feedback_end_date'         =>  $request->feedback_end_date,
             'feedback_details'          =>  $request->feedback_details,
             'current_status'            =>  $current_status,
+            'interniew_date'            =>  $request->interniew_date,
+            'interniew_score'           =>  $request->interniew_score,
             'action_type'               =>  $request->action_type,
             'attachment_details'        =>  $attachment_details,
             'user_id'                   =>  $this->userId()
@@ -487,6 +525,38 @@ class StaffLeadershipSerivcesController extends Controller{
 
     public function getFeedbackData($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getFeedbackData/'.$id);
+        return $response_data;
+    }
+
+    public function getleadershipDetailsForFeedback($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/getleadershipDetailsForFeedback/'.$id);
+        // dd($response_data);
+        return $response_data;
+    }
+
+    public function saveFeedback(Request $request){
+        $request_data =[
+            'feedback_id'               =>  $request->feedback_id,
+            'application_number'        =>  $request->application_number,
+            'selection_type_id'         =>  $request->selection_type_id,
+            'position_title_id'         =>  $request->position_title_id,
+            'questionList'              =>  $request->questionList,
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedback', $request_data);
+        $notification_data=[
+            'notification_appNo'            =>  $request->application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        return $response_data;
+    }
+
+    public function updatedVisited($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/updatedVisited/'.$id);
         return $response_data;
     }
 

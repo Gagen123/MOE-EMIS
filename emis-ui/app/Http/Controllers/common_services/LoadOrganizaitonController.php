@@ -36,7 +36,6 @@ class LoadOrganizaitonController extends Controller{
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
         }
-
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
             $param=$id;
@@ -46,7 +45,7 @@ class LoadOrganizaitonController extends Controller{
         if($type=="gewoggwise"){
             $param=$id;
         }
-        
+
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }

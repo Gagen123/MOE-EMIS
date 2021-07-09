@@ -7,6 +7,7 @@
                         <tr>
                             <th>SL#</th>
                             <th>Application Number</th>
+                            <th>Selection For</th>
                             <th>Position</th>
                             <th>From Date</th>
                             <th>To Date</th>
@@ -17,7 +18,8 @@
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
                             <td>{{ item.application_number }}</td>
-                            <td>{{ selectionList[item.post_details.position_title] }}</td>
+                            <td>{{ selectionList[item.post_details.selection_type] }}</td>
+                            <td>{{ positionList[item.post_details.position_title] }}</td>
                             <td>{{ item.application_details.feedback_start_date }}</td>
                             <td>{{ item.application_details.feedback_end_date }}</td>
                             <td>
@@ -35,23 +37,14 @@ export default {
     data(){
         return{
             selectionList:{},
+            positionList:{},
             data_list:[],
 
         }
     },
     methods: {
-        getfeedbackdetails(){
-            let uri = '/staff/staffLeadershipSerivcesController/checkforfeedbackLink'
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.data_list=data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
-        getSelectionList(uri = 'questionAnswers/loadQuestionaries/loadServices_Leadership_Service'){
+        //get position details to populate form
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -63,12 +56,37 @@ export default {
                 console.log('err: '+error);
             });
         },
+        getfeedbackdetails(){
+            let uri = '/staff/staffLeadershipSerivcesController/checkforfeedbackLink'
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.data_list=data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                // this.positionList =  data.data.data;
+                 for(let i=0;i<data.data.data.length;i++){
+                    this.positionList[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
         loadeditpage(itme){
             this.$router.push({name:"open_feedback",params:{nomination_id:itme.id}});
         },
     },
     mounted(){
         this.getSelectionList();
+        this.loadPositionTitleList();
         this.getfeedbackdetails();
         this.dt =  $("#nominaiton-table").DataTable();
 

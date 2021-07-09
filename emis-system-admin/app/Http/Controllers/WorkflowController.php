@@ -256,5 +256,15 @@ class WorkflowController extends Controller{
         ];
         NotificationVisited::create($not_visited);
     }
+
+    public function visitedNotification(Request $request){
+        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
+        $record_id=$notificationDetails->id;
+        $not_visited=[
+            'notification_id'           =>  $record_id,
+            'user_id'                   =>  $request->action_by,
+        ];
+        NotificationVisited::create($not_visited);
+    }
 }
 

@@ -16,6 +16,7 @@ class SubjectAssessmentType extends Model
         'org_class_id',
         'org_stream_id',
         'aca_sub_id',
+        'show_in_result',
         'aca_rating_type_id',
         'class_stream',
         'pass_score',

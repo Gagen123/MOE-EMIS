@@ -2,22 +2,21 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="subject-group-table" class="table table-sm table-bordered table-striped">
+                <table id="reason_for_absent_table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Display Order</th>
-                            <th>Subject Group</th>
-                            <th>Subject Category</th>
+                            <th>SL#</th>
+                            <th>Name</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <tr v-for="(item, index) in subjectgroupList" :key="index">
-                            <td class="text-right">{{ item.display_order }}</td>
-                            <td>{{ item.name }}<span v-if="item.dzo_name"> ( {{ item.dzo_name }} )</span></td>
-                            <td>{{ item.sub_category_name }}</td>
+                        <tr v-for="(item, index) in reasonList" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ item.name }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
+
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -34,15 +33,15 @@
 export default {
     data(){
         return{
-            subjectgroupList:[],
+            reasonList:[],
+            dt:''
         }
     },
     methods:{
-        loadsubjectgroupList(uri = 'masters/loadAcademicMasters/all_subject_group'){
+        loadReasonsForAbsentList(uri = 'masters/loadAcademicMasters/all_reasons_for_absent'){
             axios.get(uri)
             .then(response => {
-                let data = response 
-                this.subjectgroupList =  data.data.data;
+                this.reasonList =  response.data.data;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -51,22 +50,22 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_subject_group',params: {data:data}});
+            this.$router.push({name:'edit_reason_for_absent',params: {data:data}});
         },
     },
     mounted(){ 
-        this.loadsubjectgroupList();
-        this.dt =  $("#subject-group-table").DataTable({
+        this.loadReasonsForAbsentList();
+        this.dt =  $("#reason_for_absent_table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
             ],
         })
     },
     watch: {
-        subjectgroupList(val) {
+        reasonList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#subject-group-table").DataTable()
+                this.dt =  $("#reason_for_absent_table").DataTable()
             });
         }
     }

@@ -51,6 +51,10 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Display Order:</label>
+                        <input type="number" name="display_order" v-model="form.display_order" id="display_order" class="form-control">
+                    </div>
                 </div>
                 <div class="row form-group" v-if="is_answer_option">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -111,6 +115,7 @@ export default {
                 name: '',
                 status: 1,
                 answer_type:'',
+                display_order:'',
                 answer:[{name:'',status:1}],
                 record_type:'Question',
                 action_type:'add',
