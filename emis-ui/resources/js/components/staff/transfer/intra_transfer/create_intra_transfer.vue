@@ -245,10 +245,10 @@ export default {
                 reason_id:'',
                 description:'',
                 current_date:'',
-                 type_id:'',
-
+                type_id:'',
                 preference_dzongkhag:[],
                 transferType:"intra_transfer",
+                service_name:"intra transfer",
                 preference_school1:'',
                 preference_school2:'',
                 preference_school3:'',
@@ -415,7 +415,9 @@ export default {
                                     }
                                 }
                                 let formData = new FormData();
+                                formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                formData.append('service_name', this.form.service_name);
                                 formData.append('preference_school1', this.form.preference_school1);
                                 formData.append('preference_school2', this.form.preference_school2);
                                 formData.append('preference_school3', this.form.preference_school3);

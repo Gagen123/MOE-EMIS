@@ -74,11 +74,8 @@ class CommonController extends Controller{
         ];
         $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
-<<<<<<< HEAD
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
-        // dd($tr_data);
-=======
-        $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+        // $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
 
         if(config('services.constant.deo_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.deo_role_id'))!==false){
             $approved_transfer_data="Valid";//pull approved Transfer application only for DEO role
@@ -87,7 +84,6 @@ class CommonController extends Controller{
             $approved_transfer_data="Invalid";
         }
 
->>>>>>> ce85b42cac3ed124fd0654c3a1de83e2b895f792
         if(config('services.constant.hrd_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
             $leadership_data="Valid";//pull leadership application only for HRD role
         }

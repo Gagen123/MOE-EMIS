@@ -250,6 +250,7 @@ export default {
                 preference_dzongkhag:[],
                 status: 'pending',
                 transferType:"inter_transfer",
+                service_name:"inter transfer",
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
@@ -418,6 +419,7 @@ export default {
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                formData.append('service_name', this.form.service_name);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
                                 formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
@@ -436,6 +438,8 @@ export default {
                                             title: 'Application for Transfer has been submitted for further action'
                                         });
                                     }
+                                    this.applyselect2();
+                                    this.$router.push('/list_inter_transfer');
                                 })
                                 .catch((error) => {
                                     console.log("Errors:"+error)

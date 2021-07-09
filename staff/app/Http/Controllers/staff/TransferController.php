@@ -210,11 +210,16 @@ class TransferController extends Controller{
         return $this->successResponse($response_data);
     }
     public function updateTransferApplication(Request $request){
+       
         $request_data =[
             'status'                       =>   $request->status,
             'updated_by'                   =>   $request->user_id,
             'updated_at'                   =>   date('Y-m-d h:i:s'),
+            'status_id'                    =>   $request->status_id,
         ];
+        if($request->status_id==10){
+            TransPrefenreces::create($request_data);
+        }
         if($request->status=="Approved"){
             $additional_data=[
                 'dzongkhagApproved'  =>   $request->dzongkhagApproved,

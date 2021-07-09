@@ -21,30 +21,6 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <!-- <div class="callout callout-success">
-                            <span><label><u>Transfer Config Detials</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Year:</label>
-                                    <span class="text-blue text-bold">{{t_year}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">From Date:</label>
-                                    <span class="text-blue text-bold">{{t_from_data}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">End Date:</label>
-                                    <span class="text-blue text-bold">{{t_to_date}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Remarks:</label>
-                                    <span class="text-blue text-bold">{{t_remarks}}</span>
-                                </div>
-                            </div>
-                        </div> -->
-
                         <div class="callout callout-success">
                             <span><label><u>Applicant Detials</u></label></span>
                             <div class="form-group row">
@@ -199,6 +175,7 @@ export default {
                 application_no:'',
                 staff_id: '',
                 status_id:'',
+                service_name:'',
                 transfer_reason_id:'',
                 description:'',
                 preference_dzongkhag1:'',
@@ -225,26 +202,34 @@ export default {
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
-                // for(let i=0;i<data.preferences.length;i++){
-                //     if(i==0){
-                //         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
-                //         $('#approvedDzongkhag1').val(data.preferences[i].dzongkhag_id);
-                //     }
-                //     if(i==1){
-                //         this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
-                //         $('#approvedDzongkhag2').val(data.preferences[i].dzongkhag_id);
-                //     }
-                //     if(i==2){
-                //         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
-                //         $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
-                //     }
-                // }
+                this.draft_attachments=data.attachments;
+
+                for(let i=0;i<data.preferences.length;i++){
+                    if(i==0){
+                        this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag1').val(data.preferences[i].dzongkhag_id);
+                    }
+                    if(i==1){
+                        this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag2').val(data.preferences[i].dzongkhag_id);
+                    }
+                    if(i==2){
+                        this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
+                        $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
+                    }
+                }
                 if(this.form.status_id!=10 && this.form.status_id!=0){
                     $('#verifyId').show();
                 }
                 if(this.form.status_id==2 ){
                     $('#approveId').show();
-                     $('#verifyId').hide();
+                    $('#verifyId').hide();
+                    $('#approveDzohead').show();
+                    $('#approveDzo1').show();
+                    $('#approveDzo2').show();
+                    $('#approveDzo3').show();
+                    
+                    
                 }
             })
             .catch((error) =>{

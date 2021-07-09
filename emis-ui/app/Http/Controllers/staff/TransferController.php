@@ -13,7 +13,7 @@ class TransferController extends Controller{
     use AuthUser;
     public $database_name="staff_db";
     public $table_name="transfer_application";
-    public $service_name="Transfer";
+    // public $service_name="Transfer";
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
@@ -52,6 +52,7 @@ class TransferController extends Controller{
         return $response_data;
     }
     public function submitFinalapplicantDetails(Request $request){
+        $service_name = $request->service_name;
         $rules = [
             'transferType'              =>  'required  ',
         ];
@@ -59,10 +60,6 @@ class TransferController extends Controller{
             'transferType.required'     => 'Please select this',
         ];
         $this->validate($request, $rules,$customMessages);
-        // $workflowdet=$this->getsubmitterStatus('transfer');
-        // if($workflowdet['screen_id']=="0"){
-        //     return "No Screen";
-        // }
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
@@ -103,7 +100,7 @@ class TransferController extends Controller{
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
+            'service_name'      =>$request->service_name,
             'application_number'=>  json_decode($response_data)->data->aplication_number,
             'screen_id'         =>  json_decode($response_data)->data->aplication_number,
             'status_id'         =>  1,
@@ -147,6 +144,7 @@ class TransferController extends Controller{
         return json_encode($loadTransferDetails);
     }
     public function updateTransferApplication(Request $request){
+        $service_name = $request->service_name;
         $org_status='Verified';
         $work_status=$request->status_id+1;
         if($request->actiontype=="reject"){
@@ -160,7 +158,7 @@ class TransferController extends Controller{
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$this->service_name,
+            'service_name'      =>$request->service_name,
             'application_number'=>$request->application_no,
             'screen_id'         =>$request->application_no,
             'status_id'         =>$work_status,
@@ -169,8 +167,9 @@ class TransferController extends Controller{
             'access_level'      =>$this->getAccessLevel(),
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
+            'dzongkhagApproved' =>$request->dzongkhagApproved, 
         ];
-        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        // $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         // $files = $request->attachments;
         // $filenames = $request->attachmentname;
         // $remarks = $request->remarks;
@@ -199,129 +198,18 @@ class TransferController extends Controller{
             'status'                        =>   $org_status,
             'application_number'            =>   $request->application_no,
             'remarks'                       =>   $request->remarks,
+            'status_id'                     =>$work_status,
             // 'attachment_details'            =>   $attachment_details,
             'user_id'                       =>   $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         return $response_data;
     }
-    // public function updateTransferApplication(Request $request){
-    //     $work_status=$request->status_id+1;
-    //     $app_status='Pending for approval';
-    //     $notification_data=[
-    //         'notification_for'              =>  'Transfer Application',
-    //         'notification_access_type'      =>  'all',
-    //         'notification_appNo'            =>  $request->application_no,
-    //         'dzo_id'                        =>  $this->getUserDzoId(),
-    //         'working_agency_id'             =>  $this->getWrkingAgencyId(),
-    //         'access_level'                  =>  $this->getAccessLevel(),
-    //         'action_by'                     =>  $this->userId(),
-    //     ];
-    //     $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
-    //     $user_id=$appRole_id[0]->user_id;
-    //     if($request->actiontype=="reject"){
-    //         $work_status=0;
-    //         $app_status="Rejected";
-    //         $notification_data=$notification_data+[
-    //             'notification_message'          =>  'Your Application for Leave has been rejected. Reason for the rejection: '.$request->remarks,
-    //             'notification_type'             =>  'user',
-    //             'call_back_link'                =>  'notificationMessage',
-    //             'user_role_id'                  =>  $user_id,
-    //         ];
-    //     }
-    //     else if($request->actiontype=="approve"){
-    //         $app_status="Approved";
-    //         $work_status=10;
-    //         $notification_data=$notification_data+[
-    //             'notification_message'          =>  'Your Application for Leave has been Approved ',
-    //             'notification_type'             =>  'user',
-    //             'call_back_link'                =>  'notificationMessage',
-    //             'user_role_id'                  =>  $user_id,
-    //         ];
-    //     }
-    //     else{
-    //         //get next role id from transfer config to send notification.
-    //         $response_data= json_decode($this->apiService->listData('emis/staff/transfer/getAppVeriTransferConfigDetails/'.$request->transfer_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds')));
-    //         $notification_data=$notification_data+[
-    //             'notification_message'          =>  '',
-    //             'notification_type'             =>  'role',
-    //             'call_back_link'                =>  'tasklist',
-    //             'user_role_id'                  =>  $response_data->role_id,
-    //         ];
-    //     }
-    //     $workflow_data=[
-    //         'db_name'           =>  $this->database_name,
-    //         'table_name'        =>  $this->transfer_table_name,
-    //         'service_name'      =>  $this->service_name,
-    //         'application_number'=>  $request->application_number,
-    //         'screen_id'         =>  $request->application_number,
-    //         'status_id'         =>  $work_status,
-    //         'remarks'           =>  $request->remarks,
-    //         'user_dzo_id'       =>  $this->getUserDzoId(),
-    //         'access_level'      =>  $this->getAccessLevel(),
-    //         'working_agency_id' =>  $this->getWrkingAgencyId(),
-    //         'action_by'         =>  $this->userId(),
-    //     ];
-    //     $update_data =[
-    //         'status'                       =>   $app_status,
-    //         'application_number'           =>   $request->application_number,
-    //         'remarks'                      =>   $request->remarks,
-    //         'user_id'                      =>   $this->userId()
-    //     ];
-    //     $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
-    //     // $this->apiService->createData('emis/staff/staffServices/updateNextNotification'.$notification_data);
-
-    //     $response_data= $this->apiService->createData('emis/staff/staffServices/updateTransferApplication', $update_data);
-    //     return $response_data;
-    // }
-
-    // public function updateTransferApplication1(Request $request){
-    //     $workflowdet=$this->getcurrentworkflowStatusForUpdate('transfer');
-    //     $work_status=$workflowdet['status'];
-    //     $transfer_status='Under Process';
-    //     if($request->actiontype=="reject"){
-    //         $work_status=0;
-    //         $transfer_status="Rejected";
-    //     }
-    //     else if($request->actiontype=="approve"){
-    //         $transfer_status="Approved";
-    //         $work_status=10;
-    //     }
-    //     else{
-
-    //     }
-    //     $workflow_data=[
-    //         'db_name'           =>$this->database_name,
-    //         'table_name'        =>$this->table_name,
-    //         'service_name'      =>$this->service_name,
-    //         'application_number'=>$request->application_no,
-    //         'screen_id'         =>$workflowdet['screen_id'],
-    //         'status_id'         =>$work_status,
-    //         'remarks'           =>$request->remarks,
-    //         'user_dzo_id'       =>$this->getUserDzoId(),
-    //         'access_level'      =>$this->getAccessLevel(),
-    //         'working_agency_id' =>$this->getWrkingAgencyId(),
-    //         'action_by'         =>$this->userId(),
-    //     ];
-    //     $update_data =[
-    //         'status'                       =>   $transfer_status,
-    //         'application_number'           =>   $request->application_no,
-    //         'dzongkhagApproved'           =>   $request->dzongkhagApproved,
-    //         'remarks'                      =>   $request->remarks,
-    //         'user_id'                      =>   $this->userId()
-    //     ];
-    //     // dd($update_data);
-    //     $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
-    //     $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $update_data);
-    //     return $response_data;
-    // }
-
     public function LoadSchoolByDzoId($type="",$parent_id=""){
         $parent_id =$this->getUserDzoId();
         $type = "userdzongkhagwise";
         $response_data = $this->apiService->listData('emis/common_services/loadOrgList/'.$type.'/'.$parent_id);
+
         return $response_data;
     }
     public function loadtransferDetails($type=""){

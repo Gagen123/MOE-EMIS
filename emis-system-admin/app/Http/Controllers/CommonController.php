@@ -29,6 +29,7 @@ class CommonController extends Controller{
             'org'                       =>  $request->org,
             'leave_config_data'         =>  $request->leave_config_data,
             'leadership_config_data'    =>  $request->leadership_config_data,
+            'approved_transfer_data'    =>  $request->approved_transfer_data,
             'dzongkhag'                 =>  $request->dzongkhag,
             'user_id'                   =>  $request->user_id,
             'type'                      =>  $request->type,
@@ -53,10 +54,11 @@ class CommonController extends Controller{
             return DB::select($result_data);
         }
         else{
-            if(strtolower($access_level)=="dzongkhag"){
+            if(strtolower($access_level)=="Dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
-            if(strtolower($access_level)=="org"){
+
+            if(strtolower($access_level)=="Org"){
                 $result_data.='t.working_agency_id="'.$org_id.'" AND ';
             }
 
@@ -73,10 +75,14 @@ class CommonController extends Controller{
                     }
                 }
             }
-
             //pulling leave application
             if($work_flow_for_leave!=""){
-                $result_data.=' OR (t.claimed_by IS NULL AND (';
+                if($work_flow_from_system_admin_status==null || $work_flow_from_system_admin_status==""){
+                    $result_data.=' (t.claimed_by IS NULL AND (';
+                }
+                else{
+                    $result_data.=' OR (t.claimed_by IS NULL AND (';
+                }
                 foreach($work_flow_for_leave as $i => $srcn){
                     $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_leave)-1==$i){
@@ -90,7 +96,7 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
             }
 
             //pulling application for the transfer
@@ -108,8 +114,8 @@ class CommonController extends Controller{
                 }
             }
             //pulling approved transfer Application for DEO
-            if($request->approved_transfer_data=="Valid"){
-                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
+            if($request->approved_transfer_data=="Valid"){ 
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "inter transfer")';
             }
             //final query
             // return $result_data;
