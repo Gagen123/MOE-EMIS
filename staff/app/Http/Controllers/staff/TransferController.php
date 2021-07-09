@@ -217,7 +217,7 @@ class TransferController extends Controller{
         ];
         if($request->status=="Approved"){
             $additional_data=[
-                'dzongkhagApproved'           =>   $request->dzongkhagApproved,
+                'dzongkhagApproved'  =>   $request->dzongkhagApproved,
             ];
             $request_data = $request_data + $additional_data;
         }
