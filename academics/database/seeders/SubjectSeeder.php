@@ -281,7 +281,7 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Commercial Studies
+            // Commercial Studies 
             [
                 'id' => 'c14eddcc-de9b-11eb-9029-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
@@ -445,7 +445,7 @@ class SubjectSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
 
-            //Rigzhung
+            //Rigzhung Elective 
             [
                 'id' => 'd6d2410a-cefc-11eb-8c53-e89eb413ce43',
                 'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
@@ -461,7 +461,6 @@ class SubjectSeeder extends Seeder
 
 
             //Personal Characteristics 
-
             [
                 'id' => 'bbf1c5d8-b8d2-11eb-b80d-b07b2586b8c6',
                 'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
@@ -474,6 +473,216 @@ class SubjectSeeder extends Seeder
                 'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
                 'created_at' => Carbon::now(),
             ],
+
+             //Lekshe Jon Wang
+             [
+                'id' => '619fe69a-dec1-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Lekshe Jon Wang',
+                'dzo_name'=> 'ལེགས་བཤད་ལྗོན་དབང་།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'30',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+             //Ngadroen
+             [
+                'id' => '7d36c907-dec1-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Ngadroen',
+                'dzo_name'=> 'ངག་སྒྲོན།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'31',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+            
+             //Chu Dang Shing Gi Ten chey
+             [
+                'id' => '772478db-dec6-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Chu Dang Shing Gi Ten chey',
+                'dzo_name'=> 'ཆུ་དང་ཤིང་གི་བསྟན་བཅོས།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'32',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            //Nyen-ngag
+            [
+                'id' => '41f56c70-cefc-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Nyen-ngag',
+                'dzo_name'=> 'སྙན་ངག།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'33',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            //Nencha
+            [
+                'id' => '5d35b1ef-d02c-11eb-a9e6-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Nencha',
+                'dzo_name'=> 'སྙན་ཆ།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'34',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            // Tsi
+            [
+                'id' => '7d7f112a-cefd-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Tsi',
+                'dzo_name'=> 'སྩིས།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'35',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+
+             //Lhari
+             [
+                'id' => 'b01d3198-dec6-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Lhari',
+                'dzo_name'=> '',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'36',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+             //Ngon Ja
+            [
+                'id' => '69a4c327-decb-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Ngon Ja',
+                'dzo_name'=> 'མངོན་བརྗོད།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'37',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            //Sumtag Didom
+            [
+                'id' => 'e87ba5db-dec9-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Sumtag Didom',
+                'dzo_name'=> 'སུམ་རྟགས་སྡུད་སྡོམ།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'38',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            //Gyalrab 
+            [
+                'id' => '58994546-cefd-11eb-8c53-e89eb413ce43',
+                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Gyalrab',
+                'dzo_name'=> 'རྒྱལ་རབས།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'39',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+           
+            //Chenju
+            [
+                'id' => '30c668c2-decc-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Chenju',
+                'dzo_name'=> 'སྤྱོད་འཇུག།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'40',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            //Ngadroen Sumtag
+            [
+                'id' => '9dd9405d-decc-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Ngadroen Sumtag',
+                'dzo_name'=> 'ངག་སྒྲོན་སུམ་རྟགས།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'41',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+            // Jungrab
+            [
+                'id' => 'f6e28e34-decc-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Jungrab',
+                'dzo_name'=> 'འབྱུང་རབས།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'42',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+
+              // Ngadroen Dang Tagijupa
+            [
+                'id' => '67ef35a1-decd-11eb-9029-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Ngadroen Dang Tagijupa',
+                'dzo_name'=> 'ངག་སྒྲོན་དང་རྟགས་ཀྱི་འཇུག་པ།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'43',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+            // Dreklam
+            [
+                'id' => '86a6dcc7-e0ab-11eb-bd8c-e89eb413ce43',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_id' => null,
+                'name' => 'Dreklam',
+                'dzo_name'=> 'སྒྲིག་ལམ།',
+                'assessed_by_class_teacher' => '0',
+                'display_order'=>'44',
+                'status' => '1',
+                'created_by' => '013328f4-a381-4c6b-a270-8c071b366fc4',
+                'created_at' => Carbon::now(),
+            ],
+           
 
         ]);
     }

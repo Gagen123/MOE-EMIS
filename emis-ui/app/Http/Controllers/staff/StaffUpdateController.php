@@ -25,6 +25,7 @@ class StaffUpdateController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $request_data =[
             'id'                                =>  $request->id,
+            'staff_id'                          =>  $request->staff_id,
             'currier_stage'                     =>  $request->currier_stage,
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId()

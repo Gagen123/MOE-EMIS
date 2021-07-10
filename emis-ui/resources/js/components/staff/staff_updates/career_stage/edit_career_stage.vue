@@ -34,6 +34,7 @@ export default {
             cureerstageList:[],
             form: new form({
                 id:'',
+                staff_id:'',
                 currier_stage: '',
                 remarks:'',
             }),
@@ -72,16 +73,10 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="award_category"){
-                this.form.award_category=$('#award_category').val();
-                this.loadAwardType($('#award_category').val());
+            if(id=="currier_stage"){
+                this.form.currier_stage=$('#currier_stage').val();
             }
-            if(id=="award_type_id"){
-                this.form.award_type_id=$('#award_type_id').val();
-            }
-            if(id=="staff"){
-                this.form.staff=$('#staff').val();
-            }
+
         },
         loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
             axios.get(uri)
@@ -106,13 +101,13 @@ export default {
             Fire.$emit('changefunction',$(this).attr('id'));
         });
 
-        Fire.$on('changefunction',(id)=> {
+        Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
 
         this.loadactivecureerstageList();
         this.form.id=this.$route.params.id;
+        this.form.staff_id=this.$route.params.id;
     },
-
 }
 </script>
