@@ -21,7 +21,8 @@ class AcaSubject extends Migration
             $table->char('aca_sub_id',36)->nullable()->index();
             $table->string('name',100)->unique();
             $table->string('dzo_name',255)->nullable();
-            $table->unsignedTinyInteger('assessed_by_class_teacher')->index()->default(0);
+            $table->unsignedTinyInteger('assessed_by_class_teacher')->index()->default(0); 
+            $table->unsignedTinyInteger('is_special_educational_needs')->index()->default(0);
             $table->unsignedTinyInteger('display_order')->index();
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0-Disabled');
             $table->string('created_by',36)->index();

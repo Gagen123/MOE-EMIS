@@ -19,6 +19,7 @@ class Subject extends Model
         'aca_sub_category_id',
         'display_order',
         'assessed_by_class_teacher',
+        'is_special_educational_needs',
         'status',
         'created_by',
         'created_at',

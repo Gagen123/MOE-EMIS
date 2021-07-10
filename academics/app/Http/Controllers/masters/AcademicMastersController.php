@@ -51,6 +51,7 @@ class AcademicMastersController extends Controller
                         'name'  =>  $request['name'],
                         'aca_sub_category_id' => $request['aca_sub_category_id'],
                         'assessed_by_class_teacher' =>  $request['assessed_by_class_teacher'],
+                        'is_special_educational_needs' =>  $request['is_special_educational_needs'],
                         'dzo_name' => $request['dzo_name'],
                         'display_order'=> $request['display_order'],
                         'status'    =>  $request['status'],
@@ -77,12 +78,13 @@ class AcademicMastersController extends Controller
                 ];
                 $this->validate($request, $rules,  $customMessages);
                 $data = Subject::find($request['id']);
-                $messs_det='name:'.$data->name.'; aca_sub_category_id:'.$data->aca_sub_category_id.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; display_order:'.$data->display_order.'; status:'.$data->status;
+                $messs_det='name:'.$data->name.'; aca_sub_category_id:'.$data->aca_sub_category_id.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; is_special_educational_needs:'.$data->is_special_educational_needs.'; display_order:'.$data->display_order.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
+                $data->is_special_educational_needs = $request['is_special_educational_needs'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->update();
@@ -260,11 +262,11 @@ class AcademicMastersController extends Controller
     }
     public function loadAcademicMasters($param=""){
         if($param == "all_subject"){
-            $subject = DB::select('SELECT t1.id,t1.name,t1.assessed_by_class_teacher,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
+            $subject = DB::select('SELECT t1.id,t1.name,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
             return $this->successResponse($subject);
         }
         if($param == "all_active_subject"){
-            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
+            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,is_special_educational_needs,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject);
         }
         if($param == "all_active_subject_category"){
@@ -272,7 +274,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($active_subject_category);
         }
         if($param == "all_sub_subject"){
-            $subject = DB::select("SELECT t1.id, t1.aca_sub_id, t2.id AS aca_sub_category_id,t1.status,t1.name AS sub_subeject_name,t1.dzo_name,t3.dzo_name AS dzo_subject,t1.assessed_by_class_teacher,t1.display_order, t3.name AS sub_name, t2.name AS sub_category_name
+            $subject = DB::select("SELECT t1.id, t1.aca_sub_id, t2.id AS aca_sub_category_id,t1.status,t1.name AS sub_subeject_name,t1.dzo_name,t3.dzo_name AS dzo_subject,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.display_order, t3.name AS sub_name, t2.name AS sub_category_name
                   FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id JOIN aca_subject t3 ON t1.aca_sub_id= t3.id ORDER BY display_order");
             return $this->successResponse($subject);
         }
