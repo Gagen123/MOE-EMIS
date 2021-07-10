@@ -759,6 +759,7 @@ class ComposerStaticInit228fdf6ebc6ee1ea63a81755787ca814
         'App\\Services\\Emis\\Staff\\StaffSerivces' => __DIR__ . '/../..' . '/app/Services/Emis/Staff/StaffSerivces.php',
         'App\\Services\\System\\AdministrationService' => __DIR__ . '/../..' . '/app/Services/System/AdministrationService.php',
         'App\\Traits\\ApiResponser' => __DIR__ . '/../..' . '/app/Traits/ApiResponser.php',
+        'App\\Traits\\AuthUser' => __DIR__ . '/../..' . '/app/Traits/AuthUser.php',
         'App\\Traits\\ServiceHelper' => __DIR__ . '/../..' . '/app/Traits/ServiceHelper.php',
         'App\\Traits\\Uuid' => __DIR__ . '/../..' . '/app/Traits/Uuid.php',
         'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Cors.php',
