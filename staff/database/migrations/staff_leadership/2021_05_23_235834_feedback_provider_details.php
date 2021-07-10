@@ -26,9 +26,10 @@ class FeedbackProviderDetails extends Migration
             $table->char('status',50)->default('Pending')->nullable();
             $table->char('created_by',36)->nullable();
             $table->timestamp('created_at')->nullable(true);
+            $table->char('updated_by',36)->nullable();
+            $table->timestamp('updated_at')->nullable(true);
         });
     }
-
     public function down(){
         Schema::dropIfExists('staff_leadership_nominee_feedback_detials');
     }

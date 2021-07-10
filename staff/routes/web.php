@@ -186,6 +186,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/deleteNomination/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@deleteNomination']);
             $router->post('/verifyApproveNotify', ['uses' => 'staff\StaffLeadershipSerivcesController@verifyApproveNotify']);
             $router->get('/getFeedbackData/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getFeedbackData']);
+            $router->post('/saveFeedback', ['uses' => 'staff\StaffLeadershipSerivcesController@saveFeedback']);
+            $router->get('/updatedVisited/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@updatedVisited']);
         });
     });
 
@@ -198,6 +200,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         // });
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
 
+
+    });
+
+    //Staff Update Services
+    $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
+        $router->post('/saveStaffcareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffcareerStage']);
 
     });
 });

@@ -623,6 +623,24 @@ const routes = [
             },
         ]
     },
+     //Staff Update Services
+     { path:'/staff_update_services',
+        component: require('./components/staff/staff_updates/staff_update_index.vue').default,
+        children:[
+            { path: '/', name:'staff_update_services', component: require('./components/staff/staff_updates/staff_update_list.vue').default },
+
+            { path: '/career_stage',
+                component: require('./components/staff/staff_updates/career_stage/career_stage_index.vue').default,
+                children:[
+                    { path: '/', name:'career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/list_career_stage',name:'list_career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/create_career_stage',name:'create_career_stage', component: require('./components/staff/staff_updates/career_stage/create_career_stage.vue').default },
+                    { path: '/edit_career_stage', name:'edit_career_stage', component: require('./components/staff/staff_updates/career_stage/edit_career_stage.vue').default },
+                ],
+            },
+        ]
+    },
+
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
 
     //Leadership Selection

@@ -25,7 +25,17 @@ class StaffLeadershipApplication extends Migration
             $table->date('feedback_start_date')->nullable(true);
             $table->date('feedback_end_date')->nullable(true);
             $table->char('feedback_updated_by',36)->nullable(true);
+            $table->date('interniew_date')->nullable(true);
+            $table->string('interniew_score',11)->nullable(true);
+            $table->timestamp('interview_updated_at')->nullable(true);
+            $table->char('interview_updated_by',36)->nullable(true);
+            $table->timestamp('rejected_at')->nullable(true);
+            $table->char('rejected_by',36)->nullable(true);
+            $table->string('rejected_remarks',255)->nullable(true);
             $table->timestamp('feedback_updated_date')->nullable(true);
+            $table->char('selected_by',36)->nullable(true);
+            $table->string('selected_remarks',255)->nullable(true);
+            $table->timestamp('selected_at')->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('status',100)->default('Submitted');
             $table->char('updated_by',36)->nullable(true);
