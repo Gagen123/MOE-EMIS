@@ -135,8 +135,8 @@ export default {
             }
 		},
         // just added
-        getStockReceivedDetails(stockreceivedId){
-            axios.get('mess_manage/getStockReceivedDetails/'+stockreceivedId)
+        getStockReceivedDetails(stkId){
+            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
             .then((response) => {  
                 let data=response.data.data;
                 this.form.dateOfreceived        =    data.dateOfreceived;
@@ -144,19 +144,21 @@ export default {
                 $('#quarter').val(data.quarter).trigger('change');
                 this.loadActiveQuarterList();
                 this.form.remarks               =    data.remarks;
-                this.form.id                    =    stockreceivedId;
+                this.form.id                    =    data.id;
+                this.form.items_received=[];
 
-                let prop=data.stockreceived;
-                let stockreceivedDetails=[];
+                // let prop=data.stockreceived;
+                // let stockreceivedDetails=[];
                 for(let i=0;i<prop.length;i++){
-                    stockreceivedDetails.push({item:prop[i].item_id,
-                    quantity:prop[i].quantity,
-                    unit:prop[i].unit_id,
-                    remarks:prop[i].remarks});
+                    this.form.items_received.push({
+                    item:data[i].item_id,
+                    quantity:data[i].receivedquantity,
+                    unit:data[i].unit_id,
+                    remarks:data[i].remarks});
                    
                 }
                 this.count=data.length;
-                this.form.items_received=stockreceivedDetails;
+                //this.form.items_received=stockreceivedDetails;
                 
             })
             .catch((error) =>{  

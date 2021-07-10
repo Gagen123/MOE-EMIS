@@ -107,7 +107,7 @@ class EccdInfrastructureController extends Controller
         }
     }
 
-    //ECCD Instructure 
+    //ECCD Infrastructure 
 
     public function getStructureTypeInDropdown(){
         return ECCDStructureType::where('status',1)->get();

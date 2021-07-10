@@ -23,12 +23,17 @@ class MessManagementController extends Controller
 
     public function loadFoodReleaseList(){
       //  dd('m here');
-          $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
-          return $list;
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
+        return $list;
     }
 
     public function getFoodReleaseItem($foodreleaseId=''){
         $list = $this->apiService->listData('emis/messManagement/getFoodReleaseItem/'.$foodreleaseId);
+        return $list;
+    }
+
+    public function getFoodReleaseDetails($foodrelId=''){
+        $list = $this->apiService->listData('emis/messManagement/getFoodReleaseDetails/'.$foodrelId);
         return $list;
     }
     public function saveFoodRelease(Request $request){
@@ -174,13 +179,19 @@ class MessManagementController extends Controller
     }
 
     public function loadFoodReleaseListing(){
-        $org_Id=$this->getWrkingAgencyId();
+        $orgId=$this->getWrkingAgencyId();
        // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
         return $list;
        // dd($list);
     }
-    
+    public function loadStockReceiveView($StockReceivedID=""){
+        $loadDetials = $this->apiService->listData('emis/messManagement/loadStockReceiveView/'.$StockReceivedID );
+        return $loadDetials;
+    }
+
+
+
     public function getfoodreleaseditemList($foodreleaseId=""){
         //dd('m here');
         $itemList = $this->apiService->listData('emis/messManagement/getfoodreleaseditemList/'.$foodreleaseId);
@@ -198,24 +209,26 @@ class MessManagementController extends Controller
     // }
 
     //just added
-    public function getStockReceivedDetails($stockreceivedId=""){
+    public function getStockReceivedDetails($stkId=""){
        // dd(' mhere');
-        $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stockreceivedId);
+        $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stkId);
         return $receivedDetails;
     }
 
-    // public function viewitemreceived($stockreceivedId=""){
-    //    // return($stockreceivedId);
-    //    // dd('m here');
-    //     $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
-    //     return $itemrcv;
-    // }
+    public function viewitemreceived($stockreceivedId=""){
+       // return($stockreceivedId);
+       // dd('m here');
+        $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
+        return $itemrcv;
+    }
 
     // Stock Issued
+   
     public function loadStockIssuedList(){
-        //  dd('from UI');
-        $org_Id=$this->getWrkingAgencyId();
-        $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList'.$org_Id);
+        //return json_encode('from UI');  
+        $orgId = $this->getWrkingAgencyId();
+       // dd($orgId);
+        $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList/'.$orgId);
         return $list;
     }
 
@@ -245,6 +258,13 @@ class MessManagementController extends Controller
           return $e;
         }
     }
+    public function StockIssueEditList($lssId=""){
+        // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
+        return $list;
+    }
+ 
+
 
     public function getInventoryList($org_Id=""){
          //  dd('m here');
@@ -257,14 +277,6 @@ class MessManagementController extends Controller
 
     
 
-    public function getStockIssueItem($org_Id=""){
-        if($org_Id=="null" || $org_Id==""){
-            $org_Id=$this->getWrkingAgencyId();
-        }
-       // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/getStockIssueItem/'.$org_Id);
-        return $list;
-       // dd($list);
-    }
+    
 
 }

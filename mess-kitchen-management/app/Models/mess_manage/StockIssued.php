@@ -14,9 +14,7 @@ class StockIssued extends Model
         'id',   
         'organizationId',                         
         'dateOfissue',
-        'item_id',
         'quantity',
-        'unit_id',
         'item',
         'quantity',
         'unit',
@@ -26,3 +24,4 @@ class StockIssued extends Model
         'updated_by'
     ];
 }
+

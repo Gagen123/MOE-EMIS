@@ -95,4 +95,11 @@ class FoodReleaseController extends Controller
       ->select( 'item_id as item','quantity','unit_id as unit')->where('foodreleaseId',$foodreleaseId)->get();
       return $list;
     }
+    public function getFoodReleaseDetails($foodrelId=''){
+        $response_data=FoodRelease::where('id',$foodrelId)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=FoodReleaseDocuments::where('attachmentId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data);
+      }
 }

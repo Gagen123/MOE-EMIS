@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Food Release:<span class="text-danger">*</span></label> 
+                        <label class="">Date of Food Release:<span class="text-danger">*</span></label>  
                         <input class="form-control editable_fields" name="dateOfrelease" id="dateOfrelease" type="date" 
                         v-model="form.dateOfrelease" :class="{ 'is-invalid': form.errors.has('dateOfrelease') }" @change="remove_err('dateOfrelease')">
                         <has-error :form="form" field="dateOfrelease"></has-error>
@@ -28,7 +28,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
-                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
                     </div>
@@ -38,37 +38,43 @@
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
                 </div>
-                <div class="form-group row">
+                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0.5">Attachments</label>
-                        <table id="participant-table" class="table w-100 table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Attachment Name</th> 
-                                    <th>File</th> 
-                                </tr> 
-                            </thead> 
-                            <tbody>
-                                <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                    <td>
-                                        <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                        <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                    </td>
-                                    <td>                                
-                                        <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td colspan="3"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore" 
-                                        @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr> 
-                            </tbody>
-                        </table>
+                        <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <!-- <div class="card">
@@ -153,7 +159,7 @@ export default {
                 // [{
                 //     item:'',quantity:'',unit:'', remarks:'',
                 // }], 
-                 attachments:
+                attachments:
                 [{
                     file_name:'',attachment:''
                 }],
@@ -186,20 +192,52 @@ export default {
             if(type=="reset"){
                 this.restForm();
             }
+            // if(type=="save"){
+            //         this.form.post('/mess_manage/saveFoodRelease',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Food release detail is added successfully'
+            //         })
+            //         this.$router.push('/foodrelease_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......");
+            //         this.applyselect();
+            //     })
+            // }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveFoodRelease',this.form)
+                 const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('dateOfrelease', this.form.dateOfrelease);
+                formData.append('dzongkhag', this.form.dzongkhag);
+                // alert(this.form.attachments);
+                formData.append('organizaiton', this.form.organizaiton);
+                formData.append('quarter', this.form.quarter);
+                formData.append('remarks', this.form.remarks);
+                 for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
+               
+                    axios.post('/mess_manage/saveFoodRelease',formData,config)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food release detail is added successfully'
+                        title: ' Detail is updated successfully'
                     })
                     this.$router.push('/foodrelease_list');
                 })
-                .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
+                .catch((err) => {
+                    console.log("Error."+err.message)
                 })
             }
+
+
         },
         //     if(type=="save"){
         //         const config = { 
@@ -231,13 +269,13 @@ export default {
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
-                this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
                 $('#file_name'+currentcount).prop('readonly',true);
             }
             else{
                 $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
-            } 
+            }
         },
 
         applyselect(){
@@ -323,6 +361,7 @@ export default {
                 let data = response;
                 this.orgList = data.data.data;
             })
+            
             .catch(function (error){
                 console.log("Error:"+error)
             });
@@ -373,15 +412,16 @@ export default {
         //         this.form.items_released.splice(index,1); 
         //     }
         // },
-        addMoreattachments: function(){
-            this.filecount++;
-            this.form.attachments.push({file_name:'',attachment:''})
+         addMore: function(){
+            this.count++;
+            this.form.attachments.push({file_name:'', attachment:''});
         },
-        removeattachments(index){    
+        remove(){
             if(this.form.attachments.length>1){
-                this.filecount--;
-                this.form.attachments.pop(); 
-                this.form.ref_docs.pop();
+                if(this.count>this.require_count){
+                    this.count--;
+                    this.form.attachments.pop();
+                }
             }
         },
         changefunction(id){
@@ -403,9 +443,50 @@ export default {
             }
            
         },
-       
+        getFoodReleaseDetails(foodrelId){
+            axios.get('mess_manage/getFoodReleaseDetails/' +foodrelId)
+            .then((response) => {  
+                // let data=response.data.data;
+                // this.form.dateOfrelease         =    data.dateOfrelease;
+                // this.form.dzongkhag             =    data.dzongkhag_id;
+                // this.form.organizaiton          =    data.org_id;
+                // this.form.quarter               =    data.quarter_id;
+                // this.form.remarks               =    data.remarks;
+                // this.form.id                    =    data.id;
+                // let prop=data.foodrelease;
+                // let releaseDetails=[];
+                // for(let i=0;i<prop.length;i++){
+                //     releaseDetails.push({file_name:prop[i].user_defined_name,
+                //     attachment:prop[i].path
+                //    });
+                   
+                // }
+                // this.count=data.length;
+                // this.form.attachments=releaseDetails;
+                    let data=response.data.data;
+               // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.dateOfrelease         = data[i].dateOfrelease;
+                    this.form.dzongkhag             = data[i].dzongkhag_id
+                    this.form.organizaiton          = data[i].org_id
+                    this.form.quarter               = data[i].quarter_id
+                    this.form.remarks               = data[i].remarks
+                    this.form.id                    = data[i].id;
+                    this.form.attachments.push({
+                       file_name:data[i].user_defined_name,
+                       attachment:data[i].path,
+                      
+                    });
+                }
+                this.count=data.length;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
     },
-    mounted() { 
+     mounted() { 
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -417,24 +498,15 @@ export default {
             this.changefunction(id);
         });
        
-        this.loadactivedzongkhagList();
+       
+    },
+    created(){
+         this.loadactivedzongkhagList();
         this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-        this.allOrgList();
-        
-        //this.$route.params.data.dateOfprocure;
-      //  this.student_form.cid_passport=this.$route.query.data[0].CidNo;
+        this.allOrgList(); 
+        this.getFoodReleaseDetails(this.$route.params.data.id);
     },
-    created() {
-        this.form.id=this.$route.params.data.id;
-        this.form.dateOfrelease=this.$route.params.data.dateOfrelease;
-        this.form.dzongkhag=this.$route.params.data.dzongkhag_id;
-        this.form.organizaiton=this.$route.params.data.org_id;
-        this.form.quarter=this.$route.params.data.quarter;
-        this.form.remarks=this.$route.params.data.remarks;
-        this.attachments.file_name=this.$route.params.data.file_name;
-        this.attachment.attachment=this.$route.params.data.attachment;
-    }
 }
 </script>
