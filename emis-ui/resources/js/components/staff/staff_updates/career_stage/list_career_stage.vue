@@ -65,7 +65,7 @@ export default {
                     this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
-            .catch(function (error) {
+            .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }

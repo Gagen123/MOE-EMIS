@@ -9,6 +9,7 @@
                             <th>Subject</th>
                             <th>Subject Category</th>
                             <th>Assessed by Class Teacher</th>
+                            <th>Is Special Educational Needs (SEN) </th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -16,9 +17,13 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in subjectList" :key="index">
                             <td class="text-right">{{ item.display_order }}</td>
-                            <td>{{ item.name }}<span v-if="item.dzo_name"> ( {{ item.dzo_name }} )</span></td>
+                            <td>{{ item.name }} 
+                                <br> 
+                                <span v-if="item.dzo_name"> {{ item.dzo_name }} </span>
+                            </td>
                             <td>{{ item.sub_category_name }}</td>
                             <td>{{ item.assessed_by_class_teacher ==  1 ? "Yes" : "No" }}</td>
+                             <td>{{ item.is_special_educational_needs ==  1 ? "Yes" : "No" }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
 
                             <td>
