@@ -48,7 +48,7 @@
                                 <has-error :form="personal_form" field="emp_id"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i> </label>
+                                <label class="mb-0.5">CID/Work Permit No:<i class="text-danger">*</i> </label>
                                 <input type="text" v-model="personal_form.cid_work_permit" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }" id="cid_work_permit" name="cid_work_permit" class="form-control">
                                 <has-error :form="personal_form" field="cid_work_permit"></has-error>
                             </div>
@@ -144,12 +144,21 @@
 
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
+                                <label class="mb-0.5">Position Title (Level):<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
                                     <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id+'_'+item.subgroup">{{ item.name }} ({{ item.level }})</option>
                                 </select>
                                 <has-error :form="personal_form" field="position_title"></has-error>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="mb-0.5">Organization Type:<i class="text-danger">*</i></label>
+                                <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
+                                    <option value="Org">Organization/School </option>
+                                    <option value="Dzongkhag">Dzongkhag</option>
+                                    <option value="Ministry">Ministry </option>
+                                </select>
+                                <has-error :form="personal_form" field="organization_type"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
@@ -162,7 +171,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
+                        <div class="form-group row" v-if="personal_form.isteaching">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
@@ -361,8 +370,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
+                                            <td>{{ subjectArray[item.first_subject]}}</td>
+                                            <td v-if="item.second_subject!=null">{{ subjectArray[item.second_subject]}}</td>
                                             <td v-else></td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
@@ -572,6 +581,7 @@
 export default {
     data(){
         return{
+
             grand_total:0,
             qualification_tbl_row_count:0,
             sex_idList:[],
@@ -583,6 +593,7 @@ export default {
             villageList:[],
             orgList:[],
             subjectList:[],
+            subjectArray:{},
             cureerstageList:[],
             qualificationDescription:[],
             staffqualificationlist:[],
@@ -591,6 +602,8 @@ export default {
             staff_nomination_list:[],
 
             personal_form: new form({
+                isteaching:false,
+                organization_type:'',
                 personal_id: '',
                 cideid:'',
                 emp_type: 'Regular',
@@ -948,7 +961,7 @@ export default {
                                 this.$router.push('/list_civil_staff');
                             })
                             .catch((error) => {
-                                console.log("Error......"+error)
+                                console.log("Error:"+error)
                             });
                         }
                     });
@@ -958,7 +971,7 @@ export default {
             else{
                 if(nextclass=="qualification-tab"){
                     this.personal_form.post('staff/savePersonalDetails')
-                    .then((response) => {
+                    .then((response) =>{
                         Toast.fire({
                             icon: 'success',
                             title: 'Data saved Successfully'
@@ -981,23 +994,33 @@ export default {
                         if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
                             $('#working_agency_id').addClass('select2-hidden-accessible');
                         }
-                        if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
-                            $('#comp_sub').addClass('select2-hidden-accessible');
+                        if(!$('#marital_status').attr('class').includes('select2-hidden-accessible')){
+                            $('#marital_status').addClass('select2-hidden-accessible');
                         }
-                        if(!$('#elective_sub1').attr('class').includes('select2-hidden-accessible')){
-                            $('#elective_sub1').addClass('select2-hidden-accessible');
+                        if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
+                            $('#sex_id').addClass('select2-hidden-accessible');
                         }
-                        if(!$('#elective_sub2').attr('class').includes('select2-hidden-accessible')){
-                            $('#elective_sub2').addClass('select2-hidden-accessible');
+                        if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
+                            $('#position_title').addClass('select2-hidden-accessible');
                         }
                         if(!$('#currier_stage').attr('class').includes('select2-hidden-accessible')){
                             $('#currier_stage').addClass('select2-hidden-accessible');
                         }
-                        this.change_tab('personal-tab');
-                        console.log("Error......"+error)
+                        if(this.personal_form.isteaching){
+                            if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
+                                $('#comp_sub').addClass('select2-hidden-accessible');
+                            }
+                            if(!$('#elective_sub1').attr('class').includes('select2-hidden-accessible')){
+                                $('#elective_sub1').addClass('select2-hidden-accessible');
+                            }
+                            if(!$('#elective_sub2').attr('class').includes('select2-hidden-accessible')){
+                                $('#elective_sub2').addClass('select2-hidden-accessible');
+                            }
+                        }
+                        console.log("Error:"+error)
                     });
                 }
-                if(nextclass=="personal-tab"){
+                else if(nextclass=="personal-tab"){
                     this.loaddraftpersonalDetails();
                     this.change_tab(nextclass);
                 }
@@ -1074,8 +1097,12 @@ export default {
         loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.subjectList =  data.data.data;
+                let data = response.data.data;
+                this.subjectList =  data;
+                for(let i=0;i<data.length;i++){
+                    this.subjectArray[data[i].id] = data[i].name;
+                }
+
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -1117,16 +1144,14 @@ export default {
                 }
             });
         },
-        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title"){
+        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title_with_level"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.positiontitleList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
         },
 
@@ -1184,7 +1209,16 @@ export default {
             });
         },
         allOrgList(){
+            let dzo_id=$('#dzongkhag').val();
+            let org_type=$('#organization_type').val();
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            //Below two should change according to the data from rcsc
+            if(org_type=="Dzongkhag"){
+                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            }
+            if(org_type=="Ministry"){
+                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            }
             this.orgList = [];
             axios.get(uri)
             .then(response =>{
@@ -1218,7 +1252,13 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="position_title"){
-                this.personal_form.position_title=$('#position_title').val();
+                this.personal_form.position_title=$('#position_title').val().split('_')[0];
+                if($('#position_title').val().split('_')[1].toLowerCase().replaceAll(" ", "")=="teachingservices"){
+                    this.personal_form.isteaching=true;
+                }
+                else{
+                    this.personal_form.isteaching=false;
+                }
             }
             if(id=="sex_id"){
                 this.personal_form.sex_id=$('#sex_id').val();
@@ -1246,6 +1286,11 @@ export default {
                 this.getgewoglist();
                 this.allOrgList();
             }
+             if(id=="organization_type"){
+                this.personal_form.organization_type=$('#organization_type').val();
+                this.allOrgList();
+            }
+
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
                 this.getvillagelist();

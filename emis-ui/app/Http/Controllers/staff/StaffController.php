@@ -27,8 +27,6 @@ class StaffController extends Controller{
             'email'                 =>  'required',
             'position_title'        =>  'required',
             'working_agency_id'     =>  'required',
-            'comp_sub'              =>  'required',
-            'elective_sub1'         =>  'required',
             'currier_stage'         =>  'required',
         ];
 
@@ -41,10 +39,15 @@ class StaffController extends Controller{
             'email.required'                => 'This field is required',
             'position_title.required'       => 'This field is required',
             'working_agency_id.required'    => 'This field is required',
-            'comp_sub.required'             => 'This field is required',
-            'elective_sub1.required'        => 'This field is required',
             'currier_stage.required'        => 'This field is required',
         ];
+        if($request->isteaching){
+            $rules= $rules+['comp_sub'              =>  'required',
+                            'elective_sub1'         =>  'required'];
+            $customMessages= $customMessages+[
+                'comp_sub.required'              =>  'This field is required',
+                'elective_sub1.required'         =>  'This field is required'];
+        }
         if($request->emp_type=="Regular" || $request->emp_type=="Volunteer"){
             $rules=array_merge($rules,
                 array('marital_status'        =>  'required',
