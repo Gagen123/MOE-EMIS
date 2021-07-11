@@ -81,9 +81,9 @@ class StockIssuedController extends Controller
                'organizationId'             =>  $request->organizationId,
                'dateOfissue'                =>  $request->dateOfissue,
                'id'                         =>  $request->id,
-               'item'                       =>  $item['item'],
+               'item_id'                    =>  $item['item'],
                'quantity'                   =>  $item['quantity'],
-               'unit'                       =>  $item['unit'],
+               'unit_id'                    =>  $item['unit'],
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
@@ -101,9 +101,9 @@ class StockIssuedController extends Controller
               $itemIssued = array(
                'organizationId'             =>  $orgId,
                'dateOfissue'                =>  $date,
-               'item'                       =>  $item['item'],
+               'item_id'                    =>  $item['item'],
                'quantity'                   =>  $item['quantity'],
-               'unit'                       =>  $item['unit'],
+               'unit_id'                    =>  $item['unit'],
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
@@ -119,7 +119,7 @@ class StockIssuedController extends Controller
     }
     public function loadStockIssuedList($orgId=""){
             $list = DB::table('stock_issueds')
-            ->select('id','organizationId', 'dateOfissue as dateOfissue','item as item', 'quantity as quantity','unit as unit')->where('organizationId',$orgId)->get();
+            ->select('id','organizationId', 'dateOfissue as dateOfissue','item_id as item', 'quantity as quantity','unit_id as unit')->where('organizationId',$orgId)->get();
             return $list;
     }
     public function StockIssueEditList($lssId=""){

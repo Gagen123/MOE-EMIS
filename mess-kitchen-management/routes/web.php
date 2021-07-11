@@ -23,7 +23,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadFoodReleaseList', 'messManage\FoodReleaseController@loadFoodReleaseList');
             $router->post('/saveFoodRelease', 'messManage\FoodReleaseController@saveFoodRelease');
             $router->get('/getFoodReleaseDetails/{foodrelId}', 'messManage\FoodReleaseController@getFoodReleaseDetails');
-            $router->get('/getFoodReleaseItem/{foodreleaseId}', 'messManage\FoodReleaseController@getFoodReleaseItem');
+            $router->get('/ViewFoodReleaseDetials/{foodreleaseId}', 'messManage\FoodReleaseController@ViewFoodReleaseDetials');
+        //    $router->get('/getFoodReleaseItem/{foodreleaseId}', 'messManage\FoodReleaseController@getFoodReleaseItem');
             
         });
 
@@ -51,7 +52,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
           
         });
        
-        $router->get('/getInventoryList/{org_Id}', 'messManage\StockInventoryController@getInventoryList');
+        $router->get('/getInventoryList/{orgId}', 'messManage\StockInventoryController@getInventoryList');
       
     });
    

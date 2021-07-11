@@ -731,12 +731,13 @@ Route::prefix('academics')->group(function () {
 });
 
 
-Route::prefix('mess_manage')->group(function () {   
+Route::prefix('mess_manage')->group(function () {    
     //FOOD RELEASE NOTE
     Route::post('/saveFoodRelease', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveFoodRelease'])->name('saveFoodRelease');
     Route::get('/loadFoodReleaseList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadFoodReleaseList'])->name('loadFoodReleaseList');
     Route::get('/getFoodReleaseDetails/{foodrelId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getFoodReleaseDetails'])->name('getFoodReleaseDetails');
-    Route::get('/getFoodReleaseItem/{foodreleaseId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getFoodReleaseItem'])->name('getFoodReleaseItem');
+    Route::get('/ViewFoodReleaseDetials/{foodreleaseId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'ViewFoodReleaseDetials'])->name('ViewFoodReleaseDetials');
+   // Route::get('/getFoodReleaseItem/{foodreleaseId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getFoodReleaseItem'])->name('getFoodReleaseItem');
     
     //LOCAL PROCURE
     Route::post('/saveLocalProcure', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveLocalProcure'])->name('saveLocalProcure');
@@ -762,7 +763,7 @@ Route::prefix('mess_manage')->group(function () {
     Route::get('/loadStockIssuedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockIssuedList'])->name('loadStockIssuedList');
 
 
-    Route::get('/getInventoryList/{org_Id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
+    Route::get('/getInventoryList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
 });
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');

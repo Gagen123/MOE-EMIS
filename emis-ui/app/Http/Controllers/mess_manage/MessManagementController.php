@@ -27,13 +27,17 @@ class MessManagementController extends Controller
         return $list;
     }
 
-    public function getFoodReleaseItem($foodreleaseId=''){
-        $list = $this->apiService->listData('emis/messManagement/getFoodReleaseItem/'.$foodreleaseId);
-        return $list;
-    }
+    // public function getFoodReleaseItem($foodreleaseId=''){
+    //     $list = $this->apiService->listData('emis/messManagement/getFoodReleaseItem/'.$foodreleaseId);
+    //     return $list;
+    // }
 
     public function getFoodReleaseDetails($foodrelId=''){
         $list = $this->apiService->listData('emis/messManagement/getFoodReleaseDetails/'.$foodrelId);
+        return $list;
+    }
+    public function ViewFoodReleaseDetials($foodreleaseId=''){
+        $list = $this->apiService->listData('emis/messManagement/ViewFoodReleaseDetials/'.$foodreleaseId);
         return $list;
     }
     public function saveFoodRelease(Request $request){
@@ -266,15 +270,14 @@ class MessManagementController extends Controller
  
 
 
-    public function getInventoryList($org_Id=""){
-         //  dd('m here');
-        if($org_Id=="null" || $org_Id==""){
-            $org_Id=$this->getWrkingAgencyId();
-        }
-        $list = $this->apiService->listData('emis/messManagement/getInventoryList/'.$org_Id);
+    public function getInventoryList(){
+        //  dd('m here');
+        $orgId=$this->getWrkingAgencyId();
+        //dd( $orgId);
+        $list = $this->apiService->listData('emis/messManagement/getInventoryList/'.$orgId);
         return $list;
     }
-
+    
     
 
     

@@ -43,18 +43,30 @@
                         <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="form-group row">
-                        <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>Upload File</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Upload File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr id="record1" v-for='(attach, count) in attachmentDetails' :key="count+1">
+                                <template>
+                                    <td>
+                                        {{attach.user_defined_name}}
+                                    </td>
+                                    <td>                                
+                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                        <span>
+                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                        </span>
+                                    </td>
+                                </template>
+                                </tr> 
+                                 <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                         <td>
                                             <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                             <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
@@ -72,9 +84,8 @@
                                             @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                         </td>
                                     </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <!-- <div class="card">
@@ -149,6 +160,7 @@ export default {
             dzongkhag:'',
             organizaiton:'',
             quarter:'',
+            attachmentDetails:'',
            
           //  itemrelease:[],
             // items_released: [],
@@ -291,6 +303,51 @@ export default {
 
 
         },
+        
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'mess_manage/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
 
         /**
          * method to remove error
@@ -350,7 +407,7 @@ export default {
         /**
          * 
          */
-        allOrgList(dzo_id){
+        allOrgList(dzo_id,org_id){
             if(dzo_id==""){
                 dzo_id=$('#dzongkhag').val();
             }
@@ -360,6 +417,10 @@ export default {
             .then(response =>{
                 let data = response;
                 this.orgList = data.data.data;
+                setTimeout(function () {
+                     $('#organizaiton').val(org_id).trigger('change');
+                }, 300);
+               
             })
             
             .catch(function (error){
@@ -433,7 +494,7 @@ export default {
             if(id=="dzongkhag"){
               // alert($('#dzongkhag').val());
                 this.form.dzongkhag=$('#dzongkhag').val();
-                this.allOrgList($('#dzongkhag').val());
+                this.allOrgList($('#dzongkhag').val(),'');
             }
             if(id=="quarter"){
                 this.form.quarter=$('#quarter').val();
@@ -446,39 +507,39 @@ export default {
         getFoodReleaseDetails(foodrelId){
             axios.get('mess_manage/getFoodReleaseDetails/' +foodrelId)
             .then((response) => {  
-                // let data=response.data.data;
-                // this.form.dateOfrelease         =    data.dateOfrelease;
-                // this.form.dzongkhag             =    data.dzongkhag_id;
-                // this.form.organizaiton          =    data.org_id;
-                // this.form.quarter               =    data.quarter_id;
-                // this.form.remarks               =    data.remarks;
-                // this.form.id                    =    data.id;
-                // let prop=data.foodrelease;
-                // let releaseDetails=[];
-                // for(let i=0;i<prop.length;i++){
-                //     releaseDetails.push({file_name:prop[i].user_defined_name,
-                //     attachment:prop[i].path
-                //    });
-                   
-                // }
-                // this.count=data.length;
-                // this.form.attachments=releaseDetails;
-                    let data=response.data.data;
-               // alert(data.length);
-                for(let i=0; i<data.length;i++){
-                    this.form.dateOfrelease         = data[i].dateOfrelease;
-                    this.form.dzongkhag             = data[i].dzongkhag_id
-                    this.form.organizaiton          = data[i].org_id
-                    this.form.quarter               = data[i].quarter_id
-                    this.form.remarks               = data[i].remarks
-                    this.form.id                    = data[i].id;
-                    this.form.attachments.push({
-                       file_name:data[i].user_defined_name,
-                       attachment:data[i].path,
+                let data=response.data.data;
+                this.form.dateOfrelease         =    data.dateOfrelease;
+                this.form.dzongkhag             =    data.dzongkhag_id;
+                $('#dzongkhag').val(data.dzongkhag_id).trigger('change');
+                this.loadactivedzongkhagList();
+                this.form.organizaiton          =    data.org_id;
+                this.allOrgList(data.dzongkhag_id,data.org_id);
+                
+                this.form.quarter               =    data.quarter_id;
+                 $('#quarter').val(data.quarter_id).trigger('change');
+                this.loadActiveQuarterList();
+                this.form.remarks               =    data.remarks;
+                this.form.id                    =    data.id;
+                 
+                this.attachmentDetails=data.attachments;
+                
+                
+            //         let data=response.data.data;
+            //    // alert(data.length);
+            //     for(let i=0; i<data.length;i++){
+            //         this.form.dateOfrelease         = data[i].dateOfrelease;
+            //         this.form.dzongkhag             = data[i].dzongkhag_id
+            //         this.form.organizaiton          = data[i].org_id
+            //         this.form.quarter               = data[i].quarter_id
+            //         this.form.remarks               = data[i].remarks
+            //         this.form.id                    = data[i].id;
+            //         this.form.attachments.push({
+            //            file_name:data[i].user_defined_name,
+            //            attachment:data[i].path,
                       
-                    });
-                }
-                this.count=data.length;
+            //         });
+            //     }
+            //     this.count=data.length;
                 
             })
             .catch((error) =>{  
@@ -501,11 +562,11 @@ export default {
        
     },
     created(){
-         this.loadactivedzongkhagList();
+        this.loadactivedzongkhagList();
         this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-        this.allOrgList(); 
+        // this.allOrgList(); 
         this.getFoodReleaseDetails(this.$route.params.data.id);
     },
 }

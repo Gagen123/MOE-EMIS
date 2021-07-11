@@ -13,7 +13,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
-                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
                     </div>
@@ -34,7 +34,7 @@
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
                                       <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                        </select>
                                   </td>
                                   <td>                          
@@ -42,7 +42,7 @@
                                   </td>
                                   <td>                                
                                      <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                      </select> 
                                   </td>
                                   <td>                                
@@ -141,7 +141,7 @@ export default {
                 let data=response.data.data;
                 this.form.dateOfreceived        =    data.dateOfreceived;
                 this.form.quarter               =    data.quarter_id;
-                $('#quarter').val(data.quarter).trigger('change');
+                $('#quarter').val(data.quarter_id).trigger('change');
                 this.loadActiveQuarterList();
                 this.form.remarks               =    data.remarks;
                 this.form.id                    =    data.id;
@@ -149,13 +149,12 @@ export default {
 
                 // let prop=data.stockreceived;
                 // let stockreceivedDetails=[];
-                for(let i=0;i<prop.length;i++){
+                for(let i=0;i<data.stockreceived.length;i++){
                     this.form.items_received.push({
-                    item:data[i].item_id,
-                    quantity:data[i].receivedquantity,
-                    unit:data[i].unit_id,
-                    remarks:data[i].remarks});
-                   
+                    item:data.stockreceived[i].item_id,
+                    quantity:data.stockreceived[i].receivedquantity,
+                    unit:data.stockreceived[i].unit_id,
+                    remarks:data.stockreceived[i].remarks});
                 }
                 this.count=data.length;
                 //this.form.items_received=stockreceivedDetails;
@@ -233,6 +232,22 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        allOrgList(dzo_id){
+            if(dzo_id==""){
+                dzo_id=$('#dzongkhag').val();
+            }
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+            })
+            
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
         /**
          * 
          */
@@ -269,7 +284,16 @@ export default {
                 this.form.items_received.splice(index,1); 
             }
         },
-       
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dzongkhagList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
        
     },
      mounted() { 
@@ -290,8 +314,10 @@ export default {
     },
     created() {
         this.loadActiveUnitList(); 
+        this.allOrgList();
         this.loadActiveItemList();
         this.loadActiveQuarterList();
+        this.loadactivedzongkhagList();
         this.getStockReceivedDetails(this.$route.params.data.id);
      
        
