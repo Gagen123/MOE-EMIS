@@ -18,14 +18,15 @@ $router->get('/', function () use ($router) {
 });
 $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'messManage/'], function () use ($router) {
-        
+
         $router->group(['prefix' => 'foodrelease'], function () use ($router) {
             $router->get('/loadFoodReleaseList', 'messManage\FoodReleaseController@loadFoodReleaseList');
             $router->post('/saveFoodRelease', 'messManage\FoodReleaseController@saveFoodRelease');
             $router->get('/getFoodReleaseDetails/{foodrelId}', 'messManage\FoodReleaseController@getFoodReleaseDetails');
             $router->get('/ViewFoodReleaseDetials/{foodreleaseId}', 'messManage\FoodReleaseController@ViewFoodReleaseDetials');
         //    $router->get('/getFoodReleaseItem/{foodreleaseId}', 'messManage\FoodReleaseController@getFoodReleaseItem');
-            
+            $router->delete('/deleteFile/{id}', ['uses' => 'messManage\FoodReleaseController@deleteFile']);
+
         });
 
         $router->group(['prefix' => 'localprocure'], function () use ($router) {
@@ -33,7 +34,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveLocalProcure', 'messManage\LocalProcureController@saveLocalProcure');
             $router->get('/localProcureEditList/{locId}', 'messManage\LocalProcureController@localProcureEditList');
         });
- 
+
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
             $router->get('/loadStockIssuedList/{orgId}', 'messManage\StockIssuedController@loadStockIssuedList');
             $router->post('/saveStockIssued', 'messManage\StockIssuedController@saveStockIssued');
@@ -46,16 +47,15 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveStockReceived', 'messManage\StockReceiveController@saveStockReceived');
             $router->get('/viewitemreceived/{stockreceivedId}', 'messManage\StockReceiveController@viewitemreceived');
             $router->get('/loadStockReceiveView/{StockReceivedID}', ['uses' => 'messManage\StockReceiveController@loadStockReceiveView']);
-            
+
            $router->get('/getStockReceivedDetails/{stkId}', 'messManage\StockReceiveController@getStockReceivedDetails');
-            //just added 
-          
+            //just added
+
         });
-       
+
         $router->get('/getInventoryList/{orgId}', 'messManage\StockInventoryController@getInventoryList');
-      
+
     });
-   
+
 });
-    
-   
+

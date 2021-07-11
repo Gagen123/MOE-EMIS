@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockReceived;
-use App\Models\mess_manage\StockReceivedItem; 
-use App\Models\mess_manage\LocalProcure; 
+use App\Models\mess_manage\StockReceivedItem;
+use App\Models\mess_manage\LocalProcure;
 use App\Models\mess_manage\StockIssued;
 use Exception;
 
@@ -31,10 +31,10 @@ class StockInventoryController extends Controller
         //   return $stckrecive;
         //   // $response_data=StockReceived::where('organizationId',$org_id)->get();
         //   // return $this->successResponse($response_data);
-     //  try{  
+     //  try{
             $response_data = DB::select("SELECT a.item_id, a.organizationId, a.unit_id, a.stock_received_quantity, b.stock_issed_quantity, c.local_procured_quantity
           FROM
-          (SELECT a.item_id, f.organizationId, a.unit_id, SUM(a.receivedquantity) AS stock_received_quantity FROM 
+          (SELECT a.item_id, f.organizationId, a.unit_id, SUM(a.receivedquantity) AS stock_received_quantity FROM
            stock_received_items a
            LEFT JOIN stock_receiveds f ON a.stockreceivedId = f.id GROUP BY f.organizationId, a.item_id, a.unit_id) a
           LEFT JOIN
@@ -46,6 +46,6 @@ class StockInventoryController extends Controller
     //    }catch(Exception $e){
     //     dd($e);
     //    }
-          
+
     }
 }

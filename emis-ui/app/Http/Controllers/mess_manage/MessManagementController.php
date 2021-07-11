@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Storage;
 class MessManagementController extends Controller
 {
     //
-    use ServiceHelper; 
-    use AuthUser; 
+    use ServiceHelper;
+    use AuthUser;
     public $apiService;
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
@@ -59,7 +59,7 @@ class MessManagementController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-                           
+
                         )
                     );
                 }
@@ -69,7 +69,7 @@ class MessManagementController extends Controller
         $rules = [
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
-            'organizaiton'             =>  'required', 
+            'organizaiton'             =>  'required',
             'quarter'                  =>  'required',
         ];
         $customMessages = [
@@ -79,7 +79,7 @@ class MessManagementController extends Controller
             'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
 
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
@@ -92,7 +92,7 @@ class MessManagementController extends Controller
             'id'                       =>  $request['id'],
           //  'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
-        ];  
+        ];
        //  dd($foodrelease);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
@@ -108,7 +108,7 @@ class MessManagementController extends Controller
     // //local Procurement
 
     public function loadLocalProcure(){
-        //return json_encode('from UI');  
+        //return json_encode('from UI');
         $orgId = $this->getWrkingAgencyId();
        // dd($orgId);
         $list = $this->apiService->listData('emis/messManagement/loadLocalProcure/'.$orgId);
@@ -123,7 +123,7 @@ class MessManagementController extends Controller
         ];
         $customMessages = [
             'dateOfprocure.required'          => 'dateOfprocure is required',
-          
+
         ];
         $this->validate($request, $rules, $customMessages);
         $localprocure =[
@@ -149,7 +149,7 @@ class MessManagementController extends Controller
         return $list;
     }
 
-    // Stock Received 
+    // Stock Received
 
     public function saveStockReceived(Request $request){
         $rules = [
@@ -227,9 +227,9 @@ class MessManagementController extends Controller
     }
 
     // Stock Issued
-   
+
     public function loadStockIssuedList(){
-        //return json_encode('from UI');  
+        //return json_encode('from UI');
         $orgId = $this->getWrkingAgencyId();
        // dd($orgId);
         $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList/'.$orgId);
@@ -251,7 +251,7 @@ class MessManagementController extends Controller
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
-        ];  
+        ];
        //   dd($stockissue);
       try{
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
@@ -267,7 +267,7 @@ class MessManagementController extends Controller
         $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
         return $list;
     }
- 
+
 
 
     public function getInventoryList(){
@@ -277,9 +277,18 @@ class MessManagementController extends Controller
         $list = $this->apiService->listData('emis/messManagement/getInventoryList/'.$orgId);
         return $list;
     }
-    
-    
 
-    
+    public function deleteFile($full_path="",$id=""){
+        $full_path=str_replace('SSS','/',$full_path);
+        $headers = ['Content-Type: application/pdf'];
+        $file_name = explode('/',$full_path);
+        $finel_name = end($file_name);
+        $response_data="";
+        if (file_exists($full_path)){
+            unlink($full_path);
+            $response_data = $this->apiService->deleteData("emis/messManagement/deleteFile", $id);
+        }
+        return $response_data;
+    }
 
 }

@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table id="foodrelease-table" class="table table-sm table-bordered table-striped">
@@ -11,32 +11,31 @@
                             <th>School Name</th>
                             <th>Quarter</th>
                             <th>Remarks</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
-                    </thead>  
+                    </thead>
                     <tbody>
                         <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
-                            <td> {{dzongkhagList[item.dzongkhag]}}</td>                      
-                            <td> {{orgList[item.organizaiton]}}</td>                   
+                            <td> {{dzongkhagList[item.dzongkhag]}}</td>
+                            <td> {{orgList[item.organizaiton]}}</td>
                             <td> {{quarterList[item.quarter]}}</td>
                             <td> {{ item.remarks}}</td>
-                              
-                            <td> 
+                            <td>
                               <div class="btn-group btn-group-sm">
-                                   
+
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="FoodReleaseView(item)"><i class="fas fa-eye"></i ></a>
                                </div>
                                <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
-                                    
+
                                </div>
                             </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
       <!--  Temporary model table  -->
@@ -55,17 +54,17 @@
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="font-weight-normal">Date of Release: </label>
                                  <span class="text-indigo-600">{{displayItem.dateOfrelease}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Dzongkhag Name: </label>
                                  <span class="text-indigo-600">{{ dzongkhagList[displayItem.dzongkhag]}}</span>
-                                </div> 
+                                </div>
                            </div>
                            <div class="form-group row">
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">School Name: </label>
                                  <span class="text-indigo-600">{{orgList[displayItem.organizaiton]}}</span>
-                               </div> 
+                               </div>
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Quarter: </label>
                                  <span class="text-indigo-600">{{quarterList[displayItem.quarter]}}</span>
@@ -79,7 +78,7 @@
                                         <th>Sl No.</th>
                                         <th>Item</th>
                                         <th>Quantity</th>
-                                        <th>Unit</th> 
+                                        <th>Unit</th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -87,7 +86,7 @@
                                      <td> {{index + 1}}</td>
                                      <td> {{itemList[tableitem.item]}}</td>
                                      <td> {{tableitem.quantity}}</td>
-                                     <td> {{unitList[tableitem.unit]}}</td>                   
+                                     <td> {{unitList[tableitem.unit]}}</td>
                                  </tr>
                              </tbody>
                           </table>
@@ -109,8 +108,7 @@
 <script>
 export default {
     data(){
-        return{  
-           
+        return{
             foodrelease_list:[],
             displayItem:'',
             itemrelease_list:[],
@@ -121,47 +119,34 @@ export default {
             itemList:{},
             quarterList:{},
             dt:''
-           
-        } 
+
+        }
     },
     methods: {
         loadFoodReleaseList(uri = 'mess_manage/loadFoodReleaseList'){
             axios.get(uri)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.foodrelease_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log(error);
             });
-            setTimeout(function(){
-                $("#foodrelease-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
-        
+
         viewfoodreleasenote:function(item){
             this.displayItem="";
             this.displayItem=item;
            // alert(this.displayItem.foodreleaseId);
             axios.get('mess_manage/getFoodReleaseItem/' + this.displayItem.id)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.itemrelease_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            //  
-            // this.itemrelease_list="";
-          // this.itemrelease_list=tableitem;
             $('#viewfoodreleasenote').modal('show');
 		},
         viewFoodReleaseList(data){
@@ -170,7 +155,7 @@ export default {
         },
         FoodReleaseView(data){
            data.action='view';
-            this.$router.push({name:'FoodReleaseView',params: {data:data}}); 
+            this.$router.push({name:'FoodReleaseView',params: {data:data}});
         },
 
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
@@ -178,7 +163,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -191,7 +176,7 @@ export default {
             .then(response =>{
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.orgList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.orgList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -204,7 +189,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.quarterList[data.data.data[i].id] = data.data.data[i].Name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -216,7 +201,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.itemList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -228,7 +213,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -241,21 +226,21 @@ export default {
         this.loadactivedzongkhagList();
         this.allOrgList();
         this.loadActiveQuarterList();
-        this.loadFoodReleaseList();
         this.loadActiveItemList();
         this.loadActiveUnitList();
+        this.loadFoodReleaseList();
         this.dt =  $("#foodrelease-table").DataTable();
-       
+
     },
     watch: {
-        itemrelease_list(){
+        foodrelease_list(){
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#foodrelease-table").DataTable()
             });
         }
     },
-    
+
 }
 </script>
 

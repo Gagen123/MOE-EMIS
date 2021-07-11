@@ -52,8 +52,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::all();
             }
             else{        // dd($request);
-
-                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
+                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
@@ -78,7 +77,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadOrgDetails($type="", $id=""){
-      
+
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();

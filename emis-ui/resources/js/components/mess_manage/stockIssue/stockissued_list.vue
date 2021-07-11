@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table id="stockissued-table" class="table table-sm table-bordered table-striped">
@@ -10,9 +10,9 @@
                             <th>item</th>
                             <th>Quantity</th>
                             <th>Unit</th>
-                            <th>Action</th>                      
+                            <th>Action</th>
                         </tr>
-                    </thead> 
+                    </thead>
                     <tbody>
                          <tr v-for="(item, index) in stockissued_list" :key="index">
                             <td> {{index + 1}}</td>
@@ -20,15 +20,15 @@
                             <td> {{itemList[item.item]}}</td>
                             <td> {{item.quantity}}</td>
                             <td> {{unitList[item.unit]}}
-                            <td> 
+                            <td>
                               <!-- <div class="btn-group btn-group-sm">
                                   <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewstockissue(item)"><i class="fas fa-eye"></i ></a>
                               </div> -->
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockIssuedList(item)"><i class="fas fa-edit"></i ></a>
                                </div>
-                            </td> 
-                        </tr> 
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -48,7 +48,7 @@
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="font-weight-normal">Date of Issue: </label>
                                  <span class="text-indigo-600">{{displayItem.dateOfissue}}</span>
-                                </div> 
+                                </div>
                            </div>
                       </div>
                     <!--   <div class="card-body"> -->
@@ -58,7 +58,7 @@
                                         <th>Sl No.</th>
                                         <th>Item</th>
                                         <th>Quantity Issued</th>
-                                        <th>Unit</th> 
+                                        <th>Unit</th>
                                         <th>Damaged Quantity</th>
                                         <th>Remarks</th>
                                  </tr>
@@ -68,9 +68,9 @@
                                      <td> {{index + 1}}</td>
                                      <td> {{itemList[tableitem.item]}}</td>
                                      <td> {{tableitem.quantity}}</td>
-                                     <td> {{unitList[tableitem.unit]}}</td> 
-                                     <td> {{tableitem.damageqty}} </td>  
-                                     <td> {{tableitem.remarks}}</td>             
+                                     <td> {{unitList[tableitem.unit]}}</td>
+                                     <td> {{tableitem.damageqty}} </td>
+                                     <td> {{tableitem.remarks}}</td>
                                  </tr>
                              </tbody>
                           </table>
@@ -93,7 +93,7 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             totle:0,
             stockissued_list:[],
             displayItem:'',
@@ -101,42 +101,32 @@ export default {
             itemList:{},
             unitList:{},
             dt:''
-        } 
+        }
     },
     methods: {
         loadStockIssuedList(uri = 'mess_manage/loadStockIssuedList'){
             axios.get(uri)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.stockissued_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#stockissued-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
         viewstockissue:function(item){
             this.displayItem="";
             this.displayItem=item;
            // alert(this.displayItem.foodreleaseId);
             axios.get('mess_manage/getStockIssueItem/' + this.displayItem.id)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.itemrelease_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            //  
+            //
             // this.itemrelease_list="";
           // this.itemrelease_list=tableitem;
             $('#viewstockissue').modal('show');
@@ -146,7 +136,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].Name; 
+                    this.itemList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -158,7 +148,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].Name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -185,7 +175,7 @@ export default {
             });
         }
     },
-    
+
 }
 </script>
 
