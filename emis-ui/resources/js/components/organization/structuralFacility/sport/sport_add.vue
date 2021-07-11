@@ -225,7 +225,6 @@ export default {
                     $('#sizeAndarea1').hide();
 
                 }
-
         },
         /**
          * 

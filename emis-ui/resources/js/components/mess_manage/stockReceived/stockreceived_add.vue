@@ -9,24 +9,11 @@
                         v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
                         <has-error :form="form" field="dateOfreceived"></has-error>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
-                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="dzongkhag"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">School Name:<span class="text-danger">*</span></label> 
-                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
-                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="organizaiton"></has-error>
-                    </div> -->
+                  
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
-                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
                     </div>
@@ -47,7 +34,7 @@
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
                                     <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
                                   </td>
                                   <td>                          
@@ -55,7 +42,7 @@
                                   </td>
                                   <td>                                
                                      <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                          
                                      </select> 
                                   </td>
@@ -262,6 +249,7 @@ export default {
        
     },
      mounted() { 
+        this.loadActiveQuarterList();
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -275,7 +263,7 @@ export default {
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
        // this.loadActiveTermList();
-        this.loadActiveQuarterList();
+      
        
     }
 }

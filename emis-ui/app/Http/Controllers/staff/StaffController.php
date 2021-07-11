@@ -26,8 +26,8 @@ class StaffController extends Controller{
             'contact_number'        =>  'required',
             'email'                 =>  'required',
             'position_title'        =>  'required',
-            'working_agency_id'     =>  'required',
-            'currier_stage'         =>  'required',
+            // 'working_agency_id'     =>  'required',
+            // 'currier_stage'         =>  'required',
         ];
 
         $customMessages = [
@@ -38,8 +38,8 @@ class StaffController extends Controller{
             'contact_number.required'       => 'This field is required',
             'email.required'                => 'This field is required',
             'position_title.required'       => 'This field is required',
-            'working_agency_id.required'    => 'This field is required',
-            'currier_stage.required'        => 'This field is required',
+            // 'working_agency_id.required'    => 'This field is required',
+            // 'currier_stage.required'        => 'This field is required',
         ];
         if($request->isteaching){
             $rules= $rules+['comp_sub'              =>  'required',

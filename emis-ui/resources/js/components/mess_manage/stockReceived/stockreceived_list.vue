@@ -20,6 +20,9 @@
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item)"><i class="fas fa-eye"></i ></a>
                         </div> 
+                         <!-- <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="StockReceivedView(item)"><i class="fas fa-eye"></i ></a>
+                        </div>  -->
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockReceivedList(item)"><i class="fas fa-edit"></i ></a>
                         </div>
@@ -99,8 +102,7 @@ export default {
     },
 
     methods:{
-        loadFoodReleaseListing(org_Id){
-        let uri = 'mess_manage/loadFoodReleaseListing/'+org_Id;
+        loadFoodReleaseListing(uri = 'mess_manage/loadFoodReleaseListing'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -126,7 +128,7 @@ export default {
             axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
             .then(response => { 
                 let data = response;
-                this.itemreceived_list =  data.data;
+                this.itemreceived_list =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -142,12 +144,17 @@ export default {
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
+        StockReceivedView(data){
+            data.action='view';
+            this.$router.push({name:'StockReceivedView',params: {data:data}});
+        },
+
         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.quarterList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].Name; 
                 }
             })
             .catch(function (error) {

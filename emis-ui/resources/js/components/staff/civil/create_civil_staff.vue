@@ -297,7 +297,7 @@
                                                         <label class="mb-0.5">First Subject:<i class="text-danger">*</i></label>
                                                         <select v-model="qualification_form.firstsub" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('firstsub') }" class="form-control select2" id="firstsub">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in qualificationsubjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
                                                         <has-error :form="qualification_form" field="firstsub"></has-error>
                                                     </div>
@@ -305,7 +305,7 @@
                                                         <label class="mb-0.5">Second subject:</label>
                                                         <select v-model="qualification_form.secondsub" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('secondsub') }" class="form-control select2" id="secondsub">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in qualificationsubjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
                                                         <has-error :form="qualification_form" field="secondsub"></has-error>
                                                     </div>
@@ -593,6 +593,7 @@ export default {
             villageList:[],
             orgList:[],
             subjectList:[],
+            qualificationsubjectList:[],
             subjectArray:{},
             cureerstageList:[],
             qualificationDescription:[],
@@ -821,6 +822,7 @@ export default {
                 else{
                     this.nomination_form.post('staff/savenominationDetails')
                     .then((response) => {
+
                         Toast.fire({
                             icon: 'success',
                             title: 'Data saved Successfully'
@@ -832,7 +834,6 @@ export default {
                         console.log("Error:"+error)
                     });
                 }
-
                // this.nomination_form.nominies.push({nomi_cid:'',nomi_name:'',nomi_desig:'',nomi_address:'',nomi_contact:'',nomi_email:'',nomi_relation:'',nomi_percentage:''})
             }
         },
@@ -980,15 +981,15 @@ export default {
                         $('.select2').select2({
                             theme: 'bootstrap4'
                         });
-                        if(response.data.data.id!=undefined){
+                        if(response.data.data || (response.data.data!=undefined && response.data.data.id!=undefined)){
                             this.qualification_form.personal_id=response.data.data.id;
                             this.nomination_form.personal_id=response.data.data.id;
+                            this.change_tab(nextclass);
+                            this.loadqualificationdescription();
+                            this.loadqualification();
+                            this.loadcoursemode();
+                            this.loadqualication(this.personal_form.personal_id);
                         }
-                        this.change_tab(nextclass);
-                        this.loadqualificationdescription();
-                        this.loadqualification();
-                        this.loadcoursemode();
-                        this.loadqualication(this.personal_form.personal_id);
                     })
                     .catch((error) => {
                         if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
@@ -1091,23 +1092,27 @@ export default {
                 this.personal_form.remarks=data.remarks;
             })
             .catch((error) => {
-                console.log("Error......"+error);
+                console.log("Error:"+error);
             });
         },
-        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 this.subjectList =  data;
-                for(let i=0;i<data.length;i++){
-                    this.subjectArray[data[i].id] = data[i].name;
-                }
-
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
+            });
+        },
+        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.qualificationsubjectList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
             });
         },
         loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
@@ -1117,9 +1122,7 @@ export default {
                 this.cureerstageList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.leg(error);
             });
         },
         loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
@@ -1129,7 +1132,7 @@ export default {
                 this.sex_idList =  data.data.data;
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.leg(error);
             });
         },
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
@@ -1139,9 +1142,7 @@ export default {
                 this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.leg(error);
             });
         },
         loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title_with_level"){
@@ -1162,9 +1163,7 @@ export default {
                 this.repationshipList =  data.data.data;
             })
             .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.leg(error);
             });
         },
         loadactivecountryList(uri="masters/loadGlobalMasters/all_active_country"){
@@ -1385,6 +1384,7 @@ export default {
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
 
+        this.loadAcademicMasters();
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
         this.loadrelationshipList();

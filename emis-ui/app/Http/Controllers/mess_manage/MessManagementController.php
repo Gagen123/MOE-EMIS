@@ -9,6 +9,7 @@ use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
+use Illuminate\Support\Facades\Storage;
 
 class MessManagementController extends Controller
 {
@@ -22,16 +23,45 @@ class MessManagementController extends Controller
 
     public function loadFoodReleaseList(){
       //  dd('m here');
-          $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
-          return $list;
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
+        return $list;
     }
 
     public function getFoodReleaseItem($foodreleaseId=''){
         $list = $this->apiService->listData('emis/messManagement/getFoodReleaseItem/'.$foodreleaseId);
         return $list;
     }
+
+    public function getFoodReleaseDetails($foodrelId=''){
+        $list = $this->apiService->listData('emis/messManagement/getFoodReleaseDetails/'.$foodrelId);
+        return $list;
+    }
     public function saveFoodRelease(Request $request){
         //return $request
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'foodreleasenote';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                           
+                        )
+                    );
+                }
+            }
+        }
+        //dd($attachment_details);
         $rules = [
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
@@ -46,29 +76,7 @@ class MessManagementController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         
-    //     $files = $request->attachments;
-    //    //  dd($files);
-    //     $filenames = $request->attachmentname;
-    //     $attachment_details=[];
-    //     $file_store_path=config('services.constant.file_stored_base_path').'MessManagement';
-    //     if($files!=null && $files!=""){
-    //         if(sizeof($files)>0 && !is_dir($file_store_path)){
-    //             mkdir($file_store_path,0777,TRUE);
-    //         }
-    //         if(sizeof($files)>0){
-    //             foreach($files as $index => $file){
-    //                 $file_name = time().'_' .$file->getClientOriginalName();
-    //                 move_uploaded_file($file,$file_store_path.'/'.$file_name);
-    //                 array_push($attachment_details,
-    //                     array(
-    //                         'path'                    =>  $file_store_path,
-    //                         'original_name'           =>  $file_name,
-    //                         'user_defined_name'       =>  $filenames[$index],
-    //                     )
-    //                 );
-    //             }
-    //         }
-    //     }
+
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
@@ -76,7 +84,7 @@ class MessManagementController extends Controller
             'organizaiton'             =>  $request['organizaiton'],
             'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
-          //  'attachment_details'       =>  $attachment_details,
+            'attachment_details'       =>  $attachment_details,
             'id'                       =>  $request['id'],
           //  'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
@@ -95,9 +103,11 @@ class MessManagementController extends Controller
 
     // //local Procurement
 
-    public function loadLocalProcure($org_Id=""){
-     //return json_encode('from UI');  
-        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure'.$org_Id);
+    public function loadLocalProcure(){
+        //return json_encode('from UI');  
+        $orgId = $this->getWrkingAgencyId();
+       // dd($orgId);
+        $list = $this->apiService->listData('emis/messManagement/loadLocalProcure/'.$orgId);
         return $list;
     }
 
@@ -128,6 +138,11 @@ class MessManagementController extends Controller
         catch(\GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+    public function localProcureEditList($locId=""){
+       // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/localProcureEditList/'.$locId);
+        return $list;
     }
 
     // Stock Received 
@@ -163,13 +178,20 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadFoodReleaseListing($org_Id=""){
+    public function loadFoodReleaseListing(){
+        $orgId=$this->getWrkingAgencyId();
        // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
         return $list;
        // dd($list);
     }
-    
+    public function loadStockReceiveView($StockReceivedID=""){
+        $loadDetials = $this->apiService->listData('emis/messManagement/loadStockReceiveView/'.$StockReceivedID );
+        return $loadDetials;
+    }
+
+
+
     public function getfoodreleaseditemList($foodreleaseId=""){
         //dd('m here');
         $itemList = $this->apiService->listData('emis/messManagement/getfoodreleaseditemList/'.$foodreleaseId);
@@ -187,32 +209,28 @@ class MessManagementController extends Controller
     // }
 
     //just added
-    public function getStockReceivedDetails($stockreceivedId=""){
-        $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stockreceivedId);
+    public function getStockReceivedDetails($stkId=""){
+       // dd(' mhere');
+        $receivedDetails = $this->apiService->listData('emis/messManagement/getStockReceivedDetails/'.$stkId);
         return $receivedDetails;
     }
 
     public function viewitemreceived($stockreceivedId=""){
        // return($stockreceivedId);
-        //dd('m here');
+       // dd('m here');
         $itemrcv = $this->apiService->listData('emis/messManagement/viewitemreceived/'.$stockreceivedId);
         return $itemrcv;
     }
 
     // Stock Issued
-    public function getStockIssuedList($org_Id=""){
-        //  dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/getStockIssuedList'.$org_Id);
+   
+    public function loadStockIssuedList(){
+        //return json_encode('from UI');  
+        $orgId = $this->getWrkingAgencyId();
+       // dd($orgId);
+        $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList/'.$orgId);
         return $list;
     }
-    // public function loadStockIssuedList($org_Id=""){
-    //   //  dd('m here');
-    //  if($org_Id=="null" || $org_Id==""){
-    //      $org_Id=$this->getWrkingAgencyId();
-    //     }
-    //   $list = $this->apiService->listData('emis/messManagement/loadStockIssuedList'.$org_Id);
-    //   return $list;
-    // }
 
     public function saveStockIssued(Request $request){
      //return $request
@@ -240,6 +258,13 @@ class MessManagementController extends Controller
           return $e;
         }
     }
+    public function StockIssueEditList($lssId=""){
+        // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
+        return $list;
+    }
+ 
+
 
     public function getInventoryList($org_Id=""){
          //  dd('m here');
@@ -252,14 +277,6 @@ class MessManagementController extends Controller
 
     
 
-    public function getStockIssueItem($org_Id=""){
-        if($org_Id=="null" || $org_Id==""){
-            $org_Id=$this->getWrkingAgencyId();
-        }
-       // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/getStockIssueItem/'.$org_Id);
-        return $list;
-       // dd($list);
-    }
+    
 
 }
