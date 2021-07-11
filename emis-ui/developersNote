@@ -59,6 +59,9 @@ Setting up the system administration, and user management:
 
     Additional table - student history
 
+    Additional field in std_student - isNeedy. (ask Tshewang whether it is necessary)
+    Also ask Tshewang about the scholarship - can a student have multiple scholarships?
+
 
     *********************SOME TO DO FOR THE FUTURE*********************************
     1. Data table partition to take care of academic year

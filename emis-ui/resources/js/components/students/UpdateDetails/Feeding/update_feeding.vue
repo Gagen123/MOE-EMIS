@@ -22,9 +22,9 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label class="rp-3">No. of Meals:</label><br>
-                    <label><input  type="radio" v-model="noOfMeals" name="feeding" id="feeding" value="1" tabindex=""/> One Meal</label>
-                    <label><input  type="radio" v-model="noOfMeals" name="feeding" id="feeding" value="2" tabindex=""/> Two Meals</label>
-                    <label><input  type="radio" v-model="noOfMeals" name="feeding" id="feeding" value="3" tabindex=""/> Three Meals</label>
+                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="1" tabindex=""/> One Meal</label>
+                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="2" tabindex=""/> Two Meals</label>
+                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="3" tabindex=""/> Three Meals</label>
                     <has-error :form="student_form" field="feeding"></has-error>
                 </div>
             </div>
@@ -32,8 +32,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="mb-0.5">Remarks:</label>
-                        <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.offence_description" :class="{ 'is-invalid': student_form.errors.has('offence_description') }" name="offence_description" id="offence_description"></textarea>
-                        <has-error :form="student_form" field="offence_description"></has-error>
+                        <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                        <has-error :form="student_form" field="remarks"></has-error>
                     </div>
                 </div>
             </div>
@@ -100,7 +100,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/disciplinary_record_list');
+                    this.$router.push('/updated_feeding_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -133,9 +133,6 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
-        this.loadActiveSeverityList();
     },
     
 }

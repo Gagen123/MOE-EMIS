@@ -370,8 +370,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ subjectArray[item.first_subject]}}</td>
-                                            <td v-if="item.second_subject!=null">{{ subjectArray[item.second_subject]}}</td>
+                                            <td>{{ item.first_subject.name}}</td>
+                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
                                             <td v-else></td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
@@ -1076,7 +1076,9 @@ export default {
                 this.personal_form.cid_work_permit=data.cid_work_permit;
                 this.personal_form.name=data.name;
                 this.personal_form.position_title=data.position_title_id;
+                $('#position_title').val(data.position_title_id).trigger('change');
                 this.personal_form.marital_status=data.merital_status;
+                $('#marital_status').val(data.merital_status).trigger('change');
                 this.personal_form.dob=data.dob;
 
                 this.personal_form.sex_id=data.sex_id;

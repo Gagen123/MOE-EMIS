@@ -22,8 +22,8 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label class="rp-3">Is Needy Student:</label><br>
-                    <label><input  type="radio" v-model="needy" name="needy" id="needy" value="1" tabindex=""/> Yes</label>
-                    <label><input  type="radio" v-model="needy" name="needy" id="needy" value="0" tabindex=""/> No</label>
+                    <label><input  type="radio" v-model="student_form.needy" name="needy" id="needy" value="1" tabindex=""/> Yes</label>
+                    <label><input  type="radio" v-model="student_form.needy" name="needy" id="needy" value="0" tabindex=""/> No</label>
                     <has-error :form="student_form" field="needy"></has-error>
                 </div>
             </div>
@@ -31,8 +31,8 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label class="mb-0.5">Remarks:</label>
-                        <textarea @change="remove_error('offence_description')" class="form-control" v-model="student_form.offence_description" :class="{ 'is-invalid': student_form.errors.has('offence_description') }" name="offence_description" id="offence_description"></textarea>
-                        <has-error :form="student_form" field="offence_description"></has-error>
+                        <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                        <has-error :form="student_form" field="remarks"></has-error>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/disciplinary_record_list');
+                    this.$router.push('/updated_needy_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -135,9 +135,6 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
-        this.loadActiveSeverityList();
     },
     
 }
