@@ -112,7 +112,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/disciplinary_record_list');
+                    this.$router.push('/updated_contact_list');
                 })
                 .catch(() => {
                     console.log("Error......")

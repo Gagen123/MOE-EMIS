@@ -140,18 +140,60 @@ class StudentUpdateController extends Controller
     }
 
     private function updateStudentSenDetails($data){
-        $students = Student::where('id',$data['id'])->update($data);
-        return $students;
+        $student_detail=Student::where('id',$data['student'])->get('isSen')->toArray();
+        
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'historyFor'    =>  'Student SEN Change',
+            'previousValue' =>  $student_detail[0]['isSen']
+        ];
+
+        $history = $this->insertStudentHistory($student_history);
+
+        $new_data = [
+            'isSen' => $data['sen']
+        ];
+
+        $student = Student::where('id',$data['student'])->update($new_data);
+        return $this->successResponse($student);
     }
 
     private function updateStudentFeedingDetails($data){
-        $students = Student::where('id',$data['id'])->update($data);
-        return $students;
+        $student_detail=Student::where('id',$data['student'])->get('noOfMeals')->toArray();
+        
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'historyFor'    =>  'Student Feeding Change',
+            'previousValue' =>  $student_detail[0]['noOfMeals']
+        ];
+
+        $history = $this->insertStudentHistory($student_history);
+
+        $new_data = [
+            'noOfMeals' => $data['feeding']
+        ];
+
+        $student = Student::where('id',$data['student'])->update($new_data);
+        return $this->successResponse($student);
     }
 
     private function updateStudentNeedyDetails($data){
-        $students = Student::where('id',$data['id'])->update($data);
-        return $students;
+        $student_detail=Student::where('id',$data['student'])->get('isNeedy')->toArray();
+        
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'historyFor'    =>  'Student Needy Status Change',
+            'previousValue' =>  $student_detail[0]['isNeedy']
+        ];
+
+        $history = $this->insertStudentHistory($student_history);
+
+        $new_data = [
+            'isNeedy' => $data['needy']
+        ];
+
+        $student = Student::where('id',$data['student'])->update($new_data);
+        return $this->successResponse($student);
     }
 
     private function updateStudentScholarshipDetails($data){
