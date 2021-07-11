@@ -171,9 +171,10 @@ export default {
          * method to add more fields
          */
         loadStockReceiveView(StockReceivedID){
-            axios.get('mess_manage/loadStockReceiveView/'+StockReceivedID)
+            axios.get('mess_manage/loadStockReceiveView/' +StockReceivedID)
             .then((response) => {
                 let data=response.data.data
+                this.form.id=data.id;
                 this.form.dateOfreceived=data.dateOfreceived;
                 this.form.quarter=data.quarter;
                 this.form.remarks=data.remarks;
@@ -189,8 +190,8 @@ export default {
        
     },
      mounted() { 
-        this.StockReceivedID=this.$route.params.data.stockreceivedId;
-        this.loadStockReceiveView();
+        this.loadStockReceiveView(this.$route.params.data.id);
+       
         this.loadActiveQuarterList();
          $('.select2').select2();
         $('.select2').select2({

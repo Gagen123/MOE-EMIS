@@ -91,7 +91,7 @@ class StockReceiveController extends Controller
     }
 
     public function viewitemreceived($stockreceivedId=""){
-       // dd('from micro');
+      //  dd($stockreceivedId);
         $list = DB::table('stock_received_items as a')
         ->join('stock_receiveds as b', 'a.stockreceivedId', '=','b.id')
         ->select('b.dateOfreceived as dateOfreceived','b.quarter_id as quarter',
@@ -102,9 +102,9 @@ class StockReceiveController extends Controller
         //  dd('from services');
     }
     public function getStockReceivedDetails($stkId=""){
-        dd($stockreceivedId);
+       // dd($stockreceivedId);
         $response_data=StockReceived::where('id',$stkId)->first();
-        $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$response_data->id)->get();
+        $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$stkId)->get();
         return $this->successResponse($response_data); 
     }
 

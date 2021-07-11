@@ -186,9 +186,9 @@ export default {
                     this.form.dateOfissue           = data[i].dateOfissue;
                     this.form.id                    = data[i].id;
                     this.form.item_issue.push({
-                       item:data[i].item,
+                       item:data[i].item_id,
                        quantity:data[i].quantity,
-                       unit:data[i].unit,
+                       unit:data[i].unit_id,
                        damagequantity:data[i].damagequantity,
                        remarks:data[i].remarks
                     });

@@ -42,6 +42,7 @@ export default {
             localprocure_list:[],
             itemList:{},
             unitList:{},
+            dt:''
         } 
     },
     methods: {
@@ -97,10 +98,20 @@ export default {
         },
     },
     mounted(){
+
         this.loadActiveItemList();
         this.loadActiveUnitList();
         this.loadLocalProcure();
+        this.dt =  $("#localprocure-table").DataTable();
        
+    },
+     watch: {
+        localprocure_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#localprocure-table").DataTable()
+            });
+        }
     },
     
 }

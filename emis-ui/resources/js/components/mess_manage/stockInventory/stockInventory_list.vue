@@ -48,13 +48,14 @@ export default {
             stockInventory:[],
             itemList:{},
             unitList:{},
+            
         }
     },
     methods:{
         /**
          * method to load organization/school list
          */
-        getInventoryList(uri = 'mess_manage/getInventoryList/null'){
+        getInventoryList(uri = 'mess_manage/getInventoryList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -69,7 +70,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.itemList[data.data.data[i].id] = data.data.data[i].Name; 
                 }
             })
             .catch(function (error) {
@@ -81,7 +82,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].Name; 
                 }
             })
             .catch(function (error) {

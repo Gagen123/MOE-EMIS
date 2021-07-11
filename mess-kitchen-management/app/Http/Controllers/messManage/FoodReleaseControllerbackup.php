@@ -22,38 +22,6 @@ class FoodReleaseController extends Controller
 
     public function saveFoodRelease(Request $request){
          //dd('m here');
-         $id = $request->id;
-         if($id != null){
-            $foodrelease = [
-                'dateOfrelease'             =>  $request['dateOfrelease'],
-                'dzongkhag_id'              =>  $request['dzongkhag'],
-                'org_id'                    =>  $request['organizaiton'],
-                'quarter_id'                =>  $request['quarter'],
-                'remarks'                   =>  $request['remarks'],
-                'id'                        =>  $request['id'],
-                'updated_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
-            ];
-           // dd($foodrelease);
-            $foodrel = FoodRelease::where('id',$id)->update($foodrelease);
-            $attachmentId =  $foodrel->id;
-            if($request->attachment_details!=null && $request->attachment_details!="" && $request->attachmentId!=""){
-                foreach($request->attachment_details as $att){
-                    $attach =[
-                        'attachmentId'              =>  $attachmentId,
-                        'path'                      =>  $att['path'],
-                        'attachment_for'            =>  'Food Release Note',
-                        'user_defined_name'         =>  $att['user_defined_name'],
-                        'original_name'             =>  $att['original_name'],
-                        
-                    ];
-                   // dd($attach);
-                    FoodReleaseDocuments::create($attach);
-                }  
-            }
-            return $this->successResponse($foodrel, Response::HTTP_CREATED);
-        
-        }else{
         $foodrelease = [
             'dateOfrelease'             =>  $request['dateOfrelease'],
             'dzongkhag_id'              =>  $request['dzongkhag'],
@@ -79,8 +47,7 @@ class FoodReleaseController extends Controller
                // dd($attach);
                 FoodReleaseDocuments::create($attach);
             }
-        }
-        
+        } 
 
        // $releasId = DB::table('food_releases')->orderBy('id','desc')->limit(1)->pluck('id');
         // dd($request->items_release);
@@ -110,10 +77,9 @@ class FoodReleaseController extends Controller
         //     );
         //     FoodReleaseDocuments::create($doc_data);
         // }
-        return $this->successResponse($foodrel, Response::HTTP_CREATED);
+        return $this->successResponse($foodrelease, Response::HTTP_CREATED);
        // dd($foodrel);
     }
-}
     public function loadFoodReleaseList(){
         //   return 'from service of mine';
         $list = DB::table('food_releases')

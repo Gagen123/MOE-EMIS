@@ -23,8 +23,8 @@ class StockInventoryController extends Controller
     {
         date_default_timezone_set('Asia/Dhaka');
     }
-    public function getInventoryList($org_Id){
-      //  dd($org_Id);
+    public function getInventoryList($orgId){
+       // dd($orgId);
         //  return 'from service of mine';
         //    $stckrecive = DB::table('stock_receiveds')
         //   ->select('dateOfreceived as dateOfreceived', 'term_id as term', 'remarks as remarks')->where('organizationId', $org_Id)->get();
@@ -41,7 +41,7 @@ class StockInventoryController extends Controller
           (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity FROM stock_issueds GROUP BY organizationId, item_id, unit_id) b ON a.item_id=b.item_id
           LEFT JOIN
           (SELECT item_id,organizationId, unit_id, SUM(quantity) AS local_procured_quantity FROM local_procures GROUP BY organizationId, item_id, unit_id) c ON a.item_id=c.item_id
-         WHERE a.organizationId = ? GROUP BY a.stock_received_quantity,  b.stock_issed_quantity, c.local_procured_quantity, a.organizationId, a.unit_id, a.item_id",[$org_Id]);
+         WHERE a.organizationId = ? GROUP BY a.stock_received_quantity,  b.stock_issed_quantity, c.local_procured_quantity, a.organizationId, a.unit_id, a.item_id",[$orgId]);
          return $this->successResponse($response_data);
     //    }catch(Exception $e){
     //     dd($e);

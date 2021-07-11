@@ -24,10 +24,10 @@
                             <td> {{ item.remarks}}</td>
                               
                             <td> 
-                              <!-- <div class="btn-group btn-group-sm">
+                              <div class="btn-group btn-group-sm">
                                    
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewfoodreleasenote(item)"><i class="fas fa-eye"></i ></a>
-                               </div> -->
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="FoodReleaseView(item)"><i class="fas fa-eye"></i ></a>
+                               </div>
                                <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
                                     
@@ -120,7 +120,7 @@ export default {
             unitList:{},
             itemList:{},
             quarterList:{},
-            
+            dt:''
            
         } 
     },
@@ -167,6 +167,10 @@ export default {
         viewFoodReleaseList(data){
             data.action='edit';
             this.$router.push({name:'FoodReleaseEdit',params: {data:data}});
+        },
+        FoodReleaseView(data){
+           data.action='view';
+            this.$router.push({name:'FoodReleaseView',params: {data:data}}); 
         },
 
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
@@ -240,7 +244,16 @@ export default {
         this.loadFoodReleaseList();
         this.loadActiveItemList();
         this.loadActiveUnitList();
+        this.dt =  $("#foodrelease-table").DataTable();
        
+    },
+    watch: {
+        itemrelease_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#foodrelease-table").DataTable()
+            });
+        }
     },
     
 }
