@@ -586,23 +586,23 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="studenthealth">
+                    {{-- <li class="nav-item" id="studenthealth">
                         <router-link to="/student_health" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Remedial Actions
                             </p>
                         </router-link>
-                    </li>
+                    </li> --}}
                     <!-- Non-Academic Activities -->
-                    <li class="nav-item" id="studenthealth">
+                    {{-- <li class="nav-item" id="studenthealth">
                         <router-link to="/student_health" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Hobbies & Interest
                             </p>
                         </router-link>
-                    </li>
+                    </li> --}}
                     <li class="nav-item" id="programs">
                         <router-link to="/student_programs_clubs" class="nav-link">
                             <p>

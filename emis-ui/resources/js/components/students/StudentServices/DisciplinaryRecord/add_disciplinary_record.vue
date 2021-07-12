@@ -84,7 +84,7 @@ export default {
             offenceTypeList:[],
             actionTakenList:[],
             severityList:[],
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'',
 
             student_form: new form({
                 id:'',
@@ -101,7 +101,7 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        
+
         loadStudentList(uri='students/loadStudentList/'+this.id){
             axios.get(uri)
             .then(response => {
@@ -196,11 +196,19 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
+        });
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.id=data['Agency_Code'];
+        })
+        .catch(errors => {
+            console.log(errors)
         });
 
         this.loadStudentList();
@@ -208,6 +216,6 @@ export default {
         this.loadActiveActionTakenList();
         this.loadActiveSeverityList();
     },
-    
+
 }
 </script>
