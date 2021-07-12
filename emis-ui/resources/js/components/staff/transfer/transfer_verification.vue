@@ -178,6 +178,7 @@ export default {
                 service_name:'',
                 transfer_reason_id:'',
                 description:'',
+                transferType:'',
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
@@ -199,9 +200,12 @@ export default {
                 let data=response.data.data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
+                this.form.id=data.id;
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
+                this.form.transferType=data.transferType;
+                
                 this.draft_attachments=data.attachments;
 
                 for(let i=0;i<data.preferences.length;i++){

@@ -144,7 +144,6 @@ class TransferController extends Controller{
         return json_encode($loadTransferDetails);
     }
     public function updateTransferApplication(Request $request){
-        $service_name = $request->service_name;
         $org_status='Verified';
         $work_status=$request->status_id+1;
         if($request->actiontype=="reject"){
@@ -158,7 +157,7 @@ class TransferController extends Controller{
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
-            'service_name'      =>$request->service_name,
+            'service_name'      =>"inter transfer",
             'application_number'=>$request->application_no,
             'screen_id'         =>$request->application_no,
             'status_id'         =>$work_status,
@@ -194,15 +193,38 @@ class TransferController extends Controller{
         //         }
         //     }
         // }
-        $data =[
-            'status'                        =>   $org_status,
-            'application_number'            =>   $request->application_no,
-            'remarks'                       =>   $request->remarks,
-            'status_id'                     =>$work_status,
-            // 'attachment_details'            =>   $attachment_details,
-            'user_id'                       =>   $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
+        if($request->transferType=='intra_transfer'){
+            $data =[
+                'id'                            =>  $request->id,
+                'status'                        =>  $org_status,
+                'application_number'            =>  $request->application_no,
+                'remarks'                       =>  $request->remarks,
+                'transferType'                  =>  $request->transferType,
+                'current_status'                =>  $request->actiontype,
+                'status_id'                     =>  $work_status,
+                'service_name'                  =>  "intra transfer",
+                'dzongkhagApproved'             =>$request->dzongkhagApproved,
+                // 'attachment_details'            =>   $attachment_details,
+                'user_id'                       =>   $this->userId()
+            ];
+            $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
+        }
+        else if($request->transferType=='inter_transfer'){
+            $data =[
+                'id'                            =>  $request->id,
+                'status'                        =>  $org_status,
+                'application_number'            =>  $request->application_no,
+                'remarks'                       =>  $request->remarks,
+                'transferType'                  =>  $request->transferType,
+                'current_status'                =>  $request->actiontype,
+                'status_id'                     =>  $work_status,
+                'service_name'                  =>  "inter transfer",
+                'dzongkhagApproved'             =>$request->dzongkhagApproved,
+                // 'attachment_details'            =>   $attachment_details,
+                'user_id'                       =>   $this->userId()
+            ];
+            $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
+        }
         return $response_data;
     }
     public function LoadSchoolByDzoId($type="",$parent_id=""){
