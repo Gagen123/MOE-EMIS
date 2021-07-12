@@ -47,7 +47,7 @@ class StockInventoryController extends Controller
             LEFT JOIN
             (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity 
           FROM stock_issueds GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
-         WHERE a.organizationId = ? GROUP BY aa.stock_received_quantity,  b.stock_issed_quantity, aa.local_procured_quantity, aa.organizationId, aa.unit_id, aa.item_id",[$orgId]);
+         WHERE a.organizationId = ? ",[$orgId]);
          return $this->successResponse($response_data);
     //    }catch(Exception $e){
     //     dd($e);
