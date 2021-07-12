@@ -15,7 +15,6 @@ class Calender extends Migration
             $table->date('to_date')->nullable(false);
             $table->string('remarks',500)->nullable(true);
             $table->string('user_type',100)->nullable(true);
-            $table->string('user_type',50)->nullable(true);
             $table->boolean('status')->default(1);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',50)->nullable(true);

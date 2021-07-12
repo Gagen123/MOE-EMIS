@@ -66,9 +66,11 @@ var numberOfAjaxCAllPending = 0;
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
   numberOfAjaxCAllPending++;
-
-  var $body = $("body");
-  $body.addClass("request_loading");
+  let _actionType = config.url;
+  if (_actionType !== 'common/getNotification') {
+    var $body = $("body");
+    $body.addClass("request_loading");
+  }
   return config;
 }, function (error) {
   return Promise.reject(error);
