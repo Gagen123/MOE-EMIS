@@ -19,6 +19,7 @@
                                     <th>Stock Received</th>
                                     <th>Locally Procured</th>
                                     <th>Stock Issued</th>
+                                    <th>Stock Damage</th>
                                     <th>Unit</th>
 
                                 </tr>
@@ -30,7 +31,9 @@
                                     <td>{{ item.stock_received_quantity}}</td>
                                     <td>{{ item.local_procured_quantity}}</td>
                                     <td>{{ item.stock_issed_quantity}}</td>
+                                    <td>{{ item.Damage_Qty}}</td>
                                     <td>{{unitList[item.unit_id]}} </td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
