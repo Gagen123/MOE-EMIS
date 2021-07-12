@@ -55,13 +55,16 @@ class StudentUpdateController extends Controller{
                 }
             case "update_contact" : {
                     $additional_rules =[
-                        'contact'   =>  'required|min:8|max:8'
+                        'change_for'   =>  'required'
                     ];
                     $additional_messages=[
-                        'contact.required'  => 'This field is required'
+                        'change_for.required'  => 'This field is required'
                     ];
                     $additional_data = [
-                        'contact'   => $request->contact
+                        'change_for'    => $request->change_for,
+                        'address'       => $request->address,
+                        'email'         => $request->email,
+                        'contact'       => $request->contact
                     ];
                     break;
                 }
@@ -134,14 +137,14 @@ class StudentUpdateController extends Controller{
 
         $data = $data + $additional_data;
 
-
         $response_data= $this->apiService->createData('emis/students/saveStudentUpdates', $data);
         return $response_data;
         
     }
 
     public function loadStudentUpdatesList($param=""){
-        $student_list = $this->apiService->listData('emis/students/loadStudentUpdatesList/'.$param);
+        $org_id = $this->getWrkingAgencyId();
+        $student_list = $this->apiService->listData('emis/students/loadStudentUpdatesList/'.$param.'/'.$org_id);
         return $student_list;
     }
     

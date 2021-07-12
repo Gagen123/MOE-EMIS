@@ -12,66 +12,63 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- text input -->
                     <div class="form-group">
-                        <label>Date of Offence:</label>
+                        <label>Date:</label>
                         <input type="date" @change="remove_error('date')" class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" name="date" id="date">
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <!-- select -->
-                    <div class="form-group">
-                        <label class="mb-0.5">Offence Type:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.offence_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('offence_type') }" class="form-control select2" name="offence_type" id="offence_type">
-                            <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                        </select>
-                        <has-error :form="student_form" field="offence_type"></has-error>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- select -->
-                    <div class="form-group">
-                        <label class="mb-0.5">Severity:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.severity" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('severity') }" class="form-control select2" name="severity" id="severity">
-                            <option v-for="(item, index) in severityList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                        </select>
-                        <has-error :form="student_form" field="severity"></has-error>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label class="mb-0.5">Description of Offence:</label>
-                        <textarea @change="remove_error('offence_description')" class="form-control" v-model="student_form.offence_description" :class="{ 'is-invalid': student_form.errors.has('offence_description') }" name="offence_description" id="offence_description"></textarea>
-                        <has-error :form="student_form" field="offence_description"></has-error>
-                    </div>
+            <div class="form-group row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label class="mb-0.5">Change Address For:<i class="text-danger">*</i></label>
+                    <select name="change_for" class="form-control" v-model="student_form.change_for">
+                        <option value="">--- Please Select ---</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                    </select>
+                    <has-error :form="student_form" field="change_for"></has-error>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- select -->
                     <div class="form-group">
-                        <label class="mb-0.5">Action Taken:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.action_taken" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('action_taken') }" class="form-control select2" name="action_taken" id="action_taken">
-                            <option v-for="(item, index) in actionTakenList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                        </select>
-                        <has-error :form="student_form" field="action_taken"></has-error>
+                        <label class="mb-0.5">Work Address:</label>
+                        <textarea @change="remove_error('address')" class="form-control" v-model="student_form.address" :class="{ 'is-invalid': student_form.errors.has('address') }" name="address" id="address"></textarea>
+                        <has-error :form="student_form" field="address"></has-error>
                     </div>
                 </div>
-                <div class="col-sm-6">
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
                     <div class="form-group">
-                        <label class="mb-0.5">Description of Action Taken:</label>
+                        <label>Contact:</label>
+                        <input type="number" @change="remove_error('contact')" class="form-control" v-model="student_form.contact" :class="{ 'is-invalid': student_form.errors.has('contact') }" name="contact" id="contact">
+                        <has-error :form="student_form" field="contact"></has-error>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <!-- text input -->
+                    <div class="form-group">
+                        <label>Personal Email:</label>
+                        <input type="text" @change="remove_error('email')" class="form-control" v-model="student_form.email" :class="{ 'is-invalid': student_form.errors.has('email') }" name="email" id="email">
+                        <has-error :form="student_form" field="email"></has-error>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label class="mb-0.5">Remarks:</label>
                         <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
                         <has-error :form="student_form" field="remarks"></has-error>
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="card-footer text-right">
                     <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                     <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>
+                </div>
             </div>
         </form>
     </div>
@@ -89,13 +86,14 @@ export default {
             student_form: new form({
                 id:'',
                 student: '',
-                offence_type: '',
+                change_for: '',
                 date: '',
-                action_taken: '',
-                severity: '',
-                offence_description:'',
+                address: '',
+                email: '',
+                contact:'',
                 remarks:'',
-                action_type:'edit'
+                record_type:'update_contact',
+                action_type:'add'
             }),
         }
     },
@@ -108,36 +106,6 @@ export default {
                 let data = response;
                 console.log(data);
                 this.studentList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveOffenceTypeList(uri="masters/loadActiveStudentMasters/offence_type"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.offenceTypeList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveActionTakenList(uri="masters/loadActiveStudentMasters/disciplinary_action_taken"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.actionTakenList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.severityList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -156,13 +124,13 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/addStudentRecord',this.student_form)
+                this.student_form.post('/students/saveStudentUpdates',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/disciplinary_record_list');
+                    this.$router.push('/updated_contact_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -177,15 +145,6 @@ export default {
             }
             if(id=="student"){
                 this.student_form.student=$('#student').val();
-            }
-            if(id=="offence_type"){
-                this.student_form.offence_type=$('#offence_type').val();
-            }
-            if(id=="action_taken"){
-                this.student_form.action_taken=$('#action_taken').val();
-            }
-            if(id=="severity"){
-                this.student_form.severity=$('#severity').val();
             }
         },
     },
@@ -204,22 +163,15 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
-        this.loadActiveSeverityList();
     },
     created() {
-        this.loadStudentList();  
-        this.student_form.id=this.$route.params.data.id;
-        this.student_form.student=this.$route.params.data.Name;
         this.student_form.student=this.$route.params.data.StdStudentId;
-        this.student_form.offence_type=this.$route.params.data.StdDisciplinaryOffenceTypeId;
-        this.student_form.date=this.$route.params.data.OffenceDate;
-        this.student_form.action_taken=this.$route.params.data.StdDisciplinaryActionTypeId;
-        this.student_form.severity=this.$route.params.data.StdDisciplinarySeverityId;
-        this.student_form.offence_description=this.$route.params.data.OffenceDescription;
-        this.student_form.remarks=this.$route.params.data.ActionDescription;
-       
+        this.student_form.address=this.$route.params.data.WorkAddress;
+        this.student_form.contact=this.$route.params.data.ContactNo;
+        this.student_form.email=this.$route.params.data.Email;
+        this.student_form.change_for=this.$route.params.data.Relationship;
+        this.student_form.id=this.$route.params.data.id;
     },
+    
 }
 </script>
