@@ -35,6 +35,11 @@
                     Roles & Responsibilities 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('counselling_type_list')">
+                    <router-link to="/counselling_type_index" id="counselling_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Counselling Type
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

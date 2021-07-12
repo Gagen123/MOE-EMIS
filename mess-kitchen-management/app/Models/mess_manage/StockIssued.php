@@ -14,15 +14,14 @@ class StockIssued extends Model
         'id',   
         'organizationId',                         
         'dateOfissue',
+        'quantity',
         'item_id',
         'quantity',
         'unit_id',
-        'item',
-        'quantity',
-        'unit',
         'damagequantity',
         'remarks',
         'created_by',
         'updated_by'
     ];
 }
+

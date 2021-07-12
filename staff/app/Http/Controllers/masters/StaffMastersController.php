@@ -510,6 +510,19 @@ class StaffMastersController extends Controller{
         if($param=="all_active_position_title"){
             return $this->successResponse(PositionTitle::where ('status', 1)->get());
         }
+        if($param=="all_active_position_title_with_level"){
+            $positions=PositionTitle::where('status', 1)->get();
+            if($positions!=null && $positions!="" && sizeof($positions)>0){
+                foreach($positions as $pos){
+                    $pos->subgroup=StaffSubMajorGrop::where('id',$pos['sub_group_id'])->first()->name;
+                    $level=PositionLevel::where('id',$pos['position_level_id'])->first();
+                    if($level!=null && $level!=""){
+                        $pos->level=$level->name;
+                    }
+                }
+            }
+            return $this->successResponse($positions);
+        }
 
         if($param=="all_position_level_List"){
             return $this->successResponse(PositionLevel::all());

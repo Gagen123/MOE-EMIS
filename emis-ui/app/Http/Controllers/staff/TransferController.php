@@ -168,7 +168,7 @@ class TransferController extends Controller{
             'action_by'         =>$this->userId(),
             'dzongkhagApproved' =>$request->dzongkhagApproved, 
         ];
-        // $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         // $files = $request->attachments;
         // $filenames = $request->attachmentname;
         // $remarks = $request->remarks;

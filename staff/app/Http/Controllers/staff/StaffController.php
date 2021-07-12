@@ -4,6 +4,7 @@ namespace App\Http\Controllers\staff;
 
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
+use App\Models\staff\CareerStage;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
@@ -32,8 +33,6 @@ class StaffController extends Controller{
                 'email'                 =>  'required |unique:stf_staff',
                 'position_title'        =>  'required',
                 'working_agency_id'     =>  'required',
-                'comp_sub'              =>  'required',
-                'elective_sub1'         =>  'required',
                 'currier_stage'         =>  'required',
             ];
             if($request->emp_type=="Regular" || $request->emp_type=="Volunteer"){
@@ -42,9 +41,13 @@ class StaffController extends Controller{
                     'emp_file_code'         =>  'required',)
                 );
             }
+            if($request->isteaching){
+                $rules= $rules+['comp_sub'              =>  'required',
+                                'elective_sub1'         =>  'required'];
+            }
             $this->validate($request, $rules);
         }
-        
+
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
@@ -66,12 +69,12 @@ class StaffController extends Controller{
             'comp_sub_id'           =>  $request->comp_sub,
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
-            'cureer_stagge_id'      =>  $request->currier_stage,
+            // 'cureer_stagge_id'      =>  $request->currier_stage,
             'employee_code'         =>  $request->emp_file_code,
             'remarks'               =>  $request->remarks,
             'status'                =>  $request->status,
         ];
-        
+
         if($request->status=="Pending"){
             $data=array_merge($data,
                 array('created_by'            =>  $request->user_id,
@@ -86,18 +89,32 @@ class StaffController extends Controller{
                 )
             );
         }
-        
+
         if($request->personal_id==""){
             $response_data = PersonalDetails::create($data);
+            $curr_data=[
+                'staff_id'              =>  $response_data->id,
+                'currier_stage'         =>  $request->currier_stage,
+                'remarks'               =>  $request->remarks,
+                'created_by'            =>  $request->user_id,
+                'created_at'            =>  date('Y-m-d h:i:s'),
+            ];
+            CareerStage::create($curr_data);
         }
         else{
             $act_det = PersonalDetails::where ('id', $request->personal_id)->firstOrFail();
             $act_det->fill($data);
             $response_data=$act_det->save();
+            $curr_data=[
+                'currier_stage'         =>  $request->currier_stage,
+                'remarks'               =>  $request->remarks,
+            ];
+            CareerStage::where('staff_id',$request->personal_id)->update($curr_data);
         }
+
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loaddraftpersonalDetails(Request $request,$type="",$user_id=""){
         if($type=="Private"){
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->where('emp_type_id',$type)->first());
@@ -107,7 +124,7 @@ class StaffController extends Controller{
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->wherein('emp_type_id',$emp_type)->first());
         }
     }
-    
+
     public function checkThisCid($cid=""){
         return $this->successResponse(PersonalDetails::where('cid_work_permit',$cid)->first());
     }
@@ -164,7 +181,7 @@ class StaffController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadQualification($staff_id="",$user_id=""){
         return $this->successResponse(QualificationDetails::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
     }
@@ -194,7 +211,7 @@ class StaffController extends Controller{
             'nomi_percentage.required'      => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        
+
         $nomination_details =[
             'personal_id'                       =>  $request->personal_id,
             'nomination_id'                     =>  $request->nomination_id,
@@ -240,7 +257,7 @@ class StaffController extends Controller{
     public function loadStaffNomination($staff_id=""){
         return $this->successResponse(Nomination::where('personal_id',$staff_id)->where('status','Created')->get());
     }
-    
+
     public function updatefinalstaffDetails(Request $request){
         $response_data=[];
         $final_details =[
@@ -277,7 +294,7 @@ class StaffController extends Controller{
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     // public function loadAllStaff($type=""){
     //     if(strpos($type,',')){
     //         $emp_type=[];
@@ -290,7 +307,7 @@ class StaffController extends Controller{
     //         return $this->successResponse(PersonalDetails::where('emp_type_id',$type)->where('status','Created')->get());
     //     }
     // }
-    
+
     public function getEmisUsers($empId=""){
         if(strlen($empId)==11){
             return $this->successResponse(PersonalDetails::where('cid_work_permit',$empId)->where('status','Created')->first());
@@ -312,7 +329,7 @@ class StaffController extends Controller{
     //     }
     //     return $this->successResponse(PersonalDetails::all());
     // }
-    
+
     public function load_staff_details_by_id($id=""){
         return $this->successResponse(PersonalDetails::where('id',$id)->first());
     }
@@ -320,5 +337,5 @@ class StaffController extends Controller{
         $teacher = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
         return $this->successResponse($teacher);
     }
-    
+
 }

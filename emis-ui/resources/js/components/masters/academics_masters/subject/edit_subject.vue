@@ -24,8 +24,8 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                 </div>  
-                 <div class="row form-group">
-                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number" min="0">
                         <has-error :form="form" field="display_order"></has-error>
@@ -36,13 +36,21 @@
                         <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="1" />Yes</label>
                         <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="0" />No</label>
                     </div>
-                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">status:</label>
-                        <br>
-                        <label><input v-model="form.status" type="radio" value="1" /> Active</label>
-                        <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Special Educational Needs (SEN) :</label>
+                        <br> 
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" />Yes</label>
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" />No</label>
                     </div>
-                </div>        
+                </div> 
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Status:</label>
+                        <br>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
+                    </div>
+                </div>         
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -62,6 +70,7 @@ export default {
                 aca_sub_category_id:'',
                 dzo_name:'',
                 assessed_by_class_teacher:0,
+                is_special_educational_needs:0,
                 display_order:'',
                 status:'',
                 record_type:'subject',
@@ -93,6 +102,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
+                console.log(this.form)
                 this.form.post('/masters/saveAcademicMasters',this.form)
                     .then(() => {
                     Toast.fire({
@@ -108,11 +118,12 @@ export default {
 		}, 
     },
     created() {
-        this.form.name=this.$route.params.data.name;
         this.form.aca_sub_category_id = this.$route.params.data.aca_sub_category_id
+        this.form.name=this.$route.params.data.name;
         this.form.dzo_name=this.$route.params.data.dzo_name;
         this.form.display_order = this.$route.params.data.display_order,
         this.form.assessed_by_class_teacher=this.$route.params.data.assessed_by_class_teacher;
+        this.form.is_special_educational_needs=this.$route.params.data.is_special_educational_needs;
         this.form.status=this.$route.params.data.status;
         this.form.display_order = this.$route.params.data.display_order,
         this.form.id=this.$route.params.data.id;

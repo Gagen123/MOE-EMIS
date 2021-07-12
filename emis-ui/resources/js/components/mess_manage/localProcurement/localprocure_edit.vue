@@ -2,6 +2,7 @@
     <div>
         <form class="bootbox-form" id="localprocureId">
             <div class="card-body">
+                <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label> 
@@ -26,28 +27,16 @@
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
                                     <select name="item" id="item" class="form-control " v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
-                                <!--     <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="rice">rice</option>
-                                         <option value="potatoes">potatoes</option>
-                                         <option value="onion">onion</option>
-                                     </select>-->
                                   </td>
                                   <td>                                
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
                                  <td>                                
                                 <select name="unit" id="unit" class="form-control" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                      </select> 
-                                    <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="kg">kg</option>
-                                         <option value="litre">litre</option>
-                                         <option value="packet">packet</option>
-                                     </select> -->
                                   </td>
                                   <td>                                
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
@@ -178,7 +167,7 @@ export default {
             this.count++;
             this.form.local_item.push({
                 item:'',quantity:'',unit:'',amount:'',remark:''})    
-        }, 
+            }, 
         /**
          * method to remove fields
          */
@@ -186,10 +175,35 @@ export default {
              if(this.form.local_item.length>1){
                 this.count--;
                 this.form.local_item.splice(index,1); 
-            }
+            } 
         },
+        localProcureEditList(locId){
+            this.form.local_item=[];
+            axios.get('mess_manage/localProcureEditList/' +locId)
+            .then((response) =>{
+                let data=response.data.data;
+               // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.dateOfprocure         = data[i].dateOfprocure;
+                    this.form.id                    = data[i].id;
+                    this.form.local_item.push({
+                       item:data[i].item_id,
+                       quantity:data[i].quantity,
+                       unit:data[i].unit_id,
+                       amount:data[i].amount,
+                       remark:data[i].remark
+                    });
+                }
+                this.count=data.length;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            });
+        }
     },
     mounted() { 
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -200,18 +214,15 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-      this.loadActiveItemList(); 
-      this.loadActiveUnitList();
-     // this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
+     
        
     },
     created() {
-        this.form.id=this.$route.params.data.id;
-        this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
-        this.form.local_item.item = this.$route.params.data.item;
-        this.form.local_item.quantity = this.$route.params.data.quantity;
-        this.form.local_item.unit = this.$route.params.data.unit;
-        this.form.local_item.remarks = this.$route.params.data.remarks;
+        this.localProcureEditList(this.$route.params.data.id);
+        this.loadActiveItemList(); 
+        this.loadActiveUnitList();
+        
+        
     }
 }
 </script>

@@ -56,6 +56,15 @@ const routes = [
                     { path: '/roles_responsibilities_list', name:'RolesResponsibilitiesList', component: require('./components/masters/student_masters/roles_responsibilities/roles_responsibilities_list.vue').default },
                 ]
             },
+            { path: '/counselling_type_index',
+                component: require('./components/masters/student_masters/counselling_types/counselling_type_index.vue').default ,
+                children: [
+                    { path: '', component: require('./components/masters/student_masters/counselling_types/counselling_type_list.vue').default },
+                    { path: '/counselling_type_add', name:'counselling_type_add', component: require('./components/masters/student_masters/counselling_types/counselling_type_add.vue').default },
+                    { path: '/counselling_type_edit', name:'counselling_type_edit', component: require('./components/masters/student_masters/counselling_types/counselling_type_edit.vue').default },
+                    { path: '/counselling_type_list', name:'counselling_type_list', component: require('./components/masters/student_masters/counselling_types/counselling_type_list.vue').default },
+                ]
+            },
         ]
     },
     //Students validation and others
@@ -441,8 +450,37 @@ const routes = [
                 { path: '/edit_student_awards', name:'edit_student_awards', component: require('./components/students/StudentExtraCurricular/Awards/edit_student_awards.vue').default },
             ]
         },
+        //Counselling records
+       
     ]
     },
+//     { path: '/student_counselling_record', component: require('./components/students/counselling_records/index.vue').default,
+//     children: [
+//         { path: '/general_index',name:"general_index", component: require('./components/organization/general/index_list.vue').default },
+//         { path: '/', name:'student_counselling_record', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+//         { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+//         { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
+//         { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
+        
+//     ]
+// },
+
+{ path: '/counselling_record', component: require('./components/students/counselling_records/index.vue').default,
+    children:[
+        { path: '/counselling_record',name:"counselling_record", component: require('./components/students/counselling_records/index_list.vue').default },
+
+        { path: '/student_counselling_record',
+            component: require('./components/students/counselling_records/index_counselling_records.vue').default,
+            children: [
+                { path: '',name:'index_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+                { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
+                { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
+                { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
+            ]
+        }
+
+    ]
+},
 
     //Student Programs and Clubs Routes
     { path: '/student_programs_clubs', component: require('./components/students/StudentExtraCurricular/programs_clubs_index.vue').default,

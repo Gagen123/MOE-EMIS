@@ -220,7 +220,16 @@ class TransferController extends Controller{
             'updated_at'                   =>  date('Y-m-d h:i:s'),
             'service_name'                 =>  $request->service_name,
             'current_status'               =>  $request->current_status,
-            'application_number'           =>  $request->application_number,
+            'aplication_number'           =>  $request->application_number,
+
+        ];
+        $extra_data =[
+            'id'                           =>  $request->id,
+            'status'                       =>  $request->status,
+            'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+            'updated_by'                   =>  $request->user_id,
+            'updated_at'                   =>  date('Y-m-d h:i:s'),
+            'aplication_number'           =>  $request->application_number,
 
         ];
         if($request->status=="Approved"){
@@ -251,9 +260,9 @@ class TransferController extends Controller{
                 'dzongkhagApproved'  =>   $request->dzongkhagApproved,
                 'status'             =>  $request->status,
             ];
-            $request_data = $request_data + $additional_data;
+            $extra_data = $extra_data + $additional_data;
         }
-        $response_data=TransferApplication::where('id', $request->id)->update($request_data);
+        $response_data=TransferApplication::where('id', $request->id)->update($extra_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
        
     }
