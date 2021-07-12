@@ -89,8 +89,7 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-            dt:'',
-            dt1:'',
+
         }
     },
     methods: {
@@ -100,17 +99,6 @@
                 let data = response.data;
                 if(data!="Not Found"){
                     this.commonTaskList=data;
-                }
-            });
-        },
-        loadcommontaskFoLeave(){
-            axios.get('common/getTaskList/commonLeaveOthers')
-            .then(response => {
-                let data = response.data;
-                if(data!=undefined){
-                    for(let i =0; i<data.length; i++){
-                        this.commonTaskList.push(data[i]);
-                    }
                 }
             });
         },
@@ -150,7 +138,6 @@
                 });
             }
             else{
-
                 if(data.application_number.includes('Estb')){
                     this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
                 }
@@ -172,13 +159,20 @@
                 if(data.service_name.includes('Leave')){
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.application_number.includes('Reopen')){
+                if(data.service_name.includes('Reopen')){
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Recu')){
+                 if(data.application_number.includes('Recu')){
                     this.$router.push({name:"view_principal_recuritment",params:{data:data,type:actiontype}});
                 }
+                if(data.application_number.includes('Expat')){
+                    this.$router.push({name:"open_expatriate_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.application_number.includes('STF_REC')){
+                    this.$router.push({name:"open_staff_recruitment_verification",params:{data:data,type:actiontype}});
+                }
             }
+
         }
     },
     mounted(){
@@ -186,7 +180,6 @@
         this.dt =  $("#common-task-table").DataTable();
         this.dt1 =  $("#own-task-table").DataTable()
         this.loadcommontask();
-        this.loadcommontaskFoLeave();
         this.loadowntask();
     },
     watch:{

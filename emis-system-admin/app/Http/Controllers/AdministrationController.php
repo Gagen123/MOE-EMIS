@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Calender;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -30,11 +32,11 @@ class AdministrationController extends Controller{
                 $validate=$this->validate($request, $rule);
                 $data =[
                     'country_name'  =>  $request['name'],
-                    'nationality'  =>  $request['nationality'],
-                    'code'  =>  $request['code'],
-                    'status'    =>  $request['status'],
-                    'created_by'=>  $request['user_id'],
-                    'created_at'=>  date('Y-m-d h:i:s'),
+                    'nationality'   =>  $request['nationality'],
+                    'code'          =>  $request['code'],
+                    'status'        =>  $request['status'],
+                    'created_by'    =>  $request['user_id'],
+                    'created_at'    =>  date('Y-m-d h:i:s'),
                 ];
                 $country = Country::create($data);
                 return $this->successResponse($country, Response::HTTP_CREATED);
@@ -53,7 +55,8 @@ class AdministrationController extends Controller{
             }
 
         }
-        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village" || $request['record_type']=="gender" || $request['record_type']=="mothertongue"){
+        if($request->record_type=="dzongkhag" || $request->record_type=="gewog" || $request['record_type']=="village"
+        || $request['record_type']=="gender" || $request['record_type']=="mothertongue" || $request['record_type']=="calender"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request->record_type=="dzongkhag"){
@@ -71,16 +74,18 @@ class AdministrationController extends Controller{
                 if($request->record_type=="mothertongue"){
                     $table="mother_tongue_master";
                 }
-                $rule =[
-                    'name'      => 'required|string|unique:'.$table,
-                    'code'      =>  'required|unique:'.$table,
-                    'status'    =>  'required',
-                ];
-                $validate=$this->validate($request, $rule);
+                if($request->record_type!="calender"){
+                    $rule =[
+                        'name'      => 'required|string|unique:'.$table,
+                        'code'      =>  'required|unique:'.$table,
+                        'status'    =>  'required',
+                    ];
+                    $validate=$this->validate($request, $rule);
+                }
                 $data =[
                     'name'          =>  $request['name'],
                     'dzongkhag_id'  =>  $request['parent_field'],
-                    'gewog_id'  =>  $request['parent_field'],
+                    'gewog_id'      =>  $request['parent_field'],
                     'code'          =>  $request['code'],
                     'status'        =>  $request['status'],
                     'created_by'    =>  $request['user_id'],
@@ -101,6 +106,22 @@ class AdministrationController extends Controller{
                 }
                 if($request->record_type=="mothertongue"){
                     $response_data = MotherTongue::create($data);
+                }
+                if($request->record_type=="calender"){
+                    $data =[
+                        'year'          =>  $request['year'],
+                        'from_date'     =>  $request['from_date'],
+                        'to_date'       =>  $request['to_date'],
+                        'type'          =>  $request['type'],
+                        'remarks'       =>  $request['remarks'],
+                        'user_type'     =>  $request['user_type'],
+                        'status'        =>  $request['status'],
+                        'user_type'     =>  $request['user_type'],
+                        'created_by'    =>  $request['user_id'],
+                        'created_at'    =>  date('Y-m-d h:i:s'),
+                    ];
+
+                    $response_data = Calender::create($data);
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
@@ -130,23 +151,40 @@ class AdministrationController extends Controller{
                     $data = MotherTongue::find($request['id']);
                     $table="mother_tongue_master";
                 }
-                //storing audit trials
-                $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-                $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
+                if($request->record_type=="calender"){
+                    $data = Calender::find($request['id']);
+                    $table="master_calender";
+                    $messs_det='from_date:'.$data->from_date.'; to_date:'.$data->to_date.'; type:'.$data->type.'; remarks:'.$data->remarks.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+                    $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
 
-                $data->name         = $request['name'];
-                if($request->record_type=="gewog"){
-                    $data->dzongkhag_id = $request['parent_field'];
+                    $data->from_date        = $request['from_date'];
+                    $data->to_date          = $request['to_date'];
+                    $data->status           = $request['status'];
+                    $data->remarks          = $request['remarks'];
+                    $data->type             = $request['type'];
+                    $data->updated_at       = date('Y-m-d h:i:s');
+                    $data->update();
+                    return $this->successResponse($data);
                 }
-                if($request->record_type=="village"){
-                    $data->gewog_id = $request['parent_field'];
+                else{
+                    //storing audit trials
+                    $messs_det='name:'.$data->name.$aditionla_param.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+                    $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$table."','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
+                    $data->name         = $request['name'];
+                    if($request->record_type=="gewog"){
+                        $data->dzongkhag_id = $request['parent_field'];
+                    }
+                    if($request->record_type=="village"){
+                        $data->gewog_id = $request['parent_field'];
+                    }
+
+                    $data->code         = $request['code'];
+                    $data->status       = $request['status'];
+                    $data->updated_by   = $request['user_id'];
+                    $data->updated_at   = date('Y-m-d h:i:s');
+                    $data->update();
+                    return $this->successResponse($data);
                 }
-                $data->code         = $request['code'];
-                $data->status       = $request['status'];
-                $data->updated_by   = $request['user_id'];
-                $data->updated_at   = date('Y-m-d h:i:s');
-                $data->update();
-                return $this->successResponse($data);
             }
         }
         if($request->record_type=="guidelines"){
@@ -162,6 +200,7 @@ class AdministrationController extends Controller{
                         'guideline_for'     =>  $guidefor,
                         'guideline'         =>  $guide['guideline'],
                         'status'            =>  $guide['status'],
+                        'display_order'     =>  $guide['display_order'],
                         'created_by'        =>  $request['user_id'],
                         'created_at'        =>  date('Y-m-d h:i:s'),
                     ];
@@ -171,10 +210,11 @@ class AdministrationController extends Controller{
                         dd($ex);
 
                     }
-                   
+
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
+
             if($request->actiontype=="edit"){
                 // dd( $request['guideline_for'], $request['name'],$request['id']);
                 $data = Guidelines::find($request['id']);
@@ -182,6 +222,7 @@ class AdministrationController extends Controller{
                 DB::select("CALL emis_audit_proc('".$this->database."','master_guidelines','".$request['id']."','".$messs_det."','".$request->user_id."','Edit')");
                 $data->guideline_for = $request['guideline_for'];
                 $data->guideline = $request['name'];
+                $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->updated_by = $request['user_id'];
                 $data->updated_at = date('Y-m-d h:i:s');
@@ -192,6 +233,22 @@ class AdministrationController extends Controller{
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
+        if($param=="intra_transfer"){
+            return $this->successResponse(Calender::where('type','Intra Transfer')->get());
+        }
+
+        if($param=="inter_transfer"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->get());
+        }
+        if($param=="inter"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
+        if($param=="intra"){
+            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+        }
+        if($param=="all_transfer_type_list"){
+            return $this->successResponse(Calender::all());
+        }
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }
@@ -228,7 +285,13 @@ class AdministrationController extends Controller{
         if($param=="active_guidelines"){
             return $this->successResponse(Guidelines::where('status','1')->get());
         }
+        if($param=="all_calender"){
 
+            return $this->successResponse(Calender::all());
+        }
+        if($param=="active_calender"){
+            return $this->successResponse(Calender::where('status','1')->get());
+        }
 
     }
     public function load_dropdown($model="",$parent_id=""){
@@ -239,7 +302,7 @@ class AdministrationController extends Controller{
             return $this->successResponse(Village::where('gewog_id',$parent_id)->get());
         }
         if($model=="guidelines"){
-            return $this->successResponse(Guidelines::where('guideline_for',str_replace('_',' ',$parent_id))->where('status',1)->get());
+            return $this->successResponse(Guidelines::where('guideline_for',str_replace('_',' ',$parent_id))->where('status',1)->orderby('display_order','ASC')->get());
         }
 
     }

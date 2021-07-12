@@ -47,6 +47,8 @@ const routes = [
                     { path: '/stockreceived_add', name:'StockReceivedAdd', component: require('./components/mess_manage/stockReceived/stockreceived_add.vue').default },
                     { path: '/stockreceived_edit', name:'StockReceivedEdit', component: require('./components/mess_manage/stockReceived/stockreceived_edit.vue').default },
                     { path: '/stockreceived_list', name:'StockReceivedList', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },
+                    { path: '/stockreceived_view', name:'StockReceivedView', component: require('./components/mess_manage/stockReceived/stockreceived_view.vue').default },
+
                 ]
             },
             { path: '/stockissued_index',
@@ -77,6 +79,7 @@ const routes = [
                     { path: '/foodrelease_add', name:'FoodReleaseAdd', component: require('./components/mess_manage/foodReleaseNote/foodrelease_add.vue').default },
                     { path: '/foodrelease_edit', name:'FoodReleaseEdit', component: require('./components/mess_manage/foodReleaseNote/foodrelease_edit.vue').default },
                     { path: '/foodrelease_list', name:'FoodReleaseList', component: require('./components/mess_manage/foodReleaseNote/foodrelease_list.vue').default },
+                    { path: '/foodrelease_view', name:'FoodReleaseView', component: require('./components/mess_manage/foodReleaseNote/foodrelease_view.vue').default },
                 ]
             },
             { path: '/stockInventory_list',  name:'StockInventory_List',component: require('./components/mess_manage/stockInventory/stockInventory_list.vue').default },

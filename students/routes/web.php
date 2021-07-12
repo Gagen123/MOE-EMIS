@@ -53,6 +53,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadValidationcondition','Masters\StudentMasterController@loadValidationcondition');
         //Get Scouts Section
         $router->get('/getScoutSection','Masters\StudentMasterController@getScoutSection');
+        $router->post('/saveCounsellingType', ['uses' => 'Masters\StudentMasterController@saveCounsellingType']);
+        $router->get('/loadActiveCounsellingMaster/{param}','Masters\StudentMasterController@loadActiveCounsellingMaster');
+        $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
+
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
@@ -81,7 +85,13 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getstudentGuardainClassDetails/{std_id}/{type}',['uses' => 'Students\StudentAdmissionController@getstudentGuardainClassDetails']);
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
+            //to get the application details
+            $router->get('/getApplicationDetails/{id}',['uses' => 'Students\StudentAdmissionController@getApplicationDetails']);
         });
+        //Student Updates
+        $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);
+        $router->get('/loadStudentUpdatesList/{param}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
+
         //SEN Controller
         $router->group(['prefix' => 'sen'], function () use ($router) {
             $router->get('/getquestionnaire/{StudentId}', ['uses' => 'Sen\QuestionnaireController@getQuestionnaire']);
@@ -198,6 +208,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
 
+        //Counselling Routes
+        $router->post('/saveCounsellingInformation', ['uses' => 'Students\StudentCounsellingController@saveCounsellingInformation']);
+        $router->get('/loadCounsellingInformation/{orgId}', ['uses' => 'Students\StudentCounsellingController@loadCounsellingInformation']);
+        $router->get('/getCounsellingDetails/{couId}', ['uses' => 'Students\StudentCounsellingController@getCounsellingDetails']);
+        
     });
 
 });

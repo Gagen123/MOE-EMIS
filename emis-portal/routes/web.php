@@ -5,10 +5,14 @@ use Illuminate\Support\Facades\Route;
     Route::get('/', function () {
         return view('welcome');
     });
+    Route::get('/user_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
     Route::get('/login_screen', [App\Http\Controllers\Admin\HomeController::class, 'login_screen'])->name('login_screen');
     Route::get('/userlogin', [App\Http\Controllers\Admin\HomeController::class, 'userlogin'])->name('userlogin');
     Route::get('/user_logout', [App\Http\Controllers\Admin\HomeController::class, 'user_logout'])->name('user_logout');
+    Route::post('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'new_register'])->name('new_register');
     // Auth::routes(['verify' => true]);
+    Route::get('/getSessionDetail', [App\Http\Controllers\Admin\HomeController::class, 'getSessionDetail'])->name('getSessionDetail');
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::get('home', function () {
@@ -56,6 +60,8 @@ use Illuminate\Support\Facades\Route;
     //getting organization details by OrgId
     Route::get('/loadOrganizationDetailsbyOrgId/{OrgOrganizationId}', [App\Http\Controllers\AdminstratorController::class, 'loadOrganizationDetailsbyOrgId'])->name('loadOrganizationDetailsbyOrgId');
 
+    
+    
     //Getting details by cid from std_student table
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
 
@@ -71,11 +77,20 @@ use Illuminate\Support\Facades\Route;
 
 
     Route::prefix('enrolled_student')->group(function () {
-    Route::get('profile', 'ProfileController@profile');
-    Route::put('profile', 'ProfileController@updateProfile');
-    Route::post('change-password', 'ProfileController@changePassword');
-    Route::post('Profile/upload', 'ProductController@upload');
-    Route::post('Userprofile', 'UserProfileController@upload');
+        Route::get('profile', 'ProfileController@profile');
+        Route::put('profile', 'ProfileController@updateProfile');
+        Route::post('change-password', 'ProfileController@changePassword');
+        Route::post('Profile/upload', 'ProductController@upload');
+        Route::post('Userprofile', 'UserProfileController@upload');
 
-});
+    });
+
+    //New Routes created by Phuntsho
+    Route::prefix('track_application')->group(function (){
+        Route::get('/getApplicationDetails/{id}', [App\Http\Controllers\TrackApplicationController::class, 'getApplicationDetails'])->name('getApplicationDetails');
+    });
+
+    Route::prefix('xi_admission')->group(function (){
+        Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
+    });
 

@@ -175,6 +175,15 @@ const routes = [
                 { path: '/edit_transfer_undertaking', name:'edit_transfer_undertaking', component: require('./components/masters/staff_transfer/transfer_undertaking/edit_transfer_undertaking.vue').default },
                 ],
             },
+            { path: '/transfer_type',
+                component: require('./components/masters/staff_transfer/transfer_type/transfer_type_index.vue').default,
+                children:[
+                { path: '/',name:'transfer_type', component: require('./components/masters/staff_transfer/transfer_type/list_transfer_type.vue').default },
+                { path: '/list_transfer_type',name:'list_transfer_type', component: require('./components/masters/staff_transfer/transfer_type/list_transfer_type.vue').default },
+                { path: '/create_transfer_type',name:'create_transfer_type', component: require('./components/masters/staff_transfer/transfer_type/create_transfer_type.vue').default },
+                { path: '/edit_transfer_type', name:'edit_transfer_type', component: require('./components/masters/staff_transfer/transfer_type/edit_transfer_type.vue').default },
+                ],
+            },
         ]
     },
 
@@ -229,7 +238,6 @@ const routes = [
                     { path: '/edit_leave_config', name:'edit_leave_config', component: require('./components/masters/staff_leave_masters/leave_config/edit_leave_config.vue').default },
                 ],
             },
-
         ]
     },
 
@@ -451,40 +459,79 @@ const routes = [
                     { path: '/edit_transfer_window', name:'edit_transfer_window', component: require('./components/staff/transfer_window/edit_transfer_window.vue').default },
                 ],
             },
-            { path: '/transfer_index',
-                component: require('./components/staff/transfer/transfer_index.vue').default,
-                children:[
-                    { path: '/', name:'transfer_index',  component: require('./components/staff/transfer/transfer_list.vue').default },
-                    { path: '/list_transfer',name:'list_transfer',  component: require('./components/staff/transfer/transfer_list.vue').default },
-                    { path: '/create_transfer',name:'create_transfer', component: require('./components/staff/transfer/create_transfer.vue').default },
-                    { path: '/edit_transfer', name:'edit_transfer', component: require('./components/staff/transfer/edit_transfer.vue').default },
-                ],
-            },
-
-            { path: '/transfer_acknowledgement', name:'transfer_acknowledgement',
-            component: require('./components/staff/transfer/acknowledgement.vue').default },
         ]
     },
 
-    //Staff Recuritment by gagen
-    //principal recuritment
-    { path: '/recuritment_index', component: require('./components/staff/recuritment_index.vue').default,
-      children:[
-      { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/recuritment_list.vue').default },
-      { path: '/pricipal_recuritment_index',
-        component: require('./components/staff/recuritment/recuritment_index.vue').default ,
-          children: [
-            { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-            { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/list_principal_recuritment.vue').default },
-            { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/create_principal_recuritment.vue').default },
-            { path: '/edit_principal_recuritment',name:'edit_principal_recuritment', component: require('./components/staff/recuritment/edit_principal_recuritment.vue').default },
-            { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
-            { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/princiapl_recuritment_acknowledgement.vue').default },
-          ]
-      },
+    //Transfer Applicaiton
+    { path:'/transfer_service_index', component: require('./components/staff/transfer/transfer_index.vue').default,
+        children:[
+            { path: '/',name:'transfer_service_index', component: require('./components/staff/transfer/transfer_list.vue').default },
+            { path: '/intra_transfer',
+                component: require('./components/staff/transfer/intra_transfer/intra_transfer_index.vue').default,
+                children:[
+                    { path: '/', name:'intra_transfer',  component: require('./components/staff/transfer/intra_transfer/intra_transfer_list.vue').default },
+                    { path: '/list_intra_transfer',name:'list_intra_transfer',  component: require('./components/staff/transfer/intra_transfer/intra_transfer_list.vue').default },
+                    { path: '/create_intra_transfer',name:'create_intra_transfer', component: require('./components/staff/transfer/intra_transfer/create_intra_transfer.vue').default },
+                    { path: '/edit_intra_transfer', name:'edit_intra_transfer', component: require('./components/staff/transfer/intra_transfer/edit_intra_transfer.vue').default },
+                    { path: '/intra_transfer_acknowledgement', name:'intra_transfer_acknowledgement', component: require('./components/staff/transfer/intra_transfer/acknowledgement.vue').default },
+                ],
+            },
+            { path: '/inter_transfer',
+                component: require('./components/staff/transfer/inter_transfer/inter_transfer_index.vue').default,
+                children:[
+                    { path: '/', name:'inter_transfer',  component: require('./components/staff/transfer/inter_transfer/inter_transfer_list.vue').default },
+                    { path: '/list_inter_transfer',name:'list_inter_transfer',  component: require('./components/staff/transfer/inter_transfer/inter_transfer_list.vue').default },
+                    { path: '/create_inter_transfer',name:'create_inter_transfer', component: require('./components/staff/transfer/inter_transfer/create_inter_transfer.vue').default },
+                    { path: '/edit_inter_transfer', name:'edit_inter_transfer', component: require('./components/staff/transfer/inter_transfer/edit_inter_transfer.vue').default },
+                    { path: '/inter_transfer_acknowledgement', name:'inter_transfer_acknowledgement', component: require('./components/staff/transfer/inter_transfer/acknowledgement.vue').default },
+                ],
+            },
+            { path: '/transfer_config',
+            component: require('./components/staff/transfer/transfer_config/transfer_config_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                    { path: '/list_transfer_config',name:'list_transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                    { path: '/create_transfer_config',name:'create_transfer_config', component: require('./components/staff/transfer/transfer_config/create_transfer_config.vue').default },
+                    { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
+                ],
+            },
 
+        ]
+    },
+    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+
+    // Recuritment by gagen
+    //principal recuritment
+    { path: '/recuritment_index', component: require('./components/staff/recuritment/recuritment_index.vue').default,
+      children:[
+        { path: '/recuritment_index',name:"recuritment_index", component: require('./components/staff/recuritment/principal_recuritment/recuritment_list.vue').default },
+        //principal recuritment
+        { path: '/pricipal_recuritment_index',
+            component: require('./components/staff/recuritment/principal_recuritment/recuritment_index.vue').default ,
+            children: [
+                { path: '/',name:'pricipal_recuritment_index', component: require('./components/staff/recuritment/principal_recuritment/list_principal_recuritment.vue').default },
+                { path: '/list_principal_recuritment',name:'list_principal_recuritment', component: require('./components/staff/recuritment/principal_recuritment/list_principal_recuritment.vue').default },
+                { path: '/create_principal_recuritment',name:'create_principal_recuritment', component: require('./components/staff/recuritment/principal_recuritment/create_principal_recuritment.vue').default },
+                { path: '/princiapl_recuritment_acknowledgement', name:'princiapl_recuritment_acknowledgement', component: require('./components/staff/recuritment/principal_recuritment/princiapl_recuritment_acknowledgement.vue').default },
+                { path: '/principal_recuritment_details',name:'principal_recuritment_details', component: require('./components/staff/recuritment/principal_recuritment/view_principal_recuritment.vue').default },
+            ]
+        },
+        //Expert teacher recuritment
+        { path: '/expert_recuritment_index',
+            component: require('./components/staff/recuritment/expert_recuritment/recuritment_index.vue').default ,
+            children: [
+                { path: '/',name:'expert_recuritment_index', component: require('./components/staff/recuritment/expert_recuritment/list_expert_recuritment.vue').default },
+                { path: '/list_expert_recuritment',name:'list_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/list_expert_recuritment.vue').default },
+                { path: '/create_expert_recuritment',name:'create_expert_recuritment', component: require('./components/staff/recuritment/expert_recuritment/create_expert_recuritment.vue').default },
+                { path: '/expert_recuritment_acknowledgement', name:'expert_recuritment_acknowledgement', component: require('./components/staff/recuritment/expert_recuritment/expert_recuritment_acknowledgement.vue').default },
+                { path: '/expert_recuritment_details',name:'expert_recuritment_details', component: require('./components/staff/recuritment/expert_recuritment/view_application_details.vue').default },
+            ]
+        },
       ]
     },
+    { path: '/open_expatriate_verification',name:'open_expatriate_verification', component: require('./components/staff/recuritment/expatriate_verification.vue').default },
+    { path: '/view_principal_recuritment',name:'view_principal_recuritment', component: require('./components/staff/recuritment/view_principal_recuritment.vue').default },
+
     //Staff Training
     { path:'/create_inset',
         component: require('./components/staff/training/inset_index.vue').default,
@@ -508,13 +555,25 @@ const routes = [
                     { path: '/create_nomination_selection',name:'create_nomination_selection',  component: require('./components/staff/training/nomination_selection/create_nomination_selection.vue').default },
                     { path: '/edit_nomination_selection',name:'edit_nomination_selection',  component: require('./components/staff/training/nomination_selection/edit_nomination_selection.vue').default },
                     { path: '/verify_nomination_selection',name:'verify_nomination_selection',  component: require('./components/staff/training/nomination_selection/verify_nomination_selection.vue').default },
+                    { path: '/acknowledgement_for_nomination', name:'acknowledgement_for_nomination', component: require('./components/staff/acknowledgement_for_errors.vue').default },
+                    { path: '/acknowledgement_for_nomination_success', name:'acknowledgement_for_nomination_success', component: require('./components/staff/acknowledgement.vue').default },
                 ],
             },
 
+            { path: '/participant',
+                component: require('./components/staff/training/participant/participant_index.vue').default,
+                children:[
+                    { path: '/',name:'participant',  component: require('./components/staff/training/participant/list_participant.vue').default },
+                    { path: '/list_participant',name:'list_participant',  component: require('./components/staff/training/participant/list_participant.vue').default },
+                    { path: '/create_participant',name:'create_participant',  component: require('./components/staff/training/participant/create_participant.vue').default },
+                    { path: '/view_participant',name:'view_participant',  component: require('./components/staff/training/participant/view_participant.vue').default },
+                    { path: '/acknowledgement_for_participant', name:'acknowledgement_for_participant', component: require('./components/staff/acknowledgement_for_errors.vue').default },
+                ],
+            },
+
+
         ]
     },
-
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
 
     //Management Body Transactions
     { path:'/management_body',
@@ -526,11 +585,12 @@ const routes = [
                 component: require('./components/staff/management/create_body/management_body_index.vue').default,
                 children:[
                     { path: '/', name:'create_management_body_index',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
-                    { path: '/list_management_body',name:'list_management_body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
+                    { path: '/list_management_body',name:'list_management_89body',  component: require('./components/staff/management/create_body/list_management_body.vue').default },
                     { path: '/create_management_body',name:'create_management_body',  component: require('./components/staff/management/create_body/create_management_body.vue').default },
                     { path: '/edit_management_body',name:'edit_management_body',  component: require('./components/staff/management/create_body/edit_management_body.vue').default },
                 ],
             },
+
 
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,
@@ -563,6 +623,24 @@ const routes = [
             },
         ]
     },
+     //Staff Update Services
+     { path:'/staff_update_services',
+        component: require('./components/staff/staff_updates/staff_update_index.vue').default,
+        children:[
+            { path: '/', name:'staff_update_services', component: require('./components/staff/staff_updates/staff_update_list.vue').default },
+
+            { path: '/career_stage',
+                component: require('./components/staff/staff_updates/career_stage/career_stage_index.vue').default,
+                children:[
+                    { path: '/', name:'career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/list_career_stage',name:'list_career_stage',  component: require('./components/staff/staff_updates/career_stage/list_career_stage.vue').default },
+                    { path: '/create_career_stage',name:'create_career_stage', component: require('./components/staff/staff_updates/career_stage/create_career_stage.vue').default },
+                    { path: '/edit_career_stage', name:'edit_career_stage', component: require('./components/staff/staff_updates/career_stage/edit_career_stage.vue').default },
+                ],
+            },
+        ]
+    },
+
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
 
     //Leadership Selection
@@ -570,6 +648,27 @@ const routes = [
         component: require('./components/staff/leadership/leadership_index.vue').default,
         children:[
             { path: '/', name:'staff_leadership_selection_index', component: require('./components/staff/leadership/leadership_list.vue').default },
+            { path: '/announcement',
+                component: require('./components/staff/leadership/announcement/announcement_index.vue').default,
+                children:[
+                    { path: '/', name:'announcement',  component: require('./components/staff/leadership/announcement/list_announcement.vue').default },
+                    { path: '/list_announcement',name:'list_announcement',  component: require('./components/staff/leadership/announcement/list_announcement.vue').default },
+                    { path: '/create_announcement',name:'create_announcement', component: require('./components/staff/leadership/announcement/create_announcement.vue').default },
+                    { path: '/edit_announcement', name:'edit_announcement', component: require('./components/staff/leadership/announcement/edit_announcement.vue').default },
+                    { path: '/view_announcement', name:'view_announcement', component: require('./components/staff/leadership/announcement/view_announcement.vue').default },
+                ],
+            },
+            { path: '/apply_index',
+                component: require('./components/staff/leadership/application/application_index.vue').default,
+                children:[
+                    { path: '/', name:'apply_index',  component: require('./components/staff/leadership/application/list_application.vue').default },
+                    { path: '/list_application',name:'list_application',  component: require('./components/staff/leadership/application/list_application.vue').default },
+                    { path: '/create_application',name:'create_application', component: require('./components/staff/leadership/application/create_application.vue').default },
+                    { path: '/edit_application', name:'edit_application', component: require('./components/staff/leadership/application/edit_application.vue').default },
+                    { path: '/view_application', name:'view_application', component: require('./components/staff/leadership/application/view_application.vue').default },
+                    { path: '/application_acknowledgement', name:'application_acknowledgement', component: require('./components/staff/leadership/application/acknowledgement.vue').default },
+                ],
+            },
 
             { path: '/nomination_index',
                 component: require('./components/staff/leadership/leadership_nomination/leadership_nomination_index.vue').default,
@@ -589,8 +688,37 @@ const routes = [
                 ],
             },
 
+            { path: '/leadership_type_index',
+                component: require('./components/staff/leadership/questions/leadership_type/leadership_type_index.vue').default,
+                children:[
+                    { path: '/',name:'leadership_type_index',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/list_leadership_type',name:'list_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/list_leadership_type.vue').default },
+                    { path: '/create_leadership_type',name:'create_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/create_leadership_type.vue').default },
+                    { path: '/edit_leadership_type',name:'edit_leadership_type',  component: require('./components/staff/leadership/questions/leadership_type/edit_leadership_type.vue').default },
+                ],
+            },
+            { path: '/feedback_category',
+                component: require('./components/staff/leadership/questions/feedback_category/feedback_category_index.vue').default,
+                children:[
+                    { path: '/',name:'feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/list_feedback_category.vue').default },
+                    { path: '/list_feedback_category',name:'list_feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/list_feedback_category.vue').default },
+                    { path: '/create_feedback_category',name:'create_feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/create_feedback_category.vue').default },
+                    { path: '/edit_feedback_category',name:'edit_feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/edit_feedback_category.vue').default },
+                ],
+            },
+            { path: '/question_answer',
+                component: require('./components/staff/leadership/questions/question_answer/question_answer_index.vue').default,
+                children:[
+                    { path: '/',name:'question_answer',  component: require('./components/staff/leadership/questions/question_answer/list_question_answer.vue').default },
+                    { path: '/list_question_answer',name:'list_question_answer',  component: require('./components/staff/leadership/questions/question_answer/list_question_answer.vue').default },
+                    { path: '/create_question_answer',name:'create_question_answer',  component: require('./components/staff/leadership/questions/question_answer/create_question_answer.vue').default },
+                    { path: '/edit_question_answer',name:'edit_question_answer',  component: require('./components/staff/leadership/questions/question_answer/edit_question_answer.vue').default },
+                ],
+            },
+
         ]
     },
+    { path: '/open_staff_recruitment_verification', name:'open_staff_recruitment_verification', component: require('./components/staff/leadership/verify_approve_leadership_selection_application.vue').default },
     //Staff Services
     { path:'/staff_services_index',
         component: require('./components/staff/staff_services/staff_service_index.vue').default,

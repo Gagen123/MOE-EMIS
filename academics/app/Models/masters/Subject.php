@@ -13,16 +13,18 @@ class Subject extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'aca_sub_category_id',
-        'aca_sub_group_id',
+        'aca_sub_id',
         'name',
         'dzo_name',
+        'aca_sub_category_id',
         'display_order',
-        'status',
         'assessed_by_class_teacher',
+        'is_special_educational_needs',
+        'status',
         'created_by',
         'created_at',
         'updated_by',
         'updated_at',
+
     ];
 }

@@ -296,8 +296,10 @@ class GeneralInfoController extends Controller
     }
 
     public function saveClassMapping(Request $request){
+        dd('from Ui');
+     
         $rules = [
-            'school'         =>  'required',
+            'school'           =>  'required',
             'class.*'          =>  'required',
         ];
         $customMessages = [
@@ -319,6 +321,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
     public function getCurrentClassStream($school_id = ""){
+       // dd('m here at UI');
         $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
         return $itemList;
     }
@@ -389,6 +392,7 @@ class GeneralInfoController extends Controller
     }
 
     public function getOrgProfile($id = ""){
+       // dd($id);
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
         return $org_details;
     }
@@ -432,6 +436,7 @@ class GeneralInfoController extends Controller
     //New function to update the basic organization details
 
     public function updateOrgBasicDetials(Request $request){
+        dd($request);
         switch($request['fields_for']){
             case "eccd" : {
                     $validation = $this->validateEccdFields($request);
@@ -459,8 +464,7 @@ class GeneralInfoController extends Controller
 
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
-
-
+        
     }
 
     private function validateOrganizationFields($request){

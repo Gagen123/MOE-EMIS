@@ -6,7 +6,7 @@
                     <thead>
                         <tr>
                             <th >Display Order</th>
-                            <th >Subject Name</th>
+                            <th >Subject</th>
                             <th >Assessment Area</th>
                             <th >Assessment Area Code</th>
                             <th >Rating Type</th>
@@ -18,10 +18,12 @@
                         <tr v-for="(item, index) in assessmentAreaList" :key="index">
                             <td class="text-right">{{ item.display_order }}</td>
                             <td>{{item.sub_name}}
-                                <span v-if="item.sub_dzo_name">( {{item.sub_dzo_name}} )</span>
+                                 <br>
+                                <span class="text-center" v-if="item.sub_dzo_name"> {{item.sub_dzo_name}} </span>
                             </td>
                             <td>{{ item.assessment_area_name }}
-                                <span v-if="item.area_dzo_name">( {{item.area_dzo_name}} )</span>
+                                <br>
+                                <span v-if="item.area_dzo_name"> {{item.area_dzo_name}}</span>
                             </td>
                             <td>{{ item.code }}</td>
                             <td>{{item.rating_type_name}}</td>

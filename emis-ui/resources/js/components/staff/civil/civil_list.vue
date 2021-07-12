@@ -8,19 +8,19 @@
                             <th>Sl#</th>
                             <th>Emp Id</th>
                             <th>Name</th>
-                            <th>Sex</th> 
-                            <th>Position Title</th>    
+                            <th>Sex</th>
+                            <th>Position Title</th>
                             <th>Working Agency</th>
                             <th>Email</th>
                             <th>Contact No.</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
-                    </thead> 
+                    </thead>
                     <tbody>
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
                             <td>{{ item.emp_type_id}}</td>
-                            <td>{{ item.name}}</td> 
+                            <td>{{ item.name}}</td>
                             <td>{{ genderArray[item.sex_id]}}</td>
                             <!-- <td>{{ item.position_title.name}}</td> -->
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
@@ -40,24 +40,24 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             substaffList:[],
             genderArray:{},
             positiontitleList:{},
             dt:'',
-        } 
+        }
     },
     methods: {
         loadeditpage(staff){
             this.$router.push({name:"edit_civil_staff",params:{data:staff}});
 		},
-        loadstff(){
-            axios.get('loadCommons/loadStaffList/emptype/Regular,Volunteer')
-            .then((response) => {  
+        loadstff(type){
+            axios.get('loadCommons/loadStaffList/'+type)
+            .then((response) => {
                 this.substaffList =  response.data.data;
              })
-            .catch((error) => { 
-                alert(error); 
+            .catch((error) => {
+                alert(error);
                 console.log("Error."+error);
             });
         },
@@ -66,7 +66,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.genderArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -78,7 +78,7 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -89,7 +89,23 @@ export default {
     mounted(){
         this.loadgenderList();
         this.loadpositionTitleList();
-        this.loadstff();        
+         axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.loadstff('orgWsirRegContract/Regular,Volunteer');
+            }
+            if(data['acess_level']=="Dzongkhag"){
+                this.loadstff('dzoWsirRegContract/Regular,Volunteer');
+            }
+            if(data['acess_level']=="allRegContract/Regular,Volunteer"){
+                this.loadstff();
+            }
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
         this.dt =  $("#civil-staff-table").DataTable()
     },
     watch: {
@@ -100,8 +116,8 @@ export default {
             });
         }
     },
-    
-    
+
+
 }
 </script>
 

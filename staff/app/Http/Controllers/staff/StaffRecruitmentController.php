@@ -38,8 +38,6 @@ class StaffRecruitmentController extends Controller
         ];
         $inserted_application_data = ApplicationDetails::create($application_details_data);
         $applicationDetailsId = $inserted_application_data->id;
-        return $application_details_data;
-
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $attach =[
@@ -49,9 +47,121 @@ class StaffRecruitmentController extends Controller
                     'name'                      =>  $att['original_name'],
                     'updoad_type'               =>  'Applicant',
                 ];
-                $doc = ApplicationAttachments::create($attach);
+                ApplicationAttachments::create($attach);
+            }
+        } 
+        return $application_details_data;
+
+        
+
+    }
+    public function saveExpatriateRecuritment(Request $request){
+        $application_details_data =[
+            'application_no'       =>  $this->generateApplicationNoForExpatriate(),
+            'organizationId'       =>  $request['organizationId'],
+            'passport/emigration'  =>  $request['passport'],
+            'name'                 =>  $request['name'],
+            'DateOfBirth'          =>  $request['dob'],
+            'CountryOfExpatriate'  =>  $request['country'],
+            'AddressOfExpatriate'  =>  $request['address'],
+            'EmailAddress'         =>  $request['email'],
+            'contact_number'       =>  $request['contact_number'],
+            'application_for'      =>  $request['application_for'],
+            'application_type'     =>  $request['application_type'],
+            'action_type'          =>  $request['action_type'],
+            'status'               =>  $request['status'],
+            'created_by'           =>  $request['user_id']
+        ];
+        $inserted_application_data = ApplicationDetails::create($application_details_data);
+        $applicationDetailsId = $inserted_application_data->id;
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'ApplicationDetailsId'      =>  $applicationDetailsId,
+                    'path'                      =>  $att['path'],
+                    'user_defined_file_name'    =>  $att['user_defined_name'],
+                    'name'                      =>  $att['original_name'],
+                    'updoad_type'               =>  'Applicant',
+                ];
+                ApplicationAttachments::create($attach);
+            }
+        } 
+        return $application_details_data;
+
+    }
+
+    public function loadPrincipalRecuritmentApplication($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data);
+    }
+    
+    public function updatePrincipalApproval(Request $request){
+        $data =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id,
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($data);
+
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+           
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id,
+                    ];
+                    ApplicationAttachments::create($attach);
+                }
             }
         }
+        $application_details=ApplicationDetails::where('application_no',$request->application_number)->first();
+        return $application_details;
+    }
+    public function UpdateExpatriateRecuritment(Request $request){
+        $data =[
+            'status'                        =>   $request->status,
+            'remarks'                       =>   $request->remarks,
+            'updated_by'                    =>   $request->user_id,
+        ];
+        ApplicationDetails::where('application_no', $request->application_number)->update($data);
+
+        if($request->attachment_details!="" ){
+            $type="Verification";
+            if($request->status=="Approved"){
+                $type="Approval";
+            }
+           
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $type,
+                        'created_by'                =>  $request->user_id,
+                    ];
+                    ApplicationAttachments::create($attach);
+                }
+            }
+        }
+
+        $application_details=ApplicationDetails::where('application_no',$request->application_number)->first();
+        return $application_details;
     }
 
     private function generateApplicationNo(){
@@ -88,4 +198,59 @@ class StaffRecruitmentController extends Controller
 
         return $application_no;
     }
+
+    private function generateApplicationNoForExpatriate(){
+        $last_seq=ApplicationSequence::where('service_name','Expatriate_Recuritment')->first();
+
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'Expatriate_Recuritment',
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::where('service_name', 'Expatriate_Recuritment')->update($app_details);
+        }
+        $application_no='Expat-';
+        if(strlen($last_seq)==1){
+            $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
+        }
+
+        return $application_no;
+    }
+    public function loadApprovalApplication($id="",$type=""){
+        if($type=="principal_recruitment"){
+            return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Recu-%')->get());
+        }
+        if($type=="Expatriate_Recruitment"){
+            return $this->successResponse(ApplicationDetails::where('created_by',$id)->where('application_no', 'like', 'Expat-%')->get());
+        }
+    }
+    public function loadPrincipalApplicationDetials($appNo=""){
+        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        }
+        return $this->successResponse($response_data);
+    }
+       
+    // public function loadPrincipalAttachmentDetials($id=""){
+    //     $attachement =ApplicationAttachments::where('ApplicationDetailsId',$id)->get();
+    //     return $attachement;
+    // }
 }

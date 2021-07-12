@@ -245,6 +245,7 @@ export default {
         onChangeFileUpload(e){
             this.form.ref_docs.push({attachment:e.target.files[0]});
         },
+
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
@@ -373,7 +374,7 @@ export default {
                 let data=response.data.data;
                 if(data.app_no!=undefined && data.app_no!=""){
                     let message="Your organization has already submitted Nominations for approval with Application number: <b>"+data.app_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                    this.$router.push({name:'acknowledgement_for_errors',params: {data:message}});
+                    this.$router.push({name:'acknowledgement_for_nomination',params: {data:message}});
                 }
                 else{
                     let from = new Date(data.nomination_start_date);
@@ -412,7 +413,7 @@ export default {
             });
         },
         loadStaffList(){
-            axios.get('loadCommons/userworkingagency/userworkingagency')
+            axios.get('loadCommons/loadStaffList/userworkingagency/NA')
             .then((response) => {
                 let data=response.data.data;
                 this.staff_list=data;
@@ -536,8 +537,8 @@ export default {
                     this.form.post('/staff/hrdevelopment/submitParticipants')
                     .then((response) => {
                         if(response!=null && response!=""){
-                            let message="Application for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                            this.$router.push({name:'acknowledgement',params: {data:message}});
+                            let message="Application for Nomination has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                            this.$router.push({name:'acknowledgement_for_nomination_success',params: {data:message}});
                             Swal.fire(
                                 'Success!',
                                 'Nomination details has beed submitted',

@@ -8,7 +8,7 @@ class StudentGuardainDetails extends Model
 {
     use HasFactory, Uuid;
     public $timestamps = false;
-    protected $table="std_guardain_detils";
+    protected $table="std_admission_guardian";
     protected $fillable = [
         'id',
         'student_id',

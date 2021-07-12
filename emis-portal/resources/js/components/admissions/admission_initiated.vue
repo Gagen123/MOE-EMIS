@@ -176,13 +176,13 @@
                 this.student_form.reset();
             },
             showAndHideField:function(type){
-            if(type=="classXI"){
-            $('#stream').show();
-            }
+             if(type=="classXI"){
+                $('#stream').show();
+                }
 
              if(type=="others"){
-            $('#stream').hide();
-            }
+                $('#stream').hide();
+                }
             },
             submitForm(){
                 const config = {
@@ -228,7 +228,7 @@
 
         },
         getstudentPersonalDetails(id){
-            axios.get('students/admission/getStudentDetails/admissionCid_'+id)
+            axios.get('track_application/getApplicationDetails/'+id)
             .then(response => {
                 let data = response.data.data;
                 if(data != ""){
@@ -398,7 +398,7 @@
         },
         created() {
             // let cid=this.$route.query.cid;
-            alert(this.$route.query.data);
+            //alert(this.$route.query.data);
             this.getstudentPersonalDetails(this.$route.query.data);
             this.getdzongkhagList();
             this.getclassList();

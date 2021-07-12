@@ -30,8 +30,10 @@
                              <tr>
                                 <template v-for="(item2,index2) in areas">
                                     <th v-if="item2.assessment_area" :key="index2" class="text-center">
-                                        {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
-                                        <span v-if="item2.input_type==1 && item2.weightage">({{item2.weightage}}%)</span>
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item2.assessment_area_hint">
+                                            {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
+                                            <span v-if="item2.input_type==1 && item2.weightage">({{item2.weightage}}%)</span>
+                                        </span>
                                     </th> 
                                 </template>
                             </tr>
@@ -51,12 +53,20 @@
                     </table>
                 </div>
             </div>
+
             <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
                 <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize</button>
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button>
-
             </div>
+            <footer v-if="assessmentAreaCode.length">
+                <ul class="list-inline">
+                    <strong>Abbreviations:</strong>
+                    <li v-for ="(item,index) in assessmentAreaCode" :key="index" class="list-inline-item">
+                        <small class="text-justify">  <b>{{item.code}}  </b>- {{ item.name }}</small>
+                    </li>
+                </ul>
+            </footer>
         </form>
     </div>  
 
@@ -70,6 +80,7 @@
             terms:[],
             subjects:[],
             areas:[],
+            assessmentAreaCode:[],
             dt:''
         }
       
@@ -94,6 +105,7 @@
                 let consolidatedResult = await axios.get(uri).then(response => response.data)
                 this.instructional_days = consolidatedResult.overAllInstructionalDays
                 this.terms = consolidatedResult.terms
+                this.assessmentAreaCode = consolidatedResult.abbreviations
                 this.subjects = consolidatedResult.subjects
                 this.areas = consolidatedResult.areas
                 this.consolidatedResultList = consolidatedResult.results
@@ -192,29 +204,6 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-        // this.dt = $("#view-table").DataTable({
-        //           scrollY:        "300px",
-        // scrollX:        true,
-        // scrollCollapse: true,
-        // paging:         false,
-        // fixedColumns:   {
-        //     leftColumns: 2
-        // }
-        // })
-            // $("#view-table").DataTable({
-            //         "responsive": true,
-            //         "autoWidth": true,
-            //         "paging": false,
-            //         scrollX: true,
-            //         scrollCollapse: true,
-            //         fixedColumns:   {
-            //             leftColumns: 2
-            //         },
-            //         columnDefs: [
-            //             { width: 2, targets: 0},
-            //         ],
-            //     }); 
-
     },
     created() {
         this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
@@ -226,22 +215,6 @@
         this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
 
     },
-    // watch: {
-    //     consolidatedResultList() {
-    //         this.dt.destroy();
-    //         this.$nextTick(() => {
-    //             this.dt = $("#view-consolidated-result-table").DataTable({
-    //                scrollY:        "300px",
-    //     scrollX:        true,
-    //     scrollCollapse: true,
-    //     paging:         false,
-    //     fixedColumns:   {
-    //         leftColumns: 2
-    //     }
-    //             })
-    //         });
-    //     }
-    // }
 }
 </script>
 <style scoped>

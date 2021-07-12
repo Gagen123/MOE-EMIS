@@ -37,11 +37,14 @@
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
                                         <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
                                         <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
-                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
-                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['descriptive_score']" class="form-control" id="assmt_area" type="text">
-                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control ditable_fields" :id="item1.assessment_area"> 
-                                            <option selected value="">--SELECT--</option>
-                                            <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
+                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control form-control-sm text-right num" id="assmt_area" type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
+                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['descriptive_score']" class="form-control form-control-sm assmt_area_des" id="assmt_area_des" type="text">
+                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control form-control-sm ditable_fields select2" :id="item1.assessment_area"> 
+                                            <option selected value="null">--SELECT--</option>
+                                            <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">
+                                                 <span v-if="item3.dzo_name && sub_dzo_name">{{ item3.dzo_name }}</span>
+                                                 <span v-else> {{ item3.name }}</span>
+                                            </option>
                                         </select>
                                     </span>
                                 </td>
@@ -50,6 +53,14 @@
                     </table>
                 </div>
             </div>
+             <footer>
+                <ul class="list-inline">
+                    <strong>Abbreviations:</strong>
+                    <li v-for ="(item4,index4) in assessmentAreaList" :key="index4" class="list-inline-item text-justify">
+                        <small v-if="item4.code"> <b>{{item4.code}} </b> - {{ item4.name }} </small>
+                    </li>
+                </ul>
+            </footer>
             <div class="card-footer text-right">
                 <button type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -103,10 +114,26 @@
                     searching: false,
                     fixedColumns:   {
                         leftColumns: 2
+                    },
+                    columnDefs: [
+                        { width: 100, targets: 2},
+                    ],
+                    drawCallback: function(dt) {
+                        $('.select2').select2({tags: true, width: "150"}).on("select2:select", e => {
+                            const event = new Event("change", { bubbles: true, cancelable: true });
+                            e.params.data.element.parentElement.dispatchEvent(event);
+                        })
+                        .on("select2:unselect", e => {
+                        const event = new Event("change", { bubbles: true, cancelable: true });
+                        e.params.data.element.parentElement.dispatchEvent(event);
+                        });
+                        $('.assmt_area_des').css("width", "150");
+                        $('.num').css("width", "150");
                     }
                     
+                    
                 }); 
-            }, 300);                     
+            }, 50);                     
         },
         save(action=""){
             let params = {class_stream_section:this.class_stream_section,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,aca_sub_id:this.aca_sub_id, aca_assmt_term_id:this.aca_assmt_term_id,data:this.studentAssessmentList};
@@ -149,17 +176,9 @@
                 }
             }
         },
-        mounted(){ 
+        mounted(){
             this.loadStudentAssessments()
-            // this.dt = $("#assessment-term-table").DataTable({
-            //     "paging": false,
-            //     scrollX: true,
-            //     scrollCollapse: true,
-            //     fixedColumns:   {
-            //         leftColumns: 2
-            //     }
-            // })
-        },
+            },
         created() {
             this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
             this.aca_sub_id = this.$route.params.data.aca_sub_id
@@ -174,14 +193,7 @@
             this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
 
         },
-        // watch: {
-        //     studentAssessmentList(val) {
-        //         this.dt.destroy();
-        //         this.$nextTick(() => {
-        //             this.dt = $("#assessment-term-table").DataTable()
-        //         });
-        //     }
-        // }
+  
 }
 </script>
 <style scoped>

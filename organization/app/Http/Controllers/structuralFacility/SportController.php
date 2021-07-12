@@ -31,11 +31,11 @@ class SportController extends Controller
     public function loadSport($orgId=""){
         $loadSport = DB::table('sports as a')
             ->join('sport_facility_type as b', 'a.facility', '=', 'b.id')
-            ->join('sport_facility_subtypes as c', 'b.id', '=', 'c.sportFacilityId')
-            ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facilityName',
-             'a.type as typeId','c.name as type', 'a.yearOfEstablishment as yearOfEstablishment','a.status as status',
-             'a.noOfFacility as noOfFacility','a.accessibleToDisabled as accessibleToDisabled',
-            'a.facility as facility', 'a.supportedBy as supportedBy')
+            ->join('sport_facility_subtypes as c', 'c.id', '=', 'a.type')
+            ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facility',
+            'c.name as type', 'a.yearOfEstablishment as yearOfEstablishment',
+            'a.status as status','a.number as number','a.accessibleToDisabled as accessibleToDisabled',
+            'a.supportedBy as supportedBy')
             ->where('organizationId',$orgId)->get();
         return $loadSport;
     }
@@ -51,15 +51,24 @@ class SportController extends Controller
         return $loadSport;
     }
 
+    public function getSportsDetails($sportId=""){
+        //dd($sportId);
+        $response_data=Sport::where('id',$sportId)->first();
+        return $this->successResponse($response_data);
+    }
+
     /**
      * method to save sport details
      */
     public function saveSport(Request $request){
+      //  dd($request);
         $id = $request->id;
         if( $id != null){
             $sport = [
+                'id'                                    =>  $request['id'],
                 'organizationId'                        =>  $request['organizationId'],
                 'facility'                              =>  $request['facility'],
+                'number'                                =>  $request['number'],
                 'type'                                  =>  $request['type'],
                 'yearOfEstablishment'                   =>  $request['yoe'],
                 'status'                                =>  $request['status'],
@@ -75,11 +84,14 @@ class SportController extends Controller
 
             }else{
                 $organizationId  = $request['organizationId'];
+                $facility = $request['facility'];
 
                 foreach ($request->items_received as $i=> $item){
                     $sport = array(
                      'organizationId'                   =>  $organizationId,
+                     'facility'                         =>  $facility,
                      'type'                             =>  $item['type'],
+                     'number'                           =>  $item['number'],
                      'yearOfEstablishment'              =>  $item['yoe'],
                      'accessibleToDisabled'             =>  $item['access'],
                      'size'                             =>  $request['area'],
@@ -89,17 +101,18 @@ class SportController extends Controller
                      'updated_by'                       =>  $request->user_id,
                      'created_at'                       =>  date('Y-m-d h:i:s')
                     );
-                try{
+                   // dd($sport);
+                  // dd( $facility);
+                // try{
                  $localpro = Sport::create($sport);
-                }
-                catch(\Illuminate\Database\QueryException $ex){
-                    dd($ex);
+                // }
+                // catch(\Illuminate\Database\QueryException $ex){
+                //     dd($ex);
 
-                }
-                }
-                return $this->successResponse($localpro, Response::HTTP_CREATED);
+                // }
             }
-        
+            return $this->successResponse($localpro, Response::HTTP_CREATED);
+        }
     }
     public function saveEccd(Request $request){
         $id = $request->id;

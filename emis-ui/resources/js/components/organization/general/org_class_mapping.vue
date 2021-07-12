@@ -269,6 +269,7 @@ export default {
 
         getCurrentClassStream(schoolId){
             axios.get('/organization/getCurrentClassStream/'+schoolId)
+         
               .then(response => {
                 let response_data = response.data;
                 let isNew=false;

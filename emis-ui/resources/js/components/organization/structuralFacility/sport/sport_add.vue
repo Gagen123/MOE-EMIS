@@ -20,6 +20,7 @@
                           <thead>
                               <tr>
                                   <th>Type of facilities<span class="text-danger">*</span></th>
+                                  <th>No. of Facilities<span class="text-danger">*</span></th>
                                   <th>Year of establishment<span class="text-danger">*</span></th>
                                   <th>support By<span class="text-danger">*</span></th>
                                   <th id='sizeAndarea1'>Area/Size</th>
@@ -34,6 +35,9 @@
                                         <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
+                                  </td>
+                                   <td>                          
+                                        <input type="number" name="number" class="form-control" v-model="item.number"/>
                                   </td>
                                   <td>                          
                                         <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
@@ -102,7 +106,7 @@ export default {
                  id: '',facility:'',
                   items_received:
                 [{
-                    type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',
+                    type:'',yoe:'',number:'', access:'',area:'', status:'',sportstype:'',support:'',
                 }], 
             })
         }
@@ -117,7 +121,7 @@ export default {
             this.form.facility= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})
+            this.form.items_received.push({type:'',yoe:'',number:'', access:'',area:'', status:'',sportstype:'',support:'',})
         },
 
         /**
@@ -221,7 +225,6 @@ export default {
                     $('#sizeAndarea1').hide();
 
                 }
-
         },
         /**
          * 
@@ -241,7 +244,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-               type:'',yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})    
+               type:'',number:'', yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})    
         }, 
         /**
          * method to remove fields

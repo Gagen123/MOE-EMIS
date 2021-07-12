@@ -11,8 +11,8 @@
                         <th>School Name</th>
                         <th>Application Date</th>
                         <th>Status</th>
-                        <th>Student Decission</th>
-                        <th>School decission</th>
+                        <th>Student Decision</th>
+                        <th>School Decision</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,10 +22,15 @@
                         <td>{{ school.name }}</td>
                         <td>{{ item.dateOfapply }}</td>
                         <td><span class="badge badge-success">{{ item.Status}}</span></td>
-                        <td v-if="item.Student_Decision==null">
+                        <td v-if="item.Student_Decision==null && item.school_decision=='Accepted'">
                             <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info" @click="StudentDecission(item.id,'Accepted')"> Accept</a>
                             </div>
+                            <div class="btn-group btn-group-sm">
+                                <a href="#" class="btn btn-danger" @click="StudentDecission(item.id,'Cancelled')">Cancel</a>
+                            </div>
+                        </td>
+                        <td v-if="item.Student_Decision==null && item.school_decision==null">
                             <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-danger" @click="StudentDecission(item.id,'Cancelled')">Cancel</a>
                             </div>
@@ -61,45 +66,34 @@
             }),
                school:new form({
                 name:'',
-
             }),
-
             }
         },
         methods:{
             loadApplication(cid){
                  axios.get('TrackApplicationController/applicationListsbyCid/' +cid)
                     .then(response => {
-                        // alert(JSON.stringify(response))
                     let data = response;
                     this.applicationList = data.data.data;
                     this.getdzoName(data.data.data[0].dzongkhag)
                     this.geschoolName(data.data.data[0].OrgOrganizationId)
                 });
-
             },
             getdzoName(dzo_id){
                  axios.get('load_dzongkhag_details_by_id/' +dzo_id)
                  .then(response => {
                     let data = response;
                     this.dzongkhag=data.data.data;
-
                  });
-
-
             },
+            
            geschoolName(org_id){
                  axios.get('loadOrganizationDetailsbyOrgId/' +org_id)
                  .then(response => {
                     let data = response;
                     this.school=data.data.data;
-
                  });
-
-
             },
-
-
             StudentDecission(id, actionType){
               Swal.fire({
                   text: 'Are you sure, you want to ' +actionType+ '?',
@@ -127,12 +121,10 @@
                                 'success'
                                 );
                             }
-
                         })
                     }
                   })
               },
-
         },
         created(){
             this.loadApplication(this.$route.query.cid);

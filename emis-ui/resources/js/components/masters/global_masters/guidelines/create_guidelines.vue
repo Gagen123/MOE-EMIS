@@ -24,6 +24,8 @@
                             <option value="HR Development">HR_Development</option>
                             <option value="Leave Service">Leave Service</option>
                             <option value="Staff Service">Staff Service</option>
+                            <option value="Staff Updates">Staff Updates</option>
+                            <option value="Staff Transfer Service">Staff Transfer Service</option>
                             <option value="Leadership Selection">Leadership Selection</option>
                             <option value="Organization Master">Organization Master</option>
                             <option value="Academics Master">Academics Master</option>
@@ -32,16 +34,19 @@
                             <option value="Mess Management">Mess Management</option>
                             <option value="Management Body">Management Body</option>
                             <option value="Staff Recuritment"> Staff Recuritment</option>
-                           
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>
                     </div>
                 </div>
                 <div class="row form-group" v-for='(item, index) in form.guidelines' :key="index">
-                    <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Guideline:<span class="text-danger">*</span></label>
                         <textarea class="form-control" v-model="item.guideline" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" />
                         <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
+                        <label class="required">Display Order:</label>
+                       <input type="number" min="1" name="display_order" id="display_order" class="form-control"/>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12">
                         <label class="required">Status:</label>
@@ -72,7 +77,7 @@ export default {
             form: new form({
                 guideline_for: '',
                 guidelines:[
-                    {guideline:'',status:1,}
+                    {guideline:'',display_order:1,status:1,}
                 ],
                 record_type:'guidelines',
                 action_type:'add',
@@ -82,7 +87,7 @@ export default {
     methods: {
         addMore: function(){
             this.count++;
-            this.form.guidelines.push({ guideline:'',status:1,})
+            this.form.guidelines.push({ guideline:'',display_order:'',status:1,})
         },
 
         remove(){

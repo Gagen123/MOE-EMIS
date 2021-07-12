@@ -16,6 +16,7 @@ use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
+use App\Models\Masters\CounsellingType;
 
 class StudentMasterController extends Controller
 {
@@ -48,9 +49,11 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
+       // dd($request);
         $rules = [
             'name'  =>  'required',
         ];
+        
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
@@ -61,13 +64,12 @@ class StudentMasterController extends Controller
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
-
-
-        } else if($request->actiontype=="edit"){
+        } 
+        else if($request->actiontype=="edit"){
            
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
-
+       // dd($response_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
@@ -140,13 +142,13 @@ class StudentMasterController extends Controller
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
+            $response_data = $model::where('id', $program_type->id)->get();
             return $this->successResponse($response_data);
          //   dd($response_data);
 
         } elseif($param == 'club_name'){
-            $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
+            $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
             $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $this->successResponse($response_data);
 
@@ -157,7 +159,7 @@ class StudentMasterController extends Controller
             return $this->successResponse(StudentAwardType::all());
 
         } elseif($param == 'program_type'){
-            return $this->successResponse(CeaProgram::all());
+            return $this->successResponse(CeaProgramType::all());
 
         } else {
             return $this->successResponse($model::all());
@@ -469,5 +471,39 @@ class StudentMasterController extends Controller
         } else{
             return $data;
         }
+    }
+
+    public function saveCounsellingType(Request $request){
+         //  dd($request);
+           $id = $request->id;
+           if( $id != null){
+               $data =[
+                   'id'                =>  $request->id,
+                   'name'              =>  $request->name,
+                   'description'       =>  $request->description,
+                   'status'            =>  $request->status,
+                   'updated_by'        =>  $request['user_id'],
+                   'updated_at'        =>  date('Y-m-d h:i:s'),
+                ];
+                CounsellingType::where('id', $id)->update($data);
+               $response_data = CounsellingType::where('id', $id)->first();
+           } else {
+               $data =[
+                'id'                =>  $request->id,
+                'name'              =>  $request->name,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'created_by'        =>  $request['user_id'],
+                'created_at'        =>  date('Y-m-d h:i:s'),
+               ];
+               $response_data = CounsellingType::create($data);
+           }
+          // dd($data);
+           return $this->successResponse($response_data, Response::HTTP_CREATED);
+       }
+       
+       public function getCounsellingTypeDropdown(){
+        // dd('from microserve ');
+         return CounsellingType::where('status',1)->get();
     }
 }

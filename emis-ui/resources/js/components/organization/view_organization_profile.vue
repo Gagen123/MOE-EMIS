@@ -107,7 +107,7 @@
                                                   </tr>
                                                    <tr>
                                                        <td>Category</td>
-                                                       <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'privte_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
+                                                       <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'private_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
                                                    </tr>
                                               </tbody>
                                           </table>
@@ -139,11 +139,11 @@
                                                     </tr>
                                                     <tr>
                                                         <td>Principal Contact No</td>
-                                                        <td>{{existing_details.code}}</td>
+                                                        <td>{{}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Vice/Assistant Principal Contact No</td>
-                                                        <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                        <td>{{}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Mail ID</td>

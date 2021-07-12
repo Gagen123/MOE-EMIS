@@ -75,6 +75,7 @@ export default {
     mounted(){ 
         this.classSubAssmtFrequency();
         this.dt =  $("#class_subject_assessment_area-table").DataTable({
+            destroy: true,
             rowGroup: {
                     dataSrc: 0 
                 },
@@ -88,7 +89,9 @@ export default {
         classSubAssmtFrequencyList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#class_subject_assessment_area-table").DataTable()
+                this.dt =  $("#class_subject_assessment_area-table").DataTable({
+                      destroy: true,
+                })
             });
         }
     }

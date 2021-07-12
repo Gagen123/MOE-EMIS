@@ -536,8 +536,8 @@ export default {
                     this.form.post('organization/saveEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
-                            this.file_form.application_number=response.data.data.Application_details.application_no;
-                            this.classStreamForm.application_number=response.data.data.Application_details.application_no;
+                            this.file_form.application_number=response.data.data.applicaiton_details.application_no;
+                            this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
                             // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
@@ -574,21 +574,15 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
             if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
                 $('#gewog').addClass('select2-hidden-accessible');
             }
             if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
                 $('#chiwog').addClass('select2-hidden-accessible');
             }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+            //     $('#locationType').addClass('select2-hidden-accessible');
+            // }
         },
 
         /**

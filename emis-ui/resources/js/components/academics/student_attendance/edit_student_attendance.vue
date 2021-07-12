@@ -3,14 +3,14 @@
         <form @submit.prevent="save" class="bootbox-form">
             <div class="ml-0 row form-inline">
                 <div class="mr-3">
-                    <strong>Class: </strong> {{ class_stream_section }} 
+                    <strong>Class:  </strong> {{ class_stream_section }} 
                 </div>
                 <div>
-                    <strong>Date:</strong>
-                    <input v-model="attendance_date" type="date" class="form-control form-control-sm" id="dateInput">
+                    <strong>Date: </strong>
+                    <input v-model="attendance_date" type="date" class="form-control form-control-sm mt-1" id="dateInput">
                 </div>
             </div>  
-            <div v-if="studentList.length" class="form-group row">
+            <div v-if="studentList.length" class="form-group row mt-4">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="student-attendance-table" class="table table-sm table-bordered table-striped">
                         <thead>
@@ -18,6 +18,7 @@
                                 <th>Student Code</th>
                                 <th>Name</th>
                                 <th>Present</th>
+                                <th>Remarks</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -31,7 +32,18 @@
                                     <div class="form-check">
                                         <input  v-model="item.is_present" class="form-check-input" type="checkbox" id="present">
                                     </div>
-                                </td>                                                                             
+                                </td>   
+                                <td>
+                                    <div>
+                                        <select class="form-control select2" v-model="studentList[index].aca_absence_reason_id">
+                                            <option selected="selected" value="">---SELECT---</option>
+                                            <option selected v-for="(item1, index1) in remarkList" :key="index1" :value="item1.id">
+                                                {{ item1.name }}
+                                            </option>
+                                        </select> 
+                                    </div>    
+                                </td>
+                                                                                                            
                             </tr>
                         </tbody>
                     </table>
@@ -50,6 +62,8 @@ export default {
     data(){
         return {
             studentList:[],
+            remarkList:[],
+            remarks_id:'',
             class_stream_section:'',
             attendance_date:'',
             dt:'',
@@ -75,9 +89,11 @@ export default {
                         studentAttendanceDetail.forEach((attendanceDetail)=>{
                             if(item.std_student_id == attendanceDetail.std_student_id){
                                 students[index].is_present = 0
+                                students[index].aca_absence_reason_id = attendanceDetail.aca_absence_reason_id
                             }
                         })
                     })
+                    console.log(students)
                    this.studentList = students
 
                 }).catch(function (error) {
@@ -86,8 +102,19 @@ export default {
                     }
                 });
         },
+        loadReasonsForAbsentList(uri = 'masters/loadAcademicMasters/all_active_reasons_for_absent'){
+            axios.get(uri)
+            .then(response => {
+                this.remarkList =  response.data.data;
+            })
+            .catch(function (error){
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
         save(){
-            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList})
+            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList, old_date:this.old_attendance_date})
                 .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -103,15 +130,30 @@ export default {
     },
     mounted(){
         this.getStudents()
+        this.loadReasonsForAbsentList()
         this.dt = $("#student-attendance-table").DataTable({
             columnDefs: [
                 { width: 20, targets: 0},
             ],
+            "lengthChange": false,
+            "searching": false,
+            drawCallback: function(dt) {
+                $('.select2').select2().
+                on("select2:select", e => {
+                    const event = new Event("change", { bubbles: true, cancelable: true });
+                    e.params.data.element.parentElement.dispatchEvent(event);
+                })
+                .on("select2:unselect", e => {
+                const event = new Event("change", { bubbles: true, cancelable: true });
+                e.params.data.element.parentElement.dispatchEvent(event);
+                });
+            },
         })
     }, 
     created() {
         this.class_stream_section =this.$route.params.data.class_stream_section;
         this.attendance_date = this.$route.params.data.attendance_date;
+        this.old_attendance_date = this.$route.params.data.attendance_date;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;
@@ -121,7 +163,21 @@ export default {
         studentList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#student-attendance-table").DataTable()
+                this.dt = $("#student-attendance-table").DataTable({
+                    "lengthChange": false,
+                    "searching": false,
+                    drawCallback: function(dt) {
+                        $('.select2').select2().
+                        on("select2:select", e => {
+                            const event = new Event("change", { bubbles: true, cancelable: true });
+                            e.params.data.element.parentElement.dispatchEvent(event);
+                        })
+                        .on("select2:unselect", e => {
+                        const event = new Event("change", { bubbles: true, cancelable: true });
+                        e.params.data.element.parentElement.dispatchEvent(event);
+                        });
+                    },
+                })
             });
         }
     }

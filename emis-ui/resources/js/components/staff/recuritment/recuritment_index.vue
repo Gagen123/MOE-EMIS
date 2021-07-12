@@ -1,29 +1,62 @@
 <template>
     <div>
-        <div class="card card-primary card-outline">
-            <div class="card-header pt-0 mt-0 pb-0">
-                <span class="card-title pt-2 mb-0">
-                    <b>Applications Staff Approval</b>
-                </span>
-                <span class="fa-pull-right pr-2 py-1">
-                    <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_principal_recuritment')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_principal_recuritment')"><i class="fa fa-plus"></i> Apply for Principal Recuritment</button>
-                </span>
-            </div>
-            <div class="card-body pt-1 pb-0">  
-                <router-view></router-view> 
-            </div>
+        <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
+            <li class="form-inline "><h5> Private School Recuritment Approval</h5></li>
+        </ol>
+        <div class="container-fluid">
+            <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
+                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                        <span :class="item.screen_icon"></span>
+                        {{ item.screen_name}}
+                    </router-link>
+                </li>
+
+                <li class="nav-item active pr-1">
+                    <router-link to="/pricipal_recuritment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Principal Recruitment
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/expert_recuritment_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Expatriate Recruitment
+                    </router-link>
+                </li>
+                
+            </ul>
+            <router-view></router-view>
         </div>
     </div>
 </template>
+
 <script>
 export default {
-    methods: {
-        showadprocess(type){
-            this.$router.push({name:type});
-		},
+    data(){
+        return{
+            menubar:[],
+        }
+    },
+    methods:{
+        activatelink(btnid){
+            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+            $('#'+btnid).addClass('btn-primary text-white');
+        },
+        getmenus(sub_mod_id){
+            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.menubar =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
+    },
+    mounted(){
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+        this.getmenus(routeparam);
     },
 }
 </script>
-
-

@@ -84,15 +84,19 @@ Vue.component(
 
 // Filter Section
 
+Vue.filter('formatDate', function(value) {
+    if (value) {
+        return moment(String(value)).format('MM/DD/YYYY')
+    }
+});
+
 Vue.filter('myDate',function(created){
-    return moment(created).format('MMMM Do YYYY');
+    return moment(created).format('MMMM DD YYYY');
 });
 
 Vue.filter('yesno', value => (value ? '<i class="fas fa-check green"></i>' : '<i class="fas fa-times red"></i>'));
 
 // end Filter
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 const app = new Vue({
     el: '#app',

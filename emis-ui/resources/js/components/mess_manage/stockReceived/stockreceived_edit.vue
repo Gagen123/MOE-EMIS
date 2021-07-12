@@ -9,32 +9,13 @@
                         v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
                         <has-error :form="form" field="dateOfreceived"></has-error>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
-                        <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
-                           <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="dzongkhag"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">School Name:<span class="text-danger">*</span></label> 
-                       <select v-model="organizaiton" class="form-control select2" name="organizaiton" id="organizaiton">
-                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="organizaiton"></has-error>
-                    </div> -->
+                   
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
-                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="quarter"></has-error> 
-                            <!--  <select class="form-control editable_fields" id="quarter"  v-model="form.quarter" >
-                            <option value="">---Please Select---</option> 
-                            <option value="1st quarter">1st quarter</option>
-                            <option value="2nd quarter">2nd quarter</option>
-                            <option value="3rd quarter">3rd quarter</option>
-                            </select>  -->   
                     </div>
                 </div>
             <div class="card">
@@ -52,30 +33,17 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                      </select>
-                                     <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                        <option value="">---Please Select---</option> 
-                                        <option value="rice">rice</option>
-                                        <option value="potatoes">potatoes</option>
-                                        <option value="onion">onion</option>
-                                     </select> -->
+                                      <select name="item" id="item" class="form-control" v-model="item.item">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                       </select>
                                   </td>
                                   <td>                          
                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>                                
                                      <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                         
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                      </select> 
-                                        <!--    <select class="form-control editable_fields" id="unit"  v-model="item.unit">
-                                        <option value="">---Please Select---</option> 
-                                        <option value="kg">kg</option>
-                                        <option value="litre">litre</option>
-                                        <option value="packet">packet</option>
-                                     </select> -->
                                   </td>
                                   <td>                                
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
@@ -116,15 +84,9 @@
 export default {
     data(){
         return{
-          //  orgList:[],
-          //  quarterList:[],
             itemList:[],
             unitList:[],
             quarterList:[],
-          //  dzongkhagList:[],
-          //  dzongkhag:'',
-        //    organizaiton:'',
-          //  itemrelease:[],
             items_received: [],
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
@@ -173,27 +135,29 @@ export default {
             }
 		},
         // just added
-        getStockReceivedDetails(stockreceivedId){
-            axios.get('mess_manage/getStockReceivedDetails/'+stockreceivedId)
+        getStockReceivedDetails(stkId){
+            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
             .then((response) => {  
                 let data=response.data.data;
-
                 this.form.dateOfreceived        =    data.dateOfreceived;
-                this.form.quarter           =    data.quarter;
-                this.form.remarks           =    data.remarks;
+                this.form.quarter               =    data.quarter_id;
+                $('#quarter').val(data.quarter_id).trigger('change');
+                this.loadActiveQuarterList();
+                this.form.remarks               =    data.remarks;
                 this.form.id                    =    data.id;
-                let prop=data.stockreceived;
-                let stockreceivedDetails=[];
-                for(let i=0;i<prop.length;i++){
-                    stockreceivedDetails.push({stockreceived:
-                    prop[i].item_id,item
-                    :prop[i].unit_id,unit
-                    :prop[i].quantity,quantity
-                    :prop[i].unit_id,unit
-                    :prop[i].remarks,remarks});
+                this.form.items_received=[];
+
+                // let prop=data.stockreceived;
+                // let stockreceivedDetails=[];
+                for(let i=0;i<data.stockreceived.length;i++){
+                    this.form.items_received.push({
+                    item:data.stockreceived[i].item_id,
+                    quantity:data.stockreceived[i].receivedquantity,
+                    unit:data.stockreceived[i].unit_id,
+                    remarks:data.stockreceived[i].remarks});
                 }
                 this.count=data.length;
-                this.form.items_received=stockreceivedDetails;
+                //this.form.items_received=stockreceivedDetails;
                 
             })
             .catch((error) =>{  
@@ -268,6 +232,22 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        allOrgList(dzo_id){
+            if(dzo_id==""){
+                dzo_id=$('#dzongkhag').val();
+            }
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+            })
+            
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
         /**
          * 
          */
@@ -304,10 +284,21 @@ export default {
                 this.form.items_received.splice(index,1); 
             }
         },
-       
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dzongkhagList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
        
     },
      mounted() { 
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -318,20 +309,18 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveUnitList(); 
-        this.loadActiveItemList();
-        this.loadActiveQuarterList();
+       
 
     },
     created() {
-       // this.getStockReceivedDetails(this.$route.params.data.id);
-        this.form.dateOfreceived=this.$route.params.data.dateOfreceived;
-        this.form.quarter=this.$route.params.data.quarter;
-        this.items_received.item=this.$route.params.data.item;
-        this.items_received.quantity=this.$route.params.data.receivedquantity;
-        this.items_received.unit=this.$route.params.data.unit;
-        this.items_received.remarks = this.$route.params.data.remarks;
-        this.form.id=this.$route.params.data.id;
+        this.loadActiveUnitList(); 
+        this.allOrgList();
+        this.loadActiveItemList();
+        this.loadActiveQuarterList();
+        this.loadactivedzongkhagList();
+        this.getStockReceivedDetails(this.$route.params.data.id);
+     
+       
        
     }
 }

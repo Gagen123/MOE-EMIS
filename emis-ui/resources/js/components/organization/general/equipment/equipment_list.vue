@@ -8,7 +8,7 @@
                     <th>Item</th>
                     <th>Usable</th>
                     <th>Not Usable</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -49,7 +49,7 @@ export default {
                 this.equipmentList =  data.data;
             })
             .catch(function (error) {
-               
+
             });
         },
 

@@ -44,4 +44,20 @@
 </div>
 <script src="{{ mix('/js/app.js') }}"></script>
 </body>
+<script>
+    function logout(){
+      Swal.fire({
+        text: 'Are you sure you wish to signout ?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!',
+        }).then((result) => {
+        if (result.isConfirmed) {
+          window.location="user_logout";
+        }
+      });
+    }
+</script>
 </html>

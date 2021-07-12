@@ -8,53 +8,67 @@
             </div>  
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="subject-assessment-type-table" class="table table-sm table-bordered table-striped">
+                    <table id="subject-assessment-type-table" class="subject-assessment-type-table table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Subject</th>
                                 <th>Rating Type</th>
                                 <th>Pass Score</th>
                                 <th>Is Elective</th>
+                                <th>Show in Result</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
                              <tr v-for="(item, index) in classSubjects" :key="index">
                                 <td>
-                                    <div class="form-check">
-                                        <input v-model="classSubjects[index].sub_selected" :value="item.aca_sub_id" class="form-check-input" type="checkbox" id="subject">
-                                        <label class="form-check-label" for="subject">
+                                    <div class="form-check ml-2">
+                                        <input v-model="classSubjects[index].sub_selected" :value="item.aca_sub_id" class="form-check-input" type="checkbox">
+                                        <label class="form-check-label">
                                             {{item.subject}} 
-                                            <span v-if="item.sub_dzo_name">( {{item.sub_dzo_name}} )</span>
                                         </label>
+                                        <br>
+                                        <span class="ml-2" v-if="item.sub_dzo_name">{{item.sub_dzo_name}}</span>
                                     </div>
                                 </td>
                                 <td>
-                                    <div>
-                                        <select v-model="classSubjects[index].aca_rating_type_id" :disabled="!classSubjects[index].sub_selected" class="form-control  editable_fields" id="aca_rating_type_id" :class="{ 'is-invalid': errors}"> 
-                                            <option selected value="">--SELECT--</option>
-                                            <option v-for="(item, index) in rating_type_list" :key="index" :value="item.id">{{ item.name }}</option>
+                                    <div class="ml-2">
+                                        <select v-model="classSubjects[index].aca_rating_type_id" :id="'rating_type_'+index" @change="onChange($event)"  :disabled="!classSubjects[index].sub_selected" class="form-control form-control-sm select2" :class="{ 'is-invalid': errors}"  > 
+                                            <option selected :value="null">--SELECT--</option>
+                                            <template v-for="(item1, index1) in rating_type_list">
+                                                <option v-if="item.aca_sub_category_id==item1.aca_sub_category_id || item1.aca_sub_category_id === null " :key="index1" :value="item1.id" :data-input_type="item1.input_type">{{ item1.name }}</option>
+                                            </template>
                                         </select>
                                         <has-error v-if="errors" field="aca_rating_type_id"></has-error>
                                     </div>
                                 </td>
                                  <td>
-                                    <div class="form-check col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <input 
-                                            v-model="classSubjects[index].pass_score"
-                                            class="form-check-input text-right" 
-                                            type="number" id="pass-score" max="100" min="0"
-                                            :disabled="!classSubjects[index].sub_selected || classSubjects[index].aca_rating_type_id=='ad1aacc8-b8c5-11eb-b80d-b07b2586b8c6'"
-                                        >
-                                     
+                                    <div class="form-group">
+                                        <select v-show="classSubjects[index].input_type==0" :id="'pass_score_'+index" v-model="classSubjects[index].pass_score" class="form-control form-control-sm" :disabled="!classSubjects[index].sub_selected" >
+                                            <template v-for="(item2, index2) in rating_list">
+                                                <option :key="index2"  v-if="item2.aca_rating_type_id == classSubjects[index].aca_rating_type_id" :value="item2.score" >{{item2.name}}</option>
+                                            </template>
+                                        </select>
+                                        <input v-show="classSubjects[index].input_type==1" type='number' step='0.01' max='100' min='0' v-model='classSubjects[index].pass_score' :disabled="!classSubjects[index].sub_selected" class="form-control form-control-sm text-right">
                                     </div>
                                 </td>
                                  <td>
-                                    <div class="form-check col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                    <div class="form-check col-lg-8 col-md-8 col-sm-8 col-xs-12 ml-2">
                                         <input 
                                             v-model="classSubjects[index].is_elective"
                                             class="form-check-input" 
-                                            type="checkbox" id="elective"
+                                            type="checkbox"
                                             :value="item.is_elective"
+                                            :disabled="!classSubjects[index].sub_selected"
+                                        >
+                                    </div>
+                                </td>
+                                   <td>
+                                    <div class="form-check col-lg-8 col-md-8 col-sm-8 col-xs-12 ml-2">
+                                        <input 
+                                            v-model="classSubjects[index].show_in_result"
+                                            class="form-check-input" 
+                                            type="checkbox" 
+                                            :value="item.show_in_result"
                                             :disabled="!classSubjects[index].sub_selected"
                                         >
                                     </div>
@@ -77,6 +91,7 @@ export default {
         return {
             errors:'',
             rating_type_list:[],
+            rating_list:[],
             classId:'',
             streamId:'',
             class_stream:'',
@@ -97,24 +112,69 @@ export default {
             }
             axios.get(uri)
             .then(response => {
-                this.classSubjects =  response.data.data;
-                console.log(this.classSubjects);
+                let classSubject = response.data.data
+                let classSubjects = []
+                let tempValue = []
+                classSubject.forEach(item => {
+                    tempValue['aca_rating_type_id'] = item.aca_rating_type_id
+                    tempValue['aca_sub_category_id'] = item.aca_sub_category_id
+                    tempValue['aca_sub_id'] = item.aca_sub_id
+                    tempValue['input_type'] = item.input_type
+                    tempValue['is_elective'] = item.is_elective
+                    tempValue['pass_score'] = item.pass_score
+                    tempValue['sub_dzo_name'] = item.sub_dzo_name
+                    tempValue['sub_selected'] = item.sub_selected
+                    tempValue['subject'] = item.subject
+                    if(item.show_in_result == 1 || item.show_in_result === null){
+                        tempValue['show_in_result'] = 1
+                    }else{
+                        tempValue['show_in_result'] = item.show_in_result
+                    }
+                    const obj = {...tempValue}
+                    classSubjects.push(obj)
+                });
+                this.classSubjects = classSubjects
+                
             })
             .catch(function (error){
                 console.log('Error..... '+error)
             });
-            setTimeout(function(){
-                $("#subject-assessment-type-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);
         },
-        loadRatingTypeList(uri = 'masters/loadAcademicMasters/all_active_rating_type'){
+     
+        loadRatingTypeList(){
+            let uri = 'masters/loadAcademicMasters/all_active_rating_type'
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.rating_type_list = data.data.data;
+                let data = response.data.data;
+                this.rating_type_list = data
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        onChange(event){
+            let passScoreInput = "<option value=''>---Select---</option>"
+            const rowIndex = (event.target.id).replace("rating_type_","")
+            const passScoreSelectId = "pass_score_" + rowIndex
+            const selectedInputType = $(event.target).children(':selected').attr('selected', true).data("input_type")
+            this.classSubjects[rowIndex].pass_score = ""
+            this.classSubjects[rowIndex].input_type = selectedInputType
+            if(selectedInputType==0){
+                this.rating_list.forEach((item)=>{
+                    if(item.aca_rating_type_id == event.target.value) {
+                        passScoreInput += ("<option value='" + item.score + "'>" + item.name + "</option>")
+                    }
+                })
+            }
+            $("#"+passScoreSelectId).html(passScoreInput)
+        },
+        loadRatingList(){
+            let uri = 'masters/loadAcademicMasters/all_active_rating'
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.rating_list = data
+                console.log(this.rating_list);
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -122,6 +182,7 @@ export default {
         },
         save(){
             let selectedSujects = this.classSubjects.filter((classSuject)=>classSuject.sub_selected)
+            console.log(selectedSujects)
             axios.post('/masters/saveClassSubject', {class_stream:this.class_stream,org_class_id:this.classId,org_stream_id:this.streamId,data:selectedSujects})
                  .then(() => {
                     Toast.fire({
@@ -145,7 +206,21 @@ export default {
     mounted(){ 
         this.loadClassSubject();
         this.loadRatingTypeList();
-        this.dt =  $("#subject-assessment-type-table").DataTable();
+        this.loadRatingList();
+        this.dt =  $("#subject-assessment-type-table").DataTable({
+            drawCallback: function(dt) {
+                $('.select2').select2().
+                on("select2:select", e => {
+                    const event = new Event("change", { bubbles: true, cancelable: true });
+                    e.params.data.element.parentElement.dispatchEvent(event);
+                })
+                .on("select2:unselect", e => {
+                const event = new Event("change", { bubbles: true, cancelable: true });
+                e.params.data.element.parentElement.dispatchEvent(event);
+                });
+            },
+            destroy: true,
+        });
     },
     created() {
         this.classId=this.$route.params.data.org_class_id;
@@ -157,10 +232,28 @@ export default {
         classSubjects(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#subject-assessment-type-table").DataTable()
+                this.dt =  $("#subject-assessment-type-table").DataTable({
+                    drawCallback: function(dt) {
+                        $('.select2').select2().
+                        on("select2:select", e => {
+                            const event = new Event("change", { bubbles: true, cancelable: true });
+                            e.params.data.element.parentElement.dispatchEvent(event);
+                        })
+                        .on("select2:unselect", e => {
+                        const event = new Event("change", { bubbles: true, cancelable: true });
+                        e.params.data.element.parentElement.dispatchEvent(event);
+                        });
+                    },
+                     destroy: true,
+                })
             });
         }
     }
     
 }
 </script>
+<style scoped>
+.form-control-sm {
+    font-size:0.9rem;
+}
+</style>

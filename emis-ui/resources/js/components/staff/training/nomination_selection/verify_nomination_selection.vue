@@ -4,33 +4,33 @@
             <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
                 <div class="card-body pb-0 mb-0" style="display:none">
                     <div class="callout callout-success">
-                        <div class="form-group row"> 
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Trainig Type:</label><br>
                                 <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Course Title:</label><br>
                                 <span class="text-blue text-bold">{{form.course_title}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Organized By (Department/Division):</label><br>
                                 <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
-                            </div> 
+                            </div>
                         </div>
-                        <div class="form-group row"> 
+                        <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Related Programme:</label><br>
                                 <span class="text-blue text-bold">{{ relatedProgrammeList[form.related_programme]}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Start Date:</label><br>
                                 <span class="text-blue text-bold">{{form.start_date}}</span>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">End Date:</label><br>
                                 <span class="text-blue text-bold">{{form.end_date}}</span>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -38,20 +38,20 @@
                                     <thead>
                                         <tr>
                                             <th>Attachment Name</th>
-                                            <th>File(Image,Doc,Excel,Pdf)</th>                           
+                                            <th>File(Image,Doc,Excel,Pdf)</th>
                                         </tr>
                                     </thead>
-                                    <tbody> 
+                                    <tbody>
                                         <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td> 
+                                            <td>
                                                 {{attach.user_defined_name}}
                                             </td>
-                                            <td>    
+                                            <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
-                                </table> 
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -85,27 +85,27 @@
                                             <tr>
                                                 <th>Sl#</th>
                                                 <th>CID/Work Permit Id</th>
-                                                <th>Name</th> 
-                                                <th>Contact No</th>  
-                                                <th>Email</th> 
-                                                <th>Participating As</th>    
+                                                <th>Name</th>
+                                                <th>Contact No</th>
+                                                <th>Email</th>
+                                                <th>Participating As</th>
                                                 <th>Attachments</th>
                                                 <th></th>
-                                                <th></th>                     
+                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr v-for="(item, index) in tempparticipantform.participant_list" :key="index">
                                                 <td>{{ index+1}}</td>
                                                 <td>{{ item.staff_details.cid_work_permit}}</td>
-                                                <td>{{ item.staff_details.name}}</td> 
+                                                <td>{{ item.staff_details.name}}</td>
                                                 <td>{{ item.contact}}</td>
-                                                <td>{{ item.email }}</td> 
+                                                <td>{{ item.email }}</td>
                                                 <td>{{ nature_of_participantListname[item.nature_of_participant]}}</td>
                                                 <td>
                                                     <span v-for="(doc, index) in item.document" :key="index">
                                                         <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
-                                                    </span> 
+                                                    </span>
                                                 </td>
                                                 <td>
                                                     <select :id="'selectpar'+index" v-model="item.status" @change="remove_error('selectpar',index)" class="form-control">
@@ -126,7 +126,7 @@
                                             <label class="mb-0.5">Remarks:</label>
                                             {{tempparticipantform.remarks}}
                                         </div>
-                                    </div> 
+                                    </div>
                                 </div>
                                 <div class="modal-footer text-right">
                                     <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-danger "><i class="fa fa-times"></i> Cancel</button>
@@ -139,20 +139,20 @@
                         <thead>
                             <tr>
                                 <th>Sl#</th>
-                                <th>AppNo</th> 
-                                <th>Dzongkhag</th>   
-                                <th>Organization</th>  
-                                <th>Action</th> 
+                                <th>AppNo</th>
+                                <th>Dzongkhag</th>
+                                <th>Organization</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody> 
+                        <tbody>
                             <tr v-for="(item, index) in org_list" :key="index">
                                 <td>
                                     {{ index+1}}
                                     <input type="checkbox" class="form-checkbox ml-2" name="participantcheck" disabled :id="'check_tr_app_'+index">
                                 </td>
                                 <td>{{ item.app_no}}</td>
-                                <td>{{ item.dzo_details.name}}</td> 
+                                <td>{{ item.dzo_details.name}}</td>
                                 <td>{{ item.org_details.name}}</td>
                                 <td>
                                     <button class="btn btn-xs  btn-primary" @click="getParticipantDetails(item,item.org_id,index)"><i class="fa fa-eye"></i> View</button>
@@ -166,7 +166,7 @@
                             <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
                             <has-error :form="form" field="remarks"></has-error>
                         </div>
-                    </div> 
+                    </div>
                     <hr>
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -176,7 +176,7 @@
                 </div>
             </div>
         </div>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -188,7 +188,7 @@ export default {
             nature_of_participantList:[],
             nature_of_participantListname:[],
             org_list:[],
-            
+
             editdocument:[],
             orgcount:0,
             tempparticipantform:new form({
@@ -196,7 +196,7 @@ export default {
                 remarks:''
             }),
             form: new form({
-                id: '', 
+                id: '',
                 programId:'',
                 statusId:'',
                 remarks:''
@@ -204,7 +204,7 @@ export default {
         }
     },
     methods: {
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -217,17 +217,17 @@ export default {
                 let data = response.data.data;
                 if(type=="active_training_type_list"){
                     for(let i=0;i<data.length;i++){
-                        this.trainingtypeList[data[i].id] = data[i].name; 
+                        this.trainingtypeList[data[i].id] = data[i].name;
                     }
                 }
                 if(type=="active_related_programme_list"){
                     for(let i=0;i<data.length;i++){
-                        this.relatedProgrammeList[data[i].id] = data[i].name; 
+                        this.relatedProgrammeList[data[i].id] = data[i].name;
                     }
                 }
                 if(type=="active_nature_of_participant_list"){
                     for(let i=0;i<data.length;i++){
-                        this.nature_of_participantListname[data[i].id] = data[i].name; 
+                        this.nature_of_participantListname[data[i].id] = data[i].name;
                     }
                 }
             })
@@ -238,13 +238,13 @@ export default {
         updateParticipant(){
             if(this.validateparticilant()){
                 this.tempparticipantform.post('staff/hrdevelopment/updateParticipant')
-                .then((response) =>{  
+                .then((response) =>{
                     Toast.fire({
                         icon: 'success',
                         title: 'Data updated Successfully'
                     });
                 })
-                .catch((error) => { 
+                .catch((error) => {
                     console.log("Errors:"+error)
                 });
                 $('#check_tr_app_'+this.orgcount).prop('checked',true);
@@ -267,29 +267,29 @@ export default {
                 $('#'+field_id+index).removeClass('is-invalid');
                 $('#'+field_id+'_err'+index).html('');
             }
-        }, 
+        },
         loadDetails(id,statusId){
-            
+
             axios.get('staff/hrdevelopment/getParticipantDetails/orgdetails/'+id)
-            .then((response) =>{   
+            .then((response) =>{
                 let data=response.data.data;
                 this.org_list=data;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
 
         getParticipantDetails(program_id,orgId,count){
             axios.get('staff/hrdevelopment/getParticipantDetails/verification/'+program_id.program_id+'SSS'+orgId)
-            .then((response) =>{   
+            .then((response) =>{
                 let data=response.data.data;
                 this.tempparticipantform.participant_list=data;
                 this.tempparticipantform.remarks=program_id.remarks;
                 this.orgcount=count;
                 $('#applicant_modal').modal('show');
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
@@ -300,7 +300,7 @@ export default {
                     'error!',
                     'No application detial to take action',
                     'error',
-                ); 
+                );
                 returnt=false;
             }
             for(let i=0;i<this.org_list.length;i++){
@@ -309,7 +309,7 @@ export default {
                         'error!',
                         'Some of the records doesnot viewed. Please visit them and take action',
                         'error',
-                    ); 
+                    );
                     returnt=false;
                 }
             }
@@ -327,10 +327,10 @@ export default {
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.form.post('/staff/hrdevelopment/updateapplication')
-                        .then((response) => {  
+                        .then((response) => {
                             if(response!=null && response!=""){
                                 let message="Application details has been updated.  <br><b>Thank You !</b>";
-                                this.$router.push({name:'acknowledgement',params: {data:message}});
+                                this.$router.push({name:'acknowledgement_for_nomination_success',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
                                     'Nomination details has beed submitted',
@@ -338,16 +338,16 @@ export default {
                                 )
                             }
                         })
-                        .catch((error) => {  
+                        .catch((error) => {
                             console.log("Error:"+error)
                         });
                     }
                 });
             }
-            
+
         }
     },
-    
+
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();

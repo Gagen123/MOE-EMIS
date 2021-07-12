@@ -12,6 +12,7 @@ use App\Models\staff_services\StaffDisaplinary;
 use App\Models\staff_services\StaffAttendance;
 use App\Models\staff_services\StaffAttendanceDetails;
 use App\Models\staff_masters\LeaveConfiguration;
+use App\Models\staff_masters\LeaveConfigurationDetials;
 use App\Models\staff_services\LeaveApplication;
 use App\Models\staff\ApplicationSequence;
 class StaffServicesController extends Controller{
@@ -260,6 +261,34 @@ class StaffServicesController extends Controller{
         }
         return $this->successResponse($response_data);
     }
+
+    public function getAppVeriLeaveConfigDetails($leave_type_id="",$app_role_id="",$role_id=""){
+        $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$leave_type_id)->where('submitter_role_id',$app_role_id)
+        ->select('id','leave_type_id')->first();
+        if($response_data!=null && $response_data!=""){
+            //done for single role onle
+            if(strpos( $role_id,',')){
+                $role_ids=explode(',',$role_id);
+                $currentLeaveConfigDetails=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->wherein('role_id',$role_ids)
+                ->select('sequence')->first();
+            }
+            else{
+                $currentLeaveConfigDetails=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->where('role_id',$role_id)
+                ->select('sequence')->first();
+            }
+
+            $nxtLeaveConfigDetails= LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->where('sequence',$currentLeaveConfigDetails->sequence+1)
+            ->select('id','sequence','authority_type_id','role_id')->first();
+            if($response_data!=null && $response_data!=""){
+                return $nxtLeaveConfigDetails;
+            }else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
+    }
     public function getLeaveConfigDetails($role_ids=""){
         $result_data="";
         if(strpos( $role_ids,',')){
@@ -269,25 +298,27 @@ class StaffServicesController extends Controller{
                 $roles.="'$role',";
             }
             $roles=rtrim($roles,',');
-            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
-            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id  
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
             WHERE d.role_id IN(".$roles.")";
         }
         else{
-            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l 
-            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id 
+            $result_data="SELECT l.leave_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_leave_config l
+            LEFT JOIN master_staff_leave_config_details d ON l.id=d.leave_config_id
             WHERE d.role_id ='".$role_ids."'";
         }
         return DB::select($result_data);
     }
 
+    
+
     public function submitLeaveApplication(Request $request){
         $rules = [
             'staff_id'                  =>  'required',
             'reason'                    =>  'required',
-            'from_date'                  =>  'required',
-            'to_date'                    =>  'required',
-            'no_days'                    =>  'required',
+            'from_date'                 =>  'required',
+            'to_date'                   =>  'required',
+            'no_days'                   =>  'required',
         ];
         $customMessages = [
             'staff_id.required'         => 'This field is required',
@@ -397,3 +428,4 @@ class StaffServicesController extends Controller{
     
     
 }
+

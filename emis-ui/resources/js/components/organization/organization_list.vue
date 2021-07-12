@@ -24,7 +24,7 @@
                             <tbody>
                                 <tr v-for="(item, index) in data_list" :key="index">
                                     <td>{{ index+1}}</td>
-                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.org_name }}</td>
                                     <td>{{ levelArray[item.levelId] }}</td>
                                     <td>{{ item.category }}</td>
                                     <td>{{ item.code }}</td>
@@ -48,9 +48,9 @@ export default {
     data(){
         return{
             dt:'',
-            data_list:[],
             levelArray:{},
             dzoArray:{},
+            data_list:[],
         }
     },
     methods: {
@@ -58,7 +58,6 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                //  alert(JSON.stringify(response.data[0].name))
                 for(let i=0;i<data.length;i++){
                     this.levelArray[data[i].id] = data[i].name;
                 }
@@ -78,19 +77,40 @@ export default {
         },
         loadeditpage(item){
             this.$router.push({name:"view_organization_profile",query:{org_id:item.id}});
+        },
+        loadOrganizationList(type){
+             axios.get('loadCommons/loadOrgList/'+type)
+            .then((response) => {
+                this.data_list=response.data.data;
+            })
+            .catch((error) =>{
+                console.log("Error:"+error);
+            });
         }
+
     },
     mounted(){
         this.getLevel();
         this.loaddzongkhagList();
         this.dt =  $("#register-table").DataTable();
-        axios.get('loadCommons/loadOrgList/userdzongkhagwise/allData')
-        .then((response) => {
-            this.data_list=response.data.data;
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.loadOrganizationList('userworkingagency/allData');
+            }
+            if(data['acess_level']=="Dzongkhag"){
+                this.loadOrganizationList('userdzongkhagwise/allData');
+            }
+            if(data['acess_level']=="Ministry"){
+                this.loadOrganizationList('allorganizationList/allData');
+            }
         })
-        .catch((error) =>{
-            console.log("Error:"+error);
+        .catch(errors => {
+            console.log(errors)
         });
+        workingAgency
+
     },
     watch: {
         data_list() {

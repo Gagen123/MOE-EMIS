@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table id="localprocure-table" class="table table-sm table-bordered table-striped">
@@ -11,7 +11,7 @@
                             <th>Quantity</th>
                             <th>Unit</th>
                             <th>Amount</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -22,12 +22,12 @@
                             <td> {{item.quantity}}</td>
                             <td> {{unitList[item.unit]}} </td>
                             <td> {{item.amount}}</td>
-                            <td> 
+                            <td>
                               <div class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><i class="fas fa-edit"></i></a>
                                </div>
                             </td>
-                        </tr> 
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -37,32 +37,24 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             totle:0,
             localprocure_list:[],
             itemList:{},
             unitList:{},
-        } 
+            dt:''
+        }
     },
     methods: {
-        loadLocalProcure(org_Id){
-        let uri = 'mess_manage/loadLocalProcure/'+org_Id;
+        loadLocalProcure(uri = 'mess_manage/loadLocalProcure'){
             axios.get(uri)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.localprocure_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#localprocure-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);   
         },
         viewLocalProcure(data){
             data.action='edit';
@@ -77,7 +69,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.itemList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -89,7 +81,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -101,9 +93,18 @@ export default {
         this.loadActiveItemList();
         this.loadActiveUnitList();
         this.loadLocalProcure();
-       
+        this.dt =  $("#localprocure-table").DataTable();
+
     },
-    
+     watch: {
+        localprocure_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#localprocure-table").DataTable()
+            });
+        }
+    },
+
 }
 </script>
 

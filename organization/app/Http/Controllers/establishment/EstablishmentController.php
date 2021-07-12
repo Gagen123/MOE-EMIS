@@ -509,16 +509,6 @@ class EstablishmentController extends Controller{
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('status','<>','pending')->where('establishment_type',str_replace('_',' ',$type))->get());
     }
 
-    public function loadOrgChangeApplications($user_id="",$type=""){
-        if($type=="Bifurcation"){
-            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Bif-%')->get());
-        }
-        else{
-            return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        }
-
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
-    }
 
     /**
      * loading bifurcation, merger, closure and reopening
@@ -663,7 +653,7 @@ class EstablishmentController extends Controller{
                 else if($data->establishment_type=="Bifurcation"){
                     $data->proposedName=Bifurcation::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
-                else{
+                else if($data->establishment_type=="Public School" || $data->establishment_type=="Public ECCD" || $data->establishment_type=="Public ECR"){
                     //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
@@ -732,10 +722,10 @@ class EstablishmentController extends Controller{
             $org_code= $org_code.date('Y').'.'.date('m').'.'.$last_seq;
         }
 
-        $caegory=str_replace(' ','_', strtolower($request->applicaitondetails['establishment_type']));
+        $caegory=str_replace(' ','_', strtolower($request->Applicationdetails['establishment_type']));
 
-        $org_details=$request->applicaitondetails['org_details'];
-        dd($org_details);
+        $org_details=$request->Applicationdetails['org_details'];
+        // dd($request->Applicationdetails);
         //
 
         $org_data = [
@@ -745,16 +735,16 @@ class EstablishmentController extends Controller{
             'zestAgencyCode'            =>$request->zestcode,
             'code'                      =>$org_code,
             'name'                      =>$org_details['proposedName'],
-            'dzongkhagId'               =>$request->applicaitondetails['dzongkhagId'],
-            'gewogId'                   =>$request->applicaitondetails['gewogId'],
-            'chiwogId'                  =>$request->applicaitondetails['chiwogId'],
+            'dzongkhagId'               =>$request->Applicationdetails['dzongkhagId'],
+            'gewogId'                   =>$request->Applicationdetails['gewogId'],
+            'chiwogId'                  =>$request->Applicationdetails['chiwogId'],
             'status'                    => 'Active',
             'remarks'                   =>$request->remarks,
             'created_by'                =>$request->action_by,
         ];
         $application_data="";
         if($caegory=="public_school"){
-            $application_data= ApplicationEstPublic::where('ApplicationDetailsId',$request->applicaitondetails['id'])->first();
+            $application_data= ApplicationEstPublic::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             // dd($application_data);
             $org_data = $org_data+[
                 'levelId'                   =>$application_data->levelId,
@@ -772,7 +762,7 @@ class EstablishmentController extends Controller{
             ];
         }
         if($caegory=="Bifurcation"){
-            $application_data= Bifurcation::where('ApplicationDetailsId',$request->applicaitondetails['id'])->first();
+            $application_data= Bifurcation::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             $org_data = $org_data+[
                 'levelId'                   =>$application_data->levelId,
                 'locationId'                =>$application_data->locationId,
@@ -783,7 +773,7 @@ class EstablishmentController extends Controller{
 
             ];
         }
-        dd($org_data,$request->applicaitondetails);
+        // dd($org_data);
         $establishment = OrganizationDetails::create($org_data);
 
         if($caegory=="public_school" && $application_data->isFeedingSchool==1){
@@ -813,7 +803,7 @@ class EstablishmentController extends Controller{
             ];
             $porp_response_data = OrganizationProprietorDetails::create($prop_details);
         }
-        $application_calss_data=ApplicationClassStream::where('ApplicationDetailsId',$request->applicaitondetails['id'])->get();
+        $application_calss_data=ApplicationClassStream::where('ApplicationDetailsId',$request->Applicationdetails['id'])->get();
         if($application_calss_data && sizeof($application_calss_data)>0){
             foreach($application_calss_data as $cls){
                 if($caegory=="public_school" || $caegory=="public_ecr" || $caegory=="private_school"){
@@ -838,7 +828,7 @@ class EstablishmentController extends Controller{
         }
 
         $app_details=['status' => 'Registered','registered_org_code'=>$org_code];
-        ApplicationDetails::where('application_no',$request->applicaitondetails['application_no'])->update($app_details);
+        ApplicationDetails::where('application_no',$request->Applicationdetails['application_no'])->update($app_details);
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 

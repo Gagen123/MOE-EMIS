@@ -12,9 +12,20 @@
         <span class="brand-text font-weight-light text-white ml-4">{{ session('org_profile')->orgName }} {{ session('org_profile')->level }}</span>
       </div>
     @endif
-    
+
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item dropdown">
+        <li class="nav-item dropdown">
+            <a class="nav-link text-white" data-toggle="dropdown" href="#">
+              <i class="fas fa-bell"></i>
+               <span class="badge badge-warning navbar-badge bg-danger mr-3"><span id="notificationcount"></span> </span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <span class="dropdown-item dropdown-header">
+                    <span id="n_details"></span>
+                </span>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
             <div class="user-panel d-flex">
                 <div class="image">
@@ -24,7 +35,7 @@
                   @if(session('User_Details')!=null)
                     {{ session('User_Details')['Full_Name'] }}
                   @endif
-                </div>    
+                </div>
             </div>
         </a>
         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
@@ -45,4 +56,3 @@
     </li>
   </ul>
   </nav>
-  

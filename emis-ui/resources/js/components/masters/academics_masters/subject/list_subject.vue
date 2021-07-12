@@ -5,21 +5,27 @@
                 <table id="subject-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th >Display  Order</th>
-                            <th >Subject Category Name</th>
-                            <th >Subject Group Name</th>
-                            <th >Subject Name</th>
-                            <th >Status</th>
-                            <th >Action</th> 
+                            <th>Display Order</th>
+                            <th>Subject</th>
+                            <th>Subject Category</th>
+                            <th>Assessed by Class Teacher</th>
+                            <th>Is Special Educational Needs (SEN) </th>
+                            <th>Status</th>
+                            <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in subjectList" :key="index">
-                            <td class="text-right">{{ item.display_order}}</td>
-                            <td>{{item.sub_category_name}}</td>
-                            <td>{{item.sub_group_name}}</td>
-                            <td>{{ item.sub_name }} <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span></td>
+                            <td class="text-right">{{ item.display_order }}</td>
+                            <td>{{ item.name }} 
+                                <br> 
+                                <span v-if="item.dzo_name"> {{ item.dzo_name }} </span>
+                            </td>
+                            <td>{{ item.sub_category_name }}</td>
+                            <td>{{ item.assessed_by_class_teacher ==  1 ? "Yes" : "No" }}</td>
+                             <td>{{ item.is_special_educational_needs ==  1 ? "Yes" : "No" }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
+
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -41,7 +47,7 @@ export default {
         }
     },
     methods:{
-        loadSubjectList(uri = 'masters/loadAcademicMasters/all_subject'){
+        loadsubjectgroupList(uri = 'masters/loadAcademicMasters/all_subject'){
             axios.get(uri)
             .then(response => {
                 let data = response 
@@ -54,14 +60,14 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'aca_edit_subject',params: {data:data}});
+            this.$router.push({name:'edit_subject',params: {data:data}});
         },
     },
     mounted(){ 
-        this.loadSubjectList();
+        this.loadsubjectgroupList();
         this.dt =  $("#subject-table").DataTable({
             columnDefs: [
-                { width: 60, targets: 0},
+                { width: 50, targets: 0},
             ],
         })
     },

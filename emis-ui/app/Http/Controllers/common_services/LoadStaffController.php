@@ -29,11 +29,18 @@ class LoadStaffController extends Controller{
         if($type=="userdzongkhagwise"){
             $param=$this->getUserDzoId();
         }
+        if($type=="dzoWsirRegContract"){
+            $param=$param.','.$this->getUserDzoId();
+        }
 
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
         }
+        if($type=="orgWsirRegContract"){
+            $param=$param.','.$this->getWrkingAgencyId();
+        }
+
 
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
@@ -41,13 +48,15 @@ class LoadStaffController extends Controller{
         }
 
         //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise"){
+        if($type=="orgwise" || $type=="dzo_hq_departmentwise"){
             $param=$parent_id;
         }
-        //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise"){
+        if($type=="emptype"){
             $param=$parent_id;
         }
+
+
+        // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }
@@ -86,7 +95,7 @@ class LoadStaffController extends Controller{
 
     //type can be id, cid, empid and id shoulb be their respective values
     public function viewStaffDetails($type="",$id=""){
-        $response_data= $this->apiService->listData('emis/common_services/viewStaffDetails/'.$type.'/'.$id);
+        $response_data= $this->apiService->listData('emis/common_services/StaffDetails/'.$type.'/'.$id);
         return $response_data;
     }
 }

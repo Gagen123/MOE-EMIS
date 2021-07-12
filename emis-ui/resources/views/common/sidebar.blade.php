@@ -147,7 +147,7 @@
                     </li>
                 </ul>
             <!--academic-->
-               
+
                 <li class="nav-item has-treeview" id="organizationlink">
             </li>
         @if(session('User_Details')!=null)
@@ -203,7 +203,7 @@
                                         </li>
                                     @endif
                                 @endif
-                            @endforeach 
+                            @endforeach
 
 
                             <!-- @foreach(session('User_Details')['screens'] as $i=> $scr)
@@ -248,7 +248,7 @@
             <br>
             <hr>
             Developers Menu
-            
+
             <li class="nav-item has-treeview" id="academic">
                 <router-link to="/academic" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-book"></i>
@@ -288,6 +288,7 @@
                             </p>
                         </router-link>
                     </li>
+
                 </ul>
             </li>
 
@@ -485,6 +486,22 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item has-treeview" id="inset_link">
+                        <router-link to="/transfer_service_index" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-list"></i>
+                                Transfer Services
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item has-treeview" id="inset_link">
+                        <router-link to="/staff_update_services" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="nav-icon fas fa-list"></i>
+                                Staff update Services
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="track_application">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>
@@ -521,14 +538,6 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="studentlist">
-                        <router-link to="/student_list" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Update Student Details
-                            </p>
-                        </router-link>
-                    </li>
                     <li class="nav-item" id="admission">
                         <router-link to="/student_admission" class="nav-link">
                             <p>
@@ -538,18 +547,18 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="studentservices">
-                        <router-link to="/class_section" class="nav-link">
+                        <router-link to="/update_student_details" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Class Section Allocation
+                                Update Student Details
                             </p>
                         </router-link>
                     </li>
                     <li class="nav-item" id="studentservices">
-                        <router-link to="/student_services" class="nav-link">
+                        <router-link to="/class_section" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Update Student Details
+                                Class Section Allocation
                             </p>
                         </router-link>
                     </li>
@@ -570,7 +579,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="studenthealth">
-                        <router-link to="/student_health" class="nav-link">
+                        <router-link to="/counselling_record" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Counseling Services
@@ -654,7 +663,7 @@
                             </p>
                         </router-link>
                     </li>
-                    
+
                 </ul>
             </li>
 
