@@ -86,7 +86,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Brif description for seeking transfer</label>
+                                <label class="mb-0.5">Brief description for seeking transfer</label>
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
@@ -245,10 +245,10 @@ export default {
                 reason_id:'',
                 description:'',
                 current_date:'',
-                 type_id:'',
-
+                type_id:'',
                 preference_dzongkhag:[],
                 transferType:"intra_transfer",
+                service_name:"intra transfer",
                 preference_school1:'',
                 preference_school2:'',
                 preference_school3:'',
@@ -415,7 +415,9 @@ export default {
                                     }
                                 }
                                 let formData = new FormData();
+                                formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                formData.append('service_name', this.form.service_name);
                                 formData.append('preference_school1', this.form.preference_school1);
                                 formData.append('preference_school2', this.form.preference_school2);
                                 formData.append('preference_school3', this.form.preference_school3);

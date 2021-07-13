@@ -19,9 +19,7 @@ class StudentResponsibilityController extends Controller
     }
 
     public function saveStudentResponsibility(Request $request){
-
         //First - check the basic validation of the forms
-
         $rules = [
             'student'       => 'required',
             'role_id'       => 'required'
@@ -50,31 +48,23 @@ class StudentResponsibilityController extends Controller
         if($request->action_type=='add'){
             $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
         }
+        // if($validate_data!=null && json_decode($validate_data)->data == 'exist'){
+        //     //this is to offset the data and send it back to the view
+        //     $request->offsetUnset('role_id');
 
-        if($validate_data!=null && json_decode($validate_data)->data == 'exist'){
-            //this is to offset the data and send it back to the view
-            $request->offsetUnset('role_id');
+        //     $rules = [
+        //         'student'       => 'required',
+        //         'role_id'       => 'required'
+        //     ];
+        //     $customMessages = [
+        //         'student.required'          => 'This field is required',
+        //         'role_id.required'          => 'Duplication of Roles for Student'
+        //     ];
 
-            $rules = [
-                'student'       => 'required',
-                'role_id'       => 'required'
-            ];
-            $customMessages = [
-                'student.required'          => 'This field is required',
-                'role_id.required'          => 'Duplication of Roles for Student'
-            ];
-
-            $this->validate($request, $rules, $customMessages);
-        }
-
-        try{
+        //     $this->validate($request, $rules, $customMessages);
+        // }
             $response_data= $this->apiService->createData('emis/students/saveStudentResponsibility', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-
     }
 
     public function loadStudentResponsibilities($param=""){

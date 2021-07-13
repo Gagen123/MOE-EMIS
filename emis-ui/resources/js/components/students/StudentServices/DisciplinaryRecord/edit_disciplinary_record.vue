@@ -70,7 +70,7 @@
                 </div>
                 <div class="card-footer text-right">
                     <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Update</button>
             </div>
             </div>
         </form>
@@ -210,7 +210,7 @@ export default {
     },
     created() {
         this.loadStudentList();  
-        this.student_form.id=this.$route.params.data.id;
+        this.student_form.id=this.$route.params.data.Id;
         this.student_form.student=this.$route.params.data.Name;
         this.student_form.student=this.$route.params.data.StdStudentId;
         this.student_form.offence_type=this.$route.params.data.StdDisciplinaryOffenceTypeId;

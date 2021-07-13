@@ -43,7 +43,7 @@ class StudentResponsibilityController extends Controller
                 'StdStudentId'      =>  $request->student,
                 'StdRoleId'         =>  $request->role_id,
                 'Remarks'           =>  $request->remarks,
-                //'user_id'           => $this->user_id()
+                // 'user_id'           => $this->user_id()
             ];
             $response_data = StudentRole::where('id', $id)->update( $data);
         }else{
@@ -74,9 +74,15 @@ class StudentResponsibilityController extends Controller
                     'StdRoleId'         =>  $request->role_id,
                     'Remarks'           =>  $request->remarks,
                     'created_by'        => $request->user_id,
-                    'date'              => date('Y-m-d'),
                     'created_at'        => date('Y-m-d h:i:s')
                 ];
+                try{
+                    StudentRole::create( $data);
+        
+                    } catch(\Illuminate\Database\QueryException $ex){
+                        dd($ex->getMessage());
+                        // Note any method of class PDOException can be called on $ex.
+                    }
                 $response_data = StudentRole::create( $data);
             }
         }
