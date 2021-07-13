@@ -135,9 +135,6 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
-        this.loadActiveSeverityList();
     },
     
 }

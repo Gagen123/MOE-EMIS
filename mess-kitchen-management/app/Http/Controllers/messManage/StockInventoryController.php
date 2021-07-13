@@ -32,7 +32,7 @@ class StockInventoryController extends Controller
         //   // $response_data=StockReceived::where('organizationId',$org_id)->get();
         //   // return $this->successResponse($response_data);
      //  try{
-            $response_data = DB::select("SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.stock_received_quantity, b.stock_issed_quantity, aa.local_procured_quantity
+            $response_data = DB::select("SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.stock_received_quantity, b.stock_issed_quantity, aa.local_procured_quantity, b.Damage_Qty
             FROM
             (SELECT  c.item_id, c.organizationId, c.unit_id, SUM(c.stock_received_quantity) AS stock_received_quantity ,
             SUM(c.local_procured_quantity) AS local_procured_quantity
@@ -45,8 +45,9 @@ class StockInventoryController extends Controller
              FROM local_procures) c
             GROUP BY c.item_id, c.organizationId, c.unit_id) aa
             LEFT JOIN
-            (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity
-          FROM stock_issueds WHERE organizationId='".$orgId."' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id");
+            (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
+          FROM stock_issueds  GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+          WHERE aa.organizationId='".$orgId."'");
          return $this->successResponse($response_data);
     //    }catch(Exception $e){
     //     dd($e);

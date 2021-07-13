@@ -151,15 +151,20 @@ class StudentProjectController extends Controller
             $data =[
                 'id'                    => $request->id,
                 'StdStudentId'          => $request->student,
-                'CeaProjectId'          => $request->project,
+                'CaeProjectId'          => $request->project,
                 'Task'                  => $request->task,
                 'created_by'            => $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
     
                 //'user_id'        => $this->user_id() 
             ];
-
-            $response_data = CeaProjectMember::create($data);
+            try{
+                $response_data = CeaProjectMember::create($data);
+                } catch(\Illuminate\Database\QueryException $ex){
+                    dd($ex->getMessage());
+                    // Note any method of class PDOException can be called on $ex.
+                }
+           
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

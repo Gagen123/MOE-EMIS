@@ -33,6 +33,7 @@ export default {
     data(){
         return{
             totle:0,
+            staffList:{},
             transfer_list:[],
             loaddetails:[],
             staffName:[],
@@ -56,18 +57,32 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-    },
-    mounted() {
-        this.loadtransferDetails();
-        this.dt =  $("#training-table").DataTable()
-    },
-    watch: {
-        transfer_list(){
-            this.$nextTick(() => {
-                this.dt =  $("#training-table").DataTable()
+        loadstaff(){
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.length;i++){
+                 this.staffList[data.data[i].id] = data.data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
-        }
+        },
     },
+        mounted() {
+            this.loadtransferDetails();
+            this.loadstaff();
+            this.dt =  $("#training-table").DataTable()
+        },
+        watch: {
+            transfer_list(){
+                this.$nextTick(() => {
+                    this.dt =  $("#training-table").DataTable()
+                });
+            }
+        },
 
 }
 </script>

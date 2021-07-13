@@ -153,7 +153,7 @@
                 if(data.service_name.includes('Closure')){
                     this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Transfer')){
+                if(data.application_number.includes('TR')){
                     this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Leave')){

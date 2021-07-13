@@ -86,6 +86,27 @@ class WorkflowController extends Controller{
             if($request->service_name=="Hr Development"){
                 TaskDetails::where('screen_id', $request->screen_id)->update($task_data);
             }
+            else if($request->status_id==10){
+                $task_data=[
+                    'table_name'            =>$request->table_name,
+                    'service_name'          =>$request->service_name,
+                    'name'                  =>$request->name,
+                    'screen_id'             =>$request->screen_id,
+                    'application_number'    =>$request->application_number,
+                    'status_id'             =>$request->status_id,
+                    'remarks'               =>$request->remarks,
+                    'access_level'          =>$request->access_level,
+                    'user_dzo_id'           =>$request->dzongkhagApproved,
+                    'working_agency_id'     =>$request->working_agency_id,
+                    'created_by'            =>$request->action_by,
+                    'applied_on'            =>date('Y-m-d h:i:s'),
+                    'last_action_by'        =>$request->action_by,
+                    'last_action_date'      =>date('Y-m-d h:i:s'),
+                    'app_role_id'           => $request->app_role_id,
+                    'record_type_id'        => $request->record_type_id,
+                ];
+                TaskDetails::where('application_number', $request->application_number)->update($task_data);
+            }
             else{
                 TaskDetails::where('application_number', $request->application_number)->update($task_data);
             }

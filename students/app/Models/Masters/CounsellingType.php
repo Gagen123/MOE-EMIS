@@ -11,7 +11,7 @@ class CounsellingType extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="counselling_type";
+    protected $table="std_counselling_type";
 
     protected $fillable = [
         'id',
