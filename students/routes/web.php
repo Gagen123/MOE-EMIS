@@ -90,7 +90,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });
         //Student Updates
         $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);
-        $router->get('/loadStudentUpdatesList/{param}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
+        $router->get('/loadStudentUpdatesList/{param}/{org_id}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
 
         //SEN Controller
         $router->group(['prefix' => 'sen'], function () use ($router) {
