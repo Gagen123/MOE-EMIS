@@ -65,6 +65,24 @@ const routes = [
                     { path: '/counselling_type_list', name:'counselling_type_list', component: require('./components/masters/student_masters/counselling_types/counselling_type_list.vue').default },
                 ]
             },
+            { path: '/counselling_age_index',
+                component: require('./components/masters/student_masters/counselling_age_range/counselling_age_index.vue').default ,
+                children: [
+                    { path: '', component: require('./components/masters/student_masters/counselling_age_range/counselling_age_list.vue').default },
+                    { path: '/counselling_age_add', name:'counselling_age_add', component: require('./components/masters/student_masters/counselling_age_range/counselling_age_add.vue').default },
+                    { path: '/counselling_age_edit', name:'counselling_age_edit', component: require('./components/masters/student_masters/counselling_age_range/counselling_age_edit.vue').default },
+                    { path: '/counselling_age_list', name:'counselling_age_list', component: require('./components/masters/student_masters/counselling_age_range/counselling_age_list.vue').default },
+                ]
+            },
+            { path: '/counselling_class_index',
+                component: require('./components/masters/student_masters/counselling_class_range/counselling_class_index.vue').default ,
+                children: [
+                    { path: '', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_list.vue').default },
+                    { path: '/counselling_class_add', name:'counselling_class_add', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_add.vue').default },
+                    { path: '/counselling_class_edit', name:'counselling_class_edit', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_edit.vue').default },
+                    { path: '/counselling_class_list', name:'counselling_class_list', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_list.vue').default },
+                ]
+            },
         ]
     },
     //Students validation and others

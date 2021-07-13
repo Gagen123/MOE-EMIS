@@ -31,18 +31,7 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-    /**Get Scout Section in Dropdown */
-    public function getScoutSection(){
-        $data=CeaScoutSection::select('id','name')->get();
-        return $data;
-    }
-
-
-    /**Get Scout Level in Dropdown By ScoutSectionID*/
-    public function getScoutSectionLevel($scoutSectionId){
-        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
-        return $data;
-    }
+    
 
     /**
      * method to save or update student masters data
@@ -461,6 +450,14 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaProgramMeasurement";
                     break;
                 }
+            case "counselling_class_range" : {
+                    $databaseModel = "CounsellingClassRange";
+                    break;
+                }
+            case "counselling_age_range" : {
+                    $databaseModel = "CounsellingAgeRange";
+                    break;
+                }
             default : {
                 $databaseModel =$record_type;
                 break;
@@ -472,6 +469,28 @@ class StudentMasterController extends Controller
             return $data;
         }
     }
+
+    /**
+     * The following functions are written differently.
+     * Integrate to Case statements in the future
+     */
+
+    /**Get Scout Section in Dropdown */
+    public function getScoutSection(){
+        $data=CeaScoutSection::select('id','name')->get();
+        return $data;
+    }
+
+
+    /**Get Scout Level in Dropdown By ScoutSectionID*/
+    public function getScoutSectionLevel($scoutSectionId){
+        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**
+     * Counselling Master
+     */
 
     public function saveCounsellingType(Request $request){
          //  dd($request);

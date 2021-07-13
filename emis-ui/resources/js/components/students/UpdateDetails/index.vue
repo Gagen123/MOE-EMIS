@@ -20,7 +20,7 @@
                 <li class="nav-item pr-1" @click="activatelink('update_std_feeding')">
                     <router-link to="/update_std_feeding" id="update_std_feeding" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Feeding Detail
+                        Feeding Modality
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('update_std_guardian')">
