@@ -16,7 +16,10 @@ class CounsellingRecords extends Model
     protected $fillable = [
         'id',
         'counselling_type', 
-        'number',
+        'male',
+        'female',
+        'age_range',
+        'class_range',
         'remarks',
         'organizationId',
         'created_by',
