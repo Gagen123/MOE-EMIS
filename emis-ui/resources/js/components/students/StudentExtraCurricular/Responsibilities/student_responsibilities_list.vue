@@ -7,7 +7,7 @@
                     <th >Student Name</th>
                     <th >Student Code</th>
                     <th >Role/Responsibility</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -24,41 +24,41 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            org_id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentResponsibilities/'+this.org_id){
+        loadDataList(org_id){
+            let uri='students/loadStudentResponsibilities/'+org_id
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.dataList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log(error);
             });
-            setTimeout(function(){
-                $("#roles-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'edit_student_responsibilities',params: {data:data}});
         },
     },
     mounted(){
-        this.loadDataList();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.loadDataList(data['Agency_Code']);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
     },
 }
 </script>

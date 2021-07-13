@@ -139,10 +139,12 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 this.testData = data;
-                for(let i=0;i<data.length;i++){
-                    this.studentClassArray[data[i].id] = data[i].class;
-                    this.studentSectionArray[data[i].id] = data[i].section;
-                    this.studentStreamArray[data[i].id] = data[i].stream;
+                if(data!=null && data!="" && data!=undefined){
+                    for(let i=0;i<data.length;i++){
+                        this.studentClassArray[data[i].id] = data[i].class;
+                        this.studentSectionArray[data[i].id] = data[i].section;
+                        this.studentStreamArray[data[i].id] = data[i].stream;
+                    }
                 }
             })
             .catch(function (error) {
@@ -161,7 +163,7 @@ export default {
                 let class_selected = $("#std_class").val();
                 this.getStreamList();
                 this.getSectionList();
-                if(class_selected == 11 || class_selected == 12){
+                if(class_selected == 11 || class_selected == 'XI' || class_selected == 12 || class_selected == 'XII'){
                     $(".stream_selection").show();
                     $(".section_selection").show();
                 }else{

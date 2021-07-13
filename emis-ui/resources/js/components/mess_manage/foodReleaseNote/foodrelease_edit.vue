@@ -324,7 +324,6 @@ export default {
                     let file_path=file.path+'/'+file.original_name;
                     file_path=file_path.replaceAll('/', 'SSS');
                     let uri = 'mess_manage/deleteFile/'+file_path+'/'+file.id;
-                    alert(uri);
                     axios.get(uri)
                     .then(response => {
                         let data = response;

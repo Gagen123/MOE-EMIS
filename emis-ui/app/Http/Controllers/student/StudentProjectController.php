@@ -50,15 +50,8 @@ class StudentProjectController extends Controller
             'organizationId'    => $this->getWrkingAgencyId(), 
             'user_id'           => $this->userId()
         ];
-
-
-        try{
             $response_data= $this->apiService->createData('emis/students/saveStudentProject', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
     }
 
     /*
@@ -76,7 +69,6 @@ class StudentProjectController extends Controller
     */
 
     public function saveProjectMembers(Request $request){
-
         $rules = [
             'student'            => 'required',
             'project'            => 'required',
@@ -98,14 +90,8 @@ class StudentProjectController extends Controller
             'organizationId'    => $this->getWrkingAgencyId(), 
             'user_id'           => $this->userId()
         ];
-
-        try{
             $response_data= $this->apiService->createData('emis/students/saveProjectMembers', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
     }
 
     public function listProjectMembers($param=""){

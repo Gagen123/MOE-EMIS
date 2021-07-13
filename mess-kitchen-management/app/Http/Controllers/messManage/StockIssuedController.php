@@ -73,14 +73,17 @@ class StockIssuedController extends Controller
     // }
 
     public function saveStockIssued(Request $request){
+     // dd($request);
         $id = $request->id;
+        $orgId = $request['organizationId'];
+        $date = $request['dateOfissue'];
         if($id != null){
           DB::table('stock_issueds')->where('id', $request->id)->delete();
           foreach ($request->item_issue as $i=> $item){
               $itemIssued = array(
-               'organizationId'             =>  $request->organizationId,
-               'dateOfissue'                =>  $request->dateOfissue,
-               'id'                         =>  $request->id,
+              'organizationId'              =>  $orgId,
+              'dateOfissue'                 =>  $date,
+               'id'                         =>  $id,
                'item_id'                    =>  $item['item'],
                'quantity'                   =>  $item['quantity'],
                'unit_id'                    =>  $item['unit'],

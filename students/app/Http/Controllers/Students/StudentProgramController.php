@@ -47,6 +47,7 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
+            'id'                        => $request->id,
             'OrgOrganizationId'         => $request->organisation_id,
             'CeaProgrammeId'            => $request->program,
             'CeaProgrammeSupporterId'   => $request->supporter,
@@ -56,33 +57,13 @@ class StudentProgramController extends Controller
         ];
 
         if($request->record_type == 'add'){
-    
-            // $assigned_staff_details = $data['assigned_staff'];
-    
-            // unset($data['assigned_staff']);
-    
             $response_data = CeaSchoolProgramme::create($data);
-            // $lastInsertId = $response->id;
-    
-            
-    
-            // foreach($assigned_staff_details as $key => $value){
-            //     $assigned_staff_data['CeaSchoolProgrammeId'] = $lastInsertId;
-            //     $assigned_staff_data['CeaRoleId'] = $value['role'];
-            //     $assigned_staff_data['StfStaffId'] = $value['teacher'];
-            //     $assigned_staff_data['Remarks'] = $value['remarks'];
-    
-            //     $response_data = CeaRoleStaff::create($assigned_staff_data);
-            // }
         } else {
-
             $school_data = CeaSchoolProgramme::where('id',$request->id)->first();
-
             $data =$data+[
                 'updated_by'                =>  $request->user_id,
                 'updated_at'                =>   date('Y-m-d h:i:s'),
             ];
-
             CeaSchoolProgramme::where('id',$school_data->id)->update($data);
             $response_data = CeaSchoolProgramme::first();
         }
@@ -179,8 +160,9 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramMembers(Request $request){
-    
-      $rules = [
+        $id = $request->id;
+        if( $id != null && $id!= null){
+        $rules = [
             'student'                    => 'required',
             'program'                    => 'required',
             'responsibilities'           => 'required',
@@ -201,8 +183,39 @@ class StudentProgramController extends Controller
             'Responsibility'        => $request->responsibilities,
             'Status'                => $request->status
         ];
+        try{
+            $response_data=CeaProgrammeMembership::where('id', $id)->update($data);
 
-        $response = CeaProgrammeMembership::create($data);
+            } catch(\Illuminate\Database\QueryException $ex){
+                dd($ex->getMessage());
+                // Note any method of class PDOException can be called on $ex.
+            }
+        // $response_data = CeaProgrammeMembership::where('id', $id)->update($data);
+    }
+      else {
+        $rules = [
+            'student'                    => 'required',
+            'program'                    => 'required',
+            'responsibilities'           => 'required',
+        ];
+
+        $customMessages = [
+            'student.required'           => 'This field is required',
+            'program.required'           => 'This field is required',
+            'responsibilities.required'  => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'id'                    => $request->id,
+            'CeaProgrammeId'        => $request->program,
+            'StdStudentId'          => $request->student,
+            'JoiningDate'           => $request->date,
+            'Responsibility'        => $request->responsibilities,
+            'Status'                => $request->status
+        ];
+        $response_data = CeaProgrammeMembership::create($data);
+      }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
         //Fix once the roles have been decided
@@ -247,7 +260,8 @@ class StudentProgramController extends Controller
     */
 
     public function saveClubMembers(Request $request){
-    
+        $id = $request->id;
+        if( $id != null && $id!= null){
         $rules = [
               'student'                    => 'required',
               'club'                       => 'required',
@@ -269,10 +283,41 @@ class StudentProgramController extends Controller
               'Responsibility'        => $request->responsibilities,
               'Status'                => $request->status
           ];
-  
-          $response_data = CeaClubMembership::create($data);
-          return $this->successResponse($response_data, Response::HTTP_CREATED);
-  
+          $response_data = CeaClubMembership::where('id', $id)->update($data);
+        }
+        else{
+            $rules = [
+                'student'                    => 'required',
+                'club'                       => 'required',
+                'responsibilities'           => 'required',
+            ];
+    
+            $customMessages = [
+                'student.required'           => 'This field is required',
+                'club.required'              => 'This field is required',
+                'responsibilities.required'  => 'This field is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+    
+            $data =[
+                'id'                    => $request->id,
+                'CeaProgrammeId'        => $request->club,
+                'StdStudentId'          => $request->student,
+                'JoiningDate'           => $request->date,
+                'Responsibility'        => $request->responsibilities,
+                'Status'                => $request->status
+            ];
+            // dd($data);
+            try{
+                $response_data = CeaClubMembership::create($data);
+                } catch(\Illuminate\Database\QueryException $ex){
+                    dd($ex->getMessage());
+                    // Note any method of class PDOException can be called on $ex.
+                }
+            
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+
           //Fix once the roles have been decided
           
           // $assigned_student_details = $data['role'];
@@ -316,7 +361,6 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramInventory(Request $request){
-
         $rules = [
             'program'            => 'required',
             'month'            => 'required',
