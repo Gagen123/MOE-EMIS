@@ -787,6 +787,9 @@ class StudentAdmissionController extends Controller
         else{
             $response_data=Std_Students::where('id',$std_id)->first();
         }
+        if($response_data!=null && $response_data!="" && $response_data->id!=""){
+            $response_data->classDetails= StudentClassDetails::where('StdStudentId',$response_data->id)->first();
+        }
         return $this->successResponse($response_data);
     }
     public function getAllStudentCid(){
@@ -862,7 +865,7 @@ class StudentAdmissionController extends Controller
 
     /**
      * Get the application details
-     * 
+     *
      * For EMIS Portal
      */
 
