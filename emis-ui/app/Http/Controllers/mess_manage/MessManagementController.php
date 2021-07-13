@@ -290,5 +290,9 @@ class MessManagementController extends Controller
         }
         return $response_data;
     }
-
+    public function getquantity($item_id=""){
+        dd('m here');
+        $list = $this->apiService->listData('emis/messManagement/getquantity/'.$item_id);
+        return $list;  
+    }
 }
