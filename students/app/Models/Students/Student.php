@@ -26,7 +26,7 @@ class Student extends Model
         'Remarks',
         'IsNewAdmission',
         'IsTransferred',
-        'isSenStudent',
+        'isSen',
         'IsRejoined',
         'PhotoPath',
         'PrimaryContact',
