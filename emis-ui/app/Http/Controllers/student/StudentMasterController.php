@@ -29,7 +29,10 @@ class StudentMasterController extends Controller{
         $data =[
             'id'             =>  $request->id,
             'name'           =>  $request->name,
+            'central'        =>  $request->central,
+            'local'          =>  $request->local,
             'description'    =>  $request->description,
+
             'status'         =>  $request->status,
             'actiontype'     =>  $request->action_type,
             'recordtype'     =>  $request->record_type,
@@ -148,22 +151,22 @@ class StudentMasterController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/students/allActiveStudentDropdowns/'.$model."/".$parent_id);
         return $response_data;
     }
-    
+
     public function saveCounsellingType(Request $request){
         //dd($request);
         $rules = [
             'name'          =>  'required',
           //  'description'   =>  'required',
             'status'        =>  'required',
-           
+
         ];
         $customMessages = [
             'name.required'   => 'This field is required',
             'status.required' => 'This field is required',
-           
+
         ];
         $this->validate($request, $rules, $customMessages);
-        $data =[   
+        $data =[
             'id'                =>  $request['id'],
             'name'              =>  $request['name'],
             'description'       =>  $request['description'],

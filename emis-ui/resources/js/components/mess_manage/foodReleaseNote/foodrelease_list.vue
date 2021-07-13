@@ -19,7 +19,7 @@
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
                             <td> {{dzongkhagList[item.dzongkhag]}}</td>
-                            <td> {{orgList[item.organizaiton]}}</td>
+                            <td> {{orgList[item.organization]}}</td>
                             <td> {{quarterList[item.quarter]}}</td>
                             <td> {{ item.remarks}}</td>
                             <td>
