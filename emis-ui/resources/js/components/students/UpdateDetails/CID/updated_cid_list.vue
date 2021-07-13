@@ -6,9 +6,8 @@
                     <th >SL#</th>
                     <th >Student Name</th>
                     <th >Student Code</th>
-                    <th >Offence</th>
-                    <th >Severity</th>
-                    <th >Action Taken</th>
+                    <th >CID</th>
+                    <th >Previous CID</th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -16,10 +15,9 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ item.offence_type}}</td>
-                    <td>{{ item.severity}}</td>
-                    <td>{{ item.action_type}}</td>
+                    <td>{{ item.student_code}}</td>
+                    <td>{{ item.CidNo}}</td>
+                    <td>{{ item.previousValue}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -36,11 +34,10 @@ export default {
         return{
             id:'2',
             dataList:[], 
-            severityList:{},
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        loadDataList(uri='students/loadStudentUpdatesList/cid'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -73,7 +70,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+            this.$router.push({name:'edit_updated_cid',params: {data:data}});
         },
     },
     mounted(){

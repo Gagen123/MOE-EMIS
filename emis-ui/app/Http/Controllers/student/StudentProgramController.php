@@ -19,7 +19,6 @@ class StudentProgramController extends Controller
     }
 
     public function saveStudentProgram(Request $request){
-
         $rules = [
             'program'         => 'required',
             'supporter'       => 'required',
@@ -157,6 +156,7 @@ class StudentProgramController extends Controller
             'organizationId'        => $this->getWrkingAgencyId(), 
             'user_id'               => $this->userId()
         ];
+        dd($data);
             $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
             return $response_data;
        
@@ -176,7 +176,6 @@ class StudentProgramController extends Controller
     Function to save Club members 
     */
     public function saveClubMembers(Request $request){
-
         //First - check the basic validation of the forms
 
         $rules = [
@@ -210,22 +209,21 @@ class StudentProgramController extends Controller
         //Not creating but using the createData service as we are sending the $data
         $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
         
-        if(json_decode($validate_data)->data == 'exist'){
-            //this is to offset the data and send it back to the view
-            $request->offsetUnset('student');
+        // if(json_decode($validate_data)->data == 'exist'){
+        //     //this is to offset the data and send it back to the view
+        //     $request->offsetUnset('student');
             
-            $rules = [
-                'student'       => 'required',
-                'program'       => 'required'
-            ];
-            $customMessages = [
-                'student.required'          => 'Student already belongs to a club',
-                'program.required'          => 'Duplication of Clubs for Student'
-            ];
+        //     $rules = [
+        //         'student'       => 'required',
+        //         'program'       => 'required'
+        //     ];
+        //     $customMessages = [
+        //         'student.required'          => 'Student already belongs to a club',
+        //         'program.required'          => 'Duplication of Clubs for Student'
+        //     ];
 
-            $this->validate($request, $rules, $customMessages);
-        }
-
+        //     $this->validate($request, $rules, $customMessages);
+        // }
         $response_data= $this->apiService->createData('emis/students/saveClubMembers', $data);
         return $response_data;
        
@@ -243,7 +241,6 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramInventory(Request $request){
-
         $rules = [
             'program'            => 'required',
             'month'            => 'required',

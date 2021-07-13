@@ -64,7 +64,7 @@ export default {
             data.action='edit';
             this.$router.push({name:'LocalProcureEdit',params: {data:data}});
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;

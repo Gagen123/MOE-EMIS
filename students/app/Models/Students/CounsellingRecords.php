@@ -11,12 +11,15 @@ class CounsellingRecords extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="counselling_records";
+    protected $table="std_counselling_records";
 
     protected $fillable = [
         'id',
         'counselling_type', 
-        'number',
+        'male',
+        'female',
+        'age_range',
+        'class_range',
         'remarks',
         'organizationId',
         'created_by',

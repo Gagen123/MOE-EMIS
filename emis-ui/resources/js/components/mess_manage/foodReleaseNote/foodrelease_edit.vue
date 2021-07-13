@@ -236,7 +236,6 @@ export default {
                         formData.append('attachments[]', this.form.ref_docs[i].attach);
                         formData.append('attachmentname[]', this.form.ref_docs[i].name);
                     }
-
                     axios.post('/mess_manage/saveFoodRelease',formData,config)
                     .then(() => {
                     Toast.fire({
@@ -506,6 +505,7 @@ export default {
 
         },
         getFoodReleaseDetails(foodrelId){
+            this.form.id=foodrelId;
             axios.get('mess_manage/getFoodReleaseDetails/' +foodrelId)
             .then((response) => {
                 let data=response.data.data;

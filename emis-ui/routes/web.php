@@ -12,6 +12,9 @@ Route::get('/get_privileges/{id}', [App\Http\Controllers\HomeController::class, 
 Route::prefix('masters')->group(function () {
     Route::post('/saveGlobalMasters', [App\Http\Controllers\AdministrationController::class, 'saveGlobalMasters'])->name('saveGlobalMasters');
     Route::get('/loadGlobalMasters/{param}', [App\Http\Controllers\AdministrationController::class, 'loadGlobalMasters'])->name('loadGlobalMasters');
+    Route::get('/load_village_details_by_village_id/{id}', [App\Http\Controllers\AdministrationController::class, 'load_village_details_by_village_id'])->name('load_village_details_by_village_id');
+    Route::get('/load_gewog_details_by_id/{id}', [App\Http\Controllers\AdministrationController::class, 'load_gewog_details_by_id'])->name('load_gewog_details_by_id');
+    Route::get('/load_dzongkhag_details_by_id/{id}', [App\Http\Controllers\AdministrationController::class, 'load_dzongkhag_details_by_id'])->name('load_dzongkhag_details_by_id');
     Route::get('/getroles/{param}', [App\Http\Controllers\AdministrationController::class, 'getroles'])->name('getroles');
     Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
     Route::post('/saveStaffMasters', [App\Http\Controllers\AdministrationController::class, 'saveStaffMasters'])->name('saveStaffMasters');
@@ -561,6 +564,9 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadClassStreamSection/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
     Route::get('/getClassByType/{type}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'getClassByType'])->name('getClassByType');
     Route::get('/getOrgClassStream', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'getOrgClassStream'])->name('getOrgClassStream');
+    Route::get('/getOrgClassStreambyId/{id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'getOrgClassStreambyId'])->name('getOrgClassStreambyId');
+    Route::get('/getSectionById/{id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'getSectionById'])->name('getSectionById');
+
     Route::get('/loadStreamList/{id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadStreamList'])->name('loadStreamList');
     Route::get('/loadSectionList/{id}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadSectionList'])->name('loadSectionList');
     Route::get('/getClassStreamSection/{params}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'getClassStreamSection'])->name('getClassStreamSection');
@@ -766,6 +772,18 @@ Route::prefix('mess_manage')->group(function () {
 
     Route::get('/getInventoryList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'deleteFile'])->name('deleteFile');
+
+
+
+});
+
+//Dietary links
+Route::prefix('diatery')->group(function (){
+    Route::post('/savediatery', [App\Http\Controllers\dietary\DietaryController::class, 'savediatery'])->name('savediatery');
+    Route::get('/getdiatery/{org_id}', [App\Http\Controllers\dietary\DietaryController::class, 'getdiatery'])->name('getdiatery');
+    Route::get('/getdiateryDetails/{id}', [App\Http\Controllers\dietary\DietaryController::class, 'getdiateryDetails'])->name('getdiateryDetails');
+    Route::get('/checkdata/{date}', [App\Http\Controllers\dietary\DietaryController::class, 'checkdata'])->name('checkdata');
+
 });
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');

@@ -1337,6 +1337,21 @@ class AdministrationController extends Controller{
         $strCategory = $this->apiService->listData('emis/masters/eccdfacility/getEccdStructureType');
         return $strCategory;
     }
+    public function load_village_details_by_village_id($id=""){
+        $strCategory = $this->apiService->listData('emis/masters/load_village_details_by_village_id/'.$id);
+        return $strCategory;
+    }
+
+    public function load_gewog_details_by_id($id=""){
+        $strCategory = $this->apiService->listData('emis/masters/load_gewog_details_by_id/'.$id);
+        return $strCategory;
+    }
+
+    public function load_dzongkhag_details_by_id($id=""){
+        $strCategory = $this->apiService->listData('emis/masters/load_dzongkhag_details_by_id/'.$id);
+        return $strCategory;
+    }
+
 
 
 

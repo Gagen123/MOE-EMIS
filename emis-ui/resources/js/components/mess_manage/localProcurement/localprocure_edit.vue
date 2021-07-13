@@ -5,8 +5,8 @@
                 <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Procurement:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date" 
+                        <label class="">Date of Procurement:<span class="text-danger">*</span></label>
+                        <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
                         v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
                         <has-error :form="form" field="dateOfprocure"></has-error>
                     </div>
@@ -30,38 +30,38 @@
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
                                   </td>
-                                  <td>                                
+                                  <td>
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
-                                 <td>                                
+                                 <td>
                                 <select name="unit" id="unit" class="form-control" v-model="item.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                     </select> 
+                                     </select>
                                   </td>
-                                  <td>                                
+                                  <td>
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
                                  </td>
-                                  <td>                                
+                                  <td>
                                       <input type="text" name="remark" class="form-control" v-model="item.remark">
                                   </td>
-                              </tr> 
+                              </tr>
                               <tr>
-                                  <td colspan=7> 
-                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                  <td colspan=7>
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>                                          
+                              </tr>
                           </tbody>
                      </table>
                   </div>
               </div>
-            
+
              <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-             </div> 
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+             </div>
             </div>
         </form>
     </div>
@@ -76,7 +76,7 @@ export default {
             unitList:[],
             local_item: [],
             form: new form({
-                id: '', dateOfprocure: '', 
+                id: '', dateOfprocure: '',
                 local_item:
                 [{
                     item:'',quantity:'',unit:'', amount:'',remark:'',
@@ -99,7 +99,7 @@ export default {
 
         /**
          * method to save data
-         */ 
+         */
         formaction: function(type){
             if(type=="reset"){
                 this.restForm();
@@ -149,7 +149,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -166,16 +166,16 @@ export default {
         addMore: function(){
             this.count++;
             this.form.local_item.push({
-                item:'',quantity:'',unit:'',amount:'',remark:''})    
-            }, 
+                item:'',quantity:'',unit:'',amount:'',remark:''})
+            },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.local_item.length>1){
                 this.count--;
-                this.form.local_item.splice(index,1); 
-            } 
+                this.form.local_item.splice(index,1);
+            }
         },
         localProcureEditList(locId){
             this.form.local_item=[];
@@ -196,12 +196,12 @@ export default {
                 }
                 this.count=data.length;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
             });
         }
     },
-    mounted() { 
+    mounted() {
         this.loadActiveItemList();
         this.loadActiveUnitList();
        $('.select2').select2();
@@ -209,20 +209,20 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-     
-       
+
+
     },
     created() {
         this.localProcureEditList(this.$route.params.data.id);
-        this.loadActiveItemList(); 
+        this.loadActiveItemList();
         this.loadActiveUnitList();
-        
-        
+
+
     }
 }
 </script>

@@ -21,30 +21,6 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <!-- <div class="callout callout-success">
-                            <span><label><u>Transfer Config Detials</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Year:</label>
-                                    <span class="text-blue text-bold">{{t_year}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">From Date:</label>
-                                    <span class="text-blue text-bold">{{t_from_data}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">End Date:</label>
-                                    <span class="text-blue text-bold">{{t_to_date}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Remarks:</label>
-                                    <span class="text-blue text-bold">{{t_remarks}}</span>
-                                </div>
-                            </div>
-                        </div> -->
-
                         <div class="callout callout-success">
                             <span><label><u>Applicant Detials</u></label></span>
                             <div class="form-group row">
@@ -62,11 +38,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                     <label class="mb-0">Transfer Type:</label><br>
-                                    <span class="text-blue text-bold">{{form.transfer_type}}</span>
-                                </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0">Brief description for seeking transfer</label><br>
                                     <span class="text-blue text-bold">{{form.description}}</span>
                                 </div>
@@ -165,7 +137,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                  <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
@@ -201,10 +173,12 @@ export default {
             form: new form({
                 id: '',
                 application_no:'',
-                transfer_type:'',
                 staff_id: '',
+                status_id:'',
+                service_name:'',
                 transfer_reason_id:'',
                 description:'',
+                transferType:'',
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
@@ -226,17 +200,14 @@ export default {
                 let data=response.data.data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
+                this.form.id=data.id;
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
-                 this.form.staff_id=data.staff_id;
-                this.form.transfer_type=data.transferType;
+                this.form.staff_id=data.staff_id;
+                this.form.transferType=data.transferType;
                 
-                if(data.app_seq_no!=10 && data.app_seq_no!=0){
-                    $('#verifyId').show();
-                }
-                if(data.app_seq_no==10 ){
-                    $('#approveId').show();
-                }
+                this.draft_attachments=data.attachments;
+
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
                         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
@@ -251,19 +222,18 @@ export default {
                         $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
                     }
                 }
-                this.draft_attachments=data.documents;
-                if(response.data.app_stage.toLowerCase().includes('verifi')){
+                if(this.form.status_id!=10 && this.form.status_id!=0){
                     $('#verifyId').show();
                 }
-                if(response.data.app_stage.toLowerCase().includes('approve')){
+                if(this.form.status_id==2 ){
                     $('#approveId').show();
+                    $('#verifyId').hide();
                     $('#approveDzohead').show();
                     $('#approveDzo1').show();
                     $('#approveDzo2').show();
                     $('#approveDzo3').show();
-                }
-                if(response.data.app_stage.toLowerCase().includes('con')){
-                    $('#confirm').show();
+                    
+                    
                 }
             })
             .catch((error) =>{
@@ -367,7 +337,6 @@ export default {
         loadGenders(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
-               
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
                     this.genderArray[data.data.data[i].id] = data.data.data[i].name;
@@ -377,18 +346,18 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        // loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
-        //     axios.get(uri)
-        //     .then(response =>{
-        //         let data = response;
-        //         for(let i=0;i<data.data.data.length;i++){
-        //             this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
-        //         }
-        //     })
-        //     .catch(function (error){
-        //         console.log('Error: '+error);
-        //     });
-        // },
+        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
@@ -422,11 +391,11 @@ export default {
     },
     mounted(){
         this.form.application_no=this.$route.params.data.application_number;
-        
+        this.form.status_id=this.$route.params.data.status_id;
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();
         this.gettransferconfig();
-        // this.loadpositionTitleList();
+        this.loadpositionTitleList();
         this.loadreasons();
         this.getStaffDetials();
         this.loadactivedzongkhagList();

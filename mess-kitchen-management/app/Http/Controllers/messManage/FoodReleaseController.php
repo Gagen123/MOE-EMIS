@@ -35,19 +35,18 @@ class FoodReleaseController extends Controller
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
            // dd($foodrelease);
-            $foodrel = FoodRelease::where('id',$id)->update($foodrelease);
-            $attachmentId =  $foodrel->id;
-            if($request->attachment_details!=null && $request->attachment_details!="" && $request->attachmentId!=""){
+            FoodRelease::where('id',$id)->update($foodrelease);
+            $foodrel=FoodRelease::where('id',$id)->first();
+            if($request->attachment_details!=null && $request->attachment_details!=""){
                 foreach($request->attachment_details as $att){
                     $attach =[
-                        'attachmentId'              =>  $attachmentId,
+                        'attachmentId'              =>  $id,
                         'path'                      =>  $att['path'],
                         'attachment_for'            =>  'Food Release Note',
                         'user_defined_name'         =>  $att['user_defined_name'],
                         'original_name'             =>  $att['original_name'],
 
                     ];
-                   // dd($attach);
                     FoodReleaseDocuments::create($attach);
                 }
             }
@@ -63,7 +62,6 @@ class FoodReleaseController extends Controller
                 'updated_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
-        // dd($foodrelease);
             $foodrel = FoodRelease::create($foodrelease);
             $attachmentId =  $foodrel->id;
             if($request->attachment_details!=null && $request->attachment_details!=""){
@@ -76,7 +74,6 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
-                // dd($attach);
                     FoodReleaseDocuments::create($attach);
                 }
             }

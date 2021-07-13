@@ -6,6 +6,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\staff\TransferWindow;
+use App\Models\staff\StaffHistory;
+use App\Models\staff\PersonalDetails;
 use App\Models\staff\TransferApplication;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\TransPrefenreces;
@@ -211,19 +213,60 @@ class TransferController extends Controller{
     }
     public function updateTransferApplication(Request $request){
         $request_data =[
-            'status'                       =>   $request->status,
-            'updated_by'                   =>   $request->user_id,
-            'updated_at'                   =>   date('Y-m-d h:i:s'),
+            'id'                           =>  $request->id,
+            'status'                       =>  $request->status,
+            'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+            'updated_by'                   =>  $request->user_id,
+            'updated_at'                   =>  date('Y-m-d h:i:s'),
+            'service_name'                 =>  $request->service_name,
+            'current_status'               =>  $request->current_status,
+            'aplication_number'           =>  $request->application_number,
+
+        ];
+        $extra_data =[
+            'id'                           =>  $request->id,
+            'status'                       =>  $request->status,
+            'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+            'updated_by'                   =>  $request->user_id,
+            'updated_at'                   =>  date('Y-m-d h:i:s'),
+            'aplication_number'           =>  $request->application_number,
+
         ];
         if($request->status=="Approved"){
-            $additional_data=[
-                'dzongkhagApproved'           =>   $request->dzongkhagApproved,
+            $applicant_det  = TransferApplication::where('id',$request->id)->first();
+            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            $history_data=[
+                'id'                           =>$staff_detials->id,
+                'name'                         =>$staff_detials->name,
+                'cid_work_permit'              =>$staff_detials->cid_work_permit,
+                'dzo_id'                       =>$staff_detials->dzo_id,
+                'geowg_id'                     =>$staff_detials->geowg_id,
+                'village_id'                   =>$staff_detials->village_id,
+                'position_title_id'            =>$staff_detials->position_title_id,
+                'working_agency_id'            =>$staff_detials->working_agency_id,
+                'inserted_at'                  =>date('Y-m-d h:i:s'),
+                'inserted_by'                  =>$request->user_id,
+                'inserted_for'                 =>'Transfer Application',
+                'inserted_application_no'      =>$request->application_number,
             ];
-            $request_data = $request_data + $additional_data;
+            StaffHistory::create($history_data);
+            $update_data=[
+                'dzo_id'                      =>$request->dzongkhagApproved,
+            ];
+            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
         }
-        $response_data=TransferApplication::where('aplication_number', $request->application_number)->update($request_data);
+        if($request->status=="Approved"){
+            $additional_data=[
+                'dzongkhagApproved'  =>   $request->dzongkhagApproved,
+                'status'             =>  $request->status,
+            ];
+            $extra_data = $extra_data + $additional_data;
+        }
+        $response_data=TransferApplication::where('id', $request->id)->update($extra_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+       
     }
+
     public function getTransferConfigDetails($role_ids=""){
         $result_data="";
         if(strpos( $role_ids,',')){

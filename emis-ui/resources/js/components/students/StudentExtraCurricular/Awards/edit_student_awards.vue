@@ -162,7 +162,7 @@ export default {
     },
     created() {
         this.loadStudentList();
-        this.student_award_form.student=this.$route,params.data.StdStudentId;
+        this.student_award_form.id=this.$route,params.data.StdStudentId;
         this.student_award_form.award_type_id=this.$route.params.data.CeaAwardId;
         this.student_award_form.award_given_by=this.$route.params.data.AwardedBy;
         this.student_award_form.place=this.$route.params.data.Place;

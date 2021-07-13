@@ -6,20 +6,14 @@
                     <th >SL#</th>
                     <th >Student Name</th>
                     <th >Student Code</th>
-                    <th >Offence</th>
-                    <th >Severity</th>
-                    <th >Action Taken</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ item.offence_type}}</td>
-                    <td>{{ item.severity}}</td>
-                    <td>{{ item.action_type}}</td>
+                    <td>{{ item.StudentName}}</td>
+                    <td>{{ item.student_code}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -40,7 +34,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        loadDataList(uri='students/loadStudentUpdatesList/contact'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -58,26 +52,11 @@ export default {
                 }); 
             }, 3000);  
         },
-        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.severityList[data.data.data[i].id] = data.data.data[i].name; 
-                }
-                
-            })
-            
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         showedit(data){
-            this.$router.push({name:'edit_disciplinary_record',params: {data:data}});
+            this.$router.push({name:'edit_updated_contact',params: {data:data}});
         },
     },
     mounted(){
-        this.loadActiveSeverityList();
         this.loadDataList();
     },
 }
