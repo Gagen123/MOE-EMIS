@@ -49,7 +49,6 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                // alert(JSON.stringify(data.data.data));
                 for(let i=0;i<data.data.data.length;i++){
                     this.transfertypeList[data.data.data[i].id] = data.data.data[i].type;
                 }
@@ -76,19 +75,19 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-    mounted(){ 
-        this.TransferConfigurationList();
-        this.LoadTransferType();
-        this.loadroleList();
+        mounted(){ 
+            this.TransferConfigurationList();
+            this.LoadTransferType();
+            this.loadroleList();
 
-    },
-    watch:{
-        leaveConfigurationList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
-        }
-    },
+        },
+        watch:{
+            leaveConfigurationList() {
+                this.dt.destroy();
+                this.$nextTick(() => {
+                    this.dt =  $("#working-agency-table").DataTable()
+                });
+            }
+        },
 }
 </script>

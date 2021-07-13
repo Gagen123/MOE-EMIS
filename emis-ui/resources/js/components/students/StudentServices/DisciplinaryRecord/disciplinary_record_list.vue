@@ -40,9 +40,12 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        
+        loadDataList(org_id){
+            let uri='students/loadStudentRecords/'+org_id
             axios.get(uri)
             .then(response => {
+                // alert(JSON.stringify(response));
                 let data = response;
                 this.dataList =  data.data.data;
             })
@@ -68,11 +71,11 @@ export default {
     },
     mounted(){
         this.loadActiveSeverityList();
-        this.loadDataList();
+        // this.loadDataList();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
-            this.id=data['Agency_Code'];
+            this.loadDataList(data['Agency_Code']);
         })
         .catch(errors => {
             console.log(errors)

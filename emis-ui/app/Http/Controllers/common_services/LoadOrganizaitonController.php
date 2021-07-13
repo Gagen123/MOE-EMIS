@@ -57,7 +57,7 @@ class LoadOrganizaitonController extends Controller{
 
     //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
     public function loadOrgDetails($type="",$id=""){
-        
+
         if($type=="full_user_logedin_dzo_id"){
             $id=$this->getUserDzoId();
         }
@@ -111,6 +111,14 @@ class LoadOrganizaitonController extends Controller{
     public function getOrgClassStream(){
         $org_id = $this->getWrkingAgencyId();
         return $this->apiService->getListData('emis/common_services/getOrgClassStream/'.$org_id);
+    }
+
+    public function getOrgClassStreambyId($id=""){
+        return $this->apiService->getListData('emis/common_services/getOrgClassStreambyId/'.$id);
+    }
+
+    public function getSectionById($id=""){
+        return $this->apiService->getListData('emis/common_services/getSectionById/'.$id);
     }
 
     /**

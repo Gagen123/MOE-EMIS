@@ -24,8 +24,8 @@ class StudentDisciplinaryRecordController extends Controller
     */
     public function addStudentRecord(Request $request){
         $id = $request->id;
-        $student = $request->StdStudentId;
-        if( $id != null && $StdStudentId != null){
+        $student = $request->student;
+        if( $id != null && $student != null){
             $rules = [
                 'student'               => 'required',
                 'offence_type'          => 'required',

@@ -43,17 +43,17 @@ class StudentTrainingController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
-            'OrgId'             => $request->org_id,
-            'TrainingTypeName'  => $request->name,
-            'Place'             => $request->place,
-            'CeaTrainingId'     => $request->training_type,
-            'CeaProgrammeId'    => $request->program,
-            'CmnCountryId'      => $request->country,
-            'FromDate'          => $request->from_date,
-            'ToDate'            => $request->to_date,
-            'DetailsOfTraining' => $request->details,
-            'created_at'        => date('Y-m-d h:i:s'),
-            'created_by'        => $request->user_id 
+            'OrgId'                  => $request->org_id,
+            'TrainingTypeName'       => $request->name,
+            'Place'                  => $request->place,
+            'CeaTrainingId'          => $request->training_type,
+            'CeaProgrammeId'         => $request->program,
+            'CmnCountryId'           => $request->country,
+            'FromDate'               => $request->from_date,
+            'ToDate'                 => $request->to_date,
+            'DetailsOfTraining'      => $request->details,
+            'created_at'             => date('Y-m-d h:i:s'),
+            'created_by'             => $request->user_id 
         ];
         if($request->form_type == "add"){
             $data =[
@@ -69,8 +69,12 @@ class StudentTrainingController extends Controller
                 'created_at'        => date('Y-m-d h:i:s'),
                 'created_by'        => $request->user_id 
             ];
-            $response_data = CeaStudentTraining::create($data);
-      
+            try{
+                $response_data = CeaStudentTraining::create($data);
+                } catch(\Illuminate\Database\QueryException $ex){
+                    dd($ex->getMessage());
+                    // Note any method of class PDOException can be called on $ex.
+                }
         }
         if($request->form_type=="edit"){
             $data = CeaStudentTraining::find($request->id);

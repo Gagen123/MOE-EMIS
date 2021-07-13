@@ -102,7 +102,9 @@ export default {
     methods: {
         //need to get the organisation id and pass it as a parameter
 
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+        
+          loadStudentList(org_id){
+            let uri='students/loadStudentList/'+org_id;
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -210,7 +212,14 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.loadStudentList(data['Agency_Code']);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
         this.loadStudentList();
         this.loadActiveOffenceTypeList();
         this.loadActiveActionTakenList();

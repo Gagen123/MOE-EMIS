@@ -52,13 +52,8 @@ class StudentTrainingController extends Controller
             'user_id'           => $this->userId(),
             'org_id'            => $this->getWrkingAgencyId() 
         ];
-        try{
             $response_data= $this->apiService->createData('emis/students/saveStudentTraining', $data);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
     }
     /*
     * Function is to list Trainings for drop down

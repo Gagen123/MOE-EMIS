@@ -11,6 +11,7 @@ class TransferApplication extends Model{
     protected $fillable = [
         'id',
         'transfer_type_id',
+        'aplication_number',
         'transfer_window_id',
         'staff_id',
         'transfer_reason_id',

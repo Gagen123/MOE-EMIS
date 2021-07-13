@@ -55,7 +55,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/getInventoryList/{orgId}', 'messManage\StockInventoryController@getInventoryList');
 
+
+
     });
+
+    $router->group(['prefix' => 'dietary'], function () use ($router) {
+        $router->post('/savediatery', 'DietaryController@savediatery');
+        $router->get('/getdiatery/{org_Id}', 'DietaryController@getdiatery');
+        $router->get('/getdiateryDetails/{id}', 'DietaryController@getdiateryDetails');
+        $router->get('/checkdata/{date}/{org_id}', 'DietaryController@checkdata');
+    });
+
 
 });
 
