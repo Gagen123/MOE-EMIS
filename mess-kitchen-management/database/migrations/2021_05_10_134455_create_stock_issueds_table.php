@@ -21,7 +21,6 @@ class CreateStockIssuedsTable extends Migration
             $table->char('quantity',36);
             $table->char('unit_id',36);
             $table->char('item',36);
-            $table->char('quantity',36);
             $table->char('unit',36);
             $table->char('damagequantity',36);
             $table->char('remarks',36);

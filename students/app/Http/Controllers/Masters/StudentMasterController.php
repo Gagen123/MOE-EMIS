@@ -119,30 +119,36 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-
+        $orginal_param=$param;
         if(strpos($param,'_Active')){
-            $param=explode('_',$param)[0];
+            // $param=explode('_',$param)[0]; //commented by Tshewang as there are pareamers which contains _ more then 1 like student_program_Active
+            $param=str_replace('_Active','',$param);
         }
 
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
 
         $model = new $modelName();
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
-            $response_data = $model::where('id', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
+            // $response_data = $model::where('id', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
-         //   dd($response_data);
+            // dd($response_data);
 
         } elseif($param == 'club_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
-            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
+            // $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
 
-        } elseif(strpos($param,'_Active')){
+        } elseif(strpos($orginal_param,'_Active')){//change from param to $orginal_param as param value is changing above
             return $this->successResponse($model::where('status',1)->get());
 
         } elseif($param == 'student_award_type'){
@@ -165,12 +171,12 @@ class StudentMasterController extends Controller
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
         } else if($param == 'program_student_roles'){
             $status = '1';
             $assigned_to = '2';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
         } else if($param == 'vaccine_type'){
             $vacinetype = StudentType::all();
@@ -272,6 +278,7 @@ class StudentMasterController extends Controller
         if($request['recordtype']=="program_item" ){
             $data->Central   =  $dataRequest['Central'];
             $data->Local     =  $dataRequest['Local'];
+            $data->Unit_id   =  $dataRequest['Unit_id'];
         }
         $data->Description = $dataRequest['Description'];
         $data->Status = $dataRequest['Status'];
@@ -306,6 +313,7 @@ class StudentMasterController extends Controller
                 $additional_data = [
                     'Central'   =>  $request['central'],
                     'Local'     =>  $request['local'],
+                    'Unit_id'   =>  $request['unit_id'],
                 ];
                 $data = $data + $additional_data;
             }
@@ -423,7 +431,7 @@ class StudentMasterController extends Controller
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeId' => $request->program,
-                            'assigned_to'=> $request->assigned_to,
+                            'AssignedTo'=> $request->assigned_to,  //change from assigned_to AssignTo by Tshewang as its find in db
                             'remarks'=> $request->remarks
                         ];
                         $data = $data + $additional_data;
@@ -447,10 +455,6 @@ class StudentMasterController extends Controller
                 }
             case "term_type" : {
                     $databaseModel = "HealthTerm";
-                    break;
-                }
-            case "health_supplementation" : {
-                    $databaseModel = "HealthSupplementation";
                     break;
                 }
             case "health_screening" : {

@@ -31,7 +31,22 @@ class GeneralStudentController extends Controller{
     /**
      * Get the basic details student list (id, name, student code, class, section, stream)
      */
+    public function saveStudentRollNumber(Request $request){
+        $data =[
+            'id'                    => $request->id,
+            'std_class'             => $request->std_class,
+            'std_stream'            => $request->std_stream,
+            'std_section'           => $request->std_section,
+             'roll_no'              => $request->roll_no,
+            'studentList'           => $request->studentList,
+            'std_referred'          => $request->std_referred,
+            'organization_id'       => $this->getWrkingAgencyId(),
+            'user_id'               =>  $this->userId() 
+        ];
+        $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber', $data);
+        return $response_data;
 
+    }
     public function loadBasicStudentList($param=""){
         $param = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/loadBasicStudentList/'.$param);
@@ -68,7 +83,6 @@ class GeneralStudentController extends Controller{
      */
 
     public function studentListByGender($param=""){
-
         $gender_list = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_gender'));
         $data_parameters['class_params'] = $param;
         $data_parameters['gender_params'] = $gender_list;

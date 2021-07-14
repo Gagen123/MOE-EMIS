@@ -40,10 +40,8 @@ class StudentScoutController extends Controller
             'EstablishmentYear'           =>  $request->year,
             'Remarks'           =>  $request->remarks
         ];
-
         if($request->action_type=="add"){
             $response_data = CeaSchoolScout::create($data);
-
         } else if($request->action_type=="edit"){
 
             //Audit Trails
@@ -68,7 +66,6 @@ class StudentScoutController extends Controller
     }
 
     public function loadStudentScouts($param=""){
-
         $roles = DB::table('cea_school_scouts')
                 ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
                 ->select('cea_school_scouts.*', 'cea_scouts.name AS scout_name')
