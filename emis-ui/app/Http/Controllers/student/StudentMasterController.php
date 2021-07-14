@@ -19,7 +19,7 @@ class StudentMasterController extends Controller{
     public function saveStudentMasters(Request $request){
 
         $rules = [
-            'name'          =>  'required'
+            'name'          =>  'required',
         ];
         $customMessages = [
             'name.required' => 'This field is required',
@@ -29,14 +29,13 @@ class StudentMasterController extends Controller{
         $data =[
             'id'             =>  $request->id,
             'name'           =>  $request->name,
+            'unit_id'           =>  $request->unit_id,
             'central'        =>  $request->central,
             'local'          =>  $request->local,
             'description'    =>  $request->description,
-
             'status'         =>  $request->status,
             'actiontype'     =>  $request->action_type,
             'recordtype'     =>  $request->record_type,
-
             'user_id'        => $this->userId()
         ];
         //dd($data);

@@ -5,15 +5,17 @@
                 <tr>
                     <th >SL#</th>
                     <th >Item Name</th>
+                    <th >Unit</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in itemList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ measurementList[item.Unit_id]}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -24,13 +26,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            itemList:[], 
+            measurementList:{},
+            itemList:[],
         }
     },
     methods:{
@@ -41,22 +44,28 @@ export default {
                 this.itemList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log(error);
             });
-            setTimeout(function(){
-                $("#item-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
             this.$router.push({name:'ProgramItemEdit',params: {data:data}});
         },
+        loadMeasurementList(uri = 'masters/loadStudentMasters/program_measurement'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.measurementList[data.data.data[i].id] = data.data.data[i].Name;
+                }
+                // this.measurementList =  data.data.data;
+            })
+            .catch(function (error) {
+               console.log(error);
+            });
+        },
     },
     mounted(){
+        this.loadMeasurementList();
         this.loadProgramItemList();
     },
 }

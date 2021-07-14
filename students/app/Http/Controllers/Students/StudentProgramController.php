@@ -376,57 +376,47 @@ class StudentProgramController extends Controller
         $data =[
             'id'                    => $request->id,
             'OrgOrganizationId'     => $request->organisation_id,
-            'CeaProgrammeId'        => '17b2b454-6f86-49c1-b763-8f02202d3071',
-           //  'CeaProgrammeId'        => $request->program,
+            'CeaProgrammeId'        => $request->program,
             'ForMonth'              => $request->month,
             'Remarks'               => $request->remarks,
-            'inventoryDetails'      => $request->inventoryDetails,
-            'productionDetails'     => $request->productionDetails,
-            'expenditureDetails'    => $request->expenditureDetails,
-
+            // 'inventoryDetails'      => $request->inventoryDetails,
+            // 'productionDetails'     => $request->productionDetails,
+            // 'expenditureDetails'    => $request->expenditureDetails,
             //'user_id'        => $this->user_id()
         ];
+        // $inventory_details      = $data['inventoryDetails'];
+        // $production_details     = $data['productionDetails'];
+        // $expenditure_details    = $data['expenditureDetails'];
 
-        $inventory_details = $data['inventoryDetails'];
-        $production_details = $data['productionDetails'];
-        $expenditure_details = $data['expenditureDetails'];
-
-        unset($data['inventoryDetails']);
-        unset($data['productionDetails']);
-        unset($data['expenditureDetails']);
-
+        // unset($data['inventoryDetails']);
+        // unset($data['productionDetails']);
+        // unset($data['expenditureDetails']);
         $response = CeaProgramInventory::create($data);
         $lastInsertId = $response->id;
-
-        foreach($inventory_details as $key => $value){
+        foreach($request->inventoryDetails as $key => $value){
             $inventory_data['CeaProgrammeInventoryId'] = $lastInsertId;
-            $inventory_data['CeaProgrammeInventoryItemId'] = 1;
-            // $inventory_data['CeaProgrammeInventoryItemId'] = $value['item_id'];
+            $inventory_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_id'])[0];
             $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
             $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
             $inventory_data['Remarks'] = $value['remarks'];
-
-            $inventory_response = CeaProgramInventoryDetail::create($inventory_data);
+            // dd($inventory_data);
+            CeaProgramInventoryDetail::create($inventory_data);
         }
 
-        foreach($production_details as $key => $value){
+        foreach($request->productionDetails as $key => $value){
             $production_data['CeaProgrammeInventoryId'] = $lastInsertId;
-            $production_data['CeaProgrammeInventoryItemId'] = 1;
-            // $production_data['CeaProgrammeInventoryItemId'] = $value['item_produced'];
+            $production_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_produced'])[0];
             $production_data['QuantityProduced'] = $value['quantity_produced'];
             $production_data['NoOfVariety'] = $value['no_varieties'];
             $production_data['AmountGenerated'] = $value['amount_generated'];
             $production_data['Remarks'] = $value['production_remarks'];
-
-            $production_response = CeaProgramInventoryProduction::create($production_data);
+            CeaProgramInventoryProduction::create($production_data);
         }
-
-        foreach($expenditure_details as $key => $value){
+        foreach($request->expenditureDetails as $key => $value){
             $expenditure_data['CeaProgrammeInventoryId'] = $lastInsertId;
             $expenditure_data['Particular'] = $value['expenditure_details'];
             $expenditure_data['Amount'] = $value['expenditure_amount'];
             $expenditure_data['Remarks'] = $value['expenditure_remarks'];
-
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
         //dd( $data);
