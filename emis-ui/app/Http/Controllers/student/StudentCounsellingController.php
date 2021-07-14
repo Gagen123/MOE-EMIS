@@ -65,6 +65,7 @@ class StudentCounsellingController extends Controller
             return $e;
         }
     }
+
     public function loadCounsellingInformation(){ 
         $orgId=$this->getWrkingAgencyId();
         $data = $this->apiService->listData('emis/students/loadCounsellingInformation/'.$orgId);
@@ -73,6 +74,44 @@ class StudentCounsellingController extends Controller
 
     public function getCounsellingDetails($couId=""){
         $data = $this->apiService->listData('emis/students/getCounsellingDetails/'.$couId);
+        return $data;
+    }
+
+    public function saveCounsellingProgram(Request $request){
+        
+        $rules = [
+            'activities'              => 'required',
+            'issues'                  => 'required'
+           
+        ];
+
+        $customMessages = [
+            'activities.required'           => 'This field is required',
+            'issues.required'               => 'This field is required'
+           
+        ];
+        $this->validate($request, $rules, $customMessages);
+        
+        $data =[
+            'id'                    => $request['id'],
+            'activities'            => $request['activities'],
+            'issues'                => $request['issues'],
+            'user_id'               => $this->userId(),
+            'working_agency_id'     => $this->getWrkingAgencyId()
+        ];
+        
+        try{
+            $response_data= $this->apiService->createData('emis/students/saveCounsellingProgram', $data);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
+    public function loadCounsellingProgram(){ 
+        $orgId=$this->getWrkingAgencyId();
+        $data = $this->apiService->listData('emis/students/loadCounsellingProgram/'.$orgId);
         return $data;
     }
 }

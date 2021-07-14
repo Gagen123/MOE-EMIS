@@ -61,33 +61,40 @@ class StudentScoutController extends Controller
 
     public function saveScoutParticipants(Request $request){
         $rules = [
-            'StdStudentId'              => 'required',
-            'CeaSchoolScoutsId'         => 'required',
-            'CeaSchoolSectionLevelId'   => 'required',
+            'student'                   => 'required',
+            'CeaScoutSectionId'         => 'required',
+            'CeaScoutSectionLevelId'    => 'required',
             'date'                      => 'required'
         ];
 
         $customMessages = [
-            'StdStudentId.required'             => 'This field is required',
-            'CeaSchoolScoutsId.required'        => 'This field is required',
-            'CeaSchoolSectionLevelId.required'  => 'This field is required',
+            'student.required'                  => 'This field is required',
+            'CeaScoutSectionId.required'        => 'This field is required',
+            'CeaScoutSectionLevelId.required'   => 'This field is required',
             'date.required'                     => 'This field is required'
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'                        =>$request['id'],
-            'StdStudentId'              =>$request['StdStudentId']['id'],
-            'CeaSchoolScoutsId'         =>$request['CeaSchoolScoutsId']['id'],
-            'CeaSchoolSectionLevelId'   =>$request['CeaSchoolSectionLevelId']['id'],
+            'id'                        =>$request->id,
+            'student'                   =>$request->student,
+            'CeaScoutSectionId'         =>$request->CeaScoutSectionId,
+            'CeaScoutSectionLevelId'    =>$request->CeaScoutSectionLevelId,
             'date'                      =>$request->date,
             'action_type'               =>$request->action_type,
             'user_id'                   =>$this->userId(),
-            // 'working_agency_id'         =>$this->getWrkingAgencyId()
+            'working_agency_id'         =>$this->getWrkingAgencyId()
         ];
         $response_data= $this->apiService->createData('emis/students/saveScoutParticipants', $data);
         return $response_data;
+    }
+
+    public function loadScoutMembers($orgId){
+        $orgId = $this->getWrkingAgencyId();
+        $user_id = $this->userId();
+        $scout_members = $this->apiService->listData('emis/students/loadScoutMembers/'.$orgId.'/'.$user_id);
+        return $scout_members;
     }
 
 }

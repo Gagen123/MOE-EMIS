@@ -11,7 +11,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.counselling_type}}</td>
+                    <td>{{ item.activities}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -31,7 +31,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadCounsellingInformation'){
+        loadDataList(uri='students/loadCounsellingProgram'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -54,7 +54,6 @@ export default {
         },
     },
     mounted(){
-        this.getCounsellingTypeDropdown();
         this.loadDataList();
     },
 }

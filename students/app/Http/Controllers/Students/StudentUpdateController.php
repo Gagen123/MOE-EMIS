@@ -52,12 +52,28 @@ class StudentUpdateController extends Controller
                     $response_data = $this->updateStudentContactDetails($data);
                     break;
                 }
+            case "update_maritial_status" : {
+                    $additional_data = [
+                        'maritial_status'   => $request->maritial_status
+                    ];
+                    $data = $data + $additional_data;
+                    $response_data = $this->updateParentsMaritialStatus($data);
+                    break;
+                }
             case "update_feeding" : {
                     $additional_data = [
                         'feeding'   => $request->feeding
                     ];
                     $data = $data + $additional_data;
                     $response_data = $this->updateStudentFeedingDetails($data);
+                    break;
+                }
+            case "update_diet" : {
+                    $additional_data = [
+                        'diet'   => $request->diet
+                    ];
+                    $data = $data + $additional_data;
+                    $response_data = $this->updateStudentDietaryDetails($data);
                     break;
                 }
             case "update_guardian" : {
@@ -161,6 +177,25 @@ class StudentUpdateController extends Controller
         return $this->successResponse($student);
     }
 
+    private function updateParentsMaritialStatus($data){
+        $student_detail=StudentGuardianDetails::where('StdStudentId',$data['student'])->get()->toArray();
+        
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'historyFor'    =>  'Parents Maritial Status Change',
+            'previousValue' =>  $student_detail[0]['MaritialStatus']
+        ];
+
+        $history = $this->insertStudentHistory($student_history);
+
+        $new_data = [
+            'MaritialStatus' => $data['maritial_status']
+        ];
+
+        $student = StudentGuardianDetails::where('StdStudentId',$data['student'])->update($new_data);
+        return $this->successResponse($student);
+    }
+
     private function updateStudentGuardianDetails($data){
         $students = Student::where('id',$data['id'])->update($data);
         return $students;
@@ -198,6 +233,25 @@ class StudentUpdateController extends Controller
 
         $new_data = [
             'noOfMeals' => $data['feeding']
+        ];
+
+        $student = Student::where('id',$data['student'])->update($new_data);
+        return $this->successResponse($student);
+    }
+
+    private function updateStudentDietaryDetails($data){
+        $student_detail=Student::where('id',$data['student'])->get('dietType')->toArray();
+        
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'historyFor'    =>  'Student Dietary Change',
+            'previousValue' =>  $student_detail[0]['dietType']
+        ];
+
+        $history = $this->insertStudentHistory($student_history);
+
+        $new_data = [
+            'dietType' => $data['diet']
         ];
 
         $student = Student::where('id',$data['student'])->update($new_data);
@@ -252,8 +306,16 @@ class StudentUpdateController extends Controller
                     $students = $this->loadStudentContactDetails($org_id);
                     break;
                 }
+            case "maritial_status" : {
+                    $students = $this->loadParentsMaritialStatus($org_id);
+                    break;
+                }
             case "feeding" : {
                     $students = $this->loadStudentFeedingDetails($org_id);
+                    break;
+                }
+            case "diet" : {
+                    $students = $this->loadStudentDietaryDetails($org_id);
                     break;
                 }
             case "guardian" : {
@@ -308,6 +370,19 @@ class StudentUpdateController extends Controller
         return $students;
     }
 
+    private function loadParentsMaritialStatus($org_id){
+        $students = DB::table('std_student')
+                ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
+                ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
+                ->select('std_student.Name as StudentName','std_student.student_code', 'std_student_guardian.*', 'std_student_history.StdStudentId',
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                ->where('std_student.OrgOrganizationId', $org_id)
+                ->where('historyFor', 'Parents Maritial Status Change')
+                ->get();
+
+        return $students;
+    }
+
     private function loadStudentFeedingDetails($org_id){
 
         $students = DB::table('std_student')
@@ -320,6 +395,20 @@ class StudentUpdateController extends Controller
 
         return $students;
     }
+
+    private function loadStudentDietaryDetails($org_id){
+
+        $students = DB::table('std_student')
+                ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
+                ->select('std_student.Name','std_student.student_code', 'std_student.dietType','std_student_history.id', 'std_student_history.StdStudentId',
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                ->where('std_student.OrgOrganizationId', $org_id)
+                ->where('historyFor', 'Student Dietary Change')
+                ->get();
+
+        return $students;
+    }
+
 
     private function loadStudentNeedyDetails($org_id){
 

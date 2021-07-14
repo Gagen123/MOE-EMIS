@@ -16,11 +16,23 @@
                         <span class="fa fa-user-clock"></span>
                         Parent's Contact
                     </router-link>
+                </li>
+                <li class="nav-item pr-1"  @click="activatelink('update_maritial_status')">
+                    <router-link to="/update_maritial_status" id="update_maritial_status" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-clock"></span>
+                        Parent's Maritial Status
+                    </router-link>
                 </li> 
                 <li class="nav-item pr-1" @click="activatelink('update_std_feeding')">
                     <router-link to="/update_std_feeding" id="update_std_feeding" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Feeding Modality
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('update_std_dietary')">
+                    <router-link to="/update_std_dietary" id="update_std_dietary" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-check"></span>
+                        Dietary Type
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('update_std_guardian')">

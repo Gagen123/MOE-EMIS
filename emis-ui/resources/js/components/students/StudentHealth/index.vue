@@ -10,12 +10,6 @@
                    Health Screening
                 </router-link>
             </li>
-            <li class="nav-item pr-1"  @click="activatelink('stddeworm')">
-                <router-link id="stddeworm" to="/std_deworming" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                   <span class="fas fa-pills"></span>
-                   Deworming
-                </router-link>
-            </li> 
             <li class="nav-item pr-1" @click="activatelink('supplementation_link')">
                 <router-link to ="/std_supplementation" id="supplementation_link" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fas fa-tablets"></span>

@@ -68,6 +68,18 @@ class StudentUpdateController extends Controller{
                     ];
                     break;
                 }
+            case "update_maritial_status" : {
+                    $additional_rules =[
+                        'maritial_status'   =>  'required'
+                    ];
+                    $additional_messages=[
+                        'maritial_status.required'  => 'This field is required'
+                    ];
+                    $additional_data = [
+                        'maritial_status'   => $request->maritial_status
+                    ];
+                    break;
+                }
             case "update_feeding" : {
                     $additional_rules =[
                         'feeding'   =>  'required'
@@ -77,6 +89,18 @@ class StudentUpdateController extends Controller{
                     ];
                     $additional_data = [
                         'feeding'   => $request->feeding
+                    ];
+                    break;
+                }
+            case "update_diet" : {
+                    $additional_rules =[
+                        'diet'   =>  'required'
+                    ];
+                    $additional_messages=[
+                        'diet.required'  => 'This field is required'
+                    ];
+                    $additional_data = [
+                        'diet'   => $request->diet
                     ];
                     break;
                 }

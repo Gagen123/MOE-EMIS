@@ -11,9 +11,37 @@
                         <has-error :form="student_form" field="term_id"></has-error>
                     </div> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Supplementation:</label>
+                        <select v-model="student_form.supplementation" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supplementation') }" class="form-control select2" name="supplementation" id="supplementation">
+                            <option v-for="(item, index) in supplementationList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="student_form" field="supplementation"></has-error>
+                    </div> 
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Date of Supplementation Issued:</label>
                         <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
                         <has-error :form="student_form" field="date"></has-error>
+                    </div> 
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Prepared by:</label>
+                        <input type="text" @change="remove_error('prepared_by')" v-model="student_form.prepared_by" :class="{ 'is-invalid': student_form.errors.has('prepared_by') }" class="form-control" name="prepared_by" id="prepared_by" >
+                        <has-error :form="student_form" field="prepared_by"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Position Title:</label>
+                        <select v-model="student_form.supplementation_position" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supplementation_position') }" class="form-control select2" name="supplementation_position" id="supplementation_position">
+                            <option v-for="(item, index) in screeningTitle" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="student_form" field="supplementation_position"></has-error>
+                    </div> 
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Endorsed By:</label>
+                        <select v-model="student_form.supplementation_endorsed_by" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supplementation_endorsed_by') }" class="form-control select2" name="supplementation_endorsed_by" id="supplementation_endorsed_by">
+                            <option v-for="(item, index) in screeningEndorser" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="student_form" field="supplementation_endorsed_by"></has-error>
                     </div> 
                 </div>
                 <div class="form-group row">
@@ -83,16 +111,25 @@ export default {
         return{
             dt:'',
             termList:[],
+            supplementationList:[],
+            screeningList:[],
+            screeningTitle:[],
+            screeningEndorser:[],
+            classStreamSections:[],
             classList:[],
             sectionList:[],
+            genderArray:{},
             streamList:[],
             byClass:[],
             studentList:[],
-            genderArray:{},
+
             id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 term_id: '',
+                supplementation_position: '',
+                prepared_by: '',
+                supplementation_endorsed_by: '',
                 std_class: '',
                 std_stream: '',
                 std_section: '',
@@ -109,6 +146,36 @@ export default {
             .then(response => {
                 let data = response;
                 this.termList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveSupplementationList(uri="masters/loadActiveStudentMasters/health_supplementation"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.supplementationList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveScreeningTitleList(uri="masters/loadActiveStudentMasters/screening_position"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.screeningTitle =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveScreeningEndorserList(uri="masters/loadActiveStudentMasters/screening_endorser"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.screeningEndorser =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -234,6 +301,15 @@ export default {
             if(id=="term_id"){
                 this.student_form.term_id=$('#term_id').val();
             }
+            if(id=="supplementation"){
+                this.student_form.supplementation=$('#supplementation').val();
+            }
+            if(id=="supplementation_position"){
+                this.student_form.supplementation_position=$('#supplementation_position').val();
+            }
+            if(id=="supplementation_endorsed_by"){
+                this.student_form.supplementation_endorsed_by=$('#supplementation_endorsed_by').val();
+            }
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
                 let class_selected = $("#std_class").val();
@@ -300,11 +376,12 @@ export default {
             this.changefunction(id);
         });
 
+        this.loadActiveScreeningTitleList();
+        this.loadActiveScreeningEndorserList();
         this.loadClassList();
         this.loadGenderArrayList();
         this.loadActiveTermList();
-        // this.loadSectionList();
-        // this.loadStreamList();
+        this.loadActiveSupplementationList();
         
         this.dt =  $("#student-list-table").DataTable()
     },
