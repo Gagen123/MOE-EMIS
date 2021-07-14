@@ -39,6 +39,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadStockIssuedList/{orgId}', 'messManage\StockIssuedController@loadStockIssuedList');
             $router->post('/saveStockIssued', 'messManage\StockIssuedController@saveStockIssued');
             $router->get('/StockIssueEditList/{lssId}', 'messManage\StockIssuedController@StockIssueEditList');
+            $router->get('/getquantity/{itemId}/{chekva}/{orgId}', 'messManage\StockIssuedController@getquantity');
         });
 
 

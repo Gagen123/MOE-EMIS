@@ -8,6 +8,8 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockReceived; 
 use App\Models\mess_manage\StockReceivedItem; 
+use App\Models\mess_manage\TransactionTable; 
+
 use Illuminate\Support\Facades\DB;
 
 class StockReceiveController extends Controller
@@ -77,6 +79,31 @@ class StockReceiveController extends Controller
                //dd($facilityInStructure);
               
                StockReceivedItem::create($receiveditem);
+               $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->first();
+                if($checkitem!=null && $checkitem!=""){
+                    $qty=$facility['quantity']+$checkitem->available_qty;
+
+                    $update_data=[
+                        'available_qty' => $qty,
+                        'updated_by'    =>$request->user_id,
+                        'updated_at'    =>  date('Y-m-d h:i:s'),
+                    ];
+                    TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->update($update_data);  
+                }
+                else{
+                    $create_data=[
+                        'procured_type'  =>'Central',
+                        'organizationId' =>$request['organizationId'],
+                        'item_id'        =>$facility['item'],
+                        'available_qty'  =>$facility['quantity'],
+                        'created_by'     =>$request->user_id,
+                        'created_at'     =>  date('Y-m-d h:i:s'),
+                    ];
+                 //   dd($create_data);
+                    TransactionTable::create($create_data); 
+                    
+                }
+
             }
             return $this->successResponse($stcrcv, Response::HTTP_CREATED);
         }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockIssued;
+use App\Models\mess_manage\LocalProcure;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -129,5 +130,12 @@ class StockIssuedController extends Controller
         //dd($lssId);
         $response_data=StockIssued::where('id', $lssId)->get();
         return $this->successResponse($response_data);
+    }
+    public function getquantity($itemId="", $chekva="", $orgId=""){
+      //dd($lssId);
+      $response_data=StockIssued::where('item_id', $itemId)
+      ->where('procured_type',$chekva)
+      ->where('organizationId',$orgId )->get();
+      return $this->successResponse($response_data);
     }
 }
