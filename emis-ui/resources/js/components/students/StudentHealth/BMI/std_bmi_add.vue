@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-body">
                 <div class="form-group row">
@@ -9,12 +9,12 @@
                             <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="term_id"></has-error>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Date of Supplementation Issued:</label>
+                        <label>Date of Measurement:</label>
                         <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
                         <has-error :form="student_form" field="date"></has-error>
-                    </div> 
+                    </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -30,7 +30,7 @@
                             <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
                         </select>
                         <has-error :form="student_form" field="std_stream"></has-error>
-                    </div> 
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
                         <label>Section:</label>
                         <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
@@ -45,11 +45,13 @@
                             <thead>
                                 <tr>
                                     <th>Sl No</th>
-                                    <th>Name</th> 
+                                    <th>Name</th>
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Height (in meters)</th>
+                                    <th>Height (in centimeter)</th>
                                     <th>Weight (in Kg)</th>
+                                    <th>BMI</th>
+                                    <th>Result</th>
                                     <th>Remarks</th>
                                 </tr>
                             </thead>
@@ -61,10 +63,16 @@
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{getAge(student.DateOfBirth)}}</td>
                                     <td>
-                                        <input type="number" name="height" class="form-control" v-model="student_form.height[index]"/>
+                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student_form.height[index]" @change="calcualteBMI(index)"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="weight" class="form-control" v-model="student_form.weight[index]"/>
+                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student_form.weight[index]" @change="calcualteBMI(index)"/>
+                                    </td>
+                                     <td>
+                                        <span :id="'bmi'+index"></span>
+                                    </td>
+                                    <td>
+                                        <span :id="'result'+index"></span>
                                     </td>
                                     <td>
                                         <input type="text" name="remarks" class="form-control" v-model="student_form.remarks[index]"/>
@@ -81,7 +89,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </template>
 <script>
 export default {
@@ -94,7 +102,7 @@ export default {
             byClass:[],
             studentList:[],
             genderArray:{},
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'NA',
 
             student_form: new form({
                 term_id: '',
@@ -111,6 +119,16 @@ export default {
     },
 
     methods: {
+        calcualteBMI(index){
+           let height=$('#height'+index).val()/100;
+           let weight=$('#weight'+index).val();
+           let bmi=(weight/(height*height)).toFixed(2);
+           $('#bmi'+index).html(bmi);
+        //    if(){
+
+        //    }
+           $('#result'+index).html(bmi);
+        },
         loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
             axios.get(uri)
             .then(response => {
@@ -185,15 +203,15 @@ export default {
             });
         },
 
-        
+
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
             var age_dt = new Date(diff_ms);
             return Math.abs(age_dt.getUTCFullYear()-1970);
         },
-        
-        remove_error(field_id){
+
+        remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
@@ -250,7 +268,7 @@ export default {
             if(id=="std_section"){
                 axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                     .then((response) => {
-                        this.studentList = response.data;  
+                        this.studentList = response.data;
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -258,7 +276,7 @@ export default {
 
                 this.student_form.std_section=$('#std_section').val();
             }
-            
+
         },
         checkall(class_to_check,id){
             if($('#'+id).prop('checked')){
@@ -280,20 +298,19 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
 
         this.loadActiveTermList();
         this.loadGenderArrayList();
-        
+
         this.loadClassList();
-        this.loadSectionList();
-        this.loadStreamList();
+        // this.loadStreamList();
     },
-    
+
 }
 </script>
