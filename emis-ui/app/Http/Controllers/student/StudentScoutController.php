@@ -19,7 +19,6 @@ class StudentScoutController extends Controller
     }
 
     public function saveStudentScouts(Request $request){
-
         $rules = [
             'scout'       => 'required',
             'year'       => 'required'
@@ -48,7 +47,6 @@ class StudentScoutController extends Controller
 
     public function loadStudentScouts($param=""){
         $param = $this->getWrkingAgencyId();
-
         $student_roles = $this->apiService->listData('emis/students/loadStudentScouts/'.$param);
         return $student_roles;
     }
