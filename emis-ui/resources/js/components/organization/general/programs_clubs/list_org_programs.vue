@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                      <th >No.</th>
+                     <th >Type</th>
                      <th >Program Name</th>
                      <th >Year of Establishment</th>
                      <th >Supported By</th>
@@ -13,6 +14,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
+                    <td>{{ typeArray[item.CeaProgrammeTypeId]}}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.EstablishmentYear}}</td>
                     <td>{{ item.supporter_name}}</td>
@@ -31,10 +33,23 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
+            typeArray:{},
         }
     },
     methods:{
+        loadActiveProgramTypeList(uri="masters/loadActiveStudentMasters/program_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.typeArray[data[i].id] = data[i].Name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         loadDataList(uri='students/loadStudentPrograms/'+this.id){
             axios.get(uri)
             .then(response => {
@@ -50,14 +65,15 @@ export default {
                 $("#list-student-programs").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_org_programs',params: {data:data}});
         },
     },
     mounted(){
+        this.loadActiveProgramTypeList();
         this.loadDataList();
     },
 }

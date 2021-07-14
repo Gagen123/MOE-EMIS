@@ -77,13 +77,14 @@ class StudentProgramController extends Controller
 
     public function loadStudentPrograms($param=""){
         $org_id = $param;
-        $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
+        //commented by Tshewang and added CeaProgrammeTypeId in the select statement for creating program and clubs in organizaiton
+        // $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
                 ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
                 ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
-                ->select('cea_school_programme.*', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
+                ->select('cea_school_programme.*','CeaProgrammeTypeId', 'cea_programme.name AS program_name', 'cea_programme_supporter.name AS supporter_name' )
                 ->where('cea_school_programme.OrgOrganizationId', $org_id)
-                ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
+                // ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
                 ->get();
 
         return $this->successResponse($records);
@@ -152,7 +153,7 @@ class StudentProgramController extends Controller
 
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
         //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     /*
@@ -219,9 +220,9 @@ class StudentProgramController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
         //Fix once the roles have been decided
-        
+
         // $assigned_student_details = $data['role'];
-        
+
         // unset($data['role']);
         // $response = CeaProgrammeMembership::create($data);
         // $lastInsertId = $response->id;
@@ -233,7 +234,7 @@ class StudentProgramController extends Controller
 
         //     $response_data = CeaRoleStudent::create($assigned_std_data);
         // }
-        
+
     }
 
     /*
@@ -267,14 +268,14 @@ class StudentProgramController extends Controller
               'club'                       => 'required',
               'responsibilities'           => 'required',
           ];
-  
+
           $customMessages = [
               'student.required'           => 'This field is required',
               'club.required'               => 'This field is required',
               'responsibilities.required'  => 'This field is required',
           ];
           $this->validate($request, $rules, $customMessages);
-  
+
           $data =[
               'id'                    => $request->id,
               'CeaProgrammeId'        => $request->club,
@@ -291,14 +292,14 @@ class StudentProgramController extends Controller
                 'club'                       => 'required',
                 'responsibilities'           => 'required',
             ];
-    
+
             $customMessages = [
                 'student.required'           => 'This field is required',
                 'club.required'              => 'This field is required',
                 'responsibilities.required'  => 'This field is required',
             ];
             $this->validate($request, $rules, $customMessages);
-    
+
             $data =[
                 'id'                    => $request->id,
                 'CeaProgrammeId'        => $request->club,
@@ -314,26 +315,26 @@ class StudentProgramController extends Controller
                     dd($ex->getMessage());
                     // Note any method of class PDOException can be called on $ex.
                 }
-            
+
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
           //Fix once the roles have been decided
-          
+
           // $assigned_student_details = $data['role'];
-          
+
           // unset($data['role']);
           // $response = CeaProgrammeMembership::create($data);
           // $lastInsertId = $response->id;
-  
+
           // foreach($assigned_student_details as $key => $value){
           //     $assigned_std_data['CeaSchoolProgrammeId'] = $data['CeaSchoolProgrammeId'];
           //     $assigned_std_data['CeaRoleId'] = $value;
           //     $assigned_std_data['StdStudentId'] = $data['StdStudentId'];
-  
+
           //     $response_data = CeaRoleStudent::create($assigned_std_data);
           // }
-          
+
       }
 
 
@@ -371,7 +372,7 @@ class StudentProgramController extends Controller
             'month.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'OrgOrganizationId'     => $request->organisation_id,
@@ -383,7 +384,7 @@ class StudentProgramController extends Controller
             'productionDetails'     => $request->productionDetails,
             'expenditureDetails'    => $request->expenditureDetails,
 
-            //'user_id'        => $this->user_id() 
+            //'user_id'        => $this->user_id()
         ];
 
         $inventory_details = $data['inventoryDetails'];
@@ -404,7 +405,7 @@ class StudentProgramController extends Controller
             $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
             $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
             $inventory_data['Remarks'] = $value['remarks'];
-            
+
             $inventory_response = CeaProgramInventoryDetail::create($inventory_data);
         }
 
@@ -416,7 +417,7 @@ class StudentProgramController extends Controller
             $production_data['NoOfVariety'] = $value['no_varieties'];
             $production_data['AmountGenerated'] = $value['amount_generated'];
             $production_data['Remarks'] = $value['production_remarks'];
-            
+
             $production_response = CeaProgramInventoryProduction::create($production_data);
         }
 
@@ -425,7 +426,7 @@ class StudentProgramController extends Controller
             $expenditure_data['Particular'] = $value['expenditure_details'];
             $expenditure_data['Amount'] = $value['expenditure_amount'];
             $expenditure_data['Remarks'] = $value['expenditure_remarks'];
-            
+
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
         //dd( $data);
@@ -454,7 +455,7 @@ class StudentProgramController extends Controller
     */
 
     public function saveProgramActionPlan(Request $request){
-        
+
         $rules = [
             'program'            => 'required',
             'from_date'            => 'required',
@@ -467,7 +468,7 @@ class StudentProgramController extends Controller
             'to_date.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'OrgOrganizationId'       => 1,
@@ -476,7 +477,7 @@ class StudentProgramController extends Controller
             'ToDate'               => $request->to_date,
             'action_plan'           => $request->action_plan
 
-            //'user_id'        => $this->user_id() 
+            //'user_id'        => $this->user_id()
         ];
 
         $action_plan_details = $data['action_plan'];
@@ -490,7 +491,7 @@ class StudentProgramController extends Controller
             $action_plan_data['CeaProgrammeActionPlanId'] = $lastInsertId;
             $action_plan_data['Title'] = $value['title'];
             $action_plan_data['Description'] = $value['description'];
-            
+
             $plan_response = CeaProgramActionPlanDetail::create($action_plan_data);
         }
 
@@ -502,7 +503,7 @@ class StudentProgramController extends Controller
     */
 
     public function loadProgramActionPlan($param=""){
-        
+
         $id ="1";
 
         $records = DB::table('cea_programme')

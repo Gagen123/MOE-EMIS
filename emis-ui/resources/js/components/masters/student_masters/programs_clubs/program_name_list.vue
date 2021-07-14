@@ -7,7 +7,7 @@
                     <th >Program Name</th>
                     <th >Status</th>
                     <th >Description</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -24,13 +24,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            programNameList:[], 
+            programNameList:[],
         }
     },
     methods:{
@@ -41,16 +41,14 @@ export default {
                 this.programNameList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
             setTimeout(function(){
                 $("#program-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'ProgramNameEdit',params: {data:data}});

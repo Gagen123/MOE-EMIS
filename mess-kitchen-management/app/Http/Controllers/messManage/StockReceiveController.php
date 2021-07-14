@@ -9,7 +9,6 @@ use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockReceived; 
 use App\Models\mess_manage\StockReceivedItem; 
 use App\Models\mess_manage\TransactionTable; 
-
 use Illuminate\Support\Facades\DB;
 
 class StockReceiveController extends Controller
@@ -36,7 +35,7 @@ class StockReceiveController extends Controller
                 $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
                 DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
                 foreach ($request->input('items_received') as  $i=> $facility){
-                  
+
                     $receiveditem = array(
                         'stockreceivedId'               =>  $request->id,
                         'item_id'                       =>  $facility['item'],
@@ -77,7 +76,7 @@ class StockReceiveController extends Controller
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
                //dd($facilityInStructure);
-              
+
                StockReceivedItem::create($receiveditem);
                $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->first();
                 if($checkitem!=null && $checkitem!=""){
@@ -132,7 +131,7 @@ class StockReceiveController extends Controller
        // dd($stockreceivedId);
         $response_data=StockReceived::where('id',$stkId)->first();
         $response_data->stockreceived=StockReceivedItem::where('stockreceivedId',$stkId)->get();
-        return $this->successResponse($response_data); 
+        return $this->successResponse($response_data);
     }
 
     public function loadStockReceiveView($StockReceivedID=""){
@@ -143,8 +142,8 @@ class StockReceiveController extends Controller
         return $this->successResponse($response_data);
     }
 
-    
-   
+
+
     // public function saveStockReceived(Request $request){
     //     //   dd('m here at my service');
     //      $stockreceive = [
@@ -156,7 +155,7 @@ class StockReceiveController extends Controller
     //        'updated_by'               =>  $request->user_id,
     //        'created_at'               =>  date('Y-m-d h:i:s')
     //      ];
-         
+
     //      $stckrcv = StockReceived::create($stockreceive);
     //     // dd($stckrcv);
     //        $stockreceivedId = $stckrcv->id;

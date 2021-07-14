@@ -709,6 +709,8 @@ Route::prefix('students')->group(function () {
     //Student Counselling
     Route::post('/saveCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'saveCounsellingInformation'])->name('saveCounsellingInformation');
     Route::get('/loadCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'loadCounsellingInformation'])->name('loadCounsellingInformation');
+    Route::post('/saveCounsellingProgram', [App\Http\Controllers\student\StudentCounsellingController::class, 'saveCounsellingProgram'])->name('saveCounsellingProgram');
+    Route::get('/loadCounsellingProgram', [App\Http\Controllers\student\StudentCounsellingController::class, 'loadCounsellingProgram'])->name('loadCounsellingProgram');
     Route::get('/getCounsellingTypeDropdown', [App\Http\Controllers\student\StudentCounsellingController::class, 'getCounsellingTypeDropdown'])->name('getCounsellingTypeDropdown');
     Route::get('/getCounsellingDetails/{couId}', [App\Http\Controllers\student\StudentCounsellingController::class, 'getCounsellingDetails'])->name('getCounsellingDetails');
 

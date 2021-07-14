@@ -4,8 +4,10 @@
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Date</th>
-                    <th>Scores</th>
+                    <th>Created Date</th>
+                    <th>Average Scores</th>
+                    <th>Prepared By</th>
+                    <th>Endrosed By</th>
                     <th>Remarks</th>
                     <th>Action</th>
                 </tr>
@@ -13,16 +15,18 @@
             <tbody>
                 <tr v-for="(itm, index) in dietaryList" :key="index">
                     <td> {{index + 1}}</td>
-                    <td> {{itm.date}}</td>
-                    <td> {{itm.score}}</td>
+                    <td> {{itm.created_at}}</td>
+                    <td> {{itm.average_score}}</td>
+                    <td> {{itm.prepared_by}}</td>
+                    <td> {{itm.endrosed_by}}</td>
                     <td> {{itm.remarks}}</td>
                     <td>
-                        <!-- <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'view')"><i class="fas fa-eye"></i > View</a>
-                        </div> -->
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'edit')"><i class="fas fa-edit"></i > Edit</a>
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'view')"><i class="fas fa-eye"></i > View</a>
                         </div>
+                        <!-- <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'edit')"><i class="fas fa-edit"></i > Edit</a>
+                        </div> -->
                     </td>
                 </tr>
             </tbody>
@@ -53,7 +57,7 @@ export default {
                 this.$router.push({name:'edit_dietary_records',query: {id:id}});
             }
             else{
-                this.$router.push({name:'edit_dietary_records',query: {id:id}});
+                this.$router.push({name:'view_dietary_records',query: {id:id}});
             }
         },
     },

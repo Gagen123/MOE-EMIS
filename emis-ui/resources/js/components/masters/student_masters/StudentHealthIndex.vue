@@ -5,6 +5,11 @@
         </ol>
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
+                <li class="nav-item active pr-1" @click="activatelink('health_supplementation_index')">
+                    <router-link to="health_supplementation_index" id="health_supplementation_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Supplementation  
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('health_screening_index')">
                     <router-link to="health_screening_index" id="health_screening_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Health Screening  

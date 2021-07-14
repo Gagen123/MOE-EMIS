@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Models\Students;
+namespace App\Models\Masters;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class StudentDeworming extends Model
+class HealthSupplementation extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_student_deworming";
+    protected $table="std_health_supplementation_type";
 
     protected $fillable = [
         'id',
-        'StdHealthDewormingId',
-        'StdStudentId',
-        'status',
+        'Name', 
+        'Description',
+        'Status'
     ];
 }

@@ -131,14 +131,20 @@ class StudentMasterController extends Controller
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
-            $response_data = $model::where('id', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
+            // $response_data = $model::where('id', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
-         //   dd($response_data);
+            // dd($response_data);
 
         } elseif($param == 'club_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
-            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
+            // $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
 
         } elseif(strpos($param,'_Active')){
@@ -446,6 +452,10 @@ class StudentMasterController extends Controller
                 }
             case "term_type" : {
                     $databaseModel = "HealthTerm";
+                    break;
+                }
+            case "health_supplementation" : {
+                    $databaseModel = "HealthSupplementation";
                     break;
                 }
             case "health_screening" : {
