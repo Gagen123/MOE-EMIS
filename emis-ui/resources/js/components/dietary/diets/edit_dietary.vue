@@ -396,7 +396,7 @@ export default {
                 .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Local Procurement detail is added successfully'
+                        title: 'Details has been updated successfully'
                     });
                     this.$router.push('/dietary_records_list');
                 })

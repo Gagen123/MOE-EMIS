@@ -55,8 +55,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/getInventoryList/{orgId}', 'messManage\StockInventoryController@getInventoryList');
 
-
-
     });
 
     $router->group(['prefix' => 'dietary'], function () use ($router) {

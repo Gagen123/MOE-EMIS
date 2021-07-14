@@ -1,55 +1,55 @@
-<template> 
+<template>
     <div class="">
         <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="pl-2 form-inline "><h5>M</h5><h6 class="pt-1">ess Management</h6></li>
         </ol>
-        <div class="container-fluid"> 
-          <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
-              <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
-                 <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                      <span :class="item.screen_icon"></span> 
-                     {{ item.screen_name}}
-                 </router-link>
-             </li>
-              <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
-                 <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-receipt"></span>
-                     Food Release Note 
-                 </router-link>
-              </li>
-             <li class="nav-item active pr-1" @click="activatelink('stockreceived')">
-                 <router-link id="stockreceived" to="/stockreceived_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fa fa-receipt"></span>
-                     Stock Received 
-                 </router-link>
-              </li>
-              <li class="nav-item pr-1"  @click="activatelink('stockissued')">
-                 <router-link id="stockissued" to="/stockissued_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-receipt"></span>
-                     Stock Issue
-                  </router-link>
-              </li> 
-              <li class="nav-item pr-1" @click="activatelink('localprocurement')">
-                 <router-link to ="/localprocure_index" id="localprocure" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-shopping-cart"></span>
-                     Local Procurement
-                 </router-link>
-              </li>
-              <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
-                 <router-link to ="/stockInventory_list" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-shopping-cart"></span>
-                     School Inventory
-                 </router-link>
-              </li>
-              <!-- <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
-                 <router-link to ="/teststockreceived_index" id="teststockreceived" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                     <span class="fas fa-shopping-cart"></span>
-                     Test Stock Received 
-                 </router-link>
-              </li> -->
-          </ul>
-         <router-view></router-view>
-    </div>
+        <div class="container-fluid">
+            <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
+                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                        <span :class="item.screen_icon"></span>
+                        {{ item.screen_name}}
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
+                    <router-link to="/foodrelease_index" id="foodrelease" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fas fa-receipt"></span>
+                        Food Release Note
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('stockreceived')">
+                    <router-link id="stockreceived" to="/stockreceived_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-receipt"></span>
+                        Centrally Procured
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('localprocurement')">
+                    <router-link to ="/localprocure_index" id="localprocure" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fas fa-shopping-cart"></span>
+                        Local Procurement
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1"  @click="activatelink('stockissued')">
+                    <router-link id="stockissued" to="/stockissued_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fas fa-receipt"></span>
+                        Stock Issue
+                    </router-link>
+                </li>
+                <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
+                    <router-link to ="/stockInventory_list" id="schoolInventory" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fas fa-shopping-cart"></span>
+                        School Inventory
+                    </router-link>
+                </li>
+                <!-- <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
+                    <router-link to ="/teststockreceived_index" id="teststockreceived" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fas fa-shopping-cart"></span>
+                        Test Stock Received
+                    </router-link>
+                </li> -->
+            </ul>
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 <script>
@@ -72,9 +72,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("Error:"+error)
             });
         },
@@ -85,7 +85,7 @@ export default {
         this.getmenus(routeparam);
     },
 }
-</script> 
+</script>
 
 
 

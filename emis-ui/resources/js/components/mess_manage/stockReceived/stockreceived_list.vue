@@ -164,16 +164,16 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].Name;
+               for(let i=0;i<data.data.length;i++){
+                    this.itemList[data.data[i].id] = data.data[i].Name;
                 }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error:"+error)
             });
         },
         remove_err(field_id){

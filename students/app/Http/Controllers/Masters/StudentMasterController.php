@@ -31,7 +31,7 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-    
+
 
     /**
      * method to save or update student masters data
@@ -42,7 +42,7 @@ class StudentMasterController extends Controller
         $rules = [
             'name'  =>  'required',
         ];
-        
+
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
@@ -53,9 +53,9 @@ class StudentMasterController extends Controller
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
-        } 
+        }
         else if($request->actiontype=="edit"){
-           
+
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
        // dd($response_data);
@@ -118,7 +118,7 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-        
+
         if(strpos($param,'_Active')){
             $param=explode('_',$param)[0];
         }
@@ -153,7 +153,7 @@ class StudentMasterController extends Controller
         } else {
             return $this->successResponse($model::all());
         }
-        
+
     }
 
 
@@ -192,10 +192,19 @@ class StudentMasterController extends Controller
 
             $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $data;
-
+        }else if($param == 'program_item_central' || $param == 'program_item_local'){
+            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item', $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+            if($param == 'program_item_central'){
+                $data = $model::where('status',1)->where('Central',1)->get();
+            }
+            if($param == 'program_item_local'){
+                $data = $model::where('status',1)->where('Local',1)->get();
+            }
+            return $data;
         } else {
             $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
@@ -204,7 +213,7 @@ class StudentMasterController extends Controller
         }
 
       //  dd($program_student_roles);
-        
+
 
     }
 
@@ -218,7 +227,7 @@ class StudentMasterController extends Controller
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
-      
+
         return $this->successResponse($model::where('id',$id)->first());
 
     }
@@ -241,30 +250,32 @@ class StudentMasterController extends Controller
      */
 
     private function updateData($request,$dataRequest, $databaseModel){
-      //  dd('m here');
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
        //  dd($data);
         //Audit Trails
-        $msg_det='Name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        $msg_det='Name:'.$data->Name.'; Status:'.$data->Status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
       // dd('m here',$dataRequest);
 
         //data to be updated
-        $data->name = $dataRequest['Name'];
+        $data->Name = $dataRequest['Name'];
         // dd($data);
         if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
-            $data->description = $dataRequest['Description'];
+            $data->Description = $dataRequest['Description'];
         }
-        if($request['recordtype']!="vaccine_type" ){
-            $data->description = $dataRequest['vaccineFor'];
+        if($request['recordtype']=="vaccine_type" ){
+            $data->Description = $dataRequest['vaccineFor'];
         }
-        $data->description = $dataRequest['Description'];
-        $data->status = $dataRequest['Status'];
+        if($request['recordtype']=="program_item" ){
+            $data->Central   =  $dataRequest['Central'];
+            $data->Local     =  $dataRequest['Local'];
+        }
+        $data->Description = $dataRequest['Description'];
+        $data->Status = $dataRequest['Status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
-        // dd($data);
         $data->update();
         return $data;
 
@@ -287,6 +298,13 @@ class StudentMasterController extends Controller
             if($record_type!="StudentType" || $record_type!="ScholarType" || $record_type!="SpBenefit"){
                 $additional_data = [
                     'Description'  =>  $request['description'],
+                ];
+                $data = $data + $additional_data;
+            }
+            if($record_type=="program_item"){
+                $additional_data = [
+                    'Central'   =>  $request['central'],
+                    'Local'     =>  $request['local'],
                 ];
                 $data = $data + $additional_data;
             }
@@ -524,7 +542,7 @@ class StudentMasterController extends Controller
           // dd($data);
            return $this->successResponse($response_data, Response::HTTP_CREATED);
        }
-       
+
        public function getCounsellingTypeDropdown(){
         // dd('from microserve ');
          return CounsellingType::where('status',1)->get();
