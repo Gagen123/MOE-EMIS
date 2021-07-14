@@ -97,4 +97,14 @@ class StudentScoutController extends Controller
         return $scout_members;
     }
 
+    /**
+     * list the scout members (in drop down) to award badges
+     */
+
+    public function listScoutMembers(){
+        $orgId = $this->getWrkingAgencyId();
+        $user_id = $this->userId();
+        $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$orgId.'/'.$user_id);
+        return $scout_members;
+    }
 }

@@ -136,6 +136,12 @@ class StudentMasterController extends Controller{
         return $student_masters;
     }
 
+     //get Scouts Badge By Scouts Section Id
+     public function getScoutBadge($scoutSectionId){
+        $student_masters = $this->apiService->listData('emis/masters/students/getScoutBadge/'.$scoutSectionId);
+        return $student_masters;
+    }
+
     public function loadStudentMasters($param=""){
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
         return $student_masters;

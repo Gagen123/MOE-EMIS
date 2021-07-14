@@ -16,6 +16,7 @@ use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
+use App\Models\Masters\CeaScoutProficiencyBadge;
 use App\Models\Masters\CounsellingType;
 
 class StudentMasterController extends Controller
@@ -507,6 +508,12 @@ class StudentMasterController extends Controller
     /**Get Scout Level in Dropdown By ScoutSectionID*/
     public function getScoutSectionLevel($scoutSectionId){
         $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**Get Scout Badge in Dropdown By ScoutSectionID*/
+    public function getScoutBadge($scoutSectionId){
+        $data=CeaScoutProficiencyBadge::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
         return $data;
     }
 
