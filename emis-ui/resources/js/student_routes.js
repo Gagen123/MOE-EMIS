@@ -247,6 +247,15 @@ const routes = [
         { path: '/vaccination_list', name:'VaccinationList', component: require('./components/masters/student_masters/student_health/vaccination_list.vue').default },
       ]
     },
+    { path: '/health_supplementation_index',
+    component: require('./components/masters/student_masters/student_health/health_supplementation_index.vue').default ,
+      children: [
+        { path: '', component: require('./components/masters/student_masters/student_health/health_supplementation_list.vue').default },
+        { path: '/health_supplementation_add', name:'SupplementationAdd', component: require('./components/masters/student_masters/student_health/health_supplementation_add.vue').default },
+        { path: '/health_supplementation_edit', name:'SupplementationEdit', component: require('./components/masters/student_masters/student_health/health_supplementation_edit.vue').default },
+        { path: '/health_supplementation_list', name:'SupplementationList', component: require('./components/masters/student_masters/student_health/health_supplementation_list.vue').default },
+      ]
+    },
     { path: '/health_screening_index',
     component: require('./components/masters/student_masters/student_health/health_screening_index.vue').default ,
       children: [
@@ -728,12 +737,28 @@ const routes = [
                 { path: '/edit_updated_contact', name:'edit_updated_contact', component: require('./components/students/UpdateDetails/Contact/edit_updated_contact.vue').default },
             ]
         },
+        { path: '/update_maritial_status', name:'update_maritial_status', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_index.vue').default,
+            children: [
+                { path: '/', name:'updated_maritial_index', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_list.vue').default },
+                { path: '/updated_maritial_list', name:'updated_maritial_list', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_list.vue').default },
+                { path: '/update_maritial', name:'update_maritial', component: require('./components/students/UpdateDetails/MaritialStatus/update_maritial.vue').default },
+                { path: '/edit_updated_maritial', name:'edit_updated_maritial', component: require('./components/students/UpdateDetails/MaritialStatus/edit_updated_maritial.vue').default },
+            ]
+        },
         { path: '/update_std_feeding', name:'update_std_feeding', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_index.vue').default,
             children: [
                 { path: '/', name:'updated_feeding_index', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_list.vue').default },
                 { path: '/updated_feeding_list', name:'updated_feeding_list', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_list.vue').default },
                 { path: '/update_feeding', name:'update_feeding', component: require('./components/students/UpdateDetails/Feeding/update_feeding.vue').default },
                 { path: '/edit_updated_feeding', name:'edit_updated_feeding', component: require('./components/students/UpdateDetails/Feeding/edit_updated_feeding.vue').default },
+            ]
+        },
+        { path: '/update_std_dietary', name:'update_std_dietary', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_index.vue').default,
+            children: [
+                { path: '/', name:'updated_dietary_index', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_list.vue').default },
+                { path: '/updated_dietary_list', name:'updated_dietary_list', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_list.vue').default },
+                { path: '/update_dietary', name:'update_dietary', component: require('./components/students/UpdateDetails/Dietary/update_dietary.vue').default },
+                { path: '/edit_updated_dietary', name:'edit_updated_dietary', component: require('./components/students/UpdateDetails/Dietary/edit_updated_dietary.vue').default },
             ]
         },
         { path: '/update_std_guardian', name:'update_std_guardian', component: require('./components/students/UpdateDetails/Guardian/updated_guardian_index.vue').default,

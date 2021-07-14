@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StudentSupplementation extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_student_supplementation";
+    protected $table="std_student_health_supplementation";
 
     protected $fillable = [
         'id',

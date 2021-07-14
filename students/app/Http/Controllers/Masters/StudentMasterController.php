@@ -430,6 +430,10 @@ class StudentMasterController extends Controller
                     $databaseModel = "HealthTerm";
                     break;
                 }
+            case "health_supplementation" : {
+                    $databaseModel = "HealthSupplementation";
+                    break;
+                }
             case "health_screening" : {
                     $databaseModel = "HealthScreening";
                     break;

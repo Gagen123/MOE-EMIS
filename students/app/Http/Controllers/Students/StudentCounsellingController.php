@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Masters\CounsellingType;
 use App\Models\Students\CounsellingRecords;
+use App\Models\Students\CounsellingProgram;
 
 
 class StudentCounsellingController extends Controller
@@ -77,4 +78,43 @@ class StudentCounsellingController extends Controller
      // $response_data->facility=FacilityInStructure::where('infrastructureId',$response_data->id)->get();
         return $this->successResponse($response_data);
     }
+
+    public function saveCounsellingProgram(Request $request){
+        $id = $request->id;
+        if( $id != null){
+            $data =[
+                'id'                    => $request['id'],
+                'organizationId'        => $request['working_agency_id'],
+                'activities'            => $request['activities'],
+                'issues'                => $request['issues'],
+                'updated_by'            =>  $request['user_id'],
+                'updated_at'            =>  date('Y-m-d h:i:s'),
+            ];
+
+            $response_data = CounsellingProgram::where('id', $id)->update($data);
+            
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }else{
+            $data =[
+                'id'                    => $request['id'],
+                'activities'            => $request['activities'],
+                'issues'                => $request['issues'],
+                'organizationId'        => $request['working_agency_id'],
+                'remarks'               => $request['remarks'],
+                'created_by'            =>  $request['user_id'],
+                'created_at'            =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = CounsellingProgram::create($data);
+            
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }
+    }
+
+    public function loadCounsellingProgram($orgId=""){
+
+        $list= DB::table('std_counselling_programs')
+                     ->where('organizationId', $orgId)
+                     ->get();
+        return $list;
+     }
 }

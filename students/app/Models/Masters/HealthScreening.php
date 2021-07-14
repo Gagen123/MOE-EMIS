@@ -13,8 +13,8 @@ class HealthScreening extends Model
 
     protected $fillable = [
         'id',
-        'name', 
-        'description',
+        'Name', 
+        'Description',
         'Status'
     ];
 }
