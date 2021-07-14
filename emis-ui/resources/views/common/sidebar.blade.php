@@ -671,7 +671,14 @@
                             </p>
                         </router-link>
                     </li>
-
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/dietary" class="nav-link">
+                            <p>
+                            <i class="nav-icon fa fa-diagnoses"></i>
+                                Dietary
+                            </p>
+                        </router-link>
+                    </li>
                 </ul>
             </li>
 

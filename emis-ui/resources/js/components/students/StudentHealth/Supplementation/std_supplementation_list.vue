@@ -7,6 +7,7 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Term</th>
+                            <th>Supplementation Type</th>
                             <th>Date</th>
                             <th>Class</th>
                             <th>Section</th>
@@ -20,6 +21,7 @@
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.term}}</td>
+                            <td>{{ item.supplementation_type}}</td>
                             <td>{{ item.date}}</td>
                             <td>{{ classArray[item.OrgClassStreamId]}} </td>
                             <td>{{ sectionList[item.SectionDetailsId]}} </td>

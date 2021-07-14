@@ -4,26 +4,26 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Program Name:<span class="text-danger">*</span></label> 
+                        <label>Program Name:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Program Type:<span class="text-danger">*</span></label> 
+                        <label>Program Type:<span class="text-danger">*</span></label>
                         <select v-model="form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.ame }}</option>
                     </select>
                     <has-error :form="form" field="program_type"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Description:</label> 
+                        <label>Description:</label>
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
                     </div>
-                </div>  
+                </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
@@ -31,14 +31,14 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>        
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -102,7 +102,7 @@ export default {
                     console.log("Error......")
                 })
             }
-		}, 
+		},
     },
     created() {
     },
@@ -114,14 +114,15 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.loadActiveProgramList();
     },
-    
+
 }
 </script>
+

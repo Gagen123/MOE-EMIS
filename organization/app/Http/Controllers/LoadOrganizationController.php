@@ -188,6 +188,29 @@ class LoadOrganizationController extends Controller{
         return $this->successResponse($response_data);
     }
 
+     /**
+     * Get the Class Streams by org_class_strema_id
+     */
+
+    public function getOrgClassStreambyId($id){
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
+                    ->where('organization_class_streams.id', $id)
+                    ->first();
+
+        return $this->successResponse($response_data);
+    }
+
+    public function getSectionById($id){
+        $response_data = DB::table('section_details')
+            ->select('section AS section', 'id AS section_id')
+            ->where('id', $id)
+            ->first();
+        return $this->successResponse($response_data);
+    }
+
     public function loadStreamList($id){
 
         $response_data = DB::table('organization_class_streams')

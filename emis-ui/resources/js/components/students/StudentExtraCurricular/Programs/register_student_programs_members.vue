@@ -24,7 +24,7 @@
                     <!-- text input -->
                     <div class="form-group">
                         <label>Joining Date:</label>
-                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
                         <has-error :form="student_form" field="date"></has-error>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div> 
+            </div>
         </form>
     </div>
 </template>
@@ -146,15 +146,15 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.student_form.users.push({teacher:'',role:''})    
-        }, 
+            this.student_form.users.push({teacher:'',role:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.student_form.users.length>1){
                 this.count--;
-                this.student_form.users.splice(index,1); 
+                this.student_form.users.splice(index,1);
             }
         },
         formaction: function(type){
@@ -198,9 +198,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -210,6 +210,6 @@ export default {
         this.loadActiveRolesList();
 
     },
-    
+
 }
 </script>

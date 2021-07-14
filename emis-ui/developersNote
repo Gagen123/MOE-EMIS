@@ -62,10 +62,24 @@ Setting up the system administration, and user management:
     Additional field in std_student - isNeedy. (ask Tshewang whether it is necessary)
     Also ask Tshewang about the scholarship - can a student have multiple scholarships?
 
+    dietType has been added to std_student
+    std_father and std_mother dropped
+    std_guardian changed
+    MaritialStatus added to std_guardian
+
+
+    Student Health Supplementation and related tables changed
+
 
     *********************SOME TO DO FOR THE FUTURE*********************************
     1. Data table partition to take care of academic year
     2. An additional field in the masters, with an option stating whether its an update or edit
+
+    2021-07-13
+    Added Unit_id, Central and Local fields in cea_programme_item in students
+
+    chaged the foreign key for cea_programme_inventory_detail and cea_programme_inventory_production from student db;
+        -was pointed to cea_programme_item from cea_programme_inventory_item which was not been used that table
 
 
 

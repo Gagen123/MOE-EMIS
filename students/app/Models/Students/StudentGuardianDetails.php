@@ -25,6 +25,7 @@ class StudentGuardianDetails extends Model
         'CmnOccupationId',
         'ContactNo',
         'Email',
+        'MaritialStatus',
         'Relationship',
         'created_by',
         'updated_by',

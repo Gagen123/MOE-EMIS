@@ -59,13 +59,11 @@ class MessManagementController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-
                         )
                     );
                 }
             }
         }
-        //dd($attachment_details);
         $rules = [
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
@@ -79,8 +77,6 @@ class MessManagementController extends Controller
             'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
-
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
@@ -90,22 +86,13 @@ class MessManagementController extends Controller
             'remarks'                  =>  $request['remarks'],
             'attachment_details'       =>  $attachment_details,
             'id'                       =>  $request['id'],
-          //  'items_released'           =>  $request->items_released,
             'user_id'                  =>  $this->userId()
         ];
-       //  dd($foodrelease);
-        try{
-            $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
-            //dd($response_data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+       $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
+       //dd($response_data);
+       return $response_data;
     }
 
-
-    // //local Procurement
 
     public function loadLocalProcure(){
         //return json_encode('from UI');
@@ -252,15 +239,10 @@ class MessManagementController extends Controller
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
         ];
-       //   dd($stockissue);
-      try{
+        //   dd($stockissue);
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
-         //dd($response_data);
-         return $response_data;
-         }
-         catch(GuzzleHttp\Exception\ClientException $e){
-          return $e;
-        }
+        //dd($response_data);
+        return $response_data;
     }
     public function StockIssueEditList($lssId=""){
         // dd('from Ui');

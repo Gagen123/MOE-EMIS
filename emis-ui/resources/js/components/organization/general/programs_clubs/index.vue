@@ -12,9 +12,8 @@
                     </router-link>
                 </li>
             </ul>
-        <router-view></router-view>
+            <router-view></router-view>
         </div>
-        
     </div>
 </template>
 
@@ -36,9 +35,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
                 console.log("Error:"+error)
             });
         },

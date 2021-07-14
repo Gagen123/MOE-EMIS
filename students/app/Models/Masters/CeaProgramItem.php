@@ -9,12 +9,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CeaProgramItem extends Model
 {
     use HasFactory, Uuid;
+    public $timestamps = false;
     protected $table="cea_programme_item";
 
     protected $fillable = [
         'id',
-        'Name', 
-        'Description', 
+        'Name',
+        'Description',
+        'Central',
+        'Local',
+        'Unit_id',
         'Status'
     ];
 }

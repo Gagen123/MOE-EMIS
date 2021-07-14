@@ -31,7 +31,7 @@ class StudentProgramController extends Controller
             'year.required'         => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                => $request->id,
             'organisation_id'   => $this->getWrkingAgencyId(),
@@ -42,17 +42,17 @@ class StudentProgramController extends Controller
             'data_type'         => 'school_program',
             'record_type'       => $request->record_type,
             'assigned_staff'    => $request->assigned_staff,
-            'user_id'           => $this->userId() 
+            'user_id'           => $this->userId()
         ];
 
         //Validate to ensure that there is no duplication of entries
         //Not creating but using the createData service as we are sending the $data
         $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
-        
+
         if(json_decode($validate_data)->data == 'exist'){
             //this is to offset the data and send it back to the view
             $request->offsetUnset('program');
-            
+
             $rules = [
                 'supporter'     => 'required',
                 'program'       => 'required'
@@ -68,11 +68,11 @@ class StudentProgramController extends Controller
                     'program.required'          => 'You are performing an edit. No fields have been changed.'
                 ];
             }
-            
+
 
             $this->validate($request, $rules, $customMessages);
         }
-        
+
         $response_data= $this->apiService->createData('emis/students/saveStudentProgram', $data);
         return $response_data;
     }
@@ -119,7 +119,7 @@ class StudentProgramController extends Controller
 
     /**
      * Get the program details based on id while editing
-     * 
+     *
      */
 
      public function getProgramDetails($param=""){
@@ -144,7 +144,7 @@ class StudentProgramController extends Controller
             'responsibilities.required'   => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'status'                => $request->status,
@@ -153,17 +153,17 @@ class StudentProgramController extends Controller
             'date'                  => $request->date,
             'responsibilities'      => $request->responsibilities,
             'role'                  => $request->role,
-            'organizationId'        => $this->getWrkingAgencyId(), 
+            'organizationId'        => $this->getWrkingAgencyId(),
             'user_id'               => $this->userId()
         ];
-        dd($data);
-            $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
-            return $response_data;
-       
+        // dd($data);
+        $response_data= $this->apiService->createData('emis/students/saveProgramMembers', $data);
+        return $response_data;
+
     }
 
     /*
-    * Function is to list Program Members 
+    * Function is to list Program Members
     */
 
     public function listProgramMembers($param=""){
@@ -173,7 +173,7 @@ class StudentProgramController extends Controller
     }
 
     /*
-    Function to save Club members 
+    Function to save Club members
     */
     public function saveClubMembers(Request $request){
         //First - check the basic validation of the forms
@@ -193,7 +193,7 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'organizationId'        => $this->getWrkingAgencyId(), 
+            'organizationId'        => $this->getWrkingAgencyId(),
             'id'                    => $request->id,
             'status'                => $request->status,
             'student'               => $request->student,
@@ -208,11 +208,11 @@ class StudentProgramController extends Controller
         //Validate to ensure that there is no duplication of entries
         //Not creating but using the createData service as we are sending the $data
         $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
-        
+
         // if(json_decode($validate_data)->data == 'exist'){
         //     //this is to offset the data and send it back to the view
         //     $request->offsetUnset('student');
-            
+
         //     $rules = [
         //         'student'       => 'required',
         //         'program'       => 'required'
@@ -226,7 +226,7 @@ class StudentProgramController extends Controller
         // }
         $response_data= $this->apiService->createData('emis/students/saveClubMembers', $data);
         return $response_data;
-       
+
     }
 
     public function listClubMembers($param=""){
@@ -251,7 +251,7 @@ class StudentProgramController extends Controller
             'month.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'organisation_id'       => $this->getWrkingAgencyId(),
@@ -261,7 +261,7 @@ class StudentProgramController extends Controller
             'productionDetails'     => $request->productionDetails,
             'expenditureDetails'    => $request->expenditureDetails,
 
-            //'user_id'        => $this->user_id() 
+            //'user_id'        => $this->user_id()
         ];
 
         $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
@@ -295,7 +295,7 @@ class StudentProgramController extends Controller
             'to_date.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'organisation_id'       => $this->getWrkingAgencyId(),

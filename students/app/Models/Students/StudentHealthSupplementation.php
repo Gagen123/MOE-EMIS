@@ -13,7 +13,11 @@ class StudentHealthSupplementation extends Model
 
     protected $fillable = [
         'id',
+        'OrgOrganizationId',
         'StdHealthTermId',
+        'StdHealthSupplementationTypeId', 
+        'StdScreeningPositionTitleId',
+        'StdScreeningEndorsedById',
         'date',
         'class',
         'section',
