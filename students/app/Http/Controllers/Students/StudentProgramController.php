@@ -428,7 +428,6 @@ class StudentProgramController extends Controller
             
             $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
         }
-        //dd( $data);
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 

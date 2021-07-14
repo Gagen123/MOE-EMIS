@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Students\Student;
+use App\Models\Students\StudentRollNumber;
+
 
 class GeneralStudentController extends Controller
 {
@@ -54,12 +56,12 @@ class GeneralStudentController extends Controller
         $id = $param1;
         $class_details = explode('__', $id);
         
-        $records = DB::table('std_student')
+        $records = DB::table('std_student') 
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
-                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0])
-                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0]) 
+                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2]) 
                     //->where('academicYear', date('Y'))
                     ->get();
         return $records;
@@ -72,7 +74,42 @@ class GeneralStudentController extends Controller
      * If you want only student and class, create another function
      */
 
+    public function saveStudentRollNumber(Request $request){
+        $data =[
+            'id'                    => $request->id,
+            'std_class'             => $request->std_class,
+            'std_stream'            => $request->std_stream,
+            'std_section'           => $request->std_section,
+            'roll_no'               => $request->roll_no,
+            'studentList'           => $request->studentList,
+            'std_referred'          => $request->std_referred,
+            'organization_id'       => $request->organization_id,
+            'user_id'               => $request->user_id,
 
+        ];
+        // dd($data);
+        $request_data = StudentRollNumber::create($data);
+        return $request_data;
+        // if($request->studentList!=null && $request->studentList!=""){
+        //     foreach($request->studentList[0] as $details){
+        //         $attach =[
+        //             'id'                        =>  $details['id'],
+        //             'student_code'              =>  $details['student_code'],
+        //         ];
+        //         dd($attach);
+        //         ApplicationAttachments::create($attach);
+        //     }
+        // } 
+        // if($request->studentList!=null && $request->studentList!=""){
+        //     foreach($request->studentList as $details){
+        //         $attach =[
+        //             'id'                        =>  $details['id'],
+        //             'student_code'              =>  $details['student_code'],
+        //         ];
+        //         ApplicationAttachments::create($attach);
+        //     }
+        // } 
+    }
     public function loadStudentByClass($class){
         $id = $class;
         

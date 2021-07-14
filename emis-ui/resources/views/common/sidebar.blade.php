@@ -627,6 +627,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="roll_no">
+                        <router-link to="/students_rollNo" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Assign Roll No
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="send">
                         <router-link to="/student_sen_list" class="nav-link">
                             <p>
