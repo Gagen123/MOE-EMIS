@@ -152,7 +152,7 @@ export default {
            axios.get(uri)
            .then(response => {
                let data = response;
-               this.itemList =  data.data.data;
+               this.itemList =  data.data;
            })
            .catch(function (error) {
                console.log("Error......"+error)
