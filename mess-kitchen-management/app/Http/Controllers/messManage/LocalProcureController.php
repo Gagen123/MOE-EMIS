@@ -5,8 +5,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\mess_manage\LocalProcure; 
-use App\Models\mess_manage\TransactionTable; 
+use App\Models\mess_manage\LocalProcure;
+use App\Models\mess_manage\TransactionTable;
 use Illuminate\Support\Facades\DB;
 
 class LocalProcureController extends Controller
@@ -29,7 +29,7 @@ class LocalProcureController extends Controller
              'id'                         =>  $request->id,
              'item_id'                    =>  $item['item'],
              'quantity'                   =>  $item['quantity'],
-             'unit_id'                    =>  $item['unit'],
+            //  'unit_id'                    =>  $item['unit'],
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
@@ -49,7 +49,7 @@ class LocalProcureController extends Controller
              'dateOfprocure'              =>  $date,
              'item_id'                    =>  $item['item'],
              'quantity'                   =>  $item['quantity'],
-             'unit_id'                    =>  $item['unit'],
+            //  'unit_id'                    =>  $item['unit'],
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
@@ -67,7 +67,7 @@ class LocalProcureController extends Controller
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                  ];
                 TransactionTable::where('item_id',$item['item'])->where('procured_type','Local')
-                ->where('organizationId',$request->organizationId)->update($update_data);  
+                ->where('organizationId',$request->organizationId)->update($update_data);
             }
             else{
              $create_data=[
@@ -79,12 +79,12 @@ class LocalProcureController extends Controller
                     'created_at'           =>  date('Y-m-d h:i:s'),
                 ];
                // dd( $create_data);
-              TransactionTable::create($create_data); 
+              TransactionTable::create($create_data);
             }
         }
       //  dd('m here');
-      //   dd('localprocure'); 
-        return $this->successResponse($localpro, Response::HTTP_CREATED);  
+      //   dd('localprocure');
+        return $this->successResponse($localpro, Response::HTTP_CREATED);
     }
 }
     public function loadLocalProcure($orgId=""){
