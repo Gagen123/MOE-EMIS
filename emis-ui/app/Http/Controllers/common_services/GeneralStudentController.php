@@ -43,7 +43,7 @@ class GeneralStudentController extends Controller{
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber', $data);
+        $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber',$data);
         return $response_data;
 
     }

@@ -9,16 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
-use App\Models\std_admission;
-use App\Models\Students\Std_Students;
 use App\Models\Students\Student;
-<<<<<<< HEAD
 use App\Models\Students\StudentRollNumber;
 
-=======
-use App\Models\Students\StudentClassDetails;
-use App\Models\Students\StudentGuardainDetails;
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
 
 class GeneralStudentController extends Controller
 {
@@ -62,13 +55,8 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         $class_details = explode('__', $id);
-<<<<<<< HEAD
         
         $records = DB::table('std_student') 
-=======
-
-        $records = DB::table('std_student')
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
@@ -81,37 +69,61 @@ class GeneralStudentController extends Controller
 
     /**
      * Get the student list by class
-     *
+     * 
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
 
     public function saveStudentRollNumber(Request $request){
         $data =[
-            'id'                    => $request->id,
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,
             'roll_no'               => $request->roll_no,
-            'studentList'           => $request->studentList,
-            'std_referred'          => $request->std_referred,
+            // 'studentList'           => $request->studentList,
             'organization_id'       => $request->organization_id,
             'user_id'               => $request->user_id,
 
         ];
-        // dd($data);
-        $request_data = StudentRollNumber::create($data);
-        return $request_data;
-        // if($request->studentList!=null && $request->studentList!=""){
-        //     foreach($request->studentList[0] as $details){
-        //         $attach =[
-        //             'id'                        =>  $details['id'],
-        //             'student_code'              =>  $details['student_code'],
+        $roll_no = $data['roll_no'];
+        unset($data['roll_no']);
+
+        $response_data = StudentRollNumber::create($data);
+        return $response_data;
+        $lastInsertId = $response_data->id;
+
+        // foreach($std_ids as $index => $stdStudentId){
+        //     if(!array_key_exists($index, $std_screened)){
+        //         $screened_data = [
+        //             'StdHealthScreeningId' => $lastInsertId,
+        //             'StdStudentId'=> $stdStudentId,
         //         ];
-        //         dd($attach);
-        //         ApplicationAttachments::create($attach);
+                
+        //         StudentScreened::create($screened_data);
+        //     }
+        //     if(array_key_exists($index, $std_referred)){
+        //         $screened_data = [
+        //             'StdHealthScreeningId' => $lastInsertId,
+        //             'StdStudentId'=> $stdStudentId,
+        //         ];
+                
+        //         StudentReferred::create($screened_data);
+        //     }
+        // }
+        // dd($data1);
+        // if($request->studentList!=null && $request->studentList!=""){
+        //     foreach($request->studentList as $details){
+        //         $data =[
+        //             'std_id'             =>  $details['id'],
+        //             'student_code'       =>  $details['student_code'],
+        //         ];
+        //         $data= $data1+ $data;
+        //         $request_data = StudentRollNumber::create($data);
+        //         return $request_data;
+
         //     }
         // } 
+       
         // if($request->studentList!=null && $request->studentList!=""){
         //     foreach($request->studentList as $details){
         //         $attach =[
@@ -124,7 +136,7 @@ class GeneralStudentController extends Controller
     }
     public function loadStudentByClass($class){
         $id = $class;
-
+        
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
@@ -137,7 +149,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Load student list by gender
-     *
+     * 
      * Takes class, stream and section as parameter separated by __ (double underscore)
      * We get the gender from master and pass it as an argument in an array
      */
@@ -145,7 +157,7 @@ class GeneralStudentController extends Controller
     public function studentListByGender($data=""){
         //get the array from the url parameters
         parse_str($data, $data_parameters);
-
+        
         $gender_params = $data_parameters['gender_params'];
         $class_params = $data_parameters['class_params'];
         $org_id = $data_parameters['organization_id'];
@@ -156,7 +168,7 @@ class GeneralStudentController extends Controller
         $vaccine_for = $vaccine_query->vaccineFor;
 
         $gender = NULL;
-
+        
         if($vaccine_for == '1'){
             foreach($gender_params as $data_values){
                 foreach($data_values as $key =>$value){
@@ -175,11 +187,11 @@ class GeneralStudentController extends Controller
                 }
             }
         }
-
+        
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.student_code, t1.DateOfBirth, t1.CmnSexId,
                             t2.OrgClassStreamId, t2.SectionDetailsId
-                    FROM std_student t1
-                    LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId
+                    FROM std_student t1 
+                    LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId 
                     WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ? AND t2.SectionDetailsId = ? ";
 
         $params = [$org_id, $class_details[0], $class_details[2]];
@@ -188,14 +200,14 @@ class GeneralStudentController extends Controller
             $query .= ' AND t1.CmnSexId = ?';
             array_push($params,$gender);
         }
-
-        return $this->successResponse (DB::select($query,$params));
+  
+        return $this->successResponse (DB::select($query,$params)); 
     }
 
     /**
-     * Get Student List by orgid and org classstreamId
+     * Get Student List by orgid and org classstreamId 
      */
-
+    
     public function getStudentList($orgId,$orgClassStreamId){
         $data=DB::table('std_student as a')
                 ->join('std_student_class_stream as b', 'a.id','=','b.StdStudentId')
@@ -208,7 +220,7 @@ class GeneralStudentController extends Controller
 
     public function getStudents($org_id,Request $request){
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.CidNo, t2.OrgClassStreamId, t2.SectionDetailsId
-        FROM std_student t1
+        FROM std_student t1 
         LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ?";
         $params = [$org_id,$request->OrgClassStreamId];
 
@@ -216,64 +228,50 @@ class GeneralStudentController extends Controller
             $query .= ' AND t2.SectionDetailsId = ?';
             array_push($params,$request->sectionId);
         }
-
-        return $this->successResponse (DB::select($query,$params));
+  
+        return $this->successResponse (DB::select($query,$params)); 
     }
 
     /**
      * For Profile
      * Get Student, Parents, Roles and Responsibilities and Programme/Club Membership of the Student
-     *
+     * 
      * id is the student id
      */
 
     public function getStudentDetails($id){
-        // $records = DB::table('std_student')
-        //     ->where('std_student.id',$id)
-        //     ->get();
-        $response_data=Std_Students::where('id',$id)->first();
-        if($response_data!=null && $response_data!="" && $response_data->id!=""){
-            $response_data->classDetails= DB::table('std_student_class_stream')
-            ->where('StdStudentId',$response_data->id)->first();
-        }
-        return $response_data;
+        $records = DB::table('std_student')
+                    ->where('std_student.id',$id)
+                    ->get();
+        return $records;
     }
 
     public function getStudentParentsDetails($id){
-        // $records = DB::table('std_student')
-        // ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
-        // ->where('std_student.id',$id)
-        // ->get();
-        //commented by Tshewang as its loading student details along with parent details
-        $records = DB::table('std_student_guardian')
-        ->where('StdStudentId',$id)
-        ->get();
+        $records = DB::table('std_student')
+                    ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
+                    ->where('std_student.id',$id)
+                    ->get();
         return $records;
     }
 
     public function getStudentRoleDetails($id){
-        // $records = DB::table('std_role_student')
-        // ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')
-        // ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
-        // ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
-        // ->where('std_student.id', $id)
-        // ->get();
         $records = DB::table('std_role_student')
-        ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
-        ->select('std_role_student.*', 'std_role.name AS role_name')
-        ->where('StdStudentId', $id)
-        ->get();
+                    ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')
+                    ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
+                    ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
+                    ->where('std_student.id', $id)
+                    ->get();
         return $records;
     }
 
     public function getStudentProgrammeDetails($id){
         $records = DB::table('cea_programme_membership')
-        ->join('cea_programme', 'cea_programme_membership.CeaProgrammeId', '=', 'cea_programme.id')
-        ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
-        ->select('cea_programme_membership.*', 'cea_programme.name AS program_name',
-        'std_student.Name AS student_name', 'std_student.student_code AS student_code')
-        ->where('std_student.id', $id)
-        ->get();
+                        ->join('cea_programme', 'cea_programme_membership.CeaProgrammeId', '=', 'cea_programme.id')
+                        ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
+                        ->select('cea_programme_membership.*', 'cea_programme.name AS program_name',
+                            'std_student.Name AS student_name', 'std_student.student_code AS student_code')
+                            ->where('std_student.id', $id)
+                        ->get();
         return $records;
     }
 
@@ -288,5 +286,5 @@ class GeneralStudentController extends Controller
                     ->first();
         return $vaccine;
     }
-
+    
 }
