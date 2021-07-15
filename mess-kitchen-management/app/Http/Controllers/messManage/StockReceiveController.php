@@ -78,7 +78,8 @@ class StockReceiveController extends Controller
                //dd($facilityInStructure);
 
                StockReceivedItem::create($receiveditem);
-               $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->first();
+               $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')
+               ->where('organizationId',$request['organizationId'])->first();
                 if($checkitem!=null && $checkitem!=""){
                     $qty=$facility['quantity']+$checkitem->available_qty;
 

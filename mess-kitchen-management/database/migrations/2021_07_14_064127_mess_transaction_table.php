@@ -18,12 +18,12 @@ class MessTransactionTable extends Migration
             $table->uuid('id')->primary();
             $table->char('organizationId');
             $table->char('item_id');
-            $table->date('procured_type');
+            $table->char('procured_type');
             $table->char('available_qty',36);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
-            $table->timestamps('created_at')->nullable(true);
-            $table->timestamps('updated_at')->nullable(true);
+            $table->timestamp('created_at')->nullable(true);
+            $table->timestamp('updated_at')->nullable(true);
         });
     }
 

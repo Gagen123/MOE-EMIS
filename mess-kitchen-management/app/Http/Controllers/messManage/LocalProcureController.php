@@ -78,7 +78,7 @@ class LocalProcureController extends Controller
                     'created_by'           =>  $request->user_id,
                     'created_at'           =>  date('Y-m-d h:i:s'),
                 ];
-                dd( $create_data);
+               // dd( $create_data);
               TransactionTable::create($create_data); 
             }
         }

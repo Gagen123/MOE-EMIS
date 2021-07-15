@@ -33,12 +33,12 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @change="getquantity(item.id,index)">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @change="getquantity('item',index)">
+                                         <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id">{{ itm.Name }}</option>
                                       </select>
                                   </td>
                                    <td :id="'loadavailableqty'+index">                                
-                                     {{item.itemqty}}
+                                     {{item.available_qty}}
                                   </td>
                                    <td>                                
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
@@ -85,7 +85,7 @@ export default {
             itemList:[],
             unitList:[],
             item_issue: [],
-            item:'',
+          //  item:'',
             form: new form({
                 id: '', dateOfissue: '', 
                 item_issue:
@@ -200,6 +200,8 @@ export default {
         },
 
         getquantity(itemId,index){
+           itemId=$('#'+itemId).val();
+          // alert(itemId);
             let chekva=$("input[type='radio'][name='procuredtype']:checked").val();
             let isvalid=true;
             if(chekva==undefined){
@@ -214,7 +216,8 @@ export default {
                     .then(response => {
                     let data = response;
                     // this.itemqty =  data.data;
-                    $('#loadavailableqty'+index).html(data.data);
+                    $('#loadavailableqty'+index).html(data.data.data.available_qty);
+                   // alert(data.data.data.available_qty);
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -222,16 +225,7 @@ export default {
             }
             
         },
-
-
-        //  getquantity: function() {
-        //    // alert(this.item);
-        //       axios.get('/mess_manage/getquantity',{
-                 
-        //       }).then(function(response){
-        //           this.itemqty = response.data;
-        //       }.bind(this));
-        //  },
+     
         getItem:function(type){
              if(type=="locallyProcured"){
                 this.loadActiveItemList();
@@ -240,12 +234,6 @@ export default {
                this.loadActiveItemList2();
             }
         },
-        // getquantity1:function(){
-        //  alert('vdcchd');
-        // },
-           
-
-        
 
     },
     mounted() { 
