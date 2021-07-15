@@ -21,17 +21,17 @@
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
-                              <tr>
+                                <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
                                   <th>Available Quantity</th>
                                   <th>Quantity Issued</th>
                                   <th>Damage/Loss Quantity(kg)</th>
                                   <th>Remarks</th>
-                              </tr>
+                                </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
+                                <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                     <td>
                                         <select name="item" :id="'itemid'+index" class="form-control editable_fields" v-model="item.item" @change="getquantity(index)">
                                             <option v-for="(itm, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ itm.Name }}</option>
