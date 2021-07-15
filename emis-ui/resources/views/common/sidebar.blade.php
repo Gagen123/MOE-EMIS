@@ -400,6 +400,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="subject_offered">
+                        <router-link to="/subject_offered" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Subject Offered
+                            </p>
+                        </router-link>
+                    </li>
                     <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
                         <router-link to="/general_index" class="nav-link">
                             <p>
