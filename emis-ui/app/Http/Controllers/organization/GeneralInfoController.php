@@ -295,9 +295,34 @@ class GeneralInfoController extends Controller
         return $disasterList;
     }
 
+    public function saveSubjectMapping(Request $request){
+        $rules = [
+            'class_id'           =>  'required',
+        ];
+        $customMessages = [
+            'class_id.required'        => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $class_subject =[
+            'class_id'          =>  $request['class_id'],
+            'org_id'            =>  $this->getWrkingAgencyId(),
+            'subjects'          =>  $request['subject_ids'],
+            'user_id'           =>  $this->userId(),
+            'id'                =>  $request['id'],
+        ];
+        // dd($class_subject );
+        $response_data= $this->apiService->createData('emis/organization/saveSubjectMapping', $class_subject);
+        return $response_data;
+    }
+
+    public function getSubjectMapping(){
+        $disasterList = $this->apiService->listData('emis/organization/getSubjectMapping/'.$this->getWrkingAgencyId());
+        return $disasterList;
+    }
+
     public function saveClassMapping(Request $request){
         $rules = [
-            'school'         =>  'required',
+            'school'           =>  'required',
             'class.*'          =>  'required',
         ];
         $customMessages = [
@@ -319,6 +344,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
     public function getCurrentClassStream($school_id = ""){
+       // dd('m here at UI');
         $itemList = $this->apiService->listData('emis/organization/classMapping/getCurrentClassStream/'.$school_id);
         return $itemList;
     }
@@ -461,7 +487,7 @@ class GeneralInfoController extends Controller
 
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
-        
+
     }
 
     private function validateOrganizationFields($request){
@@ -585,7 +611,7 @@ class GeneralInfoController extends Controller
             'fencingtype'               =>  'required',
             'entranceGate'              =>  'required',
             'disasterArea'              =>  'required',
-            
+
         ];
 
         $customMessages = [

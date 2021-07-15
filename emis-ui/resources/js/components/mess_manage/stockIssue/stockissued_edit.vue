@@ -25,29 +25,17 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @onchange="getquantity()">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
-                                      <!-- <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="rice">rice</option>
-                                         <option value="potatoes">potatoes</option>
-                                         <option value="onion">onion</option>
-                                     </select>-->
                                   </td>
-                                  <td>                                
+                                   <td>                                
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                  </td>
                                  <td>
                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                     </select> 
-                                    <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="kg">kg</option>
-                                         <option value="litre">litre</option>
-                                         <option value="packet">packet</option>
-                                    </select>-->
                                   </td>
                                   <td>                                
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
@@ -90,7 +78,7 @@ export default {
                 id: '', dateOfissue: '', 
                 item_issue:
                 [{
-                    item:'',quantity:'',unit:'', damagequantity:'',remarks:'',
+                    item:'', quantity:'',unit:'', damagequantity:'',remarks:'',
                 }],
             })
         }
@@ -188,18 +176,38 @@ export default {
                 this.form.item_issue.splice(index,1); 
             }
         },
+        StockIssueEditList(lssId){
+            this.form.item_issue=[];
+            axios.get('mess_manage/StockIssueEditList/' +lssId)
+            .then((response) =>{
+                let data=response.data.data;
+               // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.dateOfissue           = data[i].dateOfissue;
+                    this.form.id                    = data[i].id;
+                    this.form.item_issue.push({
+                       item:data[i].item_id,
+                       quantity:data[i].quantity,
+                       unit:data[i].unit_id,
+                       damagequantity:data[i].damagequantity,
+                       remarks:data[i].remarks
+                    });
+                }
+                this.count=data.length;
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        }
     },
-    mounted() { 
+     mounted() { 
         this.loadActiveUnitList(); 
         this.loadActiveItemList();
     },
     created() {
-        this.form.dateOfissue = this.$route.params.data.dateOfissue;
-        this.form.item_issue.item = this.$route.params.data.item;
-        this.form.item_issue.quantity = this.$route.params.data.quantity;
-        this.form.item_issue.unit = this.$route.params.data.unit;
-        this.form.item_issue.damagequantity = this.$route.params.data.damagequantity;
-        this.form.item_issue.remarks = this.$route.params.data.remarks;
+        this.StockIssueEditList(this.$route.params.data.id);
+        // this.loadActiveItemList(); 
+        // this.loadActiveUnitList();
     }
 }
 </script>

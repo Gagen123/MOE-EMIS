@@ -3,18 +3,27 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Scout:<i class="text-danger">*</i></label>
+                    <label class="mb-0.5">Scout Member:<i class="text-danger">*</i></label>
                     <select v-model="student_form.scout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('scout') }" class="form-control select2" name="scout" id="scout">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        <option v-for="(item, index) in memberList" :key="index" v-bind:value="item.StdStudentId+'_'+item.CeaScoutSectionId">{{ item.student_name}} ({{ item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="scout"></has-error>
                 </div> 
             </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Proficiency Badge:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.badgeEarned" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('badgeEarned') }" class="form-control select2" name="badgeEarned" id="badgeEarned">
+                        <option v-for="(item, index) in badgeList" :key="index" v-bind:value="item.id">{{ item.name}}</option>
+                    </select>
+                    <has-error :form="student_form" field="badgeEarned"></has-error>
+                </div>
+            </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Year of Establishment:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.year" :class="{ 'is-invalid': student_form.errors.has('year') }" id="year" @change="remove_err('year')" type="number">
-                    <has-error :form="student_form" field="year"></has-error>
+                    <label>Date of Award of Badge:<span class="text-danger">*</span></label> 
+                    <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <has-error :form="student_form" field="date"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -35,49 +44,50 @@
 export default {
     data(){
         return {
-            programList:[],
+            memberList:[],
+            badgeList:[],
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 id:'',
                 scout: '',
-                year:'',
+                badgeEarned:'',
+                date:'',
                 remarks:'',
                 action_type:'add'
             }),
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/scout_section"){
+        loadScoutMemberList(uri="students/listScoutMembers"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data.data;
+                this.memberList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
+            });
+        },
+        loadActiveScoutBagde(id){
+            let scout_section=$('#CeaScoutSectionId').val();
+            if(id!="" && scout_section==null){
+                scout_section=id;
+            }
+            let uri = '/masters/getScoutBadge/'+scout_section;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.badgeList = data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
             });
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
-            }
-        },
-        /**
-         * method to add more fields
-         */
-        addMore: function(){
-            this.count++;
-            this.student_form.users.push({teacher:'',role:''})    
-        }, 
-        /**
-         * method to remove fields
-         */
-        remove(index){    
-             if(this.student_form.users.length>1){
-                this.count--;
-                this.student_form.users.splice(index,1); 
             }
         },
         formaction: function(type){
@@ -106,11 +116,17 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="student"){
-                this.student_form.program=$('#program').val();
-            }
             if(id=="scout"){
-                this.student_form.scout=$('#scout').val();
+                let selected_value = $('#scout').val();
+                let std_id = selected_value.split("_")[0];
+                let scout_section = selected_value.split("_")[1];
+
+                this.student_form.scout= std_id;
+
+                this.loadActiveScoutBagde(scout_section);
+            }
+            if(id=="badgeEarned"){
+                this.student_form.badgeEarned=$('#badgeEarned').val();
             }
         },
     },
@@ -128,7 +144,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadActiveProgramList();
+        this.loadScoutMemberList();
     },
     
 }

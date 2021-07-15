@@ -8,7 +8,7 @@
                         <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name}} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
-                </div> 
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -42,10 +42,7 @@ export default {
         return {
             studentList:[],
             roleList:[],
-            //id is set to default and is not used
-            id:'2',
             action_type:'add',
-
             student_form: new form({
                 student: '',
                 role_id: '',
@@ -56,8 +53,9 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        
-        loadStudentList(uri='students/loadStudentList/'+this.id){
+
+        loadStudentList(org_id){
+            let uri='students/loadStudentList/'+org_id;
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -118,23 +116,30 @@ export default {
             }
         },
     },
-     mounted() {
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
 
-        this.loadStudentList();
         this.loadActiveRoleList();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.loadStudentList(data['Agency_Code']);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
-    
+
 }
 </script>

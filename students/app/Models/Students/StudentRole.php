@@ -15,6 +15,8 @@ class StudentRole extends Model
         'id',
         'StdStudentId',
         'StdRoleId',
+        'created_by',
+        'created_at',
         'Remarks'
     ];
 

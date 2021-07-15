@@ -19,7 +19,6 @@ class StudentDisciplinaryController extends Controller
     }
 
     public function addStudentRecord(Request $request){
-        
         $rules = [
             'student'               => 'required',
             'offence_type'          => 'required',
@@ -53,15 +52,8 @@ class StudentDisciplinaryController extends Controller
             'user_id'               => $this->userId(),
             'working_agency_id'     => $this->getWrkingAgencyId()
         ];
-
-        try{
             $response_data= $this->apiService->createData('emis/students/addStudentRecord', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-        
     }
 
     public function loadStudentRecords($param=""){
@@ -69,4 +61,6 @@ class StudentDisciplinaryController extends Controller
         $student_records = $this->apiService->listData('emis/students/loadStudentRecords/'.$param);
         return $student_records;
     }
+
+    
 }

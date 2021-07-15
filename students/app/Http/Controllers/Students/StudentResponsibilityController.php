@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentRole;
 use App\Models\Students\Student;
+use Carbon\Carbon;
 
 class StudentResponsibilityController extends Controller
 {
@@ -18,7 +19,7 @@ class StudentResponsibilityController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
-    /** 
+    /**
      * method to save or update student awards
     */
 
@@ -34,15 +35,15 @@ class StudentResponsibilityController extends Controller
                 'role_id.required'          => 'This field is required'
             ];
             $this->validate($request, $rules, $customMessages);
-    
+
             $record_type = $request['record_type'];
-            
+
             $data =[
                 'id'                => $request->id,
                 'StdStudentId'      =>  $request->student,
                 'StdRoleId'         =>  $request->role_id,
                 'Remarks'           =>  $request->remarks,
-                //'user_id'           => $this->user_id() 
+                // 'user_id'           => $this->user_id()
             ];
             $response_data = StudentRole::where('id', $id)->update( $data);
         }else{
@@ -55,17 +56,35 @@ class StudentResponsibilityController extends Controller
                 'role_id.required'          => 'This field is required'
             ];
             $this->validate($request, $rules, $customMessages);
-    
-            $record_type = $request['record_type'];
-            
-            $data =[
-                'id'                => $request->id,
-                'StdStudentId'      =>  $request->student,
-                'StdRoleId'         =>  $request->role_id,
-                'Remarks'           =>  $request->remarks,
-                //'user_id'           => $this->user_id() 
-            ];
-            $response_data = StudentRole::create( $data);
+
+            // $record_type = $request['record_type'];
+            $exist=false;
+            $check_data=StudentRole::where('StdStudentId',$request->student)->where('StdRoleId',$request->role_id)->first();
+            if( $check_data!=null &&  $check_data!=""){
+                $getyear = $check_data->date;
+                $year = Carbon::createFromFormat('d/m/Y', $getyear)->format('Y');
+                if($year==date('Y')){
+                    $exist=true;
+                    return "exist";
+                }
+            }
+            if(!$exist){
+                $data =[
+                    'StdStudentId'      =>  $request->student,
+                    'StdRoleId'         =>  $request->role_id,
+                    'Remarks'           =>  $request->remarks,
+                    'created_by'        => $request->user_id,
+                    'created_at'        => date('Y-m-d h:i:s')
+                ];
+                try{
+                    StudentRole::create( $data);
+        
+                    } catch(\Illuminate\Database\QueryException $ex){
+                        dd($ex->getMessage());
+                        // Note any method of class PDOException can be called on $ex.
+                    }
+                $response_data = StudentRole::create( $data);
+            }
         }
         // $rules = [
         //     'student'       => 'required',
@@ -78,20 +97,20 @@ class StudentResponsibilityController extends Controller
         // $this->validate($request, $rules, $customMessages);
 
         // $record_type = $request['record_type'];
-        
+
         // $data =[
         //     'id'                => $request->id,
         //     'StdStudentId'      =>  $request->student,
         //     'StdRoleId'         =>  $request->role_id,
         //     'Remarks'           =>  $request->remarks,
-        //     //'user_id'           => $this->user_id() 
+        //     //'user_id'           => $this->user_id()
         // ];
 
         // if($request->action_type=="add"){
         //     $response_data = StudentRole::create($data);
 
         // } else if($request->action_type=="edit"){
-  
+
         //     //Audit Trails
         //     // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         //     // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
@@ -106,7 +125,7 @@ class StudentResponsibilityController extends Controller
         // }
         //dd('$app_data');
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
+
     }
 
     /**
@@ -123,16 +142,16 @@ class StudentResponsibilityController extends Controller
                 ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
                 ->where('std_student.OrgOrganizationId', $id)
                 ->get();
-        
+
         return $this->successResponse($roles);
 
     }
 
     public function getAssignedTeacherRoles($param=""){
-        
+
         $roles = DB::table('std_role_staff')->where('CeaSchoolProgrammeId', $param)->get();
-        
+
         return $this->successResponse($roles);
     }
-    
+
 }

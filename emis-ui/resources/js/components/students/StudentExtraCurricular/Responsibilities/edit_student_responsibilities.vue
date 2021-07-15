@@ -8,7 +8,7 @@
                         <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name}} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
-                </div> 
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -50,13 +50,12 @@ export default {
                 student: '',
                 role_id: '',
                 remarks:'',
-                action_type:'add',
+                action_type:'edit',
             }),
         }
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        
         loadStudentList(uri='students/loadStudentList/'+this.id){
             axios.get(uri)
             .then(response => {
@@ -125,9 +124,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -137,7 +136,7 @@ export default {
     },
      created() {
         this.loadStudentList();
-        this.student_form.id = this.$route.params.data.id; 
+        this.student_form.id = this.$route.params.data.id;
         this.student_form.student=this.$route.params.data.StdStudentId;
         this.student_form.role_id=this.$route.params.data.StdRoleId;
         this.student_form.remarks=this.$route.params.data.Remarks;

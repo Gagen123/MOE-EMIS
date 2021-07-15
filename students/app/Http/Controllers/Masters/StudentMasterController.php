@@ -16,6 +16,8 @@ use App\Models\Masters\CeaRole;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
+use App\Models\Masters\CeaScoutProficiencyBadge;
+use App\Models\Masters\CounsellingType;
 
 class StudentMasterController extends Controller
 {
@@ -30,27 +32,18 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-    /**Get Scout Section in Dropdown */
-    public function getScoutSection(){
-        $data=CeaScoutSection::select('id','name')->get();
-        return $data;
-    }
 
-
-    /**Get Scout Level in Dropdown By ScoutSectionID*/
-    public function getScoutSectionLevel($scoutSectionId){
-        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
-        return $data;
-    }
 
     /**
      * method to save or update student masters data
     */
 
     public function saveStudentMasters(Request $request){
+       // dd($request);
         $rules = [
             'name'  =>  'required',
         ];
+
         $this->validate($request, $rules);
 
         $record_type = $request['recordtype'];
@@ -61,13 +54,12 @@ class StudentMasterController extends Controller
 
         if($request->actiontype=="add"){
             $response_data = $this->insertData($data, $databaseModel);
+        }
+        else if($request->actiontype=="edit"){
 
-
-        } else if($request->actiontype=="edit"){
-           
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
-
+       // dd($response_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
@@ -127,30 +119,36 @@ class StudentMasterController extends Controller
     */
 
     public function loadStudentMasters($param=""){
-        
+        $orginal_param=$param;
         if(strpos($param,'_Active')){
-            $param=explode('_',$param)[0];
+            // $param=explode('_',$param)[0]; //commented by Tshewang as there are pareamers which contains _ more then 1 like student_program_Active
+            $param=str_replace('_Active','',$param);
         }
 
         $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
 
         $model = new $modelName();
         //need to separate programs from clubs
 
         if($param == 'program_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
-            $response_data = $model::where('id', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
+            // $response_data = $model::where('id', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
-         //   dd($response_data);
+            // dd($response_data);
 
         } elseif($param == 'club_name'){
-            $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
-            $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            //commented by Tshewang and load respective master data by program type
+            // $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
+            // $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
+            $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
+            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
 
-        } elseif(strpos($param,'_Active')){
+        } elseif(strpos($orginal_param,'_Active')){//change from param to $orginal_param as param value is changing above
             return $this->successResponse($model::where('status',1)->get());
 
         } elseif($param == 'student_award_type'){
@@ -162,7 +160,7 @@ class StudentMasterController extends Controller
         } else {
             return $this->successResponse($model::all());
         }
-        
+
     }
 
 
@@ -173,12 +171,12 @@ class StudentMasterController extends Controller
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
         } else if($param == 'program_student_roles'){
             $status = '1';
             $assigned_to = '2';
-            return $this->successResponse(CeaRole::where('status',$status)->where('assigned_to', $assigned_to)->get());
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
         } else if($param == 'vaccine_type'){
             $vacinetype = StudentType::all();
@@ -201,10 +199,19 @@ class StudentMasterController extends Controller
 
             $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $data;
-
+        }else if($param == 'program_item_central' || $param == 'program_item_local'){
+            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item', $type='Model');
+            $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            $model = new $modelName();
+            if($param == 'program_item_central'){
+                $data = $model::where('status',1)->where('Central',1)->get();
+            }
+            if($param == 'program_item_local'){
+                $data = $model::where('status',1)->where('Local',1)->get();
+            }
+            return $data;
         } else {
             $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
-
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
             $status = '1';
@@ -213,7 +220,7 @@ class StudentMasterController extends Controller
         }
 
       //  dd($program_student_roles);
-        
+
 
     }
 
@@ -227,7 +234,7 @@ class StudentMasterController extends Controller
 
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
-      
+
         return $this->successResponse($model::where('id',$id)->first());
 
     }
@@ -250,30 +257,33 @@ class StudentMasterController extends Controller
      */
 
     private function updateData($request,$dataRequest, $databaseModel){
-      //  dd('m here');
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
        //  dd($data);
         //Audit Trails
-        $msg_det='Name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+        $msg_det='Name:'.$data->Name.'; Status:'.$data->Status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
       // dd('m here',$dataRequest);
 
         //data to be updated
-        $data->name = $dataRequest['Name'];
+        $data->Name = $dataRequest['Name'];
         // dd($data);
         if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
-            $data->description = $dataRequest['Description'];
+            $data->Description = $dataRequest['Description'];
         }
-        if($request['recordtype']!="vaccine_type" ){
-            $data->description = $dataRequest['vaccineFor'];
+        if($request['recordtype']=="vaccine_type" ){
+            $data->Description = $dataRequest['vaccineFor'];
         }
-        $data->description = $dataRequest['Description'];
-        $data->status = $dataRequest['Status'];
+        if($request['recordtype']=="program_item" ){
+            $data->Central   =  $dataRequest['Central'];
+            $data->Local     =  $dataRequest['Local'];
+            $data->Unit_id   =  $dataRequest['Unit_id'];
+        }
+        $data->Description = $dataRequest['Description'];
+        $data->Status = $dataRequest['Status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
-        // dd($data);
         $data->update();
         return $data;
 
@@ -296,6 +306,14 @@ class StudentMasterController extends Controller
             if($record_type!="StudentType" || $record_type!="ScholarType" || $record_type!="SpBenefit"){
                 $additional_data = [
                     'Description'  =>  $request['description'],
+                ];
+                $data = $data + $additional_data;
+            }
+            if($record_type=="program_item"){
+                $additional_data = [
+                    'Central'   =>  $request['central'],
+                    'Local'     =>  $request['local'],
+                    'Unit_id'   =>  $request['unit_id'],
                 ];
                 $data = $data + $additional_data;
             }
@@ -413,7 +431,7 @@ class StudentMasterController extends Controller
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeId' => $request->program,
-                            'assigned_to'=> $request->assigned_to,
+                            'AssignedTo'=> $request->assigned_to,  //change from assigned_to AssignTo by Tshewang as its find in db
                             'remarks'=> $request->remarks
                         ];
                         $data = $data + $additional_data;
@@ -459,6 +477,14 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaProgramMeasurement";
                     break;
                 }
+            case "counselling_class_range" : {
+                    $databaseModel = "CounsellingClassRange";
+                    break;
+                }
+            case "counselling_age_range" : {
+                    $databaseModel = "CounsellingAgeRange";
+                    break;
+                }
             default : {
                 $databaseModel =$record_type;
                 break;
@@ -469,5 +495,67 @@ class StudentMasterController extends Controller
         } else{
             return $data;
         }
+    }
+
+    /**
+     * The following functions are written differently.
+     * Integrate to Case statements in the future
+     */
+
+    /**Get Scout Section in Dropdown */
+    public function getScoutSection(){
+        $data=CeaScoutSection::select('id','name')->get();
+        return $data;
+    }
+
+
+    /**Get Scout Level in Dropdown By ScoutSectionID*/
+    public function getScoutSectionLevel($scoutSectionId){
+        $data=CeaScoutSectionLevel::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**Get Scout Badge in Dropdown By ScoutSectionID*/
+    public function getScoutBadge($scoutSectionId){
+        $data=CeaScoutProficiencyBadge::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**
+     * Counselling Master
+     */
+
+    public function saveCounsellingType(Request $request){
+         //  dd($request);
+           $id = $request->id;
+           if( $id != null){
+               $data =[
+                   'id'                =>  $request->id,
+                   'name'              =>  $request->name,
+                   'description'       =>  $request->description,
+                   'status'            =>  $request->status,
+                   'updated_by'        =>  $request['user_id'],
+                   'updated_at'        =>  date('Y-m-d h:i:s'),
+                ];
+                CounsellingType::where('id', $id)->update($data);
+               $response_data = CounsellingType::where('id', $id)->first();
+           } else {
+               $data =[
+                'id'                =>  $request->id,
+                'name'              =>  $request->name,
+                'description'       =>  $request->description,
+                'status'            =>  $request->status,
+                'created_by'        =>  $request['user_id'],
+                'created_at'        =>  date('Y-m-d h:i:s'),
+               ];
+               $response_data = CounsellingType::create($data);
+           }
+          // dd($data);
+           return $this->successResponse($response_data, Response::HTTP_CREATED);
+       }
+
+       public function getCounsellingTypeDropdown(){
+        // dd('from microserve ');
+         return CounsellingType::where('status',1)->get();
     }
 }

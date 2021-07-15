@@ -47,6 +47,7 @@ class LoadOrganizationController extends Controller{
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
         }
+
         if($type=="allorganizationList"){
             if($id=="allData"){
                 $response_data=OrganizationDetails::all();
@@ -58,13 +59,8 @@ class LoadOrganizationController extends Controller{
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
             foreach($response_data as $res){
-                $res->org_name=$res->name; //without level
-                if($res['levelId']!=null && $res['levelId']!=""){
-                    $lev=Level::where('id',$res['levelId'])->first();
-                    if($lev!=null && $lev!=""){
-                        $res->name=$res->name.' '.json_decode($lev)->name;
-                    }
-                }
+                $lev=Level::where('id',$res['levelId'])->first();
+                $res->name=$res->name.' '.json_decode($lev)->name;
             }
         }
         return $this->successResponse($response_data);
@@ -81,20 +77,13 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
+            $response_data->level=Level::where('id',$response_data->levelId)->first();
             if($response_data!=null && $response_data!=""){
-                if($response_data->levelId!=null && $response_data->levelId!=""){
-                    $level=Level::where('id',$response_data->levelId)->first();
-                    if($level!=null && $level!=""){
-                        $response_data->level=$level;
-                        $response_data->name=$response_data->name.' '.$level->name;
-                    }
-                }
-
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
                 ->select('cl.*', 'c.class', 'c.id AS classId')
                 ->where('cl.organizationId',$response_data->id)
-                ->orderBy('c.displayOrder', 'asc')
+                    ->orderBy('c.displayOrder', 'asc')
                 ->get();
                 $response_data->classes=$data;
                 if($response_data->category=="private_school"){
@@ -188,7 +177,6 @@ class LoadOrganizationController extends Controller{
      */
 
     public function getOrgClassStream($org_id){
-
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
                     ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
@@ -197,6 +185,29 @@ class LoadOrganizationController extends Controller{
                     ->groupBy('organization_class_streams.classId') //added by Tshewang as required only class
                     ->get();
 
+        return $this->successResponse($response_data);
+    }
+
+     /**
+     * Get the Class Streams by org_class_strema_id
+     */
+
+    public function getOrgClassStreambyId($id){
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
+                    ->where('organization_class_streams.id', $id)
+                    ->first();
+
+        return $this->successResponse($response_data);
+    }
+
+    public function getSectionById($id){
+        $response_data = DB::table('section_details')
+            ->select('section AS section', 'id AS section_id')
+            ->where('id', $id)
+            ->first();
         return $this->successResponse($response_data);
     }
 

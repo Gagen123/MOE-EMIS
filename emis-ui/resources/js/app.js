@@ -41,9 +41,10 @@ import organization from "./organization";
 import student_routes from "./student_routes";
 import academic_routes from "./academic_routes";
 import mess_manage_routes from "./mess_manage_routes";
+import dietary from "./dietary";
 
 var allRoutes = [];
-allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes);
+allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes,dietary);
 const routes = allRoutes;
 const router = new VueRouter({
     routes
@@ -66,9 +67,11 @@ var numberOfAjaxCAllPending = 0;
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
   numberOfAjaxCAllPending++;
-
-  var $body = $("body");
-  $body.addClass("request_loading");
+  let _actionType = config.url;
+  if (_actionType !== 'common/getNotification') {
+    var $body = $("body");
+    $body.addClass("request_loading");
+  }
   return config;
 }, function (error) {
   return Promise.reject(error);

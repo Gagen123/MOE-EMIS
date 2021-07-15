@@ -203,6 +203,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
     //Organization Transactions Routes
     $router->group(['prefix' => 'organization'], function () use ($router){
+        $router->post('/saveSubjectMapping', 'generalInformation\ClassMappingController@saveSubjectMapping');
+        $router->get('/getSubjectMapping/{org_id}', ['uses' => 'generalInformation\ClassMappingController@getSubjectMapping']);
+
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
         $router->post('/udpateOrgProfile', 'establishment\EstablishmentController@udpateOrgProfile');
@@ -353,13 +356,13 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         //ECCD Infracture
         $router->group(['prefix' => 'eccdinfrastructure'], function () use ($router) {
-            $router->get('/getStructureTypeInDropdown', 'structuralFacility\InfrastructureController@getStructureTypeInDropdown'); 
+            $router->get('/getStructureTypeInDropdown', 'structuralFacility\InfrastructureController@getStructureTypeInDropdown');
             $router->get('/geteccdStructureFacilityInDropdown/{structuretype}', 'structuralFacility\InfrastructureController@geteccdStructureFacilityInDropdown');
             $router->post('/saveEccdInfrastructure', 'structuralFacility\EccdInfrastructureController@saveEccdInfrastructure');
             $router->get('/loadEccdInfrastructureList/{orgId}', 'structuralFacility\EccdInfrastructureController@loadEccdInfrastructureList');
             $router->get('/getEccdInfrastructureDetails/{eccdinfraId}', 'structuralFacility\EccdInfrastructureController@getEccdInfrastructureDetails');
 
-        });  
+        });
 
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
@@ -468,6 +471,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
 
         $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);
+        $router->get('/getOrgClassStreambyId/{id}', ['uses' => 'LoadOrganizationController@getOrgClassStreambyId']);
+        $router->get('/getSectionById/{id}', ['uses' => 'LoadOrganizationController@getSectionById']);
         $router->get('/loadStreamList/{id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
         $router->get('/loadSectionList/{id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
         $router->get('/getClassArray/{org_id}', ['uses' => 'LoadOrganizationController@getClassArray']);

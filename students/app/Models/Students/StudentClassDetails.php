@@ -19,7 +19,7 @@ class StudentClassDetails extends Model
         'OrgClassSectionId',
         'StdStudentTypeId',
         'NoOfMeals',
-        'IsSenStudent',
+        'IsSen',
         'Meal_Type',
         'Feeding_Type',
         'created_by',

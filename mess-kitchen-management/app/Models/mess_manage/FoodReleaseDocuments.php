@@ -14,11 +14,11 @@ class FoodReleaseDocuments extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'foodreleaseId',
-        'attachment_for',
+        'attachmentId',
         'path',
-        'original_name',
+        'attachment_for',
         'user_defined_name',
+        'original_name',
     ];
 
 }

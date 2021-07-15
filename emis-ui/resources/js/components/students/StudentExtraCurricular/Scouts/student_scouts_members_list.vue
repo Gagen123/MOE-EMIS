@@ -14,7 +14,7 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.student_name}}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.student_code}}</td>
                     <td>{{ item.scout_name}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -36,30 +36,30 @@ export default {
         }
     },
     methods:{
-        // loadDataList(uri='students/loadScoutMembers/'+this.id){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         this.dataList =  data.data.data;
-        //     })
-        //     .catch(function (error) {
-        //         if(error.toString().includes("500")){
-        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-        //         }
-        //     });
-        //     setTimeout(function(){
-        //         $("#list-student-initiative").DataTable({
-        //             "responsive": true,
-        //             "autoWidth": true,
-        //         });
-        //     }, 3000);
-        // },
+        loadDataList(uri='students/loadScoutMembers/'+this.id){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+            setTimeout(function(){
+                $("#list-student-initiative").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                });
+            }, 3000);
+        },
         showedit(data){
             this.$router.push({name:'edit_student_projects_members',params: {data:data}});
         },
     },
     mounted(){
-        // this.loadDataList();
+        this.loadDataList();
     },
 }
 </script>

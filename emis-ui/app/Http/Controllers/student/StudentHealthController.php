@@ -65,27 +65,36 @@ class StudentHealthController extends Controller
 
     public function addSupplementationRecords(Request $request){
         $rules = [
-            'term_id'            => 'required',
-            'date'               => 'required'
+            'term_id'                       => 'required',
+            'date'                          => 'required',
+            'supplementation'               => 'required',
+            'supplementation_position'      => 'required',
+            'supplementation_endorsed_by'   => 'required'
         ];
 
         $customMessages = [
-            'term_id.required'  => 'This field is required',
-            'date.required'     => 'This field is required',
+            'term_id.required'                      => 'This field is required',
+            'date.required'                         => 'This field is required',
+            'supplementation.required'              => 'This field is required',
+            'supplementation_position.required'     => 'This field is required',
+            'supplementation_endorsed_by.required'  => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
         
         $data =[
-            'id'               => $request->id,
-            'term_id'          => $request->term_id,
-            'date'             => $request->date,
-            'std_class'             => $request->std_class,
-            'std_stream'            => $request->std_stream,
-            'std_section'           => $request->std_section,
-            'std_id'                => $request->std_id,
-            'std_screened'          => $request->std_screened,
-            'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'id'                            => $request->id,
+            'term_id'                       => $request->term_id,
+            'supplementation'               => $request->supplementation,
+            'supplementation_position'      => $request->supplementation_position,
+            'supplementation_endorsed_by'   => $request->supplementation_endorsed_by,
+            'date'                          => $request->date,
+            'std_class'                     => $request->std_class,
+            'std_stream'                    => $request->std_stream,
+            'std_section'                   => $request->std_section,
+            'std_id'                        => $request->std_id,
+            'std_screened'                  => $request->std_screened,
+            'organization_id'               => $this->getWrkingAgencyId(),
+            'user_id'                       =>  $this->userId() 
         ];
        
             $response_data= $this->apiService->createData('emis/students/addSupplementationRecords', $data);

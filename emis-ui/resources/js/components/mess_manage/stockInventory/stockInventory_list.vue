@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="card ">
-            <div class="card-body">  
-                <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
+            <div class="card-body">
+                <div class="card-header pb-1 mb-0 pt-0 mt-0">
                      <span class="card-title">
                     <b>Stock Inventory</b>
                     </span>
                 </div>
             </div>
-            <div class="card-body">  
+            <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="training-table" class="table w-100 table-sm table-bordered table-striped">
@@ -17,10 +17,11 @@
                                     <th>Sl#</th>
                                     <th>Item</th>
                                     <th>Stock Received</th>
-                                    <th>Locally Procured</th>    
-                                    <th>Stock Issued</th> 
+                                    <th>Locally Procured</th>
+                                    <th>Stock Issued</th>
+                                    <th>Stock Damage</th>
                                     <th>Unit</th>
-                                  
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -30,12 +31,14 @@
                                     <td>{{ item.stock_received_quantity}}</td>
                                     <td>{{ item.local_procured_quantity}}</td>
                                     <td>{{ item.stock_issed_quantity}}</td>
+                                    <td>{{ item.Damage_Qty}}</td>
                                     <td>{{unitList[item.unit_id]}} </td>
+                                    
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                </div>  
+                </div>
             </div>
         </div>
     </div>
@@ -48,13 +51,14 @@ export default {
             stockInventory:[],
             itemList:{},
             unitList:{},
+
         }
     },
     methods:{
         /**
          * method to load organization/school list
          */
-        getInventoryList(uri = 'mess_manage/getInventoryList/null'){
+        getInventoryList(uri = 'mess_manage/getInventoryList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -69,7 +73,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.itemList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -81,7 +85,7 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -89,7 +93,7 @@ export default {
             });
         },
 
-       
+
     },
     mounted(){
         this.loadActiveItemList();

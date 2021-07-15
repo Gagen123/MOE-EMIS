@@ -7,7 +7,7 @@
                     <th>Date of Stock Received</th>
                     <th>Quarter</th>
                     <th>Remarks</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -19,7 +19,10 @@
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item)"><i class="fas fa-eye"></i ></a>
-                        </div> 
+                        </div>
+                         <!-- <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="StockReceivedView(item)"><i class="fas fa-eye"></i ></a>
+                        </div>  -->
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockReceivedList(item)"><i class="fas fa-edit"></i ></a>
                         </div>
@@ -43,7 +46,7 @@
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="font-weight-normal">Date of Received: </label>
                                  <span class="text-indigo-600">{{displayItem.dateOfreceived}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                   <label class="font-weight-normal">Quarter: </label>
                                   <span class="text-indigo-600">{{quarterList[displayItem.quarter]}}</span>
@@ -57,7 +60,7 @@
                                         <th>Sl No.</th>
                                         <th>Item</th>
                                         <th>Quantity</th>
-                                        <th>Unit</th> 
+                                        <th>Unit</th>
                                         <th>Remarks</th>
                                  </tr>
                              </thead>
@@ -66,8 +69,8 @@
                                      <td> {{index + 1}}</td>
                                      <td> {{itemList[tableitem.item]}}</td>
                                      <td> {{tableitem.quantity}}</td>
-                                     <td> {{unitList[tableitem.unit]}}</td>   
-                                     <td> {{tableitem.remarks}}</td>                
+                                     <td> {{unitList[tableitem.unit]}}</td>
+                                     <td> {{tableitem.remarks}}</td>
                                  </tr>
                              </tbody>
                           </table>
@@ -95,28 +98,20 @@ export default {
             quarterList:{},
             unitList:{},
             itemList:{},
+            dt:''
         }
     },
 
     methods:{
-        loadFoodReleaseListing(org_Id){
-        let uri = 'mess_manage/loadFoodReleaseListing/'+org_Id;
+        loadFoodReleaseListing(uri = 'mess_manage/loadFoodReleaseListing'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.stockReceivedList =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#stockreceived-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
 
         viewitemreceived:function(item){
@@ -124,16 +119,14 @@ export default {
             this.displayItem=item;
           //  alert(this.displayItem.stockreceivedId);
             axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
-            .then(response => { 
+            .then(response => {
                 let data = response;
                 this.itemreceived_list =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            //  
+            //
             // this.itemrelease_list="";
           // this.itemrelease_list=tableitem;
             $('#viewitemreceived').modal('show');
@@ -142,12 +135,17 @@ export default {
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
+        StockReceivedView(data){
+            data.action='view';
+            this.$router.push({name:'StockReceivedView',params: {data:data}});
+        },
+
         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.quarterList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.quarterList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
@@ -159,23 +157,23 @@ export default {
             .then(response => {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.unitList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].name; 
+               for(let i=0;i<data.data.length;i++){
+                    this.itemList[data.data[i].id] = data.data[i].Name;
                 }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error:"+error)
             });
         },
         remove_err(field_id){
@@ -189,22 +187,31 @@ export default {
         //     .then(response => {
         //         let data = response;
         //        for(let i=0;i<data.data.data.length;i++){
-        //             this.termList[data.data.data[i].id] = data.data.data[i].name; 
+        //             this.termList[data.data.data[i].id] = data.data.data[i].name;
         //         }
         //     })
         //     .catch(function (error) {
         //         console.log("Error......"+error)
         //     });
         // },
-       
+
     },
-    
+
     mounted(){
         this.loadActiveQuarterList();
         this.loadActiveUnitList();
         this.loadActiveItemList();
         this.loadFoodReleaseListing();
-        
+        this.dt =  $("#stockreceived-table").DataTable();
+
+    },
+    watch: {
+        stockReceivedList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#stockreceived-table").DataTable()
+            });
+        }
     },
 }
 </script>

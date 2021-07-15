@@ -49,10 +49,16 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
+        $router->get('/getScoutBadge/{scoutSectionId}','Masters\StudentMasterController@getScoutBadge');
+        
         $router->post('/saveValidationcondition', ['uses' => 'Masters\StudentMasterController@saveValidationcondition']);
         $router->get('/loadValidationcondition','Masters\StudentMasterController@loadValidationcondition');
         //Get Scouts Section
         $router->get('/getScoutSection','Masters\StudentMasterController@getScoutSection');
+        $router->post('/saveCounsellingType', ['uses' => 'Masters\StudentMasterController@saveCounsellingType']);
+        $router->get('/loadActiveCounsellingMaster/{param}','Masters\StudentMasterController@loadActiveCounsellingMaster');
+        $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
+
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
@@ -66,6 +72,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
             $router->post('/studentAdmissionupdate', ['uses' => 'students\StudentAdmissionController@studentAdmissionupdate']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
+            
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
@@ -86,7 +93,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });
         //Student Updates
         $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);
-        $router->get('/loadStudentUpdatesList/{param}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
+        $router->get('/loadStudentUpdatesList/{param}/{org_id}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
 
         //SEN Controller
         $router->group(['prefix' => 'sen'], function () use ($router) {
@@ -101,6 +108,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         //Get Student List by orgId, Orgclassstreamid
         $router->get('/getStudentList/{orgId}/{orgClassStreamId}',['uses' => 'General\GeneralStudentController@getStudentList']);
         $router->get('/loadStudentList/{param}',['uses' => 'General\GeneralStudentController@loadStudentList']);
+
+        //this route is for assigning roll number to student
+        $router->post('/saveStudentRollNumber',['uses' => 'General\GeneralStudentController@saveStudentRollNumber']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
@@ -179,6 +189,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/listStudentScouts/{param}', ['uses' => 'Students\StudentScoutController@listStudentScouts']);
         //SAVE SCOUT PARTICIPANTS
         $router->post('/saveScoutParticipants', ['uses' => 'Students\StudentScoutController@saveScoutParticipants']);
+        $router->get('/loadScoutMembers/{orgId}/{user_id}', ['uses' => 'Students\StudentScoutController@loadScoutMembers']);
+        $router->get('/listScoutMembers/{orgId}/{user_id}', ['uses' => 'Students\StudentScoutController@listScoutMembers']);
 
         $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
@@ -204,6 +216,13 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
 
+        //Counselling Routes
+        $router->post('/saveCounsellingInformation', ['uses' => 'Students\StudentCounsellingController@saveCounsellingInformation']);
+        $router->get('/loadCounsellingInformation/{orgId}', ['uses' => 'Students\StudentCounsellingController@loadCounsellingInformation']);
+        $router->post('/saveCounsellingProgram', ['uses' => 'Students\StudentCounsellingController@saveCounsellingProgram']);
+        $router->get('/loadCounsellingProgram/{orgId}', ['uses' => 'Students\StudentCounsellingController@loadCounsellingProgram']);
+        $router->get('/getCounsellingDetails/{couId}', ['uses' => 'Students\StudentCounsellingController@getCounsellingDetails']);
+        
     });
 
 });

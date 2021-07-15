@@ -77,7 +77,7 @@
             </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('Update')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -104,18 +104,6 @@ export default {
         }
     },
     methods: {
-        
-        // loadTeacherList(uri='students/loadTeacherList/'+this.org_id){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         console.log(data);
-        //         this.teacherList =  data.data.data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
         loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
             axios.get(uri)
             .then(response => {

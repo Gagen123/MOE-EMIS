@@ -35,6 +35,21 @@
                     Roles & Responsibilities 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('counselling_type_list')">
+                    <router-link to="/counselling_type_index" id="counselling_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Counselling Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('counselling_age_index')">
+                    <router-link to="/counselling_age_index" id="counselling_age_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Counselling Age Range
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('counselling_class_index')">
+                    <router-link to="/counselling_class_index" id="counselling_class_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Counselling Class Range
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

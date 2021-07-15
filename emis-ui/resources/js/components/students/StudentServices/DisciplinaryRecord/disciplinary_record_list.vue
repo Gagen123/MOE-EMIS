@@ -9,7 +9,7 @@
                     <th >Offence</th>
                     <th >Severity</th>
                     <th >Action Taken</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -28,46 +28,39 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            id:'2',
-            dataList:[], 
+            id:'',
+            dataList:[],
             severityList:{},
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentRecords/'+this.id){
+        
+        loadDataList(org_id){
+            let uri='students/loadStudentRecords/'+org_id
             axios.get(uri)
             .then(response => {
+                // alert(JSON.stringify(response));
                 let data = response;
                 this.dataList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#disciplinary-list-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.severityList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.severityList[data.data.data[i].id] = data.data.data[i].name;
                 }
-                
             })
-            
             .catch(function (error) {
                 console.log("Error......"+error)
             });
@@ -78,7 +71,15 @@ export default {
     },
     mounted(){
         this.loadActiveSeverityList();
-        this.loadDataList();
+        // this.loadDataList();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.loadDataList(data['Agency_Code']);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>

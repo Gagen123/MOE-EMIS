@@ -12,16 +12,34 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <!-- text input -->
                     <div class="form-group">
                         <label>Date:</label>
                         <input type="date" @change="remove_error('date')" class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" name="date" id="date">
                     </div>
                 </div>
             </div>
+            <div class="form-group row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label class="mb-0.5">Change Address For:<i class="text-danger">*</i></label>
+                    <select name="change_for" class="form-control" v-model="student_form.change_for">
+                        <option value="">--- Please Select ---</option>
+                        <option value="Father">Father</option>
+                        <option value="Mother">Mother</option>
+                    </select>
+                    <has-error :form="student_form" field="change_for"></has-error>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="mb-0.5">Work Address:</label>
+                        <textarea @change="remove_error('address')" class="form-control" v-model="student_form.address" :class="{ 'is-invalid': student_form.errors.has('address') }" name="address" id="address"></textarea>
+                        <has-error :form="student_form" field="address"></has-error>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-sm-4">
-                    <!-- text input -->
                     <div class="form-group">
                         <label>Contact:</label>
                         <input type="number" @change="remove_error('contact')" class="form-control" v-model="student_form.contact" :class="{ 'is-invalid': student_form.errors.has('contact') }" name="contact" id="contact">
@@ -68,11 +86,11 @@ export default {
             student_form: new form({
                 id:'',
                 student: '',
-                offence_type: '',
+                change_for: '',
                 date: '',
-                action_taken: '',
-                severity: '',
-                offence_description:'',
+                address: '',
+                email: '',
+                contact:'',
                 remarks:'',
                 record_type:'update_contact',
                 action_type:'add'
@@ -112,7 +130,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/disciplinary_record_list');
+                    this.$router.push('/updated_contact_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -145,9 +163,6 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
-        this.loadActiveSeverityList();
     },
     
 }

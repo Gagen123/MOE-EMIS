@@ -55,13 +55,28 @@ class StudentUpdateController extends Controller{
                 }
             case "update_contact" : {
                     $additional_rules =[
-                        'contact'   =>  'required|min:8|max:8'
+                        'change_for'   =>  'required'
                     ];
                     $additional_messages=[
-                        'contact.required'  => 'This field is required'
+                        'change_for.required'  => 'This field is required'
                     ];
                     $additional_data = [
-                        'contact'   => $request->contact
+                        'change_for'    => $request->change_for,
+                        'address'       => $request->address,
+                        'email'         => $request->email,
+                        'contact'       => $request->contact
+                    ];
+                    break;
+                }
+            case "update_maritial_status" : {
+                    $additional_rules =[
+                        'maritial_status'   =>  'required'
+                    ];
+                    $additional_messages=[
+                        'maritial_status.required'  => 'This field is required'
+                    ];
+                    $additional_data = [
+                        'maritial_status'   => $request->maritial_status
                     ];
                     break;
                 }
@@ -74,6 +89,18 @@ class StudentUpdateController extends Controller{
                     ];
                     $additional_data = [
                         'feeding'   => $request->feeding
+                    ];
+                    break;
+                }
+            case "update_diet" : {
+                    $additional_rules =[
+                        'diet'   =>  'required'
+                    ];
+                    $additional_messages=[
+                        'diet.required'  => 'This field is required'
+                    ];
+                    $additional_data = [
+                        'diet'   => $request->diet
                     ];
                     break;
                 }
@@ -134,14 +161,14 @@ class StudentUpdateController extends Controller{
 
         $data = $data + $additional_data;
 
-
         $response_data= $this->apiService->createData('emis/students/saveStudentUpdates', $data);
         return $response_data;
         
     }
 
     public function loadStudentUpdatesList($param=""){
-        $student_list = $this->apiService->listData('emis/students/loadStudentUpdatesList/'.$param);
+        $org_id = $this->getWrkingAgencyId();
+        $student_list = $this->apiService->listData('emis/students/loadStudentUpdatesList/'.$param.'/'.$org_id);
         return $student_list;
     }
     

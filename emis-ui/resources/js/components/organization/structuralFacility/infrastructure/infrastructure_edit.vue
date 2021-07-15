@@ -339,8 +339,10 @@ export default {
                 let prop=data.facility;
                 let facilityDetails=[];
                 for(let i=0;i<prop.length;i++){
-                    facilityDetails.push({facility:prop[i].facilityTypeId,facilityNo:prop[i].facilityName,
-                    capacity:prop[i].capacity,noOfFacility:prop[i].noOfFacility,
+                    facilityDetails.push({facility:prop[i].facilityTypeId,
+                    facilityNo:prop[i].facilityName,
+                    capacity:prop[i].capacity,
+                    noOfFacility:prop[i].noOfFacility,
                     accessibleDisabled:prop[i].noAccessibleToDisabled,
                     internetConnection:prop[i].noWithInternetConnection});
                 }

@@ -907,21 +907,19 @@ const routes = [
         children:
             [
                 { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+                { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+                { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
             //    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
             //    { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
             //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
             ]
         },
-        { path: '/connectivity_details', name:'connectivity_details', 
-        component: require('./components/organization/general/connectivity/edit_connectivity.vue').default, 
-        children: 
-        [
-            { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-          //  { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
-           { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-        //    { path: '/list_connectivity', name:'ConnectivityList', component: require('./components/organization/general/connectivity/list_connectivity.vue').default },
-        ]    
-      },
+        // { path: '/connectivity_details', name:'connectivity_details',
+        //     component: require('./components/organization/general/connectivity/edit_connectivity.vue').default,
+        //     children:
+        //     [
+        //     ]
+        // },
         { path: '/wash',name:'wash', component: require('./components/organization/structuralFacility/wash.vue').default },
         { path: '/school_feeding',name:'school_feeding', component: require('./components/organization/structuralFacility/school_feeding.vue').default },
         { path: '/eccdfacilities',name:'eccdfacilities', component: require('./components/organization/structuralFacility/eccdFacilities.vue').default },
@@ -966,6 +964,18 @@ const routes = [
         { path: '/list_org_programs', name:'list_org_programs', component: require('./components/organization/general/programs_clubs/list_org_programs.vue').default },
       ]
     },
+
+    //organization subject offering
+    { path: '/subject_offered',
+      component: require('./components/organization/subject_offered/subject_offered_index.vue').default ,
+      children: [
+        { path: '',name:'subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
+        { path: '/add_subject_offered', name:'add_subject_offered', component: require('./components/organization/subject_offered/add_subject_offered.vue').default },
+        { path: '/edit_subject_offered', name:'edit_subject_offered', component: require('./components/organization/subject_offered/edit_subject_offered.vue').default },
+        { path: '/list_subject_offered', name:'list_subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
+      ]
+    },
+
 
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,

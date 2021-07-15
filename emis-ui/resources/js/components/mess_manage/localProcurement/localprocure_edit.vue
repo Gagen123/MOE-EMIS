@@ -2,10 +2,11 @@
     <div>
         <form class="bootbox-form" id="localprocureId">
             <div class="card-body">
+                <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Procurement:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date" 
+                        <label class="">Date of Procurement:<span class="text-danger">*</span></label>
+                        <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
                         v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
                         <has-error :form="form" field="dateOfprocure"></has-error>
                     </div>
@@ -26,53 +27,41 @@
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
                                     <select name="item" id="item" class="form-control " v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
-                                <!--     <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="rice">rice</option>
-                                         <option value="potatoes">potatoes</option>
-                                         <option value="onion">onion</option>
-                                     </select>-->
                                   </td>
-                                  <td>                                
+                                  <td>
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
-                                 <td>                                
+                                 <td>
                                 <select name="unit" id="unit" class="form-control" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                     </select> 
-                                    <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">
-                                         <option value="">---Please Select---</option> 
-                                         <option value="kg">kg</option>
-                                         <option value="litre">litre</option>
-                                         <option value="packet">packet</option>
-                                     </select> -->
+                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                     </select>
                                   </td>
-                                  <td>                                
+                                  <td>
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
                                  </td>
-                                  <td>                                
+                                  <td>
                                       <input type="text" name="remark" class="form-control" v-model="item.remark">
                                   </td>
-                              </tr> 
+                              </tr>
                               <tr>
-                                  <td colspan=7> 
-                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                  <td colspan=7>
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>                                          
+                              </tr>
                           </tbody>
                      </table>
                   </div>
               </div>
-            
+
              <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-             </div> 
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+             </div>
             </div>
         </form>
     </div>
@@ -87,7 +76,7 @@ export default {
             unitList:[],
             local_item: [],
             form: new form({
-                id: '', dateOfprocure: '', 
+                id: '', dateOfprocure: '',
                 local_item:
                 [{
                     item:'',quantity:'',unit:'', amount:'',remark:'',
@@ -110,7 +99,7 @@ export default {
 
         /**
          * method to save data
-         */ 
+         */
         formaction: function(type){
             if(type=="reset"){
                 this.restForm();
@@ -160,7 +149,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -177,41 +166,63 @@ export default {
         addMore: function(){
             this.count++;
             this.form.local_item.push({
-                item:'',quantity:'',unit:'',amount:'',remark:''})    
-        }, 
+                item:'',quantity:'',unit:'',amount:'',remark:''})
+            },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.local_item.length>1){
                 this.count--;
-                this.form.local_item.splice(index,1); 
+                this.form.local_item.splice(index,1);
             }
         },
+        localProcureEditList(locId){
+            this.form.local_item=[];
+            axios.get('mess_manage/localProcureEditList/' +locId)
+            .then((response) =>{
+                let data=response.data.data;
+               // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.dateOfprocure         = data[i].dateOfprocure;
+                    this.form.id                    = data[i].id;
+                    this.form.local_item.push({
+                       item:data[i].item_id,
+                       quantity:data[i].quantity,
+                       unit:data[i].unit_id,
+                       amount:data[i].amount,
+                       remark:data[i].remark
+                    });
+                }
+                this.count=data.length;
+            })
+            .catch((error) =>{
+                console.log("Error:"+error);
+            });
+        }
     },
-    mounted() { 
+    mounted() {
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-      this.loadActiveItemList(); 
-      this.loadActiveUnitList();
-     // this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
-       
+
+
     },
     created() {
-        this.form.id=this.$route.params.data.id;
-        this.form.dateOfprocure = this.$route.params.data.dateOfprocure;
-        this.form.local_item.item = this.$route.params.data.item;
-        this.form.local_item.quantity = this.$route.params.data.quantity;
-        this.form.local_item.unit = this.$route.params.data.unit;
-        this.form.local_item.remarks = this.$route.params.data.remarks;
+        this.localProcureEditList(this.$route.params.data.id);
+        this.loadActiveItemList();
+        this.loadActiveUnitList();
+
+
     }
 }
 </script>
