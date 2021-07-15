@@ -13,7 +13,6 @@ use App\Models\std_admission;
 use App\Models\Students\Std_Students;
 use App\Models\Students\Student;
 use App\Models\Students\StudentRollNumber;
-
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\StudentGuardainDetails;
 class GeneralStudentController extends Controller
