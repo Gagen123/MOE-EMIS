@@ -29,7 +29,7 @@ class StudentHealthController extends Controller
             'date.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'term_id'               => $request->term_id,
@@ -40,7 +40,7 @@ class StudentHealthController extends Controller
             'std_id'                => $request->std_id,
             'std_screened'          => $request->std_screened,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
 
 
@@ -51,7 +51,7 @@ class StudentHealthController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
-        
+
     }
 
     public function loadDewormingRecords($param=""){
@@ -80,7 +80,7 @@ class StudentHealthController extends Controller
             'supplementation_endorsed_by.required'  => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                            => $request->id,
             'term_id'                       => $request->term_id,
@@ -94,12 +94,12 @@ class StudentHealthController extends Controller
             'std_id'                        => $request->std_id,
             'std_screened'                  => $request->std_screened,
             'organization_id'               => $this->getWrkingAgencyId(),
-            'user_id'                       =>  $this->userId() 
+            'user_id'                       =>  $this->userId()
         ];
-       
+
             $response_data= $this->apiService->createData('emis/students/addSupplementationRecords', $data);
             return $response_data;
-        
+
     }
 
     public function loadSupplementationRecords($param=""){
@@ -132,7 +132,7 @@ class StudentHealthController extends Controller
             'std_section.required'              => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'screening'             => $request->screening,
@@ -147,7 +147,7 @@ class StudentHealthController extends Controller
             'std_screened'          => $request->std_screened,
             'std_referred'          => $request->std_referred,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
 
         try{
@@ -220,7 +220,7 @@ class StudentHealthController extends Controller
             'std_section.required'              => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'screening'             => $request->screening,
@@ -235,7 +235,7 @@ class StudentHealthController extends Controller
             'std_screened'          => $request->std_screened,
             'std_referred'          => $request->std_referred,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
 
         try{
@@ -262,7 +262,7 @@ class StudentHealthController extends Controller
             'date.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'term_id'          => $request->term_id,
@@ -275,7 +275,7 @@ class StudentHealthController extends Controller
             'weight'          => $request->weight,
             'remarks'        => $request->remarks,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
 
         try{
@@ -286,7 +286,7 @@ class StudentHealthController extends Controller
             return $e;
         }
     }
-    
+
     public function loadBmiSummary($param=""){
         $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$param);
         return $student_records;
@@ -371,7 +371,7 @@ class StudentHealthController extends Controller
             'std_section.required'              => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'                    => $request->id,
             'vaccination'           => $request->vaccination,
@@ -383,7 +383,7 @@ class StudentHealthController extends Controller
             'std_id'                => $request->std_id,
             'std_vaccinated'        => $request->std_vaccinated,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
 
         try{

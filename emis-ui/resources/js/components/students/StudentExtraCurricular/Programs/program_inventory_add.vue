@@ -245,7 +245,8 @@ export default {
                 organisation_id:'1',
                 inventoryDetails: [],
                 productionDetails: [],
-                expenditureDetails: []
+                expenditureDetails: [],
+                actionType:'add',
             }),
         }
     },
