@@ -12,8 +12,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="required">Item Category:</label>
                     <br>
-                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Local" tabindex="2"  /> Locally Procured Item</label>
-                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Central" tabindex="3" /> Centrally Supplied Item</label>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Local" tabindex="2" @change="getItem()" /> Locally Procured Item</label>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Central" tabindex="3"  @change="getItem()"/> Centrally Supplied Item</label>
                     <br><span id="error_msg" class="text-danger"></span>
                 </div>
                 </div>
@@ -33,7 +33,7 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                   <td>
-                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @change="getquantity('item',index)">
+                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @change="getquantity('item',index), selectunit('item',index)">
                                          <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id">{{ itm.Name }}</option>
                                       </select>
                                   </td>
@@ -41,12 +41,13 @@
                                      {{item.available_qty}}
                                   </td>
                                    <td>                                
-                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
                                  </td>
                                  <td>
-                                    <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                    <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                    </select> 
+                                    </select>  -->
+                                    <span :id="'measurement_unit'+index"></span>
                                   </td>
                                   <td>                                
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
@@ -85,6 +86,7 @@ export default {
             itemList:[],
             unitList:[],
             item_issue: [],
+            unitArray:{},
           //  item:'',
             form: new form({
                 id: '', dateOfissue: '', 
@@ -146,16 +148,16 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-           axios.get(uri)
-           .then(response => {
-               let data = response;
-               this.unitList =  data.data.data;
-           })
-           .catch(function (error) {
-               console.log("Error......"+error)
-           });
-       },
+    //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+    //        axios.get(uri)
+    //        .then(response => {
+    //            let data = response;
+    //            this.unitList =  data.data.data;
+    //        })
+    //        .catch(function (error) {
+    //            console.log("Error......"+error)
+    //        });
+    //    },
 
         /**
          * method to get item in dropdown
@@ -205,7 +207,7 @@ export default {
             let chekva=$("input[type='radio'][name='procuredtype']:checked").val();
             let isvalid=true;
             if(chekva==undefined){
-                $('#error_msg').html('Please selec procurement type');
+                $('#error_msg').html('Please select procurement type');
                 isvalid=false;
             }
             if(isvalid){
@@ -233,6 +235,27 @@ export default {
             else{
                this.loadActiveItemList2();
             }
+        },
+
+        selectunit(type,index){
+            if(type=="item"){
+                let itemval=$('#item'+index).val();
+                $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+            }
+        },
+
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
 
     },

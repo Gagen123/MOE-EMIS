@@ -116,6 +116,16 @@ class StockIssuedController extends Controller
               );
   
            $itemiss = StockIssued::create($itemIssued);
+           $checkitem=TransactionTable::where('item_id',$item['item'])
+               ->where('organizationId',$request['organizationId'])->first();
+                  $qty=$checkitem->available_qty-$item['quantity']-$item['damagequantity'];
+                  $update_data=[
+                    'available_qty' => $qty,
+                    'updated_by'    => $request->user_id,
+                    'updated_at'    =>  date('Y-m-d h:i:s'),
+                  ];
+                 // dd($update_data);
+                  TransactionTable::where('item_id',$item['item'])->update($update_data);  
           }
         //  dd('m here');
         //s   dd('itemIssued'); 
@@ -140,4 +150,5 @@ class StockIssuedController extends Controller
      // dd($response_data);
       return $this->successResponse($response_data);
     }
+
 }

@@ -25,29 +25,19 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item">
+                                    <select name="item" id="item" class="form-control" v-model="item.item" @change="selectunit('item',index)">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
-                                <!--     <select class="form-control editable_fields" id="item"  v-model="item.item">
-                                         <option value="">---Please Select---</option>
-                                         <option value="rice">rice</option>
-                                         <option value="potatoes">potatoes</option>
-                                         <option value="onion">onion</option>
-                                     </select>-->
+                              
                                   </td>
                                   <td>
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
                                  <td>
-                                <select name="unit" id="unit" class="form-control" v-model="item.unit">
+                                <!-- <select name="unit" id="unit" class="form-control" v-model="item.unit">
                                          <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                     </select>
-                                    <!-- <select class="form-control editable_fields" id="unit"  v-model="item.unit">
-                                         <option value="">---Please Select---</option>
-                                         <option value="kg">kg</option>
-                                         <option value="litre">litre</option>
-                                         <option value="packet">packet</option>
                                      </select> -->
+                                    <span :id="'measurement_unit'+index"></span>
                                   </td>
                                   <td>
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
@@ -85,6 +75,7 @@ export default {
             count:1,
             itemList:[],
             unitList:[],
+            unitArray:{},
             local_item: [],
             form: new form({
                 id: '', dateOfprocure: '',
@@ -151,6 +142,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -186,6 +180,12 @@ export default {
              if(this.form.local_item.length>1){
                 this.count--;
                 this.form.local_item.splice(index,1);
+            }
+        },
+        selectunit(type,index){
+            if(type=="item"){
+                let itemval=$('#item'+index).val();
+                $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
             }
         },
     },

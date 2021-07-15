@@ -68,9 +68,10 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
-                    this.itemList[data.data.data[i].id] = data.data.data[i].Name;
+               for(let i=0;i<data.data.length;i++){
+                    this.itemList[data.data[i].id] = data.data[i].Name;
                 }
+               // alert(data.data.length);
             })
             .catch(function (error) {
                 console.log("Error......"+error)
