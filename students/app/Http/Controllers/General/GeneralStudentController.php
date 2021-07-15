@@ -12,13 +12,8 @@ use App\Models\Masters\StudentAwards;
 use App\Models\std_admission;
 use App\Models\Students\Std_Students;
 use App\Models\Students\Student;
-<<<<<<< HEAD
-use App\Models\Students\StudentRollNumber;
-
-=======
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\StudentGuardainDetails;
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
 
 class GeneralStudentController extends Controller
 {
@@ -62,13 +57,8 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         $class_details = explode('__', $id);
-<<<<<<< HEAD
-        
-        $records = DB::table('std_student') 
-=======
 
         $records = DB::table('std_student')
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
