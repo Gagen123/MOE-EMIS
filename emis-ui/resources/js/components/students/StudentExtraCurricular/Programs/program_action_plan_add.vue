@@ -8,17 +8,17 @@
                         <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program"></has-error>
-                </div> 
+                </div>
             </div>
-            <label>Plan for the Period:</label> 
+            <label>Plan for the Period:</label>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>From:<span class="text-danger">*</span></label> 
+                    <label>From:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_err('from_date')" type="date">
                     <has-error :form="student_form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>To:<span class="text-danger">*</span></label> 
+                    <label>To:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_err('to_date')" type="date">
                     <has-error :form="student_form" field="to_date"></has-error>
                 </div>
@@ -30,12 +30,12 @@
                             <thead>
                                 <tr>
                                     <th>Activity</th>
-                                    <th>Description</th>                   
+                                    <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id="record1" v-for='(plan, index) in student_form.action_plan' :key="index">
-                                    <td>                             
+                                    <td>
                                         <input type="text" name="title" id="title" class="form-control" v-model="plan.title" :class="{ 'is-invalid': student_form.errors.has('title') }" @change="remove_err('title')"/>
                                         <has-error :student_form="form" field="title"></has-error>
                                     </td>
@@ -43,15 +43,15 @@
                                         <textarea @change="remove_error('description')" class="form-control" v-model="plan.description" :class="{ 'is-invalid': student_form.errors.has('description') }" name="description" id="description"></textarea>
                                         <has-error :student_form="form" field="description"></has-error>
                                     </td>
-                                </tr> 
+                                </tr>
                                 <tr>
-                                    <td colspan="5"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                    <td colspan="5">
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
-                                </tr>                                          
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -143,10 +143,10 @@ export default {
         /**
          * method to remove fields
          */
-        removeStudents(index){    
+        removeStudents(index){
              if(this.student_form.action_plan.length>1){
                 this.count--;
-                this.student_form.action_plan.splice(index,1); 
+                this.student_form.action_plan.splice(index,1);
             }
         },
         formaction: function(type){
@@ -190,9 +190,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -202,6 +202,6 @@ export default {
         this.loadActiveProgramList();
         this.loadActiveSupportList();
     },
-    
+
 }
 </script>

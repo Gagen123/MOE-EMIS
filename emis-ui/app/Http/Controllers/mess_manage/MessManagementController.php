@@ -272,5 +272,10 @@ class MessManagementController extends Controller
         }
         return $response_data;
     }
-
+    public function getquantity($itemId="", $chekva=""){
+     //  dd($itemId, $chekva );
+        $orgId=$this->getWrkingAgencyId();
+        $list = $this->apiService->listData('emis/messManagement/getquantity/'.$itemId. "/".$chekva. "/".$orgId);
+        return $list;  
+    }
 }

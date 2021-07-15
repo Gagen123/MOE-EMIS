@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\LocalProcure; 
+use App\Models\mess_manage\TransactionTable; 
 use Illuminate\Support\Facades\DB;
 
 class LocalProcureController extends Controller
@@ -56,6 +57,30 @@ class LocalProcureController extends Controller
             );
 
          $localpro = LocalProcure::create($localprocure);
+         $checkitem=TransactionTable::where('item_id',$item['item'])->where('procured_type','Local')->first();
+         if($checkitem!=null && $checkitem!=""){
+                $qty=$item['item']+$checkitem->available_qty;
+
+                $update_data=[
+                    'available_qty' =>  $qty,
+                    'updated_by'    =>  $request->user_id,
+                    'updated_at'    =>  date('Y-m-d h:i:s'),
+                 ];
+                TransactionTable::where('item_id',$item['item'])->where('procured_type','Local')
+                ->where('organizationId',$request->organizationId)->update($update_data);  
+            }
+            else{
+             $create_data=[
+                    'procured_type'        =>  'Local',
+                    'organizationId'       =>  $request->organizationId,
+                    'item_id'              =>  $item['item'],
+                    'available_qty'        =>  $item['quantity'],
+                    'created_by'           =>  $request->user_id,
+                    'created_at'           =>  date('Y-m-d h:i:s'),
+                ];
+               // dd( $create_data);
+              TransactionTable::create($create_data); 
+            }
         }
       //  dd('m here');
       //   dd('localprocure'); 
