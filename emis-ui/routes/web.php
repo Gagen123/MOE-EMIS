@@ -169,7 +169,8 @@ Route::prefix('organization')->group(function () {
     Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
     Route::get('/getStreamByClassId/{classId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getStreamByClassId'])->name('getStreamByClassId');
     Route::get('/getExistingSectionByClass/{classId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getExistingSectionByClass'])->name('getExistingSectionByClass');
-
+    Route::post('/saveSubjectMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSubjectMapping'])->name('saveSubjectMapping');
+    Route::get('/getSubjectMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'getSubjectMapping'])->name('getSubjectMapping');
     Route::post('/saveClassMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveClassMapping'])->name('saveClassMapping');
     Route::get('/loadOrganizationByDzoId/{dzo_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrganizationByDzoId'])->name('loadOrganizationByDzoId');
     Route::get('/getCurrentClassStream/{school_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getCurrentClassStream'])->name('getCurrentClassStream');
@@ -625,7 +626,7 @@ Route::prefix('students')->group(function () {
 
     //for student rollNo
     Route::post('/saveStudentRollNumber', [App\Http\Controllers\common_services\GeneralStudentController::class, 'saveStudentRollNumber'])->name('saveStudentRollNumber');
-    
+
     //Update Student Details Routs
     Route::post('/saveStudentUpdates', [App\Http\Controllers\student\StudentUpdateController::class, 'saveStudentUpdates'])->name('saveStudentUpdates');
     Route::get('/loadStudentUpdatesList/{param}', [App\Http\Controllers\student\StudentUpdateController::class, 'loadStudentUpdatesList'])->name('loadStudentUpdatesList');

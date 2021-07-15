@@ -37,13 +37,13 @@ class GeneralStudentController extends Controller{
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,
-             'roll_no'              => $request->roll_no,
+            //  'roll_no'              => $request->roll_no,
             'studentList'           => $request->studentList,
             'std_referred'          => $request->std_referred,
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId() 
         ];
-        $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber', $data);
+        $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber',$data);
         return $response_data;
 
     }

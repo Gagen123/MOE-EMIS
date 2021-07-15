@@ -81,7 +81,7 @@ Setting up the system administration, and user management:
     chaged the foreign key for cea_programme_inventory_detail and cea_programme_inventory_production from student db;
         -was pointed to cea_programme_item from cea_programme_inventory_item which was not been used that table
 
-
+    created organization_class_subject at organizaiton with fields in model
 
 
 
