@@ -95,7 +95,6 @@ class StudentProjectController extends Controller
 
     public function listStudentProjects($param=""){
         $org_id = $param;
-
         $records = DB::table('cea_project')
                 ->join('cea_project_type', 'cea_project.CeaProjectTypeId', '=', 'cea_project_type.id')
                 ->leftjoin('cea_programme', 'cea_project.CeaProgrammeId', '=', 'cea_programme.id')

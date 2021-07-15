@@ -40,10 +40,8 @@ class StudentScoutController extends Controller
             'EstablishmentYear'           =>  $request->year,
             'Remarks'           =>  $request->remarks
         ];
-
         if($request->action_type=="add"){
             $response_data = CeaSchoolScout::create($data);
-
         } else if($request->action_type=="edit"){
 
             //Audit Trails
@@ -68,7 +66,6 @@ class StudentScoutController extends Controller
     }
 
     public function loadStudentScouts($param=""){
-
         $roles = DB::table('cea_school_scouts')
                 ->join('cea_scouts', 'cea_school_scouts.CeaScoutsId', '=', 'cea_scouts.id')
                 ->select('cea_school_scouts.*', 'cea_scouts.name AS scout_name')
@@ -145,26 +142,30 @@ class StudentScoutController extends Controller
 
     public function loadScoutMembers($orgId="", $user_id=""){
 
-        try{
-            DB::table('cea_scout_membership')
-                ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
-                ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
-                ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_scout_membership.*', 'cea_scout_section.name AS scout_name', 'std_student.name as student_name')
-                ->where('std_student.OrgOrganizationId', $orgId)
-                ->where('cea_scout_membership.created_by', $user_id)
-                ->get();
+        $roles = DB::table('cea_scout_membership')
+                    ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
+                    ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
+                    ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
+                    ->select('cea_scout_membership.*', 'cea_scout_section.name AS scout_name', 'std_student.name as student_name', 
+                                'std_student.student_code as student_code')
+                    ->where('std_student.OrgOrganizationId', $orgId)
+                    ->where('cea_scout_membership.created_by', $user_id)
+                    ->get();
+        return $this->successResponse($roles);
+    }
 
-            } catch(\Illuminate\Database\QueryException $ex){ 
-                dd($ex->getMessage()); 
-                // Note any method of class PDOException can be called on $ex.
-            }
+    /**
+     * list the scout members (in drop down) to award badges
+     */
+
+    public function listScoutMembers($orgId="", $user_id=""){
 
         $roles = DB::table('cea_scout_membership')
                     ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
                     ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
                     ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
-                    ->select('cea_scout_membership.*', 'cea_scout_section.name AS scout_name', 'std_student.name as student_name')
+                    ->select('cea_scout_membership.CeaScoutSectionId', 'std_student.name as student_name', 
+                                'std_student.student_code as student_code','std_student.id as StdStudentId')
                     ->where('std_student.OrgOrganizationId', $orgId)
                     ->where('cea_scout_membership.created_by', $user_id)
                     ->get();

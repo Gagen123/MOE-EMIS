@@ -14,15 +14,15 @@
                 <li class="nav-item pr-1" @click="activatelink('scouts_badge')">
                     <router-link to="/scouts_badge" id="scouts_badge" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Award Scout Proficiency Badge
+                        Scout Proficiency Badge
                     </router-link>
                 </li>
-                <li class="nav-item pr-1" @click="activatelink('scouts_leader')">
+                <!-- <li class="nav-item pr-1" @click="activatelink('scouts_leader')">
                     <router-link to="/scouts_leader" id="scouts_leader" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Scouts Leaders
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>

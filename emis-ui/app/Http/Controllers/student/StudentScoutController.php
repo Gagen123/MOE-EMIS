@@ -19,7 +19,6 @@ class StudentScoutController extends Controller
     }
 
     public function saveStudentScouts(Request $request){
-
         $rules = [
             'scout'       => 'required',
             'year'       => 'required'
@@ -48,7 +47,6 @@ class StudentScoutController extends Controller
 
     public function loadStudentScouts($param=""){
         $param = $this->getWrkingAgencyId();
-
         $student_roles = $this->apiService->listData('emis/students/loadStudentScouts/'.$param);
         return $student_roles;
     }
@@ -97,4 +95,14 @@ class StudentScoutController extends Controller
         return $scout_members;
     }
 
+    /**
+     * list the scout members (in drop down) to award badges
+     */
+
+    public function listScoutMembers(){
+        $orgId = $this->getWrkingAgencyId();
+        $user_id = $this->userId();
+        $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$orgId.'/'.$user_id);
+        return $scout_members;
+    }
 }

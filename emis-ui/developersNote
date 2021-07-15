@@ -76,7 +76,10 @@ Setting up the system administration, and user management:
     2. An additional field in the masters, with an option stating whether its an update or edit
 
     2021-07-13
-    Added Central and Local fields in cea_programme_item in students
+    Added Unit_id, Central and Local fields in cea_programme_item in students
+
+    chaged the foreign key for cea_programme_inventory_detail and cea_programme_inventory_production from student db;
+        -was pointed to cea_programme_item from cea_programme_inventory_item which was not been used that table
 
 
 
