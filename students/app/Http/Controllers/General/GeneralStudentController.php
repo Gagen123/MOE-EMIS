@@ -11,13 +11,8 @@ use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Students\Student;
 use App\Models\Students\StudentRollNumber;
-<<<<<<< HEAD
 
 
-=======
-use App\Models\Students\StudentClassDetails;
-use App\Models\Students\StudentGuardainDetails;
->>>>>>> 42322a3649555cb42804bd0990491e863b9b2f17
 class GeneralStudentController extends Controller
 {
     //
@@ -60,17 +55,13 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         $class_details = explode('__', $id);
-<<<<<<< HEAD
         
         $records = DB::table('std_student') 
-=======
-        $records = DB::table('std_student')
->>>>>>> 42322a3649555cb42804bd0990491e863b9b2f17
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
-                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0])
-                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0]) 
+                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2]) 
                     //->where('academicYear', date('Y'))
                     ->get();
         return $records;
@@ -82,9 +73,8 @@ class GeneralStudentController extends Controller
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
-    //changes incorporated by Tshewang
+//Student rollNumber
     public function saveStudentRollNumber(Request $request){
-<<<<<<< HEAD
         $data =[
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
@@ -147,27 +137,6 @@ class GeneralStudentController extends Controller
     public function loadStudentByClass($class){
         $id = $class;
         
-=======
-        if($request->studentList!=null && $request->studentList!=""){
-            foreach($request->studentList as $details){
-                $rollo_data =[
-                    'id'                        =>  $details['id'],
-                    'roll_no'                   =>  $details['roll_no'],
-                    'organization_id'           =>  $request->organization_id,
-                    'user_id'                   =>  $request->user_id,
-                    'std_class'                 =>  $request->std_class,
-                    'std_stream'                =>  $request->std_stream,
-                    'std_section'               =>  $request->std_section,
-                ];
-                // dd($rollo_data);
-                $request_data = StudentRollNumber::create($rollo_data);
-            }
-        }
-        return $request_data;
-    }
-    public function loadStudentByClass($class){
-        $id = $class;
->>>>>>> 42322a3649555cb42804bd0990491e863b9b2f17
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
