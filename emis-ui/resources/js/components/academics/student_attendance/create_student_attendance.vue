@@ -9,7 +9,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                     <label>Select Class:<span class="text-danger">*</span></label> 
                     <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="remove_err('class_stream_section_id')">
-                        <option selected="selected" value="">---SELECT CLASS---</option>
+                        <option selected="selected" value="">---Select---</option>
                         <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                             {{ item.class_stream_section }}
                         </option>
@@ -40,13 +40,13 @@
                                 </td>
                                 <td>
                                     <div class="form-check">
-                                        <input  v-model="studentList[index].is_present" class="form-check-input" type="checkbox" value="" id="present">
+                                        <input  v-model="studentList[index].is_present" class="form-check-input" type="checkbox" id="present">
                                     </div>
                                 </td>   
                                 <td>
-                                    <div>
-                                        <select class="form-control select2" v-model="studentList[index].remarks_id">
-                                            <option selected="selected" value="">---SELECT---</option>
+                                    <div v-if="item.is_present==0">
+                                        <select class="select2 form-control form-control-sm" v-model="studentList[index].aca_absence_reason_id">
+                                            <option selected="selected" value="">---Select---</option>
                                             <option selected v-for="(item1, index1) in remarkList" :key="index1" :value="item1.id">
                                                 {{ item1.name }}
                                             </option>
@@ -122,7 +122,6 @@ export default {
         },
         getStudents(){
             if($('#class_stream_section_id').val()===''){
-             
                 this.errorMessage = "This field is required"
             }
            let uri = 'academics/getStudentsForAttendance'

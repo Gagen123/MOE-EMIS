@@ -17,8 +17,9 @@ class AcaInstructionalDaysSpecialCase extends Migration
             $table->char('id',36)->primary();
             $table->char('org_id',36)->index();
             $table->char('org_class_id',36)->index();
-            $table->char('org_stream_id',36)->index();
-            $table->char('org_section_id',36)->index();
+            $table->char('org_stream_id',36)->nullable()->index();
+            $table->char('org_section_id',36)->nullable()->index();
+            $table->string('class_stream_section',100);
             $table->char('std_student_id',36)->index();
             $table->char('aca_term_id',36)->index();
             $table->integer('instructional_days')->index();

@@ -75,7 +75,6 @@ class AcademicController extends Controller
     }
     public function getStudentsForAttendance(Request $request){
         $org_id = $this->getWrkingAgencyId();
-
         $uri = 'emis/academics/loadStudentAttendanceDetail/'.$org_id;
 
         $uri .= ('?&org_class_id='.$request->classId.'&attendance_date='.$request->attendance_date);
@@ -95,9 +94,58 @@ class AcademicController extends Controller
            }else {
                 return json_encode([
                     "student"=>$students,
-                    "studentAttendanceDetail"=>$studentAttendanceDetail["data"]["studentAttendanceDetail"]
+                    "studentAttendanceDetail"=>$studentAttendanceDetail["data"]["studentAttendanceDetail"],
                 ]);
            }
+    }
+    public function getAttendanceData(Request $request){
+        $org_id = $this->getWrkingAgencyId();
+        $uri = 'emis/academics/getAttendanceData/'.$org_id;
+
+        $uri .= ('?org_class_id='.$request->classId.'&std_id='.$request->studentId.'&aca_term_id='.$request->termId);
+
+        if($request->streamId !== null){
+            $uri .= (('&org_stream_id='.$request->streamId));
+        }
+        if($request->sectionId !== null){
+            $uri .= (('&org_section_id='.$request->sectionId));
+        }
+        return $this->apiService->listData($uri);
+    }
+    public function getTermsByClass($classId,$streamId=""){
+        $uri = 'emis/academics/getTermsByClass/'.$classId;
+        if($streamId){
+           $uri .= ('/'.$streamId);
+        }
+        $getTerms = $this->apiService->listData($uri);
+        return $getTerms;
+    }
+    public function saveInstrunctionalDays(Request $request){
+        $rules = [
+            'org_class_id' => 'required',
+            'std_student_id' => 'required',
+            'aca_term_id' => 'required',
+            'instructional_days' => 'required',
+            'remarks' => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'std_student_id.required' => 'This field is required',
+            'aca_term_id.required' => 'This field is required',
+            'instructional_days.required' => 'This field is required',
+            'remarks.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $request['org_id'] = $this->getWrkingAgencyId();
+        $data = $request->all();
+
+        $response_data = $this->apiService->createData('emis/academics/saveInstrunctionalDays', $data);
+        return $response_data;
+    }
+    public function getInstrunctionalDays(){
+        $instructional_days_special_case = $this->apiService->listData('emis/academics/getInstrunctionalDays');
+        return $this->successResponse($instructional_days_special_case);
     }
     public function saveSubjectTeacher(Request $request){
         $rules = [

@@ -722,6 +722,11 @@ Route::prefix('academics')->group(function () {
     Route::get('/loadConsolidatedResult', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResult'])->name('loadConsolidatedResult');
     Route::post('/saveConsolidatedResut', [App\Http\Controllers\academics\AcademicController::class, 'saveConsolidatedResut'])->name('saveConsolidatedResut');
     Route::get('/getStudentsForAttendance', [App\Http\Controllers\academics\AcademicController::class, 'getStudentsForAttendance'])->name('getStudentsForAttendance');
+    Route::get('/getAttendanceData', [App\Http\Controllers\academics\AcademicController::class, 'getAttendanceData'])->name('getAttendanceData');
+    Route::get('/getTermsByClass/{classId}/{streamId?}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByClass'])->name('getTermsByClass');
+    Route::post('/saveInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'saveInstrunctionalDays'])->name('saveInstrunctionalDays');
+    Route::get('/getInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'getInstrunctionalDays'])->name('getInstrunctionalDays');
+
 });
 
 

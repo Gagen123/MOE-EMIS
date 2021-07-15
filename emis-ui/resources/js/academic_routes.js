@@ -112,15 +112,15 @@ const routes = [
 
             ]
         },
-    //     { path:'/instructional-days', component:require('./components/academics/student_attendance/student_attendance_index.vue').default,
-    //     children: [
-    //         { path: '', component:require('./components/academics/student_attendance/list_student_attendance.vue').default},
-    //         { path: '/list-student-attendance', name: 'list_student_attendance', component: require('./components/academics/student_attendance/list_student_attendance.vue').default},
-    //         { path: '/create-student-attendance', name: 'create_student_attendance', component: require('./components/academics/student_attendance/create_student_attendance.vue').default },
-    //         { path: '/edit-student-attendance',name:'edit_student_attendance', component:require('./components/academics/student_attendance/edit_student_attendance.vue').default},
+        { path:'/instructional-days-special_case', component:require('./components/academics/instructional_days_special_case/instructional_days_special_case_index.vue').default,
+            children: [
+                { path: '', component:require('./components/academics/instructional_days_special_case/list_instructional_days_special_case.vue').default},
+                { path: '/list-instructional-days-special-case', name: 'list_instructional_days_special_case', component: require('./components/academics/instructional_days_special_case/list_instructional_days_special_case.vue').default},
+                { path: '/create-instructional-days-special-case', name: 'create_instructional_days_special_case', component: require('./components/academics/instructional_days_special_case/create_instructional_days_special_case.vue').default },
+                { path: '/edit-instructional-days-special-case',name:'edit_instructional_days_special_case', component:require('./components/academics/instructional_days_special_case/edit_instructional_days_special_case.vue').default},
 
-    //     ]
-    // },
+            ]
+        },
 
 
     ]

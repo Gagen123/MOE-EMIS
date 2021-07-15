@@ -11,6 +11,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Models\academics\ClassTeacher;
 use App\Models\academics\ClassTeacherHistory;
+use App\Models\academics\InstructionalDaysForSpecialCase;
 use App\Models\academics\SubjectTeacher;
 use App\Models\academics\StudentAssessment;
 use App\Models\academics\ResultConsolidated;
@@ -202,17 +203,21 @@ class AcademicController extends Controller
                 'created_at' => date('Y-m-d h:i:s')
             ];
         $stdAttendance = StudentAttendance::create($attendance);
+        try{
         foreach($request["data"] as $studentAttendance){
             if($studentAttendance['is_present']=="0"){
                 StudentAttendanceDetail::create(
                     ['aca_std_attendance_id' => $stdAttendance->id,
-                    'aca_absence_reason_id' => $studentAttendance['remarks_id'],
+                    'aca_absence_reason_id' => $studentAttendance['aca_absence_reason_id'],
                     'std_student_id' => $studentAttendance['std_student_id'],
                     'created_by' => $request['user_id'],
                     'created_at' => date('Y-m-d h:i:s')]
                 );
             }
         }
+    }catch(Exception $e){
+        dd($e);
+    }
     }
     public function saveStudentAttendance(Request $request){
         $rules = [
@@ -269,7 +274,7 @@ class AcademicController extends Controller
                     'class_stream_section' => $request['class_stream_section'],
                     'attendance_date' => $request['attendance_date'],
                     'std_student_id' => $studentAttendance['std_student_id'],
-                    'aca_absence_reason_id' => $studentAttendance['remarks_id'],
+                    'aca_absence_reason_id' => $studentAttendance['aca_absence_reason_id'],
                     'recorded_for' => "Student Attendance Change",
                     'created_by' => $request['user_id'],
                     'created_at' => date('Y-m-d h:i:s')
@@ -277,6 +282,57 @@ class AcademicController extends Controller
                 StudentAttendanceHistory::create($data);
             }
         }
+    }
+    public function getTermsByClass($classId,$streamId=""){
+        $query = 'SELECT t1.id,t1.name,t1.dzo_name FROM aca_assessment_term t1 
+                    JOIN aca_class_assessment_frequency t2 ON t1.aca_assmt_frequency_id = t2.aca_assmt_frequency_id 
+                 WHERE t2.org_class_id = ?';
+        $param = [$classId];
+        if($streamId){
+           $query.= ' AND t2.org_stream_id';
+           array_push($param,$streamId);
+        }
+        $getTerms = $this->successResponse(DB::select("$query AND t1.status = 1",$param));
+        return $getTerms;
+    }
+    public function saveInstrunctionalDays(Request $request){
+        $rules = [
+            'org_class_id' => 'required',
+            'std_student_id' => 'required',
+            'aca_term_id' => 'required',
+            'instructional_days' => 'required',
+            'remarks' => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'std_student_id.required' => 'This field is required',
+            'aca_term_id.required' => 'This field is required',
+            'instructional_days.required' => 'This field is required',
+            'remarks.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data = [
+            'org_id' => $request['org_id'],
+            'org_class_id' => $request['org_class_id'],
+            'org_stream_id' => $request['org_stream_id'],
+            'org_section_id' => $request['org_section_id'],
+            'class_stream_section' => $request['class_stream_section'],
+            'std_student_id' => $request['std_student_id'],
+            'aca_term_id' => $request['aca_term_id'],
+            'instructional_days' => $request['instructional_days'],
+            'remarks' => $request['remarks'],
+            'created_by' => $request['user_id'],
+            'created_at' => date('Y-m-d h:i:s'),
+        ];
+
+        $response_data= InstructionalDaysForSpecialCase::create($data);
+        return $response_data;
+  
+    }
+    public function getInstrunctionalDays(){
+        $instructional_days_special_case = DB::select('SELECT t1.id,t1.org_id, t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.class_stream_section,t1.std_student_id,t1.aca_term_id,t1.instructional_days,t1.remarks
+            FROM aca_instructional_days_special_case t1 JOIN aca_assessment_term t2 ON t1.aca_term_id = t2.id');
+        return $this->successResponse($instructional_days_special_case);
     }
     public function loadStudentAssessmentList($staffId, $orgId){
         $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
@@ -390,9 +446,29 @@ class AcademicController extends Controller
         $query1 .= ' AND org_section_id = ?';
         array_push($params1, $request->org_section_id);
         }
+
         $studentAttendanceDetail = DB::select($query,$params);
         $hasAttendance = DB::select($query1,$params1);
+
         return $this->successResponse(["studentAttendanceDetail"=>$studentAttendanceDetail,"hasAttendance"=>$hasAttendance]);
+    }
+    public function getAttendanceData($orgId,Request $request){
+        $query = "SELECT COUNT(t1.id) AS no_instructional_days,COUNT(t2.id) AS no_days_absent FROM aca_student_attendance t1 
+            JOIN aca_assessment_term t3 ON t1.attendance_date 
+                BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t3.from_month,2,'0'),'-',LPAD(t3.from_date,2,'0')) 
+                AND CONCAT(YEAR(CURDATE()),'-',LPAD(t3.to_month,2,'0'),'-',LPAD(t3.to_date,2,'0')) 
+            LEFT JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id AND t2.std_student_id = ? WHERE t1.org_id = ? AND t3.id = ? AND t1.org_class_id = ? ";
+            $params = [$request->std_id,$orgId,$request->aca_term_id,$request->org_class_id];
+            if($request->org_stream_id){
+                $query.= ' AND t1.org_stream_id = ?';
+                array_push($params, $request->org_stream_id);
+            }
+            if($request->org_section_id){
+            $query .= ' AND t1.org_section_id = ?';
+                array_push($params, $request->org_section_id);
+            }
+            $absentee = DB::select($query,$params);
+        return $this->successResponse($absentee);
     }
     public function saveStudentAssessment(Request $request,$userId){
         $rules = [
