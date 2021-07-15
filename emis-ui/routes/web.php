@@ -713,6 +713,8 @@ Route::prefix('students')->group(function () {
     Route::post('/saveScoutParticipants', [App\Http\Controllers\student\StudentScoutController::class, 'saveScoutParticipants'])->name('saveScoutParticipants');
     Route::get('/loadScoutMembers/{orgId}', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutMembers'])->name('loadScoutMembers');
     Route::get('/listScoutMembers', [App\Http\Controllers\student\StudentScoutController::class, 'listScoutMembers'])->name('listScoutMembers');
+    Route::post('/saveStudentScoutsBadge', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScoutsBadge'])->name('saveStudentScoutsBadge');
+    Route::get('/loadScoutsBadge', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutsBadge'])->name('loadScoutsBadge');
     //Student Counselling
     Route::post('/saveCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'saveCounsellingInformation'])->name('saveCounsellingInformation');
     Route::get('/loadCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'loadCounsellingInformation'])->name('loadCounsellingInformation');

@@ -8,14 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StudentType extends Model
 {
     use HasFactory, Uuid;
-    protected $table="std_vaccine_type";
+    protected $table="std_student_type";
     public $timestamps = false;
     protected $fillable = [
         'id',
         'Name',
         'Status',
         'Description',
-        'vaccineFor',
         'created_by',
         'created_at',
         'updated_by',

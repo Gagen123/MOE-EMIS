@@ -177,18 +177,6 @@ export default {
                 this.student_form.date='';
             }
             if(type=="save"){
-                this.student_form.std_screened=[];
-                let screenedArray=[];
-                $("input[name='height']:checked").each( function () {
-                    screenedArray.push($(this).val());
-                });
-                this.student_form.std_screened=screenedArray;
-                
-                this.student_form.std_referred=[];
-                let referredArray=[];
-                $("input[name='weight']:checked").each( function () {
-                    referredArray.push($(this).val());
-                });
 
                 this.student_form.class_section_stream = this.studentList;
                 this.student_form.post('/students/saveStudentClassAllocation',this.student_form)
@@ -209,15 +197,6 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
-            if(id=="screening"){
-                this.student_form.screening=$('#screening').val();
-            }
-            if(id=="screening_position"){
-                this.student_form.screening_position=$('#screening_position').val();
-            }
-            if(id=="screening_endorsed_by"){
-                this.student_form.screening_endorsed_by=$('#screening_endorsed_by').val();
             }
             if(id=="std_class"){
                 this.student_form.std_class=$('#std_class').val();
@@ -329,8 +308,6 @@ export default {
             });
         
         this.loadClassList();
-        // this.loadSectionList();
-        // this.loadStreamList();
         this.dt =  $("#allocation-list-table").DataTable()
     },
     watch: {

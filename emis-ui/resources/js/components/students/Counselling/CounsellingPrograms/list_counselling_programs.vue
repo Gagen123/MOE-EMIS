@@ -50,7 +50,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_counselling_records',params: {data:data}});
+            this.$router.push({name:'edit_counselling_programs',params: {data:data}});
         },
     },
     mounted(){
