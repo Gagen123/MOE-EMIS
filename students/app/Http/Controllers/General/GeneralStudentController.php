@@ -82,7 +82,7 @@ class GeneralStudentController extends Controller
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
-
+    //changes incorporated by Tshewang
     public function saveStudentRollNumber(Request $request){
 <<<<<<< HEAD
         $data =[
