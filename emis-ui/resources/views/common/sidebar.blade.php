@@ -539,7 +539,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item" id="studentlist">
-                        <router-link to="/student_list" class="nav-link">
+                        <router-link to="/student_list_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 Student List
