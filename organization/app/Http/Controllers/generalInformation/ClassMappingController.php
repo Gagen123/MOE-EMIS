@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\OrganizationClassStream;
 use App\Models\Masters\ClassStream;
 use App\Models\generalInformation\SectionDetails;
-
+use App\Models\OrganizationClassSubject;
 
 class ClassMappingController extends Controller
 {
@@ -34,7 +34,7 @@ class ClassMappingController extends Controller
         //         'created_by'        => $request->user_id,
         //         'created_at'        => date('Y-m-d h:i:s'),
         //     ];
-            
+
         //     $cla = ClassMapping::create($class);
         // }
         $existclassStream=OrganizationClassStream::where('organizationId',$request->school)->get();
@@ -80,7 +80,7 @@ class ClassMappingController extends Controller
                             }
                         }
                     }
-                } 
+                }
             }
         }
 
@@ -157,6 +157,29 @@ class ClassMappingController extends Controller
                 $class_stream->sectionCount=SectionDetails::where('classSectionId',$class_stream['id'])->count();
             }
         }
+        return $response_data;
+    }
+
+    public function saveSubjectMapping(Request $request){
+        $response_data="";
+        if($request->subjects!=null && $request->subjects!=""){
+            foreach($request->subjects as $key => $sub){
+                $classStream = [
+                    'organizationId'        => $request->org_id,
+                    'classId'               => $request->class_id,
+                    'subjectId'             => $sub,
+                    'created_by'            => $request->user_id,
+                    'created_at'            => date('Y-m-d h:i:s'),
+                ];
+                $response_data= OrganizationClassSubject::create($classStream);
+            }
+        }
+
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+    public function getSubjectMapping($org_id=""){
+        $response_data = OrganizationClassSubject::where('organizationId',$org_id)->get();
         return $response_data;
     }
 

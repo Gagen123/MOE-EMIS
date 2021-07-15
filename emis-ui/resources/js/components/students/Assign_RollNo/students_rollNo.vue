@@ -48,7 +48,7 @@
                                         <td>{{ item.Name}}</td>
                                         <td>{{ item.student_code}}</td>
                                         <td>
-                                        <input type="number" name="roll_no" class="form-control" v-model="student_form.roll_no[index]"/>
+                                            <input type="number" name="roll_no" class="form-control" v-model="item.roll_no"/>
                                         </td>
                                     </tr>
                                 </tbody>
