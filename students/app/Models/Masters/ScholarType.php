@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ScholarType extends Model{
     use HasFactory, Uuid;
-    protected $table="master_student_scholar";
+    protected $table="std_scholarship";
     public $timestamps = false;
     protected $fillable = [
         'id',
         'Name',
+        'SchoolCategory',
+        'Description',
         'Status',
         'created_by', 
         'created_at',

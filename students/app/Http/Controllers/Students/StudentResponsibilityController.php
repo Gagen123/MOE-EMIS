@@ -76,54 +76,10 @@ class StudentResponsibilityController extends Controller
                     'created_by'        => $request->user_id,
                     'created_at'        => date('Y-m-d h:i:s')
                 ];
-                try{
-                    StudentRole::create( $data);
-        
-                    } catch(\Illuminate\Database\QueryException $ex){
-                        dd($ex->getMessage());
-                        // Note any method of class PDOException can be called on $ex.
-                    }
                 $response_data = StudentRole::create( $data);
             }
         }
-        // $rules = [
-        //     'student'       => 'required',
-        //     'role_id'       => 'required'
-        // ];
-        // $customMessages = [
-        //     'student.required'          => 'This field is required',
-        //     'role_id.required'          => 'This field is required'
-        // ];
-        // $this->validate($request, $rules, $customMessages);
-
-        // $record_type = $request['record_type'];
-
-        // $data =[
-        //     'id'                => $request->id,
-        //     'StdStudentId'      =>  $request->student,
-        //     'StdRoleId'         =>  $request->role_id,
-        //     'Remarks'           =>  $request->remarks,
-        //     //'user_id'           => $this->user_id()
-        // ];
-
-        // if($request->action_type=="add"){
-        //     $response_data = StudentRole::create($data);
-
-        // } else if($request->action_type=="edit"){
-
-        //     //Audit Trails
-        //     // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
-        //     // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-
-        //     $app_data = [
-        //         'StdStudentId' => $request['student'],
-        //         'StdRoleId' => $request['role_id'],
-        //         'Remarks' => $request['remarks']
-        //     ];
-        //     $response_data = StudentRole::where('id', $id)->update($ $app_data);
-        //    // StudentRole::where('id', $request['id'])->update($app_data);
-        // }
-        //dd('$app_data');
+        
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }

@@ -9,6 +9,10 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label> 
+                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -30,6 +34,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                description:'',
                 status: 1,
                 record_type:'ScholarType',
                 action_type:'add',

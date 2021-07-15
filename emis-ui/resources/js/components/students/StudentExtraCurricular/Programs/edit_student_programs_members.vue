@@ -39,16 +39,6 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label >Roles:</label><br>
-                        <span v-for="(item, index) in  roleList" :key="index">
-                            <input type="checkbox" :id="'role'+(index)" v-model="student_form.role" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
-                        </span>
-                    </div>
-                </div>
-            </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Update</button>

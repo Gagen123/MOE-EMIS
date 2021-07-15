@@ -50,7 +50,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
         $router->get('/getScoutBadge/{scoutSectionId}','Masters\StudentMasterController@getScoutBadge');
-        
+
         $router->post('/saveValidationcondition', ['uses' => 'Masters\StudentMasterController@saveValidationcondition']);
         $router->get('/loadValidationcondition','Masters\StudentMasterController@loadValidationcondition');
         //Get Scouts Section
@@ -191,6 +191,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveScoutParticipants', ['uses' => 'Students\StudentScoutController@saveScoutParticipants']);
         $router->get('/loadScoutMembers/{orgId}/{user_id}', ['uses' => 'Students\StudentScoutController@loadScoutMembers']);
         $router->get('/listScoutMembers/{orgId}/{user_id}', ['uses' => 'Students\StudentScoutController@listScoutMembers']);
+        $router->post('/saveStudentScoutsBadge', ['uses' => 'Students\StudentScoutController@saveStudentScoutsBadge']);
+        $router->get('/loadScoutsBadge/{orgId}/{user_id}', ['uses' => 'Students\StudentScoutController@loadScoutsBadge']);
 
         $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
