@@ -12,14 +12,10 @@ use App\Models\Masters\StudentAwards;
 use App\Models\std_admission;
 use App\Models\Students\Std_Students;
 use App\Models\Students\Student;
-<<<<<<< HEAD
 use App\Models\Students\StudentRollNumber;
 
-=======
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\StudentGuardainDetails;
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
-
 class GeneralStudentController extends Controller
 {
     //
@@ -62,18 +58,12 @@ class GeneralStudentController extends Controller
     public function loadStudentBySection($param1){
         $id = $param1;
         $class_details = explode('__', $id);
-<<<<<<< HEAD
-        
-        $records = DB::table('std_student') 
-=======
-
         $records = DB::table('std_student')
->>>>>>> 39ab2186619822b52e38115b7de193158be375c4
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
                     'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
-                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0]) 
-                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2]) 
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0])
+                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
                     //->where('academicYear', date('Y'))
                     ->get();
         return $records;
@@ -87,44 +77,25 @@ class GeneralStudentController extends Controller
      */
 
     public function saveStudentRollNumber(Request $request){
-        $data =[
-            'id'                    => $request->id,
-            'std_class'             => $request->std_class,
-            'std_stream'            => $request->std_stream,
-            'std_section'           => $request->std_section,
-            'roll_no'               => $request->roll_no,
-            'studentList'           => $request->studentList,
-            'std_referred'          => $request->std_referred,
-            'organization_id'       => $request->organization_id,
-            'user_id'               => $request->user_id,
-
-        ];
-        // dd($data);
-        $request_data = StudentRollNumber::create($data);
+        if($request->studentList!=null && $request->studentList!=""){
+            foreach($request->studentList as $details){
+                $rollo_data =[
+                    'id'                        =>  $details['id'],
+                    'roll_no'                   =>  $details['roll_no'],
+                    'organization_id'           =>  $request->organization_id,
+                    'user_id'                   =>  $request->user_id,
+                    'std_class'                 =>  $request->std_class,
+                    'std_stream'                =>  $request->std_stream,
+                    'std_section'               =>  $request->std_section,
+                ];
+                // dd($rollo_data);
+                $request_data = StudentRollNumber::create($rollo_data);
+            }
+        }
         return $request_data;
-        // if($request->studentList!=null && $request->studentList!=""){
-        //     foreach($request->studentList[0] as $details){
-        //         $attach =[
-        //             'id'                        =>  $details['id'],
-        //             'student_code'              =>  $details['student_code'],
-        //         ];
-        //         dd($attach);
-        //         ApplicationAttachments::create($attach);
-        //     }
-        // } 
-        // if($request->studentList!=null && $request->studentList!=""){
-        //     foreach($request->studentList as $details){
-        //         $attach =[
-        //             'id'                        =>  $details['id'],
-        //             'student_code'              =>  $details['student_code'],
-        //         ];
-        //         ApplicationAttachments::create($attach);
-        //     }
-        // } 
     }
     public function loadStudentByClass($class){
         $id = $class;
-
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
                     ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
