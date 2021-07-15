@@ -84,7 +84,7 @@ class LoadOrganizationController extends Controller{
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
-                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->select('cl.*', 'c.class','c.displayOrder', 'c.id AS classId')
                 ->where('cl.organizationId',$response_data->id)
                     ->orderBy('c.displayOrder', 'asc')
                 ->get();
