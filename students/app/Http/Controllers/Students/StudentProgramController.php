@@ -372,52 +372,89 @@ class StudentProgramController extends Controller
             'month.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
+        if($request->actionType=="add"){
+            $data =[
+                // 'id'                    => $request->id,
+                'OrgOrganizationId'     => $request->organisation_id,
+                'CeaProgrammeId'        => $request->program,
+                'ForMonth'              => $request->month,
+                'Remarks'               => $request->remarks,
+                // 'inventoryDetails'      => $request->inventoryDetails,
+                // 'productionDetails'     => $request->productionDetails,
+                // 'expenditureDetails'    => $request->expenditureDetails,
+                //'user_id'        => $this->user_id()
+            ];
+            // $inventory_details      = $data['inventoryDetails'];
+            // $production_details     = $data['productionDetails'];
+            // $expenditure_details    = $data['expenditureDetails'];
 
-        $data =[
-            'id'                    => $request->id,
-            'OrgOrganizationId'     => $request->organisation_id,
-            'CeaProgrammeId'        => $request->program,
-            'ForMonth'              => $request->month,
-            'Remarks'               => $request->remarks,
-            // 'inventoryDetails'      => $request->inventoryDetails,
-            // 'productionDetails'     => $request->productionDetails,
-            // 'expenditureDetails'    => $request->expenditureDetails,
-            //'user_id'        => $this->user_id()
-        ];
-        // $inventory_details      = $data['inventoryDetails'];
-        // $production_details     = $data['productionDetails'];
-        // $expenditure_details    = $data['expenditureDetails'];
+            // unset($data['inventoryDetails']);
+            // unset($data['productionDetails']);
+            // unset($data['expenditureDetails']);
+            $response = CeaProgramInventory::create($data);
+            $lastInsertId = $response->id;
+            foreach($request->inventoryDetails as $key => $value){
+                $inventory_data['CeaProgrammeInventoryId'] = $lastInsertId;
+                $inventory_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_id'])[0];
+                $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
+                $inventory_data['PreviousQty'] = $value['previous_balance'];
+                $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
+                $inventory_data['Remarks'] = $value['remarks'];
+                CeaProgramInventoryDetail::create($inventory_data);
+            }
 
-        // unset($data['inventoryDetails']);
-        // unset($data['productionDetails']);
-        // unset($data['expenditureDetails']);
-        $response = CeaProgramInventory::create($data);
-        $lastInsertId = $response->id;
-        foreach($request->inventoryDetails as $key => $value){
-            $inventory_data['CeaProgrammeInventoryId'] = $lastInsertId;
-            $inventory_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_id'])[0];
-            $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
-            $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
-            $inventory_data['Remarks'] = $value['remarks'];
-            // dd($inventory_data);
-            CeaProgramInventoryDetail::create($inventory_data);
+            foreach($request->productionDetails as $key => $value){
+                $production_data['CeaProgrammeInventoryId'] = $lastInsertId;
+                $production_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_produced'])[0];
+                $production_data['QuantityProduced'] = $value['quantity_produced'];
+                $production_data['NoOfVariety'] = $value['no_varieties'];
+                $production_data['AmountGenerated'] = $value['amount_generated'];
+                $production_data['Remarks'] = $value['production_remarks'];
+                CeaProgramInventoryProduction::create($production_data);
+            }
+            foreach($request->expenditureDetails as $key => $value){
+                $expenditure_data['CeaProgrammeInventoryId'] = $lastInsertId;
+                $expenditure_data['Particular'] = $value['expenditure_details'];
+                $expenditure_data['Amount'] = $value['expenditure_amount'];
+                $expenditure_data['Remarks'] = $value['expenditure_remarks'];
+                $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
+            }
         }
-
-        foreach($request->productionDetails as $key => $value){
-            $production_data['CeaProgrammeInventoryId'] = $lastInsertId;
-            $production_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_produced'])[0];
-            $production_data['QuantityProduced'] = $value['quantity_produced'];
-            $production_data['NoOfVariety'] = $value['no_varieties'];
-            $production_data['AmountGenerated'] = $value['amount_generated'];
-            $production_data['Remarks'] = $value['production_remarks'];
-            CeaProgramInventoryProduction::create($production_data);
-        }
-        foreach($request->expenditureDetails as $key => $value){
-            $expenditure_data['CeaProgrammeInventoryId'] = $lastInsertId;
-            $expenditure_data['Particular'] = $value['expenditure_details'];
-            $expenditure_data['Amount'] = $value['expenditure_amount'];
-            $expenditure_data['Remarks'] = $value['expenditure_remarks'];
-            $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
+        if($request->actionType=="edit"){
+            $data =[
+                'CeaProgrammeId'        => $request->program,
+                'ForMonth'              => $request->month,
+                'Remarks'               => $request->remarks,
+            ];
+            $response = CeaProgramInventory::where('id',$request->id)->update($data);
+            CeaProgramInventoryDetail::where('CeaProgrammeInventoryId',$request->id)->delete();
+            foreach($request->inventoryDetails as $key => $value){
+                $inventory_data['CeaProgrammeInventoryId'] = $request->id;
+                $inventory_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_id'])[0];
+                $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
+                $inventory_data['PreviousQty'] = $value['previous_balance'];
+                $inventory_data['DecreaseInQuantity'] = $value['decrease_quantity'];
+                $inventory_data['Remarks'] = $value['remarks'];
+                CeaProgramInventoryDetail::create($inventory_data);
+            }
+            CeaProgramInventoryProduction::where('CeaProgrammeInventoryId',$request->id)->delete();
+            foreach($request->productionDetails as $key => $value){
+                $production_data['CeaProgrammeInventoryId'] = $request->id;
+                $production_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_produced'])[0];
+                $production_data['QuantityProduced'] = $value['quantity_produced'];
+                $production_data['NoOfVariety'] = $value['no_varieties'];
+                $production_data['AmountGenerated'] = $value['amount_generated'];
+                $production_data['Remarks'] = $value['production_remarks'];
+                CeaProgramInventoryProduction::create($production_data);
+            }
+            CeaProgramInventoryExpenditure::where('CeaProgrammeInventoryId',$request->id)->delete();
+            foreach($request->expenditureDetails as $key => $value){
+                $expenditure_data['CeaProgrammeInventoryId'] = $request->id;
+                $expenditure_data['Particular'] = $value['expenditure_details'];
+                $expenditure_data['Amount'] = $value['expenditure_amount'];
+                $expenditure_data['Remarks'] = $value['expenditure_remarks'];
+                $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
+            }
         }
         //dd( $data);
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
@@ -437,6 +474,24 @@ class StudentProgramController extends Controller
 
         return $this->successResponse($records);
     }
+    public function loadInventoryDetials($param=""){
+
+        $records =CeaProgramInventory::where('id',$param)->first();
+        $CeaProgramInventoryDetail=CeaProgramInventoryDetail::where('CeaProgrammeInventoryId',$param)->get();
+        if($CeaProgramInventoryDetail!=null && $CeaProgramInventoryDetail!=""){
+            $records->details=$CeaProgramInventoryDetail;
+        }
+        $CeaProgramInventoryProduction=CeaProgramInventoryProduction::where('CeaProgrammeInventoryId',$param)->get();
+        if($CeaProgramInventoryProduction!=null && $CeaProgramInventoryProduction!=""){
+            $records->production=$CeaProgramInventoryProduction;
+        }
+        $CeaProgramInventoryExpenditure=CeaProgramInventoryExpenditure::where('CeaProgrammeInventoryId',$param)->get();
+        if($CeaProgramInventoryExpenditure!=null && $CeaProgramInventoryExpenditure!=""){
+            $records->expenditure=$CeaProgramInventoryExpenditure;
+        }
+        return $this->successResponse($records);
+    }
+
 
     /*
     * Save Program Action Plan
@@ -456,32 +511,45 @@ class StudentProgramController extends Controller
             'to_date.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
-        $data =[
-            'id'                    => $request->id,
-            'OrgOrganizationId'       => 1,
-            'CeaProgrammeId'               => $request->program,
-            'FromDate'             => $request->from_date,
-            'ToDate'               => $request->to_date,
-            'action_plan'           => $request->action_plan
-
-            //'user_id'        => $this->user_id()
-        ];
-
-        $action_plan_details = $data['action_plan'];
-
-        unset($data['action_plan']);
-
-        $response = CeaProgramActionPlan::create($data);
-        $lastInsertId = $response->id;
-
-        foreach($action_plan_details as $key => $value){
-            $action_plan_data['CeaProgrammeActionPlanId'] = $lastInsertId;
-            $action_plan_data['Title'] = $value['title'];
-            $action_plan_data['Description'] = $value['description'];
-
-            $plan_response = CeaProgramActionPlanDetail::create($action_plan_data);
+        if($request->id!=""){
+            // $data =[
+            //     'OrgOrganizationId'       => 1,
+            //     'CeaProgrammeId'               => $request->program,
+            //     'FromDate'             => $request->from_date,
+            //     'ToDate'               => $request->to_date,
+            //     'action_plan'           => $request->action_plan
+            // ];
+            // $action_plan_details = $data['action_plan'];
+            // unset($data['action_plan']);
+            // $response = CeaProgramActionPlan::where('id',$request->id)->udpate($data);
+            foreach($request->action_plan as $key => $value){//will be only one record as add more is disabled at ui
+                $action_plan_data['Title'] = $value['title'];
+                $action_plan_data['Description'] = $value['description'];
+                $plan_response = CeaProgramActionPlanDetail::where('id',$request->id)->update($action_plan_data);
+            }
+            $det=CeaProgramActionPlanDetail::where('id',$request->id)->first();
         }
+        else{
+            $data =[
+                'id'                    => $request->id,
+                'OrgOrganizationId'       => 1,
+                'CeaProgrammeId'               => $request->program,
+                'FromDate'             => $request->from_date,
+                'ToDate'               => $request->to_date,
+                'action_plan'           => $request->action_plan
+            ];
+            $action_plan_details = $data['action_plan'];
+            unset($data['action_plan']);
+            $response = CeaProgramActionPlan::create($data);
+            $lastInsertId = $response->id;
+            foreach($action_plan_details as $key => $value){
+                $action_plan_data['CeaProgrammeActionPlanId'] = $lastInsertId;
+                $action_plan_data['Title'] = $value['title'];
+                $action_plan_data['Description'] = $value['description'];
+                $plan_response = CeaProgramActionPlanDetail::create($action_plan_data);
+            }
+        }
+
 
         return $this->successResponse($plan_response, Response::HTTP_CREATED);
     }
