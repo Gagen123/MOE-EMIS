@@ -41,7 +41,7 @@
                                      {{item.available_qty}}
                                   </td>
                                    <td>                                
-                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
+                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" @onchnage="validatefield()"/>
                                  </td>
                                  <td>
                                     <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
@@ -257,6 +257,10 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        // validatefield(qty){
+        //     if(qty)
+
+        // }
 
     },
     mounted() { 
