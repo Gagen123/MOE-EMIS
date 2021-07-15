@@ -70,6 +70,8 @@ Setting up the system administration, and user management:
 
     Student Health Supplementation and related tables changed
 
+    stdType added to std_student
+
 
     *********************SOME TO DO FOR THE FUTURE*********************************
     1. Data table partition to take care of academic year

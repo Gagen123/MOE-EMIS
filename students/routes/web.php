@@ -115,6 +115,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         
         $router->get('/loadStudentBySectionForRollNumber/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySectionForRollNumber']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
+        $router->get('/loadStudentByType/{type}/{class_id}', ['uses' => 'General\GeneralStudentController@loadStudentByType']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
         $router->get('/studentListByGender/{data}', ['uses' => 'General\GeneralStudentController@studentListByGender']);
         //for profile
