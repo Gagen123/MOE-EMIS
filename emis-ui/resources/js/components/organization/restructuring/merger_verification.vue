@@ -699,7 +699,6 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                alert(this.gewogArray[gewogId]);
                 this.selected_gewog=this.gewogArray[gewogId];
             })
             .catch(function (error) {

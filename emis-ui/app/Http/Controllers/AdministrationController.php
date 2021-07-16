@@ -1134,9 +1134,9 @@ class AdministrationController extends Controller{
     }
     public function getpersonbycid($cid){
         $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
-        if ($person->citizenDetailsResponse) {
-            $response_data = $person->citizenDetailsResponse;
-            return  response()->json($response_data);
+        if($person->data->hasdata){
+            $response_data = $person->data->citizenDetail;
+            return  $response_data;
         }else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }

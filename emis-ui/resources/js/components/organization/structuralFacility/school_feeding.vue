@@ -552,7 +552,7 @@ export default {
         },
         loadQuestionList(param){
             this.questionList=[];
-            axios.get('questionAnswers/loadQuestionaries/washAndOthers_'+param+'_Question')
+            axios.get('questionAnswerController/loadQuestionaries/washAndOthers_'+param+'_Question')
             .then(response => {
                 let data = response.data.data;
                 if(param=="Kitchen"){
