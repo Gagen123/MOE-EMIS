@@ -257,7 +257,8 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        // validatefield(qty){
+        // validatefield(){
+        //     let $qty = 
         //     if(qty)
 
         // }
