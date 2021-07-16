@@ -27,7 +27,7 @@ class StudentCounsellingController extends Controller
                     ->join('std_counselling_type', 'std_counselling_records.counselling_type', '=', 'std_counselling_type.id')
                     ->join('std_counselling_class_range', 'std_counselling_records.class_range', '=', 'std_counselling_class_range.id')
                     ->join('std_counselling_age_range', 'std_counselling_records.age_range', '=', 'std_counselling_age_range.id')
-                    ->select('std_counselling_records.*', 'std_counselling_type.name as counselling_type', 
+                    ->select('std_counselling_records.*', 'std_counselling_type.name as counselling_name', 
                                 'std_counselling_class_range.name as ClassRange', 'std_counselling_age_range.name as AgeRange')
                     ->where('organizationId', $orgId)
                     ->get();

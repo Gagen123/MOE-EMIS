@@ -6,9 +6,6 @@
                     <th >SL#</th>
                     <th >Student Name</th>
                     <th >Student Code</th>
-                    <th >Offence</th>
-                    <th >Severity</th>
-                    <th >Action Taken</th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -16,10 +13,7 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ item.offence_type}}</td>
-                    <td>{{ item.severity}}</td>
-                    <td>{{ item.action_type}}</td>
+                    <td>{{ item.student_code}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

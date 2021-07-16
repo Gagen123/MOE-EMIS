@@ -77,11 +77,14 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
-            $response_data->level=Level::where('id',$response_data->levelId)->first();
+            if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!=""){
+                $response_data->level=Level::where('id',$response_data->levelId)->first();
+            }
+
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
-                ->select('cl.*', 'c.class', 'c.id AS classId')
+                ->select('cl.*', 'c.class','c.displayOrder', 'c.id AS classId')
                 ->where('cl.organizationId',$response_data->id)
                     ->orderBy('c.displayOrder', 'asc')
                 ->get();

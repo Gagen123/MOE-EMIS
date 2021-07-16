@@ -76,6 +76,15 @@ class GeneralStudentController extends Controller{
     }
 
     /**
+     * load student list by type (i.e. Regular, CE etc)
+     */
+
+    public function loadStudentByType($type="", $class_id=""){
+        $student_list = $this->apiService->listData('emis/students/loadStudentByType/'.$type.'/'.$class_id);
+        return $student_list;
+    }
+
+    /**
      * Load student list by gender
      * 
      * Takes class, stream, section and vaccine type as parameter separated by __ (double underscore)

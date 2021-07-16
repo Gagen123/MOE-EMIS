@@ -329,10 +329,17 @@ const routes = [
 { path: '/student_sen_list',name:'student_sen_list', component: require('./components/students/Sen/sen_student_list.vue').default },
 { path: '/sen_questions',name:'sen_questions', component: require('./components/students/Sen/sen_question.vue').default },
 
-    //Student List and Profile Related Routes
+    //Student Profile
     { path: '/student_profile',name:'student_profile', component: require('./components/students/General/student_profile.vue').default },
-    { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
+    // { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
 
+    //Student List
+    { path: '/student_list_index', component: require('./components/students/General/student_list_index.vue').default,
+        children: [
+            { path: '/', name:'regular_student_list', component: require('./components/students/General/Regular/student_list.vue').default },
+            { path: '/ce_student_list', name:'ce_student_list', component: require('./components/students/General/CE/ce_student_list.vue').default},
+        ]
+    },
    
 
     //Student Admission Related Routes

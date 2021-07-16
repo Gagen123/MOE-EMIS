@@ -617,6 +617,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadBasicStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadBasicStudentList'])->name('loadBasicStudentList');
     Route::get('/loadStudentByClass/{class}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByClass'])->name('loadStudentByClass');
     Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
+    Route::get('/loadStudentByType/{type}/{class_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByType'])->name('loadStudentByType');
     Route::get('/studentListByGender/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'studentListByGender'])->name('studentListByGender');
     //for profile
     Route::get('/getStudentDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentDetails'])->name('getStudentDetails');
@@ -713,6 +714,8 @@ Route::prefix('students')->group(function () {
     Route::post('/saveScoutParticipants', [App\Http\Controllers\student\StudentScoutController::class, 'saveScoutParticipants'])->name('saveScoutParticipants');
     Route::get('/loadScoutMembers/{orgId}', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutMembers'])->name('loadScoutMembers');
     Route::get('/listScoutMembers', [App\Http\Controllers\student\StudentScoutController::class, 'listScoutMembers'])->name('listScoutMembers');
+    Route::post('/saveStudentScoutsBadge', [App\Http\Controllers\student\StudentScoutController::class, 'saveStudentScoutsBadge'])->name('saveStudentScoutsBadge');
+    Route::get('/loadScoutsBadge', [App\Http\Controllers\student\StudentScoutController::class, 'loadScoutsBadge'])->name('loadScoutsBadge');
     //Student Counselling
     Route::post('/saveCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'saveCounsellingInformation'])->name('saveCounsellingInformation');
     Route::get('/loadCounsellingInformation', [App\Http\Controllers\student\StudentCounsellingController::class, 'loadCounsellingInformation'])->name('loadCounsellingInformation');

@@ -5,7 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Student Name</th>
-                    <th >Class</th>
+                    <th >Student Code</th>
                     <th >Award</th>
                     <th >Award Date</th>
                     <th >Awarded By</th>
@@ -16,7 +16,7 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
+                    <td>{{ item.student_code}}</td>
                     <td>{{ item.award_name}}</td>
                     <td>{{ item.AwardDate}}</td>
                     <td>{{ item.AwardedBy}}</td>

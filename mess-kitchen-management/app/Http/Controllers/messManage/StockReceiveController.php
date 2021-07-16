@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
-use App\Models\mess_manage\StockReceived; 
-use App\Models\mess_manage\StockReceivedItem; 
-use App\Models\mess_manage\TransactionTable; 
+use App\Models\mess_manage\StockReceived;
+use App\Models\mess_manage\StockReceivedItem;
+use App\Models\mess_manage\TransactionTable;
 use Illuminate\Support\Facades\DB;
 
 class StockReceiveController extends Controller
@@ -40,14 +40,14 @@ class StockReceiveController extends Controller
                         'stockreceivedId'               =>  $request->id,
                         'item_id'                       =>  $facility['item'],
                         'receivedquantity'              =>  $facility['quantity'],
-                        'unit_id'                       =>  $facility['unit'],
+                        // 'unit_id'                       =>  $facility['unit'],
                         'remarks'                       =>  $facility['remarks'],
                         'updated_by'                    =>  $request->user_id,
                         'created_at'                    =>  date('Y-m-d h:i:s')
                     );
                     $stcrcv = StockReceivedItem::create($receiveditem);
                 }
-            return $this->successResponse($infra, Response::HTTP_CREATED);
+            return $this->successResponse($stcrcv, Response::HTTP_CREATED);
 
         }else{
             $stockreceive = [
@@ -70,7 +70,7 @@ class StockReceiveController extends Controller
                     'stockreceivedId'              =>  $stockreceivedId,
                     'item_id'                      =>  $facility['item'],
                     'receivedquantity'             =>  $facility['quantity'],
-                    'unit_id'                      =>  $facility['unit'],
+                    // 'unit_id'                      =>  $facility['unit'],
                     'remarks'                      =>  $facility['remarks'],
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
@@ -88,7 +88,7 @@ class StockReceiveController extends Controller
                         'updated_by'    =>$request->user_id,
                         'updated_at'    =>  date('Y-m-d h:i:s'),
                     ];
-                    TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->update($update_data);  
+                    TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')->update($update_data);
                 }
                 else{
                     $create_data=[
@@ -100,8 +100,8 @@ class StockReceiveController extends Controller
                         'created_at'     =>  date('Y-m-d h:i:s'),
                     ];
                  //   dd($create_data);
-                    TransactionTable::create($create_data); 
-                    
+                    TransactionTable::create($create_data);
+
                 }
 
             }

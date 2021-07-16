@@ -97,13 +97,13 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveStudentScouts',this.student_form)
+                this.student_form.post('/students/saveStudentScoutsBadge',this.student_form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_scouts_list');
+                    this.$router.push('/scouts_badge_list');
                 })
                 .catch(() => {
                     console.log("Error......")

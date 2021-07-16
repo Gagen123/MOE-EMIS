@@ -34,7 +34,7 @@ class StockIssuedController extends Controller
         // //     $stockissue = array(
         // //      'organizationId'            =>  $orgId,
         // //      'dateOfissue'               =>  $request['dateOfissue'];
-             
+
         // //      'item'                      =>  $item['item'],
         // //      'quantity'                  =>  $item['quantity'],
         // //      'unit'                      =>  $item['unit'],
@@ -49,7 +49,7 @@ class StockIssuedController extends Controller
         //  $stckiss = StockIssued::create($item);
         //   // dd('stockissue');
         // }
-        //  //  dd('m here'); 
+        //  //  dd('m here');
               //  dd('m here');
     //     $orgId = $request['organizationId'];
     //     $date = $request['dateOfissue'];
@@ -69,8 +69,8 @@ class StockIssuedController extends Controller
     //      $itemiss = StockIssued::create($itemIssued);
     //     }
     //   //  dd('m here');
-    //  //    dd('localprocure'); 
-    //     return $this->successResponse($itemiss, Response::HTTP_CREATED);  
+    //  //    dd('localprocure');
+    //     return $this->successResponse($itemiss, Response::HTTP_CREATED);
     //    // return $this->successResponse($item, Response::HTTP_CREATED);
     // }
 
@@ -88,13 +88,13 @@ class StockIssuedController extends Controller
                'id'                         =>  $id,
                'item_id'                    =>  $item['item'],
                'quantity'                   =>  $item['quantity'],
-               'unit_id'                    =>  $item['unit'],
+            //    'unit_id'                    =>  $item['unit'],
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
               );
-  
+
               $itemiss = StockIssued::create($itemIssued);
             }
            return $this->successResponse($itemiss,Response::HTTP_CREATED);
@@ -108,13 +108,13 @@ class StockIssuedController extends Controller
                'dateOfissue'                =>  $date,
                'item_id'                    =>  $item['item'],
                'quantity'                   =>  $item['quantity'],
-               'unit_id'                    =>  $item['unit'],
+            //    'unit_id'                    =>  $item['unit'],
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
               );
-  
+
            $itemiss = StockIssued::create($itemIssued);
            $checkitem=TransactionTable::where('item_id',$item['item'])
                ->where('organizationId',$request['organizationId'])->first();
@@ -125,11 +125,11 @@ class StockIssuedController extends Controller
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                   ];
                  // dd($update_data);
-                  TransactionTable::where('item_id',$item['item'])->update($update_data);  
+                  TransactionTable::where('item_id',$item['item'])->update($update_data);
           }
         //  dd('m here');
-        //s   dd('itemIssued'); 
-        return $this->successResponse($itemiss, Response::HTTP_CREATED);  
+        //s   dd('itemIssued');
+        return $this->successResponse($itemiss, Response::HTTP_CREATED);
       }
     }
     public function loadStockIssuedList($orgId=""){
@@ -142,7 +142,7 @@ class StockIssuedController extends Controller
         $response_data=StockIssued::where('id', $lssId)->get();
         return $this->successResponse($response_data);
     }
-    public function getquantity($itemId="", $chekva="", $orgId=""){ 
+    public function getquantity($itemId="", $chekva="", $orgId=""){
      // dd( $orgId,$itemId,$chekva  );
       $response_data=TransactionTable::where('item_id', $itemId)
       ->where('procured_type',$chekva)
