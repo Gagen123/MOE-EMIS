@@ -8,12 +8,10 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentHealthScreening;
-use App\Models\Students\StudentHealthDeworming;
 use App\Models\Students\StudentHealthSupplementation;
 use App\Models\Students\StudentHealthVaccination;
 use App\Models\Students\StudentSupplementation;
 use App\Models\Students\StudentVaccination;
-use App\Models\Students\StudentDeworming;
 use App\Models\Students\StudentScreening;
 use App\Models\Students\StudentBmi;
 use App\Models\Students\CeaRoleStaff;
@@ -29,94 +27,43 @@ class StudentHealthController extends Controller
     }
 
     /**
-     * method to save or update student deworming
-    */
+     * Function kept for future reference
+     * 
+     * Nice way to count records
+     */
 
-    public function addDewormingRecords(Request $request){
+    // public function loadDewormingRecords($param=""){
 
-        $rules = [
-            'term_id'            => 'required',
-            'date'               => 'required',
-            'std_class'             => 'required',
-            'std_section'           => 'required',
-        ];
+    //     $id =$param;
 
-        $customMessages = [
-            'term_id.required'  => 'This field is required',
-            'date.required'     => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
+    //     $records = DB::table('std_health_deworming')
+    //                 ->select('std_health_deworming.id', 'std_health_deworming.StdHealthTermId','std_health_deworming.date',
+    //                             'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId', 'std_health_term.name AS term')
+    //                 ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
+    //                 ->leftjoin('std_student_deworming', 'std_health_deworming.id', '=', 'std_student_deworming.StdHealthDewormingId')
+    //                 ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_deworming.section')
+    //                 ->groupBy('std_student_class_stream.SectionDetailsId', 'std_health_deworming.date', 'std_student_class_stream.SectionDetailsId')
+    //                 ->get();
 
-        $data =[
-            'id'                    => $request->id,
-            'StdHealthTermId'       => $request->term_id,
-            'date'                  => $request->date,
-            'class'                 => $request->std_class,
-            'section'               => $request->std_section,
-            'stream'                => $request->std_stream,
-            'std_id'                => $request->std_id,
-            'std_screened'          => $request->std_screened
-        ];
-
-        $std_ids = $data['std_id'];
-        $std_screened = $data['std_screened'];
-
-        unset($data['std_id']);
-        unset($data['std_screened']);
-
-        $response_data = StudentHealthDeworming::create($data);
-        $lastInsertId = $response_data->id;
-
-        //insert students that are not given
-        foreach($std_screened as $key => $value){
-            $data = [
-                'StdHealthDewormingId'  => $lastInsertId,
-                'StdStudentId'          => $value,
-                'status'                => 'Not Given'
-            ];
-            StudentDeworming::create($data);
-        }
-
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-
-    }
-
-    /**
-     * method to list students deworming records
-    */
-
-    public function loadDewormingRecords($param=""){
-
-        $id =$param;
-
-        $records = DB::table('std_health_deworming')
-                    ->select('std_health_deworming.id', 'std_health_deworming.StdHealthTermId','std_health_deworming.date',
-                                'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId', 'std_health_term.name AS term')
-                    ->join('std_health_term', 'std_health_deworming.StdHealthTermId', '=', 'std_health_term.id')
-                    ->leftjoin('std_student_deworming', 'std_health_deworming.id', '=', 'std_student_deworming.StdHealthDewormingId')
-                    ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_deworming.section')
-                    ->groupBy('std_student_class_stream.SectionDetailsId', 'std_health_deworming.date', 'std_student_class_stream.SectionDetailsId')
-                    ->get();
-
-        for($i=0; $i<sizeof($records); $i++){
-            $not_given = DB::table("std_student_deworming")
-                        ->select( DB::raw("COUNT(CASE WHEN std_student_deworming.status = 'Not Given' THEN 1 END) as not_given"))
-                        ->where('StdHealthDewormingId', $records[$i]->id)
-                        ->get();
+    //     for($i=0; $i<sizeof($records); $i++){
+    //         $not_given = DB::table("std_student_deworming")
+    //                     ->select( DB::raw("COUNT(CASE WHEN std_student_deworming.status = 'Not Given' THEN 1 END) as not_given"))
+    //                     ->where('StdHealthDewormingId', $records[$i]->id)
+    //                     ->get();
 
 
-            $total_student = DB::table("std_student_class_stream")
-                            ->select( DB::raw("COUNT(std_student_class_stream.SectionDetailsId) as total_student"))
-                            ->where('SectionDetailsId', $records[$i]->SectionDetailsId)
-                            ->get();
+    //         $total_student = DB::table("std_student_class_stream")
+    //                         ->select( DB::raw("COUNT(std_student_class_stream.SectionDetailsId) as total_student"))
+    //                         ->where('SectionDetailsId', $records[$i]->SectionDetailsId)
+    //                         ->get();
 
-            $records[$i]->not_given = $not_given[0]->not_given;
-            $records[$i]->total_student = $total_student[0]->total_student;
-        }
+    //         $records[$i]->not_given = $not_given[0]->not_given;
+    //         $records[$i]->total_student = $total_student[0]->total_student;
+    //     }
 
-        return $this->successResponse($records);
+    //     return $this->successResponse($records);
 
-    }
+    // }
 
 
     /**
@@ -423,6 +370,27 @@ class StudentHealthController extends Controller
         return $this->successResponse($records); 
     }
 
+    /**
+     * Load the health supplementation details of an individual student
+     * The is health supplementation id and student id separated by __ (double underscore)
+     */
+
+    public function getSupplementationDetails($id=''){
+        $param_details = explode('__', $id);
+
+        $records = DB::table('std_health_supplementation')
+                    ->select('std_health_supplementation.*', 'std_student_health_supplementation.status as given','std_student.id AS StdStudentId',
+                            'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
+                    ->leftjoin('std_student_class_stream', 'std_health_supplementation.section', '=', 'std_student_class_stream.SectionDetailsId')
+                    ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
+                    ->leftjoin('std_student_health_supplementation', 'std_student_health_supplementation.StdStudentId', '=', 'std_student.id')
+                    ->where('std_health_supplementation.id', $param_details[0])
+                    ->where('std_student.id', $param_details[1])
+                    ->first();
+
+        return $this->successResponse($records);
+    }
+
     /*
     * BMI Records for students
     */
@@ -482,9 +450,9 @@ class StudentHealthController extends Controller
             }
             $bmi='NA';
             if($weight>0){
-                $wight=(int) $weight;
-                $height=(int) $height;
-                $bmi=number_format($wight/($height *$height), 2, '.', '');
+                $wight=(float) $weight;
+                $temp_height=(float) $height/100;
+                $bmi=number_format($wight/($temp_height *$temp_height), 2, '.', '');
             }
             $screened_data = [
                 'StdHealthBmiId'        => $summ_data->id,
@@ -510,6 +478,7 @@ class StudentHealthController extends Controller
         $records = StudentBmiSummery::where('created_by',$param)->get();
         return $this->successResponse($records);
     }
+
     public function loadBmidetails($id=""){
         $records = StudentBmiSummery::where('id',$id)->first();
          $rec = DB::table('std_student_bmi')
@@ -520,6 +489,41 @@ class StudentHealthController extends Controller
             ->get();
         $records->bmiDetails=$rec;
         //StudentBmi::where('StdHealthBmiId',$records->id)->get();
+        return $this->successResponse($records);
+    }
+
+    /**
+     * get the health bmi details
+     */
+
+    public function getHealthBmiDetails($param=""){
+        $id = $param;
+        $records = DB::table('std_student_bmi_summary')
+                    ->select('std_student_bmi_summary.*')
+                    ->where('std_student_bmi_summary.id', $id)
+                    ->get();
+
+        return $this->successResponse($records); 
+    }
+
+    /**
+     * Load the bmi details of the view
+     * The param takes 4 parameters - class, section, stream and health id separated by __ (double underscore)
+     */
+
+    public function loadViewBmiDetails($param=''){
+        $param_details = explode('__', $param);
+
+        $records = DB::table('std_student_bmi_summary')
+                    ->select('std_student_bmi.*', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
+                                'std_student.DateOfBirth', 'std_student.CmnSexId')
+                    ->leftjoin('std_student_class_stream', 'std_student_bmi_summary.section_id', '=', 'std_student_class_stream.SectionDetailsId')
+                    ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
+                    ->leftjoin('std_student_bmi', 'std_student_bmi.StdStudentId', '=', 'std_student.id')
+                    ->where('std_student_bmi_summary.section_id', $param_details[1])
+                    ->where('std_student_bmi_summary.id', $param_details[3])
+                    ->get();
+
         return $this->successResponse($records);
     }
 
@@ -599,48 +603,6 @@ class StudentHealthController extends Controller
     }
 
     /**
-     * Load the deworming details of the view
-     * The param takes 4 parameters - class, section, stream and health id separated by __ (double underscore)
-     */
-
-    public function loadViewDewormingDetails($param=''){
-        $param_details = explode('__', $param);
-
-        $records = DB::table('std_health_deworming')
-                    ->select('std_health_deworming.*', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
-                                'std_student.DateOfBirth', 'std_student.CmnSexId')
-                    ->leftjoin('std_student_class_stream', 'std_health_deworming.section', '=', 'std_student_class_stream.SectionDetailsId')
-                    ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
-                    ->leftjoin('std_student_deworming', 'std_student_deworming.StdStudentId', '=', 'std_student.id')
-                    ->where('std_health_deworming.section', $param_details[1])
-                    ->where('std_health_deworming.id', $param_details[3])
-                    ->get();
-
-        return $this->successResponse($records);
-    }
-
-
-    /**
-     * Load the deworming details of an individual student
-     * The is deworming id and student id separated by __ (double underscore)
-     */
-
-    public function getDewormingDetails($id=''){
-        $param_details = explode('__', $id);
-
-        $records = DB::table('std_health_deworming')
-                    ->select('std_health_deworming.*', 'std_health_not_screened.StdStudentId as screened','std_health_referred.StdStudentId as referred',
-                        'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
-                    ->leftjoin('std_student_class_stream', 'std_health_deworming.section', '=', 'std_student_class_stream.SectionDetailsId')
-                    ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
-                    ->where('std_health_deworming.id', $param_details[0])
-                    ->where('std_student.id', $param_details[1])
-                    ->get();
-
-        return $this->successResponse($records);
-    }
-
-    /**
      * Load the supplementation details of the view
      * The param takes 4 parameters - class, section, stream and health id separated by __ (double underscore)
      */
@@ -650,6 +612,7 @@ class StudentHealthController extends Controller
 
         $records = DB::table('std_health_supplementation')
                     ->select('std_health_supplementation.*', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
+                                'std_student_health_supplementation.status as given',
                                 'std_student.DateOfBirth', 'std_student.CmnSexId', 'std_health_supplementation_type.Name as supplementation_type')
                     ->leftjoin('std_student_class_stream', 'std_health_supplementation.section', '=', 'std_student_class_stream.SectionDetailsId')
                     ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
