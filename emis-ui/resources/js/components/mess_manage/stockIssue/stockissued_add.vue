@@ -46,13 +46,8 @@
                                    <td :id="'loadavailableqty'+index">
                                      {{item.available_qty}}
                                   </td>
-<<<<<<< HEAD
-                                   <td>                                
-                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" @onchnage="validatefield()"/>
-=======
                                    <td>
                                      <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
->>>>>>> c9b21f640a5ed9faa4fd59a7b6948ea4466bc763
                                  </td>
                                   <td>
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>

@@ -10,6 +10,20 @@
             </div>
             <div class="card-body">
                 <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">School Inventory Record Type:<span class="text-danger">*</span></label>
+                       <select name="reordtype" id="reordtype" class="form-control select2" @change="getrecordtype()" >
+                            <option value="">---Please Select---</option> 
+                            <option value="Centrally Supplied">Cntrally Supplied Record</option>
+                            <option value="Locally Procured">Locally Procured Record</option>
+                            <option value="3rd quarter">3rd quarter</option>                        
+                        </select>
+                        <has-error :form="form" field="quarter"></has-error>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="training-table" class="table w-100 table-sm table-bordered table-striped">
                             <thead>
