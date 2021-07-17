@@ -19,11 +19,11 @@ class CreateStockReceivedItemsTable extends Migration
             $table->char('item_id',36);
             $table->char('receivedquantity',36);
             $table->char('unit_id',36);
-            $table->char('remarks',36);
+            $table->char('remarks',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
-         
+
         });
     }
 

@@ -113,7 +113,7 @@ class QuestionAnswerController extends Controller{
                     'category_type_id'      =>  $request->category_type_id,
                     'answer_type'           =>  $request->answer_type,)
                 );
-               
+
             }
             $response_data = $model::create($data);
         }
@@ -154,7 +154,7 @@ class QuestionAnswerController extends Controller{
             $data->update();
             return $this->successResponse($data);
         }
-    
+
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

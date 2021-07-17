@@ -267,17 +267,17 @@ class StudentHealthController extends Controller
             'id'               => $request->id,
             'term_id'          => $request->term_id,
             'date'             => $request->date,
-            'std_class'             => $request->std_class,
-            'std_stream'            => $request->std_stream,
-            'std_section'           => $request->std_section,
-            'std_id'            => $request->std_id,
-            'height'                => $request->height,
-            'weight'          => $request->weight,
-            'remarks'        => $request->remarks,
-            'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId()
+            'std_class'        => $request->std_class,
+            'std_stream'       => $request->std_stream,
+            'std_section'      => $request->std_section,
+            'std_id'           => $request->std_id,
+            'height'           => $request->height,
+            'weight'           => $request->weight,
+            'remarks'          => $request->remarks,
+            'studentList'      => $request->studentList,
+            'organization_id'  => $this->getWrkingAgencyId(),
+            'user_id'          => $this->userId()
         ];
-
         try{
             $response_data= $this->apiService->createData('emis/students/addBmiRecords', $data);
             return $response_data;
@@ -287,10 +287,16 @@ class StudentHealthController extends Controller
         }
     }
 
-    public function loadBmiSummary($param=""){
-        $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$param);
+    public function loadBmiSummary(){
+        $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$this->userId());
         return $student_records;
     }
+
+    public function loadBmidetails($id=""){
+        $student_records = $this->apiService->listData('emis/students/loadBmidetails/'.$id);
+        return $student_records;
+    }
+
 
     /**
      * Load the health details of the view
@@ -337,6 +343,11 @@ class StudentHealthController extends Controller
 
     public function loadViewSupplementationDetails($param=''){
         $student_records = $this->apiService->listData('emis/students/loadViewSupplementationDetails/'.$param);
+        return $student_records;
+    }
+
+    public function getHealthSupplementationDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getHealthSupplementationDetails/'.$param);
         return $student_records;
     }
 

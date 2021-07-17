@@ -35,13 +35,16 @@ class StockReceiveController extends Controller
                 $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
                 DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
                 foreach ($request->input('items_received') as  $i=> $facility){
-
+                    $remarks="";
+                    if(isset($facility['remarks'])){
+                        $remarks=$facility['remarks'];
+                    }
                     $receiveditem = array(
                         'stockreceivedId'               =>  $request->id,
-                        'item_id'                       =>  $facility['item'],
+                        'item_id'                       =>  explode('_',$facility['item'])[0],
                         'receivedquantity'              =>  $facility['quantity'],
-                        // 'unit_id'                       =>  $facility['unit'],
-                        'remarks'                       =>  $facility['remarks'],
+                        'unit_id'                       =>  explode('_',$facility['item'])[1],
+                        'remarks'                       =>  $remarks,
                         'updated_by'                    =>  $request->user_id,
                         'created_at'                    =>  date('Y-m-d h:i:s')
                     );
@@ -63,19 +66,25 @@ class StockReceiveController extends Controller
             // dd($infrastructure);
             $stcrcv = StockReceived::create($stockreceive);
             $stockreceivedId = $stcrcv->id;
-           foreach ($request->input('items_received') as  $i=> $facility){
-            // dd( $stockreceivedId);
-           // dd($facility);
+            foreach ($request->input('items_received') as  $i=> $facility){
+                $remarks="";
+                if(isset($facility['remarks'])){
+                    $remarks=$facility['remarks'];
+                }
                 $receiveditem = array(
                     'stockreceivedId'              =>  $stockreceivedId,
-                    'item_id'                      =>  $facility['item'],
+                    'item_id'                      =>  explode('_',$facility['item'])[0],
                     'receivedquantity'             =>  $facility['quantity'],
-                    // 'unit_id'                      =>  $facility['unit'],
-                    'remarks'                      =>  $facility['remarks'],
+                    'unit_id'                      =>  explode('_',$facility['item'])[1],
+                    'remarks'                      =>  $remarks,
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
+<<<<<<< HEAD
               // dd( $receiveditem);
+=======
+            //    dd($receiveditem);
+>>>>>>> f18ad1844387ba2b531eb52a45d73edd3a5473ac
 
                StockReceivedItem::create($receiveditem);
                $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')

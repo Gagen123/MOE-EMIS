@@ -3,7 +3,7 @@
         <div class="invoice p-3 mb-6">
             <div class="row">
                 <div class="col-12">
-                    <h5>Health Screening Details</h5>
+                    <h5>Health Supplementation Details</h5>
                 </div>
             </div>
             <div class="row invoice-info">
@@ -11,11 +11,11 @@
                     <div class="table-responsive">
                         <table v-for="(item, index) in healthScreeningDetails" :key="index">
                         <tr>
-                            <th style="width:50%">Screening Type:</th>
-                            <td>{{item.screening_type}}</td>
+                            <th style="width:50%">Supplementation Type:</th>
+                            <td>{{item.supplementation_type}}</td>
                         </tr>
                         <tr>
-                            <th>Date of Screening:</th>
+                            <th>Date of Supplementation Given:</th>
                             <td>{{item.date}}</td>
                         </tr>
                         <tr>
@@ -38,7 +38,7 @@
         <hr>
         <div class="row">
             <div class="col-12">
-                <h6>Student List and Screening Details</h6>
+                <h6>Student List and Supplementation Details</h6>
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -71,7 +71,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit Student Deworming Details</h4>
+                        <h4 class="modal-title">Edit Student Supplementation Details</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -98,13 +98,8 @@
                                 <div class="row form-group rp=0.5">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0.5">Screened:<i class="text-danger">*</i></label>
-                                        <label><input  type="radio" v-model="student_form.isScreened" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="student_form.isScreened" value="0" tabindex=""/> No</label>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5"> Referred:<i class="text-danger">*</i></label>
-                                        <label><input  type="radio" v-model="student_form.isReferred" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="student_form.isReferred" value="0" tabindex=""/> No</label>
+                                        <label><input  type="radio" v-model="student_form.given" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="student_form.given" value="0" tabindex=""/> No</label>
                                     </div>
                                 </div>
                             </form>
@@ -166,8 +161,8 @@ export default {
         /**
          * method to get health screening details by id
         */
-        getHealthScreeningDetails(id){
-            axios.get('students/getHealthScreeningDetails/'+id)
+        getHealthSupplementationDetails(id){
+            axios.get('students/getHealthSupplementationDetails/'+id)
             .then((response) => {  
                 this.healthScreeningDetails = response.data.data;  
             })
@@ -287,7 +282,7 @@ export default {
         this.loadClassArrayList();
         this.loadSectionArrayList();
         this.loadStreamArrayList();
-        this.getHealthScreeningDetails(this.$route.params.data.id);
+        this.getHealthSupplementationDetails(this.$route.params.data.id);
         let student_params = this.$route.params.data.OrgClassStreamId+'__'+this.$route.params.data.SectionDetailsId+'__'+this.$route.params.data.stream+'__'+this.$route.params.data.id;
         this.getStudentList(student_params);
     }

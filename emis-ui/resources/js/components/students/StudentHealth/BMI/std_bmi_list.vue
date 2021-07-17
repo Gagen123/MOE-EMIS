@@ -8,20 +8,20 @@
                             <th>Sl#</th>
                             <th>Term </th>
                             <th>Class</th>
-                            <th>Section</th>
                             <th>Stream</th>
+                            <th>Section</th>
                             <th>Date of Measurement</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.term}}</td>
-                            <td>{{ classArray[item.class]}} </td>
-                            <td>{{ sectionList[item.section]}} </td>
-                            <td v-if="item.stream">{{ item.stream}}</td>
+                            <td>{{ termListArray[item.term_id]}}</td>
+                            <td>{{ classArray[item.class_id]}} </td>
+                            <td v-if="item.stream_id">{{ item.stream_id}}</td>
                             <td v-else>NA</td>
+                            <td>{{ sectionList[item.section_id]}} </td>
                             <td>{{ item.date}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
@@ -41,25 +41,23 @@ export default {
     },
     data() {
         return {
-            id:'2',
             dataList:[],
             sectionList:{},
             classList:[],
             classArray:{},
             streamList:{},
+            termListArray:{},
         }
     },
     methods:{
-        loadDataList(uri='students/loadBmiSummary/'+this.id){
+        loadDataList(uri='students/loadBmiSummary'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.dataList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
         },
         showedit(data){
@@ -101,15 +99,25 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        showedit(data){
-            this.$router.push({name:'student_projects_edit',params: {data:data}});
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                 for(let i=0;i<data.length;i++){
+                    this.termListArray[data[i].id] = data[i].Name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
+
     },
     mounted(){
+        this.loadActiveTermList();
         this.loadClassArrayList();
         this.loadSectionArrayList();
         this.loadStreamArrayList();
-        
         this.loadDataList();
     },
 }

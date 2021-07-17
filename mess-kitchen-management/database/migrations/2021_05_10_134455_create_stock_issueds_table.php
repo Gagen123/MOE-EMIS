@@ -23,7 +23,7 @@ class CreateStockIssuedsTable extends Migration
             $table->char('item',36);
             $table->char('unit',36);
             $table->char('damagequantity',36);
-            $table->char('remarks',36);
+            $table->char('remarks',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();
