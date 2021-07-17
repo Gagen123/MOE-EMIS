@@ -54,4 +54,25 @@ class StockInventoryController extends Controller
     //    }
 
     }
+
+    // public function getInventoryListLocal($orgId){
+      
+    //          $response_data = DB::select("SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.local_procured_quantity, b.stock_issed_quantity, b.Damage_Qty, d.Available_Qty
+    //          FROM
+            
+    //          (SELECT item_id, organizationId, unit_id, SUM(quantity) AS local_procured_quantity 
+    //           FROM `local_procures` 
+    //          GROUP BY item_id, organizationId, unit_id) aa
+    //          LEFT JOIN
+    //          (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
+    //        FROM stock_issueds  GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+    //        LEFT JOIN 
+    //        (SELECT organizationId, item_id, SUM(available_qty) AS Available_Qty FROM mess_transaction_table
+    //        WHERE procured_type="Local") d ON aa.item_id = d.item_id
+
+    //        WHERE aa.organizationId='".$orgId."'");
+    //       return $this->successResponse($response_data);
+    
+ 
+     
 }

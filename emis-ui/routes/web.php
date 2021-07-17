@@ -783,6 +783,7 @@ Route::prefix('mess_manage')->group(function () {
 
 
     Route::get('/getInventoryList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
+    Route::get('/getInventoryListLocal', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryListLocal'])->name('getInventoryListLocal');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'deleteFile'])->name('deleteFile');
 
 

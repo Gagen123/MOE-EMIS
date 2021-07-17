@@ -75,7 +75,7 @@ class StockReceiveController extends Controller
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
-               //dd($facilityInStructure);
+              // dd( $receiveditem);
 
                StockReceivedItem::create($receiveditem);
                $checkitem=TransactionTable::where('item_id',$facility['item'])->where('procured_type','Central')
