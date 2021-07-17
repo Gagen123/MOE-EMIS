@@ -4,13 +4,13 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item personal-tab">
-                        <a class="nav-link active" data-toggle="pill" @click="shownexttab('personal-tab')" role="tab"> 
-                            <label class="mb-0.5">Personal Detais </label>                              
+                        <a class="nav-link active" data-toggle="pill" @click="shownexttab('personal-tab')" role="tab">
+                            <label class="mb-0.5">Personal Detais </label>
                         </a>
                     </li>
                     <li class="nav-item appointment-tab">
-                        <a class="nav-link" data-toggle="pill" @click="shownexttab('appointment-tab')" role="tab"> 
-                            <label class="mb-0.5">Appointment </label>                              
+                        <a class="nav-link" data-toggle="pill" @click="shownexttab('appointment-tab')" role="tab">
+                            <label class="mb-0.5">Appointment </label>
                         </a>
                     </li>
                     <li class="nav-item qualification-tab">
@@ -35,23 +35,23 @@
                                 <!-- <input type="radio" name="etype" @click="showemptypedtab(true)" value="Contract"> Contract -->
                                 <input type="radio" v-model="personal_form.emp_type" name="etype" @click="showemptypedtab(false)" value="Volunteer"> Volunteer & Project Based
                                 <!-- <input type="radio" name="etype" @click="showemptypedtab(false)" value="Project Based"> Project Based -->
-                            </div> 
-               
-                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            </div>
+
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
                                 <input type="text" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
                                 <has-error :form="personal_form" field="cid_work_permit"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mt-4 pt-2">
                                 <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
                                 <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name"  readonly>
                                 <has-error :form="personal_form" field="name"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
@@ -66,8 +66,8 @@
                                 </label>
                                 <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
                                 <has-error :form="personal_form" field="dob"></has-error>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Marital Status:<i class="text-danger">*</i></label>
@@ -76,14 +76,14 @@
                                     <option v-for="(item, index) in marital_statusList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="marital_status"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
                                     <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="country_id"></has-error>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row" id="bhutanese_address">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -92,38 +92,38 @@
                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="dzongkhag"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Gewog:</label>
                                 <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
                                     <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="gewog"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Village:</label>
                                 <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
                                     <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="village_id"></has-error>
-                            </div> 
-                        </div> 
+                            </div>
+                        </div>
                         <div class="form-group row" id="foreign_address" style="display:none">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Address:</label>
                                 <textarea @change="remove_error('address')" class="form-control" v-model="personal_form.address" :class="{ 'is-invalid': personal_form.errors.has('address') }" name="address" id="address"></textarea>
                                 <has-error :form="personal_form" field="address"></has-error>
                             </div>
-                        </div>                         
-                        
+                        </div>
+
                         <!-- <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Has Received Training on Supporting Children with Disabilities:</label><br>
                                 <input type="radio" name="sentraining" value="Yes"> Yes
                                 <input type="radio" name="sentraining" value="No"> No
-                            </div> 
+                            </div>
                         </div> -->
-                        
+
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Remarks:</label>
@@ -152,7 +152,7 @@
                                     <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="position_title"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
                                 <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
@@ -163,19 +163,19 @@
                                     <option value="3"> Mathematics</option>
                                 </select>
                                 <has-error :form="personal_form" field="working_agency_id"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
                                 <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
                                 <has-error :form="personal_form" field="contact_number"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                             <label class="mb-0.5">Email:<i class="text-danger">*</i></label>
                                 <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
                                 <has-error :form="personal_form" field="email"></has-error>
-                            </div> 
+                            </div>
                         </div>
-               
+
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
@@ -184,7 +184,7 @@
                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="comp_sub"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Elective Subject 1:<i class="text-danger">*</i></label>
                                 <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
@@ -192,15 +192,15 @@
                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="elective_sub1"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Elective Subject 2:</label> 
+                                <label class="mb-0.5">Elective Subject 2:</label>
                                 <select v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2" name="elective_sub2" id="elective_sub2">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="elective_sub2"></has-error>
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group row">
                             <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -215,12 +215,12 @@
                                     <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="personal_form" field="currier_stage"></has-error>
-                            </div> 
+                            </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Employee File Code:<i class="text-danger">*</i></label>
                                 <input @change="remove_error('emp_file_code')" class="form-control" v-model="personal_form.emp_file_code" :class="{ 'is-invalid': personal_form.errors.has('emp_file_code') }" name="emp_file_code" id="emp_file_code" type="text">
                                 <has-error :form="personal_form" field="emp_file_code"></has-error>
-                            </div> 
+                            </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -233,10 +233,10 @@
                     <div class="tab-pane fade tab-content-details" id="qualification-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <!-- <ul class="bg-cyan mb-2 pb-1">
                             <li class="pl-2 text-white">
-                                
+
                             </li>
                         </ul> -->
-                        
+
                         <div class="modal fade" id="qualification-modal" tabindex="-1" role="dialog">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
@@ -271,9 +271,9 @@
                                                             <option value="B.Ed Secondary">B.Ed Secondary</option>
                                                             <option value="PGCE">PGCE</option>
                                                             <option value="6">PGDE</option>
-                                                            <option value="PGDE">B.Ed Secondary</option>  
+                                                            <option value="PGDE">B.Ed Secondary</option>
                                                             <option value="B. COM">B. COM</option>
-                                                            <option value="M. COM">M. COM</option> 
+                                                            <option value="M. COM">M. COM</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -285,7 +285,7 @@
                                                             <option value="Mix Mode">Mix Mode</option>
                                                             <option value="Full Mode">Full Mode</option>
                                                             <option value="Part Time">Part Time</option>
-                                                            <option value="Distance Education">Distance Education</option> 
+                                                            <option value="Distance Education">Distance Education</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -293,7 +293,7 @@
                                                         <input type="text" id="coursetitle" class="form-control">
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">First Subject:<i class="text-danger">*</i></label>
@@ -302,7 +302,7 @@
                                                             <option value="Biological Science">Biological Science</option>
                                                             <option value="Buddhist Studies">Buddhist Studies</option>
                                                             <option value="Business Administration">Business Administration</option>
-                                                            <option value="Community">Community</option> 
+                                                            <option value="Community">Community</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -312,7 +312,7 @@
                                                             <option value="Biological Science">Biological Science</option>
                                                             <option value="Buddhist Studies">Buddhist Studies</option>
                                                             <option value="Business Administration">Business Administration</option>
-                                                            <option value="Community">Community</option> 
+                                                            <option value="Community">Community</option>
                                                         </select>
                                                     </div>
                                                  </div>
@@ -324,8 +324,8 @@
                                                             <option value="Bhutan">Bhutan</option>
                                                             <option value="AFGHANISTAN">AFGHANISTAN</option>
                                                             <option value="ANGOLA">ANGOLA</option>
-                                                            <option value="CHINA">CHINA</option> 
-                                                            <option value="INDIA">INDIA</option> 
+                                                            <option value="CHINA">CHINA</option>
+                                                            <option value="INDIA">INDIA</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -345,7 +345,7 @@
                                     <div class="modal-footer">
                                         <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-flat btn-danger">Cancel</button>
                                         <button  @click="addMore('qualification')" type="button" class="btn btn-flat btn-primary">Add</button>
-                                    </div> 
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -360,14 +360,14 @@
                                         <tr>
                                             <th>Desciption</th>
                                             <th>Qualification</th>
-                                            <th>Course Mode/Type</th>  
+                                            <th>Course Mode/Type</th>
                                             <th>Course Title</th>
-                                            <th>First Subject</th> 
-                                            <th>Second subject</th>    
-                                            <th>Country</th>    
-                                            <th>Start Date</th> 
+                                            <th>First Subject</th>
+                                            <th>Second subject</th>
+                                            <th>Country</th>
+                                            <th>Start Date</th>
                                             <th>End Date</th>
-                                            <th>Action</th>                     
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody id="qualificationlist">
@@ -394,12 +394,12 @@
                                         <tr>
                                             <th>CID</th>
                                             <th>Name</th>
-                                            <th>Designation/Position Title</th>  
+                                            <th>Designation/Position Title</th>
                                             <th>Address</th>
-                                            <th>Contact Number</th> 
-                                            <th>Email</th>    
-                                            <th>Relation</th>    
-                                            <th>Percentage of benifit (%)</th>                     
+                                            <th>Contact Number</th>
+                                            <th>Email</th>
+                                            <th>Relation</th>
+                                            <th>Percentage of benifit (%)</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -440,19 +440,19 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="6"> 
-                                                <button type="button" class="btn btn-xs btn-primary" id="addMore" 
+                                            <td colspan="6">
+                                                <button type="button" class="btn btn-xs btn-primary" id="addMore"
                                                 @click="addMore('nom')"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-xs btn-danger" id="addMore" 
+                                                <button type="button" class="btn btn-xs btn-danger" id="addMore"
                                                 @click="remove('nom')"><i class="fa fa-trash"></i> Remove</button>
                                             </td>
                                             <td>
-                                                Total: 
+                                                Total:
                                             </td>
                                             <td>
                                                 <input readonly type="number" id="percentagetotla" class="form-control">
                                             </td>
-                                        </tr>  
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -468,16 +468,16 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 </template>
 <script>
 export default {
-  components: { 
+  components: {
 
    },
     data(){
-        return{ 
+        return{
             totle:0,
             sentab:false,
             sex_idList:[],
@@ -513,7 +513,7 @@ export default {
                 contact_number:'',
                 email:'',
                 remarks:'',
-                 
+
                 working_agency_id:'',
                 position_title:'',
                 comp_sub:'',
@@ -521,16 +521,16 @@ export default {
                 elective_sub2:'',
                 currier_stage:'',
                 emp_file_code:'',
-                
+
             })
-        } 
+        }
     },
     methods: {
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
-        }, 
+        },
         showemptypedtab(type){
             if(type){
                 $('#empidcid').html('Emp Id/CID');
@@ -557,7 +557,7 @@ export default {
             $('#'+type).modal('show');
         },
         addMore: function(type){
-            if(type=="qualification"){ 
+            if(type=="qualification"){
                 let tabledata="<tr>"+
                 "<td>"+$('#qdescription').val()+"</td>"+
                 "<td>"+$('#qualification').val()+"</td>"+
@@ -565,7 +565,7 @@ export default {
                 "<td>"+$('#coursetitle').val()+"</td>"+
                 "<td>"+$('#firstsub').val()+"</td>"+
                 "<td>"+$('#sectsub').val()+"</td>"+
-                "<td>"+$('#country').val()+"</td>"+ 
+                "<td>"+$('#country').val()+"</td>"+
                 "<td>"+$('#startdate').val()+"</td>"+
                 "<td>"+$('#enddate').val()+"</td>"+
                 "<td><button type='button' class='btn btn success><i class='fa fa-edit'></i> Edit</button><button type='button' class='btn btn danger><i class='fa fa-times'></i> Delete</button> </td>"+
@@ -576,14 +576,14 @@ export default {
             else{
                 this.nominies.push({cid:'',name:'',desig:'',address:'',contact:'',email:'',relation:'',percentage:''})
             }
-        }, 
-        remove(type,index){ 
+        },
+        remove(type,index){
             if(type=="qua"){
-                this.qualificationlist.splice(index,1); 
-            } 
+                this.qualificationlist.splice(index,1);
+            }
             else{
-                this.nominies.splice(index,1); 
-            }            
+                this.nominies.splice(index,1);
+            }
         },
         getpersonaldetails(data){
             data.name='Full Name'+data.cid;
@@ -609,8 +609,8 @@ export default {
             }
             $('#percentagetotla').val(this.totle);
         },
-        shownexttab(nextclass){ 
-            if(nextclass=="final-tab"){ 
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
                 Swal.fire({
                     text: "Are you sure you wish to save this staff details ?",
                     icon: 'info',
@@ -632,7 +632,7 @@ export default {
             else{
                 if(nextclass=="appointment-tab"){
                     this.personal_form.post('staff/savePersonalDetails')
-                    .then((response) => {  
+                    .then((response) => {
                         Toast.fire({
                             icon: 'success',
                             title: 'Data Updated Successfully'
@@ -644,7 +644,7 @@ export default {
                         response.data.id
                         this.change_tab(nextclass);
                     })
-                    .catch((error) => { 
+                    .catch((error) => {
                         if(!$('#marital_status').attr('class').includes('select2-hidden-accessible')){
                             $('#marital_status').addClass('select2-hidden-accessible');
                         }
@@ -664,11 +664,11 @@ export default {
                         if(!$('#currier_stage').attr('class').includes('select2-hidden-accessible')){
                             $('#currier_stage').addClass('select2-hidden-accessible');
                         }
-                       
+
                         // $('.select2').select2();
                         // $('.select2').select2({
                         //     theme: 'bootstrap4'
-                        // }); 
+                        // });
                         this.change_tab('personal-tab');
                         console.log("Error......"+error)
                     });
@@ -676,7 +676,7 @@ export default {
                 if(nextclass=="personal-tab"){
                     this.loaddraftpersonalDetails();
                     this.change_tab(nextclass);
-                }  
+                }
                 else{
                     this.change_tab(nextclass);
                 }
@@ -694,7 +694,7 @@ export default {
         },
         loaddraftpersonalDetails(){
             axios.get('staff/loaddraftpersonalDetails')
-            .then((response) => {  
+            .then((response) => {
                 let data=response.data.data;
                 if(data.village_id!=null){
                     this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
@@ -715,7 +715,7 @@ export default {
                 this.personal_form.marital_status=data.marital_status;
                 this.personal_form.dob=data.dob;
                 this.personal_form.position_title=data.position_title_id;
-                
+
                 this.personal_form.sex_id=data.sex_id;
                 this.personal_form.country_id=data.country_id;
                 this.personal_form.working_agency_id=data.working_agency_id;
@@ -728,11 +728,11 @@ export default {
                 this.personal_form.emp_file_code=data.employee_code;
                 this.personal_form.remarks=data.remarks;
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error:"+error);
             });
         },
-        
+
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
@@ -852,7 +852,7 @@ export default {
             if(id=="sex_id"){
                 this.personal_form.sex_id=$('#sex_id').val();
             }
-            if(id=="marital_status"){ 
+            if(id=="marital_status"){
                 this.personal_form.marital_status=$('#marital_status').val();
             }
             if(id=="country_id"){
@@ -896,9 +896,9 @@ export default {
                 this.personal_form.currier_stage=$('#currier_stage').val();
             }
         }
-        
+
     },
-    
+
     mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -906,9 +906,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

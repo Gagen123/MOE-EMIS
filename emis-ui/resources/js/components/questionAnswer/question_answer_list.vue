@@ -21,7 +21,7 @@ export default {
         }
     },
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Question_Answer_setup'){
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Question_Answer_Setup'){
             axios.get(uri)
             .then(response => {
                 let data = response;

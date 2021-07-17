@@ -53,7 +53,6 @@ export default {
                 this.substaffList =  response.data.data;
              })
             .catch((error) => {
-                alert(error);
                 console.log("Error."+error);
             });
         },

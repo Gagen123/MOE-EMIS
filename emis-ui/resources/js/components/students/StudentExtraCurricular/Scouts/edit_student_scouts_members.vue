@@ -106,7 +106,7 @@ export default {
                 this.scoutSectionList =  response.data;
             }).catch(function (error) { console.log("Error......"+error)});
         },
-        
+
         loadActiveScoutSectionLevel(id){
             let scout_section=$('#CeaScoutSectionId').val();
             if(id!="" && scout_section==null){
@@ -128,7 +128,7 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            
+
             if(id=="student"){
                 this.student_form.student=$('#student').val();
             }
@@ -140,7 +140,6 @@ export default {
             if(id=="CeaScoutSectionLevelId"){
                 this.student_form.CeaScoutSectionLevelId=$('#CeaScoutSectionLevelId').val();
             }
-            
         },
         formaction: function(type){
             if(type=="save"){
