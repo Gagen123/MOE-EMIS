@@ -59,8 +59,12 @@ class LoadOrganizationController extends Controller{
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
             foreach($response_data as $res){
-                $lev=Level::where('id',$res['levelId'])->first();
-                $res->name=$res->name.' '.json_decode($lev)->name;
+                if($res['levelId']!=null && $res['levelId']!=""){
+                    $lev=Level::where('id',$res['levelId'])->first();
+                    if($lev!=null && $lev!=""){
+                        $res->name=$res->name.' '.$lev->name;
+                    }
+                }
             }
         }
         return $this->successResponse($response_data);

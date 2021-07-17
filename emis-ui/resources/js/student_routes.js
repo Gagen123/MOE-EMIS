@@ -340,7 +340,7 @@ const routes = [
             { path: '/ce_student_list', name:'ce_student_list', component: require('./components/students/General/CE/ce_student_list.vue').default},
         ]
     },
-   
+
 
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
@@ -506,7 +506,7 @@ const routes = [
             ]
         },
         //Counselling records
-       
+
     ]
     },
 //     { path: '/student_counselling_record', component: require('./components/students/counselling_records/index.vue').default,
@@ -516,7 +516,7 @@ const routes = [
 //         { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
 //         { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
 //         { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
-        
+
 //     ]
 // },
 
