@@ -83,7 +83,7 @@
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ itemList[item.item_id]}}</td>
                                     <!-- <td>{{ item.stock_received_quantity}}</td> -->
-                                    <td>{{ item.local_procured_quantity}}</td>
+                                    <td>{{ item.Lcoal_quantity}}</td>
                                     <td>{{ item.stock_issed_quantity}}</td>
                                     <td>{{ item.Damage_Qty}}</td>
                                     <td>{{ item.Available_Qty}}</td>
@@ -167,7 +167,7 @@ export default {
                $('#stockReceived').hide();
             }
             else{
-                 $('#localProcure').hide();
+                $('#localProcure').hide();
                $('#stockReceived').hide();
 
             }
@@ -193,7 +193,7 @@ export default {
         this.loadActiveItemList();
         this.loadActiveUnitList();
         this.getInventoryListCentral();
-       // this.getInventoryListLocal();
+        this.getInventoryListLocal();
     }
 }
 </script>

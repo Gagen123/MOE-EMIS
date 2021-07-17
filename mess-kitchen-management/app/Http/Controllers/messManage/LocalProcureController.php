@@ -23,13 +23,15 @@ class LocalProcureController extends Controller
       if($id != null){
         DB::table('local_procures')->where('id', $request->id)->delete();
         foreach ($request->local_item as $i=> $item){
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
             $localprocure = array(
              'organizationId'             =>  $request->organizationId,
              'dateOfprocure'              =>  $request->dateOfprocure,
              'id'                         =>  $request->id,
-             'item_id'                    =>  $item['item'],
+             'item_id'                    =>  $itm_id,
              'quantity'                   =>  $item['quantity'],
-            //  'unit_id'                    =>  $item['unit'],
+             'unit_id'                    =>  $unitid,
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
@@ -44,20 +46,22 @@ class LocalProcureController extends Controller
         $orgId = $request['organizationId'];
         $date = $request['dateOfprocure'];
         foreach ($request->local_item as $i=> $item){
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
             $localprocure = array(
              'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
-             'item_id'                    =>  $item['item'],
+             'item_id'                    =>  $itm_id,
              'quantity'                   =>  $item['quantity'],
-            //  'unit_id'                    =>  $item['unit'],
+             'unit_id'                    =>  $unitid,
              'amount'                     =>  $item['amount'],
              'remark'                     =>  $item['remark'],
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
             );
-
+           // dd( $localprocure);
          $localpro = LocalProcure::create($localprocure);
-         $checkitem=TransactionTable::where('item_id',$item['item'])->where('procured_type','Local')->first();
+         $checkitem=TransactionTable::where('item_id',$itm_id)->where('procured_type','Local')->first();
          if($checkitem!=null && $checkitem!=""){
                 $qty=$item['item']+$checkitem->available_qty;
 
@@ -66,14 +70,14 @@ class LocalProcureController extends Controller
                     'updated_by'    =>  $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                  ];
-                TransactionTable::where('item_id',$item['item'])->where('procured_type','Local')
+                TransactionTable::where('item_id',$itm_id)->where('procured_type','Local')
                 ->where('organizationId',$request->organizationId)->update($update_data);
             }
             else{
              $create_data=[
                     'procured_type'        =>  'Local',
                     'organizationId'       =>  $request->organizationId,
-                    'item_id'              =>  $item['item'],
+                    'item_id'              =>  $itm_id,
                     'available_qty'        =>  $item['quantity'],
                     'created_by'           =>  $request->user_id,
                     'created_at'           =>  date('Y-m-d h:i:s'),

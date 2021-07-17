@@ -121,6 +121,7 @@ class MessManagementController extends Controller
             'user_id'                =>  $this->userId()
         ];
        //  dd($localprocure);
+      // dd($request->local_item);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcure', $localprocure);
          //   dd($response_data);

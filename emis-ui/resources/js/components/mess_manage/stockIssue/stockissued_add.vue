@@ -12,8 +12,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="required">Item Category:</label>
                     <br>
-                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Local" tabindex="2" @change="getItem()" /> Locally Procured Item</label>
-                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Central" tabindex="3"  @change="getItem()"/> Centrally Supplied Item</label>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Local" tabindex="2" @change="getItem('locallyProcured')" /> Locally Procured Item</label>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Central" tabindex="3"  @change="getItem('centrallyProcured')"/> Centrally Supplied Item</label>
                     <br><span id="error_msg" class="text-danger"></span>
                 </div>
                 </div>
@@ -34,7 +34,7 @@
                                 <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                     <td>
                                         <select name="item" :id="'itemid'+index" class="form-control editable_fields" v-model="item.item" @change="getquantity(index)">
-                                            <option v-for="(itm, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ itm.Name }}</option>
+                                            <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id+'_'+itm.Unit_id">{{ itm.Name }}</option>
                                         </select>
                                     </td>
                                     <td>
@@ -203,7 +203,7 @@ export default {
 
         getquantity(index){
            let itemId=$('#itemid'+index).val();
-           alert(itemId);
+          // alert(itemId);
             // alert(itemval.split('_')[1]);
             $('#measurement_unit'+index).html(this.unitArray[itemId.split('_')[1]]);
 
@@ -220,18 +220,21 @@ export default {
                     .then(response => {
                     let data = response;
                     $('#loadavailableqty'+index).html(data.data.data.available_qty);
+                    
                 })
+               
                 .catch(function (error) {
                     console.log(error);
                 });
+                 alert(data.data.data.available_qty);
             }
 
         },
 
-        getItem:function(type){
-             if(type=="locallyProcured"){
+        getItem(type){
+            if(type=="locallyProcured"){
                 this.loadActiveItemList();
-        }
+            }
             else{
                this.loadActiveItemList2();
             }
