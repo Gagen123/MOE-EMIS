@@ -157,7 +157,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadSupplementationRecords/{param}', ['uses' => 'Students\StudentHealthController@loadSupplementationRecords']);
         $router->get('/loadViewSupplementationDetails/{param}', ['uses' => 'Students\StudentHealthController@loadViewSupplementationDetails']);
         $router->get('/getSupplementationDetails/{id}', ['uses' => 'Students\StudentHealthController@getSupplementationDetails']);
-
+        $router->get('/getHealthSupplementationDetails/{param}', ['uses' => 'Students\StudentHealthController@getHealthSupplementationDetails']);
+        
         $router->post('/addHealthScreeningRecords', ['uses' => 'Students\StudentHealthController@addHealthScreeningRecords']);
         $router->get('/loadHealthScreeningRecords/{param}', ['uses' => 'Students\StudentHealthController@loadHealthScreeningRecords']);
         $router->get('/listScreeningSummary/{param}', ['uses' => 'Students\StudentHealthController@listScreeningSummary']);

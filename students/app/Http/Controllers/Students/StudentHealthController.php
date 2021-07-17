@@ -370,7 +370,6 @@ class StudentHealthController extends Controller
 
     public function getHealthScreeningDetails($param=""){
         $id = $param;
-
         $records = DB::table('std_health_screening_type')
                     ->select('std_health_screening.id', 'std_health_screening.date', 'std_health_screening.class', 
                                 'std_health_screening.section', 'std_health_screening.stream', 'std_health_screening_type.name AS screening_type',
@@ -401,6 +400,25 @@ class StudentHealthController extends Controller
                     ->select('StdStudentId')
                     ->where('StdHealthScreeningId', $id)
                     ->get();
+        return $this->successResponse($records); 
+    }
+
+    /**
+     * get the health supplementation details
+     */
+
+    public function getHealthSupplementationDetails($param=""){
+        $id = $param;
+        $records = DB::table('std_health_supplementation_type')
+                    ->select('std_health_supplementation.id', 'std_health_supplementation.date', 'std_health_supplementation.class', 
+                                'std_health_supplementation.section', 'std_health_supplementation.stream', 'std_health_supplementation_type.Name AS supplementation_type',
+                                'std_screening_endorsed_by.Name AS endorsed_by', 'std_screening_position_title.Name AS position')
+                    ->join('std_health_supplementation', 'std_health_supplementation.StdHealthSupplementationTypeId', '=', 'std_health_supplementation_type.id')
+                    ->leftjoin('std_screening_position_title', 'std_health_supplementation.StdScreeningPositionTitleId', '=', 'std_screening_position_title.id')
+                    ->leftjoin('std_screening_endorsed_by', 'std_health_supplementation.StdScreeningEndorsedById', '=', 'std_screening_endorsed_by.id')
+                    ->where('std_health_supplementation.id', $id)
+                    ->get();
+
         return $this->successResponse($records); 
     }
 

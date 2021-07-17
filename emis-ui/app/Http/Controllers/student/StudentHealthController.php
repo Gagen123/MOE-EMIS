@@ -340,6 +340,11 @@ class StudentHealthController extends Controller
         return $student_records;
     }
 
+    public function getHealthSupplementationDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getHealthSupplementationDetails/'.$param);
+        return $student_records;
+    }
+
     /**
      * Load the health details of a student to edit
      * The is health screening id and student id separated by __ (double underscore)
