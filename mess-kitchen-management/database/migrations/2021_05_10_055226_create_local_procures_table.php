@@ -8,7 +8,7 @@ class CreateLocalProcuresTable extends Migration
 {
     /**
      * Run the migrations.
-     * 
+     *
      * @return void
      */
     public function up()
@@ -21,7 +21,7 @@ class CreateLocalProcuresTable extends Migration
             $table->char('quantity',36);
             $table->char('unit_id',36);
             $table->char('amount',36);
-            $table->char('remark',36);
+            $table->char('remark',36)->nullable(true);
             $table->char('created_by',36)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamps();

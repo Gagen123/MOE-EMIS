@@ -1,260 +1,335 @@
 <template>
-    <div> 
+    <div>
        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-body">
-                      <div class="form-group row">
-                           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                               <label>Term:</label>
-                             <select name="vaccine" id="vaccine" class="form-control editable_fields">
-                                 <option value="">--Select--</option>
-                                 <option value="1" >First Term</option>
-                                 <option value="2">Second Term</option>
-                                
-                             </select>
-                            </div> 
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                             <label>Date of Measurement:</label>
-                              <input type="date" class="form-control" name="date_id" id="month">
-                            </div> 
-                       </div>
-                       <div class="form-group row">
-                           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                               <label>Class:</label>
-                              <select name="classes" id="classes" class="form-control editable_fields" @change="shownew()">
-                                 <option value="">--Select--</option>
-                                 <option value="1">PP</option>
-                                 <option value="2">I</option>
-                                 <option value="3">II</option>
-                                 <option value="4">III</option>
-                                 <option value="5">IV</option>
-                                 <option value="6">V</option>
-                                 <option value="7">VI</option>
-                                 <option value="8">VII</option>
-                                 <option value="9">VIII</option>
-                                 <option value="10">IX</option>
-                                 <option value="11">X</option>
-                                 <option value="12">XI</option>
-                                 <option value="13">XII</option>
-                             </select> 
-                           </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 hidden" id="stream">
-                                <label>Streams:</label>
-                                <select name="stream" id="stream" class="form-control editable_fields" >
-                                    <option value="">--Select--</option>
-                                    <option value="1">Science</option>
-                                    <option value="2">Arts</option>
-                                    <option value="3">Commerce</option>
-                                </select>
-                            </div> 
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Section:</label>
-                               <select name="section" id="section" class="form-control editable_fields" @change="show()">
-                                 <option value="">--Select--</option>
-                                 <option value="1">A</option>
-                                 <option value="2">B</option>
-                                 <option value="3">C</option>
-                                 <option value="4">D</option>
-                                 <option value="5">E</option>
-                                 <option value="6">F</option>
-                                </select>
-                            </div> 
-                       </div>
-                       <div class="hidden" id="PP_A">
-                           <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="transferoption-table" class="table w-100 table-bordered table-striped">
-                                  <thead>
-                                      <tr>
-                                         <th>Student ID</th>
-                                         <th>Name</th> 
-                                         <th>Sex</th>
-                                         <th>DOB</th>
-                                         <th>Age</th>
-                                         <th>Height</th>
-                                         <th>Weight</th>
-                                         <th>BMI</th>
-                                         <th>Remarks</th>
-                                     </tr>
-                                 </thead>
-                                <tbody>
-                                    <tr>
-                                       <td>123</td>
-                                        <td>Sonam Dorji</td>
-                                        <td>Male</td>
-                                        <td>2010-12-12</td>
-                                        <td>10</td>
-                                        <td>
-                                            <input type="number" name="number" class="form-control"/>
-                                       </td>
-                                       <td>
-                                         <input type="number" name="number" class="form-control"/>
-                                      </td>
-                                      <td>
-                                         <input type="number" name="number1" class="form-control"/>
-                                      </td>
-                                      <td>
-                                          <input type="text" name="remark" class="form-control"/>
-                                      </td>
-                                    </tr>
-                                    <tr>
-                                         <td>345</td>
-                                         <td>Tshering Dema</td>
-                                         <td>Female</td>
-                                         <td>2011-10-13</td>
-                                         <td>9</td>
-                                      <td>
-                                          <input type="number" name="number" class="form-control"/>
-                                     </td>
-                                     <td>
-                                          <input type="number" name="number" class="form-control"/>
-                                     </td>
-                                     <td>
-                                         <input type="number" name="number1" class="form-control"/>
-                                      </td>
-                                      <td>
-                                         <input type="text" name="remark" class="form-control"/>
-                                     </td>
-                                   </tr>
-                                 </tbody>
-                             </table>
-                            </div>
-                           </div>
-                        </div>
-                         <div class="hidden" id="XI_SCI_A">
-                            <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="transferoption-table" class="table w-100 table-bordered table-striped">
-                                  <thead>
-                                       <tr>
-                                         <th>Student ID</th>
-                                         <th>Name</th> 
-                                         <th>Sex</th>
-                                         <th>DOB</th>
-                                         <th>Age</th>
-                                         <th>Height</th>
-                                         <th>Weight</th>
-                                         <th>BMI</th>
-                                         <th>Remarks</th>
-                                     </tr>
-                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>126</td>
-                                        <td>Pema Lham</td>
-                                        <td>Female</td>
-                                        <td>2010-12-24</td>
-                                        <td>10</td>
-                                        <td>
-                                         <input type="number" name="number" class="form-control"/>
-                                        </td>
-                                        <td>
-                                          <input type="number" name="number" class="form-control"/>
-                                        </td>
-                                        <td>
-                                         <input type="number" name="number1" class="form-control"/>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="remark" class="form-control"/>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                      <td>125</td>
-                                        <td>Lekdrup Phuntsho</td>
-                                        <td>Male</td>
-                                        <td>2010-07-12</td>
-                                        <td></td>
-                                        <td>
-                                         <input type="number" name="number" class="form-control"/>
-                                        </td>
-                                        <td>
-                                          <input type="number" name="number" class="form-control"/>
-                                        </td>
-                                        <td>
-                                          <input type="number" name="number1" class="form-control"/>
-                                        </td>
-                                        <td>
-                                          <input type="text" name="remark" class="form-control"/>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                             </table>
-                            </div>
-                            </div>
-                        </div>
-                         <hr>
-                       <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                
-                                <button class="btn btn-primary" @click="shownexttab('expenditure-tab','final-tab')"> <i class="fa fa-save"></i>Save </button>
-                            </div>
-                        </div>
-                <!--    </div>-->
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Term:</label>
+                        <select v-model="student_form.term_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('term_id') }" class="form-control select2" name="term_id" id="term_id">
+                            <option v-for="(item, index) in termList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="student_form" field="term_id"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Date of Measurement:</label>
+                        <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                        <has-error :form="student_form" field="date"></has-error>
+                    </div>
                 </div>
-          </div>
-       </div> 
-    
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Class:</label>
+                        <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
+                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                        </select>
+                        <has-error :form="student_form" field="std_class"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
+                        <label>Streams:</label>
+                        <select v-model="student_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
+                        </select>
+                        <has-error :form="student_form" field="std_stream"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
+                        <label>Section:</label>
+                        <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
+                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
+                        </select>
+                        <has-error :form="student_form" field="std_section"></has-error>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="student-list-table" class="table w-100 table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sl No</th>
+                                    <th>Name</th>
+                                    <th>Sex</th>
+                                    <th>Age</th>
+                                    <th>Height (in centimeter)</th>
+                                    <th>Weight (in Kg)</th>
+                                    <th>BMI</th>
+                                    <th>Result</th>
+                                    <th>Remarks</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr v-for="(student, index) in student_form.studentList" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ student.Name}}</td>
+                                    <td> {{genderArray[student.CmnSexId]}}  </td>
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
+                                    <td>{{getAge(student.DateOfBirth)}}</td>
+                                    <td>
+                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student.height" @change="calcualteBMI(index)"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student.weight" @change="calcualteBMI(index)"/>
+                                    </td>
+                                    <td>
+                                        <!-- <input type="text" readonly name="bmi" :id="'bmi'+index" class="form-control" v-model="student.bmi"/> -->
+                                        <span :id="'bmi'+index" ></span>
+                                    </td>
+                                    <td>
+                                        <span :id="'result'+index"></span>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="remarks" class="form-control" v-model="student.remarks"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="card-footer text-right">
+                    <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 export default {
-    
    data(){
         return{
+            termList:[],
+            classList:[],
+            sectionList:[],
+            streamList:[],
+            byClass:[],
+            // studentList:[],
+            genderArray:{},
+            id:'NA',
+            datadetails:'',
 
+            student_form: new form({
+                term_id: '',
+                std_class: '',
+                std_stream: '',
+                std_section: '',
+                studentList:[],
+                date: '',
+                std_id: [],
+                height:[],
+                weight:[],
+                remarks:[]
+            }),
         }
     },
 
     methods: {
-     show: function()  {
-         let classes = $("#classes").val();
-         let stream = $("#stream").val();
-         let section = $("#section").val();
-         if(classes == 12 && stream == 1 && section == 1) {
-             $("#XI_SCI_A").show();
-             $("#PP_A").hide();
-       
-        }else {
-         $("#PP_A").show();
-         $("#XI_SCI_A").hide();
-         }
-     },
-  
-     shownew: function()  {
-         let classes = $("#classes").val();
-         if(classes == 12 || classes == 13) {
-             $("#stream").show();
-             }
-              else{
-                 $("#stream").hide();
-              }
-     },
-        
-        shownexttab(presentclass,nextclass){  
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-            if(nextclass=="final-tab"){ 
-                Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire(
-                            'Success!',
-                            'Details has been saved successfully.',
-                            'success',
-                        )
-                        this.$router.push('/bmi_link');
-                    }
-                });
+        calcualteBMI(index){
+           let height=$('#height'+index).val()/100;
+           let weight=$('#weight'+index).val();
+           let bmi=(weight/(height*height)).toFixed(2);
+           $('#bmi'+index).html(bmi);
+            // this.student_form.studentList.bmi=bmi;
+           $('#result'+index).html(bmi);
+        },
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.termList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * to load the array definitions of class, stream and section
+         */
+        loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.genderArray[data[i].id] = data[i].name;
+                }
+            })
+        },
+
+        /**
+         * to load the class list
+         */
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
+        /**
+         * method to get stream list
+         */
+        getStreamList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadStreamList/'+classId;
+            this.streamList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.streamList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getSectionList(id){
+            let classId=$('#std_class').val();
+            if(id!="" && classId==null){
+                classId=id;
+            }
+            let uri = 'loadCommons/loadSectionList/'+classId;
+            this.sectionList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.sectionList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+
+        getAge(DateOfBirth){
+            let date_of_birth = new Date(DateOfBirth);
+            var diff_ms = Date.now() - date_of_birth.getTime();
+            var age_dt = new Date(diff_ms);
+            return Math.abs(age_dt.getUTCFullYear()-1970);
+        },
+
+        remove_err(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
             }
         },
+        formaction: function(type){
+            if(type=="reset"){
+                this.student_form.screening= '';
+                this.student_form.prepared_by='';
+                this.student_form.screening_position='';
+                this.student_form.screening_endorsed_by= '';
+                this.student_form.date='';
+            }
+            if(type=="save"){
+                this.student_form.post('/students/addBmiRecords',this.student_form)
+                    .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Details added successfully'
+                    })
+                    this.$router.push('/std_bmi_list');
+                })
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+        },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="term_id"){
+                this.student_form.term_id=$('#term_id').val();
+            }
+            if(id=="std_class"){
+                this.student_form.std_class=$('#std_class').val();
+                let class_selected = $("#std_class").val();
+                this.getStreamList();
+                this.getSectionList();
+                if(class_selected == 11 || class_selected == 12){
+                    $(".stream_selection").show();
+                    $(".section_selection").show();
+                }else{
+                    $(".section_selection").show();
+                    $(".stream_selection").hide();
+                }
+            }
+
+            if(id=="std_stream"){
+                this.student_form.std_stream=$('#std_stream').val();
+            }
+            if(id=="std_section"){
+                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+                    .then((response) => {
+                        this.student_form.studentList = response.data;
+                })
+                .catch(() => {
+                    consoele.log("Error:"+e)
+                });
+
+                this.student_form.std_section=$('#std_section').val();
+            }
+
+        },
+        checkall(class_to_check,id){
+            if($('#'+id).prop('checked')){
+                $("."+class_to_check).prop("checked",true);
+            }
+            else{
+                $("."+class_to_check).prop("checked",false);
+            }
+        },
+        getBMIDetails(id){
+            let uri='students/loadBmidetails/'+id;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.datadetails =  data;
+                this.student_form.term_id=data.term_id;
+                this.student_form.std_class=data.class_id;
+                this.student_form.std_stream=data.stream_id;
+                this.student_form.std_section=data.section_id;
+                this.student_form.date=data.date;
+                // this.student_form.studentList=data.bmiDetails;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
     },
     mounted() {
-         
+        $('.select2').select2()
+        $('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
+
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+
+        this.loadActiveTermList();
+        this.loadGenderArrayList();
+
+        this.loadClassList();
+        // this.loadStreamList();
+        this.getBMIDetails(this.$route.params.data.id);
     },
-    
+
 }
 </script>

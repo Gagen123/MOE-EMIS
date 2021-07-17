@@ -25,20 +25,17 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <th>Quantity</th>
                                   <th>Unit</th>
+                                  <th>Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item" @change="selectunit('item',index)">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                    <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
                                       </select>
-                                  </td>
-                                  <td>
-                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
                                   <td>
                                      <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
@@ -47,6 +44,10 @@
                                      </select> -->
                                     <span :id="'measurement_unit'+index"></span>
                                   </td>
+                                  <td>
+                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                  </td>
+
                                   <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
@@ -86,16 +87,10 @@
 export default {
     data(){
         return{
-          //  orgList:[],
             quarterList:[],
             itemList:[],
             unitList:[],
             unitArray:{},
-          //  termList:[],
-          //  dzongkhagList:[],
-          //  dzongkhag:'',
-        //    organizaiton:'',
-          //  itemrelease:[],
             items_received: [],
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
@@ -251,10 +246,8 @@ export default {
             }
         },
         selectunit(type,index){
-            if(type=="item"){
-                let itemval=$('#item'+index).val();
-                $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
-            }
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
 
 
@@ -273,8 +266,6 @@ export default {
         });
         this.loadActiveUnitList();
         this.loadActiveItemList();
-       // this.loadActiveTermList();
-
 
     }
 }

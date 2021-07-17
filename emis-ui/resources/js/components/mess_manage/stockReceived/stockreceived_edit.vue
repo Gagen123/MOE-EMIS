@@ -25,37 +25,40 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
+                                  <!-- <th>Unit</th> -->
                                   <th>Quantity</th>
-                                  <th>Unit</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
-                                  <td>
-                                      <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                       </select>
-                                  </td>
-                                  <td>
-                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
-                                  </td>
-                                  <td>
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                     </select>
-                                  </td>
-                                  <td>
+                                <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                                    <td>
+                                        <select name="item" :id="'item'+index" class="form-control" v-model="item.item">
+                                            <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        </select>
+                                    </td>
+                                    <!-- <td>
+                                        <span :id="'measurement_unit'+index">{{item.unit}}</span>
+                                    </td> -->
+                                    <td>
+                                        <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                    </td>
+                                    <!-- <td>
+                                        <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                            <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        </select>
+                                    </td> -->
+                                    <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
-                                  </td>
-                              </tr>
-                             <tr>
-                                  <td colspan=7>
-                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                      @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                      @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                  </td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=7>
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                    </td>
                               </tr>
                           </tbody>
                      </table>
@@ -88,6 +91,7 @@ export default {
             unitList:[],
             quarterList:[],
             items_received: [],
+            unitArray:{},
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
@@ -146,18 +150,15 @@ export default {
                 this.form.remarks               =    data.remarks;
                 this.form.id                    =    data.id;
                 this.form.items_received=[];
-
-                // let prop=data.stockreceived;
-                // let stockreceivedDetails=[];
                 for(let i=0;i<data.stockreceived.length;i++){
                     this.form.items_received.push({
                     item:data.stockreceived[i].item_id,
+                    // unit:this.unitArray[data.stockreceived[i].unit_id],
                     quantity:data.stockreceived[i].receivedquantity,
-                    unit:data.stockreceived[i].unit_id,
+                    // unit:data.stockreceived[i].unit_id,
                     remarks:data.stockreceived[i].remarks});
                 }
                 this.count=data.length;
-                //this.form.items_received=stockreceivedDetails;
 
             })
             .catch((error) =>{
@@ -213,6 +214,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -222,11 +226,12 @@ export default {
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.itemList =  data.data.data;
+                this.itemList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -319,9 +324,6 @@ export default {
         this.loadActiveQuarterList();
         this.loadactivedzongkhagList();
         this.getStockReceivedDetails(this.$route.params.data.id);
-
-
-
     }
 }
 </script>

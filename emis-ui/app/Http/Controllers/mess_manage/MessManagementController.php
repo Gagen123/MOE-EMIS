@@ -159,7 +159,7 @@ class MessManagementController extends Controller
             'user_id'                       =>  $this->userId()
 
         ];
-     //   dd($stockreceived);
+    //    dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -276,6 +276,6 @@ class MessManagementController extends Controller
      //  dd($itemId, $chekva );
         $orgId=$this->getWrkingAgencyId();
         $list = $this->apiService->listData('emis/messManagement/getquantity/'.$itemId. "/".$chekva. "/".$orgId);
-        return $list;  
+        return $list;
     }
 }

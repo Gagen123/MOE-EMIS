@@ -20,7 +20,7 @@ class StaffServicesController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    
+
     public function saveStaffAward(Request $request){
         $rules = [
             'staff'             =>  'required',
@@ -51,7 +51,7 @@ class StaffServicesController extends Controller{
         ];
         if($request->action_type=="edit"){
             $additional=[
-                'updated_by'                 =>  $request->user_id, 
+                'updated_by'                 =>  $request->user_id,
                 'updated_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
@@ -60,19 +60,19 @@ class StaffServicesController extends Controller{
         }
         else{
             $additional=[
-                'created_by'                 =>  $request->user_id, 
+                'created_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
-            $response_data = StaffAward::create($data); 
+            $response_data = StaffAward::create($data);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadStaffAward($user_id=""){
         return $this->successResponse(StaffAward::where('created_by',$user_id)->get());
     }
-    
+
     public function deleteStaffServices($type="",$id=""){
         if($type=="award"){
             return $this->successResponse(StaffAward::where('id',$id)->delete());
@@ -81,7 +81,7 @@ class StaffServicesController extends Controller{
             return $this->successResponse(StaffResponsiblity::where('id',$id)->delete());
         }
     }
-    
+
     public function saveStaffResponsibility(Request $request){
         $rules = [
             'staff'             =>  'required',
@@ -99,7 +99,7 @@ class StaffServicesController extends Controller{
         ];
         if($request->action_type=="edit"){
             $additional=[
-                'updated_by'                 =>  $request->user_id, 
+                'updated_by'                 =>  $request->user_id,
                 'updated_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
@@ -108,11 +108,11 @@ class StaffServicesController extends Controller{
         }
         else{
             $additional=[
-                'created_by'                 =>  $request->user_id, 
+                'created_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
-            $response_data = StaffResponsiblity::create($data); 
+            $response_data = StaffResponsiblity::create($data);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -120,7 +120,7 @@ class StaffServicesController extends Controller{
     public function loadStaffResponsibility($user_id=""){
         return $this->successResponse(StaffResponsiblity::where('created_by',$user_id)->get());
     }
-    
+
     public function saveStaffDisaplinary(Request $request){
         $rules = [
             'staff'                 =>  'required',
@@ -148,7 +148,7 @@ class StaffServicesController extends Controller{
         ];
         if($request->action_type=="edit"){
             $additional=[
-                'updated_by'                 =>  $request->user_id, 
+                'updated_by'                 =>  $request->user_id,
                 'updated_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
@@ -157,11 +157,11 @@ class StaffServicesController extends Controller{
         }
         else{
             $additional=[
-                'created_by'                 =>  $request->user_id, 
+                'created_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
-            $response_data = StaffDisaplinary::create($data); 
+            $response_data = StaffDisaplinary::create($data);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
@@ -180,7 +180,7 @@ class StaffServicesController extends Controller{
         ];
         if($request->action_type=="edit"){
             $additional=[
-                'updated_by'                 =>  $request->user_id, 
+                'updated_by'                 =>  $request->user_id,
                 'updated_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
@@ -189,7 +189,7 @@ class StaffServicesController extends Controller{
             StaffAttendanceDetails::where('att_id',$request->id)->delete();
             foreach($request->staffList as $leave){
                 $att_det=[
-                    'att_id'                   =>  $request->id, 
+                    'att_id'                   =>  $request->id,
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
@@ -200,15 +200,15 @@ class StaffServicesController extends Controller{
         }
         else{
             $additional=[
-                'created_by'                 =>  $request->user_id, 
+                'created_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s'),
             ];
             $data=$data+$additional;
-            $response_data = StaffAttendance::create($data); 
+            $response_data = StaffAttendance::create($data);
 
             foreach($request->staffList as $leave){
                 $att_det=[
-                    'att_id'                   =>  $response_data->id, 
+                    'att_id'                   =>  $response_data->id,
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
@@ -219,7 +219,7 @@ class StaffServicesController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadStaffattendance($param=""){
         // $response_data="";
         // if(strpos($param,'SSS')){
@@ -237,13 +237,13 @@ class StaffServicesController extends Controller{
         $response_data=StaffAttendance::where('org_id',$param)->get();
         return $this->successResponse($response_data);
     }
-    
+
     public function loadattendanceDetails($id=""){
         $att_detials=StaffAttendance::where('id',$id)->first();
         $att_detials->details=StaffAttendanceDetails::where('att_id',$att_detials->id)->get();
         return $this->successResponse($att_detials);
     }
-    
+
     public function checkAttendanceDetailsByDate($year="",$month="",$org_id=""){
         $att_detials=StaffAttendance::where('year',$year)->where('month',$month)->where('org_id',$org_id)->first();
         return $this->successResponse($att_detials);
@@ -253,11 +253,11 @@ class StaffServicesController extends Controller{
         if(strpos( $role_ids,',')){
             $role_ids=explode(',',$role_ids);
             $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->wherein('submitter_role_id',$role_ids)
-            ->select('id','leave_type_id')->get();
+            ->select('id','leave_type_id')->first();
         }
         else{
             $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->where('submitter_role_id',$role_ids)
-            ->select('id','leave_type_id')->get();
+            ->select('id','leave_type_id')->first();
         }
         return $this->successResponse($response_data);
     }
@@ -310,7 +310,7 @@ class StaffServicesController extends Controller{
         return DB::select($result_data);
     }
 
-    
+
 
     public function submitLeaveApplication(Request $request){
         $rules = [
@@ -335,14 +335,14 @@ class StaffServicesController extends Controller{
                 $app_details = [
                     'service_name'                  =>  'Leave',
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::create($app_details);
             }
             else{
                 $last_seq=$last_seq->last_sequence+1;
                 $app_details = [
                     'last_sequence'                 =>  $last_seq,
-                ];  
+                ];
                 ApplicationSequence::where('service_name', 'Leave')->update($app_details);
             }
             $appNo='L';
@@ -374,10 +374,10 @@ class StaffServicesController extends Controller{
                 'org_id'                    =>  $request->org,
                 'status'                    =>  $request->status,
                 'dzongkhag_id'              =>  $request->dzongkhag,
-                'created_by'                =>  $request->user_id, 
+                'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
-            $response_data = LeaveApplication::create($data_data); 
+            $response_data = LeaveApplication::create($data_data);
         }
         else{
             $udpate_data =[
@@ -385,7 +385,7 @@ class StaffServicesController extends Controller{
                 'from_date'                 =>  $request->from_date,
                 'to_date'                   =>  $request->to_date,
                 'no_days'                   =>  $request->no_days,
-                'updated_by'                =>  $request->user_id, 
+                'updated_by'                =>  $request->user_id,
                 'updated_at'                =>  date('Y-m-d h:i:s')
             ];
             LeaveApplication::where('id',$request->id)->update($udpate_data);
@@ -393,29 +393,29 @@ class StaffServicesController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadLeaveDetails($appNo=""){
         $leave_detials=LeaveApplication::where('application_number',$appNo)->first();
         return $this->successResponse($leave_detials);
     }
-    
+
     public function verifyApproveRejectLeaveApplication(Request $request){
         $app_details =[
             'status'                        =>  $request->status,
             'remarks'                       =>  $request->remarks,
-            'updated_by'                    =>  $request->user_id, 
+            'updated_by'                    =>  $request->user_id,
             'updated_at'                    =>  date('Y-m-d h:i:s')
         ];
         LeaveApplication::where('application_number', $request->application_number)->update($app_details);
-        $response_data = LeaveApplication::where('application_number', $request->application_number)->first(); 
+        $response_data = LeaveApplication::where('application_number', $request->application_number)->first();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function getApprovedLeaveCount($staff_id="",$leave_type_id=""){
         $leave_detials=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$leave_type_id)->where('status','Approved')->where('year',date('Y'))->select('no_days')->get();
         return $this->successResponse($leave_detials);
     }
-    
+
     public function getOnGoingLeave($staff_id=""){
         $leave_detials=LeaveApplication::where('staff_id',$staff_id)->whereNotIn('status', ['Rejected','Approved'])->select('application_number')->first();
         return $this->successResponse($leave_detials);
@@ -425,7 +425,7 @@ class StaffServicesController extends Controller{
         $leave_detials=LeaveApplication::where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
         return $this->successResponse($leave_detials);
     }
-    
-    
+
+
 }
 

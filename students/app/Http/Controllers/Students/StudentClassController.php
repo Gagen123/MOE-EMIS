@@ -18,12 +18,11 @@ class StudentClassController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
 
-    /** 
+    /**
      * method to save or update student Classes
     */
 
     public function saveStudentClassAllocation(Request $request){
-        
         $data =[
             'id'                            => $request['id'],
             'class_section_stream'          => $request['class_section_stream'],
@@ -32,22 +31,26 @@ class StudentClassController extends Controller
         ];
 
         $class_section_stream = $data['class_section_stream'];
-
+        // dd($class_section_stream);
         //allocating the class
         foreach($class_section_stream as $key => $value){
             if(array_key_exists('orgClassStreamId', $value)){
                 $check_value = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])->select('id')->first();
-                //If not null, then 
+                //If not null, then
+                $secId="NA";
+                if(isset( $value['sectionId'] )){
+                    $secId=$value['sectionId'];
+                }
                 if($check_value != NULL || (!empty($check_value))){
-                    $deletedRows = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])
-                                    ->where('academicYear', '=', date('Y'))
-                                    ->delete();
+                    // $deletedRows = StudentClassAllocation::where('OrgClassStreamId', '=', $value['orgClassStreamId'])
+                    //                 ->where('academicYear', '=', date('Y'))
+                    //                 ->delete();
 
                     //insert after deleting
                     $class_allocation_data = [
                         'StdStudentId'          => $value['id'],
                         'OrgClassStreamId'      => $value['orgClassStreamId'],
-                        'SectionDetailsId'      => $value['sectionId'],
+                        'SectionDetailsId'      => $secId,
                         'academicYear'          => date('Y')
                     ];
                     $response_data = StudentClassAllocation::create($class_allocation_data);
@@ -56,42 +59,42 @@ class StudentClassController extends Controller
                     $class_allocation_data = [
                         'StdStudentId'          => $value['id'],
                         'OrgClassStreamId'      => $value['orgClassStreamId'],
-                        'SectionDetailsId'      => $value['sectionId'],
+                        'SectionDetailsId'      => $secId,
                         'academicYear'          => date('Y')
                     ];
                     $response_data = StudentClassAllocation::create($class_allocation_data);
                 }
             }
             //updating the students No of Meals detail
-            if($value['noOfMeals'] != NULL){
-                $meals=[
-                    'noOfMeals' => $value['noOfMeals']
-                ];
+            // if($value['noOfMeals'] != NULL){
+            //     $meals=[
+            //         'noOfMeals' => $value['noOfMeals']
+            //     ];
 
-                $no_meals = Student::where('id', $value['id'])->update($meals);
-            }
+            //     $no_meals = Student::where('id', $value['id'])->update($meals);
+            // }
 
             //updating the students boarder detail
-            if($value['isBoarder'] != NULL){
-                $boarder=[
-                    'isBoarder' => $value['isBoarder']
-                ];
+            // if($value['isBoarder'] != NULL){
+            //     $boarder=[
+            //         'isBoarder' => $value['isBoarder']
+            //     ];
 
-                $no_meals = Student::where('id', $value['id'])->update($boarder);
-            }
+            //     $no_meals = Student::where('id', $value['id'])->update($boarder);
+            // }
 
             //updating the students scholarship details
-            if($value['scholarshipType'] != NULL){
-                $scholarship=[
-                    'scholarshipType' => $value['scholarshipType']
-                ];
+            // if($value['scholarshipType'] != NULL){
+            //     $scholarship=[
+            //         'scholarshipType' => $value['scholarshipType']
+            //     ];
 
-                $no_meals = Student::where('id', $value['id'])->update($scholarship);
-            }
+            //     $no_meals = Student::where('id', $value['id'])->update($scholarship);
+            // }
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-        
+
     }
 
     /**
@@ -108,7 +111,7 @@ class StudentClassController extends Controller
         //         ->select('cea_student_award.*', 'std_student.Name','cea_award.name AS award_name')
         //         ->where('std_student.OrgOrganizationId', $id)
         //         ->get();
-        
+
         // return $this->successResponse($awards);
 
     }
@@ -119,7 +122,7 @@ class StudentClassController extends Controller
 
     private function updateData($dataRequest, $databaseModel){
 
-        $modelName = "App\\Models\\Masters\\"."$databaseModel"; 
+        $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
 
         $data = $model::find($dataRequest['id']);
@@ -127,7 +130,7 @@ class StudentClassController extends Controller
         //Audit Trails
         // $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
-        
+
         //data to be updated
         $data->name = $dataRequest['name'];
         $data->description = $dataRequest['description'];
@@ -135,8 +138,8 @@ class StudentClassController extends Controller
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
         $data->update();
-        
+
         return $data;
 
-    }    
+    }
 }
