@@ -25,7 +25,7 @@
                             <td>{{ item.date}}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                                    <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
                                 </div>
                             </td>
                         </tr>
@@ -60,8 +60,8 @@ export default {
                 console.log(error);
             });
         },
-        showedit(data){
-            this.$router.push({name:'std_bmi_edit',params: {data:data}});
+        showview(data){
+            this.$router.push({name:'std_bmi_view',params: {data:data}});
         },
         /**
          * to load the array definitions of class, stream and section

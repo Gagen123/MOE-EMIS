@@ -57,7 +57,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ item.Name}}</td>
                         <td>{{ item.student_code}}</td>
-                        <td>{{ item.screened ==  given ? "Given" : "Not Given" }}</td>
+                        <td>{{ item.given ==  null ? "Given" : "Not Given" }}</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showaddmodal(item.id+'__'+item.StdStudentId)"><i class="fas fa-edit"></i > Edit</a>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="row form-group rp=0.5">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Screened:<i class="text-danger">*</i></label>
+                                        <label class="mb-0.5">Supplementation Given/Not Given:<i class="text-danger">*</i></label>
                                         <label><input  type="radio" v-model="student_form.given" value="1" tabindex=""/> Yes</label>
                                         <label><input  type="radio" v-model="student_form.given" value="0" tabindex=""/> No</label>
                                     </div>
@@ -185,19 +185,6 @@ export default {
         },
 
         /**
-         * Method to get screening details of the student
-         */
-        getStudentScreeningDetails(id){
-            axios.get('/students/getScreeningDetails/'+id)
-                    .then((response) => {
-                        this.screeningDetails = response.data.data;  
-                })
-                .catch(() => {
-                    consoele.log("Error:"+e)
-                });
-        },
-
-        /**
          * to load the array definitions of class, stream and section
          */
         loadClassArrayList(uri="loadCommons/getClassArray"){
@@ -238,9 +225,15 @@ export default {
          */
         showaddmodal(id){ 
             $('#screening-modal').modal('show');
-            axios.get('/students/getScreeningDetails/'+id)
+            axios.get('/students/getSupplementationDetails/'+id)
                     .then((response) => {
-                        this.screeningDetails = response.data.data;  
+                        this.screeningDetails = response.data;
+                        if(response.data.data.given==null){
+                            this.student_form.given=1;
+                        }
+                        else{
+                            this.student_form.given=0;
+                        }
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)

@@ -18,47 +18,6 @@ class StudentHealthController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function addDewormingRecords(Request $request){
-        $rules = [
-            'term_id'            => 'required',
-            'date'               => 'required'
-        ];
-
-        $customMessages = [
-            'term_id.required'  => 'This field is required',
-            'date.required'     => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-
-        $data =[
-            'id'                    => $request->id,
-            'term_id'               => $request->term_id,
-            'date'                  => $request->date,
-            'std_class'             => $request->std_class,
-            'std_stream'            => $request->std_stream,
-            'std_section'           => $request->std_section,
-            'std_id'                => $request->std_id,
-            'std_screened'          => $request->std_screened,
-            'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId()
-        ];
-
-
-        try{
-            $response_data= $this->apiService->createData('emis/students/addDewormingRecords', $data);
-            return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-
-    }
-
-    public function loadDewormingRecords($param=""){
-        $student_records = $this->apiService->listData('emis/students/loadDewormingRecords/'.$param);
-        return $student_records;
-    }
-
     /*
     * Supplementation Records
     */
@@ -297,6 +256,16 @@ class StudentHealthController extends Controller
         return $student_records;
     }
 
+    public function loadViewBmiDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadViewBmiDetails/'.$param);
+        return $student_records;
+    }
+
+    public function getHealthBmiDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getHealthBmiDetails/'.$param);
+        return $student_records;
+    }
+
 
     /**
      * Load the health details of the view
@@ -317,25 +286,7 @@ class StudentHealthController extends Controller
         $student_records = $this->apiService->listData('emis/students/getScreeningDetails/'.$id);
         return $student_records;
     }
-    /**
-     * Load the health deworming details of the view
-     * The param takes 4 parameters - class, stream, section and health id separated by __ (double underscore)
-     */
-
-    public function loadViewDewormingDetails($param=''){
-        $student_records = $this->apiService->listData('emis/students/loadViewDewormingDetails/'.$param);
-        return $student_records;
-    }
-
-    /**
-     * Load the health details of a student to edit
-     * The is health screening id and student id separated by __ (double underscore)
-     */
-
-    public function getDewormingDetails($id=''){
-        $student_records = $this->apiService->listData('emis/students/getDewormingDetails/'.$id);
-        return $student_records;
-    }
+    
     /**
      * Load the health supplementation details of the view
      * The param takes 4 parameters - class, stream, section and health id separated by __ (double underscore)
