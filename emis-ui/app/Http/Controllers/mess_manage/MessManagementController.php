@@ -121,6 +121,7 @@ class MessManagementController extends Controller
             'user_id'                =>  $this->userId()
         ];
        //  dd($localprocure);
+      // dd($request->local_item);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcure', $localprocure);
          //   dd($response_data);
@@ -159,7 +160,7 @@ class MessManagementController extends Controller
             'user_id'                       =>  $this->userId()
 
         ];
-    //    dd($stockreceived);
+       // dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -257,6 +258,13 @@ class MessManagementController extends Controller
         $orgId=$this->getWrkingAgencyId();
         //dd( $orgId);
         $list = $this->apiService->listData('emis/messManagement/getInventoryList/'.$orgId);
+        return $list;
+    }
+    public function getInventoryListLocal(){
+        //  dd('m here');
+        $orgId=$this->getWrkingAgencyId();
+        //dd( $orgId);
+        $list = $this->apiService->listData('emis/messManagement/getInventoryListLocal/'.$orgId);
         return $list;
     }
 

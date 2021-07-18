@@ -18,7 +18,7 @@ class StudentBmi extends Model
         'height',
         'weight',
         'bmi',
-        'remarks',
+        'result',
         'created_by',
         'created_at',
         'updated_by',

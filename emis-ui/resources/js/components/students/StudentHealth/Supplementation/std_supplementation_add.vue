@@ -151,7 +151,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveSupplementationList(uri="masters/loadActiveStudentMasters/health_supplementation"){
+        loadActiveSupplementationList(uri="masters/loadActiveStudentMasters/HealthSupplementation"){
             axios.get(uri)
             .then(response => {
                 let data = response;

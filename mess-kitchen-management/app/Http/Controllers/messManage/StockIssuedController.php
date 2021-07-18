@@ -79,16 +79,19 @@ class StockIssuedController extends Controller
         $id = $request->id;
         $orgId = $request['organizationId'];
         $date = $request['dateOfissue'];
+       
         if($id != null){
           DB::table('stock_issueds')->where('id', $request->id)->delete();
           foreach ($request->item_issue as $i=> $item){
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
               $itemIssued = array(
               'organizationId'              =>  $orgId,
               'dateOfissue'                 =>  $date,
                'id'                         =>  $id,
-               'item_id'                    =>  $item['item'],
+               'item_id'                    =>  $itm_id,
                'quantity'                   =>  $item['quantity'],
-            //    'unit_id'                    =>  $item['unit'],
+               'unit_id'                    =>  $unitid,
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
@@ -103,12 +106,14 @@ class StockIssuedController extends Controller
           $orgId = $request['organizationId'];
           $date = $request['dateOfissue'];
           foreach ($request->item_issue as $i=> $item){
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
               $itemIssued = array(
                'organizationId'             =>  $orgId,
                'dateOfissue'                =>  $date,
-               'item_id'                    =>  $item['item'],
+               'item_id'                    =>  $itm_id,
                'quantity'                   =>  $item['quantity'],
-            //    'unit_id'                    =>  $item['unit'],
+               'unit_id'                    =>  $unitid,
                'damagequantity'             =>  $item['damagequantity'],
                'remarks'                    =>  $item['remarks'],
                'updated_by'                 =>  $request->user_id,
@@ -116,7 +121,7 @@ class StockIssuedController extends Controller
               );
 
            $itemiss = StockIssued::create($itemIssued);
-           $checkitem=TransactionTable::where('item_id',$item['item'])
+           $checkitem=TransactionTable::where('item_id',$itm_id)
                ->where('organizationId',$request['organizationId'])->first();
                   $qty=$checkitem->available_qty-$item['quantity']-$item['damagequantity'];
                   $update_data=[
@@ -124,8 +129,8 @@ class StockIssuedController extends Controller
                     'updated_by'    => $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                   ];
-                 // dd($update_data);
-                  TransactionTable::where('item_id',$item['item'])->update($update_data);
+                //  dd($update_data);
+                  TransactionTable::where('item_id',$itm_id)->update($update_data);
           }
         //  dd('m here');
         //s   dd('itemIssued');

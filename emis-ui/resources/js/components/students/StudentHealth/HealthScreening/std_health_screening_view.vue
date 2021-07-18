@@ -138,20 +138,9 @@ export default {
             staffqualificationlist:[],
 
             student_form: new form({
-                action_type:'',
-                personal_id: '',
-                qualification_id:'',
-                description:'',
-                qualification:'',
-                coursemode:'',
-                coursetitle:'',
-                firstsub:'',
-                secondsub:'',
-                country:'',
-                startdate:'',
-                enddate:'',
-                action_type:'',
-                status:'Pending',
+                id:'',
+                isScreened:'',
+                isReferred:''
             }),
         }
     },
@@ -186,7 +175,7 @@ export default {
                         this.studentList = response.data.data;  
                 })
                 .catch(() => {
-                    consoele.log("Error:"+e)
+                    console.log("Error:"+e)
                 });
         },
 

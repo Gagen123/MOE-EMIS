@@ -17,6 +17,7 @@ class TransactionTable extends Model
         'id',
         'organizationId',
         'item_id',
+        
         'procured_type',
         'available_qty',
         'created_by',
