@@ -209,24 +209,27 @@ export default {
 
             let chekva=$("input[type='radio'][name='procuredtype']:checked").val();
             let isvalid=true;
+           
             if(chekva==undefined){
                 $('#error_msg').html('Please select procurement type');
                 isvalid=false;
             }
             if(isvalid){
                  $('#error_msg').html('');
+                 
                 let uri = 'mess_manage/getquantity/'+itemId+'/'+chekva;
                 axios.get(uri)
                     .then(response => {
                     let data = response;
-                    $('#loadavailableqty'+index).html(data.data.data.available_qty);
+                   $('#loadavailableqty'+index).html(data.data.data.available_qty);
+                    
                     
                 })
                
                 .catch(function (error) {
                     console.log(error);
                 });
-                 alert(data.data.data.available_qty);
+                
             }
 
         },
@@ -240,12 +243,12 @@ export default {
             }
         },
 
-        selectunit(index){
-            let itemval=$('#itemid'+index).val();
-            // alert(itemval);
-            // alert(itemval.split('_')[1]);
-            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
-        },
+        // selectunit(index){
+        //     let itemval=$('#itemid'+index).val();
+        //     // alert(itemval);
+        //     // alert(itemval.split('_')[1]);
+        //     $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        // },
 
         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)

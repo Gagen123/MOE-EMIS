@@ -148,7 +148,9 @@ class StockIssuedController extends Controller
         return $this->successResponse($response_data);
     }
     public function getquantity($itemId="", $chekva="", $orgId=""){
+
      // dd( $orgId,$itemId,$chekva  );
+    
       $response_data=TransactionTable::where('item_id', $itemId)
       ->where('procured_type',$chekva)
       ->where('organizationId',$orgId )->first();

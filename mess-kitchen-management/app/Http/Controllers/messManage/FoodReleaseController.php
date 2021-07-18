@@ -47,6 +47,7 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
+                  
                     FoodReleaseDocuments::create($attach);
                 }
             }
@@ -74,6 +75,7 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
+                  //  dd($attach);
                     FoodReleaseDocuments::create($attach);
                 }
             }

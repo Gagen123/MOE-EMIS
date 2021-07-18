@@ -64,6 +64,8 @@ class MessManagementController extends Controller
                 }
             }
         }
+        $request['attachment_details'] = $attachment_details;
+       // dd($attachment_details);
         $rules = [
             'dateOfrelease'            =>  'required',
             'dzongkhag'                =>  'required',
@@ -88,6 +90,7 @@ class MessManagementController extends Controller
             'id'                       =>  $request['id'],
             'user_id'                  =>  $this->userId()
         ];
+       // dd($foodrelease);
        $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
        //dd($response_data);
        return $response_data;
