@@ -137,6 +137,7 @@
 export default {
    data(){
         return{
+            globalStudentParams:'',
             healthBmiDetails:[],
             studentList:[],
             bmiDetails:'',
@@ -259,6 +260,7 @@ export default {
                     title: 'Data saved Successfully'
                 });
                 $('#screening-modal').modal('hide');
+                this.getStudentList(this.globalStudentParams);
             })
             .catch((error) => {  
                 console.log("Error:"+error)
@@ -289,6 +291,7 @@ export default {
         this.loadStreamArrayList();
         this.getHealthBmiDetails(this.$route.params.data.id);
         let student_params = this.$route.params.data.class_id+'__'+this.$route.params.data.section_id+'__'+this.$route.params.data.stream_id+'__'+this.$route.params.data.id;
+        this.globalStudentParams = this.$route.params.data.class_id+'__'+this.$route.params.data.section_id+'__'+this.$route.params.data.stream_id+'__'+this.$route.params.data.id;
         this.getStudentList(student_params);
     }
 }
