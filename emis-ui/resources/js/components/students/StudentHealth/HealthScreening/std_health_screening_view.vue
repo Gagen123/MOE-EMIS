@@ -139,6 +139,8 @@ export default {
 
             student_form: new form({
                 id:'',
+                StdHealthScreeningId:'',
+                StdStudentId:'',
                 isScreened:'',
                 isReferred:''
             }),
@@ -236,6 +238,10 @@ export default {
             axios.get('/students/getScreeningDetails/'+id)
                     .then((response) => {
                         this.screeningDetails = response.data;
+                        this.student_form.id = response.data.data.screen_id;
+                        this.student_form.StdHealthScreeningId = response.data.data.id;
+                        this.student_form.StdStudentId = response.data.data.StdStudentId;
+
                         if(response.data.data.screened==null){
                             this.student_form.isScreened=1;
                         }
