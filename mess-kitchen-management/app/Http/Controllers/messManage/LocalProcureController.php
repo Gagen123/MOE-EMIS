@@ -25,19 +25,30 @@ class LocalProcureController extends Controller
         foreach ($request->local_item as $i=> $item){
             $itm_id=explode('_',$item['item'])[0];
             $unitid=explode('_',$item['item'])[1];
+            $remarks='NA';
+            if(isset($item['remark'])){
+                $remarks= $item['remark'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity= $item['quantity'];
+            }
+            $amount=0;
+            if(isset($item['amount'])){
+                $amount= $item['amount'];
+            }
             $localprocure = array(
              'organizationId'             =>  $request->organizationId,
              'dateOfprocure'              =>  $request->dateOfprocure,
              'id'                         =>  $request->id,
              'item_id'                    =>  $itm_id,
-             'quantity'                   =>  $item['quantity'],
+             'quantity'                   =>  $quantity,
              'unit_id'                    =>  $unitid,
-             'amount'                     =>  $item['amount'],
-             'remark'                     =>  $item['remark'],
+             'amount'                     =>  $amount,
+             'remark'                     =>  $remarks,
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
             );
-
             $localpro = LocalProcure::create($localprocure);
         }
          return $this->successResponse($localpro,Response::HTTP_CREATED);
@@ -48,14 +59,26 @@ class LocalProcureController extends Controller
         foreach ($request->local_item as $i=> $item){
             $itm_id=explode('_',$item['item'])[0];
             $unitid=explode('_',$item['item'])[1];
+            $remarks='NA';
+            if(isset($item['remark'])){
+                $remarks= $item['remark'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity= $item['quantity'];
+            }
+            $amount=0;
+            if(isset($item['amount'])){
+                $amount= $item['amount'];
+            }
             $localprocure = array(
              'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
              'item_id'                    =>  $itm_id,
-             'quantity'                   =>  $item['quantity'],
+             'quantity'                   =>  $quantity,
              'unit_id'                    =>  $unitid,
-             'amount'                     =>  $item['amount'],
-             'remark'                     =>  $item['remark'],
+             'amount'                     =>  $amount,
+             'remark'                     =>  $remarks,
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
             );
