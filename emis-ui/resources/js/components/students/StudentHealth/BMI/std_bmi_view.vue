@@ -89,13 +89,37 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row form-group rp=0.5">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">BMI:<i class="text-danger">*</i></label>
-                                        <label><input  type="radio" v-model="student_form.given" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="student_form.given" value="0" tabindex=""/> No</label>
-                                    </div>
-                                </div>
+                                <table id="student-list-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:15%">Height (in cm)</th>
+                                            <th style="width:15%">Weight (in Kg)</th>
+                                            <th style="width:10%">BMI</th>
+                                            <th style="width:10%">Result</th>
+                                            <!-- <th>Remarks</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                        <tr>
+                                            <td>
+                                                <input type="number" name="height" id="height" class="form-control" v-model="student_form.height" @change="calcualteBMI()"/>
+                                            </td>
+                                            <td>
+                                                <input type="number" name="weight" id="weight" class="form-control" v-model="student_form.weight" @change="calcualteBMI()"/>
+                                            </td>
+                                            <td>
+                                                <!-- <input type="text" readonly name="bmi" :id="'bmi'+index" class="form-control" v-model="student.bmi"/> -->
+                                                <span id="bmi" ></span>
+                                            </td>
+                                            <td>
+                                                <span id="result"></span>
+                                            </td>
+                                            <!-- <td>
+                                                <input type="text" name="remarks" class="form-control" v-model="student.remarks"/>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -120,31 +144,26 @@ export default {
             classList:[],
             classArray:{},
             streamList:{},
-            
-            //to check for modal
-            qualificationDescription:[],
-            staffqualificationlist:[],
 
             student_form: new form({
-                action_type:'',
-                personal_id: '',
-                qualification_id:'',
-                description:'',
-                qualification:'',
-                coursemode:'',
-                coursetitle:'',
-                firstsub:'',
-                secondsub:'',
-                country:'',
-                startdate:'',
-                enddate:'',
-                action_type:'',
-                status:'Pending',
+                id:'',
+                height:'',
+                weight:'',
+                bmi:'',
+                result:'',
             }),
         }
     },
 
     methods: {
+        calcualteBMI(index){
+           let height=$('#height').val()/100;
+           let weight=$('#weight').val();
+           let bmi=(weight/(height*height)).toFixed(2);
+           $('#bmi').html(bmi);
+            // this.student_form.studentList.bmi=bmi;
+           $('#result').html(bmi);
+        },
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
@@ -222,19 +241,18 @@ export default {
             axios.get('/students/getBmiDetails/'+id)
                     .then((response) => {
                         this.bmiDetails = response.data;
-                        if(response.data.data.given==null){
-                            this.student_form.given=1;
-                        }
-                        else{
-                            this.student_form.given=0;
-                        }
+                        
+                        this.student_form.id = response.data.data.id;
+                        this.student_form.height = response.data.data.height;
+                        this.student_form.weight = response.data.data.weight;
+                        this.student_form.bmi = response.data.data.bmi;
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
                 });
         },
         addMore: function(type){
-            this.student_form.post('/students/updateHealthBmiRecords',this.student_form)
+            this.student_form.post('/students/updateBmiRecord',this.student_form)
             .then((response) => {  
                 Toast.fire({
                     icon: 'success',
