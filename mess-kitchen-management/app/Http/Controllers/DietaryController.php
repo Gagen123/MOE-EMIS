@@ -100,10 +100,12 @@ class DietaryController extends Controller{
 
         $basic_details = [
             'average_score'                      =>  $request->average_score,
-            'prepared_by'                        =>  $request->prepared_by,
+            // 'prepared_by'                        =>  $request->prepared_by,
             'remarks'                            =>  $request->remarks,
-            'endrosed_by'                        =>  $request->endrosed_by,
+            // 'endrosed_by'                        =>  $request->endrosed_by,
             'organizationId'                     =>  $request->org_id,
+            'dzongkhagId'                        =>  $request->dzo_id,
+            'status'                             =>  'Submitted'
         ];
         if($request->action_type=="add"){
             $basic_details = $basic_details+[
@@ -319,7 +321,13 @@ class DietaryController extends Controller{
     }
 
     public function getdiatery($org_Id=""){
-        $response_data = DietaryBasic::where('organizationId',$org_Id)->get();
+        if(strpos($org_Id,'_Creater')!==false){
+            $response_data = DietaryBasic::where('created_by',explode('_',$org_Id)[0])->get();
+        }
+        else{
+            //list by org wise need to check as and when use
+            $response_data = DietaryBasic::where('organizationId',explode('_',$org_Id)[0])->get();
+        }
         return $response_data;
     }
 
@@ -342,6 +350,22 @@ class DietaryController extends Controller{
         else{
             return false;
         }
+    }
+
+    public function approvereject(Request $request){
+        $status='Approved';
+        if($request->action_type=="reject"){
+            $status='Rejected';
+        }
+        $basic_details = [
+            'approve_reject_remarks'            =>  $request->remarks,
+            'status'                            =>  $status,
+            'approve_reject_by'                 =>  $request->user_id,
+            'approve_reject_at'                 =>  date('Y-m-d h:i:s')
+        ];
+        DietaryBasic::where('id',$request->id)->update($basic_details);
+        $basic = DietaryBasic::where('id',$request->id)->first();
+        return $this->successResponse($basic, Response::HTTP_CREATED);
     }
 
 }

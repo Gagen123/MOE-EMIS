@@ -6,20 +6,18 @@
                     <th>SL#</th>
                     <th>Created Date</th>
                     <th>Average Scores</th>
-                    <th>Prepared By</th>
-                    <th>Endrosed By</th>
                     <th>Remarks</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody v-if="showmess">
                 <tr v-for="(itm, index) in dietaryList" :key="index">
                     <td> {{index + 1}}</td>
                     <td> {{itm.created_at}}</td>
                     <td> {{itm.average_score}}</td>
-                    <td> {{itm.prepared_by}}</td>
-                    <td> {{itm.endrosed_by}}</td>
                     <td> {{itm.remarks}}</td>
+                    <td> {{itm.status}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'view')"><i class="fas fa-eye"></i > View</a>
@@ -30,6 +28,21 @@
                     </td>
                 </tr>
             </tbody>
+
+            <tbody v-if="showprincipaltask">
+                <tr v-for="(itm, index) in dietaryList" :key="index">
+                    <td> {{index + 1}}</td>
+                    <td> {{itm.created_at}}</td>
+                    <td> {{itm.average_score}}</td>
+                    <td> {{itm.remarks}}</td>
+                    <td> {{itm.status}}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadpage(itm.id,'verify')"><i class="fas fa-edit"></i > Open</a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </template>
@@ -37,12 +50,14 @@
 export default {
     data(){
         return{
+            showmess:false,
+            showprincipaltask:false,
             dietaryList:[],
         }
     },
     methods:{
-        loadDietaryList(org_id){
-            let uri="diatery/getdiatery/"+org_id;
+        loadDietaryList(type){
+            let uri="diatery/getdiatery/"+type;
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -57,7 +72,7 @@ export default {
                 this.$router.push({name:'edit_dietary_records',query: {id:id}});
             }
             else{
-                this.$router.push({name:'view_dietary_records',query: {id:id}});
+                this.$router.push({name:'view_dietary_records',query: {id:id,type:type}});
             }
         },
     },
@@ -65,9 +80,25 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
-            this.loadDietaryList(data['Agency_Code']);
+            let roleName="";
+            for(let i=0;i<data['roles'].length;i++){
+                if(i==data['roles'].length-1){
+                    roleName+=data['roles'][i].roleName;
+                }
+                else{
+                    roleName+=data['roles'][i].roleName+', ';
+                }
+            }
+            if(roleName.toLowerCase().includes('mess')){
+                this.showmess=true;
+                this.loadDietaryList('Creater');
+            }
+            if(roleName.toLowerCase().includes('principal') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
+                this.showprincipaltask=true;
+                this.loadDietaryList('OrgWise');
+            }
         })
-        .catch(errors => {
+        .catch(errors =>{
             console.log(errors)
         });
     },

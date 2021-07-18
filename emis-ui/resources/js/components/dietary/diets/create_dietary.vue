@@ -29,7 +29,7 @@
                                 <td>Condiments & chillies</td>
                                 <td>Scores</td>
                             </tr>
-                            <tr class="bg-warning">
+                            <tr class="bg-warning fixectopsection">
                                 <td></td>
                                 <td></td>
                                 <td>Cereals</td>
@@ -414,7 +414,7 @@
                     <span class="text-danger" id="remarks_err"></span>
                 </div>
             </div>
-            <div class="row form-group">
+            <!-- <div class="row form-group">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0">Prepared By</label>
                     <input type="text" class="form-control" v-model="form.prepared_by" id="prepared_by" />
@@ -425,10 +425,10 @@
                     <input type="text" class="form-control" v-model="form.endrosed_by" id="endrosed_by" />
                     <span class="text-danger" id="endrosed_by_err"></span>
                 </div>
-            </div>
+            </div> -->
             <div class="card-footer text-right" id="action_buttons">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Submit</button>
             </div>
         </form>
     </div>
@@ -622,7 +622,7 @@ export default {
         formaction(action){
             if(action=="save" && this.validateDate()){
                 Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
+                    text: "Are you sure you wish to submit this details ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -634,7 +634,7 @@ export default {
                         .then(() => {
                             Toast.fire({
                                 icon: 'success',
-                                title: 'Details has been added successfully'
+                                title: 'Dietary details has been submitted'
                             });
                             this.$router.push('/dietary_records_list');
                         })
@@ -647,6 +647,18 @@ export default {
         },
     },
     mounted() {
+        $(window).scroll(function(e){
+            var $el = $('.fixectopsection');
+            $el.css({'position': 'sticky', 'top': '0','z-index': '1'});
+            // if ($(this).scrollTop() > 200 ){
+            //     //$el.css({'position': 'fixed', 'top': '0px'});
+            //     $('.fixectopsection').addClass('fixed-top');
+            // }
+            // if ($(this).scrollTop() < 200){
+            //     $('.fixectopsection').removeClass('fixed-top');
+            //     // $el.css({'position': 'static', 'top': '0px'});
+            // }
+        });
         // let currentdate = new Date();
         // let month=currentdate.getMonth()+1;
         // if(month.toString().length==1){

@@ -66,6 +66,33 @@ class StudentHealthController extends Controller
         return $student_records;
     }
 
+    public function updateHealthSupplementationRecords(Request $request){
+        $rules = [
+            'given'                => 'required'
+        ];
+
+        $customMessages = [
+            'given.required'                => 'This field is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'id'                            => $request->id,
+            'StdHealthSupplementationId'    => $request->StdHealthSupplementationId,
+            'StdStudentId'                  => $request->StdStudentId,
+            'given'                         => $request->given,
+            'user_id'                       =>  $this->userId()
+        ];
+
+        try{
+            $response_data= $this->apiService->createData('emis/students/updateHealthSupplementationRecords', $data);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
     /*
     * Health Screening Records
     */
@@ -157,43 +184,23 @@ class StudentHealthController extends Controller
 
     public function updateHealthScreeningRecords(Request $request){
 
-        dd('in the UI');
-
         $rules = [
-            'screening'             => 'required',
-            'date'                  => 'required',
-            'screening_endorsed_by' => 'required',
-            'prepared_by'           => 'required',
-            'screening_position'    => 'required',
-            'std_class'             => 'required',
-            'std_section'           => 'required',
+            'isScreened'                => 'required',
+            'isReferred'                => 'required'
         ];
 
         $customMessages = [
-            'screening.required'                => 'This field is required',
-            'date.required'                     => 'This field is required',
-            'screening_endorsed_by.required'    => 'This field is required',
-            'prepared_by.required'              => 'This field is required',
-            'screening_position.required'       => 'This field is required',
-            'std_class.required'                => 'This field is required',
-            'std_section.required'              => 'This field is required'
+            'isScreened.required'                => 'This field is required',
+            'isReferred.required'                => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
 
         $data =[
             'id'                    => $request->id,
-            'screening'             => $request->screening,
-            'prepared_by'           => $request->prepared_by,
-            'screening_position'    => $request->screening_position,
-            'date'                  => $request->date,
-            'screening_endorsed_by' => $request->screening_endorsed_by,
-            'std_class'             => $request->std_class,
-            'std_stream'            => $request->std_stream,
-            'std_section'           => $request->std_section,
-            'std_id'                => $request->std_id,
-            'std_screened'          => $request->std_screened,
-            'std_referred'          => $request->std_referred,
-            'organization_id'       => $this->getWrkingAgencyId(),
+            'StdHealthScreeningId'  => $request->StdHealthScreeningId,
+            'StdStudentId'          => $request->StdStudentId,
+            'isScreened'            => $request->isScreened,
+            'isReferred'            => $request->isReferred,
             'user_id'               =>  $this->userId()
         ];
 
@@ -246,6 +253,37 @@ class StudentHealthController extends Controller
         }
     }
 
+    /*
+    * Update BMI Record of a student
+    */
+
+    public function updateBmiRecord(Request $request){
+        $rules = [
+            'weight'            => 'required',
+            'height'            => 'required'
+        ];
+
+        $customMessages = [
+            'weight.required'   => 'This field is required',
+            'height.required'   => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'id'           => $request->id,
+            'height'       => $request->height,
+            'weight'       => $request->weight,
+            'user_id'      => $this->userId()
+        ];
+        try{
+            $response_data= $this->apiService->createData('emis/students/updateBmiRecord', $data);
+            return $response_data;
+        }
+        catch(GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+
     public function loadBmiSummary(){
         $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$this->userId());
         return $student_records;
@@ -266,6 +304,11 @@ class StudentHealthController extends Controller
         return $student_records;
     }
 
+    public function getBmiDetails($id=""){
+        $student_records = $this->apiService->listData('emis/students/getBmiDetails/'.$id);
+        return $student_records;
+    }
+    
 
     /**
      * Load the health details of the view

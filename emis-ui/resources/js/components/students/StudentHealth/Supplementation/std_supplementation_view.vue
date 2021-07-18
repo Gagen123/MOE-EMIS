@@ -132,20 +132,10 @@ export default {
             staffqualificationlist:[],
 
             student_form: new form({
-                action_type:'',
-                personal_id: '',
-                qualification_id:'',
-                description:'',
-                qualification:'',
-                coursemode:'',
-                coursetitle:'',
-                firstsub:'',
-                secondsub:'',
-                country:'',
-                startdate:'',
-                enddate:'',
-                action_type:'',
-                status:'Pending',
+                id:'',
+                StdHealthSupplementationId:'',
+                StdStudentId:'',
+                given:''
             }),
         }
     },
@@ -228,6 +218,11 @@ export default {
             axios.get('/students/getSupplementationDetails/'+id)
                     .then((response) => {
                         this.screeningDetails = response.data;
+                        
+                        this.student_form.id = response.data.data.supplementation_id;
+                        this.student_form.StdHealthSupplementationId = response.data.data.id;
+                        this.student_form.StdStudentId = response.data.data.StdStudentId;
+
                         if(response.data.data.given==null){
                             this.student_form.given=1;
                         }
@@ -240,7 +235,7 @@ export default {
                 });
         },
         addMore: function(type){
-            this.student_form.post('/students/updateHealthScreeningRecords',this.student_form)
+            this.student_form.post('/students/updateHealthSupplementationRecords',this.student_form)
             .then((response) => {  
                 Toast.fire({
                     icon: 'success',
