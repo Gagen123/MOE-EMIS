@@ -797,6 +797,8 @@ Route::prefix('diatery')->group(function (){
     Route::get('/getdiateryDetails/{id}', [App\Http\Controllers\dietary\DietaryController::class, 'getdiateryDetails'])->name('getdiateryDetails');
     Route::get('/checkdata/{date}', [App\Http\Controllers\dietary\DietaryController::class, 'checkdata'])->name('checkdata');
 
+    Route::post('/approvereject', [App\Http\Controllers\dietary\DietaryController::class, 'approvereject'])->name('approvereject');
+
 });
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
