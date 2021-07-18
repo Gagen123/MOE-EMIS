@@ -20,7 +20,7 @@
                             <td> {{item.dateOfprocure}}</td>
                             <td> {{itemList[item.item]}}</td>
                             <td> {{item.quantity}}</td>
-                            <td> {{unitList[item.unit]}} </td>
+                            <td> {{unitArray[item.unit]}} </td>
                             <td> {{item.amount}}</td>
                             <td>
                               <div class="btn-group btn-group-sm">
@@ -41,7 +41,8 @@ export default {
             totle:0,
             localprocure_list:[],
             itemList:{},
-            unitList:{},
+            unitList:[],
+            unitArray:{},
             dt:''
         }
     },
@@ -81,8 +82,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
-                    this.unitList[data.data.data[i].id] = data.data.data[i].Name;
+                this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
             .catch(function (error) {

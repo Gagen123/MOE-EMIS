@@ -105,14 +105,19 @@ class DietaryController extends Controller{
             'endrosed_by'             =>  $request->endrosed_by,
             'action_type'             =>  $request->action_type,
             'user_id'                 =>  $this->userId(),
-            'org_id'                  =>  $this->getWrkingAgencyId()
+            'org_id'                  =>  $this->getWrkingAgencyId(),
+            'dzo_id'                  =>  $this->getUserDzoId()
         ];
         $response_data= $this->apiService->createData('emis/dietary/savediatery', $request_data);
         return $response_data;
     }
 
     public function getdiatery($org_id=""){
-        $list = $this->apiService->listData('emis/dietary/getdiatery/'.$org_id);
+        $param=$this->getWrkingAgencyId().'_'."OrgWise";
+        if($org_id=="Creater"){
+            $param=$this->userId().'_'."Creater";
+        }
+        $list = $this->apiService->listData('emis/dietary/getdiatery/'.$param);
         return $list;
     }
 
@@ -124,5 +129,19 @@ class DietaryController extends Controller{
     public function checkdata($date=""){
         $list = $this->apiService->listData('emis/dietary/checkdata/'.$date.'/'.$this->getWrkingAgencyId());
         return $list;
+    }
+
+    public function approvereject(Request $request){
+        $request_data =[
+            'remarks'                 =>  $request->remarks,
+            'action'                  =>  $request->action,
+            'id'                      =>  $request->id,
+            'action_type'             =>  $request->action,
+            'user_id'                 =>  $this->userId(),
+            'org_id'                  =>  $this->getWrkingAgencyId(),
+            'dzo_id'                  =>  $this->getUserDzoId()
+        ];
+        $response_data= $this->apiService->createData('emis/dietary/approvereject', $request_data);
+        return $response_data;
     }
 }

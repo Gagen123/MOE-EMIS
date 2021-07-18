@@ -25,10 +25,9 @@
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item" @change="selectunit('item',index)">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                    <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
                                       </select>
-                              
                                   </td>
                                   <td>
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
@@ -182,11 +181,9 @@ export default {
                 this.form.local_item.splice(index,1);
             }
         },
-        selectunit(type,index){
-            if(type=="item"){
-                let itemval=$('#item'+index).val();
-                $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
-            }
+         selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
     },
      mounted() {

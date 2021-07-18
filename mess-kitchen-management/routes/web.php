@@ -55,6 +55,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
 
         $router->get('/getInventoryList/{orgId}', 'messManage\StockInventoryController@getInventoryList');
+        $router->get('/getInventoryListLocal/{orgId}', 'messManage\StockInventoryController@getInventoryListLocal');
 
     });
 
@@ -63,6 +64,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getdiatery/{org_Id}', 'DietaryController@getdiatery');
         $router->get('/getdiateryDetails/{id}', 'DietaryController@getdiateryDetails');
         $router->get('/checkdata/{date}/{org_id}', 'DietaryController@checkdata');
+
+        $router->post('/approvereject', ['uses' => 'DietaryController@approvereject']);
     });
 
 
