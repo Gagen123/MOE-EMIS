@@ -19,8 +19,8 @@
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
                             <td> {{dzongkhagList[item.dzongkhag]}}</td>
-                            <td> {{orgList[item.organization]}}</td>
-                            <td> {{quarterList[item.quarter]}}</td>
+                            <td> {{orgList[item.organization]}}{{orgList}}</td>
+                            <td> {{quarterList[item.quarter]}}{{quarterList}}</td>
                             <td> {{ item.remarks}}</td>
                             <td>
                               <div class="btn-group btn-group-sm">
@@ -118,6 +118,8 @@ export default {
             unitList:{},
             itemList:{},
             quarterList:{},
+            quarterList:[],
+            orgList:[],
             dt:''
 
         }
@@ -177,6 +179,7 @@ export default {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
                     this.orgList[data.data.data[i].id] = data.data.data[i].name;
+                   
                 }
             })
             .catch(function (error){
@@ -219,6 +222,45 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
+        },
+        allOrgList(dzo_id,org_id){
+            if(dzo_id==""){
+                dzo_id=$('#dzongkhag').val();
+            }
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.orgList = data.data.data;
+                setTimeout(function () {
+                     $('#organizaiton').val(org_id).trigger('change');
+                }, 300);
+
+            })
+
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="dzongkhag"){
+              // alert($('#dzongkhag').val());
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.allOrgList($('#dzongkhag').val(),'');
+            }
+            if(id=="quarter"){
+                this.form.quarter=$('#quarter').val();
+            }
+            if(id=="organizaiton"){
+                this.form.organizaiton=$('#organizaiton').val();
+            }
+
         },
 
     },
