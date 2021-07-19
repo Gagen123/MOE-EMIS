@@ -34,6 +34,8 @@ class EstablishmentController extends Controller
     }
 
     public function saveEstablishment(Request $request){
+        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$this->getRoleIds('roleIds')));
+        // dd($workflowdet);
         switch($request['establishment_type']){
             case "public_school" : {
                     $this->service_name = "Public School";
@@ -184,6 +186,22 @@ class EstablishmentController extends Controller
             ];
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$this->getRoleIds('roleIds')));
+            $notification_data=[
+                'notification_for'              =>  $request->service_name,
+                'notification_appNo'            =>  $application_number,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  config('services.constant.notification_leadership_selection_applicaiton'),
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
     }

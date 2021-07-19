@@ -152,6 +152,7 @@ class MessManagementController extends Controller
         $this->validate($request, $rules, $customMessages);
         $stockreceived =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
+            'dzoId'                        =>  $this->getUserDzoId(),
             'dateOfreceived'                =>  $request['dateOfreceived'],
             'quarter'                       =>  $request['quarter'],
             'remarks'                       =>  $request['remarks'],
@@ -170,19 +171,19 @@ class MessManagementController extends Controller
         }
     }
 
-    public function loadFoodReleaseListing(){
-        $orgId=$this->getWrkingAgencyId();
-       // dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$orgId);
+    //changed the method name to stockReceivedListing from loadFoodReleaseListing by Tshewang
+    public function stockReceivedListing($type){
+        $param=$this->getWrkingAgencyId().'_'."OrgWise";
+        if($type=="Creater"){
+            $param=$this->userId().'_'."Creater";
+        }
+        $list = $this->apiService->listData('emis/messManagement/stockReceivedListing/'.$param);
         return $list;
-       // dd($list);
     }
     public function loadStockReceiveView($StockReceivedID=""){
         $loadDetials = $this->apiService->listData('emis/messManagement/loadStockReceiveView/'.$StockReceivedID );
         return $loadDetials;
     }
-
-
 
     public function getfoodreleaseditemList($foodreleaseId=""){
         //dd('m here');
@@ -190,15 +191,10 @@ class MessManagementController extends Controller
         return $itemList;
     }
 
-    // public function loadFoodReleaseListing($org_Id=""){
-    //     if($org_Id=="null" || $org_Id==""){
-    //         $org_Id=$this->getWrkingAgencyId();
-    //     }
-    //    // dd('m here');
-    //     $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseListing/'.$org_Id);
-    //     return $list;
-    //    // dd($list);
-    // }
+    public function loadStockReceivedDetails($id=""){
+        $list = $this->apiService->listData('emis/messManagement/loadStockReceivedDetails/'.$id);
+        return $list;
+    }
 
     //just added
     public function getStockReceivedDetails($stkId=""){
@@ -249,6 +245,20 @@ class MessManagementController extends Controller
         // dd('from Ui');
         $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
         return $list;
+    }
+
+    public function approvereject(Request $request){
+        $request_data =[
+            'remarks'                 =>  $request->remarks,
+            'action'                  =>  $request->action,
+            'id'                      =>  $request->id,
+            'action_type'             =>  $request->action,
+            'user_id'                 =>  $this->userId(),
+            'org_id'                  =>  $this->getWrkingAgencyId(),
+            'dzo_id'                  =>  $this->getUserDzoId()
+        ];
+        $response_data= $this->apiService->createData('emis/messManagement/approvereject', $request_data);
+        return $response_data;
     }
 
 

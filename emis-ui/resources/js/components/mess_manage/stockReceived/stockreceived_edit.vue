@@ -25,7 +25,7 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <!-- <th>Unit</th> -->
+                                  <th>Unit</th>
                                   <th>Quantity</th>
                                   <th>Remarks</th>
                               </tr>
@@ -33,13 +33,13 @@
                            <tbody>
                                 <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                     <td>
-                                        <select name="item" :id="'item'+index" class="form-control" v-model="item.item">
-                                            <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                            <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id">{{ itm.Name }}</option>
                                         </select>
                                     </td>
-                                    <!-- <td>
+                                    <td>
                                         <span :id="'measurement_unit'+index">{{item.unit}}</span>
-                                    </td> -->
+                                    </td>
                                     <td>
                                         <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                     </td>
@@ -78,7 +78,6 @@
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
             </div>
-
         </form>
     </div>
 </template>
@@ -103,7 +102,10 @@ export default {
     },
 
     methods:{
-
+        selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
         /**
          * method to reset form
          */
@@ -128,7 +130,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food received detail is added successfully'
+                        title: 'Food received detail is edited successfully'
                     })
                     this.$router.push('/stockreceived_list');
                 })
