@@ -652,7 +652,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadViewSupplementationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewSupplementationDetails'])->name('loadViewSupplementationDetails');
     Route::get('/getSupplementationDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getSupplementationDetails'])->name('getSupplementationDetails');
     Route::get('/getHealthSupplementationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthSupplementationDetails'])->name('getHealthSupplementationDetails');
-    
+
     Route::post('/addHealthScreeningRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addHealthScreeningRecords'])->name('addHealthScreeningRecords');
     Route::post('/updateHealthScreeningRecords', [App\Http\Controllers\student\StudentHealthController::class, 'updateHealthScreeningRecords'])->name('updateHealthScreeningRecords');
     Route::get('/loadHealthScreeningRecords/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthScreeningRecords'])->name('loadHealthScreeningRecords');
@@ -765,9 +765,11 @@ Route::prefix('mess_manage')->group(function () {
     Route::get('/localProcureEditList/{locId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'localProcureEditList'])->name('localProcureEditList');
 
     //STOCK RECEIVED
-    Route::get('/loadFoodReleaseListing', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadFoodReleaseListing'])->name('loadFoodReleaseListing');
+    Route::get('/stockReceivedListing/{type}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'stockReceivedListing'])->name('stockReceivedListing');
     Route::get('/loadStockReceiveView/{StockReceivedID}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceiveView'])->name('loadStockReceiveView');
     Route::post('/saveStockReceived', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceived'])->name('saveStockReceived');
+    Route::get('/loadStockReceivedDetails/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceivedDetails'])->name('loadStockReceivedDetails');
+    Route::post('/approvereject', [App\Http\Controllers\mess_manage\MessManagementController::class, 'approvereject'])->name('approvereject');
     //just added today
     Route::get('/getStockReceivedDetails/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getStockReceivedDetails'])->name('getStockReceivedDetails');
     Route::get('/viewitemreceived/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'viewitemreceived'])->name('viewitemreceived');

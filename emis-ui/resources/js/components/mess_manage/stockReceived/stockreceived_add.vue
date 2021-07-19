@@ -38,10 +38,6 @@
                                       </select>
                                   </td>
                                   <td>
-                                     <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-
-                                     </select> -->
                                     <span :id="'measurement_unit'+index"></span>
                                   </td>
                                   <td>
@@ -75,10 +71,9 @@
             </div>
             <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Submit</button>
             </div>
-            </div>
-
+        </div>
         </form>
     </div>
 </template>
@@ -103,7 +98,6 @@ export default {
     },
 
     methods:{
-
         /**
          * method to reset form
          */
@@ -128,7 +122,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food received detail is added successfully'
+                        text: "Food received detail has been saved and submitted for principal's endrosement"
                     })
                     this.$router.push('/stockreceived_list');
                 })
@@ -209,9 +203,6 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        /**
-         *
-         */
 
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -223,10 +214,6 @@ export default {
                 this.form.quarter=$('#quarter').val();
             }
         },
-
-        /**f
-         * method to get dzongkhag in dropdown
-         */
 
         /**
          * method to add more fields
@@ -240,7 +227,7 @@ export default {
          * method to remove fields
          */
         remove(index){
-             if(this.form.items_received.length>1){
+            if(this.form.items_received.length>1){
                 this.count--;
                 this.form.items_received.splice(index,1);
             }
@@ -249,12 +236,10 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
-
-
     },
-     mounted() {
+    mounted() {
         this.loadActiveQuarterList();
-         $('.select2').select2();
+        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
@@ -266,7 +251,6 @@ export default {
         });
         this.loadActiveUnitList();
         this.loadActiveItemList();
-
     }
 }
 </script>

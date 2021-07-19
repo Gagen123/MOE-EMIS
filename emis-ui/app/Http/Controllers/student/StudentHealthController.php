@@ -27,16 +27,12 @@ class StudentHealthController extends Controller
             'term_id'                       => 'required',
             'date'                          => 'required',
             'supplementation'               => 'required',
-            'supplementation_position'      => 'required',
-            'supplementation_endorsed_by'   => 'required'
         ];
 
         $customMessages = [
             'term_id.required'                      => 'This field is required',
             'date.required'                         => 'This field is required',
             'supplementation.required'              => 'This field is required',
-            'supplementation_position.required'     => 'This field is required',
-            'supplementation_endorsed_by.required'  => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -44,8 +40,6 @@ class StudentHealthController extends Controller
             'id'                            => $request->id,
             'term_id'                       => $request->term_id,
             'supplementation'               => $request->supplementation,
-            'supplementation_position'      => $request->supplementation_position,
-            'supplementation_endorsed_by'   => $request->supplementation_endorsed_by,
             'date'                          => $request->date,
             'std_class'                     => $request->std_class,
             'std_stream'                    => $request->std_stream,
@@ -101,9 +95,6 @@ class StudentHealthController extends Controller
         $rules = [
             'screening'             => 'required',
             'date'                  => 'required',
-            'screening_endorsed_by' => 'required',
-            'prepared_by'           => 'required',
-            'screening_position'    => 'required',
             'std_class'             => 'required',
             'std_section'           => 'required',
         ];
@@ -111,9 +102,6 @@ class StudentHealthController extends Controller
         $customMessages = [
             'screening.required'                => 'This field is required',
             'date.required'                     => 'This field is required',
-            'screening_endorsed_by.required'    => 'This field is required',
-            'prepared_by.required'              => 'This field is required',
-            'screening_position.required'       => 'This field is required',
             'std_class.required'                => 'This field is required',
             'std_section.required'              => 'This field is required'
         ];
@@ -122,10 +110,7 @@ class StudentHealthController extends Controller
         $data =[
             'id'                    => $request->id,
             'screening'             => $request->screening,
-            'prepared_by'           => $request->prepared_by,
-            'screening_position'    => $request->screening_position,
             'date'                  => $request->date,
-            'screening_endorsed_by' => $request->screening_endorsed_by,
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,

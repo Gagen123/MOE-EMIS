@@ -7,6 +7,7 @@
                     <th>Date of Stock Received</th>
                     <th>Quarter</th>
                     <th>Remarks</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -14,23 +15,20 @@
                 <tr v-for="(item, index) in stockReceivedList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.dateOfreceived}}</td>
-                    <td>{{ quarterList[item.quarter]}} </td>
+                    <td>{{ quarterList[item.quarter_id]}} </td>
                     <td>{{ item.remarks}}</td>
+                    <td>{{ item.status}}</td>
                     <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item)"><i class="fas fa-eye"></i ></a>
+                        <div class="btn-group btn-group-sm" v-if="showmess">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'view')"><i class="fas fa-eye"></i ></a>
                         </div>
-                         <!-- <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="StockReceivedView(item)"><i class="fas fa-eye"></i ></a>
-                        </div>  -->
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockReceivedList(item)"><i class="fas fa-edit"></i ></a>
+                        <div class="btn-group btn-group-sm" v-if="showprincipaltask">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'open')"><i class="fa fa-file-signature"></i > Open</a>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <!-- for display  -->
          <div class="modal fade" id="viewitemreceived" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -98,12 +96,15 @@ export default {
             quarterList:{},
             unitList:{},
             itemList:{},
-            dt:''
+            dt:'',
+            showmess:false,
+            showprincipaltask:false,
         }
     },
 
     methods:{
-        loadFoodReleaseListing(uri = 'mess_manage/loadFoodReleaseListing'){
+        loadFoodReleaseListing(type){
+            let uri = 'mess_manage/stockReceivedListing/'+type;
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -114,22 +115,23 @@ export default {
             });
         },
 
-        viewitemreceived:function(item){
-            this.displayItem="";
-            this.displayItem=item;
-          //  alert(this.displayItem.stockreceivedId);
-            axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
-            .then(response => {
-                let data = response;
-                this.itemreceived_list =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-            //
-            // this.itemrelease_list="";
-          // this.itemrelease_list=tableitem;
-            $('#viewitemreceived').modal('show');
+        viewitemreceived:function(item,type){
+            if(type=="view"){
+                this.displayItem="";
+                this.displayItem=item;
+                axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
+                .then(response => {
+                    let data = response;
+                    this.itemreceived_list =  data.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+                $('#viewitemreceived').modal('show');
+            }
+            if(type=="open"){
+                this.$router.push({name:'stockreceived_view',query: {id:item.id,type:type}});
+            }
 		},
         viewStockReceivedList(data){
             data.action='edit';
@@ -144,7 +146,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
+                for(let i=0;i<data.data.data.length;i++){
                     this.quarterList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })
@@ -182,27 +184,37 @@ export default {
             }
         },
 
-        // loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //        for(let i=0;i<data.data.data.length;i++){
-        //             this.termList[data.data.data[i].id] = data.data.data[i].name;
-        //         }
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
-
     },
 
     mounted(){
         this.loadActiveQuarterList();
         this.loadActiveUnitList();
         this.loadActiveItemList();
-        this.loadFoodReleaseListing();
         this.dt =  $("#stockreceived-table").DataTable();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            let roleName="";
+            for(let i=0;i<data['roles'].length;i++){
+                if(i==data['roles'].length-1){
+                    roleName+=data['roles'][i].roleName;
+                }
+                else{
+                    roleName+=data['roles'][i].roleName+', ';
+                }
+            }
+            if(roleName.toLowerCase().includes('mess')){
+                this.showmess=true;
+                this.loadFoodReleaseListing('Creater');
+            }
+            if(roleName.toLowerCase().includes('principal') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
+                this.showprincipaltask=true;
+                this.loadFoodReleaseListing('OrgWise');
+            }
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
 
     },
     watch: {

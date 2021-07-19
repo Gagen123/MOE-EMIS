@@ -44,11 +44,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
         $router->group(['prefix' => 'stockreceived'], function () use ($router) {
-            $router->get('/loadFoodReleaseListing/{orgId}', 'messManage\StockReceiveController@loadFoodReleaseListing');
+            $router->get('/stockReceivedListing/{orgId}', 'messManage\StockReceiveController@stockReceivedListing');
             $router->post('/saveStockReceived', 'messManage\StockReceiveController@saveStockReceived');
             $router->get('/viewitemreceived/{stockreceivedId}', 'messManage\StockReceiveController@viewitemreceived');
             $router->get('/loadStockReceiveView/{StockReceivedID}', ['uses' => 'messManage\StockReceiveController@loadStockReceiveView']);
-
+            $router->get('/loadStockReceivedDetails/{id}', ['uses' => 'messManage\StockReceiveController@loadStockReceivedDetails']);
+            $router->post('/approvereject', 'messManage\StockReceiveController@approvereject');
            $router->get('/getStockReceivedDetails/{stkId}', 'messManage\StockReceiveController@getStockReceivedDetails');
             //just added
 
