@@ -20,7 +20,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'messManage/'], function () use ($router) {
 
         $router->group(['prefix' => 'foodrelease'], function () use ($router) {
-            $router->get('/loadFoodReleaseList', 'messManage\FoodReleaseController@loadFoodReleaseList');
+            $router->get('/loadFoodReleaseList/{param}', 'messManage\FoodReleaseController@loadFoodReleaseList');
             $router->post('/saveFoodRelease', 'messManage\FoodReleaseController@saveFoodRelease');
             $router->get('/getFoodReleaseDetails/{foodrelId}', 'messManage\FoodReleaseController@getFoodReleaseDetails');
             $router->get('/ViewFoodReleaseDetials/{foodreleaseId}', 'messManage\FoodReleaseController@ViewFoodReleaseDetials');

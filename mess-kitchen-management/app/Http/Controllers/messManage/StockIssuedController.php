@@ -79,24 +79,36 @@ class StockIssuedController extends Controller
         $id = $request->id;
         $orgId = $request['organizationId'];
         $date = $request['dateOfissue'];
-       
+
         if($id != null){
           DB::table('stock_issueds')->where('id', $request->id)->delete();
           foreach ($request->item_issue as $i=> $item){
             $itm_id=explode('_',$item['item'])[0];
             $unitid=explode('_',$item['item'])[1];
-              $itemIssued = array(
+            $rem="NA";
+            if(isset($item['remarks'])){
+                $rem=$item['remarks'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity=$item['quantity'];
+            }
+            $damagequantity=0;
+            if(isset($item['damagequantity'])){
+                $damagequantity=$item['damagequantity'];
+            }
+            $itemIssued = array(
               'organizationId'              =>  $orgId,
               'dateOfissue'                 =>  $date,
                'id'                         =>  $id,
                'item_id'                    =>  $itm_id,
-               'quantity'                   =>  $item['quantity'],
+               'quantity'                   =>  $quantity,
                'unit_id'                    =>  $unitid,
-               'damagequantity'             =>  $item['damagequantity'],
-               'remarks'                    =>  $item['remarks'],
+               'damagequantity'             =>  $damagequantity,
+               'remarks'                    =>  $rem,
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
-              );
+            );
 
               $itemiss = StockIssued::create($itemIssued);
             }
@@ -108,14 +120,26 @@ class StockIssuedController extends Controller
           foreach ($request->item_issue as $i=> $item){
             $itm_id=explode('_',$item['item'])[0];
             $unitid=explode('_',$item['item'])[1];
+            $rem="NA";
+            if(isset($item['remarks'])){
+                $rem=$item['remarks'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity=$item['quantity'];
+            }
+            $damagequantity=0;
+            if(isset($item['damagequantity'])){
+                $damagequantity=$item['damagequantity'];
+            }
               $itemIssued = array(
                'organizationId'             =>  $orgId,
                'dateOfissue'                =>  $date,
                'item_id'                    =>  $itm_id,
-               'quantity'                   =>  $item['quantity'],
+               'quantity'                   =>  $quantity,
                'unit_id'                    =>  $unitid,
-               'damagequantity'             =>  $item['damagequantity'],
-               'remarks'                    =>  $item['remarks'],
+               'damagequantity'             =>  $damagequantity,
+               'remarks'                    =>  $rem,
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
               );
