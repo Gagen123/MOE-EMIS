@@ -53,8 +53,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::all();
             }
             else{        // dd($request);
-
-                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId');
+                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){

@@ -21,9 +21,8 @@ class MessManagementController extends Controller
         $this->apiService = $apiService;
     }
 
-    public function loadFoodReleaseList(){
-      //  dd('m here');
-        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList');
+    public function loadFoodReleaseList($param=""){
+        $list = $this->apiService->listData('emis/messManagement/loadFoodReleaseList/'.$param);
         return $list;
     }
 

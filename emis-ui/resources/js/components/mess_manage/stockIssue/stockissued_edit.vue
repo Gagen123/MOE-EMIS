@@ -4,8 +4,8 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Stock Issued:<span class="text-danger">*</span></label> 
-                        <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date" 
+                        <label class="">Date of Stock Issued:<span class="text-danger">*</span></label>
+                        <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date"
                         v-model="form.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
                         <has-error :form="form" field="dateOfissue"></has-error>
                     </div>
@@ -29,38 +29,38 @@
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                       </select>
                                   </td>
-                                   <td>                                
+                                   <td>
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                  </td>
                                  <td>
                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                    </select> 
+                                    </select>
                                   </td>
-                                  <td>                                
+                                  <td>
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
                                  </td>
-                                  <td>                                
+                                  <td>
                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
                                   </td>
-                              </tr> 
+                              </tr>
                               <tr>
-                                  <td colspan=7> 
-                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                  <td colspan=7>
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>                                          
+                              </tr>
                           </tbody>
                      </table>
                   </div>
               </div>
-            
+
              <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-             </div> 
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+             </div>
             </div>
         </form>
     </div>
@@ -75,7 +75,7 @@ export default {
             unitList:[],
             item_issue: [],
             form: new form({
-                id: '', dateOfissue: '', 
+                id: '', dateOfissue: '',
                 item_issue:
                 [{
                     item:'', quantity:'',unit:'', damagequantity:'',remarks:'',
@@ -152,7 +152,7 @@ export default {
            axios.get(uri)
            .then(response => {
                let data = response;
-               this.itemList =  data.data;
+               this.itemList =  data.data.data;
            })
            .catch(function (error) {
                console.log("Error......"+error)
@@ -165,15 +165,15 @@ export default {
         addMore: function(){
             this.count++;
             this.form.item_issue.push({
-                item:'',quantity:'',unit:'',damagequantity:'',remarks:''})    
-        }, 
+                item:'',quantity:'',unit:'',damagequantity:'',remarks:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.item_issue.length>1){
                 this.count--;
-                this.form.item_issue.splice(index,1); 
+                this.form.item_issue.splice(index,1);
             }
         },
         StockIssueEditList(lssId){
@@ -195,19 +195,16 @@ export default {
                 }
                 this.count=data.length;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         }
     },
-     mounted() { 
-        this.loadActiveUnitList(); 
+     mounted() {
+        this.loadActiveUnitList();
         this.loadActiveItemList();
-    },
-    created() {
         this.StockIssueEditList(this.$route.params.data.id);
-        // this.loadActiveItemList(); 
-        // this.loadActiveUnitList();
-    }
+    },
+
 }
 </script>

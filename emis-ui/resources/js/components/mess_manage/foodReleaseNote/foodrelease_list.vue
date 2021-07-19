@@ -123,7 +123,8 @@ export default {
         }
     },
     methods: {
-        loadFoodReleaseList(uri = 'mess_manage/loadFoodReleaseList'){
+        loadFoodReleaseList(id,type){
+            let uri = 'mess_manage/loadFoodReleaseList/'+id+'__'+type;
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -228,7 +229,23 @@ export default {
         this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList();
-        this.loadFoodReleaseList();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            if(data['acess_level']=="Org"){
+                this.loadFoodReleaseList(data['Agency_Code'],'Org');
+            }
+            if(data['acess_level']=="Dzongkhag"){
+                this.loadFoodReleaseList(data['Dzo_Id'],'Dzongkhag');
+            }
+            if(data['acess_level']=="Ministry"){
+                this.loadFoodReleaseList('NA','All');
+            }
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
+
         this.dt =  $("#foodrelease-table").DataTable();
 
     },
