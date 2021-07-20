@@ -4,7 +4,7 @@
             <div class="card-body">
                 <form class="form-horizontal">
                 <div class="row invoice-info">
-                    <div class="col-sm-2 invoice-col">  1130
+                    <div class="col-sm-2 invoice-col"> 
                         <label class="mb-0"><i><u>ECCD Strcuture Type</u></i></label>
                     </div>
                     <div class="col-sm-9 invoice-col">

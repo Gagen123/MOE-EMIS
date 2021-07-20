@@ -106,7 +106,7 @@
                                 <tr>
                                     <th style="width:60%">Description</th>
                                     <th style="width:40%">Value</th>
-                                </tr>
+                                </tr> 
                             </thead>
                             <tbody>
                                 <tr v-for="(item, index) in indoor_form.questionList" :key="index">
@@ -167,7 +167,7 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade tab-content-details" id="indoorspace-tab" role="tabpanel" aria-labelledby="basicdetails">
+                    <div class="tab-pane fade tab-content-details" id="indoorspace-tab" role="tabpanel" aria-labelledby="indoorspace">
                         <table id="dynamic-table1" class="table w-100  table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
@@ -487,7 +487,7 @@ export default {
                                 icon: 'success',
                                 title: 'Data saved Successfully'
                             });
-                            this.loadIndoorList('indoorspace');
+                            this.loadOutdoorList('indoorspace');
                             this.change_tab(nextclass);
                         }
                     })
@@ -537,7 +537,7 @@ export default {
                                 icon: 'success',
                                 title: 'Data saved Successfully'
                             });
-                            this.loadIndoorSpaceList('building');
+                            this.loadOutdoorList('building');
                             this.change_tab(nextclass);
                         }
                     })
@@ -587,7 +587,7 @@ export default {
                                 icon: 'success',
                                 title: 'Data saved Successfully'
                             });
-                            this.loadBuildingInfoList('location');
+                            this.loadOutdoorList('location');
                             this.change_tab(nextclass);
                         }
                     })
@@ -690,7 +690,7 @@ export default {
                 if(param=="indoor"){
                     this.indoor_form.questionList =  data;
                 }
-                if(param=="indoorspace"){
+                if(param=="indoorSSSspace"){
                     this.indoorspace_form.questionList =  data;
                 }
                 if(param=="building"){
@@ -726,6 +726,8 @@ export default {
             });
         },
 
+        
+
         getScreenAccess(){
             axios.get('common/getSessionDetail')
             .then(response => {
@@ -751,11 +753,12 @@ export default {
         // this.getScreenAccess();
         this.loadQuestionList('outdoor');
         this.loadQuestionList('indoor');
-         this.loadQuestionList('indoorspace');
-          this.loadQuestionList('building');
+        this.loadQuestionList('indoorSSSspace');
+        this.loadQuestionList('building');
         this.loadQuestionList('location');
 
         this.loadOutdoorList('outdoor');
+      
         //this.loadWashDetialsList('sanitation');
 
 
