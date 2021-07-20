@@ -14,6 +14,7 @@ class CeaProgramInventoryDetail extends Model
     protected $fillable = [
         'id',
         'CeaProgrammeInventoryId',
+        'PreviousQty',
         'CeaProgrammeInventoryItemId',
         'IncreaseInQuantity',
         'DecreaseInQuantity',

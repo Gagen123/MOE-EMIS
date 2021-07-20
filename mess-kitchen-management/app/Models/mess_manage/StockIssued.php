@@ -16,7 +16,6 @@ class StockIssued extends Model
         'dateOfissue',
         'quantity',
         'item_id',
-        'quantity',
         'unit_id',
         'damagequantity',
         'remarks',

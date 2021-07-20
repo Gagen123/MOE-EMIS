@@ -1,8 +1,5 @@
 <template>
 <div>
-    <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
-        <li class="form-inline "><h6 class="pt-1">Organization Profile</h6></li>
-    </ol>
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -174,6 +171,7 @@
     export default {
         data(){
             return{
+                access_level:'',
                 orgDetails:'',
                 isprofile:false,
                 existing_details:'',
@@ -236,6 +234,7 @@
                 axios.get('common/getSessionDetail')
                 .then(response =>{
                     let data = response.data.data;
+                    this.access_level = data['acess_level'];
                     this.getorgProfile(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
                 }) ;

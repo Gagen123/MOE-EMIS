@@ -428,7 +428,6 @@ export default {
                 this.form.training_type=data.training_type;
                 $('#qualification_upgradation_section').hide();
                 $('#professional_development_section').hide();
-                alert(this.trainingtypeList[data.training_type].toLowerCase());
                 if(this.trainingtypeList[data.training_type].toLowerCase().includes('qualification upgrad')){
                     $('#qualification_upgradation_section').show();
                 }

@@ -30,13 +30,12 @@
                         Transfer Time Schedule
                     </router-link>
                 </li> -->
-                <li class="nav-item pr-1">
+                <!-- <li class="nav-item pr-1">
                     <router-link to="/transfer_index" id="nomination" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Transfer
                     </router-link>
-                </li>
-
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>

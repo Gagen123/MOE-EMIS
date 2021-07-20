@@ -47,8 +47,7 @@ const routes = [
                     { path: '/stockreceived_add', name:'StockReceivedAdd', component: require('./components/mess_manage/stockReceived/stockreceived_add.vue').default },
                     { path: '/stockreceived_edit', name:'StockReceivedEdit', component: require('./components/mess_manage/stockReceived/stockreceived_edit.vue').default },
                     { path: '/stockreceived_list', name:'StockReceivedList', component: require('./components/mess_manage/stockReceived/stockreceived_list.vue').default },
-                    { path: '/stockreceived_view', name:'StockReceivedView', component: require('./components/mess_manage/stockReceived/stockreceived_view.vue').default },
-
+                    { path: '/stockreceived_view', name:'stockreceived_view', component: require('./components/mess_manage/stockReceived/stockreceived_view.vue').default },
                 ]
             },
             { path: '/stockissued_index',

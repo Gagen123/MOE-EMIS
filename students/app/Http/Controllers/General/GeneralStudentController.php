@@ -66,6 +66,37 @@ class GeneralStudentController extends Controller
                     ->get();
         return $records;
     }
+
+    public function loadStudentByType($type, $class_id){
+
+        try{
+            DB::table('std_student')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->join('std_student_type', 'std_student.stdType', '=', 'std_student_type.id')
+                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
+                                'std_student_class_stream.OrgClassStreamId', 'std_student.noOfMeals', 'std_student.scholarshipType', 'std_student.isBoarder')
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_id)
+                    ->where('std_student_type.Name',$type)
+                    //->where('academicYear', date('Y'))
+                    ->get();
+
+            } catch(\Illuminate\Database\QueryException $ex){ 
+                dd($ex->getMessage()); 
+                // Note any method of class PDOException can be called on $ex.
+            }
+        
+        $records = DB::table('std_student')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->join('std_student_type', 'std_student.stdType', '=', 'std_student_type.id')
+                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
+                                'std_student_class_stream.OrgClassStreamId', 'std_student.noOfMeals', 'std_student.scholarshipType', 'std_student.isBoarder')
+                    ->where('std_student_class_stream.OrgClassStreamId',$class_id)
+                    ->where('std_student_type.Name',$type)
+                    //->where('academicYear', date('Y'))
+                    ->get();
+        return $records;
+    }
+
     public function loadStudentBySectionForRollNumber($param1){
         $id = $param1;
         $class_details = explode('__', $id);

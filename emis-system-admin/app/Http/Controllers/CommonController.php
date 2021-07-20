@@ -41,7 +41,7 @@ class CommonController extends Controller{
         $work_flow_for_leave=$data['leave_config_data'];
         $work_flow_for_leadership=$data['leadership_config_data'];
         $work_flow_for_transfer=$request->tr_config_data;
-        // return $request->tr_config_data; 
+        // return $request->tr_config_data;
         $type=$data['type'];
         $user_id=$data['user_id'];
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
@@ -114,13 +114,12 @@ class CommonController extends Controller{
                 }
             }
             //pulling approved transfer Application for DEO
-            if($request->approved_transfer_data=="Valid"){ 
+            if($request->approved_transfer_data=="Valid"){
                 $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "inter transfer")';
             }
             //final query
             // return $result_data;
             return DB::select($result_data);
-
         }
     }
 

@@ -109,7 +109,6 @@ class EstablishmentController extends Controller
     public function saveUploadedFiles(Request $request){
         $application_number = $request->application_number;
         $files = $request->attachments;
-        // dd($files);
         $filenames = $request->attachmentname;
         $remarks = $request->remarks;
         $attachment_details=[];
@@ -128,7 +127,6 @@ class EstablishmentController extends Controller
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
                             'application_number'     =>  $application_number,
-                            // 'remark'                 =>  $remarks[$index]
                         )
                     );
                 }
@@ -150,7 +148,7 @@ class EstablishmentController extends Controller
         ];
         // dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
-        // dd($request['action_type']);
+        // dd($response_data);
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet);
@@ -182,13 +180,48 @@ class EstablishmentController extends Controller
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
+            $app_type="";
+            if(strpos($request->service_name,'Establishment of Public School')){
+                $app_type="establishment_of_public_school";
+            }
+            if(strpos($request->service_name,'Establishment of Private School')){
+                $app_type="establishment_of_private_school";
+            }
+            if(strpos($request->service_name,'Establishment of Private ECCD')){
+                $app_type="establishment_of_private_eccd";
+            }
+            if(strpos($request->service_name,'Establishment of Public ECCD')){
+                $app_type="establishment_of_public_eccd";
+            }
+            if(strpos($request->service_name,'Establishment of Public ECR')){
+                $app_type="establishment_of_public_ecr";
+            }
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+            //Notification preparation
+            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$app_type.'/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1);
+            $seq=((int) $workflowdet[0]->Sequence +1);
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
+            $role_id=$next_roleId[0]->SysRoleId;
+            $notification_data=[
+                'notification_for'              =>  $request->service_name,
+                'notification_appNo'            =>  $application_number,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $role_id,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
     }
-
-
 
 
     public function getClass(){
@@ -310,13 +343,16 @@ class EstablishmentController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
 
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
-        $service_name=$loadOrganizationDetails->data->establishment_type;
+        // dd($loadOrganizationDetails);
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
             foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
-                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
-                $vteam->name=$response_data->name;
-                $vteam->cid=$response_data->cid_work_permit;
-                $vteam->po_title=$response_data->position_title;
+                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember));
+                if($response_data!=null && $response_data!=""){
+                    $response_data=$response_data->data;
+                    $vteam->name=$response_data->name;
+                    $vteam->cid=$response_data->cid_work_permit;
+                    $vteam->po_title=$response_data->position_title;
+                }
             }
         }
         foreach($workflowdet as $work){
@@ -328,19 +364,56 @@ class EstablishmentController extends Controller
         if($loadOrganizationDetails!=null){
             $loadOrganizationDetails->app_stage=$workflowstatus;
         }
+
+        //update notification
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
     public function loadEstbDetailsForView($appNo=""){
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
             foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
-                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
-                $vteam->name=$response_data->name;
-                $vteam->cid=$response_data->cid_work_permit;
-                $vteam->po_title=$response_data->position_title;
+                // dd($vteam->teamMember);
+                if($vteam->teamMember=="Internal"){
+                    $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
+                    if($response_data!=null && $response_data!=""){
+                        $vteam->name=$response_data->name;
+                        $vteam->cid=$response_data->cid_work_permit;
+                        $vteam->po_title=$response_data->position_title;
+                    }
+                }
             }
         }
         return json_encode($loadOrganizationDetails);
+    }
+
+    public function updateTeamVerification(Request $request){
+        $udpate_data =[
+            'email'                         =>   $request->email,
+            'org_id'                        =>   $request->working_agency_id,
+            'id'                            =>   $request->id,
+            'name'                          =>   $request->name,
+            'cid'                           =>   $request->cid,
+            'staff_type'                    =>   $request->staff_type,
+            'staff_id'                      =>   $request->staff_id,
+            'applicationNo'                 =>   $request->applicationNo,
+            'user_id'                       =>   $this->userId()
+        ];
+        // dd($udpate_data);
+        $response_data= $this->apiService->createData('emis/organization/establishment/updateTeamVerification', $udpate_data);
+        return $response_data;
+    }
+
+    public function loadTeamVerificationList($id=""){
+        $response_data = $this->apiService->listData('emis/organization/establishment/loadTeamVerificationList/'.$id);
+        return $response_data;
     }
 
     public function updateNewEstablishmentApplication(Request $request){

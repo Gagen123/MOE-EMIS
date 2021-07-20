@@ -38,7 +38,7 @@ class ClassStreamController extends Controller
             $data = Classes::find($request['id']);
             $messs_det='className:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','class','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
-                
+
             $class = Classes::where('id', $id)->update($cla);
             return $this->successResponse($class, Response::HTTP_CREATED);
         }else{
@@ -59,7 +59,7 @@ class ClassStreamController extends Controller
 
     public function loadClassStreamMapping($type=""){
         if($type!="NA"){
-            if(strpos($type,'_')!==false){
+            if(strpos($type,'ECCD')===false && strpos($type,'_')!==false){
                 if(strpos('school',$type)===false && explode('_',$type)[1]+1 <8){
                     $data = DB::table('classes')
                     ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
@@ -94,6 +94,15 @@ class ClassStreamController extends Controller
                 ->select('*')
                 ->where('type',0)
                 ->orderBy('displayOrder', 'asc')
+                ->get();
+            }
+            else if(strpos($type,'_ECCD')!==false){
+                $data = DB::table('classes')
+                ->leftjoin('class_stream_mappings', 'classes.id', '=', 'class_stream_mappings.classId')
+                ->leftjoin('streams', 'streams.id', '=', 'class_stream_mappings.streamId')
+                ->select('class_stream_mappings.*', 'classes.class', 'classes.id AS classId', 'streams.id AS streamId', 'streams.stream')
+                ->where('category',explode('_',$type)[0])
+                ->orderBy('classes.displayOrder', 'asc')
                 ->get();
             }
             else{

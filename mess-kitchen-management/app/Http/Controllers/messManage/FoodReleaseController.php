@@ -47,6 +47,7 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
+                  
                     FoodReleaseDocuments::create($attach);
                 }
             }
@@ -74,6 +75,7 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
+                  //  dd($attach);
                     FoodReleaseDocuments::create($attach);
                 }
             }
@@ -111,13 +113,34 @@ class FoodReleaseController extends Controller
         // dd($foodrel);
         }
     }
-    public function loadFoodReleaseList(){
-        //   return 'from service of mine';
-        $list = DB::table('food_releases')
-        ->select( 'dateOfrelease as dateOfrelease',
-         'dzongkhag_id as dzongkhag','org_id as organization',
-         'quarter_id as quarter','remarks as remarks','id'
-         )->get();
+    public function loadFoodReleaseList($param=""){
+        $type=explode('__',$param)[1];
+        $id=explode('__',$param)[0];
+        if($type=="Org"){
+            $list = DB::table('food_releases')
+            ->select( 'dateOfrelease as dateOfrelease',
+             'dzongkhag_id as dzongkhag','org_id as organization',
+             'quarter_id as quarter','remarks as remarks','id'
+             )
+             ->where('org_id',$id)
+             ->get();
+        }
+        if($type=="Dzongkhag"){
+            $list = DB::table('food_releases')
+            ->select( 'dateOfrelease as dateOfrelease',
+             'dzongkhag_id as dzongkhag','org_id as organization',
+             'quarter_id as quarter','remarks as remarks','id'
+             )
+             ->where('dzongkhag_id',$id)
+             ->get();
+        }
+        if($type=="All"){
+            $list = DB::table('food_releases')
+            ->select( 'dateOfrelease as dateOfrelease',
+             'dzongkhag_id as dzongkhag','org_id as organization',
+             'quarter_id as quarter','remarks as remarks','id'
+             )->get();
+        }
         return $list;
     }
 

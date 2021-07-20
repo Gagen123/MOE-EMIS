@@ -53,7 +53,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                        <label class="mb-0">Attachments if any</label>
                     </div>
                 </div>
                 <div class="card">
@@ -290,7 +290,6 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                alert(data.data.data.length);
                 this.staffList = data.data.data;
             })
             .catch(function (error){
@@ -300,13 +299,14 @@ export default {
         getLeave_details(){
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
-                let data = response.data;
+                let data = response.data.data;
+                console.log(data);
                 if(data!=""){
                     //need to handle for multiple role later, for now it will take for first role at the index 0
-                    this.total_leave_apply=' ('+data.data.leave_details.category+')';
-                    this.actual_leave_avail=data.data.leave_details.no_days;
-                    this.leave_balance=data.data.leave_details.no_days;
-                    this.form.submitted_to=data.data.next_role_id.role_id;
+                    this.total_leave_apply=' ('+data.leave_details.category+')';
+                    this.actual_leave_avail=data.leave_details.no_days;
+                    this.leave_balance=data.leave_details.no_days;
+                    // this.form.submitted_to=data.next_role_id.role_id;
                     $('#form_details').show();
                     $('#applyId').show();
                     this.getApprovedLeaveCount();

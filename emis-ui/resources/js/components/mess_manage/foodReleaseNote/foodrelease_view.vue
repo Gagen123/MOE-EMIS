@@ -1,7 +1,7 @@
 <template>
     <div>
         <form class="bootbox-form" id="foodreleaseId">
-            <div class="card-body">
+            <div class="card-body"> 
                 <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label> 

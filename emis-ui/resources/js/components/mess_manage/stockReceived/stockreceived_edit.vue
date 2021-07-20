@@ -25,27 +25,30 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <th>Quantity</th>
                                   <th>Unit</th>
+                                  <th>Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
-                                  <td>
-                                      <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                       </select>
-                                  </td>
-                                  <td>
-                                    <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
-                                  </td>
-                                  <td>
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                     </select>
-                                  </td>
-                                  <td>
+                                <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                                    <td>
+                                        <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                            <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id">{{ itm.Name }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span :id="'measurement_unit'+index">{{item.unit}}</span>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                    </td>
+                                    <!-- <td>
+                                        <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                            <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        </select>
+                                    </td> -->
+                                    <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr>
@@ -75,7 +78,6 @@
                  <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
             </div>
-
         </form>
     </div>
 </template>
@@ -84,9 +86,10 @@
 export default {
     data(){
         return{
+            quarterList:[],
             itemList:[],
             unitList:[],
-            quarterList:[],
+            unitArray:{},
             items_received: [],
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
@@ -99,7 +102,10 @@ export default {
     },
 
     methods:{
-
+        selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
         /**
          * method to reset form
          */
@@ -124,7 +130,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food received detail is added successfully'
+                        title: 'Food received detail is edited successfully'
                     })
                     this.$router.push('/stockreceived_list');
                 })
@@ -134,36 +140,6 @@ export default {
                 })
             }
 		},
-        // just added
-        getStockReceivedDetails(stkId){
-            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
-            .then((response) => {
-                let data=response.data.data;
-                this.form.dateOfreceived        =    data.dateOfreceived;
-                this.form.quarter               =    data.quarter_id;
-                $('#quarter').val(data.quarter_id).trigger('change');
-                this.loadActiveQuarterList();
-                this.form.remarks               =    data.remarks;
-                this.form.id                    =    data.id;
-                this.form.items_received=[];
-
-                // let prop=data.stockreceived;
-                // let stockreceivedDetails=[];
-                for(let i=0;i<data.stockreceived.length;i++){
-                    this.form.items_received.push({
-                    item:data.stockreceived[i].item_id,
-                    quantity:data.stockreceived[i].receivedquantity,
-                    unit:data.stockreceived[i].unit_id,
-                    remarks:data.stockreceived[i].remarks});
-                }
-                this.count=data.length;
-                //this.form.items_received=stockreceivedDetails;
-
-            })
-            .catch((error) =>{
-                console.log("Error:"+error);
-            });
-        },
 
         applyselect(){
             if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
@@ -181,7 +157,7 @@ export default {
         },
 
         /**
-         * method to get term in dropdown
+         * method to get quarter in dropdown
          */
         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
@@ -213,6 +189,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -222,30 +201,14 @@ export default {
         /**
          * method to get item in dropdown
          */
-      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.itemList =  data.data.data;
+                this.itemList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
-            });
-        },
-        allOrgList(dzo_id){
-            if(dzo_id==""){
-                dzo_id=$('#dzongkhag').val();
-            }
-            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
-            this.orgList = [];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.orgList = data.data.data;
-            })
-
-            .catch(function (error){
-                console.log("Error:"+error)
             });
         },
         /**
@@ -284,21 +247,41 @@ export default {
                 this.form.items_received.splice(index,1);
             }
         },
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dzongkhagList =  data.data.data;
+        selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
+        getStockReceivedDetails(stkId){
+            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
+            .then((response) => {
+                let data=response.data.data;
+                this.form.dateOfreceived        =    data.dateOfreceived;
+                this.form.quarter               =    data.quarter_id;
+                $('#quarter').val(data.quarter_id).trigger('change');
+                this.loadActiveQuarterList();
+                this.form.remarks               =    data.remarks;
+                this.form.id                    =    data.id;
+                this.form.items_received=[];
+                for(let i=0;i<data.stockreceived.length;i++){
+                    this.form.items_received.push({
+                    itemid:data.stockreceived[i].item_id,
+                    // unit:this.unitArray[data.stockreceived[i].unit_id],
+                    quantity:data.stockreceived[i].receivedquantity,
+                    measurement_unit:data.stockreceived[i].unit_id,
+                    remarks:data.stockreceived[i].remarks});
+                }
+                this.count=data.length;
+
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
+            .catch((error) =>{
+                console.log("Error:"+error);
             });
         },
 
+
     },
      mounted() {
-        this.loadActiveItemList();
-        this.loadActiveUnitList();
+        this.loadActiveQuarterList();
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -309,18 +292,9 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-
-    },
-    created() {
         this.loadActiveUnitList();
-        this.allOrgList();
         this.loadActiveItemList();
-        this.loadActiveQuarterList();
-        this.loadactivedzongkhagList();
         this.getStockReceivedDetails(this.$route.params.data.id);
-
-
 
     }
 }

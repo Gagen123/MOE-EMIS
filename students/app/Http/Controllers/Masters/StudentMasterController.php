@@ -179,8 +179,8 @@ class StudentMasterController extends Controller
             return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
         } else if($param == 'vaccine_type'){
-            $vacinetype = StudentType::all();
-            return $vacinetype;
+            // $vacinetype = StudentType::all();
+            // return $vacinetype;
 
         } else if($param == 'program_name'){
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
@@ -459,6 +459,10 @@ class StudentMasterController extends Controller
                 }
             case "health_screening" : {
                     $databaseModel = "HealthScreening";
+                    break;
+                }
+            case "health_supplementation" : {
+                    $databaseModel = "HealthSupplementation";
                     break;
                 }
             case "screening_position" : {

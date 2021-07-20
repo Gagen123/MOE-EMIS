@@ -25,27 +25,25 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <th>Quantity</th>
                                   <th>Unit</th>
+                                  <th>Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
-                                    <select name="item" id="item" class="form-control" v-model="item.item">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                    <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
                                       </select>
+                                  </td>
+                                  <td>
+                                    <span :id="'measurement_unit'+index"></span>
                                   </td>
                                   <td>
                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
-                                  <td>
-                                     <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
 
-                                     </select>
-                                  </td>
                                   <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
@@ -73,10 +71,9 @@
             </div>
             <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Submit</button>
             </div>
-            </div>
-
+        </div>
         </form>
     </div>
 </template>
@@ -85,15 +82,10 @@
 export default {
     data(){
         return{
-          //  orgList:[],
             quarterList:[],
             itemList:[],
             unitList:[],
-          //  termList:[],
-          //  dzongkhagList:[],
-          //  dzongkhag:'',
-        //    organizaiton:'',
-          //  itemrelease:[],
+            unitArray:{},
             items_received: [],
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
@@ -106,7 +98,6 @@ export default {
     },
 
     methods:{
-
         /**
          * method to reset form
          */
@@ -131,7 +122,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Food received detail is added successfully'
+                        text: "Food received detail has been saved and submitted for principal's endrosement"
                     })
                     this.$router.push('/stockreceived_list');
                 })
@@ -190,6 +181,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -209,9 +203,6 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        /**
-         *
-         */
 
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -223,10 +214,6 @@ export default {
                 this.form.quarter=$('#quarter').val();
             }
         },
-
-        /**f
-         * method to get dzongkhag in dropdown
-         */
 
         /**
          * method to add more fields
@@ -240,17 +227,19 @@ export default {
          * method to remove fields
          */
         remove(index){
-             if(this.form.items_received.length>1){
+            if(this.form.items_received.length>1){
                 this.count--;
                 this.form.items_received.splice(index,1);
             }
         },
-
-
+        selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
     },
-     mounted() {
+    mounted() {
         this.loadActiveQuarterList();
-         $('.select2').select2();
+        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
@@ -262,9 +251,6 @@ export default {
         });
         this.loadActiveUnitList();
         this.loadActiveItemList();
-       // this.loadActiveTermList();
-
-
     }
 }
 </script>

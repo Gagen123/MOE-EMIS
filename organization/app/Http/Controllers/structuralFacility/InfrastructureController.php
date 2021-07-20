@@ -12,7 +12,7 @@ use App\Models\Masters\StructureSubCategory;
 use App\Models\Masters\StructureFacility;
 use App\Models\Masters\StructureDesigner; 
 use App\Models\Masters\ECCDStructureType;
-use App\Models\Masters\ECCDFacilities;
+use App\Models\structuralFacility\ECCDFacilities;
 use App\Models\structuralFacility\FacilityInStructure;
 use App\Models\structuralFacility\eccdInfrastructure;
 use App\Models\structuralFacility\eccdInfrastructurefacility;

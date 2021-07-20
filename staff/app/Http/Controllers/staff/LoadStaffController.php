@@ -76,6 +76,16 @@ class LoadStaffController extends Controller{
         if($type=="emp_id"){
             return $this->successResponse(PersonalDetails::where('emp_id',$id)->first());
         }
+        if($type=="cid_emp_id"){
+            $data=$this->successResponse(PersonalDetails::where('emp_id',$id)->first());
+            if($data!=null && $data!=""){
+                return $data;
+            }
+            else{
+                return $this->successResponse(PersonalDetails::where('cid_work_permit',$id)->first());
+            }
+        }
+
     }
 
 }

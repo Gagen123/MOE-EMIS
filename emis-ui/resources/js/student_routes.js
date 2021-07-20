@@ -329,11 +329,18 @@ const routes = [
 { path: '/student_sen_list',name:'student_sen_list', component: require('./components/students/Sen/sen_student_list.vue').default },
 { path: '/sen_questions',name:'sen_questions', component: require('./components/students/Sen/sen_question.vue').default },
 
-    //Student List and Profile Related Routes
+    //Student Profile
     { path: '/student_profile',name:'student_profile', component: require('./components/students/General/student_profile.vue').default },
-    { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
+    // { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
 
-   
+    //Student List
+    { path: '/student_list_index', component: require('./components/students/General/student_list_index.vue').default,
+        children: [
+            { path: '/', name:'regular_student_list', component: require('./components/students/General/Regular/student_list.vue').default },
+            { path: '/ce_student_list', name:'ce_student_list', component: require('./components/students/General/CE/ce_student_list.vue').default},
+        ]
+    },
+
 
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
@@ -483,7 +490,7 @@ const routes = [
             ]
         },
         //Counselling records
-       
+
     ]
     },
 //     { path: '/student_counselling_record', component: require('./components/students/counselling_records/index.vue').default,
@@ -493,7 +500,7 @@ const routes = [
 //         { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
 //         { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
 //         { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
-        
+
 //     ]
 // },
 

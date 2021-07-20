@@ -1132,10 +1132,17 @@ class AdministrationController extends Controller{
         return $dis;
     }
     public function getpersonbycid($cid){
+<<<<<<< HEAD
         $person = json_decode($this->apiService->listData('getCensusData/'. $cid));
         if ($person!=null && $person->citizenDetailsResponse) {
             $response_data = $person->citizenDetailsResponse;
             return  response()->json($response_data);
+=======
+        $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
+        if($person->data->hasdata){
+            $response_data = $person->data->citizenDetail;
+            return  $response_data;
+>>>>>>> 7c97dc035c62177142682f87ea11f59c20b1f767
         }else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }

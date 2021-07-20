@@ -7,7 +7,7 @@
                     <th>Category</th>
                     <th>Sub-Category</th>
                     <th>Structure No.</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -31,7 +31,8 @@
 export default {
     data(){
         return{
-            infrastructureList:[]
+            infrastructureList:[],
+            dt:'',
         }
     },
 
@@ -43,16 +44,8 @@ export default {
                 this.infrastructureList =  data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#infrastructure-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
         viewInfrastructureList(data){
             data.action='edit';
@@ -61,6 +54,15 @@ export default {
     },
     mounted(){
         this.loadInfrastructureList();
+        this.dt =  $("#infrastructure-table").DataTable();
+    },
+    watch: {
+        infrastructureList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#infrastructure-table").DataTable()
+            });
+        }
     },
 }
 </script>
