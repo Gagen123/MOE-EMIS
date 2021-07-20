@@ -44,7 +44,7 @@
                                                   </thead>
                                                  <tbody>
                                                   <tr>
-                                                     <td>Level</td>
+                                                     <td>Levels</td>
                                                      <td>{{levelArray[existing_details.levelId]}}</td>
                                                    </tr>
                                                    <tr>

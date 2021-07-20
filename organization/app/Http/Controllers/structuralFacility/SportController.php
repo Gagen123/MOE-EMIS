@@ -61,7 +61,6 @@ class SportController extends Controller
      * method to save sport details
      */
     public function saveSport(Request $request){
-      //  dd($request);
         $id = $request->id;
         if( $id != null){
             $sport = [
@@ -101,15 +100,14 @@ class SportController extends Controller
                      'updated_by'                       =>  $request->user_id,
                      'created_at'                       =>  date('Y-m-d h:i:s')
                     );
-                   // dd($sport);
                   // dd( $facility);
-                // try{
+                try{
                  $localpro = Sport::create($sport);
-                // }
-                // catch(\Illuminate\Database\QueryException $ex){
-                //     dd($ex);
+                }
+                catch(\Illuminate\Database\QueryException $ex){
+                    dd($ex);
 
-                // }
+                }
             }
             return $this->successResponse($localpro, Response::HTTP_CREATED);
         }

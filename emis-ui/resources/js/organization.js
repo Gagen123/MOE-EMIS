@@ -566,6 +566,16 @@ const routes = [
                   { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
                 ]
               },
+
+            //   { path: '/projections',
+            //   component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
+            //   children: [
+            //     { path: '',name:'projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+            //     { path: '/add_projections', name:'add_projections', component: require('./components/organization/centers_feeders/projections/add_projections.vue').default },
+            //     { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/centers_feeders/projections/edit_projections.vue').default },
+            //     { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+            //   ]
+            // },
             // { path: '/locations', name:'locations',
             //     component: require('./components/organization/general/locations.vue').default,
             //     children:

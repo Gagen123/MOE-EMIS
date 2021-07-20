@@ -39,7 +39,6 @@ class StructuralController extends Controller
             'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
-       // dd( $sport);
         // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
@@ -213,6 +212,7 @@ class StructuralController extends Controller
             'user_id'                   =>  $this->userId() 
         ];
         // dd($request->questionList);
+        // dd( $eccd_data); 
         $response_data= $this->apiService->createData('emis/organization/infrastructure/saveEccdFacilities', $eccd_data);
         return $response_data;
     }

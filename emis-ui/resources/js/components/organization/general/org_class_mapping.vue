@@ -342,7 +342,6 @@ export default {
                 axios.get(url)
                 .then(response => {
                     this.classStreamList = response.data.data;
-                    alert(this.classStreamList);
                 });
             }
         },

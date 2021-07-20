@@ -12,7 +12,7 @@ class ECCDFacilities extends Model
     use HasFactory, Uuid;
     protected $table="eccd_facilities";
     protected $fillable = [
-        'id','orgId','questionId','answer','type','ans_type','created_by','updated_by'
+        'id','orgId','questionId','answer','type','ans_type','created_by','updated_by','created_at', 'updated_at'
     ];
 
 

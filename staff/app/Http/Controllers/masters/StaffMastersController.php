@@ -135,28 +135,23 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-        if($request['record_type']=="transfer_type"){
-
-            try{
-            $response_data = TransferType::create();
-            }catch(\Illuminate\Database\QueryException $ex){
-            dd($ex);
+            if($request['record_type']=="transfer_type"){
+                    $response_data = TransferType::create();
+                return $response_data;
             }
-            return $response_data;
-        }
 
-        if($request['record_type']=="staff_qualification"){
+            if($request['record_type']=="staff_qualification"){
             if($request->actiontype=="add"){
                 $table="";
                 if($request['record_type']=="staff_qualification"){
                     $table="master_stf_qualification";
                 }
                 $rules = [
-                    'parent_field'    =>  'required',
+                    'parent_field'     =>  'required',
                     'parent_field1'    =>  'required',
-                    'name'  =>  'required|unique:'.$table,
-                    'code'    =>  'required|unique:'.$table,
-                    'status'    =>  'required',
+                    'name'             =>  'required|unique:'.$table,
+                    'code'             =>  'required|unique:'.$table,
+                    'status'           =>  'required',
                 ];
                 $customMessages = [
                     'parent_field.required' => 'This field is required',

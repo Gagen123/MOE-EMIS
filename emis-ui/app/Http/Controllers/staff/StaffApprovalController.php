@@ -41,7 +41,6 @@ class StaffApprovalController extends Controller
 
     public function savePrincipalApproval(Request $request){
         $this->service_name = $request['application_for'];
-        
         //File Upload
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -273,7 +272,6 @@ class StaffApprovalController extends Controller
                 }
             }
         }
-
         $data =[
             'status'                        =>   $org_status,
             'application_number'            =>   $request->application_no,
@@ -354,26 +352,27 @@ class StaffApprovalController extends Controller
                 }
             }
         }
+
         $request['attachment_details'] = $attachment_details;
-        $principalApproval_data="";
-        $validation ="";
-        switch($request['application_type']){
-            case "Expatriate_Recruitment" : {
-                $validation = $this->validateExpatriateRecuritmentFields($request);
-                $principalApproval_data = $this->setExpatriateRecuritmentFields($request);
-                break;
+        $Expatriate_data="";
+        $validation="";
+            switch($request['application_type']){
+                case "principal_recruitment" : {
+                        $validation = $this->validatePrincipalRecuritmentApprovalFields($request);
+                        $Expatriate_data = $this->setExpatriateRecuritmentFields($request);
+                        break;
+                    }
+                    default : {
+                        break;
+                    }
                 }
-                default : {
-                    break;
-                }
-            }
-            $rules = $validation['rules'];
-            $customMessages = $validation['messages'];
-    
-            $this->validate($request, $rules, $customMessages);
-            $principalApproval_data=$principalApproval_data+[
-                'attachment_details'    =>   $attachment_details,
-            ];
+                $rules = $validation['rules'];
+                $customMessages = $validation['messages'];
+        
+                $this->validate($request, $rules, $customMessages);
+                $Expatriate_data=$Expatriate_data+[
+                    'attachment_details'            =>   $attachment_details,
+                ];
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
             //  dd($workflowdet,$request->application_for);
             $screen_id="";
@@ -391,7 +390,7 @@ class StaffApprovalController extends Controller
             if($screen_id==null || $screen_id==""){
                 return 'No Screen';
             }
-            $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $principalApproval_data);
+            $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $Expatriate_data);
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
