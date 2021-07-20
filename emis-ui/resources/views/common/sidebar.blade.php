@@ -306,22 +306,14 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
+                    <li class="nav-item has-treeview" >
+                        <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
+                        <i class="fa fa-angle-double-right nav-icon"></i>
+                            View Org Profile
+                        </router-link>
+                    </li>
                     @if(session('User_Details')!=null)
-                        @if(session('User_Details')['acess_level']=="Org")
-                            <li class="nav-item has-treeview" >
-                                <router-link to="/view_organization_profile" class="nav-link pt-1 pb-1">
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                    View Org Profile
-                                </router-link>
-                            </li>
-                        @endif
                         @if(session('User_Details')['acess_level']=="Dzongkhag")
-                            <li class="nav-item has-treeview" >
-                                <router-link to="/view_dzongkhag_profile" class="nav-link pt-1 pb-1">
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                    View Org Profile
-                                </router-link>
-                            </li>
                             <li class="nav-item" id="organization_list">
                                 <router-link to="/organization_list" class="nav-link">
                                     <p>
@@ -332,12 +324,6 @@
                             </li>
                         @endif
                         @if(session('User_Details')['acess_level']=="Ministry")
-                            <li class="nav-item has-treeview" >
-                                <router-link to="/view_department_profile" class="nav-link pt-1 pb-1">
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                    View Org Profile
-                                </router-link>
-                            </li>
                             <li class="nav-item" id="organization_list">
                                 <router-link to="/organization_list" class="nav-link">
                                     <p>
@@ -367,23 +353,12 @@
                     </li>
                     @if(session('User_Details')!=null)
                         @if(session('User_Details')['acess_level']=="Org")
-                            @foreach(session('User_Details')['roles'] as $key => $user_role)
-                                @if(strpos($user_role->roleName,'ECCD')===false)
-                                    <li class="nav-item has-treeview" >
-                                        <router-link to="/detailed_information_eccd" class="nav-link pt-1 pb-1">
-                                        <i class="fa fa-angle-double-right nav-icon"></i>
-                                            Detailed Information
-                                        </router-link>
-                                    </li>
-                                @else
-                                    <li class="nav-item has-treeview" >
-                                        <router-link to="/detailed_information_school" class="nav-link pt-1 pb-1">
-                                        <i class="fa fa-angle-double-right nav-icon"></i>
-                                            Detailed Information
-                                        </router-link>
-                                    </li>
-                                @endif
-                            @endforeach
+                            <li class="nav-item has-treeview" >
+                                <router-link to="/detailed_information_organization" class="nav-link pt-1 pb-1">
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Detailed Information
+                                </router-link>
+                            </li>
                         @endif
                     @endif
 
@@ -684,67 +659,59 @@
 
                 </ul>
             </li>
-            @if(session('User_Details')!=null)
-                {{-- @if(session('User_Details')['acess_level']=="Org") --}}
-                    @foreach(session('User_Details')['roles'] as $key => $user_role)
-                        @if(strpos($user_role->roleName,'ECCD')===false)
-                            <li class="nav-header"></li>
-                            <li class="nav-item has-treeview" id="studentlink">
-                                <a href="#" class="nav-link pt-1 pb-1">
-                                    <i class="nav-icon fa fa-adjust"></i>
-                                    <p>
-                                        Other Transactions
-                                        <i class="fas fa-angle-left right"></i>
-                                    </p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item" id="track_application">
-                                        <router-link to="/question_answer_index" class="nav-link">
-                                            <p>
-                                                <i class="fa fa-question nav-icon"></i>
-                                                Question & Answer set up
-                                            </p>
-                                        </router-link>
-                                    </li>
-                                    <li class="nav-item" id="messlink">
-                                        <router-link to="/messManage_index" class="nav-link">
-                                            <p>
-                                            <i class="nav-icon fa fa-carrot"></i>
-                                                Mess Management
-                                            </p>
-                                        </router-link>
-                                    </li>
-                                    <li class="nav-item" id="messlink">
-                                        <router-link to="/dietary" class="nav-link">
-                                            <p>
-                                            <i class="nav-icon fa fa-diagnoses"></i>
-                                                Dietary
-                                            </p>
-                                        </router-link>
-                                    </li>
-                                </ul>
-                            </li>
+            <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="studentlink">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="nav-icon fa fa-adjust"></i>
+                    <p>
+                        Other Transactions
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="track_application">
+                        <router-link to="/question_answer_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-question nav-icon"></i>
+                                Question & Answer set up
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/messManage_index" class="nav-link">
+                            <p>
+                            <i class="nav-icon fa fa-carrot"></i>
+                                Mess Management
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/dietary" class="nav-link">
+                            <p>
+                            <i class="nav-icon fa fa-diagnoses"></i>
+                                Dietary
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
 
-                            <li class="nav-item" id="track_application">
-                                <router-link to="/track_application" class="nav-link">
-                                    <p>
-                                        <i class="fa fa-search nav-icon"></i>
-                                        Track Application
-                                    </p>
-                                </router-link>
-                            </li>
-                            <li class="nav-item" id="tasklist">
-                                <router-link to="/tasklist" class="nav-link">
-                                    <p>
-                                        <i class="fa fa-list nav-icon"></i>
-                                        Task List
-                                    </p>
-                                </router-link>
-                            </li>
-                        @endif
-                    @endforeach
-                {{-- @endif --}}
-            @endif
+            <li class="nav-item" id="track_application">
+                <router-link to="/track_application" class="nav-link">
+                    <p>
+                        <i class="fa fa-search nav-icon"></i>
+                        Track Application
+                    </p>
+                </router-link>
+            </li>
+            <li class="nav-item" id="tasklist">
+                <router-link to="/tasklist" class="nav-link">
+                    <p>
+                        <i class="fa fa-list nav-icon"></i>
+                        Task List
+                    </p>
+                </router-link>
+            </li>
             <li class="nav-item" id="select_system">
                 <a href="{{route('select_system') }}" class="nav-link text-white">
                     <i class="nav-icon fa fa-sign-out-alt pr-4"></i>

@@ -87,7 +87,7 @@
                                     <label class="mb-0">Is Feeding School:</label>
                                     <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
                                 </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" v-if="applicationOrgdetails.isFeedingSchool  == 1">
                                     <label class="mb-0">Feeding Modality:</label><br>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding1" value="1" tabindex=""/> One Meal</label>
                                     <label><input  type="checkbox" v-model="feeding" id="feeding2" value="2" tabindex=""/> Two Meals</label>
@@ -120,7 +120,7 @@
                                         <tr>
                                             <th>Sl#</th>
                                             <th>Class</th>
-                                            <th class="strm_clas">Stream</th>
+                                            <th class="isstream" style="display:none">Stream</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -128,8 +128,8 @@
                                         <tr v-for='(item,count) in class_section' :key="count+1">
                                             <td>{{count+1 }} </td>
                                             <td>{{calssArray[item.classId] }} </td>
-                                            <td class="strm_clas" v-if="item.streamId">  {{streamArray[item.streamId]}}</td>
-                                            <td class="strm_clas" v-else> </td>
+                                            <td class="isstream" style="display:none">  {{streamArray[item.streamId]}}</td>
+                                            <td class="notstream" style="display:none"> </td>
                                              <td>
                                                 <input type="checkbox" checked="true">
                                             </td>
@@ -323,7 +323,6 @@ export default {
     },
     methods:{
         loadestablishmentapplicationdetails(appId){
-            $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForView/'+appId)
             .then((response) => {
                 let data=response.data.data;
@@ -331,7 +330,11 @@ export default {
                 this.application_number=this.applicationdetails.application_no;
                 this.applicationOrgdetails=data.org_details;
                 if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
-                    $('.strm_clas').show();
+                    this.isstream=true;
+                    $('.isstream').show();
+                }
+                else{
+                    $('.notstream').show();
                 }
                 this.class_section=data.org_class_stream;
                 if(data.app_verification!=null){
@@ -346,7 +349,7 @@ export default {
                     $('#feedingDetails').show();
                 }
                 // alert(data.app_verification);
-                if(data.app_verification_team.length>0){
+                if(data.app_verification_team!=null && data.app_verification_team!="" && data.app_verification_team.length>0){
                     $('#team_verificationAttachment').show();
                     $('#verifier_team').show();
                     for(let i=0;i<data.app_verification_team.length;i++){

@@ -212,27 +212,27 @@ class TransferController extends Controller{
         return $this->successResponse($response_data);
     }
     public function updateTransferApplication(Request $request){
-        $request_data =[
-            'id'                           =>  $request->id,
-            'status'                       =>  $request->status,
-            'dzongkhagApproved'            =>  $request->dzongkhagApproved,
-            'updated_by'                   =>  $request->user_id,
-            'updated_at'                   =>  date('Y-m-d h:i:s'),
-            'service_name'                 =>  $request->service_name,
-            'current_status'               =>  $request->current_status,
-            'aplication_number'           =>  $request->application_number,
+        // $request_data =[
+        //     'id'                           =>  $request->id,
+        //     'status'                       =>  $request->status,
+        //     'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+        //     'updated_by'                   =>  $request->user_id,
+        //     'updated_at'                   =>  date('Y-m-d h:i:s'),
+        //     'service_name'                 =>  $request->service_name,
+        //     'current_status'               =>  $request->current_status,
+        //     'aplication_number'            =>  $request->application_number,
 
-        ];
+        // ];
         $extra_data =[
             'id'                           =>  $request->id,
             'status'                       =>  $request->status,
             'dzongkhagApproved'            =>  $request->dzongkhagApproved,
             'updated_by'                   =>  $request->user_id,
             'updated_at'                   =>  date('Y-m-d h:i:s'),
-            'aplication_number'           =>  $request->application_number,
+            'aplication_number'            =>  $request->application_number,
 
         ];
-        if($request->status=="Approved"){
+        if($request->status=="Approved"|| $request->status =="Transfer Approved"){
             $applicant_det  = TransferApplication::where('id',$request->id)->first();
             $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
             $history_data=[
@@ -251,7 +251,8 @@ class TransferController extends Controller{
             ];
             StaffHistory::create($history_data);
             $update_data=[
-                'dzo_id'                      =>$request->dzongkhagApproved,
+                'dzo_id'                       =>$request->dzongkhagApproved,
+                'working_agency_id'            =>$request->preference_school,
             ];
             PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
         }

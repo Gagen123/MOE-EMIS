@@ -145,7 +145,6 @@ export default {
                 })
             }
 		},
-
         applyselect(){
             if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
                 $('#quarter').addClass('select2-hidden-accessible');
@@ -160,7 +159,6 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-
         getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/' +this.form.facility){
             axios.get(uri)
             .then(response => {
@@ -172,7 +170,6 @@ export default {
         /**
          * method to get quarter in dropdown
          */
-        
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -184,7 +181,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-
         /**
          * method to get unit in dropdown
          */

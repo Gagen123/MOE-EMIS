@@ -28,6 +28,7 @@ class ApplicationDetails extends Model
         'year',
         'status',
         'remarks',
+        'applicant_remarks',
         'created_by',
         'updated_by',
         'created_at',

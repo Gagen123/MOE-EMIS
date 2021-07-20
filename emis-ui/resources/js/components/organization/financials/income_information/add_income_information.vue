@@ -56,7 +56,7 @@ export default {
             axios.get('masters/organizationMasterController/loadincomeList')
             .then(response => {
                 let data = response;
-                this.incomeList =  data.data.data;
+                this.incomeList = data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -64,26 +64,26 @@ export default {
 
         },
         submitForm(){
-        const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
+            const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
                 }
-            }
-            let formData = new FormData(); 
-            formData.append('amount', this.income_form.amount);
-            formData.append('date', this.income_form.date);
-            formData.append('incomeFacilitiesId', this.income_form.incomeFacilitiesId);
-            formData.append('remarks', this.income_form.remarks);
-            axios.post('/organization/saveIncomeinfo',formData,config)
-            .then(()=>{
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data  saved successfully'
-                });
-                 this.$router.push('/list_income_information');
-            })
-            .catch(()=>{console.log("Error.....")})
-        },  
+                let formData = new FormData(); 
+                formData.append('amount', this.income_form.amount);
+                formData.append('date', this.income_form.date);
+                formData.append('incomeFacilitiesId', this.income_form.incomeFacilitiesId);
+                formData.append('remarks', this.income_form.remarks);
+                axios.post('/organization/saveIncomeinfo',formData,config)
+                .then(()=>{
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data  saved successfully'
+                    });
+                    this.$router.push('/list_income_information');
+                })
+                .catch(()=>{console.log("Error.....")})
+            },  
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');

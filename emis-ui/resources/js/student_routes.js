@@ -445,22 +445,6 @@ const routes = [
             },
         ]
     },
-        //Student =>Student RollNo Allocation
-        { path: '/class_section', component: require('./components/students/ClassSection/index.vue').default,
-        children: [
-            { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/list_class_section_allocation.vue').default },
-            { path: '/list_class_section_allocation', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-            //Student => Class Section Allocation
-            { path: '/class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/class_section_allocation.vue').default,
-                children: [
-                    { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-                    { path: '/list_class_section_allocation', name:'list_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-                    { path: '/allocate_class_section', name:'allocate_class_section', component: require('./components/students/ClassSection/ClassSectionAllocation/allocate_class_section.vue').default },
-                    { path: '/edit_class_section_allocation', name:'edit_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/edit_class_section_allocation.vue').default },
-                ]
-            },
-        ]
-    },
      //Student List and Profile Related Routes
     //  { path: '/student_profile',name:'student_profile', component: require('./components/students/Assign_RollNo/student_profile.vue').default },
      { path: '/students_rollNo',name:'students_rollNo', component: require('./components/students/Assign_RollNo/students_rollNo.vue').default },

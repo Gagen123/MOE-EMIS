@@ -566,6 +566,16 @@ const routes = [
                   { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
                 ]
               },
+
+            //   { path: '/projections',
+            //   component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
+            //   children: [
+            //     { path: '',name:'projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+            //     { path: '/add_projections', name:'add_projections', component: require('./components/organization/centers_feeders/projections/add_projections.vue').default },
+            //     { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/centers_feeders/projections/edit_projections.vue').default },
+            //     { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
+            //   ]
+            // },
             // { path: '/locations', name:'locations',
             //     component: require('./components/organization/general/locations.vue').default,
             //     children:
@@ -932,6 +942,7 @@ const routes = [
     { path: '/view_dzongkhag_profile',name:'view_dzongkhag_profile', component: require('./components/organization/view_dzongkhag_profile.vue').default },
     { path: '/view_department_profile',name:'view_department_profile', component: require('./components/organization/view_department_profile.vue').default },
     { path: '/basic_details_index',name:'basic_details_index', component: require('./components/organization/organization_basic_details.vue').default },
+    { path: '/detailed_information_organization',name:'detailed_information_organization', component: require('./components/organization/detailed_information_organization.vue').default },
     { path: '/detailed_information_eccd',name:'detailed_information_eccd', component: require('./components/organization/detailed_information_eccd.vue').default },
     { path: '/detailed_information_school',name:'detailed_information_school', component: require('./components/organization/detailed_information_school.vue').default },
     { path: '/org_class_section',name:'org_class_section', component: require('./components/organization/general/org_class_mapping.vue').default },

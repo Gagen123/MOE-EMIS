@@ -21,27 +21,27 @@
                                     </div>
                                     <br>
                                     <div class="form-group row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="col-lg-8 col-md-8 col-sm-8">
                                             <label>Name:</label>
-                                            <input type="text" readonly :value="form.name"  class="form-control" id="name"/>
+                                            <input type="text"  :value="form.name"  class="form-control" id="name"/>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Date of Birth:</label>
-                                            <input type="text" readonly :value="form.dob"  class="form-control" id="dob"/>
+                                            <input type="date"  :value="form.dob"  class="form-control" id="dob"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Dzongkhag:</label>
-                                            <input type="text" readonly :value="form.dzongkhag"  class="form-control" id="dzongkhag"/>
+                                            <input type="text"  :value="form.dzongkhag"  class="form-control" id="dzongkhag"/>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Gewog:</label>
-                                            <input type="text" readonly :value="form.gewog"  class="form-control" id="gewog"/>
+                                            <input type="text"  :value="form.gewog"  class="form-control" id="gewog"/>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Village:</label>
-                                            <input type="text" readonly :value="form.village"  class="form-control" id="village"/>
+                                            <input type="text"  :value="form.village"  class="form-control" id="village"/>
                                         </div>
                                     </div>
                                     <div class="form-group row">
