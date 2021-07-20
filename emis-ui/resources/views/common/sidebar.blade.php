@@ -371,6 +371,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
+                        <router-link to="/structural_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Facilities
+                            </p>
+                        </router-link>
+                    </li>
                     @if(session('User_Details')!=null)
                         @if(session('User_Details')['acess_level']=="Org")
                             @foreach(session('User_Details')['roles'] as $key => $user_role)
@@ -404,14 +412,6 @@
                                             <p>
                                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                                 Equipments and Furnitures
-                                            </p>
-                                        </router-link>
-                                    </li>
-                                    <li class="nav-item" id="facility" onclick="setclass('organizationlink','','facility')">
-                                        <router-link to="/structural_index" class="nav-link">
-                                            <p>
-                                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                                Facilities
                                             </p>
                                         </router-link>
                                     </li>

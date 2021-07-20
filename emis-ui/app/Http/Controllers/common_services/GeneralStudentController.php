@@ -130,4 +130,16 @@ class GeneralStudentController extends Controller{
         return $student_record;
     }
 
+    /**
+     * Load the student information e.g. no. of boys and girls
+     * 
+     * $param takes the value such as general, SEN etc
+     */
+
+    public function loadStudentInformation($param){
+        $org_id = $this->getWrkingAgencyId();
+        $student_record = $this->apiService->listData('emis/students/loadStudentInformation/'.$org_id.'/'.$param);
+        return $student_record;
+    }
+
 }

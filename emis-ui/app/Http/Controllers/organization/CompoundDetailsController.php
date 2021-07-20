@@ -76,7 +76,7 @@ class CompoundDetailsController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-      //  dd( $comp);
+        //dd( $comp);
         // try{
             $response_data= $this->apiService->createData('emis/organization/compoundDetails/saveSchoolCompundDetails', $comp);
             return $response_data;
