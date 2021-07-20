@@ -4,7 +4,7 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Type:<i class="text-danger">*</i></label>
-                    <select v-model="finacial_form.type" :class="{ 'is-invalid select2 select2-hidden-accessible': finacial_form.errors.has('type') }" class="form-control select2" name="type" id="type">
+                    <select v-model="finacial_form.financialInformationId" :class="{ 'is-invalid select2 select2-hidden-accessible': finacial_form.errors.has('financialInformationId') }" class="form-control select2" name="financialInformationId" id="financialInformationId">
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="finacial_form" field=""></has-error>
@@ -43,12 +43,10 @@ export default {
     data(){
         return {
             typeList:[],
-
             finacial_form: new form({
                 amount: '',
                 date:'',
                 remarks: '',
-                type:'',
                 financialInformationId:'',
             }),
         }
@@ -57,6 +55,7 @@ export default {
         loadtypeList(){
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
+                alert(JSON.stringify(response.data.data));
                 let data = response;
                 this.typeList =  data.data.data;
             })

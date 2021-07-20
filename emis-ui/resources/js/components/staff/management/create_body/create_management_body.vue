@@ -191,7 +191,7 @@
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Type:<span class="text-danger">*</span> </label>
-                                <select v-model="staff.type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('type') }" class="form-control select2" name="type" id="type" disabled>
+                                <select v-model="staff.type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('type') }" class="form-control select2" name="type" id="type">
                                     <option value="">--Select--</option>
                                     <option value="Staff">Staff</option>
                                     <option value="Non Staff">Non Staff</option>
@@ -387,7 +387,7 @@ export default {
                 this.staffcomposition_list=[];
                 this.studentcomposition_list=[];
                 this.nonstaffcomposition_list=[];
-                let data = response.data.data;
+                let data = response.data.data.members;
                 for(let i=0;i<data.length;i++){
                     if(data[i].emptye=="Staff"){
                         this.staffcomposition_list.push(data[i]);
@@ -399,7 +399,6 @@ export default {
                         this.nonstaffcomposition_list.push(data[i]);
                     }
                 }
-
             })
             .catch(function (error) {
                 console.log('error: '+error);

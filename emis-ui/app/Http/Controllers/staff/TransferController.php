@@ -154,6 +154,10 @@ class TransferController extends Controller{
             $org_status="Approved";
             $work_status=10;
         }
+        if($request->actiontype=="forward"){
+            $org_status="Transfer Approved";
+            $work_status=9;
+        }
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -166,7 +170,7 @@ class TransferController extends Controller{
             'access_level'      =>$this->getAccessLevel(),
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
-            'dzongkhagApproved' =>$request->dzongkhagApproved, 
+            'dzongkhagApproved' =>$request->userDzongkhag, 
         ];
         $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         // $files = $request->attachments;
@@ -197,29 +201,34 @@ class TransferController extends Controller{
             $data =[
                 'id'                            =>  $request->id,
                 'status'                        =>  $org_status,
+                'preference_school'             =>  $request->preference_school,
+                'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
                 'service_name'                  =>  "intra transfer",
-                'dzongkhagApproved'             =>$request->dzongkhagApproved,
+                'dzongkhagApproved'             =>$request->userDzongkhag,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>   $this->userId()
             ];
+            
             $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         }
         else if($request->transferType=='inter_transfer'){
             $data =[
                 'id'                            =>  $request->id,
                 'status'                        =>  $org_status,
+                'preference_school'             =>  $request->preference_school,
+                'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
                 'service_name'                  =>  "inter transfer",
-                'dzongkhagApproved'             =>$request->dzongkhagApproved,
+                'dzongkhagApproved'             =>$request->userDzongkhag,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>   $this->userId()
             ];

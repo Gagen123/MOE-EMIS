@@ -52,8 +52,8 @@
                         </div>
                     </div>
                     <div class="tab-pane fade tab-content-details" id="undertaking-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div v-if="dzongkhagApproved" class="form-group row" >
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="Preferences" >
                                 <label class="mb-0.5">Transfer Preferences</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
@@ -99,7 +99,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div v-if="dzongkhagApproved" class="form-group row" id="Preferences">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Attachments</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -122,6 +122,17 @@
                                 </table>
                             </div>
                         </div>
+
+                        <div v-if="preferenceSchool" class="form-group row" >
+                            <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Select School</label>
+                                    <select v-model="form.preference_school" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school') }" class="form-control select2" name="preference_school" id="preference_school">
+                                <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <has-error :form="form" field="preference_school"></has-error>
+                            <span class="text-danger" id="preference_school_err"></span>
+                            </div>
+                        </div>
                         <!-- <Workflow
                             :appNo="form.application_no"
                         /> -->
@@ -136,8 +147,9 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
+                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Forward </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
@@ -170,6 +182,10 @@ export default {
             draft_attachments:[],
             working_history_list:[],
             training_details_list:[],
+            SchoolList:[],
+            dzongkhagApproved:true,
+            preferenceSchool:false,
+
             form: new form({
                 id: '',
                 application_no:'',
@@ -182,13 +198,15 @@ export default {
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
+                preference_school:'',
+                userDzongkhag:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
                 }],
                 ref_docs:[],
                 remarks:'',
-                dzongkhagApproved:'',
+                
                 actiontype:'',
             }),
         }
@@ -198,6 +216,7 @@ export default {
             axios.get('staff/transfer/loadtrainsferDetails/'+appId+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
+                // alert(JSON.stringify(response.data.data));
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
                 this.form.id=data.id;
@@ -205,9 +224,16 @@ export default {
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
                 this.form.transferType=data.transferType;
-                
                 this.draft_attachments=data.attachments;
 
+                 if(this.form.status_id==10 ){
+                    $('#forwardId').show();
+                    this.dzongkhagApproved=false;
+                    this.preferenceSchool=true;
+                }
+                else{
+                    this.dzongkhagApproved=true;
+                }
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
                         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
@@ -232,8 +258,6 @@ export default {
                     $('#approveDzo1').show();
                     $('#approveDzo2').show();
                     $('#approveDzo3').show();
-                    
-                    
                 }
             })
             .catch((error) =>{
@@ -256,6 +280,16 @@ export default {
                 console.log(errors)
             });
         },
+        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.SchoolList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
         getStaffDetials(staffId){
             axios.get('loadCommons/viewStaffDetails/by_id/'+staffId)
             .then(response =>{
@@ -274,8 +308,8 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        shownexttab(nextclass){
-            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve"){
+        shownexttab(nextclass){ 
+            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve" || nextclass=="forward"){
                 let action=true;
                 if(nextclass=="reject" && this.form.remarks==""){
                     $('#remarks_err').html('Please mention remarks');
@@ -382,6 +416,16 @@ export default {
                 console.log("Error:"+error)
             });
         },
+         changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="preference_school"){
+                this.form.preference_school=$('#preference_school').val();
+            }
+        },
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
@@ -390,14 +434,27 @@ export default {
         },
     },
     mounted(){
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
+
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
         this.form.application_no=this.$route.params.data.application_number;
         this.form.status_id=this.$route.params.data.status_id;
+        this.form.userDzongkhag=this.$route.params.data.user_dzo_id;
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();
         this.gettransferconfig();
         this.loadpositionTitleList();
         this.loadreasons();
         this.getStaffDetials();
+        this.loadOrgList();
         this.loadactivedzongkhagList();
     }
 }
