@@ -50,15 +50,15 @@
                                     </td> -->
                                     <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan=7>
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
+                                  </td>
+                              </tr>
+                             <tr>
+                                  <td colspan=7>
+                                      <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                      @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                      <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                      @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                  </td>
                               </tr>
                           </tbody>
                      </table>
@@ -86,11 +86,11 @@
 export default {
     data(){
         return{
+            quarterList:[],
             itemList:[],
             unitList:[],
-            quarterList:[],
-            items_received: [],
             unitArray:{},
+            items_received: [],
             form: new form({
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
@@ -140,33 +140,6 @@ export default {
                 })
             }
 		},
-        // just added
-        getStockReceivedDetails(stkId){
-            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
-            .then((response) => {
-                let data=response.data.data;
-                this.form.dateOfreceived        =    data.dateOfreceived;
-                this.form.quarter               =    data.quarter_id;
-                $('#quarter').val(data.quarter_id).trigger('change');
-                this.loadActiveQuarterList();
-                this.form.remarks               =    data.remarks;
-                this.form.id                    =    data.id;
-                this.form.items_received=[];
-                for(let i=0;i<data.stockreceived.length;i++){
-                    this.form.items_received.push({
-                    item:data.stockreceived[i].item_id,
-                    // unit:this.unitArray[data.stockreceived[i].unit_id],
-                    quantity:data.stockreceived[i].receivedquantity,
-                    // unit:data.stockreceived[i].unit_id,
-                    remarks:data.stockreceived[i].remarks});
-                }
-                this.count=data.length;
-
-            })
-            .catch((error) =>{
-                console.log("Error:"+error);
-            });
-        },
 
         applyselect(){
             if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
@@ -184,7 +157,7 @@ export default {
         },
 
         /**
-         * method to get term in dropdown
+         * method to get quarter in dropdown
          */
         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
             axios.get(uri)
@@ -228,7 +201,6 @@ export default {
         /**
          * method to get item in dropdown
          */
-
         loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
@@ -237,22 +209,6 @@ export default {
             })
             .catch(function (error) {
                 console.log("Error......"+error)
-            });
-        },
-        allOrgList(dzo_id){
-            if(dzo_id==""){
-                dzo_id=$('#dzongkhag').val();
-            }
-            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
-            this.orgList = [];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.orgList = data.data.data;
-            })
-
-            .catch(function (error){
-                console.log("Error:"+error)
             });
         },
         /**
@@ -291,21 +247,41 @@ export default {
                 this.form.items_received.splice(index,1);
             }
         },
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dzongkhagList =  data.data.data;
+        selectunit(type,index){
+            let itemval=$('#'+type+index).val();
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
+        getStockReceivedDetails(stkId){
+            axios.get('mess_manage/getStockReceivedDetails/'+stkId)
+            .then((response) => {
+                let data=response.data.data;
+                this.form.dateOfreceived        =    data.dateOfreceived;
+                this.form.quarter               =    data.quarter_id;
+                $('#quarter').val(data.quarter_id).trigger('change');
+                this.loadActiveQuarterList();
+                this.form.remarks               =    data.remarks;
+                this.form.id                    =    data.id;
+                this.form.items_received=[];
+                for(let i=0;i<data.stockreceived.length;i++){
+                    this.form.items_received.push({
+                    itemid:data.stockreceived[i].item_id,
+                    // unit:this.unitArray[data.stockreceived[i].unit_id],
+                    quantity:data.stockreceived[i].receivedquantity,
+                    measurement_unit:data.stockreceived[i].unit_id,
+                    remarks:data.stockreceived[i].remarks});
+                }
+                this.count=data.length;
+
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
+            .catch((error) =>{
+                console.log("Error:"+error);
             });
         },
 
+
     },
      mounted() {
-        this.loadActiveItemList();
-        this.loadActiveUnitList();
+        this.loadActiveQuarterList();
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -316,16 +292,10 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-
-    },
-    created() {
         this.loadActiveUnitList();
-        this.allOrgList();
         this.loadActiveItemList();
-        this.loadActiveQuarterList();
-        this.loadactivedzongkhagList();
         this.getStockReceivedDetails(this.$route.params.data.id);
+
     }
 }
 </script>
