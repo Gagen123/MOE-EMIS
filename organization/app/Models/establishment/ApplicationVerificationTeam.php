@@ -11,16 +11,14 @@ class ApplicationVerificationTeam extends Model
     use HasFactory, Uuid;
     protected $table="application_verification_team";
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'id',
         'ApplicationVerificationId',
         'agency',
         'teamMember',
+        'name',
+        'cid',
+        'email',
         'verificationDate',
         'remarks',
         'updated_by',

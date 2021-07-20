@@ -172,7 +172,7 @@
                                     <thead>
                                         <tr>
                                             <th>Classes</th>
-                                            <th class="strm_clas">Stream</th>
+                                            <th class="strm_clas" style="display:none">Stream</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -181,10 +181,10 @@
                                             <td>
                                                 <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
                                             </td>
-                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
+                                            <td class="strm_clas" style="display:none" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
                                                 {{  streamArray[item.streamId]  }}
                                             </td>
-                                            <td class="strm_clas" v-else>
+                                            <td class="notstrm_clas" v-else>
 
                                             </td>
                                             <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
@@ -257,19 +257,95 @@
                                 </div>
                             </div>
                             <hr>
+                            <div class="modal fade" id="search-modal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Adding Staff</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="bootbox-body">
+                                                <div class="row form-group">
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                        <label>Select type:<span class="text-danger">*</span></label>
+                                                        <select class="form-control" @change="showfield()" id="staff_type" v-model="search.staff_type" :class="{ 'is-invalid': search.errors.has('staff_type') }">
+                                                            <option value="">--Select--</option>
+                                                            <option value="Internal">Internal</option>
+                                                            <option value="External">External</option>
+                                                        </select>
+                                                        <has-error :form="search" field="staff_type"></has-error>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="internalstaff">
+                                                        <label>CID/Passport/Emp Id:</label>
+                                                        <input type="text" name="emp_deails_forsearch" id="emp_deails_forsearch" class="form-control">
+                                                        <span class="text-danger" id="emp_deails_forsearch_err"></span>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" v-if="internalstaff">
+                                                        <button type="button" @click="getEmpDetailsForsearch()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Search</button>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                        <label>CID:<span class="text-danger">*</span></label>
+                                                        <input type="text" v-model="search.cid" :class="{ 'is-invalid': search.errors.has('cid') }" name="cid" id="cid" class="form-control">
+                                                        <has-error :form="search" field="cid"></has-error>
+                                                    </div>
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                        <label>Name:<span class="text-danger">*</span></label>
+                                                        <input type="text" v-model="search.name" :class="{ 'is-invalid': search.errors.has('name') }" name="name" id="name" class="form-control">
+                                                        <has-error :form="search" field="name"></has-error>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                        <label>Emial:<span class="text-danger">*</span></label>
+                                                        <input type="text" v-model="search.email" :class="{ 'is-invalid': search.errors.has('email') }" name="email" id="email" class="form-control">
+                                                        <has-error :form="search" field="email"></has-error>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-flat btn-danger">Cancel</button>
+                                            <button  @click="addsearchProvider()" type="button" class="btn btn-flat btn-primary">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="verifier_team" style="display:none">
                                 <h5><u>Team Verification</u></h5>
                                 <div class="row form-group">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
+                                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
                                         <label>Enter the Members CID:</label>
                                         <input type="text" name="emp_deails" id="emp_deails" class="form-control">
                                         <span class="text-danger" id="emp_deails_err"></span>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" v-if="showsearch">
                                         <button type="button" @click="getEmpDetails()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Search</button>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4">
                                         <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>CID/Passport</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Staff Type</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-for='(user, index) in searchProviderList' :key="index">
+                                                <tr>
+                                                    <td> {{user.cid}}</td>
+                                                    <td> {{user.name}}</td>
+                                                    <td> {{user.email}}</td>
+                                                    <td> {{user.staff_type}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <!-- <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th>Name</th>
@@ -291,7 +367,7 @@
                                                 </tr>
                                             </tbody>
                                             <span id="nminees_error" class="text-danger"></span>
-                                        </table>
+                                        </table> -->
                                     </div>
                                 </div>
                             </div>
@@ -387,6 +463,7 @@ export default {
     },
     data(){
         return{
+            internalstaff:false,
             count:1,
             showsearch:false,
             proprietorList:[],
@@ -401,6 +478,7 @@ export default {
             feeding:[],
             isFeeding:0,
             feed_details:'',
+            searchProviderList:[],
             applicationOrgdetails:{locationTypeId:'', level:'', proposedName:'', initiated_by:''},
             classStreamForm: new form({
                 id: '',class:[], stream:[], status:'submitted'
@@ -414,6 +492,16 @@ export default {
                 }],
                 ref_docs:[],
             }),
+            search: new form({
+                id:'',
+                email:'',
+                name:'',
+                cid:'',
+                staff_type:'',
+                applicationNo:'',
+                working_agency_id:'',
+            }),
+
         }
     },
     methods:{
@@ -432,17 +520,28 @@ export default {
                 console.log(errors)
             });
         },
+        getteamVerificationList(){
+            axios.get('organization/loadTeamVerificationList/'+this.search.id)
+            .then(response => {
+                let data = response.data.data;
+                this.searchProviderList=data;
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
         loadestablishmentapplicationdetails(appId,type){
-            $('.strm_clas').hide();
             axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
+                this.search.id=data.id;
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
+                this.getteamVerificationList();
                 let meals="";
                 if(data.org_details.isFeedingSchool==1){
                     this.isFeeding=1;
@@ -540,7 +639,6 @@ export default {
 
                 }
 
-
                 if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
                     $('.strm_clas').show();
                 }
@@ -596,25 +694,24 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        getEmpDetails(){
-            if($('#emp_deails').val()==""){
-                $('#emp_deails_err').html('Please provide this field');
+        showfield(){
+            this.internalstaff=false;
+            if($('#staff_type').val()=="Internal"){
+                this.internalstaff=true;
+            }
+        },
+        getEmpDetailsForsearch(){
+            if($('#emp_deails_forsearch').val()==""){
+                $('#emp_deails_forsearch_err').html('Please provide this field');
             }
             else{
-                $('#emp_deails_err').html('');
-                let type="";
-                if($('#emp_deails').val().length==11){
-                    type="cid";
-                }
-                else{
-                    type="emp_id";
-                }
-                let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails').val();
+                $('#emp_deails_forsearch_err').html('');
+                let type="cid_emp_id";
+                let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails_forsearch').val();
                 axios.get(uri)
                 .then((response) => {
                     let data=response.data.data;
                     $('#emp_deails').val('');
-                    $('#nminees_error').html('');
                     if(data==null){
                         Swal.fire({
                             text: "No details are found with this input!",
@@ -622,13 +719,68 @@ export default {
                         });
                     }
                     else{
-                        this.form.nomi_staffList.push({id:'NA',staff_id:data.id, name:data.name, cid:data.cid_work_permit, po_title:data.position_title, org_id:data.working_agency_id,org:data.working_agency, dzo_id:data.dzo_id,dzo:data.dzongkhag})
+                        this.search.working_agency_id=data.working_agency_id;
+                        this.search.staff_id=data.id;
+                        this.search.cid=data.cid_work_permit;
+                        this.search.name=data.name;
+                        this.search.email=data.email;
                     }
                 })
                 .catch(function (error){
                     console.log(error);
                 });
             }
+        },
+        addsearchProvider(){
+            this.search.applicationNo= this.form.applicationNo;
+            this.search.post('organization/updateTeamVerification/')
+            .then((response) => {
+                this.getteamVerificationList();
+                $('#search-modal').modal('hide');
+                this.search.staff_id='';
+                this.search.cid='';
+                this.search.name='';
+                this.search.email='';
+                this.search.staff_type='';
+            })
+            .catch((err) =>{
+                console.log("Error: "+err);
+            });
+		},
+        getEmpDetails(){
+            $('#search-modal').modal('show');
+            // if($('#emp_deails').val()==""){
+            //     $('#emp_deails_err').html('Please provide this field');
+            // }
+            // else{
+            //     $('#emp_deails_err').html('');
+            //     let type="";
+            //     if($('#emp_deails').val().length==11){
+            //         type="cid";
+            //     }
+            //     else{
+            //         type="emp_id";
+            //     }
+            //     let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails').val();
+            //     axios.get(uri)
+            //     .then((response) => {
+            //         let data=response.data.data;
+            //         $('#emp_deails').val('');
+            //         $('#nminees_error').html('');
+            //         if(data==null){
+            //             Swal.fire({
+            //                 text: "No details are found with this input!",
+            //                 icon: 'error',
+            //             });
+            //         }
+            //         else{
+            //             this.form.nomi_staffList.push({id:'NA',staff_id:data.id, name:data.name, cid:data.cid_work_permit, po_title:data.position_title, org_id:data.working_agency_id,org:data.working_agency, dzo_id:data.dzo_id,dzo:data.dzongkhag})
+            //         }
+            //     })
+            //     .catch(function (error){
+            //         console.log(error);
+            //     });
+            // }
         },
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="update" || nextclass=="verify" || nextclass=="approve"){

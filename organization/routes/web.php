@@ -369,6 +369,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
             $router->post('/saveEstablishment', 'establishment\EstablishmentController@saveEstablishment');
             $router->post('/updateEstablishment', 'establishment\EstablishmentController@updateEstablishment');
+            $router->get('/loadTeamVerificationList/{id}', 'establishment\EstablishmentController@loadTeamVerificationList');
+
+            $router->post('/updateTeamVerification', 'establishment\EstablishmentController@updateTeamVerification');
             $router->post('/saveClassStream', 'establishment\EstablishmentController@saveClassStream');
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
