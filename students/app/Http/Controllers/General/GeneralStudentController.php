@@ -289,5 +289,31 @@ class GeneralStudentController extends Controller
                     ->first();
         return $vaccine;
     }
+
+    /**
+     * Load the student information e.g. no. of boys and girls
+     * 
+     * $param takes the value such as general, SEN etc
+     */
+
+    public function loadStudentInformation($org_id, $param){
+        if($param == 'general'){
+            $records = DB::table('std_student')
+                    ->select( 'std_student.CmnSexId', DB::raw("COUNT(std_student.CmnSexId) as sex"))
+                    ->groupBy('std_student.CmnSexId')
+                    ->where('OrgOrganizationId', $org_id)
+                    ->get();
+        }
+        if($param == 'sen'){
+            $records = DB::table('std_student')
+                    ->select( 'std_student.CmnSexId', DB::raw("COUNT(std_student.isSen) as sen"))
+                    ->groupBy('std_student.CmnSexId')
+                    ->where('OrgOrganizationId', $org_id)
+                    ->get();
+        }
+        
+
+        return $records;
+    }
     
 }
