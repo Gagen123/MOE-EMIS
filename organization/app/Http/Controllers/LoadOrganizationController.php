@@ -71,8 +71,8 @@ class LoadOrganizationController extends Controller{
 
     public function loadInactiveOrgList($dzo_id){
         $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
-                            ->where('dzongkhagId',$dzo_id)
-                            ->select( 'id','name','levelId','dzongkhagId')->get();
+            ->where('dzongkhagId',$dzo_id)
+            ->select( 'id','name','levelId','dzongkhagId')->get();
         return $response_data;
     }
 

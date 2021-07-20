@@ -236,7 +236,7 @@ class QuestionAnswerController extends Controller{
         if(strpos($type,"washAndOthers_")!==false){
             $questionlist = DB::table('question_details as q')
                 ->join('question_category as c', 'q.category_id', '=', 'c.id')
-                ->select('q.name', 'q.id', 'q.answer_type')
+                ->select('q.name', 'q.id', 'q.answer_type') 
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')
                 ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')

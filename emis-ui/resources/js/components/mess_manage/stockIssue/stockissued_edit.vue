@@ -9,25 +9,42 @@
                         v-model="form.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
                         <has-error :form="form" field="dateOfissue"></has-error>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="required">Item Category:</label>
+                    <br>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Local" tabindex="2" @change="getItem('locallyProcured')" /> Locally Procured Item</label>
+                    <label><input v-model="form.category" name="procuredtype" type="radio" value="Central" tabindex="3"  @change="getItem('centrallyProcured')"/> Centrally Supplied Item</label>
+                    <br><span id="error_msg" class="text-danger"></span>
+                </div>
                 </div>
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
-                              <tr>
+                                <tr>
                                   <th>Item</th>
-                                  <th>Quantity Issued</th>
                                   <th>Unit</th>
+                                  <th>Available Quantity</th>
+                                  <th>Quantity Issued</th>
                                   <th>Damage/Loss Quantity(kg)</th>
                                   <th>Remarks</th>
-                              </tr>
+                                </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
-                                  <td>
-                                     <select name="item" id="item" class="form-control editable_fields" v-model="item.item" @onchange="getquantity(), validatefield()">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                      </select>
+                                <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
+                                    <td>
+                                        <select name="item" :id="'itemid'+index" class="form-control editable_fields" v-model="item.item" @change="getquantity(index)">
+                                            <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id+'_'+itm.Unit_id">{{ itm.Name }}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                            <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                        </select>  -->
+                                        <span :id="'measurement_unit'+index"></span>
+                                    </td>
+                                   <td :id="'loadavailableqty'+index">
+                                     {{item.available_qty}}
                                   </td>
                                    <td>
                                      <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
@@ -74,11 +91,13 @@ export default {
             itemList:[],
             unitList:[],
             item_issue: [],
+            unitArray:{},
+          //  item:'',
             form: new form({
                 id: '', dateOfissue: '',
                 item_issue:
                 [{
-                    item:'', quantity:'',unit:'', damagequantity:'',remarks:'',
+                    item:'', quantity:'',measurement_unit:'', damagequantity:'',remarks:'',
                 }],
             })
         }
@@ -93,7 +112,7 @@ export default {
             this.form.dateOfissue= '';
             let formReset =this.form.item_issue;
             formReset.splice(0, formReset.length);
-            this.form.item_issue.push({item:'',quantity:'',unit:'',damagequantity:'',remarks:''})
+            this.form.item_issue.push({item:'',quantity:'',measurement_unit:'',damagequantity:'',remarks:''})
         },
 
         /**
@@ -134,21 +153,31 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+    //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+    //        axios.get(uri)
+    //        .then(response => {
+    //            let data = response;
+    //            this.unitList =  data.data.data;
+    //        })
+    //        .catch(function (error) {
+    //            console.log("Error......"+error)
+    //        });
+    //    },
+
+        /**
+         * method to get item in dropdown
+         */
+      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
            axios.get(uri)
            .then(response => {
                let data = response;
-               this.unitList =  data.data.data;
+               this.itemList =  data.data;
            })
            .catch(function (error) {
                console.log("Error......"+error)
            });
        },
-
-        /**
-         * method to get item in dropdown
-         */
-      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList2(uri="masters/loadActiveStudentMasters/program_item_central"){
            axios.get(uri)
            .then(response => {
                let data = response;
@@ -175,7 +204,32 @@ export default {
                 this.count--;
                 this.form.item_issue.splice(index,1);
             }
+            else{
+               this.loadActiveItemList2();
+            }
         },
+
+        selectunit(index){
+            let itemval=$('#itemid'+index).val();
+            // alert(itemval);
+            // alert(itemval.split('_')[1]);
+            $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
+
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.unitList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.unitArray[data.data.data[i].id] = data.data.data[i].Name;
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
         StockIssueEditList(lssId){
             this.form.item_issue=[];
             axios.get('mess_manage/StockIssueEditList/' +lssId)
@@ -188,7 +242,7 @@ export default {
                     this.form.item_issue.push({
                        item:data[i].item_id,
                        quantity:data[i].quantity,
-                       unit:data[i].unit_id,
+                       measurement_unit:data[i].unit_id,
                        damagequantity:data[i].damagequantity,
                        remarks:data[i].remarks
                     });
@@ -199,6 +253,12 @@ export default {
                 console.log("Error:"+error);
             });
         }
+        // validatefield(){
+        //     let $qty = 
+        //     if(qty)
+
+        // }
+
     },
      mounted() {
         this.loadActiveUnitList();

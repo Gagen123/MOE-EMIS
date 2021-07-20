@@ -158,14 +158,16 @@ class RestructuringController extends Controller
             return 'No Screen';
         }
         // dd($establishment_data);
+
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         // dd($response_data,$workflowdet,$request->application_for);
+        $appNo=json_decode($response_data)->data->application_no;
         if($request->action_type!="edit"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$screen_name,//screen name
-                'application_number'=>json_decode($response_data)->data->application_no,
+                'application_number'=>$appNo,
                 'name'              =>$request['application_for'], //Organizaiton Name
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
@@ -178,6 +180,29 @@ class RestructuringController extends Controller
             ];
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $type="";
+            if($screen_name=="Change in Name"){
+                $type="change_in_name";
+            }
+            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$type.'/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1,$screen_name);
+            $seq=((int) $workflowdet[0]->Sequence +1);
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
+            $role_id=$next_roleId[0]->SysRoleId;
+            $notification_data=[
+                'notification_for'              =>  $screen_name,
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $role_id,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
         // return $response_data;
@@ -254,6 +279,7 @@ class RestructuringController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
+        // dd($loadOrganizationDetails);
         // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->establishment_type;//pulled category from existing organization details to match the data for verification
         // dd($service_name,$workflowdet);
