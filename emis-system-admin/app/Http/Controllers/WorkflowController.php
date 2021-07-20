@@ -64,6 +64,7 @@ class WorkflowController extends Controller{
                 'last_action_date'      =>date('Y-m-d h:i:s'),
                 'app_role_id'           => $request->app_role_id,
                 'record_type_id'        => $request->record_type_id,
+                'claimed_by'            =>null,
             ];
             try{
                 return $workflowdetails = TaskDetails::create($task_data);
