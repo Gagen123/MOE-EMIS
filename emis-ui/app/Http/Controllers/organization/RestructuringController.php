@@ -184,6 +184,15 @@ class RestructuringController extends Controller
             if($screen_name=="Change in Name"){
                 $type="change_in_name";
             }
+            if($screen_name=="Upgrade"){
+                $type="upgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
             $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$type.'/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1,$screen_name);
             $seq=((int) $workflowdet[0]->Sequence +1);

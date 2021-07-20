@@ -39,6 +39,7 @@ use App\Models\establishment\ApplicationVerification;
 use App\Models\establishment\ApplicationNoMeals;
 use App\Models\establishment\ApplicationVerificationTeam;
 use App\Models\establishment\ApplicationAttachments;
+use App\Models\establishment\ApplicationEstDetailsChange;
 use App\Models\restructuring\Bifurcation;
 
 class EstablishmentController extends Controller{
@@ -611,7 +612,10 @@ class EstablishmentController extends Controller{
                 'created_by'                  =>   date('Y-m-d h:i:s'),
             ];
             $establishment=ApplicationVerification::create($verification);
-            $status="Notified For Tentative Date";
+            if($request->status!="Rejected"){
+                $status="Notified For Tentative Date";
+            }
+
         }
         else if($request->update_type=="team_verification" || $request->update_type=="final_verification"){
             // if(sizeof($request->nomi_staffList)>0 ){
@@ -1236,4 +1240,31 @@ class EstablishmentController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    public function loadOrgChangeApplications($user_id="",$type=""){
+        $response_data=ApplicationDetails::where('created_by',$user_id)->where('establishment_type',str_replace("_"," ",$type))->get();
+        if($response_data!="" && $response_data!=null && sizeof($response_data)>0){
+            foreach($response_data as $app){
+                $app->attachments=ApplicationAttachments::where('ApplicationDetailsId',$app->id)->get();
+                $change_det=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app->id)->first();
+                $app->change_details= $change_det;
+                $app->category=OrganizationDetails::where('id',$app->change_details->organizationId)->first()->category;
+                if($app->application_type=="feeding_change"){
+                    $app->change_feeding=ApplicationNoMeals::where('foreignKeyId',$change_det->id)->get();
+                }
+                if($app->application_type=="proprietor_change"){
+                    $$app->change_prop=ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$change_det->id)->first();
+                }
+                if($app->application_type=="downgradation" || $app->application_type=="upgradation" || $app->application_type=="stream_change"){
+                    $app->change_classes = DB::table('classes as c')
+                    ->join('application_class_stream as cl', 'c.id', '=', 'cl.classId')
+                    ->select('cl.*', 'c.class', 'c.id AS classId')
+                    ->where('cl.ApplicationDetailsId',$change_det->id)
+                    ->orderBy('c.displayOrder', 'asc')
+                    ->get();
+                }
+            }
+
+        }
+        return $this->successResponse($response_data);
+    }
 }

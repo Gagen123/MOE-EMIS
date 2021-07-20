@@ -404,7 +404,7 @@
                                     <router-link to="/visitors_information" class="nav-link">
                                         <p>
                                             <i class="fa fa-angle-double-right nav-icon"></i>
-                                            Organizaiton Visitor
+                                            Organization Visitor
                                         </p>
                                     </router-link>
                                 </li>

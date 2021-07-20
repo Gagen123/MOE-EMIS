@@ -38,7 +38,7 @@
                                         <span class="text-blue text-bold">{{orgList[form.organizationId]}}</span>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Org Type: {{category}}</label>
+                                        <label>Organization Type{{category}}</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">

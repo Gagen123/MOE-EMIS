@@ -97,8 +97,8 @@ export default {
             if(data['acess_level']=="Dzongkhag"){
                 this.loadstff('dzoWsirRegContract/Regular,Volunteer');
             }
-            if(data['acess_level']=="allRegContract/Regular,Volunteer"){
-                this.loadstff();
+            if(data['acess_level']=="Ministry"){
+                this.loadstff('allRegContract/Regular,Volunteer');
             }
         })
         .catch(errors => {
