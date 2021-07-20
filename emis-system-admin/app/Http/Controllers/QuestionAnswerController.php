@@ -234,13 +234,24 @@ class QuestionAnswerController extends Controller{
         }
 
         if(strpos($type,"washAndOthers_")!==false){
-            $questionlist = DB::table('question_details as q')
+            if(strpos($type,"SSS")!==false){
+                $questionlist = DB::table('question_details as q')
                 ->join('question_category as c', 'q.category_id', '=', 'c.id')
                 ->select('q.name', 'q.id', 'q.answer_type') 
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')
-                ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')
+                ->where('c.name',str_replace('SSS',' ',explode("_",$type)[1]))
                 ->groupby('q.id')->get();
+            }
+            else{
+                $questionlist = DB::table('question_details as q')
+                    ->join('question_category as c', 'q.category_id', '=', 'c.id')
+                    ->select('q.name', 'q.id', 'q.answer_type') 
+                    ->where('q.status', '=', 1)
+                    // ->where('c.name', '=', '%' . Input::get('name') . '%')
+                    ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')
+                    ->groupby('q.id')->get();
+            }
             foreach($questionlist as $ques){
                 $ques->ans_list=Answer::where('parent_id',$ques->id)->get();
             }

@@ -213,6 +213,7 @@ class StructuralController extends Controller
             'user_id'                   =>  $this->userId() 
         ];
         // dd($request->questionList);
+        // dd( $eccd_data); 
         $response_data= $this->apiService->createData('emis/organization/infrastructure/saveEccdFacilities', $eccd_data);
         return $response_data;
     }
