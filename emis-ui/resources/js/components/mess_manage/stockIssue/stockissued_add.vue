@@ -216,16 +216,14 @@ export default {
             }
             if(isvalid){
                  $('#error_msg').html('');
-                 
-                let uri = 'mess_manage/getquantity/'+itemId+'/'+chekva;
+                let uri = 'mess_manage/getquantity/'+itemId.split('_')[0]+'/'+chekva;
                 axios.get(uri)
                     .then(response => {
                     let data = response;
-                   $('#loadavailableqty'+index).html(data.data.data.available_qty);
-                    
-                    
+                    $('#loadavailableqty'+index).html(data.data.data.available_qty);
+
                 })
-               
+
                 .catch(function (error) {
                     console.log(error);
                 });
@@ -264,7 +262,7 @@ export default {
             });
         },
         // validatefield(){
-        //     let $qty = 
+        //     let $qty =
         //     if(qty)
 
         // }

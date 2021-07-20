@@ -685,7 +685,7 @@
                 </ul>
             </li>
             @if(session('User_Details')!=null)
-                @if(session('User_Details')['acess_level']=="Org")
+                {{-- @if(session('User_Details')['acess_level']=="Org") --}}
                     @foreach(session('User_Details')['roles'] as $key => $user_role)
                         @if(strpos($user_role->roleName,'ECCD')===false)
                             <li class="nav-header"></li>
@@ -743,7 +743,7 @@
                             </li>
                         @endif
                     @endforeach
-                @endif
+                {{-- @endif --}}
             @endif
             <li class="nav-item" id="select_system">
                 <a href="{{route('select_system') }}" class="nav-link text-white">

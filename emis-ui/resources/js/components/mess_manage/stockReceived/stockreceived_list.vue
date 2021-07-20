@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                   <label class="font-weight-normal">Quarter: </label>
-                                  <span class="text-indigo-600">{{quarterList[displayItem.quarter]}}</span>
+                                  <span class="text-indigo-600">{{quarterList[displayItem.quarter_id]}}</span>
                               </div>
                            </div>
                       </div>

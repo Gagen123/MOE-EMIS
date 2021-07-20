@@ -47,8 +47,13 @@
                                      {{item.available_qty}}
                                   </td>
                                    <td>
-                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
+                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                  </td>
+                                 <td>
+                                    <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
+                                        <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                    </select>
+                                  </td>
                                   <td>
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
                                  </td>
@@ -176,7 +181,7 @@ export default {
            axios.get(uri)
            .then(response => {
                let data = response;
-               this.itemList =  data.data;
+               this.itemList =  data.data.data;
            })
            .catch(function (error) {
                console.log("Error......"+error)
@@ -189,7 +194,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.item_issue.push({
-                item:'',quantity:'',measurement_unit:'',damagequantity:'',remarks:''})
+                item:'',quantity:'',unit:'',damagequantity:'',remarks:''})
         },
         /**
          * method to remove fields
@@ -198,42 +203,6 @@ export default {
              if(this.form.item_issue.length>1){
                 this.count--;
                 this.form.item_issue.splice(index,1);
-            }
-        },
-
-        getquantity(index){
-           let itemId=$('#itemid'+index).val();
-          // alert(itemId);
-            // alert(itemval.split('_')[1]);
-            $('#measurement_unit'+index).html(this.unitArray[itemId.split('_')[1]]);
-
-            let chekva=$("input[type='radio'][name='procuredtype']:checked").val();
-            let isvalid=true;
-            if(chekva==undefined){
-                $('#error_msg').html('Please select procurement type');
-                isvalid=false;
-            }
-            if(isvalid){
-                 $('#error_msg').html('');
-                let uri = 'mess_manage/getquantity/'+itemId+'/'+chekva;
-                axios.get(uri)
-                    .then(response => {
-                    let data = response;
-                    $('#loadavailableqty'+index).html(data.data.data.available_qty);
-                    
-                })
-               
-                .catch(function (error) {
-                    console.log(error);
-                });
-                 alert(data.data.data.available_qty);
-            }
-
-        },
-
-        getItem(type){
-            if(type=="locallyProcured"){
-                this.loadActiveItemList();
             }
             else{
                this.loadActiveItemList2();
@@ -280,9 +249,9 @@ export default {
                 }
                 this.count=data.length;
             })
-            .catch((error) =>{  
+            .catch((error) =>{
                 console.log("Error:"+error);
-            }); 
+            });
         }
         // validatefield(){
         //     let $qty = 
@@ -291,9 +260,11 @@ export default {
         // }
 
     },
-    mounted() {
+     mounted() {
         this.loadActiveUnitList();
+        this.loadActiveItemList();
         this.StockIssueEditList(this.$route.params.data.id);
-    }
+    },
+
 }
 </script>
