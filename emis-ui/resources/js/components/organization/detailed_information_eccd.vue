@@ -24,24 +24,30 @@
                                                     <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Parent School:</label>
-                                                <select v-model="form.parentSchool" class="form-control" name="parentSchool" id="parentSchool">
-                                                    <option v-for="(item, index) in parentSchool" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Parent School:</label>
+                                                    <select v-model="form.parentSchool" class="form-control" name="parentSchool" id="parentSchool">
+                                                        <option v-for="(item, index) in parentSchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Parent School Level:</label>
-                                                <select v-model="form.level" class="form-control" name="level" id="level">
-                                                    <option v-for="(item, index) in level" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Parent School Level:</label>
+                                                    <select v-model="form.level" class="form-control" name="level" id="level">
+                                                        <option v-for="(item, index) in levelArray" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Distance from Dzongkhag HQ:</label><br>
+                                                    <input type="text" v-model="form.distance_from_dzo" class="form-control editable_fields" id="distance_from_dzo" />
+                                                    <has-error :form="form" field="distance_from_dzo"></has-error>
+                                                </div>
                                             </div>
                                          </div>
-                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label>Distance from Dzongkhag HQ:</label><br>
-                                            <input type="text" v-model="form.distance_from_dzo" class="form-control editable_fields" id="distance_from_dzo" />
-                                            <has-error :form="form" field="distance_from_dzo"></has-error>
-                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -177,14 +183,18 @@
                 isprofile:false,
                 levelArray:{},
                 category:'',
+                parentSchoolList:[],
+                levelList:[],
                 fence_list:[],
                 disasterList:[],
                 climate_type_list:[],
                 form: new form({
                     org_id: '',
                     isGeoPoliticallyLocated:'',
+                    parentSchool:'',
                     category:0,
                     proprietorName:'',
+                    level:'',
                     proprietorCid:'',
                     proprietorPhone:'',
                     proprietorEmail:'',

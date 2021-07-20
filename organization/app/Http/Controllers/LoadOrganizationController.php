@@ -105,6 +105,13 @@ class LoadOrganizationController extends Controller{
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
+            if($response_data==null && $response_data==""){
+                //Org is Head Quarter and have to check with HQ details
+                $response_data=HeadQuaterDetails::where('id',$id)->first();
+                $contact = ContactDetails::where('organizationId',$id)->first();
+                $response_data->contactDetails=$contact;
+                return $this->successResponse($response_data);
+            }
             // $response_data->classes=OrganizationClassStream::where('organizationId',$response_data->id)->get();
             $response_data->classes=DB::table('classes as c')
             ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
