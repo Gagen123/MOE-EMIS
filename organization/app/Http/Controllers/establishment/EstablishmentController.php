@@ -568,9 +568,8 @@ class EstablishmentController extends Controller{
         //ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->get();
         $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
         $response_data->app_verification=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
-        $id=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
-        if($id!=null && $id!=""){
-            $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$id->id)->get();
+        if($response_data!=null && $response_data!=""){
+            $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$response_data->id)->get();
         }
 
         // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
@@ -647,7 +646,8 @@ class EstablishmentController extends Controller{
         $verification =[
             'ApplicationVerificationId'     => $request->id,
             'agency'                        => $request['org_id'],
-            'teamMember'                    => $request['staff_type'],
+            'teamMember'                    => $request['staff_id'],
+            'type'                          => $request['staff_type'],
             'name'                          => $request['name'],
             'cid'                           => $request['cid'],
             'email'                         => $request['email'],

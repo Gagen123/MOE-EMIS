@@ -180,11 +180,27 @@ class EstablishmentController extends Controller
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
+            $app_type="";
+            if(strpos($request->service_name,'Establishment of Public School')){
+                $app_type="establishment_of_public_school";
+            }
+            if(strpos($request->service_name,'Establishment of Private School')){
+                $app_type="establishment_of_private_school";
+            }
+            if(strpos($request->service_name,'Establishment of Private ECCD')){
+                $app_type="establishment_of_private_eccd";
+            }
+            if(strpos($request->service_name,'Establishment of Public ECCD')){
+                $app_type="establishment_of_public_eccd";
+            }
+            if(strpos($request->service_name,'Establishment of Public ECR')){
+                $app_type="establishment_of_public_ecr";
+            }
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
             //Notification preparation
-            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__establishment_of_public_school/'.$this->getRoleIds('roleIds')));
+            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$app_type.'/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1);
             $seq=((int) $workflowdet[0]->Sequence +1);
             $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
@@ -327,11 +343,12 @@ class EstablishmentController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
 
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
-        $service_name=$loadOrganizationDetails->data->establishment_type;
+        // dd($loadOrganizationDetails);
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
             foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
-                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
+                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember));
                 if($response_data!=null && $response_data!=""){
+                    $response_data=$response_data->data;
                     $vteam->name=$response_data->name;
                     $vteam->cid=$response_data->cid_work_permit;
                     $vteam->po_title=$response_data->position_title;
@@ -363,10 +380,15 @@ class EstablishmentController extends Controller
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/establishment/loadEstbDetailsForVerification/'.$appNo));
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
             foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
-                $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
-                $vteam->name=$response_data->name;
-                $vteam->cid=$response_data->cid_work_permit;
-                $vteam->po_title=$response_data->position_title;
+                // dd($vteam->teamMember);
+                if($vteam->teamMember=="Internal"){
+                    $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
+                    if($response_data!=null && $response_data!=""){
+                        $vteam->name=$response_data->name;
+                        $vteam->cid=$response_data->cid_work_permit;
+                        $vteam->po_title=$response_data->position_title;
+                    }
+                }
             }
         }
         return json_encode($loadOrganizationDetails);
@@ -380,6 +402,7 @@ class EstablishmentController extends Controller
             'name'                          =>   $request->name,
             'cid'                           =>   $request->cid,
             'staff_type'                    =>   $request->staff_type,
+            'staff_id'                      =>   $request->staff_id,
             'applicationNo'                 =>   $request->applicationNo,
             'user_id'                       =>   $this->userId()
         ];

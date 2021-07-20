@@ -16,6 +16,7 @@ class ApplicationVerificationTeam extends Model
         'ApplicationVerificationId',
         'agency',
         'teamMember',
+        'type',
         'name',
         'cid',
         'email',

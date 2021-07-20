@@ -498,6 +498,7 @@ export default {
                 name:'',
                 cid:'',
                 staff_type:'',
+                staff_id:'',
                 applicationNo:'',
                 working_agency_id:'',
             }),
@@ -591,7 +592,6 @@ export default {
                     this.form.tentative_date=data.app_verification.tentativeDate;
                     $('#tentative_date').prop('readonly',true);
                     $('#verifier_team').show();
-
                     if((data.establishment_type=="Private School" ||  data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
                         $('#verifyId').hide();
                         $('#approveId').hide();
