@@ -176,7 +176,7 @@ export default {
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                this.orgList = response.data.data;
+                this.orgList = response.data;
             });
         },
 
