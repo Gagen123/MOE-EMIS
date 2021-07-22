@@ -970,7 +970,6 @@ const routes = [
       component: require('./components/organization/subject_offered/subject_offered_index.vue').default ,
       children: [
         { path: '',name:'subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
-        { path: '/add_subject_offered', name:'add_subject_offered', component: require('./components/organization/subject_offered/add_subject_offered.vue').default },
         { path: '/edit_subject_offered', name:'edit_subject_offered', component: require('./components/organization/subject_offered/edit_subject_offered.vue').default },
         { path: '/list_subject_offered', name:'list_subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
       ]

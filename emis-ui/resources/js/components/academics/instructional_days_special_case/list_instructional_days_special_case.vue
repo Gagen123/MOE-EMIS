@@ -19,7 +19,10 @@
                             <tr  v-for="(item, index) in instrictionalDaysForSpecialCase" :key="index">
                                 <td>{{ index+1 }}</td>
                                 <td> {{ item.class_stream_section}}</td>
-                                <td> {{ item.attendance_date}}</td>
+                                <td> {{ item.name}}</td>
+                                <td> {{ item.term}}</td>
+                                <td class="text-right"> {{ item.instructional_days}}</td>
+                                <td> {{ item.remarks}}</td>
                                 <td>
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                                 </td>                                                                               
@@ -36,7 +39,11 @@ export default {
     data() {
         return {
             instrictionalDaysForSpecialCase: [],
-            dt:''
+            org_class_id:'',
+            org_class_stream_id:'',
+            org_section_id:'',
+            dt:'',
+            
         }
     },
     methods: {
@@ -46,11 +53,32 @@ export default {
             }
         },
        async getInstructionalDays(){
-            // let instructional_days = await axios.get('academics/getInstrunctionalDays').then(response => response.data.data)
-            // let student = await axios.get()
-            // this.instrictionalDaysForSpecialCase = 
-                
+            let instructional_days = await axios.get('academics/getInstrunctionalDays').then(response => response.data.data)
+            instructional_days.forEach((item)=>{
+                this.org_class_id = item.org_class_id
+                this.org_stream_id = item.org_stream_id
+                this.org_class_stream_id = item.org_class_stream_id
+                this.org_section_id = item.org_section_id
+            })
 
+            let uri = 'academics/getStudentsForAttendance'
+            uri += ('?OrgClassStreamId='+this.org_class_stream_id+'&classId='+this.org_class_id)
+                if(this.org_stream_id !== null){
+                    uri += ('&streamId='+this.org_stream_id)
+                }
+                if(this.org_section_id !== null){
+                    uri += ('&sectionId='+this.org_section_id)
+                }
+            let student = await axios.get(uri).then(response=>response.data.student)
+
+            instructional_days.forEach((item,index)=>{
+                student.forEach(item1 => {
+                    if(item.std_student_id == item1.std_student_id){
+                        instructional_days[index]['name'] =item1.Name
+                    }
+                })
+            })
+            this.instrictionalDaysForSpecialCase = instructional_days
         },
         showedit(data){
             this.$router.push({name:'edit_instructional_days_special_case',params: {data:data}});
@@ -62,6 +90,7 @@ export default {
         this.dt = $("#list-instructional-days-special-case-table").DataTable({
                columnDefs: [
                 { width: 2, targets: 0},
+                { width: 30, targets: 4},
             ],
         })
     },

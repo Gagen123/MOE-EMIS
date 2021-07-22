@@ -54,9 +54,15 @@ const routes = [
                     { path: '/list-reasons-for-absent', name:'list_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/list_reason_for_absent.vue').default },
                     { path: '/create-reasons-for-absent', name: 'create_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/create_reason_for_absent.vue').default },
                     { path: '/edit-reasons-for-absent', name: 'edit_reason_for_absent', component: require('./components/masters/academics_masters/reason_for_absent/edit_reason_for_absent.vue').default },
-
+                ]
+            },
+            { path: '/promotion-rule', component: require('./components/masters/academics_masters/promotion_rule/promotion_rule_index.vue').default,
+            children: [
+                { path: '', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule').default },
+                { path: '/list-promotion-rule', name:'list_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule.vue').default },
+                { path: '/edit-promotion-rule', name: 'edit_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/edit_promotion_rule.vue').default },
             ]
-         },
+        },
 
         ]
     },

@@ -145,6 +145,12 @@
                             Academic Masters
                         </router-link>
                     </li>
+                    <li class="nav-item has-treeview" id="academicmaster">
+                        <router-link to="/spms-master" class="nav-link pt-1 pb-1">
+                            <i class="fa fa-book nav-icon"></i>
+                            SPMS Masters
+                        </router-link>
+                    </li>
                 </ul>
             <!--academic-->
 

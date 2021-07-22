@@ -145,7 +145,7 @@ class AcademicController extends Controller
     }
     public function getInstrunctionalDays(){
         $instructional_days_special_case = $this->apiService->listData('emis/academics/getInstrunctionalDays');
-        return $this->successResponse($instructional_days_special_case);
+        return $instructional_days_special_case;
     }
     public function saveSubjectTeacher(Request $request){
         $rules = [
@@ -424,7 +424,9 @@ class AcademicController extends Controller
                foreach($consolidatedResult["data"]['studentRank'] as $studentsRank){
                     if($studentsRank['std_student_id'] == $students[$i]["std_student_id"]){
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["position"]["area_total"]['score'] = $studentsRank['rank'];
-                        $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = "Pass";
+                        $students[$i][$studentsRank["aca_assmt_term_id"]]["remarks"]["area_total"]['score'] = $studentsRank['remarks'];
+
+                        $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = 1;
                     }
                 }
                 if($overAllInstructionalDays == 0){
@@ -453,37 +455,44 @@ class AcademicController extends Controller
 
        //For coulmn headers
        foreach($areas as $key => $area){
-            if($totalWeightageTerm>0 && $area["aca_assmt_term_id"] != $lastTermId && $lastTermId != ""){
+            if($area["aca_assmt_term_id"] != $lastTermId && $lastTermId != ""){
+                if($totalWeightageTerm>0){
+                    //Insert Total column at the end of a term
+                    array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"subject_total", "subject"=>"Total","sub_dzo_name"=>""]]);
+                    array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"subject_total","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                    $indexAddTerm++; //To adjust the index after inserting subject_total column
 
-                //Insert Total column at the end of a term
-                array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"subject_total", "subject"=>"Total","sub_dzo_name"=>""]]);
-                array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"subject_total","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
-                $indexAddTerm++; //To adjust the index after inserting subject_total column
+                    //Insert Percentage column at the end of a term
+                    array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"percentage", "subject"=>"Percentage","sub_dzo_name"=>""]]);
+                    array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"percentage","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                    $indexAddTerm++; //To adjust the index after inserting percentage column
 
-                //Insert Percentage column at the end of a term
-                array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"percentage", "subject"=>"Percentage","sub_dzo_name"=>""]]);
-                array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"percentage","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
-                $indexAddTerm++; //To adjust the index after inserting percentage column
+                    //Insert Position column at the end of a term
+                    array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"position", "subject"=>"Position","sub_dzo_name"=>""]]);
+                    array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"position","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                    $indexAddTerm++; //To adjust the index after inserting percentage column
 
-                //Insert Position column at the end of a term
-                array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"position", "subject"=>"Position","sub_dzo_name"=>""]]);
-                array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"position","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
-                $indexAddTerm++; //To adjust the index after inserting percentage column
-
-                //Insert Result (Pass/Fail) column at the end of a term
-                array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result","sub_dzo_name"=>""]]);
-                array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
-                $indexAddTerm++; //To adjust the index after inserting percentage column
-
-                 //Insert No. of Days Attended column at a term
+                    
+                    //Insert Result (Pass/Fail) column at the end of a term
+                    array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result","sub_dzo_name"=>""]]);
+                    array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                    $indexAddTerm++; //To adjust the index after inserting percentage column
+                }
+                 //Insert No. of Days Attended column at the end of a term
                  array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"no_of_days_attended", "subject"=>"No. of Days Attended","sub_dzo_name"=>""]]);
                  array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"no_of_days_attended","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
                  $indexAddTerm++; //To adjust the index after inserting no. of days attended column
 
-                  //Insert final_attendance_in_percentage column at a term
+                  //Insert final_attendance_in_percentage column at the end of  a term
                  array_splice($subjects, $key, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %","sub_dzo_name"=>""]]);
                  array_splice($originalAreas, $key + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"", "assessment_area"=>"area_total", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
                  $indexAddTerm++; //To adjust the index after inserting final_attendance_in_percentage column
+
+                 //Insert remarks column at the end of  a term
+                 array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"remarks", "subject"=>"Remarks","sub_dzo_name"=>""]]);
+                    array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"remarks","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                    $indexAddTerm++; //To adjust the index after inserting percentage column
+
                 //Reset total to 0
                 $totalWeightageTerm = 0;
             }
@@ -525,7 +534,9 @@ class AcademicController extends Controller
 
             array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"final_attendance_in_percentage", "subject"=>"Final Attendance in %", "sub_dzo_name"=>"","is_aggregate"=>1]);
             array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"final_attendance_in_percentage","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
-
+          
+            array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"remarks", "subject"=>"Remarks", "sub_dzo_name"=>"","is_aggregate"=>1]);
+            array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"remarks","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
 
         }
        return json_encode(["results"=>$students,"terms"=>$terms,"subjects"=>$subjects,"areas"=>$originalAreas,"overAllInstructionalDays" => $overAllInstructionalDays, "abbreviations"=>$consolidatedResult["data"]['abbreviations']]);

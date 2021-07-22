@@ -45,7 +45,7 @@
                                 </td>   
                                 <td>
                                     <div v-if="item.is_present==0">
-                                        <select class="select2 form-control form-control-sm" v-model="studentList[index].aca_absence_reason_id">
+                                        <select class="select2 form-control form-control-sm" required v-model="studentList[index].aca_absence_reason_id">
                                             <option selected="selected" value="">---Select---</option>
                                             <option selected v-for="(item1, index1) in remarkList" :key="index1" :value="item1.id">
                                                 {{ item1.name }}

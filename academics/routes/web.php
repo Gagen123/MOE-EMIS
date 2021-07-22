@@ -27,6 +27,10 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadclassSubAssmtFrequency',['uses' => 'masters\AcademicMastersController@loadclassSubAssmtFrequency']);
         $router->get('/loadclassSubjectAssessment/{term_id}/{sub_id}/{class_id}[/{stream_id}]',['uses' => 'masters\AcademicMastersController@loadclassSubjectAssessment']);
         $router->post('/saveclassSubjectAssessment',['uses' => 'masters\AcademicMastersController@saveclassSubjectAssessment']);
+        $router->get('/loadPromotionRule/{class_id}[/{stream_id}]','masters\AcademicMastersController@loadPromotionRule');
+        $router->post('/savePromotionRule',['uses' => 'masters\AcademicMastersController@savePromotionRule']);
+
+
     });
     $router->group(['prefix' => 'academics'], function () use ($router) {
         $router->get('/getClassTeacher/{orgId}',['uses' => 'academic\AcademicController@getClassTeacher']);

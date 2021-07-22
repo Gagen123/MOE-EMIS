@@ -18,7 +18,7 @@
                             <td>{{ item.class_stream_section }}</td>
                             <td>{{ item.sub_name }} <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name }} )</span></td>
                             <td>{{item.term_name}} <span v-if="item.term_dzo_name && item.sub_dzo_name">( {{ item.term_dzo_name }} )</span></td>
-                            <td>
+                            <td>{{item.finalized}}
                                 <span v-if="item.finalized"><strong>Finalized</strong> by
                                     <span v-if="item.assessed_by_class_teacher">class</span>
                                     <span v-else>subject</span> teacher on {{item.finalized_date}}
