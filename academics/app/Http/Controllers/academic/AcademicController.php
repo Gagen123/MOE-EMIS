@@ -256,6 +256,7 @@ class AcademicController extends Controller
                     $this->saveAttendance($request->all());
                 });
             }else if($request['action']=="edit"){
+                try{
                 $this->validate($request, $rules, $customMessages);
                 $query = 'DELETE FROM aca_student_attendance WHERE org_id = ? AND org_class_id = ? AND attendance_date = ?';
                 $params = [$request->org_id,$request->org_class_id,$request->attendance_date];
@@ -268,10 +269,13 @@ class AcademicController extends Controller
                     array_push($params, $request->org_section_id);
                 }
                 DB::transaction(function() use($request,$query, $params) {
-                    $this->updateAttendance($request);
+                    // $this->updateAttendance($request);
                     DB::delete($query, $params);
                     $this->saveAttendance($request->all());
                 });
+            }catch(Exception $e){
+                dd($e);
+            }
 
             }
         return $this->successResponse(1, Response::HTTP_CREATED);

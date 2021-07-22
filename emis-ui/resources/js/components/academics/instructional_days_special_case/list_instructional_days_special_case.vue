@@ -78,6 +78,7 @@ export default {
                     }
                 })
             })
+            console.log(instructional_days)
             this.instrictionalDaysForSpecialCase = instructional_days
         },
         showedit(data){

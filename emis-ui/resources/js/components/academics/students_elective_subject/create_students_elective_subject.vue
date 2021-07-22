@@ -13,7 +13,7 @@
                     <table id="students-elective-subject-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Student Code</th>
+                                <th>Roll No.</th>
                                 <th>Name</th>
                                 <th v-for="(item0, index0) in electiveSubjectList" :key="index0">
                                     {{item0.subject}}
@@ -24,7 +24,7 @@
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in studentElectiveSubjectList" :key="index">
                                 <td>
-                                    {{ item.CidNo }}
+                                    {{index+1 }}
                                 </td> 
                                   <td>
                                     <input v-model="studentElectiveSubjectList[index].std_student_id" class="form-control" type="hidden">

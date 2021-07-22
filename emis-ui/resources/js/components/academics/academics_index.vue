@@ -32,8 +32,8 @@
                     Student Attendance 
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1" @click="activatelink('student_attendance')">
-                    <router-link id="student_attendance" to="/instructional-days-special_case" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                 <li class="nav-item active pr-1" @click="activatelink('student_attendance_special_case')">
+                    <router-link id="student_attendance_special_case" to="/instructional-days-special_case" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Instructional Days for Special Case
                     </router-link>
                 </li>

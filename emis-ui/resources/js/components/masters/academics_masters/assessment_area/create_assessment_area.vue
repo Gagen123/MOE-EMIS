@@ -96,7 +96,7 @@ export default {
                $('#'+id).removeClass('is-invalid select2');
                $('#'+id).addClass('select2');
             }
-		    var aca_sub_category_id = $('#subject_id option:selected').data('category-id')
+		    var aca_sub_category_id = $('#aca_sub_id option:selected').data('category-id')
             var ratingtypes = "<option value=''>--Select--</option>"
             this.rating_type_list.forEach((item,index)=>{
                 if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){

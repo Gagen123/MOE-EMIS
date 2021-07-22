@@ -25,7 +25,7 @@
                     <table id="student-attendance-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Student Code</th>
+                                <th>Roll No.</th>
                                 <th>Name</th>
                                 <th>Present</th>
                                 <th>Remarks</th>
@@ -33,7 +33,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item, index) in studentList" :key="index">
-                                <td>{{ item.CidNo }}</td>
+                                <td>{{ index + 1 }}</td>
                                 <td>
                                     <input v-model='studentList[index].std_student_id' type="hidden">
                                     {{ item.Name }}
