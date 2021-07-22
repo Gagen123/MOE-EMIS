@@ -760,16 +760,6 @@ class AcademicController extends Controller
                 'created_at'=>   date('Y-m-d h:i:s'),
             ];
 
-    //         class_stream_section" => "V A"
-    //   "aca_assmt_term_id" => "0147ff87-b8c1-11eb-b80d-b07b2586b8c6"
-    //   "classId" => "327adec4-fb7d-40fb-b351-9924c9d05562"
-    //   "sectionId" => "ddb4ff90-218d-4921-9ae6-ca0239c344a5"
-    //   "remarks" => array:1 [
-    //     1416 => "Tshewang Nyenden Lhamo"
-    //   ]
-    //   "user_id" => "4120"
-    //   "org_id" => "4184f12c-a7fc-40c3-b038-013e242d8ef6"
-    // ]
             if($request['finalize']){
                 $result['finalized'] = 1;
                 $result['finalized_date'] = date('Y-m-d h:i:s');
