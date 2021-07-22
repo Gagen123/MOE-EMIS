@@ -85,7 +85,10 @@ Setting up the system administration, and user management:
 
     created organization_class_subject at organizaiton with fields in model
 
-
+    //table chaged and added 2021-07-22: Tshewang
+    - added two fields in organization_location: gate_type and landOwnership
+    - added new master table called master_gate_type
+        All are pushed in staging db
 
 
     ///feedback to be incorporated:

@@ -1039,12 +1039,12 @@ class EstablishmentController extends Controller{
          * all the commented fields are the ones missing from the database
          * Note to those looking at this function
         */
-
         $location = [
             'organizationId'        =>  $request->org_id,
             'landOwnership'         =>  $request['landOwnership'],
             'compoundFencing'       =>  $request['compoundFencing'],
             'entranceGate'          =>  $request['entranceGate'],
+            'gate_type'             =>  $request['gate_type'],
             'longitude'             =>  $request['longitude'],
             'latitude'              =>  $request['latitude'],
             'altitude'              =>  $request['altitude'],
@@ -1054,13 +1054,12 @@ class EstablishmentController extends Controller{
             'compoundArea'          =>  $request['compoundArea'],
             'googleMapPath'         =>  $request['map_path'],
             'climate_type'          =>  $request['climate_type'],
-            'disasterArea'          =>  implode(',',$request['disasterArea']),
-            'distance_from_dzo' =>  $request['distance_from_dzo'],
+            'disasterArea'          =>  $request['disasterArea'],
+            'distance_from_dzo'     =>  $request['distance_from_dzo'],
             'fencingtypeId'         =>  $request['fencingtype'],
         ];
 
         $loc = Locations::where('organizationId', $request->org_id)->first();
-
         if($loc!=null && $loc!=""){
             $location = $location+[
                 'updated_by'            =>  $request->user_id,
@@ -1075,15 +1074,10 @@ class EstablishmentController extends Controller{
             ];
             try{
                 Locations::create($location);
-
-                } catch(\Illuminate\Database\QueryException $ex){
-                    dd($ex->getMessage());
-                    // Note any method of class PDOException can be called on $ex.
-                }
-            Locations::create($location);
+            } catch(\Illuminate\Database\QueryException $ex){
+                dd($ex->getMessage());
+            }
         }
-
-
         return $this->successResponse($org_det, Response::HTTP_CREATED);
     }
 

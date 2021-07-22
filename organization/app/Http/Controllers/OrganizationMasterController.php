@@ -33,7 +33,7 @@ class OrganizationMasterController extends Controller{
             'description.required'  => 'This field is required',
             'status.required'       => 'This field is required',
         ];
-    
+
         $this->validate($request, $rules, $customMessages);
         //name,description and status should be common to all models. respective model should be passed from ui.
         $master_data = [
