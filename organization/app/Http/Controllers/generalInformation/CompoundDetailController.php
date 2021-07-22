@@ -27,6 +27,15 @@ class CompoundDetailController extends Controller
         $info = OrganizationCompoundDetail::where('organizationId',$orgId)->get();
         return $info;
     }
+    // public function loadcompoundareadetials($orgId=""){ 
+    //     $equip = DB::table('organization_compound_details')
+    //         ->select('id','organizationId','thramNo',
+    //         'plotNo', 'attachments', 'compoundArea','playgroundArea','playgroundAreaUsable',
+    //         'status','agricultureArea','agricultureAreaUsed')
+    //         ->where('organizationId',$orgId)->get();
+
+    //     return $equip;
+    // }
 
     public function saveSchoolCompundDetails(Request $request){
       $id = $request->id;
@@ -78,6 +87,10 @@ class CompoundDetailController extends Controller
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     
+    }
+    public function getcompoundetialedit($compId=""){
+        $info = OrganizationCompoundDetail::where('id',$compId)->get();
+        return $info;
     }
     
    

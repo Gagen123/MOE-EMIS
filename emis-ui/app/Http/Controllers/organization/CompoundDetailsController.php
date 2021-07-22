@@ -96,6 +96,13 @@ class CompoundDetailsController extends Controller
         $data = $this->apiService->listData('emis/organization/compoundDetails/loadcompoundareadetials/'.$orgId);
         return $data;
     }
+
+    public function getcompoundetialedit($compId=""){
+        //  dd('from UI');
+        //  $orgId=$this->getWrkingAgencyId();
+          $data = $this->apiService->listData('emis/organization/compoundDetails/getcompoundetialedit/'.$compId);
+          return $data;
+      }
     
 
 }

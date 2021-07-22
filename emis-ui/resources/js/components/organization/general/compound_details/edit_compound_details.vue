@@ -15,6 +15,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Peg Information: </label>
+
                         <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
                         <has-error :form="form" field="attachments"></has-error>
                     </div>
@@ -125,6 +126,7 @@ export default {
             this.form.status= '';
             this.form.agriculturalarea='';
             this.form.areaused = '';
+            this.form.id = '' ;
         },
 
         /**
@@ -166,7 +168,28 @@ export default {
             }
 		},
         
-      
+        getcompoundetialedit(compId){
+            axios.get('organization/getcompoundetialedit/'+compId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.form.thramno                  =    data.thramno;
+                this.form.plotno                   =    data.plotNo;
+                this.form.attachments              =    data.attachments;
+                this.form.sizecompound             =    data.compoundArea;
+                this.form.sizeplayground           =    data.playgroundArea;
+                this.form.playgroundused           =    data.playgroundAreaUsable;
+                this.form.status                   =    data.status;
+                this.form.agriculturalarea         =    data.agricultureArea;
+                this.form.areaused                 =    data.agricultureAreaUsed;
+                this.form.id                       =    data.id;
+                
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
+        },
+
+    
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
@@ -175,6 +198,7 @@ export default {
         },
         
     },
+
      mounted() { 
       
            $('.select2').select2();
@@ -187,6 +211,7 @@ export default {
         });
     },
     created() {
+        this.getcompoundetialedit(this.$route.params.data.id);
         this.form.thramno=this.$route.params.data.thramNo;
         this.form.plotno=this.$route.params.data.plotNo;
         this.form.attachments=this.$route.params.data.attachments;

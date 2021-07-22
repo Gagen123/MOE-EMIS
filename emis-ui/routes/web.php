@@ -377,6 +377,7 @@ Route::prefix('organization')->group(function () {
     //Compound Details
     Route::post('/saveSchoolCompundDetails', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveSchoolCompundDetails');
     Route::get('/loadcompoundareadetials', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
+    Route::get('/getcompoundetialedit/{compId}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'getcompoundetialedit'])->name('getcompoundetialedit');
 
     //disaster Information
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
