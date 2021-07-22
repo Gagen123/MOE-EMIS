@@ -44,7 +44,7 @@
                                                   </thead>
                                                  <tbody>
                                                   <tr>
-                                                     <td>Level</td>
+                                                     <td>Levels</td>
                                                      <td>{{levelArray[existing_details.levelId]}}</td>
                                                    </tr>
                                                    <tr>
@@ -106,7 +106,7 @@
                                                         <th><span class="text-bold"></span></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                <tbody v-if="std_data"> 
                                                     <tr>
                                                         <td>Longitude</td>
                                                         <td>{{existing_details.longitude}}</td>
@@ -124,20 +124,16 @@
                                                         <td>{{existing_details.mofCode}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Principal Contact No</td>
-                                                        <td>{{}}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Vice/Assistant Principal Contact No</td>
-                                                        <td>{{}}</td>
-                                                    </tr>
-                                                    <tr>
                                                     <td>Mail ID</td>
-                                                        <td>{{existing_details.mailid}}</td>
+                                                        <td>{{existing_details.contactDetails.email}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Website Link</td>
-                                                        <td>{{existing_details.wesitelink}}</td>
+                                                        <td>{{existing_details.contactDetails.website}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                    <td>Facebook Link</td>
+                                                        <td>{{existing_details.contactDetails.facebookLink}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -159,50 +155,82 @@
                                                       </tr>
                                                   </thead>
                                                  <tbody>
-                                                  <tr>
-                                                     <td>Total Male Teachers</td>
-                                                     <td></td>
-                                                   </tr>
-                                                   <tr>
-                                                        <td>Total Female Teachers</td>
-                                                        <td></td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>Total Female Special Education Teachers</td>
-                                                     <td></td>
-                                                  </tr>
                                                     <tr>
-                                                       <td>Total Male Special Education Teachers</td>
-                                                       <td></td>
-                                                   </tr>
-                                                  <tr>
-                                                     <td>Total Male Support Staff</td>
-                                                     <td></td>
-                                                 </tr>
-                                                 <tr>
-                                                     <td>Total Female Support Staff</td>
-                                                     <td></td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td>Total Female Counselors</td>
-                                                     <td></td>
-                                                   </tr>
-                                                   <tr>
-                                                     <td>Total Male Counselors</td>
-                                                     <td></td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td>Total Female Sports Instructor</td>
-                                                      <td></td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Total Male Sports Instructors</td>
-                                                       <td></td>
-                                                  </tr>
-                                                  <!-- <tr>
-                                                       <td>GeoPolitically Located</td>
-                                                       <td></td>
-                                                  </tr> -->
+                                                            <td>Male Teachers</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Female Teachers</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b></b></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Female Special Education Teachers</td>
+                                                            <td></td>
+                                                    </tr>
+                                                        <tr>
+                                                            <td>Male Special Education Teachers</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b></b></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Male Support Staff</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Female Support Staff</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b></b></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Female Counselors</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Male Counselors</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b></b></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Female Sports Instructor</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td>Male Sports Instructors</td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr>
+                                                            <td><b>Total</b></td>
+                                                            <td><b></b></td>
+                                                    </tr>
                                               </tbody>
                                           </table>
                                         </div>
@@ -216,21 +244,25 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>Total Female Student</td>
-                                                        <td>{{existing_details.longitude}}</td>
+                                                    <tr v-for="(item, index) in studentData" :key="index">
+                                                        <td> {{genderArray[item.CmnSexId]}} Students</td>
+                                                        <td> {{item.sex}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Total Male Sudent</td>
-                                                        <td>{{existing_details.latitude}}</td>
+                                                            <td><b>Total</b></td>
+                                                            <td><b>{{totalGeneralStudent}}</b></td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Total Female Student with Disabilities</td>
-                                                        <td>{{existing_details.altitude}}</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                    </tr>
+                                                    <tr v-for="(item1, count) in studentSenData" :key="'A'+count">
+                                                        <td> {{genderArray[item1.CmnSexId]}} Students with Disabilities</td>
+                                                        <td> {{item1.sen}}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td>Total Male Student with Disabilities</td>
-                                                        <td>{{existing_details.mofCode}}</td>
+                                                            <td><b>Total</b></td>
+                                                            <td><b>{{totalSenStudent}}</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -238,9 +270,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-
                             <!-- <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                 <strong><i class="fas fa-users mr-1"></i> Staff</strong>
                                 <div class="card-body p-0">
@@ -290,7 +319,6 @@
 
                             </div>
                         </div>
-                        <!-- /.card -->
                     </div>
                 </div>
             </div>
@@ -303,9 +331,15 @@
         data(){
             return{
                 orgDetails:'',
+                genderArray:{},
                 isprofile:false,
+                std_data:false,
                 existing_details:'',
+                totalGeneralStudent:0,
+                totalSenStudent:0,
                 levelArray:{},
+                studentData:[],
+                studentSenData:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
@@ -332,6 +366,44 @@
                     console.log(errors)
                 });
             },
+            /**
+             * to load the array definitions of class, stream and section
+             */
+            loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        this.genderArray[data[i].id] = data[i].name;
+                    }
+                })
+            },
+            getStudentData(rogId){
+                axios.get('students/loadStudentInformation/general')
+                .then(response => {
+                    this.studentData=response.data;
+                    for(let i=0;i<this.studentData.length;i++){
+                        this.totalGeneralStudent += this.studentData[i].sex;
+                    }
+
+                })    
+                .catch(errors =>{ 
+                    console.log(errors)
+                });
+            },
+            getSenStudentData(rogId){
+                axios.get('students/loadStudentInformation/sen')
+                .then(response => {
+                    this.studentSenData=response.data;
+                    for(let i=0;i<this.studentSenData.length;i++){
+                        this.totalSenStudent += this.studentSenData[i].sen;
+                    }
+
+                })    
+                .catch(errors =>{ 
+                    console.log(errors)
+                });
+            },
             getLevel(uri = '/organization/getLevelInDropdown'){
                 axios.get(uri)
                 .then(response => {
@@ -345,6 +417,7 @@
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
                     this.existing_details=response.data.data;
+                    this.std_data=true;
                     // this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                     // this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
                 })
@@ -354,8 +427,9 @@
             },
            
         },
-        mounted(){
+        created(){
             this.getLevel();
+            this.loadGenderArrayList();
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
                 this.loadPriviousOrgDetails(this.$route.query.org_id);
@@ -365,6 +439,8 @@
                 .then(response =>{
                     let data = response.data.data;
                     this.getorgProfile(data['Agency_Code']);
+                    this.getStudentData(data['Agency_Code']);
+                    this.getSenStudentData(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
                 }) ;
             }

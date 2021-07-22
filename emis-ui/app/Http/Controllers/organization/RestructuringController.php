@@ -184,6 +184,15 @@ class RestructuringController extends Controller
             if($screen_name=="Change in Name"){
                 $type="change_in_name";
             }
+            if($screen_name=="Upgrade"){
+                $type="upgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
             $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$type.'/'.$this->getRoleIds('roleIds')));
             // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1,$screen_name);
             $seq=((int) $workflowdet[0]->Sequence +1);
@@ -430,18 +439,20 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet);
+
             $screen_id="";
             $status="";
             $app_role="";
             $service_name=json_decode($response_data)->data->establishment_type;
+            // dd($workflowdet,$service_name);
             foreach($workflowdet as $work){
-                if(strtolower($work->Establishment_type)==strtolower(str_replace (' ', '_',strtolower($service_name)))){
+                if(strtolower($work->screenName)=="merger"){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
                 }
             }
+            // dd($screen_id);
             if($request->submit_type=="reject"){
                 $status='0__submitterRejects';
             }
@@ -898,7 +909,7 @@ class RestructuringController extends Controller
         ];
         // dd($bifurcation);
         $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
-
+        // dd($response_data);
         //Work Flow Process (based on Public School Establishment)
         //get submitter role
         if($request['action_type']!="edit"){
@@ -908,14 +919,14 @@ class RestructuringController extends Controller
             $status="";
             $screen_name="";
             $app_role="";
-            $service_name=json_decode($response_data)->data->establishment_type;
+            // $service_name=json_decode($response_data)->data->establishment_type;
 
             foreach($workflowdet as $work){
                 if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
-                    $screen_name=$work->screenName;
+                    // $screen_name=$work->screenName;
                 }
             }
             if($request->submit_type=="reject"){

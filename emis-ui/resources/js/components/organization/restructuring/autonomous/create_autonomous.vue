@@ -26,7 +26,7 @@
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{category}}</label>
+                                    <label>Organization Type{{category}}</label>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -176,7 +176,7 @@ export default {
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                this.orgList = response.data.data;
+                this.orgList = response.data;
             });
         },
 

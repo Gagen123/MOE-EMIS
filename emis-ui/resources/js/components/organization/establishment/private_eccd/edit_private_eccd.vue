@@ -14,7 +14,7 @@
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Classes and Stream </label>
+                            <label class="mb-0.5">Age Group </label>
                         </a>
                     </li>
                     <li class="nav-item file-tab" @click="shownexttab('file-tab')">
@@ -113,7 +113,7 @@
                                 <label><input  type="radio" @change="show_parent_school_details(true)" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" @change="show_parent_school_details(false)" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="parentDetails">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0">Parent School:</label>
