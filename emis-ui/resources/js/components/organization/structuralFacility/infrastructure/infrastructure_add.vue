@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                             </div>
@@ -58,11 +58,11 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Year of Construction:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
+                                <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text"
                                 v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
                                 <has-error :form="form" field="yearOfConstruction"></has-error>
                             </div>
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area (Sq. meter):<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
                             </div>
@@ -113,7 +113,7 @@
                                     <th style="width: 10%">Capacity</th>
                                     <th style="width: 10%">Total Number</th>
                                     <th style="width: 20%">Is Accessible to Disabled</th>
-                                    <th style="width: 22%">With Internet Connection</th>                            
+                                    <th style="width: 22%">With Internet Connection</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,14 +124,14 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    
-                                    <td>                                
+
+                                    <td>
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
                                     </td>
-                                    <td>                                
+                                    <td>
                                         <input type="number" name="capacity" class="form-control" v-model="user.capacity"/>
                                     </td>
-                                    <td>                                
+                                    <td>
                                         <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
                                     </td>
                                     <td>
@@ -145,28 +145,28 @@
                                         <label><input v-model="user.internetConnection"  type="radio" value="1"/> Yes</label>
                                         <label><input v-model="user.internetConnection"  type="radio" value="0" /> No</label>
                                     </td>
-                                </tr> 
+                                </tr>
                                 <tr>
-                                    <td colspan=7> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                    <td colspan=7>
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
-                                </tr>                                          
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-            </div> 
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>
         </form>
     </div>
-    
+
 </template>
 
 <script>
@@ -316,19 +316,19 @@ export default {
             this.count++;
             this.form.users.push({
                 facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',
-                accessibleDisabled:'',internetConnection:''})    
-        }, 
+                accessibleDisabled:'',internetConnection:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.users.length>1){
                 this.count--;
-                this.form.users.splice(index,1); 
+                this.form.users.splice(index,1);
             }
         },
     },
-    mounted() { 
+    mounted() {
         this.getCategoryDropdown();
         this.getFacilityDropdown();
         this.getDesignerDropdown();
