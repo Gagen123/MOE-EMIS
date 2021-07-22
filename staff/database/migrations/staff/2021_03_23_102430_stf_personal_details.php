@@ -18,6 +18,9 @@ class StfPersonalDetails extends Migration{
             $table->char('position_title_id',36)->nullable(false);
             $table->char('merital_status',36)->nullable(true);
             $table->char('country_id',36)->nullable(false);
+            $table->char('p_dzongkhag',36)->nullable(true);
+            $table->char('p_gewog',36)->nullable(true);
+            $table->char('p_village',36)->nullable(true);
             $table->char('dzo_id',36)->nullable(true);
             $table->char('geowg_id',36)->nullable(true);
             $table->char('village_id',36)->nullable(true);

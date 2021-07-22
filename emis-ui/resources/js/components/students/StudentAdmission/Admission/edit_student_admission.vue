@@ -1,13 +1,13 @@
 <template>
-    <div> 
+    <div>
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">  
-                        <a class="nav-link active" id="basic-tabs-head" data-toggle="pill"  href="#basic-tabs" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true"> 
-                            <label> Basic Details </label>                               
+                    <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">
+                        <a class="nav-link active" id="basic-tabs-head" data-toggle="pill"  href="#basic-tabs" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
+                            <label> Basic Details </label>
                         </a>
-                    </li>   
+                    </li>
                     <li class="nav-item guardians-tab"  @click="shownexttab('guardians-tab')">
                         <a class="nav-link" id="guardians-tab-head" data-toggle="pill" href="#guardians-tab" role="tab" aria-controls="custom-tabs-four-guardians" aria-selected="false">
                             <label>Student Guardian Details</label>
@@ -16,10 +16,10 @@
                     <li class="nav-item details-tab"  @click="shownexttab('details-tab')">
                         <a class="nav-link"  id="details-tab-head" data-toggle="pill" href="#details-tab" role="tab" aria-controls="custom-tabs-four-details" aria-selected="false">
                             <label>Other Details</label>
-                        </a>  
-                    </li>  
+                        </a>
+                    </li>
                 </ul>
-            </div>  
+            </div>
             <div class="card-body">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="basic-tabs" role="tabpanel" aria-labelledby="basicdetails">
@@ -29,7 +29,7 @@
                                     <label> Student Nationality:<span class="text-danger">*</span></label><br>
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
                                     <input type="radio" name="snationality" v-model="personal_form.snationality" value="Bhutanese Under Process" id="s-bhutanese-underprocess" @click="showstdidentity('Student-Bhutanese-underprocess')" checked> Bhutanese (under process)<br>
-                                    <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese 
+                                    <input type="radio" name="snationality" v-model="personal_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
                                     <span class="text-danger" id="snationality_err"></span>
                                 </div>
                                 <div class="row form-group col-lg-9 col-md-9 col-sm-9">
@@ -113,7 +113,7 @@
                                 </div>
                             </div>
                             <div class="row form-group">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Student Code:</label>
                                     <input type="text" @change="removeerror('studentcode','studentcode_err')" class="form-control" id="studentcode" v-model="personal_form.studentcode" readonly placeholder="generated automatically"/>
                                     <has-error :form="personal_form" field="studentcode"></has-error>
@@ -159,9 +159,9 @@
                                 <label> Student Primary Contact:</label><br>
                                 <input type="radio" value="Father" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact" @click="showidentity('primary-contact-father')" checked> Father
                                 <input type="radio" value="Mother" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact1" @click="showidentity('primary-contact-mother')" > Mother
-                                <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian 
+                                <input type="radio" value="Others" v-model="guardian_form.primary_contact" :class="{ 'is-invalid': guardian_form.errors.has('primary_contact') }" name="primary_contact" id="primary_contact2" @click="showidentity('primary-contact-guardian')"> Guardian
                                 <has-error :form="guardian_form" field="primary_contact"></has-error>
-                            </div> 
+                            </div>
                         </div>
 
                         <div class="row form-group">
@@ -283,7 +283,7 @@
                                                 </select>
                                                 <has-error :form="guardian_form" field="father_occupation"></has-error>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -612,7 +612,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>No of Meals: <span class="text-danger">*</span></label><br>
-                                    <input type="radio" name="no_meals" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" v-model="class_form.no_meals" value="1" id="no_meals1"> One 
+                                    <input type="radio" name="no_meals" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" v-model="class_form.no_meals" value="1" id="no_meals1"> One
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="2" id="no_meals2"> Two
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="3" id="no_meals3"> Three
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('no_meals') }" name="no_meals" v-model="class_form.no_meals" value="0" id="no_meals3"> None
@@ -622,13 +622,13 @@
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category: <span class="text-danger">*</span></label><br>
-                                    <input type="radio" name="meal_type" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" v-model="class_form.meal_type" value="Gyalpoi Tozey" id="meal_type"> Gyalpoi Tozey 
+                                    <input type="radio" name="meal_type" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" v-model="class_form.meal_type" value="Gyalpoi Tozey" id="meal_type"> Gyalpoi Tozey
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('meal_type') }" name="meal_type" v-model="class_form.meal_type" value="Needy Student" id="meal_type1"> Needy Student
                                     <has-error :form="class_form" field="meal_type"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Feeding Type: <span class="text-danger">*</span></label><br>
-                                    <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegeterian" id="feeding_type"> Vegeterian 
+                                    <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegeterian" id="feeding_type"> Vegeterian
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Non-vegeterian" id="feeding_type1"> Non-vegeterian
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Eggeterian" id="feeding_type2"> Eggeterian
                                     <has-error :form="class_form" field="feeding_type"></has-error>
@@ -653,11 +653,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <label> Do you think the children/student has a disability? (Eg: difficulty seeing, hearing, walking, 
+                            <label> Do you think the children/student has a disability? (Eg: difficulty seeing, hearing, walking,
                                 learning or remembering, focusing, with fine motor skills, self care, being understood, controlling behavior, socializing or playing) </label>
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <input type="radio" name="disability" :class="{ 'is-invalid': class_form.errors.has('disability') }" v-model="class_form.disability" value="Yes" id="no_meals1"> Yes 
+                                    <input type="radio" name="disability" :class="{ 'is-invalid': class_form.errors.has('disability') }" v-model="class_form.disability" value="Yes" id="no_meals1"> Yes
                                     <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('disability') }" name="disability" v-model="class_form.disability" value="No" id="no_meals2"> No
                                     <has-error :form="class_form" field="disability"></has-error>
                                 </div>
@@ -728,7 +728,7 @@ export default {
                 merital_status:'',
                 primary_contact:'',
                 type:'edit',
-                
+
                 father_nationality:'Bhutanese',
                 father_cid_passport:'',
                 father_first_name:'',
@@ -782,7 +782,7 @@ export default {
                 gardain_occupation:'',
                 gardain_email:'',
                 gardain_cntct_no:'',
-                
+
             }),
             class_form: new form({
                 student_id:'',
@@ -811,7 +811,7 @@ export default {
             if(type=="std"){
                 selected = $("input[type='radio'][name='snationality']:checked");
             }
-            
+
             if(type=="father"){
                 selected = $("input[type='radio'][name='father_nationality']:checked");
             }
@@ -828,7 +828,7 @@ export default {
                 Swal.fire({
                     html: "Please select nationality",
                     icon: 'error'
-                }); 
+                });
             }
             if(selectedVal.includes('Bhutan')){
                 if ($('#'+fieldId).val().length != 11){
@@ -841,7 +841,7 @@ export default {
                     axios.get('getpersonbycid/'+ $('#'+fieldId).val())
                     .then(response => {
                         if (JSON.stringify(response.data)!='{}'){
-                            let personal_detail = response.data.citizenDetail[0];
+                            let personal_detail = response.data;
                             if(type=="std"){
                                 this.personal_form.first_name = personal_detail.firstName;
                                 $('#first_name').prop('readonly',true);
@@ -876,7 +876,7 @@ export default {
                                         $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                         this.personal_form.sex_id =  this.sex_idList[i].id;
                                         $('#sex_id').prop('disabled',true);
-                                    }  
+                                    }
                                 }
                                 this.personal_form.dzongkhag =personal_detail.dzongkhagId;
                                 $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
@@ -889,7 +889,7 @@ export default {
                                 this.personal_form.village_id = personal_detail.villageSerialNo;
                                 $('#village_id').prop('disabled',true);
                             }
-                            
+
                             if(type=="father"){
                                 if(personal_detail.gender=="F"){
                                     Swal.fire({
@@ -953,7 +953,7 @@ export default {
                                     $('#mother_village_id').val(personal_detail.villageSerialNo).trigger('change');
                                     $('#mother_village_id').prop('disabled',true);
                                 }
-                                
+
                             }
                             if(type=="gardain"){
                                 let full_anme=personal_detail.firstName;
@@ -975,7 +975,7 @@ export default {
                                 $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
                                 $('#gardain_village_id').prop('disabled',true);
                             }
-                            
+
                         }else{
                             Swal.fire({
                                 html: "No data found for this CID",
@@ -992,7 +992,7 @@ export default {
                 }
             }
         },
-        
+
         loadAllActiveMasters(type){
             axios.get('masters/loadGlobalMasters/'+type)
             .then(response =>{
@@ -1136,7 +1136,7 @@ export default {
                 if(type=="gardain"){
                     this.gardain_villageList=data.data.data;
                 }
-                
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1154,7 +1154,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        
+
         shownexttab(nextclass){
             if(nextclass=="basic-tabs"){
                 this.changetab('basic-tabs');
@@ -1164,14 +1164,14 @@ export default {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
-                } 
+                }
                 let formData = new FormData();
                 formData.append('snationality', this.personal_form.snationality);
                 formData.append('cid_passport', this.personal_form.cid_passport);
                 formData.append('first_name', this.personal_form.first_name);
                 formData.append('middle_name', this.personal_form.middle_name);
                 formData.append('last_name', this.personal_form.last_name);
-                formData.append('dob', this.personal_form.dob); 
+                formData.append('dob', this.personal_form.dob);
                 formData.append('sex_id', this.personal_form.sex_id);
                 formData.append('dzongkhag', this.personal_form.dzongkhag);
                 formData.append('gewog', this.personal_form.gewog);
@@ -1224,7 +1224,7 @@ export default {
                     console.log("Error:"+error);
                 })
             }
-            
+
         },
         submitfinalform(){
             Swal.fire({
@@ -1367,13 +1367,13 @@ export default {
                     $('#student_type').addClass('select2-hidden-accessible');
                 }
             }
-            
+
         },
-        
+
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
         async changefunction(id){
@@ -1407,7 +1407,7 @@ export default {
                 this.guardian_form.father_dzongkhag=$('#father_dzongkhag').val();
                 this.getgewoglist($('#father_dzongkhag').val(),'p_father');
             }
-            if(id=="father_gewog"){ 
+            if(id=="father_gewog"){
                 this.guardian_form.father_gewog=$('#father_gewog').val();
                 this.getvillagelist($('#father_gewog').val(),'p_father');
             }
@@ -1418,7 +1418,7 @@ export default {
                 this.guardian_form.father_present_dzongkhag=$('#father_present_dzongkhag').val();
                 this.getgewoglist($('#father_present_dzongkhag').val(),'father');
             }
-            if(id=="father_present_gewog"){ 
+            if(id=="father_present_gewog"){
                 this.guardian_form.father_present_gewog=$('#father_present_gewog').val();
                 this.getvillagelist($('#father_present_gewog').val(),'father');
             }
@@ -1454,7 +1454,7 @@ export default {
             if(id=="mother_occupation"){
                 this.guardian_form.mother_occupation=$('#mother_occupation').val();
             }
-             
+
             if(id=="gardain_dzongkhag"){
                 this.guardian_form.gardain_dzongkhag=$('#gardain_dzongkhag').val();
                 this.getgewoglist($('#gardain_dzongkhag').val(),'p_gardain');
@@ -1558,7 +1558,7 @@ export default {
             $('#gardain_section').hide();
             if(type=="primary-contact-guardian"){
                 $('#gardain_section').show();
-            } 
+            }
         },
         getstudentPersonalDetails(id){
             axios.get('students/admission/getStudentDetails/'+id)
@@ -1661,7 +1661,7 @@ export default {
                 }
             });
         }
-        
+
     },
     mounted() {
         this.loadAllActiveMasters('all_active_gender');
@@ -1673,15 +1673,14 @@ export default {
         this.loadclasses('clasList');
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.getstudentPersonalDetails(this.$route.params.data);
-        
-        
+
+
     },
 }
 </script>
- 

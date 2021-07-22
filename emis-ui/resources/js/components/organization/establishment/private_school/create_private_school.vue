@@ -694,7 +694,7 @@ export default {
             axios.get('getpersonbycid/'+ $('#'+fieldId).val())
             .then(response => {
                 if (JSON.stringify(response.data)!='{}'){
-                    let personal_detail = response.data[0];
+                    let personal_detail = response.data;
                     this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
                 }else{
                     Swal.fire({

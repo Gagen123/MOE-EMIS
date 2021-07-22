@@ -32,7 +32,6 @@ export default {
             this.$router.push({name:type,query: {list:this.list,deleteopt:this.deleteopt,editopt:this.editopt}});
 		},
         getprivileges(){
-            alert(this.screen_id);
             let uri = 'get_privileges/'+this.screen_id
             axios.get(uri)
             .then(response => {

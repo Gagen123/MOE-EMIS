@@ -6,7 +6,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-3"> 
+                <div class="col-md-3">
                     <div class="card card-primary card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
@@ -35,9 +35,9 @@
                                             <textarea v-model="form.mission" class="form-control" id="mission"></textarea>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <div class= "form-group row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label>Vission</label>
+                                            <label>Vision</label>
                                             <textarea v-model="form.vission" class="form-control" id="vission"></textarea>
                                         </div>
                                     </div>
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -69,7 +69,7 @@
                     vission: '',
                     mission:'',
                     profile_path:'',
-                }) 
+                })
             }
         },
         methods:{
@@ -88,8 +88,8 @@
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             },
@@ -98,7 +98,7 @@
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
-                } 
+                }
                 let formData = new FormData();
                 formData.append('org_id', this.form.org_id);
                 formData.append('vission', this.form.vission);
@@ -127,8 +127,8 @@
                 let data = response.data.data;
                 this.form.org_id=data['Agency_Code'];
                 this.getorgProfile(data['Agency_Code']);
-            })    
-            .catch(errors =>{ 
+            })
+            .catch(errors =>{
                 console.log(errors)
             });
         }
