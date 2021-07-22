@@ -463,7 +463,7 @@ class GeneralInfoController extends Controller
                     break;
                 }
             case "school" : {
-                    $validation = $this->validateSchoolFields($request);
+                    //$validation = $this->validateSchoolFields($request);
                     $org_details = $this->setSchoolFields($request);
                     break;
                 }
@@ -477,10 +477,12 @@ class GeneralInfoController extends Controller
                 break;
             }
         }
-        $rules = $validation['rules'];
-        $customMessages = $validation['messages'];
-        $this->validate($request, $rules, $customMessages);
-
+        //removed validation for school by Tshewang
+        if($request['fields_for']!="school"){
+            $rules = $validation['rules'];
+            $customMessages = $validation['messages'];
+            $this->validate($request, $rules, $customMessages);
+        }
         $response_data= $this->apiService->createData('emis/organization/updateOrgBasicDetials', $org_details);
         return $response_data;
 
@@ -683,6 +685,7 @@ class GeneralInfoController extends Controller
             'fencingtype'               =>  $request['fencingtype'],
             'entranceGate'              =>  $request['entranceGate'],
             'disasterArea'              =>  $request['disasterArea'],
+            'gate_type'                 =>  $request['gate_type'],
             'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];

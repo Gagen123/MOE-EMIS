@@ -14,7 +14,7 @@
                         <has-error :form="form" field="plotno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Peg Information: </label>
+                        <label >Lag Tharm(Peg Information): </label>
                         <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
                         <has-error :form="form" field="attachments"></has-error>
                     </div>
@@ -26,21 +26,23 @@
                         <input type="text" class="form-control" @change="removeerror('sizecompound')" :class="{ 'is-invalid': form.errors.has('sizecompound') }" id="sizecompound" v-model="form.sizecompound" >
                         <has-error :form="form" field="sizecompound"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Size of Play Ground Area:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizeplayground')" :class="{ 'is-invalid': form.errors.has('sizeplayground') }" id="dob" v-model="form.sizeplayground">
                         <has-error :form="form" field="sizeplayground"></has-error>
-                      
+
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Size of Playground area used:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('playgroundused')" :class="{ 'is-invalid': form.errors.has('playgroundused') }" id="playgroundused" v-model="form.playgroundused">
                         <has-error :form="form" field="playgroundused"></has-error>
-                    </div> 
+                    </div> -->
+                    <!-- commented by tshewang, need to check insert link
+                    comment: SAP: program type field is requred- Piggery, Poultry Cattle.. with add more features -->
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Does the School have agricultural area?<span class="text-danger">*</span></label> 
+                        <label class="">Does the School have agricultural area?<span class="text-danger">*</span></label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="0" @click="showtextbox('No')" />No</label>
                         <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('Yes')"/>Yes</label>
@@ -50,33 +52,33 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Size of Agriculture Area : </label>
                         <input type="text" v-model="form.agriculturalarea" class="form-control editable_fields" id="agriculturalarea" />
-                       
+
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
                         <label>Size of Agriculture Area used :</label>
                         <input type="text" v-model="form.areaused" class="form-control editable_fields" id="areaused" />
-                       
+
                     </div>
                 </div>
             </div>
-            
+
             <div class="card-footer text-right">
                  <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                           
+                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
-    
+
 </template>
 
 <script>
 export default {
     data(){
         return{
-           
+
             form: new form({
-                id: '', 
-                thramno:'', 
+                id: '',
+                thramno:'',
                 plotno: '',
                 attachments: '',
                 sizecompound:'',
@@ -85,7 +87,7 @@ export default {
                 status: '0',
                 agriculturalarea: '',
                 areaused:'',
-               
+
             })
         }
     },
@@ -165,23 +167,23 @@ export default {
                 })
             }
 		},
-        
-      
+
+
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html(''); 
+                $('#'+errid).html('');
             }
         },
-        
+
     },
-     mounted() { 
-      
+     mounted() {
+
            $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
