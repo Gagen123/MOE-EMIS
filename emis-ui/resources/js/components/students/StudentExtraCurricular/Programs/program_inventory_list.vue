@@ -34,7 +34,8 @@ export default {
     data(){
         return{
             id:'2',
-            dataList:[], 
+            dataList:[],
+            dt:'',
         }
     },
     methods:{
@@ -45,23 +46,24 @@ export default {
                 this.dataList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
-            setTimeout(function(){
-                $("#list-programs-inventory").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'student_awards_edit',params: {data:data}});
+            this.$router.push({name:'program_inventory_edit',params: {data:data}});
         },
     },
     mounted(){
         this.loadDataList();
+        this.dt =  $("#list-programs-inventory").DataTable();
+    },
+    watch: {
+        dataList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#list-programs-inventory").DataTable()
+            });
+        }
     },
 }
 </script>

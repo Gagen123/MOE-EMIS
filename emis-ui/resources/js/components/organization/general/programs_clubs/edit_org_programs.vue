@@ -31,50 +31,6 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
-            <!-- <label>Roles Assigned to Staff </label> -->
-            <!-- <div class="card">
-                <div class="form-group row">
-                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Teacher</th>
-                                    <th>Role</th>
-                                    <th>Remarks</th>                     
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="record1" v-for='(role, index) in student_form.assigned_staff' :key="index">
-                                    <td>
-                                        <select name="teacher" id="teacher" class="form-control" v-model="role.teacher" :class="{ 'is-invalid': student_form.errors.has('teacher') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
-                                        <has-error :student_form="form" field="remarks"></has-error>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td colspan="5"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr>                                          
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -118,22 +74,12 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadTeacherList(uri='students/loadTeacherList/'+this.org_id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                console.log(data);
-                this.teacherList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+       
         loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.programList =  data.data.data;
+                let data = response.data;
+                this.programList =  data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -144,16 +90,6 @@ export default {
             .then(response => {
                 let data = response;
                 this.supportList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveRolesList(uri="masters/loadActiveStudentMasters/program_teacher_roles"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.teacherRoles =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -230,8 +166,9 @@ export default {
         getStudentProgramDetails(id){
             axios.get('students/getProgramDetails/'+id)
             .then((response) => {  
+             alert(JSON.stringify(response.data.data));
                 let data=response.data.data;
-                this.student_form.id= data.Id;
+                this.student_form.id= data.id;
                 this.student_form.name= data.StdStudentId;
                 this.student_form.program= data.CeaProgrammeId;
                 this.student_form.year = data.EstablishmentYear;
@@ -271,7 +208,7 @@ export default {
         this.loadActiveRolesList();
     },
     created() {
-        this.getStudentProgramDetails(this.$route.params.data.Id);
+        this.getStudentProgramDetails(this.$route.params.data.id);
     },
 }
 </script>

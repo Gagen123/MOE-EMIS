@@ -5,73 +5,64 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                      <small>(You will be provided the list of previous academic year)</small><br>
                      <label>Class:</label>
-                    <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
-                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                    <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }"  class="form-control select2" name="std_class" id="std_class">
+                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id+'_'+item.displayOrder">{{ item.class }}</option>
                     </select>
                     <has-error :form="student_form" field="std_class"></has-error>
                 </div>
             </div>
             <hr>
-            <form>
-                <div>
-                    <table id="allocation-list-table" class="table table-bordered text-sm table-striped">
-                        <thead>
-                            <tr>
-                                <th >SL#</th>
-                                <th >Student Name</th>
-                                <th >Student Code</th>
-                                <th >Class</th>
-                                <th >Section</th>
-                                <th >Stream</th>
-                                <th class="no_sec">No. of Meals</th>
-                                <th class="private_sec">Boarder</th>
-                                <th class="private_sec">SF/GS</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody">
-                            <tr v-for="(item, index) in studentList" :key="index">
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ item.Name}}</td>
-                                <td>{{ item.student_code}}</td>
-                                <td>
-                                    <select v-model="item.orgClassStreamId"  :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
-                                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
-                                    </select>
-                                    <has-error :form="student_form" field="class"></has-error>
-                                </td>
-                                <td>
-                                    <select v-model="item.sectionId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
-                                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
-                                    </select>
-                                    <has-error :form="student_form" field="std_section"></has-error>
-                                </td>
-                                <td>
-                                    <select v-model="item.streamId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
-                                        <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.stream }}</option>
-                                    </select>
-                                    <has-error :form="student_form" field="std_stream"></has-error>
-                                </td>
-                                <td class="no_sec">
-                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding1" id="feeding1" value="1" tabindex=""/> One Meal</label>
-                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding2" id="feeding2" value="2" tabindex=""/> Two Meals</label>
-                                    <label><input  type="radio" v-model="item.noOfMeals" name="feeding3" id="feeding3" value="3" tabindex=""/> Three Meals</label>
-                                </td>
-                                <td class="private_sec">
-                                    <label><input  type="radio" v-model="item.isBoarder" name="boarder1" id="feeding1" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="item.isBoarder" name="boarder2" id="feeding2" value="2" tabindex=""/> No</label>
-                                </td>
-                                <td class="private_sec">
-                                    <label class="private_sec"><input  type="radio" v-model="item.scholarshipType" name="scholarshipType1" id="feeding1" value="1" tabindex=""/> Gov.</label>
-                                    <label class="private_sec"><input  type="radio" v-model="item.scholarshipType" name="scholarshipType2" id="feeding2" value="2" tabindex=""/> Self Financed</label>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="form-group row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <form>
+                        <table id="allocation-list-table" class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Student Name</th>
+                                    <th>Student Code</th>
+                                    <th>Status</th>
+                                    <th>Class</th>
+                                    <th>Section</th>
+                                    <th>Stream</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                                <tr v-for="(item, index) in studentList" :key="index">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ item.Name}}</td>
+                                    <td>{{ item.student_code}}</td>
+                                    <td>
+                                        {{item.pass_status}}
+                                    </td>
+                                    <td>
+                                        <select disabled v-model="item.orgClassStreamId"  :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class') }" class="form-control select2" name="class" id="class">
+                                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="class"></has-error>
+                                    </td>
+                                    <td>
+                                        <select v-model="item.sectionId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
+                                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="std_section"></has-error>
+                                    </td>
+                                    <td>
+                                        <select v-model="item.streamId" :class="{ 'is-invalid  select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
+                                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.stream }}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="std_stream"></has-error>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="card-footer text-right">
+                            <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                        </div>
+                    </form>
                 </div>
-                <div class="card-footer text-right">
-                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                </div>
-            </form>
+            </div>
+
         </div>
     </div>
 </template>
@@ -88,6 +79,7 @@ export default {
             byClass:[],
             studentList:[],
             cat_data:'',
+            classDisplayArray:{},
             student_form: new form({
                 std_class: '',
                 std_stream: '',
@@ -113,6 +105,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.classList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.classDisplayArray[data.data.data[i].displayOrder] = data.data.data[i].id;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -139,8 +134,8 @@ export default {
             });
         },
         getSectionList(id){
-            let classId=$('#std_class').val();
-            if(id!="" && classId==null){
+            let classId=$('#std_class').val().split('_')[0];
+            if(id!=""){
                 classId=id;
             }
             let uri = 'loadCommons/loadSectionList/'+classId;
@@ -155,7 +150,7 @@ export default {
             });
         },
 
-        
+
         getAge(DateOfBirth){
             let date_of_birth = new Date(DateOfBirth);
             var diff_ms = Date.now() - date_of_birth.getTime();
@@ -177,19 +172,6 @@ export default {
                 this.student_form.date='';
             }
             if(type=="save"){
-                this.student_form.std_screened=[];
-                let screenedArray=[];
-                $("input[name='height']:checked").each( function () {
-                    screenedArray.push($(this).val());
-                });
-                this.student_form.std_screened=screenedArray;
-                
-                this.student_form.std_referred=[];
-                let referredArray=[];
-                $("input[name='weight']:checked").each( function () {
-                    referredArray.push($(this).val());
-                });
-
                 this.student_form.class_section_stream = this.studentList;
                 this.student_form.post('/students/saveStudentClassAllocation',this.student_form)
                     .then(() => {
@@ -210,38 +192,32 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="screening"){
-                this.student_form.screening=$('#screening').val();
-            }
-            if(id=="screening_position"){
-                this.student_form.screening_position=$('#screening_position').val();
-            }
-            if(id=="screening_endorsed_by"){
-                this.student_form.screening_endorsed_by=$('#screening_endorsed_by').val();
-            }
             if(id=="std_class"){
-                this.student_form.std_class=$('#std_class').val();
-                let class_selected = $("#std_class").val();
+                this.student_form.std_class=$('#std_class').val().split('_')[0];
+                let display_order=(parseInt($('#std_class').val().split('_')[1])+1);
                 this.getStreamList();
-                this.getSectionList();
+                this.getSectionList(this.classDisplayArray[display_order]);
 
-                axios.get('/students/loadStudentByClass/'+$('#std_class').val())
+                axios.get('/students/loadStudentByClass/'+$('#std_class').val().split('_')[0])
                 .then((response) => {
-                    this.studentList = response.data;  
+                    response.data.forEach(itm => {
+                        itm.pass_status='Pass';
+                        itm.orgClassStreamId=this.classDisplayArray[display_order];
+                    });
+                    this.studentList = response.data;
                     this.showhidetable();
                 })
                 .catch(() => {
-                    consoele.log("Error:"+e)
+                    console.log.log("Error:"+e)
                 });
             }
-
             if(id=="std_stream"){
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
                 // axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                 //     .then((response) => {
-                //         this.studentList = response.data;  
+                //         this.studentList = response.data;
                 // })
                 // .catch(() => {
                 //     consoele.log("Error:"+e)
@@ -249,7 +225,7 @@ export default {
 
                 this.student_form.std_section=$('#std_section').val();
             }
-            
+
         },
 
         getorgName(rogId,accessLevel){
@@ -263,8 +239,8 @@ export default {
                 this.orgDetails=data;
                 this.cat_data=data.category;
                 this.showhidetable();
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
             });
         },
@@ -280,7 +256,7 @@ export default {
                 $('.no_sec').hide();
             }
         },
-            
+
         checkall(class_to_check,id){
             if($('#'+id).prop('checked')){
                 $("."+class_to_check).prop("checked",true);
@@ -301,9 +277,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -323,14 +299,12 @@ export default {
                 }
 
                 this.getorgName(data['Agency_Code'],data['acess_level']);
-            })    
-            .catch(errors => { 
+            })
+            .catch(errors => {
                 console.log(errors)
             });
-        
+
         this.loadClassList();
-        // this.loadSectionList();
-        // this.loadStreamList();
         this.dt =  $("#allocation-list-table").DataTable()
     },
     watch: {
@@ -342,6 +316,6 @@ export default {
             });
         }
     },
-    
+
 }
 </script>

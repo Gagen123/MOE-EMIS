@@ -57,7 +57,6 @@ export default {
                 this.substaffList =  response.data.data;
              })
             .catch((error) => {
-                alert(error);
                 console.log("Error."+error);
             });
         },
@@ -98,8 +97,8 @@ export default {
             if(data['acess_level']=="Dzongkhag"){
                 this.loadstff('dzoWsirRegContract/Regular,Volunteer');
             }
-            if(data['acess_level']=="allRegContract/Regular,Volunteer"){
-                this.loadstff();
+            if(data['acess_level']=="Ministry"){
+                this.loadstff('allRegContract/Regular,Volunteer');
             }
         })
         .catch(errors => {

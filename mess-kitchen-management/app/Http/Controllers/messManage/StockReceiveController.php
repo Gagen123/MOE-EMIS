@@ -8,15 +8,12 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockReceived;
 use App\Models\mess_manage\StockReceivedItem;
+use App\Models\mess_manage\TransactionTable;
 use Illuminate\Support\Facades\DB;
 
-class StockReceiveController extends Controller
-{
-    //
+class StockReceiveController extends Controller{
     use ApiResponser;
-
-    public function __construct()
-    {
+    public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveStockReceived(Request $request){
@@ -30,23 +27,29 @@ class StockReceiveController extends Controller
                 'id'                       =>  $request['id'],
                 'updated_by'               =>  $request->user_id,
                 'created_at'               =>  date('Y-m-d h:i:s')
-                ];
-                $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
-                DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
-                foreach ($request->input('items_received') as  $i=> $facility){
+            ];
+            $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
 
-                    $receiveditem = array(
-                        'stockreceivedId'               =>  $request->id,
-                        'item_id'                       =>  $facility['item'],
-                        'receivedquantity'              =>  $facility['quantity'],
-                        'unit_id'                       =>  $facility['unit'],
-                        'remarks'                       =>  $facility['remarks'],
-                        'updated_by'                    =>  $request->user_id,
-                        'created_at'                    =>  date('Y-m-d h:i:s')
-                    );
-                    $stcrcv = StockReceivedItem::create($receiveditem);
+            DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
+            foreach ($request->input('items_received') as  $i=> $facility){
+                $itm_id=explode('_',$facility['item'])[0];
+                $unitid=explode('_',$facility['item'])[1];
+                $remarks="";
+                if(isset($facility['remarks'])){
+                    $remarks=$facility['remarks'];
                 }
-            return $this->successResponse($infra, Response::HTTP_CREATED);
+                $receiveditem = array(
+                    'stockreceivedId'               =>  $request->id,
+                    'item_id'                       =>  $itm_id,
+                    'receivedquantity'              =>  $facility['quantity'],
+                    'unit_id'                       =>  $unitid,
+                    'remarks'                       =>  $remarks,
+                    'updated_by'                    =>  $request->user_id,
+                    'created_at'                    =>  date('Y-m-d h:i:s')
+                );
+                $stcrcv = StockReceivedItem::create($receiveditem);
+            }
+            return $this->successResponse($stcrcv, Response::HTTP_CREATED);
 
         }else{
             $stockreceive = [
@@ -54,44 +57,68 @@ class StockReceiveController extends Controller
                 'quarter_id'               =>  $request['quarter'],
                 'organizationId'           =>  $request['organizationId'],
                 'remarks'                  =>  $request['remarks'],
-                'id'                       =>  $request->id,
+                'status'                   =>  'Submitted',
+                'dzo_id'                   =>  $request['dzoId'],
                 'created_by'               =>  $request->user_id,
                 'created_at'               =>  date('Y-m-d h:i:s')
             ];
-            // dd(Infrastructure::createOrFail($infrastructure));
-            // dd($infrastructure);
             $stcrcv = StockReceived::create($stockreceive);
             $stockreceivedId = $stcrcv->id;
-           foreach ($request->input('items_received') as  $i=> $facility){
-            // dd( $stockreceivedId);
-           // dd($facility);
+            foreach ($request->input('items_received') as  $i=> $facility){
+                $itm_id=explode('_',$facility['item'])[0];
+                $unitid=explode('_',$facility['item'])[1];
+                $remarks="";
+                if(isset($facility['remarks'])){
+                    $remarks=$facility['remarks'];
+                }
                 $receiveditem = array(
                     'stockreceivedId'              =>  $stockreceivedId,
-                    'item_id'                      =>  $facility['item'],
+                    'item_id'                      =>  $itm_id,
                     'receivedquantity'             =>  $facility['quantity'],
-                    'unit_id'                      =>  $facility['unit'],
-                    'remarks'                      =>  $facility['remarks'],
+                    'unit_id'                      =>  $unitid,
+                    'remarks'                      =>  $remarks,
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
-               //dd($facilityInStructure);
-
                StockReceivedItem::create($receiveditem);
+               $checkitem=TransactionTable::where('item_id',$itm_id)->where('procured_type','Central')
+               ->where('organizationId',$request['organizationId'])->first();
+                if($checkitem!=null && $checkitem!=""){
+                    $qty=$facility['quantity']+$checkitem->available_qty;
+                    $update_data=[
+                        'available_qty' => $qty,
+                        'updated_by'    =>$request->user_id,
+                        'updated_at'    =>  date('Y-m-d h:i:s'),
+                    ];
+                    TransactionTable::where('item_id',$itm_id)->where('procured_type','Central')->update($update_data);
+                }
+                else{
+                    $create_data=[
+                        'procured_type'  =>'Central',
+                        'organizationId' =>$request['organizationId'],
+                        'item_id'        =>$itm_id,
+                        'available_qty'  =>$facility['quantity'],
+                        'created_by'     =>$request->user_id,
+                        'created_at'     =>  date('Y-m-d h:i:s'),
+                    ];
+                    TransactionTable::create($create_data);
+                }
+
             }
             return $this->successResponse($stcrcv, Response::HTTP_CREATED);
         }
     }
-    public function loadFoodReleaseListing($orgId=""){
-       //  dd($orgId);
-        $stckrecive = DB::table('stock_receiveds')
-        ->select('id','organizationId','dateOfreceived as dateOfreceived', 'quarter_id as quarter', 'remarks as remarks')->where('organizationId', $orgId)->get();
-        return $stckrecive;
-        // $response_data=StockReceived::where('organizationId',$org_Id)->get();
-        // return $this->successResponse($response_data);
-    }
 
+    public function stockReceivedListing($orgId=""){
+        if(strpos($orgId,'_Creater')!==false){
+            $response_data = StockReceived::where('created_by',explode('_',$orgId)[0])->get();
+        }
+        else{
+            $response_data = StockReceived::where('organizationId',explode('_',$orgId)[0])->get();
+        }
+        return $response_data;
+    }
     public function viewitemreceived($stockreceivedId=""){
-      //  dd($stockreceivedId);
         $list = DB::table('stock_received_items as a')
         ->join('stock_receiveds as b', 'a.stockreceivedId', '=','b.id')
         ->select('b.dateOfreceived as dateOfreceived','b.quarter_id as quarter',
@@ -116,6 +143,29 @@ class StockReceiveController extends Controller
         return $this->successResponse($response_data);
     }
 
+    public function loadStockReceivedDetails($id=""){
+        $response_data=StockReceived::where('id',$id)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->itemDetails=StockReceivedItem::where('stockreceivedId',$id)->get();
+        }
+        return $this->successResponse($response_data);
+    }
+
+    public function approvereject(Request $request){
+        $status='Approved';
+        if($request->action_type=="reject"){
+            $status='Rejected';
+        }
+        $basic_details = [
+            'approve_reject_remarks'            =>  $request->remarks,
+            'status'                            =>  $status,
+            'approve_reject_by'                 =>  $request->user_id,
+            'approve_reject_at'                 =>  date('Y-m-d h:i:s')
+        ];
+        StockReceived::where('id',$request->id)->update($basic_details);
+        $basic = StockReceived::where('id',$request->id)->first();
+        return $this->successResponse($basic, Response::HTTP_CREATED);
+    }
 
 
     // public function saveStockReceived(Request $request){

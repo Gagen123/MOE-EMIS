@@ -55,7 +55,7 @@ export default {
             }, 3000);
         },
         showedit(data){
-            this.$router.push({name:'edit_student_projects_members',params: {data:data}});
+            this.$router.push({name:'edit_student_scouts_members',params: {data:data}});
         },
     },
     mounted(){

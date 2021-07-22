@@ -12,14 +12,35 @@
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Number of Studnets:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.number" :class="{ 'is-invalid': form.errors.has('number') }" id="number" @change="remove_err('number')" type="number">
-                    <has-error :form="form" field="number"></has-error>
+                    <label class="mb-1">Age Range:<i class="text-danger">*</i></label>
+                    <select v-model="form.age_range" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('age_range') }" class="form-control select2" name="age_range" id="age_range">
+                        <option v-for="(item, index) in counsellingAgeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                    </select>
+                    <has-error :form="form" field="age_range"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-1">Class Range:<i class="text-danger">*</i></label>
+                    <select v-model="form.class_range" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('class_range') }" class="form-control select2" name="class_range" id="class_range">
+                        <option v-for="(item, index) in counsellingClassList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                    </select>
+                    <has-error :form="form" field="class_range"></has-error>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Number of Male Students:<span class="text-danger">*</span></label> 
+                    <input class="form-control" v-model="form.male" :class="{ 'is-invalid': form.errors.has('male') }" id="male" @change="remove_err('male')" type="number">
+                    <has-error :form="form" field="male"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Number of Female Students:<span class="text-danger">*</span></label> 
+                    <input class="form-control" v-model="form.female" :class="{ 'is-invalid': form.errors.has('female') }" id="female" @change="remove_err('female')" type="number">
+                    <has-error :form="form" field="female"></has-error>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
+                    <label class="mb-0.5">Top Five Common Issues of Counselling:</label>
                     <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
                     <has-error :form="form" field="remarks"></has-error>
                 </div>
@@ -37,6 +58,8 @@ export default {
         return {
             dataList:[],
             counsellingTypeList:[],
+            counsellingAgeList:[],
+            counsellingClassList:[],
 
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
@@ -44,30 +67,34 @@ export default {
                 id:'',
                 remarks: '',
                 counselling_type: '',
-                number: '',
-               // action_type:'add'
+                class_range:'',
+                age_range:'',
+                male: '',
+                female:'',
+                action_type:'edit'
             }),
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
-        
-        // loadList(uri='organization/loadVisitorInformation'){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         console.log(data);
-        //         this.dataList =  data.data.data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
         getCounsellingTypeDropdown(uri = '/students/getCounsellingTypeDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
                 this.counsellingTypeList = data;
+            });
+        },
+        getCounsellingAgeRangeDropdown(uri = '/masters/loadActiveStudentMasters/counselling_age_range'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.counsellingAgeList = data;
+            });
+        },
+        getCounsellingClassRangeDropdown(uri = '/masters/loadActiveStudentMasters/counselling_class_range'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.counsellingClassList = data;
             });
         },
         remove_error(field_id){
@@ -102,37 +129,22 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-             if(id=="counselling_type"){
+            if(id=="counselling_type"){
                 this.form.counselling_type=$('#counselling_type').val();
             }
+            if(id=="age_range"){
+                this.form.age_range=$('#age_range').val();
+            }
+            if(id=="class_range"){
+                this.form.class_range=$('#class_range').val();
+            }
         },
-
-        getCounsellingDetails(couId){
-            axios.get('students/getCounsellingDetails/'+couId)
-            .then((response) => {  
-                let data=response.data.data;
-                this.form.counselling_type          =    data.counselling_type;
-                $('#counselling_type').val(data.counselling_type).trigger('change');
-
-                this.getCounsellingTypeDropdown();
-                this.form.remarks                   =    data.remarks;
-                this.form.number                    =    data.number;
-                this.form.id                        =    data.id;
-                
-               
-               
-
-
-            })
-            .catch((error) =>{  
-                console.log("Error:"+error);
-            }); 
-        },
-
-
     },
      mounted() {
-       // this.getCounsellingTypeDropdown();
+        this.getCounsellingTypeDropdown();
+        this.getCounsellingAgeRangeDropdown();
+        this.getCounsellingClassRangeDropdown();
+        
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -145,13 +157,16 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+    },
 
-        // this.loadMasterList();
-    },
     created() {
-        this.getCounsellingTypeDropdown();
-        this.getCounsellingDetails(this.$route.params.data.id)
+        this.form.id=this.$route.params.data.id;
+        this.form.counselling_type=this.$route.params.data.counselling_type;
+        this.form.class_range=this.$route.params.data.class_range;
+        this.form.age_range=this.$route.params.data.age_range;
+        this.form.male=this.$route.params.data.male;
+        this.form.female=this.$route.params.data.female;
+        this.form.remarks=this.$route.params.data.remarks;
     },
-    
 }
 </script>

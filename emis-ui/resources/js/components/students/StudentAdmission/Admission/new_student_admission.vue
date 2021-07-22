@@ -828,8 +828,8 @@ export default {
                 else{
                     axios.get('getpersonbycid/'+ $('#'+fieldId).val())
                     .then(response => {
-                        if (JSON.stringify(response.data)!='{}'){
-                            let personal_detail = response.data.citizenDetail[0];
+                        if (response.data[0]) {
+                            let personal_detail = response.data[0];
                             if(type=="std"){
                                 this.personal_form.first_name = personal_detail.firstName;
                                 $('#first_name').prop('readonly',true);
@@ -963,13 +963,14 @@ export default {
                                 $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
                                 $('#gardain_village_id').prop('disabled',true);
                             }
-
                         }else{
+                            this.ciderror = 'Invalid CID.';
                             Swal.fire({
-                                html: "No data found for this CID",
-                                icon: 'error'
+                                html: "No data found for matching CID",
+                                icon: 'info'
                             });
                         }
+
                     })
                     .catch((exception) => {
                         Swal.fire({

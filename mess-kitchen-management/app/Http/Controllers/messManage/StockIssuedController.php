@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use App\Models\mess_manage\StockIssued;
+use App\Models\mess_manage\LocalProcure;
+use App\Models\mess_manage\TransactionTable;
 use Illuminate\Support\Facades\DB;
 use Exception;
 
@@ -32,7 +34,7 @@ class StockIssuedController extends Controller
         // //     $stockissue = array(
         // //      'organizationId'            =>  $orgId,
         // //      'dateOfissue'               =>  $request['dateOfissue'];
-             
+
         // //      'item'                      =>  $item['item'],
         // //      'quantity'                  =>  $item['quantity'],
         // //      'unit'                      =>  $item['unit'],
@@ -47,7 +49,7 @@ class StockIssuedController extends Controller
         //  $stckiss = StockIssued::create($item);
         //   // dd('stockissue');
         // }
-        //  //  dd('m here'); 
+        //  //  dd('m here');
               //  dd('m here');
     //     $orgId = $request['organizationId'];
     //     $date = $request['dateOfissue'];
@@ -67,8 +69,8 @@ class StockIssuedController extends Controller
     //      $itemiss = StockIssued::create($itemIssued);
     //     }
     //   //  dd('m here');
-    //  //    dd('localprocure'); 
-    //     return $this->successResponse($itemiss, Response::HTTP_CREATED);  
+    //  //    dd('localprocure');
+    //     return $this->successResponse($itemiss, Response::HTTP_CREATED);
     //    // return $this->successResponse($item, Response::HTTP_CREATED);
     // }
 
@@ -77,22 +79,37 @@ class StockIssuedController extends Controller
         $id = $request->id;
         $orgId = $request['organizationId'];
         $date = $request['dateOfissue'];
+
         if($id != null){
           DB::table('stock_issueds')->where('id', $request->id)->delete();
           foreach ($request->item_issue as $i=> $item){
-              $itemIssued = array(
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
+            $rem="NA";
+            if(isset($item['remarks'])){
+                $rem=$item['remarks'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity=$item['quantity'];
+            }
+            $damagequantity=0;
+            if(isset($item['damagequantity'])){
+                $damagequantity=$item['damagequantity'];
+            }
+            $itemIssued = array(
               'organizationId'              =>  $orgId,
               'dateOfissue'                 =>  $date,
                'id'                         =>  $id,
-               'item_id'                    =>  $item['item'],
-               'quantity'                   =>  $item['quantity'],
-               'unit_id'                    =>  $item['unit'],
-               'damagequantity'             =>  $item['damagequantity'],
-               'remarks'                    =>  $item['remarks'],
+               'item_id'                    =>  $itm_id,
+               'quantity'                   =>  $quantity,
+               'unit_id'                    =>  $unitid,
+               'damagequantity'             =>  $damagequantity,
+               'remarks'                    =>  $rem,
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
-              );
-  
+            );
+
               $itemiss = StockIssued::create($itemIssued);
             }
            return $this->successResponse($itemiss,Response::HTTP_CREATED);
@@ -101,23 +118,47 @@ class StockIssuedController extends Controller
           $orgId = $request['organizationId'];
           $date = $request['dateOfissue'];
           foreach ($request->item_issue as $i=> $item){
+            $itm_id=explode('_',$item['item'])[0];
+            $unitid=explode('_',$item['item'])[1];
+            $rem="NA";
+            if(isset($item['remarks'])){
+                $rem=$item['remarks'];
+            }
+            $quantity=0;
+            if(isset($item['quantity'])){
+                $quantity=$item['quantity'];
+            }
+            $damagequantity=0;
+            if(isset($item['damagequantity'])){
+                $damagequantity=$item['damagequantity'];
+            }
               $itemIssued = array(
                'organizationId'             =>  $orgId,
                'dateOfissue'                =>  $date,
-               'item_id'                    =>  $item['item'],
-               'quantity'                   =>  $item['quantity'],
-               'unit_id'                    =>  $item['unit'],
-               'damagequantity'             =>  $item['damagequantity'],
-               'remarks'                    =>  $item['remarks'],
+               'item_id'                    =>  $itm_id,
+               'quantity'                   =>  $quantity,
+               'unit_id'                    =>  $unitid,
+               'damagequantity'             =>  $damagequantity,
+               'remarks'                    =>  $rem,
                'updated_by'                 =>  $request->user_id,
                'created_at'                 =>  date('Y-m-d h:i:s')
               );
-  
+
            $itemiss = StockIssued::create($itemIssued);
+           $checkitem=TransactionTable::where('item_id',$itm_id)
+               ->where('organizationId',$request['organizationId'])->first();
+                  $qty=$checkitem->available_qty-$item['quantity']-$item['damagequantity'];
+                  $update_data=[
+                    'available_qty' => $qty,
+                    'updated_by'    => $request->user_id,
+                    'updated_at'    =>  date('Y-m-d h:i:s'),
+                  ];
+                //  dd($update_data);
+                  TransactionTable::where('item_id',$itm_id)->update($update_data);
           }
         //  dd('m here');
-        //s   dd('itemIssued'); 
-        return $this->successResponse($itemiss, Response::HTTP_CREATED);  
+        //s   dd('itemIssued');
+        return $this->successResponse($itemiss, Response::HTTP_CREATED);
       }
     }
     public function loadStockIssuedList($orgId=""){
@@ -130,4 +171,15 @@ class StockIssuedController extends Controller
         $response_data=StockIssued::where('id', $lssId)->get();
         return $this->successResponse($response_data);
     }
+    public function getquantity($itemId="", $chekva="", $orgId=""){
+
+     // dd( $orgId,$itemId,$chekva  );
+    
+      $response_data=TransactionTable::where('item_id', $itemId)
+      ->where('procured_type',$chekva)
+      ->where('organizationId',$orgId )->first();
+     // dd($response_data);
+      return $this->successResponse($response_data);
+    }
+
 }

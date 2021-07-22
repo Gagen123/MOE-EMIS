@@ -656,7 +656,6 @@ class AdministrationController extends Controller{
             'id'                 =>  $request['id'],
             'user_id'            =>$this->userId()
         ];
-       // dd( $cat);
         $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
 
@@ -1159,12 +1158,13 @@ class AdministrationController extends Controller{
     }
     public function getpersonbycid($cid){
         $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
-        if ($person->citizenDetailsResponse) {
-            $response_data = $person->citizenDetailsResponse;
-            return  response()->json($response_data);
+        if($person->data->hasdata){
+            $response_data = $person->data->citizenDetail;
+            return  $response_data;
         }else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
+        return  response()->json($person);
     }
     public function loadQuater(Request $request){
      //  return('from UI');

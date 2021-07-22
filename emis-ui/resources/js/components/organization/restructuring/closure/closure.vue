@@ -512,7 +512,7 @@ export default {
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                this.orgList = response.data.data;
+                this.orgList = response.data;
             });
         },
         getAttachmentType(type){
@@ -528,7 +528,6 @@ export default {
                 console.log(errors)
             });
         },
-
     },
     mounted(){
         $('[data-toggle="tooltip"]').tooltip();

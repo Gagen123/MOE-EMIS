@@ -44,39 +44,42 @@
                         <table id="student-list-table" class="table w-100 table-bordered table-striped">
                             <thead>
                                 <tr>
-                                    <th>Sl No</th>
-                                    <th>Name</th>
-                                    <th>Sex</th>
-                                    <th>Age</th>
-                                    <th>Height (in centimeter)</th>
-                                    <th>Weight (in Kg)</th>
-                                    <th>BMI</th>
-                                    <th>Result</th>
-                                    <th>Remarks</th>
+                                    <th style="width:5%">Sl#</th>
+                                    <th style="width:15%">Name</th>
+                                    <th style="width:5%">Sex</th>
+                                    <th style="width:13%">DOB</th>
+                                    <th style="width:12%">Age</th>
+                                    <th style="width:15%">Height (in cm)</th>
+                                    <th style="width:15%">Weight (in Kg)</th>
+                                    <th style="width:10%">BMI</th>
+                                    <th style="width:10%">Result</th>
+                                    <!-- <th>Remarks</th> -->
                                 </tr>
                             </thead>
                             <tbody id="tbody">
-                                <tr v-for="(student, index) in studentList" :key="index">
+                                <tr v-for="(student, index) in student_form.studentList" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.Name}}</td>
                                     <td> {{genderArray[student.CmnSexId]}}  </td>
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
-                                    <td>{{getAge(student.DateOfBirth)}}</td>
+                                    <td>{{student.DateOfBirth}}</td>
+                                    <td>{{getAge(student.DateOfBirth)}} (Y), {{getMonth(student.DateOfBirth)}} (M)</td>
                                     <td>
-                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student_form.height[index]" @change="calcualteBMI(index)"/>
+                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student.height" @change="calcualteBMI(index)"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student_form.weight[index]" @change="calcualteBMI(index)"/>
+                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student.weight" @change="calcualteBMI(index)"/>
                                     </td>
-                                     <td>
-                                        <span :id="'bmi'+index"></span>
+                                    <td>
+                                        <!-- <input type="text" readonly name="bmi" :id="'bmi'+index" class="form-control" v-model="student.bmi"/> -->
+                                        <span :id="'bmi'+index" ></span>
                                     </td>
                                     <td>
                                         <span :id="'result'+index"></span>
                                     </td>
-                                    <td>
-                                        <input type="text" name="remarks" class="form-control" v-model="student_form.remarks[index]"/>
-                                    </td>
+                                    <!-- <td>
+                                        <input type="text" name="remarks" class="form-control" v-model="student.remarks"/>
+                                    </td> -->
                                 </tr>
                             </tbody>
                         </table>
@@ -100,7 +103,7 @@ export default {
             sectionList:[],
             streamList:[],
             byClass:[],
-            studentList:[],
+            // studentList:[],
             genderArray:{},
             id:'NA',
 
@@ -109,6 +112,7 @@ export default {
                 std_class: '',
                 std_stream: '',
                 std_section: '',
+                studentList:[],
                 date: '',
                 std_id: [],
                 height:[],
@@ -124,9 +128,7 @@ export default {
            let weight=$('#weight'+index).val();
            let bmi=(weight/(height*height)).toFixed(2);
            $('#bmi'+index).html(bmi);
-        //    if(){
-
-        //    }
+            // this.student_form.studentList.bmi=bmi;
            $('#result'+index).html(bmi);
         },
         loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
@@ -205,12 +207,31 @@ export default {
 
 
         getAge(DateOfBirth){
-            let date_of_birth = new Date(DateOfBirth);
-            var diff_ms = Date.now() - date_of_birth.getTime();
-            var age_dt = new Date(diff_ms);
-            return Math.abs(age_dt.getUTCFullYear()-1970);
-        },
+            let selectedDate=new Date($('#date').val());
 
+
+            let date_of_birth = new Date(DateOfBirth);
+            // var diff_ms = Date.now() - date_of_birth.getTime();
+            // var age_dt = new Date(diff_ms);
+            // return Math.abs(age_dt.getUTCFullYear()-1970);
+            let year = selectedDate.getFullYear() - date_of_birth.getFullYear();
+            return year;
+        },
+        getMonth(DateOfBirth){
+            let selectedDate=new Date($('#date').val());
+            let date_of_birth = new Date(DateOfBirth);
+            let month=0;
+            if (selectedDate.getMonth() + 1 < date_of_birth.getMonth() + 1){
+                // example: March 2010 (3) and January 2011 (1); this should be 10 monts
+                // 12 - 3 + 1 = 10
+                // Take the 12 months of a year into account
+                month = 12 - date_of_birth.getMonth() + 1 + selectedDate.getMonth() + 1;
+            }
+            else{
+                month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1;
+            }
+            return month;
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -249,16 +270,25 @@ export default {
                 this.student_form.term_id=$('#term_id').val();
             }
             if(id=="std_class"){
-                this.student_form.std_class=$('#std_class').val();
-                let class_selected = $("#std_class").val();
-                this.getStreamList();
-                this.getSectionList();
-                if(class_selected == 11 || class_selected == 12){
-                    $(".stream_selection").show();
-                    $(".section_selection").show();
+                if($('#date').val()==""){
+                    Swal.fire({
+                    text: "Pease select date of Measurement",
+                    icon: 'error',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'OK!',
+                    });
                 }else{
-                    $(".section_selection").show();
-                    $(".stream_selection").hide();
+                    this.student_form.std_class=$('#std_class').val();
+                    let class_selected = $("#std_class").val();
+                    this.getStreamList();
+                    this.getSectionList();
+                    if(class_selected == 11 || class_selected == 12){
+                        $(".stream_selection").show();
+                        $(".section_selection").show();
+                    }else{
+                        $(".section_selection").show();
+                        $(".stream_selection").hide();
+                    }
                 }
             }
 
@@ -268,7 +298,7 @@ export default {
             if(id=="std_section"){
                 axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                     .then((response) => {
-                        this.studentList = response.data;
+                        this.student_form.studentList = response.data;
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\staff;
 
 use App\Traits\ApiResponser;
@@ -8,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Models\staff\ApplicationDetails;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\ApplicationAttachments;
-
-
 class StaffRecruitmentController extends Controller
 {
     use ApiResponser;
@@ -51,9 +48,6 @@ class StaffRecruitmentController extends Controller
             }
         } 
         return $application_details_data;
-
-        
-
     }
     public function saveExpatriateRecuritment(Request $request){
         $application_details_data =[
@@ -89,7 +83,6 @@ class StaffRecruitmentController extends Controller
         return $application_details_data;
 
     }
-
     public function loadPrincipalRecuritmentApplication($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         if($response_data!="" && $response_data!=null){

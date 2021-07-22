@@ -26,7 +26,7 @@
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Org Type: {{form.organization_type}}</label>
+                                    <label>Organization Type{{form.organization_type}}</label>
                                 </div>
                             </div>
                             <div class="form-group row">

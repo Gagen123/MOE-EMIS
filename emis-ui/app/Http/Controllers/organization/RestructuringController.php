@@ -158,14 +158,16 @@ class RestructuringController extends Controller
             return 'No Screen';
         }
         // dd($establishment_data);
+
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         // dd($response_data,$workflowdet,$request->application_for);
+        $appNo=json_decode($response_data)->data->application_no;
         if($request->action_type!="edit"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$screen_name,//screen name
-                'application_number'=>json_decode($response_data)->data->application_no,
+                'application_number'=>$appNo,
                 'name'              =>$request['application_for'], //Organizaiton Name
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
@@ -178,6 +180,38 @@ class RestructuringController extends Controller
             ];
             // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $type="";
+            if($screen_name=="Change in Name"){
+                $type="change_in_name";
+            }
+            if($screen_name=="Upgrade"){
+                $type="upgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
+            if($screen_name=="Downgrade"){
+                $type="downgrade";
+            }
+            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$type.'/'.$this->getRoleIds('roleIds')));
+            // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1,$screen_name);
+            $seq=((int) $workflowdet[0]->Sequence +1);
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
+            $role_id=$next_roleId[0]->SysRoleId;
+            $notification_data=[
+                'notification_for'              =>  $screen_name,
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $role_id,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
         // return $response_data;
@@ -254,6 +288,7 @@ class RestructuringController extends Controller
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
         // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
+        // dd($loadOrganizationDetails);
         // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->establishment_type;//pulled category from existing organization details to match the data for verification
         // dd($service_name,$workflowdet);
@@ -404,18 +439,20 @@ class RestructuringController extends Controller
         //get submitter role
         if($request['action_type']!="edit"){
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet);
+
             $screen_id="";
             $status="";
             $app_role="";
             $service_name=json_decode($response_data)->data->establishment_type;
+            // dd($workflowdet,$service_name);
             foreach($workflowdet as $work){
-                if(strtolower($work->Establishment_type)==strtolower(str_replace (' ', '_',strtolower($service_name)))){
+                if(strtolower($work->screenName)=="merger"){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
                 }
             }
+            // dd($screen_id);
             if($request->submit_type=="reject"){
                 $status='0__submitterRejects';
             }
@@ -872,7 +909,7 @@ class RestructuringController extends Controller
         ];
         // dd($bifurcation);
         $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
-
+        // dd($response_data);
         //Work Flow Process (based on Public School Establishment)
         //get submitter role
         if($request['action_type']!="edit"){
@@ -882,14 +919,14 @@ class RestructuringController extends Controller
             $status="";
             $screen_name="";
             $app_role="";
-            $service_name=json_decode($response_data)->data->establishment_type;
+            // $service_name=json_decode($response_data)->data->establishment_type;
 
             foreach($workflowdet as $work){
                 if(strtolower($work->screenName)==strtolower($request->application_for)){
                     $screen_id=$work->SysSubModuleId;
                     $status=$work->Sequence;
                     $app_role=$work->SysRoleId;
-                    $screen_name=$work->screenName;
+                    // $screen_name=$work->screenName;
                 }
             }
             if($request->submit_type=="reject"){

@@ -37,7 +37,7 @@ class GeneralStudentController extends Controller{
             'std_class'             => $request->std_class,
             'std_stream'            => $request->std_stream,
             'std_section'           => $request->std_section,
-             'roll_no'              => $request->roll_no,
+            //  'roll_no'              => $request->roll_no,
             'studentList'           => $request->studentList,
             'std_referred'          => $request->std_referred,
             'organization_id'       => $this->getWrkingAgencyId(),
@@ -72,6 +72,15 @@ class GeneralStudentController extends Controller{
 
     public function loadStudentBySection($param1=""){
         $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1);
+        return $student_list;
+    }
+
+    /**
+     * load student list by type (i.e. Regular, CE etc)
+     */
+
+    public function loadStudentByType($type="", $class_id=""){
+        $student_list = $this->apiService->listData('emis/students/loadStudentByType/'.$type.'/'.$class_id);
         return $student_list;
     }
 
@@ -118,6 +127,18 @@ class GeneralStudentController extends Controller{
 
     public function getStudentProgrammeDetails($id){
         $student_record = $this->apiService->listData('emis/students/getStudentProgrammeDetails/'.$id);
+        return $student_record;
+    }
+
+    /**
+     * Load the student information e.g. no. of boys and girls
+     * 
+     * $param takes the value such as general, SEN etc
+     */
+
+    public function loadStudentInformation($param){
+        $org_id = $this->getWrkingAgencyId();
+        $student_record = $this->apiService->listData('emis/students/loadStudentInformation/'.$org_id.'/'.$param);
         return $student_record;
     }
 

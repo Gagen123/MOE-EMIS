@@ -26,7 +26,7 @@
                                         <has-error :form="form" field="organizationId"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Org Type: {{category}}</label>
+                                        <label>Organization Type{{category}}</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -274,7 +274,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',

@@ -456,7 +456,6 @@ class GeneralInfoController extends Controller
     //New function to update the basic organization details
 
     public function updateOrgBasicDetials(Request $request){
-        dd($request);
         switch($request['fields_for']){
             case "eccd" : {
                     $validation = $this->validateEccdFields($request);
@@ -646,21 +645,20 @@ class GeneralInfoController extends Controller
     private function setEccdFields($request){
 
         $estd =[
-            'isGeoPoliticallyLocated'   =>  $request['initiatedby'],
-            'category'                  =>  $request['initiatedby'],
-            'longitude'                 =>  $request['initiatedby'],
-            'latitude'                  =>  $request['initiatedby'],
-            'altitude'                  =>  $request['initiatedby'],
-            'map_path'                  =>  $request['initiatedby'],
-            'climate_type'              =>  $request['initiatedby'],
-            'distance_from_dzo'         =>  $request['initiatedby'],
-            'fencingtype'               =>  $request['initiatedby'],
-            'entranceGate'              =>  $request['initiatedby'],
-            'disasterArea'              =>  $request['initiatedby'],
+            'isGeoPoliticallyLocated'   =>  $request['isGeoPoliticallyLocated'],
+            'category'                  =>  $request['category'],
+            'longitude'                 =>  $request['longitude'],
+            'latitude'                  =>  $request['latitude'],
+            'altitude'                  =>  $request['altitude'],
+            'map_path'                  =>  $request['map_path'],
+            'climate_type'              =>  $request['climate_type'],
+            'distance_from_dzo'         =>  $request['distance_from_dzo'],
+            'fencingtype'               =>  $request['fencingtype'],
+            'entranceGate'              =>  $request['entranceGate'],
+            'disasterArea'              =>  $request['disasterArea'],
             'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];
-
         return $estd;
     }
 

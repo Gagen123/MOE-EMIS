@@ -16,12 +16,18 @@
                                     </div>
                                     <hr>
                                     <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div v-if="school_category === 'private_school'">
+                                            
+                                        </div>
+                                        <div v-else class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>MOF Code:</label>
                                             <input type="text" class="form-control" v-model="form.mofCode" :class="{ 'is-invalid': form.errors.has('mofCode') }" >
                                             <has-error :form="form" field="mofCode"></has-error>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div v-if="school_category === 'private_school'">
+                                            
+                                        </div>
+                                        <div v-else class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>RCSC/Zest Code:</label>
                                             <input type="text" class="form-control" v-model="form.zestAgencyCode" :class="{ 'is-invalid': form.errors.has('zestAgencyCode') }" >
                                         </div>
@@ -80,6 +86,7 @@
     export default {
         data(){
             return{
+                school_category:'',
                 users: [],
                 contactTypeList:[],
                 orgDetails:'',
@@ -123,10 +130,11 @@
                     if(response_data.category=="private_eccd"){
                         this.category="Public ECCD";
                     }
+                   this.school_category = response_data.category;
                    this.form.isAspNetSchool=response_data.isAspNetSchool;
                    this.form.isColocated=response_data.isColocated;
                    this.form.isGeoPoliticallyLocated=response_data.isGeoPoliticallyLocated;
-                  this.form.isResourceCenter=response_data.isResourceCenter;
+                   this.form.isResourceCenter=response_data.isResourceCenter;
                    this.form.isSenSchool=response_data.isSenSchool;
                    this.form.hasCounselingRoom=response_data.hasCounselingRoom;
                    this.form.hasShiftSystem=response_data.hasShiftSystem;

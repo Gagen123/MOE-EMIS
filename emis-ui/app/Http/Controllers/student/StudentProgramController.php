@@ -253,15 +253,14 @@ class StudentProgramController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'                    => $request->id,
+            'id'                    => $request->inventoryId,
+            'actionType'            => $request->actionType,
             'organisation_id'       => $this->getWrkingAgencyId(),
             'program'               => $request->program,
             'month'                 => $request->month,
             'inventoryDetails'      => $request->inventoryDetails,
             'productionDetails'     => $request->productionDetails,
             'expenditureDetails'    => $request->expenditureDetails,
-
-            //'user_id'        => $this->user_id()
         ];
 
         $response_data= $this->apiService->createData('emis/students/saveProgramInventory', $data);
@@ -274,6 +273,12 @@ class StudentProgramController extends Controller
 
     public function loadProgramInventory($param=""){
         $student_records = $this->apiService->listData('emis/students/loadProgramInventory/'.$param);
+        return $student_records;
+    }
+
+
+    public function loadInventoryDetials($param=""){
+        $student_records = $this->apiService->listData('emis/students/loadInventoryDetials/'.$param);
         return $student_records;
     }
 

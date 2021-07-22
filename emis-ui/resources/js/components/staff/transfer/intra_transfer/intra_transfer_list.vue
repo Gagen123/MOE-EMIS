@@ -10,6 +10,7 @@
                             <th>Application Number</th>
                             <th>Date of Apply</th>
                             <th>Status</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -19,7 +20,9 @@
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
-                            <!-- <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td> -->
+                           <td>
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
+                            </td>
                             
                         </tr>
                     </tbody>

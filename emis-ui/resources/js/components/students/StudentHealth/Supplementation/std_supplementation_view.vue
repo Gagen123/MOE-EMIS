@@ -3,7 +3,7 @@
         <div class="invoice p-3 mb-6">
             <div class="row">
                 <div class="col-12">
-                    <h5>Health Screening Details</h5>
+                    <h5>Health Supplementation Details</h5>
                 </div>
             </div>
             <div class="row invoice-info">
@@ -11,11 +11,11 @@
                     <div class="table-responsive">
                         <table v-for="(item, index) in healthScreeningDetails" :key="index">
                         <tr>
-                            <th style="width:50%">Screening Type:</th>
-                            <td>{{item.screening_type}}</td>
+                            <th style="width:50%">Supplementation Type:</th>
+                            <td>{{item.supplementation_type}}</td>
                         </tr>
                         <tr>
-                            <th>Date of Screening:</th>
+                            <th>Date of Supplementation Given:</th>
                             <td>{{item.date}}</td>
                         </tr>
                         <tr>
@@ -38,7 +38,7 @@
         <hr>
         <div class="row">
             <div class="col-12">
-                <h6>Student List and Screening Details</h6>
+                <h6>Student List and Supplementation Details</h6>
             </div>
         </div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -57,7 +57,7 @@
                         <td>{{ index + 1 }}</td>
                         <td>{{ item.Name}}</td>
                         <td>{{ item.student_code}}</td>
-                        <td>{{ item.screened ==  given ? "Given" : "Not Given" }}</td>
+                        <td>{{ item.given ==  null ? "Given" : "Not Given" }}</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showaddmodal(item.id+'__'+item.StdStudentId)"><i class="fas fa-edit"></i > Edit</a>
@@ -71,7 +71,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Edit Student Deworming Details</h4>
+                        <h4 class="modal-title">Edit Student Supplementation Details</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -97,14 +97,9 @@
                                 </div>
                                 <div class="row form-group rp=0.5">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Screened:<i class="text-danger">*</i></label>
-                                        <label><input  type="radio" v-model="student_form.isScreened" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="student_form.isScreened" value="0" tabindex=""/> No</label>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5"> Referred:<i class="text-danger">*</i></label>
-                                        <label><input  type="radio" v-model="student_form.isReferred" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="student_form.isReferred" value="0" tabindex=""/> No</label>
+                                        <label class="mb-0.5">Supplementation Given/Not Given:<i class="text-danger">*</i></label>
+                                        <label><input  type="radio" v-model="student_form.given" value="1" tabindex=""/> Yes</label>
+                                        <label><input  type="radio" v-model="student_form.given" value="0" tabindex=""/> No</label>
                                     </div>
                                 </div>
                             </form>
@@ -124,6 +119,7 @@
 export default {
    data(){
         return{
+            globalStudentParams:'',
             healthScreeningDetails:[],
             studentList:[],
             screeningDetails:'',
@@ -137,20 +133,10 @@ export default {
             staffqualificationlist:[],
 
             student_form: new form({
-                action_type:'',
-                personal_id: '',
-                qualification_id:'',
-                description:'',
-                qualification:'',
-                coursemode:'',
-                coursetitle:'',
-                firstsub:'',
-                secondsub:'',
-                country:'',
-                startdate:'',
-                enddate:'',
-                action_type:'',
-                status:'Pending',
+                id:'',
+                StdHealthSupplementationId:'',
+                StdStudentId:'',
+                given:''
             }),
         }
     },
@@ -166,8 +152,8 @@ export default {
         /**
          * method to get health screening details by id
         */
-        getHealthScreeningDetails(id){
-            axios.get('students/getHealthScreeningDetails/'+id)
+        getHealthSupplementationDetails(id){
+            axios.get('students/getHealthSupplementationDetails/'+id)
             .then((response) => {  
                 this.healthScreeningDetails = response.data.data;  
             })
@@ -183,19 +169,6 @@ export default {
             axios.get('/students/loadViewSupplementationDetails/'+id)
                     .then((response) => {
                         this.studentList = response.data.data;  
-                })
-                .catch(() => {
-                    consoele.log("Error:"+e)
-                });
-        },
-
-        /**
-         * Method to get screening details of the student
-         */
-        getStudentScreeningDetails(id){
-            axios.get('/students/getScreeningDetails/'+id)
-                    .then((response) => {
-                        this.screeningDetails = response.data.data;  
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
@@ -243,22 +216,34 @@ export default {
          */
         showaddmodal(id){ 
             $('#screening-modal').modal('show');
-            axios.get('/students/getScreeningDetails/'+id)
+            axios.get('/students/getSupplementationDetails/'+id)
                     .then((response) => {
-                        this.screeningDetails = response.data.data;  
+                        this.screeningDetails = response.data;
+                        
+                        this.student_form.id = response.data.data.supplementation_id;
+                        this.student_form.StdHealthSupplementationId = response.data.data.id;
+                        this.student_form.StdStudentId = response.data.data.StdStudentId;
+
+                        if(response.data.data.given==null){
+                            this.student_form.given=1;
+                        }
+                        else{
+                            this.student_form.given=0;
+                        }
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
                 });
         },
         addMore: function(type){
-            this.student_form.post('/students/updateHealthScreeningRecords',this.student_form)
+            this.student_form.post('/students/updateHealthSupplementationRecords',this.student_form)
             .then((response) => {  
                 Toast.fire({
                     icon: 'success',
                     title: 'Data saved Successfully'
                 });
                 $('#screening-modal').modal('hide');
+                this.getStudentList(this.globalStudentParams);
             })
             .catch((error) => {  
                 console.log("Error:"+error)
@@ -287,8 +272,9 @@ export default {
         this.loadClassArrayList();
         this.loadSectionArrayList();
         this.loadStreamArrayList();
-        this.getHealthScreeningDetails(this.$route.params.data.id);
+        this.getHealthSupplementationDetails(this.$route.params.data.id);
         let student_params = this.$route.params.data.OrgClassStreamId+'__'+this.$route.params.data.SectionDetailsId+'__'+this.$route.params.data.stream+'__'+this.$route.params.data.id;
+        this.globalStudentParams = this.$route.params.data.class_id+'__'+this.$route.params.data.section_id+'__'+this.$route.params.data.stream_id+'__'+this.$route.params.data.id;
         this.getStudentList(student_params);
     }
 }

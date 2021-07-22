@@ -17,7 +17,8 @@ class HeadQuaterDetails extends Model
      * @var array
      */
     protected $fillable = [
-        'id','organizationId',
+        'id',
+        'organizationId',
         'zestAgencyCode',
         'agencyName',
         'organizationType',

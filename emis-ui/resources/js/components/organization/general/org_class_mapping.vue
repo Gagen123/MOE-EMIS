@@ -269,7 +269,7 @@ export default {
 
         getCurrentClassStream(schoolId){
             axios.get('/organization/getCurrentClassStream/'+schoolId)
-         
+
               .then(response => {
                 let response_data = response.data;
                 let isNew=false;
@@ -312,24 +312,38 @@ export default {
         getClassStream(text){
             let level = text;
             $('streamsec').hide();
-            if(level.toLowerCase().includes('middle')){
+            if(level!=undefined && level.toLowerCase().includes('middle')){
                 level="10";
             }
-            else if(level.toLowerCase().includes('lower')){
+            else if(level!=undefined &&  level.toLowerCase().includes('lower')){
                 level="8";
             }
-            else if(level.toLowerCase().includes('primary')){
+            else if(level!=undefined &&  level.toLowerCase().includes('primary')){
                 level="6";
-                 this.org_type = 'multigrade';
+                this.org_type = 'multigrade';
             }
             else{
-                level="12";
-                $('.streamsec').show();
+                if(level==undefined){
+                    level="ECCD";
+                }
+                else{
+                    level="12";
+                    $('.streamsec').show();
+                }
             }
-            axios.get('/masters/loadClassStreamMapping/school_'+level)
-              .then(response => {
-                this.classStreamList = response.data.data;
-            });
+            if(level!=undefined){
+                let url="";
+                if(level=="ECCD"){
+                    url='/masters/loadClassStreamMapping/ECCD_'+level;
+                }
+                else{
+                    url='/masters/loadClassStreamMapping/school_'+level;
+                }
+                axios.get(url)
+                .then(response => {
+                    this.classStreamList = response.data.data;
+                });
+            }
         },
 
         getLevel(uri = '/organization/getLevelInDropdown'){
@@ -354,7 +368,6 @@ export default {
             if(data['acess_level']=="Org"){
                 this.getorgdetials(data['Agency_Code']);
                 this.form.school=data['Agency_Code'];
-
             }
             else{
                 $('#screenPermission').show();

@@ -523,32 +523,13 @@ export default {
                 this.form.id                    =    data.id;
 
                 this.attachmentDetails=data.attachments;
-
-
-            //         let data=response.data.data;
-            //    // alert(data.length);
-            //     for(let i=0; i<data.length;i++){
-            //         this.form.dateOfrelease         = data[i].dateOfrelease;
-            //         this.form.dzongkhag             = data[i].dzongkhag_id
-            //         this.form.organizaiton          = data[i].org_id
-            //         this.form.quarter               = data[i].quarter_id
-            //         this.form.remarks               = data[i].remarks
-            //         this.form.id                    = data[i].id;
-            //         this.form.attachments.push({
-            //            file_name:data[i].user_defined_name,
-            //            attachment:data[i].path,
-
-            //         });
-            //     }
-            //     this.count=data.length;
-
             })
             .catch((error) =>{
                 console.log("Error:"+error);
             });
         },
     },
-     mounted() {
+    mounted() {
          $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'

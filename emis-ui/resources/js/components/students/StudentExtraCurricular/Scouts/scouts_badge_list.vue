@@ -5,16 +5,20 @@
                 <tr>
 
                     <th >No.</th>
-                    <th >Scout Program</th>
-                    <th >Establishment Year</th>
+                    <th >Student Name</th>
+                    <th >Student Code</th>
+                    <th >Badge Earned</th>
+                    <th >Date Earned</th>
                     <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.scout_name}}</td>
-                    <td>{{ item.EstablishmentYear}}</td>
+                    <td>{{ item.student_name}}</td>
+                    <td>{{ item.student_code}}</td>
+                    <td>{{ item.badge_name}}</td>
+                    <td>{{ item.date}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -34,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadStudentScouts/'+this.id){
+        loadDataList(uri='students/loadScoutsBadge'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -53,7 +57,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'edit_student_scouts',params: {data:data}});
+            this.$router.push({name:'edit_scouts_badge',params: {data:data}});
         },
     },
     mounted(){

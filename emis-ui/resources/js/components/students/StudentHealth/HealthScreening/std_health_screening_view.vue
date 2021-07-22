@@ -126,6 +126,7 @@
 export default {
    data(){
         return{
+            globalStudentParams:'',
             healthScreeningDetails:[],
             studentList:[],
             screeningDetails:'',
@@ -138,20 +139,11 @@ export default {
             staffqualificationlist:[],
 
             student_form: new form({
-                action_type:'',
-                personal_id: '',
-                qualification_id:'',
-                description:'',
-                qualification:'',
-                coursemode:'',
-                coursetitle:'',
-                firstsub:'',
-                secondsub:'',
-                country:'',
-                startdate:'',
-                enddate:'',
-                action_type:'',
-                status:'Pending',
+                id:'',
+                StdHealthScreeningId:'',
+                StdStudentId:'',
+                isScreened:'',
+                isReferred:''
             }),
         }
     },
@@ -186,7 +178,7 @@ export default {
                         this.studentList = response.data.data;  
                 })
                 .catch(() => {
-                    consoele.log("Error:"+e)
+                    console.log("Error:"+e)
                 });
         },
 
@@ -247,6 +239,10 @@ export default {
             axios.get('/students/getScreeningDetails/'+id)
                     .then((response) => {
                         this.screeningDetails = response.data;
+                        this.student_form.id = response.data.data.screen_id;
+                        this.student_form.StdHealthScreeningId = response.data.data.id;
+                        this.student_form.StdStudentId = response.data.data.StdStudentId;
+
                         if(response.data.data.screened==null){
                             this.student_form.isScreened=1;
                         }
@@ -273,6 +269,7 @@ export default {
                     title: 'Data saved Successfully'
                 });
                 $('#screening-modal').modal('hide');
+                this.getStudentList(this.globalStudentParams);
             })
             .catch((error) => {  
                 console.log("Error:"+error)
@@ -303,6 +300,7 @@ export default {
         this.loadStreamArrayList();
         this.getHealthScreeningDetails(this.$route.params.data.id);
         let student_params = this.$route.params.data.class+'__'+this.$route.params.data.section+'__'+this.$route.params.data.stream+'__'+this.$route.params.data.id;
+        this.globalStudentParams = this.$route.params.data.class_id+'__'+this.$route.params.data.section_id+'__'+this.$route.params.data.stream_id+'__'+this.$route.params.data.id;
         this.getStudentList(student_params);
     }
 }

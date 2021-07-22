@@ -105,4 +105,49 @@ class StudentScoutController extends Controller
         $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$orgId.'/'.$user_id);
         return $scout_members;
     }
+
+    /**
+     * Save Scout Badge
+     */
+
+    public function saveStudentScoutsBadge(Request $request){
+        $rules = [
+            'scout'             => 'required',
+            'badgeEarned'       => 'required',
+            'date'              => 'required'
+        ];
+
+        $customMessages = [
+            'scout.required'                => 'This field is required',
+            'badgeEarned.required'          => 'This field is required',
+            'date.required'                 => 'This field is required'
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $data =[
+            'id'                    =>$request->id,
+            'scout'                 =>$request->scout,
+            'badgeEarned'           =>$request->badgeEarned,
+            'remarks'               =>$request->remarks,
+            'date'                  =>$request->date,
+            'action_type'           =>$request->action_type,
+            'user_id'               =>$this->userId(),
+            'working_agency_id'     =>$this->getWrkingAgencyId()
+        ];
+
+        $response_data= $this->apiService->createData('emis/students/saveStudentScoutsBadge', $data);
+        return $response_data;
+    }
+
+    /**
+     * load list of students and scouts badge
+     */
+
+    public function loadScoutsBadge(){
+        $orgId = $this->getWrkingAgencyId();
+        $user_id = $this->userId();
+        $scout_members = $this->apiService->listData('emis/students/loadScoutsBadge/'.$orgId.'/'.$user_id);
+        return $scout_members;
+    }
 }

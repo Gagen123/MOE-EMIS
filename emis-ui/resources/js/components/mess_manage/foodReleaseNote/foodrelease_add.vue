@@ -149,6 +149,7 @@ export default {
             dzongkhag:'',
             organizaiton:'',
             quarter:'',
+            attachments:[],
            
           //  itemrelease:[],
             // items_released: [],

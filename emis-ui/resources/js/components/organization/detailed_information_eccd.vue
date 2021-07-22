@@ -24,24 +24,22 @@
                                                     <label><input  type="radio" v-model="form.isGeoPoliticallyLocated" value="0" tabindex=""/> No</label>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Parent School:</label>
-                                                <select v-model="form.parentSchool" class="form-control" name="parentSchool" id="parentSchool">
-                                                    <option v-for="(item, index) in parentSchool" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Parent School:</label>
+                                                    <select v-model="form.parentSchool" class="form-control" name="parentSchool" id="parentSchool">
+                                                        <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Parent School Level:</label>
-                                                <select v-model="form.level" class="form-control" name="level" id="level">
-                                                    <option v-for="(item, index) in level" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>Distance from Dzongkhag HQ:</label><br>
+                                                    <input type="text" v-model="form.distance_from_dzo" class="form-control editable_fields" id="distance_from_dzo" />
+                                                    <has-error :form="form" field="distance_from_dzo"></has-error>
+                                                </div>
                                             </div>
                                          </div>
-                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label>Distance from Dzongkhag HQ:</label><br>
-                                            <input type="text" v-model="form.distance_from_dzo" class="form-control editable_fields" id="distance_from_dzo" />
-                                            <has-error :form="form" field="distance_from_dzo"></has-error>
-                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">
@@ -175,16 +173,20 @@
                 contactTypeList:[],
                 orgDetails:'',
                 isprofile:false,
-                levelArray:{},
+                SchoolList:[],
                 category:'',
+                parentSchoolList:[],
+                levelList:[],
                 fence_list:[],
                 disasterList:[],
                 climate_type_list:[],
                 form: new form({
                     org_id: '',
                     isGeoPoliticallyLocated:'',
+                    parentSchool:'',
                     category:0,
                     proprietorName:'',
+                    level:'',
                     proprietorCid:'',
                     proprietorPhone:'',
                     proprietorEmail:'',
@@ -267,6 +269,17 @@
                     });
                 })
             },
+            loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response;
+                    this.SchoolList =  data.data;
+                })
+                .catch(function (error) {
+                    console.log("Error:"+error)
+                });
+            },
+
             getContactTypeDropdown(uri = '/organization/getContactTypeDropdown'){
             axios.get(uri)
             .then(response => {
@@ -274,15 +287,7 @@
                 this.contactTypeList = data;
                 });
             },
-            getLevel(uri = '/organization/getLevelInDropdown'){
-                axios.get(uri)
-                .then(response => {
-                    let data = response.data;
-                    for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name;
-                    }
-                });
-            },
+           
             getLat: function(){
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(this.showPosition);
@@ -349,7 +354,7 @@
         mounted(){
             this.getContactTypeDropdown();
             this.getLat();
-            this.getLevel();
+            this.loadOrgList();
             this.loadfencingList();
             this.loadDisasterList();
             this.loadlcimateTypeList();

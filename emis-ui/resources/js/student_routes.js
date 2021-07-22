@@ -329,11 +329,18 @@ const routes = [
 { path: '/student_sen_list',name:'student_sen_list', component: require('./components/students/Sen/sen_student_list.vue').default },
 { path: '/sen_questions',name:'sen_questions', component: require('./components/students/Sen/sen_question.vue').default },
 
-    //Student List and Profile Related Routes
+    //Student Profile
     { path: '/student_profile',name:'student_profile', component: require('./components/students/General/student_profile.vue').default },
-    { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
+    // { path: '/student_list',name:'student_list', component: require('./components/students/General/student_list.vue').default },
 
-   
+    //Student List
+    { path: '/student_list_index', component: require('./components/students/General/student_list_index.vue').default,
+        children: [
+            { path: '/', name:'regular_student_list', component: require('./components/students/General/Regular/student_list.vue').default },
+            { path: '/ce_student_list', name:'ce_student_list', component: require('./components/students/General/CE/ce_student_list.vue').default},
+        ]
+    },
+
 
     //Student Admission Related Routes
     { path: '/student_admission', component: require('./components/students/StudentAdmission/index.vue').default,
@@ -438,22 +445,6 @@ const routes = [
             },
         ]
     },
-        //Student =>Student RollNo Allocation
-        { path: '/class_section', component: require('./components/students/ClassSection/index.vue').default,
-        children: [
-            { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/list_class_section_allocation.vue').default },
-            { path: '/list_class_section_allocation', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-            //Student => Class Section Allocation
-            { path: '/class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/class_section_allocation.vue').default,
-                children: [
-                    { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-                    { path: '/list_class_section_allocation', name:'list_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
-                    { path: '/allocate_class_section', name:'allocate_class_section', component: require('./components/students/ClassSection/ClassSectionAllocation/allocate_class_section.vue').default },
-                    { path: '/edit_class_section_allocation', name:'edit_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/edit_class_section_allocation.vue').default },
-                ]
-            },
-        ]
-    },
      //Student List and Profile Related Routes
     //  { path: '/student_profile',name:'student_profile', component: require('./components/students/Assign_RollNo/student_profile.vue').default },
      { path: '/students_rollNo',name:'students_rollNo', component: require('./components/students/Assign_RollNo/students_rollNo.vue').default },
@@ -499,7 +490,7 @@ const routes = [
             ]
         },
         //Counselling records
-       
+
     ]
     },
 //     { path: '/student_counselling_record', component: require('./components/students/counselling_records/index.vue').default,
@@ -509,7 +500,7 @@ const routes = [
 //         { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/counselling_records/list_counselling_records.vue').default },
 //         { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/counselling_records/add_counselling_records.vue').default },
 //         { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/counselling_records/edit_counselling_records.vue').default },
-        
+
 //     ]
 // },
 
