@@ -401,6 +401,31 @@ class AdministrationController extends Controller{
         return $response_data;
 
     }
+    public function loadPromotionRule($class_id,$stream_id=""){
+        $uri = 'emis/masters/loadPromotionRule/'.$class_id;
+        if($stream_id){
+           $uri .= ('/'.$stream_id);
+        }
+        $response_data = $this->apiService->listData($uri);
+        return $response_data;
+    }
+    
+    public function savePromotionRule(Request $request){
+        $rules = [
+            'data.*.aca_sub_id' => 'required',
+            'data.*.aca_promotion_sub_group_id'  => 'required',
+        ];
+        $customMessages = [
+            'data.*.aca_sub_id.required' => 'This field is required',
+            'data.*.aca_promotion_sub_group_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/savePromotionRule', $data);
+        return $response_data;
+
+    }
     public function loaddzongkhagDetails($id){
         $dzo = $this->apiService->listData('emis/masters/dzongkhag/getallDzongkhag');
         return $dzo;

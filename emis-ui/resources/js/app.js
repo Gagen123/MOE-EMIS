@@ -40,11 +40,12 @@ import staff from "./staff_routes";
 import organization from "./organization";
 import student_routes from "./student_routes";
 import academic_routes from "./academic_routes";
+import spms_routes from "./spms_routes";
 import mess_manage_routes from "./mess_manage_routes";
 import dietary from "./dietary";
 
 var allRoutes = [];
-allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes,dietary);
+allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes,spms_routes,dietary);
 const routes = allRoutes;
 const router = new VueRouter({
     routes

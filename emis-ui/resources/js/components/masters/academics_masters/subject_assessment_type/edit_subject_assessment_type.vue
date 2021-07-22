@@ -14,7 +14,7 @@
                                 <th>Subject</th>
                                 <th>Rating Type</th>
                                 <th>Pass Score</th>
-                                <th>Is Elective</th>
+                                <th>Is Optional</th>
                                 <th>Show in Result</th>
                             </tr>
                         </thead>
@@ -182,7 +182,6 @@ export default {
         },
         save(){
             let selectedSujects = this.classSubjects.filter((classSuject)=>classSuject.sub_selected)
-            console.log(selectedSujects)
             axios.post('/masters/saveClassSubject', {class_stream:this.class_stream,org_class_id:this.classId,org_stream_id:this.streamId,data:selectedSujects})
                  .then(() => {
                     Toast.fire({

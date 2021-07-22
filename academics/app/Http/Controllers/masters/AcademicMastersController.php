@@ -14,6 +14,7 @@ use App\Models\masters\ClassAssessmentFrequency;
 use App\Models\masters\ClassAssessmentFrequencyHistory;
 use App\Models\masters\ClassSubjectAssessment;
 use App\Models\masters\ClassSubjectAssessmentHistory;
+use App\Models\masters\PromotionRule;
 use App\Models\masters\RatingType;
 use App\Models\masters\ReasonsForAbsent;
 use App\Models\masters\SubjectAssessmentType;
@@ -313,6 +314,27 @@ class AcademicMastersController extends Controller
                     WHERE IFNULL(t2.not_assessed,0) = 0');
             return $this->successResponse($class_assessment_frequency);
         }
+        
+        if(strpos($param,"optional_subject_")!==false) {
+            $params=explode("_",$param);    
+                $query ="SELECT t1.id, t1.org_class_id, t1.org_stream_id, t1.aca_sub_id, t2.name, t2.dzo_name
+                 FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE  t1.is_elective = 1 AND t1.org_class_id = ?";
+                $param = [$params[3]];
+            if($params[4]=="streamId" &&  $params[6]=="sectionId") {
+                $query .= " AND t1.org_stream_id = ?";
+                array_push($param,$params[5]);
+                array_push($param,$params[7]);
+            }else if($params[4]=="streamId"){
+                $query .= " AND t1.org_stream_id = ?";  
+                array_push($param,$params[5]);
+            }
+            $optional_subject = DB::select($query,$param);
+            return $this->successResponse($optional_subject);
+        }
+        if($param == "promotion_sub_group"){
+            $promotion_sub_group = DB::select('SELECT id,description FROM aca_promotion_sub_group ORDER BY (id<0),id');
+            return $this->successResponse($promotion_sub_group);
+        }
     }
     public function loadClassSubject($class_id="",$stream_id=""){
         $query = 'SELECT (t2.id IS NOT NULL) AS sub_selected, trim(t2.pass_score)+0 AS pass_score, t1.id AS aca_sub_id,t1.aca_sub_category_id,t3.input_type, t1.name AS subject,t1.dzo_name AS sub_dzo_name,t2.aca_rating_type_id, t2.is_elective,t2.show_in_result FROM aca_subject t1 LEFT JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ? LEFT JOIN aca_rating_type t3 ON t2.aca_rating_type_id = t3.id' ;
@@ -437,6 +459,57 @@ class AcademicMastersController extends Controller
                     
                 }
         });
+        return $this->successResponse(1, Response::HTTP_CREATED);
+    }
+    public function loadPromotionRule($class_id,$stream_id=""){
+        $query = 'SELECT t1.aca_sub_id, t2.name AS subject,t2.dzo_name AS sub_dzo_name,t3.id AS promotion_rule_id,t3.aca_promotion_sub_group_id 
+            FROM aca_class_subject t1 
+            JOIN aca_subject t2 ON t1.aca_sub_id=t2.id 
+            LEFT JOIN aca_promotion_rule t3 ON t2.id = t3.aca_sub_id AND t1.org_class_id=t3.org_class_id AND ((t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL) OR t1.org_stream_id = t3.org_stream_id)
+            WHERE t2.aca_sub_id IS NULL AND t1.org_class_id = ?';
+        $params = [$class_id];
+        if($stream_id){
+          $query .= ' AND t1.org_stream_id = ?';
+          array_push($params,$stream_id);
+        }  
+        return $this->successResponse (DB::select("$query", $params)); 
+   
+    }
+    
+    public function savePromotionRule(Request $request){
+        $rules = [
+            'data.*.aca_sub_id' => 'required',
+            'data.*.aca_promotion_sub_group_id'  => 'required',
+        ];
+        $customMessages = [
+            'data.*.aca_sub_id.required' => 'This field is required',
+            'data.*.aca_promotion_sub_group_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        try{
+        $query = 'DELETE FROM aca_promotion_rule WHERE org_class_id = ?';
+        $params =[$request['org_class_id']];
+        if($request['org_stream_id']){
+            $query .= ' AND org_stream_id = ?';
+            array_push($params,$request['org_stream_id']);
+          } 
+        DB::transaction(function() use($request, $query, $params) {
+            DB::delete($query, $params);
+            if($request['data']){
+                foreach($request['data'] as $classSubject){
+                    $classSubject['class_stream'] =  $request['class_stream'];
+                    $classSubject['org_class_id'] =  $request['org_class_id'];
+                    $classSubject['org_stream_id'] =  $request['org_stream_id'];
+                    $classSubject['created_by'] =  $request['user_id'];
+                    $classSubject['created_at'] =   date('Y-m-d h:i:s');
+                   
+                    PromotionRule::create($classSubject);
+                }
+            }
+        });
+    }catch(Exception $e){
+        dd($e);
+    }
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     private  function updateAssessmentFrequency($request){

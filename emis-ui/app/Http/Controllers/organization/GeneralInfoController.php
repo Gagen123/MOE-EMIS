@@ -297,19 +297,16 @@ class GeneralInfoController extends Controller
 
     public function saveSubjectMapping(Request $request){
         $rules = [
-            'class_id'           =>  'required',
+            'data.*.org_class_id' =>  'required',
         ];
         $customMessages = [
-            'class_id.required'        => 'Class is required',
+            'data.*.org_class_id.required'  => 'class is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $class_subject =[
-            'class_id'          =>  $request['class_id'],
-            'org_id'            =>  $this->getWrkingAgencyId(),
-            'subjects'          =>  $request['subject_ids'],
-            'user_id'           =>  $this->userId(),
-            'id'                =>  $request['id'],
-        ];
+        $request['org_id'] = $this->getWrkingAgencyId();
+        $request['user_id'] = $this->userId();
+        $request['user_id'] = $this->userId();
+        $class_subject =$request->all();
         // dd($class_subject );
         $response_data= $this->apiService->createData('emis/organization/saveSubjectMapping', $class_subject);
         return $response_data;

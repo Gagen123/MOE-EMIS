@@ -12,6 +12,7 @@ use App\Models\OrganizationClassStream;
 use App\Models\Masters\ClassStream;
 use App\Models\generalInformation\SectionDetails;
 use App\Models\OrganizationClassSubject;
+use Exception;
 
 class ClassMappingController extends Controller
 {
@@ -162,15 +163,21 @@ class ClassMappingController extends Controller
 
     public function saveSubjectMapping(Request $request){
         $response_data="";
-        if($request->subjects!=null && $request->subjects!=""){
-            foreach($request->subjects as $key => $sub){
-                $classStream = [
-                    'organizationId'        => $request->org_id,
-                    'classId'               => $request->class_id,
-                    'subjectId'             => $sub,
-                    'created_by'            => $request->user_id,
-                    'created_at'            => date('Y-m-d h:i:s'),
+        if($request->data!=null && $request->data!=""){
+            foreach($request->data as $subject){
+            $classStream = [
+                    'organizationId'  => $request->org_id,
+                    'classId'         => $subject['org_class_id'],
+                    'subjectId'       => $subject['aca_sub_id'],
+                    'created_by'      => $request->user_id,
+                    'created_at'      => date('Y-m-d h:i:s'),
                 ];
+                if(isset($subject['org_stream_id'])){
+                    $classStream['streamId'] = $subject['org_stream_id'];
+                }
+                if(isset($subject['org_section_id'])){
+                    $classStream['sectionId'] = $subject['org_section_id'];
+                }
                 $response_data= OrganizationClassSubject::create($classStream);
             }
         }
@@ -179,8 +186,12 @@ class ClassMappingController extends Controller
     }
 
     public function getSubjectMapping($org_id=""){
-        $response_data = OrganizationClassSubject::where('organizationId',$org_id)->get();
-        return $response_data;
+        try{
+        $response_data = DB::select("SELECT t1.id,t1.organizationId, t1.classId,t1.streamId,t1.sectionId,t1.subjectId AS aca_sub_id,t2.class, t3.stream
+        FROM organization_class_subject t1 JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id WHERE t1.organizationId = ?",[$org_id]);
+       return $response_data;}catch(Exception $e){
+            dd($e);
+        }
     }
 
 }

@@ -157,6 +157,14 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadclassSubAssmtFrequency', [App\Http\Controllers\AdministrationController::class, 'loadclassSubAssmtFrequency'])->name('loadclassSubAssmtFrequency');
     Route::get('/loadclassSubjectAssessment/{term_id}/{sub_id}/{class_id}/{stream_id?}', [App\Http\Controllers\AdministrationController::class, 'loadclassSubjectAssessment'])->name('loadclassSubjectAssessment');
     Route::post('/saveclassSubjectAssessment', [App\Http\Controllers\AdministrationController::class, 'saveclassSubjectAssessment'])->name('saveclassSubjectAssessment');
+    Route::get('/loadPromotionRule/{class_id}/{stream_id?}', [App\Http\Controllers\AdministrationController::class, 'loadPromotionRule'])->name('loadPromotionRule');
+    Route::post('/savePromotionRule', [App\Http\Controllers\AdministrationController::class, 'savePromotionRule'])->name('savePromotionRule');
+
+   
+    //SPMS Masters
+    Route::post('/saveSpmMasters', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveSpmMasters'])->name('saveSpmMasters');
+    Route::get('/loadSpmMasters/{param}', [App\Http\Controllers\spms\SpmsMasterController::class, 'loadSpmMasters'])->name('loadSpmMasters');
+
 });
 
     //Mess Manage Master
@@ -751,6 +759,11 @@ Route::prefix('academics')->group(function () {
     Route::get('/loadConsolidatedResult', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResult'])->name('loadConsolidatedResult');
     Route::post('/saveConsolidatedResut', [App\Http\Controllers\academics\AcademicController::class, 'saveConsolidatedResut'])->name('saveConsolidatedResut');
     Route::get('/getStudentsForAttendance', [App\Http\Controllers\academics\AcademicController::class, 'getStudentsForAttendance'])->name('getStudentsForAttendance');
+    Route::get('/getAttendanceData', [App\Http\Controllers\academics\AcademicController::class, 'getAttendanceData'])->name('getAttendanceData');
+    Route::get('/getTermsByClass/{classId}/{streamId?}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByClass'])->name('getTermsByClass');
+    Route::post('/saveInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'saveInstrunctionalDays'])->name('saveInstrunctionalDays');
+    Route::get('/getInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'getInstrunctionalDays'])->name('getInstrunctionalDays');
+
 });
 
 

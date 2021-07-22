@@ -12,6 +12,8 @@ class OrganizationClassSubject extends Model{
         'id',
         'organizationId',
         'classId',
+        'streamId',
+        'sectionId',
         'subjectId',
         'created_by',
         'updated_by',
