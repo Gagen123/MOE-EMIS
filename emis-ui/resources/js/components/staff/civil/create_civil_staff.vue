@@ -1427,9 +1427,9 @@ export default {
                 axios.get('getpersonbycid/'+ this.nomination_form.nomi_cid)
                 .then(response => {
                     this.ciderror = '';
-                    if (response.data[0]) {
-                        let response_data = response.data[0];
-                        this.nomination_form.nomi_name = response_data.firstName + " " + response_data.lastName;
+                    let personal_detail = response.data;
+                    if (personal_detail!=""){
+                        this.nomination_form.nomi_name = personal_detail.firstName + " " + personal_detail.lastName;
                     }else{
                         this.ciderror = 'Invalid CID.';
                         Swal.fire({
@@ -1441,8 +1441,8 @@ export default {
                 .catch((e) => {
                     this.ciderror = 'Invalid CID / service down.';
                     Swal.fire({
-                            html: "No data found for matching CID/service down"+e,
-                            icon: 'error'
+                        html: "No data found for matching CID/service down"+e,
+                        icon: 'error'
                     });
                 });
             }

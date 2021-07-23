@@ -829,7 +829,7 @@ export default {
                     axios.get('getpersonbycid/'+ $('#'+fieldId).val())
                     .then(response => {
                         if (response.data[0]) {
-                            let personal_detail = response.data[0];
+                            let personal_detail = response.data;
                             if(type=="std"){
                                 this.personal_form.first_name = personal_detail.firstName;
                                 $('#first_name').prop('readonly',true);

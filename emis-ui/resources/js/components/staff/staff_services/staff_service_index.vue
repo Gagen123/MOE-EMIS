@@ -15,7 +15,7 @@
                     <span class="fa fa-user-clock"></span>
                     Staff Awards
                     </router-link>
-                </li> 
+                </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/staff_responsibilities" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
@@ -27,20 +27,20 @@
                         <span class="fa fa-user-clock"></span>
                         Disciplinary Record
                     </router-link>
-                </li> 
+                </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/staff_attendance" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Attendance
                     </router-link>
                 </li>
-               
+
                 <!-- <li class="nav-item active pr-1">
                     <router-link to="/apply_leave" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Apply Leave
                     </router-link>
-                </li> -->  
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>
@@ -62,12 +62,10 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+            .catch(function (error) {
+                console.log('error: '+error);
             });
         },
     },
