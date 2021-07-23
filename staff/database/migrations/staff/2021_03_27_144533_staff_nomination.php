@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 class StaffNomination extends Migration{
     public function up(){
-        Schema::create('stf_nomination', function (Blueprint $table) {
+        Schema::create('stf_family_detail', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('personal_id',36)->nullable(false);
             $table->foreign('personal_id')->references('id')->on('stf_staff');
@@ -17,6 +17,7 @@ class StaffNomination extends Migration{
             $table->string('nomi_contact',36)->nullable(false);
             $table->string('nomi_email',200)->nullable(false);
             $table->char('nomi_relation',36)->nullable(false);
+            $table->tinyInteger('isnominee')->nullable(true);
             $table->char('nomi_percentage',36)->nullable(false);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
@@ -27,6 +28,6 @@ class StaffNomination extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('stf_nomination');
+        Schema::dropIfExists('stf_family_detail');
     }
 }
