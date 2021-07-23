@@ -424,7 +424,11 @@ Route::prefix('staff')->group(function () {
         // Route::get('/getProfileDetail', [App\Http\Controllers\staff\ProfileController::class, 'getProfileDetail'])->name('getProfileDetail');
     });
     Route::prefix('staffUpdateController')->group(function (){
-        Route::post('/saveStaffcareerStage', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffcareerStage'])->name('saveStaffcareerStage');
+        Route::post('/saveStaffCareerStage', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffCareerStage'])->name('saveStaffCareerStage');
+        Route::post('/saveStaffContactDetails', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffContactDetails'])->name('saveStaffContactDetails');
+        Route::post('/saveStaffMaritialStatus', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffMaritialStatus'])->name('saveStaffMaritialStatus');
+        Route::post('/saveStaffTeacherSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffTeacherSubject'])->name('saveStaffTeacherSubject');
+        Route::post('/saveStaffRelativeDetails', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffRelativeDetails'])->name('saveStaffRelativeDetails');
     });
 
 

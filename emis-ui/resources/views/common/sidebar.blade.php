@@ -485,47 +485,63 @@
                     <li class="nav-item has-treeview" id="inset_link">
                         <router-link to="/create_inset" class="nav-link pt-1 pb-1">
                             <p>
-                            <i class="nav-icon fas fa-list"></i>
-                                Hr Development
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                HR Development
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="inset_link">
+                    <li class="nav-item has-treeview" id="leave_service_index">
                         <router-link to="/leave_service_index" class="nav-link pt-1 pb-1">
                             <p>
-                            <i class="nav-icon fas fa-list"></i>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
                                 Leave Services
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="inset_link">
+                    <li class="nav-item has-treeview" id="transfer_service_index">
                         <router-link to="/transfer_service_index" class="nav-link pt-1 pb-1">
                             <p>
-                            <i class="nav-icon fas fa-list"></i>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
                                 Transfer Services
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="inset_link">
+                    <li class="nav-item has-treeview" id="staff_update_services">
                         <router-link to="/staff_update_services" class="nav-link pt-1 pb-1">
                             <p>
-                            <i class="nav-icon fas fa-list"></i>
-                                Staff update Services
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Staff Update Services
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="track_application">
+                    <li class="nav-item has-treeview" id="staff_self_update">
+                        <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Updates by Staff
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="staff_services_index">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>
-                                <i class="nav-icon fas fa-list"></i>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
                                 Staff Services
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="track_application">
+                    <li class="nav-item" id="staff_services_index">
+                        <router-link to="/staff_services_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Secondment/Separation
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="staff_leadership_selection_index">
                         <router-link to="/staff_leadership_selection_index" class="nav-link">
                             <p>
-                                <i class="nav-icon fas fa-list"></i>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
                                 Leadership Selection
                             </p>
                         </router-link>

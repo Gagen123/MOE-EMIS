@@ -11,21 +11,33 @@
                     </router-link>
                 </li>
                 <li class="nav-item pr-1">
-                    <router-link to="/career_stage" id="awards" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/career_stage" id="career_stage" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Career Stage
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/relatives" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/relative_details" id="relative_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
-                        Relative Detials
+                        Relative Details
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/teaching_subjects" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/teacher_subject" id="teacher_subject" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Teacher Teaching Subject
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/maritial_status" id="maritial_status" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-clock"></span>
+                        Maritial Status
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/contact_details" id="contact_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-clock"></span>
+                        Contact Details
                     </router-link>
                 </li>
             </ul>
