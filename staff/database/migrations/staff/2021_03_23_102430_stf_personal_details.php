@@ -33,6 +33,7 @@ class StfPersonalDetails extends Migration{
             $table->char('elective_sub_id2',36)->nullable();
             $table->char('cureer_stagge_id',36)->nullable();
             $table->char('employee_code',100)->nullable(true);
+            $table->char('initial_appointment_date',50)->nullable();
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);

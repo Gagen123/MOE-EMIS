@@ -35,6 +35,7 @@ class PersonalDetails extends Model{
         'elective_sub_id1',
         'elective_sub_id2',
         'cureer_stagge_id',
+        'initial_appointment_date',
         'employee_code',
         'remarks',
         'created_by',

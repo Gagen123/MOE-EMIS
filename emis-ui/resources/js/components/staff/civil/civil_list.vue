@@ -19,7 +19,7 @@
                     <tbody>
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.emp_type_id}}</td>
+                            <td>{{ item.emp_id}}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ genderArray[item.sex_id]}}</td>
                             <!-- <td>{{ item.position_title.name}}</td> -->
@@ -91,14 +91,15 @@ export default {
          axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
+            //1-regualr,2-contract,3-voluntary
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWsirRegContract/Regular,Volunteer');
+                this.loadstff('orgWsirRegContract/1,2,3');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('dzoWsirRegContract/Regular,Volunteer');
+                this.loadstff('dzoWsirRegContract/1,2,3');
             }
             if(data['acess_level']=="Ministry"){
-                this.loadstff('allRegContract/Regular,Volunteer');
+                this.loadstff('allRegContract/1,2,3');
             }
         })
         .catch(errors => {

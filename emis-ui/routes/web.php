@@ -160,7 +160,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadPromotionRule/{class_id}/{stream_id?}', [App\Http\Controllers\AdministrationController::class, 'loadPromotionRule'])->name('loadPromotionRule');
     Route::post('/savePromotionRule', [App\Http\Controllers\AdministrationController::class, 'savePromotionRule'])->name('savePromotionRule');
 
-   
+
     //SPMS Masters
     Route::post('/saveSpmMasters', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveSpmMasters'])->name('saveSpmMasters');
     Route::get('/loadSpmMasters/{param}', [App\Http\Controllers\spms\SpmsMasterController::class, 'loadSpmMasters'])->name('loadSpmMasters');
@@ -400,6 +400,8 @@ Route::prefix('questionAnswerController')->group(function () {
 
 
 Route::prefix('staff')->group(function () {
+    Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
+
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
@@ -827,6 +829,7 @@ Route::prefix('diatery')->group(function (){
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getpersonbycid'])->name('getpersonbycid');
+
 
 
 
