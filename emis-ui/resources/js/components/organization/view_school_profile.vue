@@ -21,15 +21,22 @@
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                                <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
-                                <p class="text-muted">
-                                    {{form.mission}}
-                                </p>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
+                                        <p class="text-muted">
+                                            {{form.mission}}
+                                        </p>
 
-                                <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
-                                <p class="text-muted">
-                                    {{form.vission}}
-                                </p>
+                                        <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
+                                        <p class="text-muted">
+                                            {{form.vission}}
+                                        </p>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <span id="preview_sec"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <div class="card-body p-0">
@@ -106,7 +113,7 @@
                                                         <th><span class="text-bold"></span></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody v-if="std_data"> 
+                                                <tbody v-if="std_data">
                                                     <tr>
                                                         <td>Longitude</td>
                                                         <td>{{existing_details.longitude}}</td>
@@ -141,7 +148,7 @@
                                     </div>
                                 </div>
                             </div>
- 
+
                             <!--- modified code  -->
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                 <div class="card-body p-0">
@@ -310,11 +317,11 @@
                                             <th>155</th>
                                         </tr>
                                     </thead>
-                                    
+
                                     </table>
                                 </div>
                             </div> -->
-                            
+
 
 
                             </div>
@@ -323,7 +330,7 @@
                 </div>
             </div>
         </div>
-    </section>  
+    </section>
 </div>
 </template>
 <script>
@@ -346,7 +353,7 @@
                     vission: '',
                     mission:'',
                     profile_path:'',
-                }) 
+                })
             }
         },
         methods:{
@@ -361,8 +368,9 @@
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
-                })    
-                .catch(errors =>{ 
+
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             },
@@ -386,8 +394,8 @@
                         this.totalGeneralStudent += this.studentData[i].sex;
                     }
 
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             },
@@ -399,8 +407,8 @@
                         this.totalSenStudent += this.studentSenData[i].sen;
                     }
 
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             },
@@ -409,7 +417,7 @@
                 .then(response => {
                     let data = response.data;
                     for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
+                        this.levelArray[data[i].id] = data[i].name;
                     }
                 });
             },
@@ -418,14 +426,20 @@
                 .then(response => {
                     this.existing_details=response.data.data;
                     this.std_data=true;
+                    let mapid=response.data.data.locationDetials.googleMapPath;
+                    mapid=mapid.replace('width="600"','width="450"');
+                    mapid=mapid.replace('height="450"','height="300"');
+                    mapid=mapid.replace('width="800"','width="450"');
+                    mapid=mapid.replace('height="600"','height=300"');
+                    $("#preview_sec").html(mapid);
                     // this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                     // this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error: "+error);
                 });
             },
-           
+
         },
         created(){
             this.getLevel();

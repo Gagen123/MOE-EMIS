@@ -1,6 +1,6 @@
 <template>
     <div> 
-        <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
+        <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">ACADEMICS MASTERS</h6></li>
         </ol>
         <div class="container-fluid">
@@ -47,11 +47,17 @@
                         Class Subject Assessment Area 
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('reason_for_absent')">
-                    <router-link id="reason_for_absent" to="/reasons-for-absent" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Reasons for Absent
+                <li class="nav-item active pr-1" @click="activatelink('promotion_rule')">
+                    <router-link id="promotion_rule" to="/promotion-rule" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Promotion Rule
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('reason_for_absent')">
+                    <router-link id="reason_for_absent" to="/reasons-for-absent" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Reason for Absence
+                    </router-link>
+                </li>
+                
             </ul>
             <router-view></router-view>
         </div>

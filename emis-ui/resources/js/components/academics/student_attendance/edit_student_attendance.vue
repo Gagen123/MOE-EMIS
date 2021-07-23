@@ -15,7 +15,7 @@
                     <table id="student-attendance-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Student Code</th>
+                                <th>Roll No.</th>
                                 <th>Name</th>
                                 <th>Present</th>
                                 <th>Remarks</th>
@@ -23,7 +23,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item, index) in studentList" :key="index">
-                                <td>{{ item.CidNo }}</td>
+                                <td>{{ index + 1 }}</td>
                                 <td>
                                     <input v-model='studentList[index].std_student_id' type="hidden">
                                     {{ item.Name }}
@@ -34,8 +34,8 @@
                                     </div>
                                 </td>   
                                 <td>
-                                    <div>
-                                        <select class="form-control select2" v-model="studentList[index].aca_absence_reason_id">
+                                    <div v-if="item.is_present == 0">
+                                        <select class="form-control form-control-sm select2" v-model="studentList[index].aca_absence_reason_id">
                                             <option selected="selected" value="">---SELECT---</option>
                                             <option selected v-for="(item1, index1) in remarkList" :key="index1" :value="item1.id">
                                                 {{ item1.name }}
@@ -93,7 +93,6 @@ export default {
                             }
                         })
                     })
-                    console.log(students)
                    this.studentList = students
 
                 }).catch(function (error) {

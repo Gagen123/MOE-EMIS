@@ -14,6 +14,7 @@ class ResultConsolidated extends Model
     protected $fillable = [
         'id',
         'org_id',
+        'class_stream_section',
         'org_class_id',
         'org_stream_id',
         'org_section_id',

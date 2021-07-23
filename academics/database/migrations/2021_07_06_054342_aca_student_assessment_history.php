@@ -33,6 +33,8 @@ class AcaStudentAssessmentHistory extends Migration
             $table->string('recorded_for',100);
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
+            $table->timestamps();
+
         });
     }
 
