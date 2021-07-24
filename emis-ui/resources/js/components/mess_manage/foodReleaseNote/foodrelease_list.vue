@@ -180,7 +180,7 @@ export default {
                 let data = response;
                for(let i=0;i<data.data.data.length;i++){
                     this.orgList[data.data.data[i].id] = data.data.data[i].name;
-                   
+
                 }
             })
             .catch(function (error){

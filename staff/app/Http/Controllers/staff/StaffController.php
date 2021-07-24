@@ -125,7 +125,7 @@ class StaffController extends Controller{
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->where('emp_type_id',$type)->first());
         }
         else{
-            $emp_type=['Regular','Volunteer'];
+            $emp_type=['1','2','3'];
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->wherein('emp_type_id',$emp_type)->first());
         }
     }
@@ -230,7 +230,7 @@ class StaffController extends Controller{
             'nomi_percentage'                   =>  $request->nomi_percentage,
             'status'                            =>  $request->status,
         ];
-        if($request->status=="Pending"){
+        if($request->status==null || $request->status=="Pending"){
             $nomination_details=array_merge($nomination_details,
                 array('created_by'            =>  $request->user_id,
                       'created_at'            =>  date('Y-m-d h:i:s')
@@ -273,7 +273,7 @@ class StaffController extends Controller{
         $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
             foreach($nomineeDetails as $nom){
-                $nomineeDetails->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
+                $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
             }
         }
         return $this->successResponse($nomineeDetails);
