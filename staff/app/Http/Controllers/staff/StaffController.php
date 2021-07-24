@@ -5,6 +5,7 @@ namespace App\Http\Controllers\staff;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Models\staff\CareerStage;
+use App\Models\staff\DocumentDetails;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
@@ -57,6 +58,9 @@ class StaffController extends Controller{
             'dob'                   =>  $request->dob,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
+            'p_dzongkhag'           =>  $request->p_dzongkhag,
+            'p_gewog'               =>  $request->p_gewog,
+            'p_village'             =>  $request->p_village_id,
             'dzo_id'                =>  $request->dzo_id,
             'geowg_id'              =>  $request->geowg_id,
             'village_id'            =>  $request->village_id,
@@ -69,6 +73,7 @@ class StaffController extends Controller{
             'comp_sub_id'           =>  $request->comp_sub,
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
+            'initial_appointment_date' =>  $request->initial_appointment_date,
             // 'cureer_stagge_id'      =>  $request->currier_stage,
             'employee_code'         =>  $request->emp_file_code,
             'remarks'               =>  $request->remarks,
@@ -199,7 +204,6 @@ class StaffController extends Controller{
             'nomi_contact'      =>  'required',
             'nomi_email'        =>  'required',
             'nomi_relation'     =>  'required',
-            'nomi_percentage'   =>  'required'
         ];
         $customMessages = [
             'nomi_name.required'            => 'This field is required',
@@ -208,7 +212,6 @@ class StaffController extends Controller{
             'nomi_address.required'         => 'This field is required',
             'nomi_email.required'           => 'This field is required',
             'nomi_relation.required'        => 'Country field is required',
-            'nomi_percentage.required'      => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
 
@@ -223,6 +226,7 @@ class StaffController extends Controller{
             'nomi_contact'                      =>  $request->nomi_contact,
             'nomi_email'                        =>  $request->nomi_email,
             'nomi_relation'                     =>  $request->nomi_relation,
+            'isnominee'                         =>  $request->isnominee,
             'nomi_percentage'                   =>  $request->nomi_percentage,
             'status'                            =>  $request->status,
         ];
@@ -247,12 +251,32 @@ class StaffController extends Controller{
             $act_det = Nomination::where ('id', $request->nomination_id)->firstOrFail();
             $act_det->fill($nomination_details);
             $response_data=$act_det->save();
+            $response_data = Nomination::where ('id', $request->nomination_id)->first();
+        }
+        // dd($request->attachment_details);
+        if($request->attachment_details!=null){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $response_data->id,
+                    'attachment_for'                   =>  'Family Relationship',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                DocumentDetails::create($doc_data);
+            }
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
     public function loadNominations($staff_id="",$user_id=""){
-        return $this->successResponse(Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
+        $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
+        if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
+            foreach($nomineeDetails as $nom){
+                $nomineeDetails->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
+            }
+        }
+        return $this->successResponse($nomineeDetails);
     }
     public function loadStaffNomination($staff_id=""){
         return $this->successResponse(Nomination::where('personal_id',$staff_id)->where('status','Created')->get());

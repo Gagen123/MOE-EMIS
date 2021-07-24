@@ -85,13 +85,23 @@ Setting up the system administration, and user management:
 
     created organization_class_subject at organizaiton with fields in model
 
-
+    //table chaged and added 2021-07-22: Tshewang
+    - added two fields in organization_location: gate_type and landOwnership
+    - added new master table called master_gate_type
+        All are pushed in staging db
 
 
     ///feedback to be incorporated:
     1. refer copound details in vue,
     2. under detailed information, gate type is requred such as stone masonry, RCC gate, timber, steel...
 
+    2021-07-23: fields changed in the staff
+    added initial_appointment_date in stf_staff table, and chaged the table name to stf_family_detail from stf_nominee with nee fiels: isnominee
+
+
+***************Staff*****************
+staff history - table changed
+stf_relationship table created - talk to Tshewang (nominations table might suffice)
 
 
 

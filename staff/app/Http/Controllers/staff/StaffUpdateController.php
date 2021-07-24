@@ -15,7 +15,8 @@ class StaffUpdateController extends Controller{
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
     }
-    public function saveStaffcareerStage(Request $request){
+
+    public function saveStaffCareerStage(Request $request){
         $rules = [
             'currier_stage'              =>  'required  ',
         ];

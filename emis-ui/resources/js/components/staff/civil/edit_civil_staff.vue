@@ -23,172 +23,251 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="personal-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row" id="searchemp">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Emp Type:<i class="text-danger">*</i> </label><br>
-                                <input type="radio" v-model="personal_form.emp_type" name="etype" @click="showemptypedtab(true)" value="Regular"> Civil Servent
-                                <input type="radio" v-model="personal_form.emp_type" name="etype" @click="showemptypedtab(false)" value="Volunteer"> Volunteer & Project Based
-                            </div>
-                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
-                                <input type="text" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
-                                <has-error :form="personal_form" field="cid_work_permit"></has-error>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 mt-4">
-                                <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
-                                <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name"  readonly>
-                                <has-error :form="personal_form" field="name"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i></label>
-                                <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
-                                <has-error :form="personal_form" field="dob"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="sex_id"></has-error>
+                        <div class="callout callout-success">
+                            <div class="form-group row" id="searchemp">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label class="mb-0.5">Emp Type:<i class="text-danger">*</i> </label><br>
+                                    <input type="radio" v-model="personal_form.emp_type" name="etype" value="1"> Regular
+                                    <input type="radio" v-model="personal_form.emp_type" name="etype" value="2"> Contract
+                                    <input type="radio" v-model="personal_form.emp_type" name="etype" value="3"> Volunteer & Project Based
+                                    <!-- <input type="radio" name="etype" @click="showemptypedtab(false)" value="Project Based"> Project Based -->
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
+                                    <input type="text" v-model="personal_form.cideid" @change="remove_error('cideid')" :class="{ 'is-invalid': personal_form.errors.has('cideid') }"  class="form-control" name="cideid" id="cideid">
+                                    <has-error :form="personal_form" field="cideid"></has-error>
+                                </div>
+                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mt-4 pt-2">
+                                    <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Marital Status:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.marital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('marital_status') }" class="form-control select2" name="marital_status" id="marital_status">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in marital_statusList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="marital_status"></has-error>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Personal Detail</u></label></span>
+                            <div class="form-group row">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Emp Id:<i class="text-danger">*</i></label>
+                                    <input type="text" @change="remove_error('emp_id')" v-model="personal_form.emp_id" :class="{ 'is-invalid': personal_form.errors.has('emp_id') }" class="form-control" name="emp_id" id="emp_id">
+                                    <has-error :form="personal_form" field="emp_id"></has-error>
+                                </div> -->
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">CID/Work Permit No:<i class="text-danger">*</i> </label>
+                                    <input type="text" v-model="personal_form.cid_work_permit" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }" id="cid_work_permit" name="cid_work_permit" class="form-control">
+                                    <has-error :form="personal_form" field="cid_work_permit"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Full Name:<i class="text-danger">*</i></label>
+                                    <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name">
+                                    <has-error :form="personal_form" field="name"></has-error>
+                                </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i> </label>
+                                    <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
+                                    <has-error :form="personal_form" field="dob"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="sex_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Position Title (Level):<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id+'_'+item.subgroup">{{ item.name }} ({{ item.level }})</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="position_title"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Marital Status:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.marital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('marital_status') }" class="form-control select2" name="marital_status" id="marital_status">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in marital_statusList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="marital_status"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
+                                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="country_id"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Contacts</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
+                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
+                                    <has-error :form="personal_form" field="contact_number"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
+                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
+                                    </label>
+                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
+                                    <has-error :form="personal_form" field="email"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Alternative Email:</label>
+                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                    <has-error :form="personal_form" field="alternative_email"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Permanent Address</u></label></span>
+                            <div class="form-group row" id="bhutanese_address">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.p_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('p_dzongkhag') }" class="form-control select2" name="p_dzongkhag" id="p_dzongkhag">
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="p_dzongkhag"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.p_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('p_gewog') }" class="form-control select2" name="p_gewog" id="p_gewog">
+                                        <option v-for="(item, index) in p_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="p_gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.p_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('p_village_id') }" class="form-control select2" name="p_village_id" id="p_village_id">
+                                        <option v-for="(item, index) in p_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="p_village_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="foreign_address" style="display:none">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Address:</label>
+                                    <textarea class="form-control" id="address" v-model="personal_form.address"></textarea>
+                                    <has-error :form="personal_form" field="address"></has-error>
+                                </div>
+                            </div>
+                        </div>
 
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
-                                    <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="country_id"></has-error>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Working Address</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
+                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="village_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Organization Type:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
+                                        <option value="Org">Organization/School </option>
+                                        <option value="Dzongkhag">Dzongkhag</option>
+                                        <option value="Ministry">Ministry </option>
+                                    </select>
+                                    <has-error :form="personal_form" field="organization_type"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
+                                    <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
+                                    <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
+                                        <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="working_agency_id"></has-error>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group row" id="bhutanese_address">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Dzongkhag:</label>
-                                <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="dzongkhag"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Gewog:</label>
-                                <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="gewog"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Village:</label>
-                                <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
-                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="village_id"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row" id="foreign_address" style="display:none">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Address:</label>
-                                <textarea @change="remove_error('address')" class="form-control" v-model="personal_form.address" :class="{ 'is-invalid': personal_form.errors.has('address') }" name="address" id="address"></textarea>
-                                <has-error :form="personal_form" field="address"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
-                                <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
-                                <has-error :form="personal_form" field="contact_number"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Email:<i class="text-danger">*</i>
-                                    <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
-                                </label>
-                                <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
-                                <has-error :form="personal_form" field="email"></has-error>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="position_title"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
-                                <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
-                                <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
-                                    <option value=""> --Select--</option>
-                                    <option value="1"> Mothithang HSS</option>
-                                    <option value="2"> Yangchenphug HSS</option>
-                                </select>
-                                <has-error :form="personal_form" field="working_agency_id"></has-error>
-                            </div>
-
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
+                        <div class="callout callout-success" v-if="personal_form.isteaching">
+                            <span class="text-blue"><label><u>Subjects</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="comp_sub"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Elective Subject 1:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
                                     <option value=""> --Select--</option>
                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="comp_sub"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Elective Subject 1:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
-                                   <option value=""> --Select--</option>
-                                   <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="elective_sub1"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Elective Subject 2:</label>
-                                <select v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2" name="elective_sub2" id="elective_sub2">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="elective_sub2"></has-error>
+                                    </select>
+                                    <has-error :form="personal_form" field="elective_sub1"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Elective Subject 2:</label>
+                                    <select v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2" name="elective_sub2" id="elective_sub2">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="elective_sub2"></has-error>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                                <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="currier_stage"></has-error>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Others</u></label></span>
+                            <div class="form-group row">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Is in SEN Team:</label><br>
+                                    <input type="radio" name="sen" value="Yes"> Yes
+                                    <input type="radio" name="sen"  value="No"> No
+                                </div>  -->
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
+                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="currier_stage"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Employee File Code:<i class="text-danger">*</i></label>
+                                    <input @change="remove_error('emp_file_code')" class="form-control" v-model="personal_form.emp_file_code" :class="{ 'is-invalid': personal_form.errors.has('emp_file_code') }" name="emp_file_code" id="emp_file_code" type="text">
+                                    <has-error :form="personal_form" field="emp_file_code"></has-error>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Employee File Code:<i class="text-danger">*</i></label>
-                                <input @change="remove_error('emp_file_code')" class="form-control" v-model="personal_form.emp_file_code" :class="{ 'is-invalid': personal_form.errors.has('emp_file_code') }" name="emp_file_code" id="emp_file_code" type="text">
-                                <has-error :form="personal_form" field="emp_file_code"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Remarks:</label>
-                                <textarea @change="remove_error('remarks')" class="form-control" v-model="personal_form.remarks" :class="{ 'is-invalid': personal_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                                <has-error :form="personal_form" field="remarks"></has-error>
+                            <!-- <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Has Received Training on Supporting Children with Disabilities:</label><br>
+                                    <input type="radio" name="sentraining" value="Yes"> Yes
+                                    <input type="radio" name="sentraining" value="No"> No
+                                </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Remarks:</label>
+                                    <textarea @change="remove_error('remarks')" class="form-control" v-model="personal_form.remarks" :class="{ 'is-invalid': personal_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                                    <has-error :form="personal_form" field="remarks"></has-error>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -490,8 +569,10 @@ export default {
             countryList:[],
             dzongkhagList:[],
             gewog_list:[],
+            p_gewog_list:[],
             villageList:[],
-
+            p_villageList:[],
+            orgList:[],
             subjectList:[],
             cureerstageList:[],
             qualificationDescription:[],
@@ -511,6 +592,9 @@ export default {
                 dob:'',
                 marital_status:'',
                 country_id:'',
+                p_dzongkhag:'',
+                p_village_id:'',
+                p_gewog:'',
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
@@ -736,9 +820,29 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        async getgewoglist(id){
+        getPgewoglist(id,gewog_id){
+            let dzoId=$('#p_dzongkhag').val();
+            if(id!=""){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            this.gewog_list =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.p_gewog_list = data.data.data;
+                if(gewog_id!=""){
+                    this.personal_form.p_gewog=gewog_id;
+                    $('#p_gewog').val(gewog_id).trigger('change');
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        async getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
-            if(id!="" && dzoId==null){
+            if(id!=""){
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
@@ -747,6 +851,30 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list = data.data.data;
+                if(gewogId!=""){
+                    this.personal_form.p_gewog=gewog_id;
+                    $('#p_gewog').val(gewogId).trigger('change');
+                }
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        getPvillagelist(id,vilageid){
+            let villageId=$('#p_gewog').val();
+            if(id!=""){
+                villageId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+villageId;
+             this.villageList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.p_villageList = data.data.data;
+                if(vilageid!=""){
+                    this.personal_form.p_village_id=vilageid;
+                    $('#p_village_id').val(vilageid).trigger('change');
+                }
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -953,18 +1081,7 @@ export default {
             axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
             .then((response) => {
                 let data=response.data.data;
-                if(data.village_id!=null){
-                    this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
-                    this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                    this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
-                    this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                    this.personal_form.village_id=data.village_id;
-                }
-                else{
-                    this.personal_form.address=data.address;
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
-                }
+
                 this.personal_form.personal_id=data.id;
                 this.personal_form.emp_type=data.emp_type_id;
                 this.personal_form.cid_work_permit=data.cid_work_permit;
@@ -972,6 +1089,18 @@ export default {
                 this.personal_form.position_title=data.position_title_id;
                 this.personal_form.marital_status=data.merital_status;
                 this.personal_form.dob=data.dob;
+
+                this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                $('#p_dzongkhag').val(data.p_dzongkhag).trigger('change');
+                this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
+                this.getPvillagelist(data.p_gewog,data.p_village);
+
+                this.personal_form.dzongkhag=data.dzo_id;
+                $('#dzongkhag').val(data.dzo_id).trigger('change');
+                this.getgewoglist(data.dzo_id,data.dzo_id);
+                this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
+                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
+                this.personal_form.village_id=data.village_id;
 
                 this.personal_form.sex_id=data.sex_id;
                 this.personal_form.country_id=data.country_id;

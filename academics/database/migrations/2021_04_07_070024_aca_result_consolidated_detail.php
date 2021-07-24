@@ -17,7 +17,7 @@ class AcaResultConsolidatedDetail extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_result_consol_id',36)->index();
             $table->char('std_student_id',36)->index();
-            $table->unsignedTinyInteger('result')->index()->default(1)->comment('1-Promoted; 0-Detained');
+            $table->unsignedTinyInteger('result')->index()->nullable()->comment('1-Promoted; 0-Detained');
             $table->string('remarks',500)->nullable();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();

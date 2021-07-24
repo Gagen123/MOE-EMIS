@@ -1,23 +1,23 @@
 <template>
     <div>
-        <table id="list-student-programs" class="table table-bordered table-striped table-head-fixed">
+        <table id="subject-offered-table" class="table table-bordered table-striped table-head-fixed">
             <thead>
                 <tr>
-                     <th >No.</th>
+                     <th >SL#</th>
                      <th >Class</th>
-                     <th >Subject</th>
+                     <th >Action</th>
+
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in dataList" :key="index">
+                <tr v-for="(item, index) in classList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ classArray[item.classId]}}</td>
-                    <td>{{ subArray[item.subjectId]}}</td>
-                    <!-- <td>
+                    <td>{{ item.class }} <span v-if="item.stream">{{ item.stream }}</span> <span v-if="item.section">{{ item.section }}</span> </td>
+                    <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                         </div>
-                    </td> -->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -27,57 +27,40 @@
 export default {
     data(){
         return{
-            dataList:[],
-            classArray:{},
-            subArray:{},
+            classList:[],
+            dt:'',
         }
     },
     methods:{
-        loadClassList(uri="loadCommons/getOrgClassStream"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                 for(let i=0;i<data.length;i++){
-                    this.classArray[data[i].id] = data[i].class;
-                }
+        loadAcademicMasters(){
+          axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA')
+          .then(response => {
+              this.classList = response.data
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
+            .catch((error) => {
+                console.log("Error: "+error);
             });
         },
-
-        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.subjectList =  data;
-                for(let i=0;i<data.length;i++){
-                    this.subArray[data[i].id] = data[i].name;
-                }
-
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
-        loadDataList(uri='organization/getSubjectMapping'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dataList =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
+    
         showedit(data){
-            this.$router.push({name:'edit_org_programs',params: {data:data}});
+            this.$router.push({name:'edit_subject_offered',params: {data:data}});
         },
     },
     mounted(){
         this.loadAcademicMasters();
-        this.loadClassList();
-        this.loadDataList();
+        this.dt =  $("#subject-offered-table").DataTable({
+            distroy:true,
+        })
     },
+    watch: {
+        classList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-offered-table").DataTable({
+                    distroy:true,
+                })
+            });
+        }
+    }
 }
 </script>

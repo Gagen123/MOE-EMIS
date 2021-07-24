@@ -28,7 +28,8 @@ class LoadStaffController extends Controller{
             $emp_type=[];
             $id="";
             foreach(explode(',',$parent_id) as $emp){
-                if($emp=="Regular" || $emp=="Volunteer" || $emp=="Private"){
+                //1-regular, 2-contract,
+                if($emp=="1" || $emp=="2" || $emp=="Private"){
                     array_push($emp_type,$emp);
                 }
                 else{
