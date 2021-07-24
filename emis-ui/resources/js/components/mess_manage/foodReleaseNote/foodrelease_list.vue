@@ -7,8 +7,8 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Date of Food Release</th>
-                            <th>Dzongkhag</th>
-                            <th>School Name</th>
+                            <!-- <th>Dzongkhag</th>
+                            <th>School Name</th> -->
                             <th>Quarter</th>
                             <th>Remarks</th>
                             <th>Action</th>
@@ -18,8 +18,8 @@
                         <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
                             <td> {{item.dateOfrelease}}</td>
-                            <td> {{dzongkhagList[item.dzongkhag]}}</td>
-                            <td> {{orgList[item.organization]}}{{orgList}}</td>
+                            <!-- <td> {{dzongkhagList[item.dzongkhag]}}</td>
+                            <td> {{orgList[item.organization]}}{{orgList}}</td> -->
                             <td> {{quarterList[item.quarter]}}{{quarterList}}</td>
                             <td> {{ item.remarks}}</td>
                             <td>
@@ -55,16 +55,16 @@
                                     <label class="font-weight-normal">Date of Release: </label>
                                  <span class="text-indigo-600">{{displayItem.dateOfrelease}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Dzongkhag Name: </label>
                                  <span class="text-indigo-600">{{ dzongkhagList[displayItem.dzongkhag]}}</span>
-                                </div>
+                                </div> -->
                            </div>
                            <div class="form-group row">
-                               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                               <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">School Name: </label>
                                  <span class="text-indigo-600">{{orgList[displayItem.organizaiton]}}</span>
-                               </div>
+                               </div> -->
                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Quarter: </label>
                                  <span class="text-indigo-600">{{quarterList[displayItem.quarter]}}</span>

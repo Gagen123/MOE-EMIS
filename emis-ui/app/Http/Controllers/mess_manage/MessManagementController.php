@@ -67,22 +67,22 @@ class MessManagementController extends Controller
        // dd($attachment_details);
         $rules = [
             'dateOfrelease'            =>  'required',
-            'dzongkhag'                =>  'required',
-            'organizaiton'             =>  'required',
+        //    'dzongkhag'                =>  'required',
+        //    'organizaiton'             =>  'required',
             'quarter'                  =>  'required',
         ];
         $customMessages = [
             'dateOfrelease.required'    =>  'dateOfrelease is required',
-            'dzongkhag.required'        =>  'dzongkhag is required',
-            'organizaiton.required'     =>  'organizaiton  is required',
+        //    'dzongkhag.required'        =>  'dzongkhag is required',
+        //    'organizaiton.required'     =>  'organizaiton  is required',
             'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
-            'dzongkhag'                =>  $request['dzongkhag'],
-            'organizaiton'             =>  $request['organizaiton'],
+        //    'dzongkhag'                =>  $request['dzongkhag'],
+        //    'organizaiton'             =>  $request['organizaiton'],
             'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
             'attachment_details'       =>  $attachment_details,

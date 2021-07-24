@@ -253,7 +253,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
             $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails');
              $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
-             $router->get('/getcompoundetialedit/{compId}', 'generalInformation\CompoundDetailController@getcompoundetialedit');
+             $router->get('/getEditCompoundDetail/{compId}', 'generalInformation\CompoundDetailController@getEditCompoundDetail');
         });
 
         $router->group(['prefix' => 'disaster'], function () use ($router) {

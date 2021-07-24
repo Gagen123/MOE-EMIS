@@ -30,9 +30,10 @@ class CompoundDetailsController extends Controller
             'plotno'                =>  'required',
             'attachments'           =>  'required',
             'sizecompound'          =>  'required',
-            'sizeplayground'        =>  'required',
-            'playgroundused'        =>  'required',
+           // 'sizeplayground'        =>  'required',
+          //  'playgroundused'        =>  'required',
             'status'                =>  'required',
+            'statusofplay'          =>  'required',
            // 'agriculturalarea'    =>  'required',
           //  'areaused'            =>  'required',
            
@@ -43,9 +44,10 @@ class CompoundDetailsController extends Controller
             'plotno.required'                   => 'plotno is required',
             'attachments.required'              => 'attachments is required',
             'sizecompound.required'             => 'sizecompound is required',
-            'sizeplayground.required'           => 'sizeplayground is required',
-            'playgroundused.required'           => 'playgroundused is required',
+         //   'sizeplayground.required'           => 'sizeplayground is required',
+         //   'playgroundused.required'           => 'playgroundused is required',
             'status.required'                   => 'agriculturalarea is required',
+            'statusofplay.required'             => 'Select Play ground area status is required',
          //   'agriculturalarea'                  => 'agriculturalarea is required',
          //   'areaused'                          => 'areaused is required',
         ];
@@ -71,8 +73,10 @@ class CompoundDetailsController extends Controller
             'sizeplayground'                =>  $request['sizeplayground'],
             'playgroundused'                =>  $request['playgroundused'],
             'status'                        =>  $request['status'],
+            'statusofplay'                  =>  $request['statusofplay'],
             'agriculturalarea'              =>  $request['agriculturalarea'],
             'areaused'                      =>  $request['areaused'],
+            'programType'                   =>  $request['programType'],
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
@@ -97,10 +101,10 @@ class CompoundDetailsController extends Controller
         return $data;
     }
 
-    public function getcompoundetialedit($compId=""){
+    public function getEditCompoundDetail($compId=""){
         //  dd('from UI');
         //  $orgId=$this->getWrkingAgencyId();
-          $data = $this->apiService->listData('emis/organization/compoundDetails/getcompoundetialedit/'.$compId);
+          $data = $this->apiService->listData('emis/organization/compoundDetails/getEditCompoundDetail/'.$compId);
           return $data;
       }
     

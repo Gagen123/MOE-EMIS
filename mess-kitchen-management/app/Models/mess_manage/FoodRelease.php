@@ -13,8 +13,8 @@ class FoodRelease extends Model
     protected $fillable = [ 
         'id',
         'dateOfrelease',
-        'dzongkhag_id',
-        'org_id',
+     //   'dzongkhag_id',
+     //   'org_id',
         'quarter_id',
         'remarks',
         'created_by',

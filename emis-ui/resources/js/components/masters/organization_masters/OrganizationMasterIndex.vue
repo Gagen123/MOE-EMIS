@@ -229,6 +229,11 @@
                       ECCD Facility Type
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('regularstaff')">
+                    <router-link to="/program_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                      Program Type
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view> 
         </div>

@@ -69,8 +69,19 @@ class InfrastructureController extends Controller
      * method to save sport details
      */
     public function saveInfrastructure(Request $request){
+      //  dd($request);
        
         $id = $request->id;
+        // $estb_yr = '';
+        // foreach ( $request['yearofconstructinNo'] as $i=> $yr){
+        //    if($i == sizeof($request['yearofconstructinNo'])-1){
+        //       $estb_yr =   $estb_yr. $yr->consYear;
+        //     }
+        //    else{
+        //       $estb_yr =   $estb_yr. $yr->consYear.',';
+        //     }
+        // }
+        // dd( $id);
         if($id != null){
             $infrastructure = [
                 'organizationId'            =>  $request['organizationId'],
@@ -78,7 +89,7 @@ class InfrastructureController extends Controller
                 'subCategoryId'             =>  $request['subCategory'],
                 'constructionType'          =>  $request['constructionType'],
                 'structureNo'               =>  $request['structureNo'],
-                'yearOfConstruction'        =>  $request['yearOfConstruction'],
+                'yearofconstructinNo'       =>  $request['yearofconstructinNo'],
                 'plintchArea'               =>  $request['plintchArea'],
                 'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
@@ -107,13 +118,23 @@ class InfrastructureController extends Controller
             return $this->successResponse($infra, Response::HTTP_CREATED);
 
         }else{
+            $estb_yr = '';
+            foreach ( $request['yearofconstructinNo'] as $i=> $yr){
+                if($i == sizeof($request['yearofconstructinNo'])-1){
+                    $estb_yr =   $estb_yr. $yr['consYear'];
+                }
+                else{
+                    $estb_yr =   $estb_yr. $yr['consYear'].',';
+                }
+            }
+           // dd( $estb_yr);
             $infrastructure = [
                 'organizationId'            =>  $request['organizationId'],
                 'categoryId'                =>  $request['category'],
                 'subCategoryId'             =>  $request['subCategory'],
                 'constructionType'          =>  $request['constructionType'],
                 'structureNo'               =>  $request['structureNo'],
-                'yearOfConstruction'        =>  $request['yearOfConstruction'],
+                'yearofconstructinNo'       =>  $estb_yr,
                 'plintchArea'               =>  $request['plintchArea'],
                 'noOfFloor'                 =>  $request['noOfFloor'],
                 'totalCapacity'             =>  $request['totalCapacity'],
@@ -123,22 +144,23 @@ class InfrastructureController extends Controller
                 'created_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
+           // dd($infrastructure);
             // dd(Infrastructure::createOrFail($infrastructure));
-            // dd($infrastructure);
             $infra = Infrastructure::create($infrastructure);
             $infrastructureId = $infra->id;
             foreach ($request->input('users') as $i=> $user){
                 $facilityInStructure = array(
                     'infrastructureId'              =>  $infrastructureId,
                     'facilityTypeId'                =>  $user['facility'],
-                    'facilityName'                  =>  $user['facilityNo'],
-                    'capacity'                      =>  $user['capacity'],
                     'noOfFacility'                  =>  $user['noOfFacility'],
+                    'capacity'                      =>  $user['capacity'],
+                    'remarks'                       =>  $user['remarks'],
                     'noAccessibleToDisabled'        =>  $user['accessibleDisabled'],
                     'noWithInternetConnection'      =>  $user['internetConnection'],
                     'created_by'                    =>  $request->user_id,
                     'created_at'                    =>  date('Y-m-d h:i:s')
                 );
+              //  dd($facilityInStructure);
                 $infra = FacilityInStructure::create($facilityInStructure);
             }
             return $this->successResponse($infra, Response::HTTP_CREATED);
@@ -151,7 +173,7 @@ class InfrastructureController extends Controller
             ->join('structure_sub_categories as c', 'c.id', '=', 'a.subCategoryId')
             ->select('a.id AS id','b.name AS categorgName', 'c.subCategoryName AS subCategoryName',
             'a.structureNo AS structureNo','a.organizationId AS organizationId',
-            'a.yearOfConstruction AS yearOfConstruction','a.plintchArea AS plintchArea',
+            'a.yearofconstructinNo AS yearofconstructinNo','a.plintchArea AS plintchArea',
             'a.noOfFloor AS noOfFloor','a.totalCapacity AS totalCapacity',
             'a.rampAccess AS rampAccess', 'a.presentCondition AS presentCondition',
             'a.design AS design','a.categoryId AS categoryId','a.subCategoryId AS subCategoryId')

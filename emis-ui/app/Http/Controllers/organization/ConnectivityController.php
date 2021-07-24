@@ -74,8 +74,8 @@ class ConnectivityController extends Controller
             'internetAccessible'            =>  $request['internetAccessible'],
             'electricity'                   =>  $request['electricity'],
             'electricitysubstation'         =>  $request['electricitysubstation'],
-            'electricitysource'              =>  $request['electricitysource'],           
-            'id'                             =>  $request['id'],
+            'electricitysource'             =>  $request['electricitysource'],           
+            'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
       // dd($data);

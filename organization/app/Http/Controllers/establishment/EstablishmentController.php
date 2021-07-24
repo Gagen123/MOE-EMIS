@@ -1055,7 +1055,7 @@ class EstablishmentController extends Controller{
             'googleMapPath'         =>  $request['map_path'],
             'climate_type'          =>  $request['climate_type'],
             'disasterArea'          =>  implode(',',$request['disasterArea']),
-            'distance_from_dzo' =>  $request['distance_from_dzo'],
+            'distance_from_dzo'     =>  $request['distance_from_dzo'],
             'fencingtypeId'         =>  $request['fencingtype'],
         ];
 
