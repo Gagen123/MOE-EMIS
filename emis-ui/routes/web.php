@@ -611,6 +611,8 @@ Route::prefix('students')->group(function () {
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
         Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
+        Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
+        Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
     });
 
     Route::prefix('sen')->group(function (){
@@ -833,6 +835,7 @@ Route::prefix('diatery')->group(function (){
 
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getpersonbycid'])->name('getpersonbycid');
+Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
 
 
 

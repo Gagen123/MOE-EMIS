@@ -1171,6 +1171,10 @@ class AdministrationController extends Controller{
         }
         return  response()->json($person);
     }
+    public function getchildDetailsOncid($cid=""){
+        $personal_data=$this->apiService->listData('getchildDetailsOncid/'. $cid);
+        return $personal_data;
+    }
     public function loadQuater(Request $request){
      //  return('from UI');
         $dis = $this->apiService->listData('emis/masters/mess_manage/loadQuater');

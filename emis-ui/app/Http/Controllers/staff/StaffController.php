@@ -76,6 +76,7 @@ class StaffController extends Controller{
             'cid_work_permit'   =>  $request->cid_work_permit,
             'emp_id'            =>  $request->emp_id,
             'name'              =>  $request->name,
+            'organization_type' =>  $request->organization_type,
             'sex_id'            =>  $request->sex_id,
             'marital_status'    =>  $request->marital_status,
             'dob'               =>  $request->dob,

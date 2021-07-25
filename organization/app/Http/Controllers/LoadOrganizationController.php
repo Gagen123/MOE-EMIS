@@ -18,6 +18,7 @@ use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
+use App\Models\DepartmentModel;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -46,7 +47,6 @@ class LoadOrganizationController extends Controller{
         }
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
-            return $response_data;
         }
 
         if($type=="allorganizationList"){
@@ -70,7 +70,6 @@ class LoadOrganizationController extends Controller{
                 }
             }
         }
-
         return $this->successResponse($response_data);
     }
 
@@ -144,8 +143,11 @@ class LoadOrganizationController extends Controller{
 
     public function loadHeaquarterList($type="", $id=""){
         $response_data="";
-        if($type=="all_dzongkhag_headquarters" || $type=="all_ministry_headquarters"){
-            $response_data=HeadQuaterDetails::where('organizationType',$id)->select('id','agencyName AS name','dzongkhagId','organizationType')->get();
+        if($type=="all_ministry_departments"){
+            $response_data=DepartmentModel::where('type',$id)->get();
+        }
+        if($type=="all_division"){
+            $response_data=HeadQuaterDetails::where('departmentId',$id)->select('id','agencyName AS name','dzongkhagId')->get();
         }
         if($type=="allList"){
             $response_data=HeadQuaterDetails::select('id','agencyName AS name','dzongkhagId','organizationType')->all();

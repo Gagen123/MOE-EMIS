@@ -81,8 +81,12 @@ class LoadOrganizaitonController extends Controller{
         }
 
         //list headquarters of all ministry
-        if($type=="all_ministry_headquarters"){
-            $param=1;
+        if($type=="all_ministry_departments"){
+            $param=$parent_id;
+        }
+        //list headquarters of all ministry
+        if($type=="all_division"){
+            $param=$parent_id;
         }
         return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);
     }

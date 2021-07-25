@@ -38,7 +38,7 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label id="level_name"></label>
-                                                    <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @blur="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': personal_form.errors.has('cid_passport') }" id="cid_passport" v-model="personal_form.cid_passport" placeholder="Identification No">
+                                                    <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': personal_form.errors.has('cid_passport') }" id="cid_passport" v-model="personal_form.cid_passport" placeholder="Identification No">
                                                     <has-error :form="personal_form" field="cid_passport"></has-error>
                                                 </div>
                                             </div>
@@ -151,8 +151,8 @@
                                 <label>Parent's Marital Status:</label>
                                 <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
                                     <option value=""> --Select--</option>
-                                    <option value="Divorse">Divorse</option>
-                                    <option value="Single">Single</option>
+                                    <option value="Divorce">Married</option>
+                                    <option value="Divorce">Divorce</option>
                                 </select>
                                 <has-error :form="guardian_form" field="merital_status"></has-error>
                             </div>
@@ -793,193 +793,207 @@ export default {
         onChangeFileUpload(e){
             this.personal_form.attachments = e.target.files[0];
         },
-        getDetailsbyCID(fieldId,type){
+        getDetailsbyCID(cid,type){
             let selectedVal="";
             let selected ="";
             if(type=="std"){
                 selected = $("input[type='radio'][name='snationality']:checked");
-            }
-
-            if(type=="father"){
-                selected = $("input[type='radio'][name='father_nationality']:checked");
-            }
-            if(type=="mother"){
-                selected = $("input[type='radio'][name='mother_nationality']:checked");
-            }
-            if(type=="gardain"){
-                selected = $("input[type='radio'][name='gardain_nationality']:checked");
-            }
-            if(selected.length > 0) {
-                selectedVal=selected.val();
-            }
-            else{
-                Swal.fire({
-                    html: "Please select nationality",
-                    icon: 'error'
-                });
+                if(selected.length > 0) {
+                    selectedVal=selected.val();
+                }
+                else{
+                    Swal.fire({
+                        html: "Please select nationality",
+                        icon: 'error'
+                    });
+                }
             }
             if(selectedVal.includes('Bhutan')){
-                if ($('#'+fieldId).val().length != 11){
+                if ($('#'+cid).val().length != 11){
                     Swal.fire({
-                        html: "Please ender 11 digit CID",
+                        html: "Please enter 11 digit CID",
                         icon: 'error'
                     });
                 }
                 else{
-                    axios.get('getpersonbycid/'+ $('#'+fieldId).val())
-                    .then(response => {
-                        if (response.data[0]) {
-                            let personal_detail = response.data;
-                            if(type=="std"){
-                                this.personal_form.first_name = personal_detail.firstName;
-                                $('#first_name').prop('readonly',true);
-                                this.personal_form.middle_name=personal_detail.middleName;
-                                $('#middle_name').prop('readonly',true);
-                                this.personal_form.last_name=personal_detail.lastName;
-                                $('#last_name').prop('readonly',true);
-                                let date_of_birth = new Date(personal_detail.dob);
-                                let month =(date_of_birth .getMonth() + 1);
-                                let day = date_of_birth .getDate();
-                                if(day<10){
-                                    day='0'+day;
-                                }
-                                if(month<10){
-                                    month='0'+month;
-                                }
-                                let year =date_of_birth .getFullYear();
-                                this.personal_form.dob = year+ "-"+month + "-" + day;
-                                $('#dob').val(year+ "-"+month + "-" + day);
-                                $('#dob').prop('readonly',true);
-                                if(personal_detail.gender=="M"){
-                                    personal_detail.gender="male";
-                                }
-                                else if(personal_detail.gender=="F"){
-                                    personal_detail.gender="female";
-                                }
-                                else{
-                                    personal_detail.gender="others";
-                                }
-                                for(let i=0; i<this.sex_idList.length;i++){
-                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                        $('#sex_id').val(this.sex_idList[i].id).trigger('change');
-                                        this.personal_form.sex_id =  this.sex_idList[i].id;
-                                        $('#sex_id').prop('disabled',true);
-                                    }
-                                }
-                                this.personal_form.dzongkhag =personal_detail.dzongkhagId;
-                                $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                $('#dzongkhag').prop('disabled',true);
-                                this.getgewoglist(personal_detail.dzongkhagId,'std');
-                                this.personal_form.gewog = personal_detail.gewogId;
-                                $('#gewog').prop('disabled',true);
-                                this.getvillagelist(personal_detail.gewogId,'std');
-                                $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                this.personal_form.village_id = personal_detail.villageSerialNo;
-                                $('#village_id').prop('disabled',true);
-                            }
-
-                            if(type=="father"){
-                                if(personal_detail.gender=="F"){
-                                    Swal.fire({
-                                        html: "Gender of this person Female. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.father_first_name = "";
-                                    this.guardian_form.father_dzongkhag ="";
-                                    this.guardian_form.father_gewog = "";
-                                    this.guardian_form.father_village_id = "";
-                                }
-                                else{
-                                    let full_anme=personal_detail.firstName;
-                                    if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                        full_anme+=' '+personal_detail.middleName;
-                                    }
-                                    full_anme+=' '+personal_detail.lastName;
-                                    this.guardian_form.father_first_name = full_anme;
-                                    $('#father_first_name').prop('readonly',true);
-                                    this.guardian_form.father_dzongkhag =personal_detail.dzongkhagId;
-                                    $('#father_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                    $('#father_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(personal_detail.dzongkhagId,'p_father');
-                                    this.guardian_form.father_gewog = personal_detail.gewogId;
-                                    $('#father_gewog').val(personal_detail.gewogId).trigger('change');
-                                    $('#father_gewog').prop('disabled',true);
-                                    this.getvillagelist(personal_detail.gewogId,'p_father');
-                                    this.guardian_form.father_village_id = personal_detail.villageSerialNo;
-                                    $('#father_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                    $('#father_village_id').prop('disabled',true);
-                                }
-                            }
-                            if(type=="mother"){
-                                if(personal_detail.gender=="M"){
-                                    Swal.fire({
-                                        html: "Gender of this person is Male. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.mother_first_name = "";
-                                    this.guardian_form.mother_dzongkhag ="";
-                                    this.guardian_form.mother_gewog = "";
-                                    this.guardian_form.mother_village_id = "";
-                                }
-                                else{
-                                    let full_anme=personal_detail.firstName;
-                                    if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                        full_anme+=' '+personal_detail.middleName;
-                                    }
-                                    full_anme+=' '+personal_detail.lastName;
-                                    this.guardian_form.mother_first_name = full_anme;
-                                    $('#mother_first_name').prop('readonly',true);
-                                    this.guardian_form.mother_dzongkhag =personal_detail.dzongkhagId;
-                                    $('#mother_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                    $('#mother_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(personal_detail.dzongkhagId,'p_mother');
-                                    this.guardian_form.mother_gewog = personal_detail.gewogId;
-                                    $('#mother_gewog').val(personal_detail.gewogId).trigger('change');
-                                    $('#mother_gewog').prop('disabled',true);
-                                    this.getvillagelist(personal_detail.gewogId,'p_mother');
-                                    this.guardian_form.mother_village_id = personal_detail.villageSerialNo;
-                                    $('#mother_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                    $('#mother_village_id').prop('disabled',true);
-                                }
-
-                            }
-                            if(type=="gardain"){
-                                let full_anme=personal_detail.firstName;
-                                if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                    full_anme+=' '+personal_detail.middleName;
-                                }
-                                full_anme+=' '+personal_detail.lastName;
-                                this.guardian_form.gardain_first_name = full_anme;
-                                $('#gardain_first_name').prop('readonly',true);
-                                this.guardian_form.gardain_dzongkhag =personal_detail.dzongkhagId;
-                                $('#gardain_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                $('#gardain_dzongkhag').prop('disabled',true);
-                                this.getgewoglist(personal_detail.dzongkhagId,'p_gardain');
-                                this.guardian_form.gardain_gewog = personal_detail.gewogId;
-                                $('#gardain_gewog').val(personal_detail.gewogId).trigger('change');
-                                $('#gardain_gewog').prop('disabled',true);
-                                this.getvillagelist(personal_detail.gewogId,'p_gardain');
-                                this.guardian_form.gardain_village_id = personal_detail.villageSerialNo;
-                                $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                $('#gardain_village_id').prop('disabled',true);
-                            }
-                        }else{
-                            this.ciderror = 'Invalid CID.';
-                            Swal.fire({
-                                html: "No data found for matching CID",
-                                icon: 'info'
-                            });
-                        }
-
-                    })
-                    .catch((exception) => {
-                        Swal.fire({
-                            html: "No data found for matching CID/service down"+exception,
-                            icon: 'error'
+                    this.getPersonalDetailsbyCID($('#'+cid).val(),type);
+                    let fatherCid="";
+                    let motherCid="";
+                    if(type=='std'){
+                        axios.get('getchildDetailsOncid/'+ $('#'+cid).val())
+                        .then(response => {
+                            let data=response.data.data;
+                            fatherCid=data.parentDetail[0].fatherCID;
+                            motherCid=data.parentDetail[0].motherCID;
+                            this.getPersonalDetailsbyCID(fatherCid,'father');
+                            this.getPersonalDetailsbyCID(motherCid,'mother');
                         });
+                    }
+                }
+            }            
+        },
+        getPersonalDetailsbyCID(cidNo,type){
+            // if(type=="father"){
+            //     selected = $("input[type='radio'][name='father_nationality']:checked");
+            // }
+            // if(type=="mother"){
+            //     selected = $("input[type='radio'][name='mother_nationality']:checked");
+            // }
+            // if(type=="gardain"){
+            //     selected = $("input[type='radio'][name='gardain_nationality']:checked");
+            // }
+            
+            axios.get('getpersonbycid/'+ cidNo)
+            .then(response => {
+                if (response.data) {
+                    let personal_detail = response.data;
+                    if(type=="std"){
+                        this.personal_form.first_name = personal_detail.firstName;
+                        $('#first_name').prop('readonly',true);
+                        this.personal_form.middle_name=personal_detail.middleName;
+                        $('#middle_name').prop('readonly',true);
+                        this.personal_form.last_name=personal_detail.lastName;
+                        $('#last_name').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.personal_form.dob = dob;
+
+                        $('#dob').prop('readonly',true);
+                        if(personal_detail.gender=="M"){
+                            personal_detail.gender="male";
+                        }
+                        else if(personal_detail.gender=="F"){
+                            personal_detail.gender="female";
+                        }
+                        else{
+                            personal_detail.gender="others";
+                        }
+                        for(let i=0; i<this.sex_idList.length;i++){
+                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
+                                $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                                this.personal_form.sex_id =  this.sex_idList[i].id;
+                                $('#sex_id').prop('disabled',true);
+                            }
+                        }
+                        this.personal_form.dzongkhag =personal_detail.dzongkhagId;
+                        $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                        $('#dzongkhag').prop('disabled',true);
+                        this.getgewoglist(personal_detail.dzongkhagId,'std');
+                        this.personal_form.gewog = personal_detail.gewogId;
+                        $('#gewog').prop('disabled',true);
+                        this.getvillagelist(personal_detail.gewogId,'std');
+                        $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
+                        this.personal_form.village_id = personal_detail.villageSerialNo;
+                        $('#village_id').prop('disabled',true);
+                    }
+                    if(type=="father"){
+                        let father_detail = response.data;
+                        let full_name=father_detail.firstName;
+                        if(father_detail.middleName!="" && father_detail.middleName!=null){
+                            full_name+=' '+father_detail.middleName;
+                        }
+                        full_name+=' '+father_detail.lastName;
+                        this.guardian_form.father_first_name = full_name;
+                        $('#father_first_name').prop('readonly',true);
+                        this.guardian_form.father_cid_passport = father_detail.cid;
+                        $('#father_cid_passport').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.guardian_form.father_dob = dob;
+                        $('#father_dob').prop('readonly',true);
+
+                        this.guardian_form.father_dzongkhag =father_detail.dzongkhagId;
+                        $('#father_dzongkhag').val(father_detail.dzongkhagId).trigger('change');
+                        $('#father_dzongkhag').prop('disabled',true);
+
+                        this.getgewoglist(father_detail.dzongkhagId,'father');
+                        this.guardian_form.father_gewog = father_detail.gewogId;
+                        $('#father_gewog').prop('disabled',true);
+
+                        this.getvillagelist(father_detail.gewogId,'father');
+                        $('#father_village_id').val(father_detail.villageSerialNo).trigger('change');
+                        this.guardian_form.father_village_id = father_detail.villageSerialNo;
+                        $('#father_village_id').prop('disabled',true);
+                    }
+                    if(type=="mother"){
+                        let mother_detail = response.data;
+                        let full_name=mother_detail.firstName;
+                        if(mother_detail.middleName!="" && mother_detail.middleName!=null){
+                            full_name+=' '+mother_detail.middleName;
+                        }
+                        full_name+=' '+mother_detail.lastName;
+                        this.guardian_form.mother_first_name = full_name;
+                        $('#mother_first_name').prop('readonly',true);
+                        this.guardian_form.mother_cid_passport = mother_detail.cid;
+                        $('#mother_cid_passport').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.guardian_form.mother_dob = dob;
+                        $('#mother_dob').prop('readonly',true);
+
+                        this.guardian_form.mother_dzongkhag =mother_detail.dzongkhagId;
+                        $('#mother_dzongkhag').val(mother_detail.dzongkhagId).trigger('change');
+                        $('#mother_dzongkhag').prop('disabled',true);
+
+                        this.getgewoglist(mother_detail.dzongkhagId,'father');
+                        this.guardian_form.mother_gewog = mother_detail.gewogId;
+                        $('#mother_gewog').prop('disabled',true);
+
+                        this.getvillagelist(mother_detail.gewogId,'father');
+                        $('#mother_village_id').val(mother_detail.villageSerialNo).trigger('change');
+                        this.guardian_form.mother_village_id = mother_detail.villageSerialNo;
+                        $('#mother_village_id').prop('disabled',true);
+                    }
+                    if(type=="gardain"){
+                        let full_anme=personal_detail.firstName;
+                        if(personal_detail.middleName!="" && personal_detail.middleName!=null){
+                            full_anme+=' '+personal_detail.middleName;
+                        }
+                        full_anme+=' '+personal_detail.lastName;
+                        this.guardian_form.gardain_first_name = full_anme;
+                        $('#gardain_first_name').prop('readonly',true);
+                        this.guardian_form.gardain_dzongkhag =personal_detail.dzongkhagId;
+                        $('#gardain_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                        $('#gardain_dzongkhag').prop('disabled',true);
+                        this.getgewoglist(personal_detail.dzongkhagId,'p_gardain');
+                        this.guardian_form.gardain_gewog = personal_detail.gewogId;
+                        $('#gardain_gewog').val(personal_detail.gewogId).trigger('change');
+                        $('#gardain_gewog').prop('disabled',true);
+                        this.getvillagelist(personal_detail.gewogId,'p_gardain');
+                        this.guardian_form.gardain_village_id = personal_detail.villageSerialNo;
+                        $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
+                        $('#gardain_village_id').prop('disabled',true);
+                    }
+                }else{
+                    this.ciderror = 'Invalid CID.';
+                    Swal.fire({
+                        html: "No data found for matching CID",
+                        icon: 'info'
                     });
                 }
-            }
+
+            })
+            .catch((exception) => {
+                Swal.fire({
+                    html: "No data found for matching CID/service down"+exception,
+                    icon: 'error'
+                });
+            });
         },
 
         loadAllActiveMasters(type){
