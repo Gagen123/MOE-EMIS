@@ -54,9 +54,14 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadStudentAssessments/{org_id}',['uses' => 'academic\AcademicController@loadStudentAssessments']);
         $router->post('/saveStudentAssessment/{userId}',['uses' => 'academic\AcademicController@saveStudentAssessment']);
         $router->post('/unlockForEdit/{Id}',['uses' => 'academic\AcademicController@unlockForEdit']);
-        $router->get('/loadConsolidatedResultList/{staffId}/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResultList']);
+        $router->get('/loadConsolidatedResultList/{staffId}/{orgId}/{termId}',['uses' => 'academic\AcademicController@loadConsolidatedResultList']);
         $router->get('/loadAssessmentAreasForConsolidated',['uses' => 'academic\AcademicController@loadAssessmentAreasForConsolidated']);
         $router->get('/loadConsolidatedResult/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResult']); 
         $router->post('/saveConsolidatedResut',['uses' => 'academic\AcademicController@saveConsolidatedResut']);
+        $router->get('/loadClassBySubjectTeacher/{orgId}/{staffId}',['uses' => 'academic\AcademicController@loadClassBySubjectTeacher']);
+        $router->get('/getTermsByFrequency/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequency']);
+        $router->post('/unlockForEditForConsolidated/{Id}',['uses' => 'academic\AcademicController@unlockForEditForConsolidated']);
+
+
     });
 });

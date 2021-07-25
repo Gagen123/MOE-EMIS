@@ -238,10 +238,20 @@ class AcademicController extends Controller
         return $studentAssessments;
 
     }
-    public function loadStudentAssessmentList(){
+    public function loadStudentAssessmentList(Request $request){
         $staffId = $this->staffId();
         $orgId=$this->getWrkingAgencyId();
-        $class_subject_term= $this->apiService->listData('emis/academics/loadStudentAssessmentList/'.$staffId.'/'.$orgId);
+        $uri = 'emis/academics/loadStudentAssessmentList/'.$staffId.'/'.$orgId;
+        $uri .= ('?aca_assmt_term_id='.$request->aca_assmt_term_id.'&org_class_id='.$request->org_class_id);
+       
+        if($request->org_stream_id !== null){
+            $uri .= (('&org_stream_id='.$request->org_stream_id));
+        }
+
+        if($request->org_section_id !== null){
+            $uri .= (('&org_section_id='.$request->org_section_id));
+        }
+        $class_subject_term= $this->apiService->listData($uri);
         return $class_subject_term;
     }
     private function loadAssessmentAreas($term_id, $sub_id, $class_id, $stream_id=""){
@@ -332,10 +342,10 @@ class AcademicController extends Controller
         $response_data = $this->apiService->createData('emis/academics/unlockForEdit/'.$Id,[]);
         return $response_data;
     }
-    public function loadConsolidatedResultList(){
+    public function loadConsolidatedResultList($termId){
         $staffId = $this->staffId();
         $orgId= $this->getWrkingAgencyId();
-        $class_term= $this->apiService->listData('emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId);
+        $class_term= $this->apiService->listData('emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId.'/'.$termId);
         return $class_term;
     }
     public function loadAssessmentAreasForConsolidated($class_id, $stream_id="",$term_id=""){
@@ -588,9 +598,17 @@ class AcademicController extends Controller
         return $response_data;
     }
     public function loadClassBySubjectTeacher() {
-        $staffId = $this->userId();
+        $staffId = $this->staffId();
         $orgId = $this->getWrkingAgencyId();
-        $response_data = $this->apiService->createData('emis/academics/loadClassBySubjectTeacher/'.$orgId.'/'.$staffId);
+        $response_data = $this->apiService->listData('emis/academics/loadClassBySubjectTeacher/'.$orgId.'/'.$staffId);
+        return $response_data;
+    }
+    public function getTermsByFrequency($frequencyId){
+        $response_data = $this->apiService->listData('emis/academics/getTermsByFrequency/'.$frequencyId);
+        return $response_data;
+    }
+    public function unlockForEditForConsolidated($Id){
+        $response_data = $this->apiService->createData('emis/academics/unlockForEditForConsolidated/'.$Id,[]);
         return $response_data;
     }
 

@@ -17,6 +17,7 @@ class ClassAssessmentFrequencyHistory extends Model
         'org_stream_id', 
         'class_stream',
         'aca_assmt_frequency_id',
+        'aca_assmnt_type',
         'created_by',
         'created_at',
         'updated_by',

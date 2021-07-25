@@ -15,6 +15,7 @@ class AssessmentArea extends Model
         'id',
         'aca_sub_id',
         'aca_rating_type_id',
+        'aca_assmnt_type',
         'name',
         'dzo_name',
         'code',
