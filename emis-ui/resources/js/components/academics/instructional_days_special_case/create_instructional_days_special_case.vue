@@ -5,7 +5,7 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Class:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('org_class_id') }"  @change="getTerms(); getStudents(); remove_err('org_class_id');">
+                        <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('org_class_id') }"  @change="getTerms(); getStudents(); remove_err('org_class_id'); formaction('reset');">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in classes" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                                 {{ item.class_stream_section }} 
@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Student:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="std_student_id" v-model="form.std_student_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('std_student_id') }"  @change="remove_err('std_student_id')">
+                        <select class="form-control select2" id="std_student_id" v-model="form.std_student_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('std_student_id') }"  @change="getAttendanceData(); remove_err('std_student_id')">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in studentList" :key="index" :value="item.std_student_id">
                                 {{ item.Name }} 
@@ -25,13 +25,13 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Term:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="aca_term_id" v-model="form.aca_term_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('aca_term_id') }"  @change="getAttendanceData(); remove_err('aca_term_id')">
+                        <select class="form-control select2" id="aca_assmt_term_id" v-model="form.aca_assmt_term_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('aca_assmt_term_id') }"  @change="getAttendanceData(); remove_err('aca_term_id')">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
                                 {{ item.name }} 
                             </option>
                         </select> 
-                        <has-error :form="form" field="aca_term_id"></has-error>
+                        <has-error :form="form" field="aca_assmt_term_id"></has-error>
                     </div>
                 </div> 
                 <div class="row form-group">
@@ -40,8 +40,8 @@
                         <input class="form-control form-control-sm text-right" v-model="no_instructional_days" type="number" disabled>
                     </div>
                       <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>No. of Days the Student was Absent:</label>
-                        <input class="form-control form-control-sm text-right" v-model="no_days_absent" type="number" disabled>
+                        <label>No. of Days the Student was Present:</label>
+                        <input class="form-control form-control-sm text-right" v-model="no_days_present" type="number" disabled>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>No. of Instructional Days for the Student:<span class="text-danger">*</span></label>
@@ -71,11 +71,11 @@ export default {
             classes:[],
             studentList:[],
             no_instructional_days:'0',
-            no_days_absent:'0',
+            no_days_present:'0',
             terms:[],
             class_stream_section_id:'',
             form: new form({
-                aca_term_id:'',
+                aca_assmt_term_id:'',
                 std_student_id:'',
                 instructional_days:'',
                 remarks:'',
@@ -115,6 +115,7 @@ export default {
             this.classes = classTeachers
        },
       getStudents(){
+          this.studentList = [];
            let uri = 'academics/getStudentsForAttendance'
             uri += ('?class_stream_section='+this.class_stream_section_id[4]+'&OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
            if(this.class_stream_section_id[2] !== null){
@@ -129,6 +130,7 @@ export default {
                 })
         },
         getTerms(){
+            this.terms = [];
             let uri = 'academics/getTermsByClass/'+this.class_stream_section_id[1]
             if(this.class_stream_section_id[2] !== null){
                 uri += ('/'+this.class_stream_section_id[2])
@@ -139,31 +141,33 @@ export default {
         },
         getAttendanceData(){
             let uri = 'academics/getAttendanceData'
-            let str = $('#class_stream_section_id').val()
-            let array = str.split(",")
             let std_id = $('#std_student_id').val()
-            uri += ('?studentId='+std_id+'&termId='+this.form.aca_term_id+'&classId='+array[1])
-           if(array[2] !== ""){
-                uri += ('&streamId='+array[2])
+            uri += ('?studentId='+std_id+'&termId='+this.form.aca_assmt_term_id+'&classId='+this.class_stream_section_id[1])
+           if(this.class_stream_section_id[2] !== ""){
+                uri += ('&streamId='+this.class_stream_section_id[2])
             }
-            if(array[3]!==""){
-                uri += ('&sectionId='+array[3])
+            if(this.class_stream_section_id[3]!==""){
+                uri += ('&sectionId='+this.class_stream_section_id[3])
             }
             axios.get(uri).then(response =>{
                 let instructional_days = response.data.data
+                console.log(instructional_days);
                 instructional_days.forEach(item=>{
                     this.no_instructional_days = item.no_instructional_days
-                    this.no_days_absent = item.no_days_absent
+                    this.no_days_present = item.no_days_present
                 })
                
             })
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.dzo_name = '';
-                this.form.display_order = '';
-                this.form.status= 1;
+                this.form.class_stream_section_id = '';
+                this.form.std_student_id = '';
+                this.form.aca_assmt_term_id = '';
+                this.no_instructional_days= '';
+                this.no_days_present= '';
+                this.form.instructional_days='';
+                this.form.remarks='';
             }
             if(type=="save"){
              const assignName = {org_class_stream_id:this.class_stream_section_id[0], org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4] }

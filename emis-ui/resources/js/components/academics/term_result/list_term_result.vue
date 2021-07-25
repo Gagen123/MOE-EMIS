@@ -2,6 +2,31 @@
 <template>
     <div>
         <div class="form-group row">
+             <!-- <div class="row form-group">
+               <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Class:<span class="text-danger">*</span></label> 
+                    <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('org_class_id') }"  @change="remove_err('org_class_id');">
+                        <option value=""> --Select--</option>
+                        <option v-for="(item, index) in classes" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                            {{ item.class_stream_section }} 
+                        </option>
+                    </select> 
+                    <has-error :form="form" field="org_class_id"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Term:<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="aca_assmt_term_id" v-model="form.aca_assmt_term_id" :class="{ 'is-invalid select2-hidden-accessible': form.errors.has('aca_assmt_term_id') }"  @change="remove_err('aca_term_id')">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
+                                {{ item.name }} 
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="aca_assmt_term_id"></has-error>
+                </div>
+                <div class="col-auto pt-1 mt-4">
+                    <button type="button" class="btn btn-primary btn-sm" @click="getTermResult()"><i class="fa fa-download"></i> Fetch Student</button>
+                </div>
+            </div> -->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <table id="assessment-term-table" class="table table-sm table-bordered table-striped">
                     <thead>
@@ -18,7 +43,7 @@
                             <td>{{ item.class_stream_section }}</td>
                             <td>{{ item.sub_name }} <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name }} )</span></td>
                             <td>{{item.term_name}} <span v-if="item.term_dzo_name && item.sub_dzo_name">( {{ item.term_dzo_name }} )</span></td>
-                            <td>{{item.finalized}}
+                            <td>
                                 <span v-if="item.finalized"><strong>Finalized</strong> by
                                     <span v-if="item.assessed_by_class_teacher">class</span>
                                     <span v-else>subject</span> teacher on {{item.finalized_date}}
@@ -60,9 +85,12 @@ export default {
         }
     },
     methods:{
-        async classSubjectTerm(){
+        async classSubjectTeacher(){
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                // let subjectTeacher = await axios.get('academics/loadClassBySubjectTeacher').then(response=> {
+                //     console.log(response);
+                // })
                 let classSubjectTerms = await axios.get('academics/loadStudentAssessmentList').then(response => {
                     return response.data.data
                 })
@@ -92,6 +120,16 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_term_result',params: {data:data}});
         },
+        // getTerms(){
+        //     this.terms = [];
+        //     let uri = 'academics/getTermsByClass/'+this.class_stream_section_id[1]
+        //     if(this.class_stream_section_id[2] !== null){
+        //         uri += ('/'+this.class_stream_section_id[2])
+        //     }
+        //     axios.get(uri).then((response)=>{
+        //         this.terms = response.data.data
+        //     })
+        // },
         unlockForEdit(Id){
             Swal.fire({
                 title: 'Are you sure you want to undo finalize (unlock for editing)?',
@@ -117,10 +155,11 @@ export default {
                         });
                     }
             })
-        }
+        },
     },
     mounted(){ 
-        this.classSubjectTerm()
+        this.classSubjectTeacher()
+        this.getTerms()
         this.dt = $("#assessment-term-table").DataTable({
             "order": [[ 0, "asc" ]]
         })
