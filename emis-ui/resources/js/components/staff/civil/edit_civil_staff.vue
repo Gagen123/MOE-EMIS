@@ -736,7 +736,7 @@ export default {
             this.nomination_form.fileUpload=[];
             this.nomination_form.attachments=[{ file_name:'',attachment:''}];
             this.nomination_form.ref_docs=[];
-            this.nomination_form.status='Pending';
+            this.nomination_form.status='Created';
         },
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
@@ -954,6 +954,7 @@ export default {
                     formData.append('nomi_contact', this.nomination_form.nomi_contact);
                     formData.append('nomi_email', this.nomination_form.nomi_email);
                     formData.append('nomi_relation', this.nomination_form.nomi_relation);
+                    formData.append('status', this.nomination_form.status);
                     if(this.nomination_form.isnominee==0){
                         formData.append('nomi_percentage', 0);
                     }
@@ -982,7 +983,7 @@ export default {
         },
         loadqualication(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadQualification/'+staff_id;
+                let uri = 'staff/loadStaffQualification/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -1118,7 +1119,7 @@ export default {
 
         loadnomination(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadNominations/'+staff_id;
+                let uri = 'staff/loadStaffNomination/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -1381,9 +1382,9 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        getgewoglist(id){
+        getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
-            if(id!="" && dzoId==null){
+            if(id!=""){
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
@@ -1392,6 +1393,8 @@ export default {
             .then(response =>{
                 let data = response;
                 this.gewog_list = data.data.data;
+                this.personal_form.gewog=gewogId;
+                $('#gewog').val(gewogId).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1441,9 +1444,9 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        getvillagelist(id){
+        getvillagelist(id,vil_id){
             let gewogId=$('#gewog').val();
-            if(id!="" && gewogId==null){
+            if(id!=""){
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
@@ -1452,6 +1455,8 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList = data.data.data;
+                this.personal_form.village_id=vil_id;
+                $('#village_id').val(vil_id).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1506,7 +1511,7 @@ export default {
             }
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+                this.getgewoglist('','');
                 this.allOrgList();
             }
             if(id=="organization_type"){
@@ -1515,7 +1520,7 @@ export default {
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
-                this.getvillagelist();
+                this.getvillagelist('','');
             }
 
             if(id=="village_id"){
@@ -1590,22 +1595,14 @@ export default {
             axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
             .then((response) => {
                 let data=response.data.data;
-
-                if(data.village_id!=null){
-                    this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
-                    this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
-                    this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
-                    this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                    this.personal_form.village_id=data.village_id;
-                }
-                else{
-                    this.personal_form.address=data.address;
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
-                }
+                this.personal_form.dzongkhag=data.dzo_id;
+                $('#dzongkhag').val(data.dzo_id).trigger('change');
+                this.getgewoglist(data.dzo_id,data.geowg_id);
+                this.getvillagelist(data.geowg_id,data.village_id);
                 this.personal_form.personal_id=data.id;
-                // this.loadqualication(data.id);
+
                 this.qualification_form.personal_id=data.id;
+
                 this.nomination_form.personal_id=data.id;
                 this.personal_form.emp_type=data.emp_type_id;
                 this.personal_form.emp_id=data.emp_id;
@@ -1617,6 +1614,7 @@ export default {
                 $('#marital_status').val(data.merital_status).trigger('change');
                 this.personal_form.dob=data.dob;
                 this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                $('#p_dzongkhag').val(data.p_dzongkhag).trigger('change');
                 $('#initial_appointment_date').val(data.p_dzongkhag).trigger('change');
                 $('#p_dzongkhag').prop('disabled',true);
                 $('#dob').prop('disabled',true);
@@ -1636,6 +1634,7 @@ export default {
                 this.personal_form.elective_sub1=data.elective_sub_id1;
                 this.personal_form.elective_sub2=data.elective_sub_id2;
                 this.personal_form.currier_stage=data.cureer_stagge_id;
+                $('#currier_stage').val(data.cureer_stagge_id).trigger('change');
                 this.personal_form.emp_file_code=data.employee_code;
                 this.personal_form.remarks=data.remarks;
                 this.personal_form.initial_appointment_date=data.initial_appointment_date;

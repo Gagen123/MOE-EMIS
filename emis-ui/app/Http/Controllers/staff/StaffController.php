@@ -84,7 +84,7 @@ class StaffController extends Controller{
             'p_gewog'           =>  $request->p_gewog,
             'p_village_id'      =>  $request->p_village_id,
             'dzo_id'            =>  $request->dzongkhag,
-            'geowg_id'          =>  $request->geowg,
+            'geowg_id'          =>  $request->gewog,
             'village_id'        =>  $request->village_id,
             'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
@@ -225,7 +225,7 @@ class StaffController extends Controller{
             'isnominee'                         =>  $request->isnominee,
             'attachment_details'                =>  $attachment_details,
             'nomi_percentage'                   =>  $request->nomi_percentage,
-            'status'                            =>  'Pending',
+            'status'                            =>  $request->status,
             'user_id'                           =>  $this->userId()
         ];
         // dd($nomination_details);

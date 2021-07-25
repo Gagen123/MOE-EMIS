@@ -18,7 +18,12 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::all());
         }
         if($type=="userdzongkhagwise" || $type=="dzongkhagwise"){
-            return $this->successResponse(PersonalDetails::where('dzo_id',$parent_id)->where('status','Created')->get());
+            if(strpos($parent_id,'Private')!==false){
+                $dzo_id=explode('__',$parent_id)[1];
+                return $this->successResponse(PersonalDetails::where('dzo_id',$dzo_id)->where('emp_type_id','Private')->where('status','Created')->get());
+            }else{
+                return $this->successResponse(PersonalDetails::where('dzo_id',$parent_id)->where('emp_type_id','!=','Private')->where('status','Created')->get());
+            }
         }
         if($type=="orgwise" || $type=="userworkingagency" || $type=="dzo_hq_departmentwise"){
             return $this->successResponse(PersonalDetails::where('working_agency_id',$parent_id)->where('status','Created')->get());

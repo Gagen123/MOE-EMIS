@@ -318,7 +318,8 @@ Route::prefix('organization')->group(function () {
     Route::get('/getApprovedOrgDetails/{type}/{key}', [App\Http\Controllers\organization\EstablishmentController::class, 'getApprovedOrgDetails'])->name('getApprovedOrgDetails');
     Route::post('/registerOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'registerOrganizationDetails'])->name('registerOrganizationDetails');
     Route::get('/getschoolDetials', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolDetials'])->name('getschoolDetials');
-    Route::get('/getschoolList/{dzoid}', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolList'])->name('getschoolList');
+    //commented by Tshewang as changed the route to loadIOrganizaiton
+    // Route::get('/getschoolList/{dzoid}', [App\Http\Controllers\organization\EstablishmentController::class, 'getschoolList'])->name('getschoolList');
     Route::get('/getFullSchoolDetials/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getFullSchoolDetials'])->name('getFullSchoolDetials');
     Route::get('/getClassByOrg/{id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrg'])->name('getClassByOrg');
     Route::get('/checkPendingApplication/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'checkPendingApplication'])->name('checkPendingApplication');

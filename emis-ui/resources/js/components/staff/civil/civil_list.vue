@@ -13,7 +13,7 @@
                             <th>Working Agency</th>
                             <th>Email</th>
                             <th>Contact No.</th>
-                            <th>Action</th>
+                            <th class="pl-5 pr-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,7 +28,8 @@
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item,'view')">View</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item,'edit')">Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -48,8 +49,13 @@ export default {
         }
     },
     methods: {
-        loadeditpage(staff){
-            this.$router.push({name:"edit_civil_staff",params:{data:staff}});
+        loadeditpage(staff,type){
+            if(type=="edit"){
+                this.$router.push({name:"edit_civil_staff",params:{data:staff}});
+            }
+            else{
+                this.$router.push({name:"view_civil_staff",params:{data:staff}});
+            }
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)

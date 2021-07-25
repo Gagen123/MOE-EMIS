@@ -162,29 +162,6 @@
                             <span class="text-blue"><label><u>Working Address</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Dzongkhag:</label>
-                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Gewog:</label>
-                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="gewog"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Village:</label>
-                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
-                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="village_id"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Organization Type:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
                                         <option value="Org">Organization/School </option>
@@ -954,6 +931,7 @@ export default {
                     formData.append('nomi_contact', this.nomination_form.nomi_contact);
                     formData.append('nomi_email', this.nomination_form.nomi_email);
                     formData.append('nomi_relation', this.nomination_form.nomi_relation);
+                    formData.append('status', this.nomination_form.status);
                     if(this.nomination_form.isnominee==0){
                         formData.append('nomi_percentage', 0);
                     }

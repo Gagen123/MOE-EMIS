@@ -81,7 +81,6 @@ class AcademicMastersController extends Controller
                 $data = Subject::find($request['id']);
                 $messs_det='name:'.$data->name.'; aca_sub_category_id:'.$data->aca_sub_category_id.'; dzo_name:'.$data->dzo_name.'; assessed_by_class_teacher:'.$data->assessed_by_class_teacher.'; is_special_educational_needs:'.$data->is_special_educational_needs.'; display_order:'.$data->display_order.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
-
                 $data->name = $request['name'];
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->dzo_name = $request['dzo_name'];

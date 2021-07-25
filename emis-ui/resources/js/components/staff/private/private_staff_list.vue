@@ -8,14 +8,14 @@
                             <th>Sl#</th>
                             <th>Emp Id</th>
                             <th>Name</th>
-                            <th>Sex</th> 
-                            <th>Position Title</th>    
+                            <th>Sex</th>
+                            <th>Position Title</th>
                             <th>Working Agency</th>
                             <th>Email</th>
                             <th>Contact No.</th>
-                            <th>Action</th>                     
+                            <th>Action</th>
                         </tr>
-                    </thead> 
+                    </thead>
                     <tbody>
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
@@ -40,23 +40,23 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             substaffList:[],
             genderArray:{},
             positiontitleList:{},
             dt:''
-        } 
+        }
     },
     methods: {
         loadeditpage(staff){
             this.$router.push({name:"edit_private_staff",params:{data:staff}});
 		},
         loadstff(){
-            axios.get('loadCommons/loadStaffList/emptype/Private')
-            .then((response) => {  
+            axios.get('loadCommons/loadStaffList/userdzongkhagwise/Private')
+            .then((response) => {
                 this.substaffList =  response.data.data;
              })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error."+error);
             });
         },
@@ -65,7 +65,7 @@ export default {
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.genderArray[data.data.data[i].id] = data.data.data[i].name; 
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -77,7 +77,7 @@ export default {
             .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name; 
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error){
@@ -99,7 +99,7 @@ export default {
             });
         }
     },
-    
+
 }
 </script>
 
