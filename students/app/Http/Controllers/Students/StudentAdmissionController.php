@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
+use App\Models\Students\Student;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
 use App\Models\requestForAdmission;
@@ -656,7 +657,7 @@ class StudentAdmissionController extends Controller
             'OrgClassSectionId'         =>  $request->section,
             'StdStudentTypeId'          =>  $request->student_type,
             'NoOfMeals'                 =>  $request->no_meals,
-            'isSen'              =>  $request->disability,
+            'isSen'                     =>  $request->disability,
             'Meal_Type'                 =>  $request->meal_type,
             'Feeding_Type'              =>  $request->feeding_type,
             'updated_by'                =>  $request->user_id,
@@ -734,8 +735,8 @@ class StudentAdmissionController extends Controller
 
         else if(strpos($param,'__')){
             if(explode('__',$param)[0] == "admission"){
-                dd(explode('__',$param)[1]);
-                $response_data = DB::table('std_admissions')->where('OrgOrganizationId',explode('__',$param)[1])->get();
+                // dd(explode('__',$param)[1]);
+                $response_data = DB::table('std_admissions')->where('OrgOrganizationId',explode('__',$param)[1])->where('Status','<>','Admitted')->get();
                 return $response_data;
             }
             else  if(explode('__',$param)[0] == "created"){
@@ -872,6 +873,72 @@ class StudentAdmissionController extends Controller
     public function getApplicationDetails($id=""){
         $response_data = std_admission::where ('id', $id)->first();
         return $this->successResponse($response_data);
+    }
+
+    /**
+     * Update Student Admission
+     */
+
+    public function updateStudentAdmission(Request $request){
+        $request_data =[
+            'id'                        =>  $request->id,
+            'org_id'                    =>  $request->org_id,
+            'dzo_id'                    =>  $request->dzo_id,
+            'user_id'                   =>  $request->user_id
+        ];
+
+        $admission_data = std_admission::where ('id', $request->id)->first();
+
+        $student_data =[
+            'OrgOrganizationId'     =>  $request->org_id,
+            'CidNo'                 =>  $admission_data->CidNo,
+            'student_code'          =>  $admission_data->CidNo,
+            'Name'                  =>  $admission_data->first_name.' '.$admission_data->middle_name.' '.$admission_data->last_name,
+            'CmnSexId'              =>  $admission_data->CmnSexId,
+            'DateOfBirth'           =>  $admission_data->DateOfBirth,
+            'CmnCountryId'          =>  $admission_data->CmnCountryId,
+            'CmnGewogId'            =>  $admission_data->CmnGewogId,
+            'CmnChiwogId'           =>  $admission_data->CmnChiwogId,
+            'CmnLanguageId'         =>  $admission_data->CmnLanguageId,
+            'IsNewAdmission'        => 1,
+            'IsTransferred'         => 0,
+            'isSen'                 => 0,
+            'IsRejoined'            => 1
+        ];
+
+        $response_data = Student::create($student_data);
+
+        $data=[
+            'Status' => 'Admitted'
+        ];
+
+        $update_status = std_admission::where('id',$request->id)->update($data);
+
+        return $this->successResponse($response_data);
+
+    }
+
+    /**
+     * Update Student Transfer
+     */
+
+    public function updateStudentTransfer(Request $request){
+        // $data =[
+        //     'id'                        =>  $request->id,
+        //     'org_id'                    =>  $request->org_id,
+        //     'dzo_id'                    =>  $request->dzo_id,
+        //     'user_id'                   =>  $request->user_id
+        // ];
+
+        $data =[
+            'IsTransferred'                    =>  0,
+            'IsRejoined'                       =>  1,
+            'OrgOrganizationId'                =>  $request->org_id,
+        ];
+        
+        $response_data = Student::where('id',$request->id)->update($data);
+        return $this->successResponse($response_data);
+
     }
 
 }
