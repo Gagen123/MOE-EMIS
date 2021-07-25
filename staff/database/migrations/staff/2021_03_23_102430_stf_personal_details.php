@@ -15,6 +15,7 @@ class StfPersonalDetails extends Migration{
             $table->string('sex_id',100)->nullable(true);
             $table->date('dob',20)->nullable(true);
             $table->char('working_agency_id',36)->nullable(false);
+            $table->char('org_level',36)->nullable(false);
             $table->char('position_title_id',36)->nullable(false);
             $table->char('merital_status',36)->nullable(true);
             $table->char('country_id',36)->nullable(false);

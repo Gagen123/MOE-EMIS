@@ -193,14 +193,14 @@
                                     </select>
                                     <has-error :form="personal_form" field="organization_type"></has-error>
                                 </div>
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
                                     <label class="mb-0.5">Department:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.department" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('department') }" class="form-control select2" name="department" id="department">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="department"></has-error>
-                                </div> -->
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
@@ -414,9 +414,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                            <td v-else></td>
+                                            <td>{{ subjectArray[item.first_subject]}}</td>
+                                            <td>{{ subjectArray[item.second_subject]}}</td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
                                             <td>{{ item.enddate}}</td>
@@ -674,6 +673,7 @@ export default {
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
+                department:'',
                 p_dzongkhag:'',
                 p_village_id:'',
                 p_gewog:'',
@@ -1342,6 +1342,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.qualificationsubjectList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.subjectArray[data.data.data[i].id] = data.data.data[i].name;
+                }
             })
             .catch(function (error) {
                 console.log(error);
@@ -1464,8 +1467,8 @@ export default {
             });
         },
 
-        getDepartmentList(){
-            let uri = 'loadCommons/loadHeaquarterList/all_ministry_headquarters/AllDepartmentsAtMinistry';
+        getDepartmentList(type){
+            let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
             this.gewog_list =[];
             axios.get(uri)
             .then(response =>{
@@ -1479,12 +1482,8 @@ export default {
 
         allOrgList(type){
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            //Below two should change according to the data from rcsc
-            // if(org_type=="Dzongkhag"){
-            //     uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            // }
-            if(type=="Ministry"){
-                uri = 'loadCommons/loadHeaquarterList/all_ministry_headquarters/AllDepartmentsAtMinistry';
+            if(type=="division"){
+                uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
             }
             this.orgList = [];
             axios.get(uri)
@@ -1584,19 +1583,22 @@ export default {
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
-                this.allOrgList();
+                // this.allOrgList('school');
             }
             if(id=="organization_type"){
                 this.personal_form.organization_type=$('#organization_type').val();
-                 this.allOrgList($('#organization_type').val());
-                //if($('#organization_type').val()=="Ministry"){
-                    this.getDepartmentList();
-                    // $('#departmentdiv').show();
-                //}
-                //else{
-                    //this.allOrgList();
-                    // $('#departmentdiv').hide();
-                //}
+                if($('#organization_type').val()=="Ministry" || $('#organization_type').val()=="Dzongkhag"){
+                    this.getDepartmentList($('#organization_type').val());
+                    $('#departmentdiv').show();
+                }
+                else{
+                    this.allOrgList('school');
+                    $('#departmentdiv').hide();
+                }
+            }
+            if(id=="department"){
+                this.personal_form.department=$('#department').val();
+                this.allOrgList('division');
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();

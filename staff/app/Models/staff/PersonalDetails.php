@@ -27,6 +27,7 @@ class PersonalDetails extends Model{
         'dzo_id',
         'geowg_id',
         'village_id',
+        'org_level',
         'address',
         'email',
         'alternative_email',

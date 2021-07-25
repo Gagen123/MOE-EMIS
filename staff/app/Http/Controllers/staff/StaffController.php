@@ -58,6 +58,7 @@ class StaffController extends Controller{
             'dob'                   =>  $request->dob,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
+            'org_level'             =>  $request->organization_type,
             'p_dzongkhag'           =>  $request->p_dzongkhag,
             'p_gewog'               =>  $request->p_gewog,
             'p_village'             =>  $request->p_village_id,
