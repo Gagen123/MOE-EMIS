@@ -81,7 +81,7 @@ export default {
         loadOrganizationList(type){
              axios.get('loadCommons/loadOrgList/'+type)
             .then((response) => {
-                this.data_list=response.data;
+                this.data_list=response.data.data;
             })
             .catch((error) =>{
                 console.log("Error:"+error);

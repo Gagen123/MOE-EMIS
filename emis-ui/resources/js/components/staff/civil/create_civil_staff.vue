@@ -162,6 +162,29 @@
                             <span class="text-blue"><label><u>Working Address</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
+                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="village_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Organization Type:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
                                         <option value="Org">Organization/School </option>
@@ -1454,22 +1477,20 @@ export default {
             });
         },
 
-        allOrgList(){
-            let dzo_id=$('#dzongkhag').val();
-            let org_type=$('#organization_type').val();
+        allOrgList(type){
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
             //Below two should change according to the data from rcsc
-            if(org_type=="Dzongkhag"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            }
-            if(org_type=="Ministry"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            // if(org_type=="Dzongkhag"){
+            //     uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            // }
+            if(type=="Ministry"){
+                uri = 'loadCommons/loadHeaquarterList/all_ministry_headquarters/AllDepartmentsAtMinistry';
             }
             this.orgList = [];
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.orgList = data.data;
+                let data = response.data.data;
+                this.orgList = data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1567,14 +1588,15 @@ export default {
             }
             if(id=="organization_type"){
                 this.personal_form.organization_type=$('#organization_type').val();
-                if($('#organization_type').val()=="Ministry"){
+                 this.allOrgList($('#organization_type').val());
+                //if($('#organization_type').val()=="Ministry"){
                     this.getDepartmentList();
                     // $('#departmentdiv').show();
-                }
-                else{
-                    this.allOrgList();
+                //}
+                //else{
+                    //this.allOrgList();
                     // $('#departmentdiv').hide();
-                }
+                //}
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();

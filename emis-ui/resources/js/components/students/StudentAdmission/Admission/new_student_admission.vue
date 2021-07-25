@@ -828,7 +828,7 @@ export default {
                 else{
                     axios.get('getpersonbycid/'+ $('#'+fieldId).val())
                     .then(response => {
-                        if (response.data[0]) {
+                        if (response.data) {
                             let personal_detail = response.data;
                             if(type=="std"){
                                 this.personal_form.first_name = personal_detail.firstName;

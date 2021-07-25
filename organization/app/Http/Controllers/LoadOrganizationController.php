@@ -46,7 +46,6 @@ class LoadOrganizationController extends Controller{
         }
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
-            return $response_data;
         }
 
         if($type=="allorganizationList"){
@@ -70,7 +69,6 @@ class LoadOrganizationController extends Controller{
                 }
             }
         }
-
         return $this->successResponse($response_data);
     }
 

@@ -622,7 +622,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                this.orgList = data.data;
+                this.orgList = data.data.data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
