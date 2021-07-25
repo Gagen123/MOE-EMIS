@@ -409,7 +409,7 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData($uri);
         return $response_data;
     }
-    
+
     public function savePromotionRule(Request $request){
         $rules = [
             'data.*.aca_sub_id' => 'required',
@@ -1157,10 +1157,10 @@ class AdministrationController extends Controller{
         return $dis;
     }
     public function getpersonbycid($cid){
-        $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
+        $person = json_decode($this->apiService->listData('getCensusData/'. $cid));
         if($person->data->hasdata){
             $response_data = $person->data->citizenDetail;
-            return  $response_data;
+            return  response()->json($response_data);
         }else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }

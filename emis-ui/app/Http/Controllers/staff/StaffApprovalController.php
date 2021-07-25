@@ -19,7 +19,7 @@ class StaffApprovalController extends Controller
 
     public $service_name="Principal Recuritment";
     public $service_name_expa="Expatriate Recuritment";
-        
+
     // public $service_name_closure="Closure";
     // public $merge_service_name="Merger";
     // public $bif_service_name="Bifurcation";
@@ -30,7 +30,7 @@ class StaffApprovalController extends Controller
     }
 
     public function getpersonbycid($cid){
-        $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
+        $person = json_decode($this->apiService->listData('getCensusdata/'. $cid));
         if ($person->citizenDetailsResponse){
             $response_data = $person->citizenDetailsResponse;
             return  $response_data;
@@ -80,7 +80,7 @@ class StaffApprovalController extends Controller
             }
             $rules = $validation['rules'];
             $customMessages = $validation['messages'];
-    
+
             $this->validate($request, $rules, $customMessages);
             $principalApproval_data=$principalApproval_data+[
                 'attachment_details'            =>   $attachment_details,
@@ -282,7 +282,7 @@ class StaffApprovalController extends Controller
         $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/UpdateExpatriateRecuritment', $data);
         return ($response_data);
     }
-    
+
     private function validatePrincipalRecuritmentApprovalFields($request){
         $rules = [
             'cid'                        =>  'required',
@@ -325,7 +325,7 @@ class StaffApprovalController extends Controller
 
         return $data;
     }
-    
+
     public function saveExpatriateRecuritment(Request $request){
         $this->service_name = $request['application_for'];
         //File Upload
@@ -368,7 +368,7 @@ class StaffApprovalController extends Controller
                 }
                 $rules = $validation['rules'];
                 $customMessages = $validation['messages'];
-        
+
                 $this->validate($request, $rules, $customMessages);
                 $Expatriate_data=$Expatriate_data+[
                     'attachment_details'            =>   $attachment_details,

@@ -13,13 +13,13 @@
                             <th>Working Agency</th>
                             <th>Email</th>
                             <th>Contact No.</th>
-                            <th>Action</th>
+                            <th class="pl-5 pr-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.emp_type_id}}</td>
+                            <td>{{ item.emp_id}}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ genderArray[item.sex_id]}}</td>
                             <!-- <td>{{ item.position_title.name}}</td> -->
@@ -28,7 +28,8 @@
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item,'view')">View</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item,'edit')">Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -48,8 +49,13 @@ export default {
         }
     },
     methods: {
-        loadeditpage(staff){
-            this.$router.push({name:"edit_civil_staff",params:{data:staff}});
+        loadeditpage(staff,type){
+            if(type=="edit"){
+                this.$router.push({name:"edit_civil_staff",params:{data:staff}});
+            }
+            else{
+                this.$router.push({name:"view_civil_staff",params:{data:staff}});
+            }
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)
@@ -91,14 +97,15 @@ export default {
          axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
+            //1-regualr,2-contract,3-voluntary
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWsirRegContract/Regular,Volunteer');
+                this.loadstff('orgWsirRegContract/1,2,3');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('dzoWsirRegContract/Regular,Volunteer');
+                this.loadstff('dzoWsirRegContract/1,2,3');
             }
             if(data['acess_level']=="Ministry"){
-                this.loadstff('allRegContract/Regular,Volunteer');
+                this.loadstff('allRegContract/1,2,3');
             }
         })
         .catch(errors => {

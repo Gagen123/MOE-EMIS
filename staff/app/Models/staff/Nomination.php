@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Nomination extends Model{
     use HasFactory, Uuid;
-    protected $table="stf_nomination";
+    protected $table="stf_family_detail";
     public $timestamps = false;
     protected $fillable = [
         'id',
@@ -19,6 +19,7 @@ class Nomination extends Model{
         'nomi_contact',
         'nomi_email',
         'nomi_relation',
+        'isnominee',
         'nomi_percentage',
         'created_by',
         'updated_by',

@@ -289,8 +289,9 @@ export default {
         getDetailsbyCID(fieldId){
             axios.get('getpersonbycid/'+ $('#'+fieldId).val())
             .then(response => {
+                alert(response.data);
                 if (JSON.stringify(response.data)!='{}'){
-                    let personal_detail = response.data[0];
+                    let personal_detail = response.data;
                     this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
                 }else{
                     Swal.fire({
@@ -298,6 +299,7 @@ export default {
                         icon: 'error'
                     });
                 }
+
             })
             .catch((exception) => {
                 console.log(exception);

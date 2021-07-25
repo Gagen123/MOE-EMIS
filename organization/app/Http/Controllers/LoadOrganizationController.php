@@ -57,6 +57,9 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
         }
+        if($type=="private"){
+            $response_data=OrganizationDetails::wherein('category',['private_school','private_eccd'])->where('dzongkhagId',$id)->get();
+        }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
             foreach($response_data as $res){
                 if($res['levelId']!=null && $res['levelId']!=""){
@@ -67,6 +70,7 @@ class LoadOrganizationController extends Controller{
                 }
             }
         }
+
         return $this->successResponse($response_data);
     }
 

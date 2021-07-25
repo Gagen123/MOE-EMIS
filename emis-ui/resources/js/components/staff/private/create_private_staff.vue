@@ -18,112 +18,153 @@
             <div class="card-body pt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="personal-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
-                                    <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="country_id"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-1">CID/Work Permit No:<i class="text-danger">*</i></label>
-                                <input type="text" @keyup.enter="getDetailsbyCID('cid_work_permit')" @blur="getDetailsbyCID('cid_work_permit')" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
-                                <has-error :form="personal_form" field="cid_work_permit"></has-error>
+                        <div class="callout callout-success">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.country_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('country_id') }" class="form-control select2" name="country_id" id="country_id">
+                                        <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.nationality }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="country_id"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-1">CID/Work Permit No:<i class="text-danger">*</i></label>
+                                    <input type="text" @keyup.enter="getDetailsbyCID('cid_work_permit')" @blur="getDetailsbyCID('cid_work_permit')" v-model="personal_form.cid_work_permit" @change="remove_error('cid_work_permit')" :class="{ 'is-invalid': personal_form.errors.has('cid_work_permit') }"  class="form-control" name="cid_work_permit" id="cid_work_permit">
+                                    <has-error :form="personal_form" field="cid_work_permit"></has-error>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-1">Full Name:<i class="text-danger">*</i></label>
-                                <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name"  readonly>
-                                <has-error :form="personal_form" field="name"></has-error>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Personal Detail</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-1">Full Name:<i class="text-danger">*</i></label>
+                                    <input type="text" @change="remove_error('name')" v-model="personal_form.name" :class="{ 'is-invalid': personal_form.errors.has('name') }" class="form-control" name="name" id="name">
+                                    <has-error :form="personal_form" field="name"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i></label>
+                                    <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
+                                    <has-error :form="personal_form" field="dob"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="sex_id"></has-error>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Date of Birth:<i class="text-danger">*</i></label>
-                                <input type="date" v-model="personal_form.dob" :class="{ 'is-invalid': personal_form.errors.has('dob') }" id="dob" name="dob" class="form-control">
-                                <has-error :form="personal_form" field="dob"></has-error>
+
+                            <div class="form-group row" id="bhutanese_address">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.p_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('p_dzongkhag') }" class="form-control select2" name="p_dzongkhag" id="p_dzongkhag">
+                                        <option v-for="(item, index) in p_dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.p_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('p_gewog') }" class="form-control select2" name="p_gewog" id="p_gewog">
+                                        <option v-for="(item, index) in p_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.p_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="p_village_id" id="p_village_id">
+                                        <option v-for="(item, index) in p_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="village_id"></has-error>
+                                </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Sex:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="sex_id"></has-error>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="position_title"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
+                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="currier_stage"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row" id="foreign_address" style="display:none">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Address:</label>
+                                    <textarea @change="remove_error('address')" class="form-control" v-model="personal_form.address" :class="{ 'is-invalid': personal_form.errors.has('address') }" name="address" id="address"></textarea>
+                                    <has-error :form="personal_form" field="address"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Contacts</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-1">Contact No:<i class="text-danger">*</i></label>
+                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
+                                    <has-error :form="personal_form" field="contact_number"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
+                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
+                                    </label>
+                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
+                                    <has-error :form="personal_form" field="email"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Alternative Email:</label>
+                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                    <has-error :form="personal_form" field="alternative_email"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Working Address</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
+                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="village_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="working_agency_id"></has-error>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group row" id="bhutanese_address">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Dzongkhag:</label>
-                                <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="dzongkhag"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Gewog:</label>
-                                <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="gewog"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Village:</label>
-                                <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
-                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="village_id"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row" id="foreign_address" style="display:none">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Address:</label>
-                                <textarea @change="remove_error('address')" class="form-control" v-model="personal_form.address" :class="{ 'is-invalid': personal_form.errors.has('address') }" name="address" id="address"></textarea>
-                                <has-error :form="personal_form" field="address"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-1">Contact No:<i class="text-danger">*</i></label>
-                                <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
-                                <has-error :form="personal_form" field="contact_number"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Email:<i class="text-danger">*</i>
-                                    <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
-                                </label>
-                                <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
-                                <has-error :form="personal_form" field="email"></has-error>
-                            </div>
-                        </div>
-                       <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
-                                <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in positiontitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="position_title"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
-                                <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
-                                <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="working_agency_id"></has-error>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                                <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="personal_form" field="currier_stage"></has-error>
-                            </div>
-                        </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
@@ -151,6 +192,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
+
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Remarks:</label>
                                 <textarea @change="remove_error('remarks')" class="form-control" v-model="personal_form.remarks" :class="{ 'is-invalid': personal_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
@@ -289,9 +331,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                            <td v-else></td>
+                                            <td>{{ subjectArray[item.first_subject]}}</td>
+                                            <td>{{ subjectArray[item.second_subject]}}</td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
                                             <td>{{ item.enddate}}</td>
@@ -323,17 +364,21 @@ export default {
             sex_idList:[],
             positiontitleList:[],
             countryList:[],
+            p_dzongkhagList:[],
+            p_gewog_list:[],
+            p_villageList:[],
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
             orgList:[],
             subjectList:[],
+            subjectArray:{},
             cureerstageList:[],
             marital_statusList:[],
             qualificationlist:[],
             qualificationDescription:[],
             staffqualificationlist:[],
-            staff_qualification_list:'',
+            staff_qualification_list:[],
             coursemodeList:[],
 
             personal_form: new form({
@@ -346,12 +391,16 @@ export default {
                 dob:'',
                 marital_status:'',
                 country_id:'',
+                p_dzongkhag:'',
+                p_village_id:'',
+                p_gewog:'',
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
                 working_agency_id:'',
                 contact_number:'',
                 email:'',
+                alternative_email:'',
                 comp_sub:'',
                 elective_sub1:'',
                 elective_sub2:'',
@@ -390,7 +439,7 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error loadactivecountryList:"+error)
             });
         },
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
@@ -400,16 +449,26 @@ export default {
                 this.dzongkhagList =  data.data.data;
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error:"+error)
+            });
+        },
+        loadactivePdzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.p_dzongkhagList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error loadactivePdzongkhagList:"+error)
             });
         },
         async getgewoglist(id){
             let dzoId=$('#dzongkhag').val();
-            if(id!="" && dzoId==null){
+            this.gewog_list = [];
+            if(id!=""){
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
-             this.gewog_list = [];
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -419,13 +478,33 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        allOrgList(){
-            let uri = 'organization/getschoolList/private';
+        async getPgewoglist(id){
+            let dzoId=$('#dzongkhag').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            this.p_gewog_list = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.p_gewog_list = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        allOrgList(dzo_id,id){
+            let uri = 'loadCommons/loadOrgList/private/'+dzo_id;
             this.orgList = [];
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.orgList = data.data.data;
+                if(id!=""){
+                    this.personal_form.working_agency_id=id;
+                    $('#working_agency_id').val(id).trigger('change');
+                }
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -433,7 +512,7 @@ export default {
         },
         async getvillagelist(id){
             let gewogId=$('#gewog').val();
-            if(id!="" && gewogId==null){
+            if(id!=""){
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
@@ -442,6 +521,23 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        async getPvillagelist(id){
+            let gewogId=$('#gewog').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            this.p_villageList =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.p_villageList = data.data.data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -472,7 +568,7 @@ export default {
                 this.sex_idList =  data.data.data;
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.log("Error loadactivesex_idList:"+error)
             });
         },
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
@@ -499,11 +595,15 @@ export default {
                 }
             });
         },
-        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
+        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.subjectList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.subjectArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -552,7 +652,7 @@ export default {
                                 this.$router.push('/list_private_staff');
                             })
                             .catch((error) => {
-                                console.log("Error......"+error)
+                                console.log("Error shownexttab:"+error)
                             });
                         }
                     });
@@ -627,47 +727,47 @@ export default {
             axios.get('staff/loaddraftpersonalDetails/Private')
             .then((response) => {
                 let data=response.data.data;
-                if(data.village_id!=null){
+                if(data!=null){
                     this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
+                    this.allOrgList(JSON.parse(response.data.dzongkhag).data.id,data.working_agency_id);
+
                     this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
                     this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
                     this.getvillagelist(JSON.parse(response.data.gewog).data.id);
                     this.personal_form.village_id=data.village_id;
-                }
-                else{
-                    this.personal_form.address=data.address;
-                    $('#bhutanese_address').hide();
-                    $('#foreign_address').show();
-                }
-                this.personal_form.personal_id=data.id;
-                this.qualification_form.personal_id=data.id;
-                this.personal_form.emp_type=data.emp_type_id;
-                this.personal_form.cid_work_permit=data.cid_work_permit;
-                this.personal_form.name=data.name;
-                this.personal_form.position_title=data.position_title_id;
-                $('#position_title').val(data.position_title_id).trigger('change');
-                this.personal_form.dob=data.dob;
 
-               this.personal_form.sex_id=data.sex_id;
-                $('#sex_id').val(data.sex_id).trigger('change');
-                this.personal_form.country_id=data.country_id;
-                $('#country_id').val(data.country_id).trigger('change');
-                this.personal_form.working_agency_id=data.working_agency_id;
-                $('#working_agency_id').val(data.working_agency_id).trigger('change');
-                this.personal_form.contact_number=data.contact_no;
-                this.personal_form.email=data.email;
-                this.personal_form.comp_sub=data.comp_sub_id;
-                $('#comp_sub').val(data.comp_sub_id).trigger('change');
-                this.personal_form.elective_sub1=data.elective_sub_id1;
-                $('#elective_sub1').val(data.elective_sub_id1).trigger('change');
-                this.personal_form.elective_sub2=data.elective_sub_id2;
-                $('#elective_sub2').val(data.elective_sub_id2).trigger('change');
-                this.personal_form.currier_stage=data.cureer_stagge_id;
-                $('#currier_stage').val(data.cureer_stagge_id).trigger('change');
-                this.personal_form.remarks=data.remarks;
+                    this.personal_form.personal_id=data.id;
+                    this.qualification_form.personal_id=data.id;
+                    this.personal_form.emp_type=data.emp_type_id;
+                    this.personal_form.cid_work_permit=data.cid_work_permit;
+                    this.personal_form.name=data.name;
+                    this.personal_form.position_title=data.position_title_id;
+                    $('#position_title').val(data.position_title_id).trigger('change');
+                    this.personal_form.dob=data.dob;
+                    this.personal_form.currier_stage=data.cureer_stagge_id;
+                    $('#currier_stage').val(data.currier_stage).trigger('change');
+
+                    this.personal_form.sex_id=data.sex_id;
+                    $('#sex_id').val(data.sex_id).trigger('change');
+                    this.personal_form.country_id=data.country_id;
+                    $('#country_id').val(data.country_id).trigger('change');
+
+                    this.personal_form.contact_number=data.contact_no;
+                    this.personal_form.email=data.email;
+                    this.personal_form.alternative_email=data.alternative_email;
+                    this.personal_form.comp_sub=data.comp_sub_id;
+                    $('#comp_sub').val(data.comp_sub_id).trigger('change');
+                    this.personal_form.elective_sub1=data.elective_sub_id1;
+                    $('#elective_sub1').val(data.elective_sub_id1).trigger('change');
+                    this.personal_form.elective_sub2=data.elective_sub_id2;
+                    $('#elective_sub2').val(data.elective_sub_id2).trigger('change');
+                    this.personal_form.currier_stage=data.cureer_stagge_id;
+                    $('#currier_stage').val(data.cureer_stagge_id).trigger('change');
+                    this.personal_form.remarks=data.remarks;
+                }
             })
             .catch((error) => {
-                console.log("Error......"+error);
+                console.log("Error loaddraftpersonalDetails:"+error);
             });
         },
         showaddmodal(type){
@@ -702,12 +802,12 @@ export default {
             $('#country').val(item.country.id).trigger('change');
             this.qualification_form.country=item.country.id;
 
-            $('#firstsub').val(item.first_subject.id).trigger('change');
-            this.qualification_form.first_subject=item.first_subject.id;
+            $('#firstsub').val(item.first_subject).trigger('change');
+            this.qualification_form.first_subject=item.first_subject;
 
             if(item.second_subject!=null){
-                $('#secondsub').val(item.second_subject.id).trigger('change');
-                this.qualification_form.second_subject=item.second_subject.id;
+                $('#secondsub').val(item.second_subject).trigger('change');
+                this.qualification_form.second_subject=item.second_subject;
             }
 
             $('#startdate').val(item.startdate);
@@ -777,20 +877,39 @@ export default {
                     $('#foreign_address').hide();
                 }
                 else{
-                    $('#name').prop('readonly',false);
+                    $('#name').prop('disabled',false);
+                    this.personal_form.name='';
+                    $('#cid_work_permit').prop('disabled',false);
+                    this.personal_form.cid_work_permit='';
+                    $('#dob').prop('disabled',false);
+                    this.personal_form.dob='';
+                    $('#sex_id').prop('disabled',false);
+                    this.personal_form.sex_id='';
                     $('#bhutanese_address').hide();
                     $('#foreign_address').show();
                 }
                 this.personal_form.country_id=$('#'+id).val();
             }
+            if(id=="p_dzongkhag"){
+                this.personal_form.p_dzongkhag=$('#p_dzongkhag').val();
+                this.getPgewoglist($('#p_dzongkhag').val());
+            }
+            if(id=="p_gewog"){
+                this.personal_form.p_gewog=$('#p_gewog').val();
+                this.getPvillagelist($('#p_gewog').val());
+            }
+            if(id=="p_village_id"){
+                this.personal_form.p_village_id=$('#p_village_id').val();
+            }
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+                this.getgewoglist($('#dzongkhag').val());
+                this.allOrgList($('#dzongkhag').val(),'');
 
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
-                this.getvillagelist();
+                this.getvillagelist($('#gewog').val());
             }
             if(id=="village_id"){
                 this.personal_form.village_id=$('#village_id').val();
@@ -876,21 +995,18 @@ export default {
                         else{
                             axios.get('getpersonbycid/'+ $('#'+fieldId).val())
                             .then(response => {
-                                if (JSON.stringify(response.data)!='{}'){
-                                    let personal_detail = response.data.citizenDetail[0];
+                                if(response.data!=""){
+                                    let personal_detail = response.data;
                                     this.personal_form.name = personal_detail.firstName + " " + personal_detail.lastName;
-                                    let date_of_birth = new Date(personal_detail.dob);
-                                    let month =(date_of_birth .getMonth() + 1);
-                                    let day = date_of_birth .getDate();
-                                    if(day<10){
-                                        day='0'+day;
+                                    let dob=personal_detail.dob;
+                                    if(dob.includes('-')){
+                                        dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
                                     }
-                                    if(month<10){
-                                        month='0'+month;
+                                    if(dob.includes('/')){
+                                        dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
                                     }
-                                    let year =date_of_birth .getFullYear();
-                                    this.personal_form.dob = year+ "-"+month + "-" + day;
-                                    $('#dob').val(year+ "-"+month + "-" + day);
+                                    this.personal_form.dob = dob;
+                                    $('#dob').val(dob);
                                     if(personal_detail.gender=="M"){
                                         personal_detail.gender="male";
                                     }
@@ -906,13 +1022,20 @@ export default {
                                             this.personal_form.sex_id =  this.sex_idList[i].id;
                                         }
                                     }
-                                    this.personal_form.dzongkhag =personal_detail.dzongkhagId;
+                                    this.personal_form.p_dzongkhag =personal_detail.dzongkhagId;
                                     $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                    this.getgewoglist(personal_detail.dzongkhagId);
-                                    this.personal_form.gewog = personal_detail.gewogId;
-                                    this.getvillagelist(personal_detail.gewogId);
+                                    this.getPgewoglist(personal_detail.dzongkhagId);
+                                    this.personal_form.p_gewog = personal_detail.gewogId;
+                                    this.getPvillagelist(personal_detail.gewogId);
                                     $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                    this.personal_form.village_id = personal_detail.villageSerialNo;
+                                    this.personal_form.p_village_id = personal_detail.villageSerialNo;
+                                    $('#name').prop('disabled',true);
+                                    $('#cid_work_permit').prop('disabled',true);
+                                    $('#dob').prop('disabled',true);
+                                    $('#sex_id').prop('disabled',true);
+                                    $('#dzongkhag').prop('disabled',true);
+                                    $('#gewog').prop('disabled',true);
+                                    $('#village_id').prop('disabled',true);
                                 }else{
                                     Swal.fire({
                                         html: "No data found for this CID",
@@ -956,13 +1079,13 @@ export default {
             this.changefunction(id);
         });
         this.loadactivecountryList();
+        this.loadactivePdzongkhagList();
         this.loadactivedzongkhagList();
         this.loadactivesex_idList();
         this.loadactivemaritalList();
         this.loadpositiontitleList();
         this.loadactivecureerstageList();
         this.loadactivesubjectList();
-        this.allOrgList();
         this.loaddraftpersonalDetails();
 
     },

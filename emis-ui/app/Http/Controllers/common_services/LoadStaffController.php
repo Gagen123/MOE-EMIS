@@ -27,7 +27,12 @@ class LoadStaffController extends Controller{
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
         if($type=="userdzongkhagwise"){
-            $param=$this->getUserDzoId();
+            if($parent_id=="Private"){
+                $param='Private__'.$this->getUserDzoId();
+            }
+            else{
+                $param=$this->getUserDzoId();
+            }
         }
         if($type=="dzoWsirRegContract"){
             $param=$param.','.$this->getUserDzoId();
