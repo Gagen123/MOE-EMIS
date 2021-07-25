@@ -9,6 +9,7 @@ use App\Traits\ApiResponser;
 use App\Models\Students\StudentPersonalDetails;
 use App\Models\Students\Std_Students;
 use App\Models\Students\Student;
+use App\Models\Students\StudentClassAllocation;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
 use App\Models\requestForAdmission;
@@ -911,6 +912,14 @@ class StudentAdmissionController extends Controller
         $data=[
             'Status' => 'Admitted'
         ];
+
+        $student_class_data=[
+            'StdStudentId'          => $response_data->id,
+            'OrgClassStreamId'      => $admission_data->class_id,
+            'academicYear'          => date('Y')
+        ];
+
+        $update_class = StudentClassAllocation::create($student_class_data);
 
         $update_status = std_admission::where('id',$request->id)->update($data);
 
