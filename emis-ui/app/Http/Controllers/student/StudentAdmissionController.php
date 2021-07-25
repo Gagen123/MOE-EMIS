@@ -333,7 +333,10 @@ class StudentAdmissionController extends Controller{
         if($param=="session"){
             $param=$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId();
         }
-        if($param=="admission" || $param=="created"){
+        if($param=="admission"){
+            $param=$param.'__'.$this->getWrkingAgencyId();
+        }
+        if($param=="created"){
             $param=$param.'__'.$this->userId();
         }
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$param);
@@ -443,6 +446,36 @@ class StudentAdmissionController extends Controller{
         ];
         // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/studentAdmissionupdate', $data);
+        return $response_data;
+    }
+
+    /**
+     * Admit New Student
+     */
+
+    public function updateStudentAdmission(Request $request){
+        $data =[
+            'id'                        =>  $request->id,
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/students/admission/updateStudentAdmission', $data);
+        return $response_data;
+    }
+
+    /**
+     * Admit Transfer Student
+     */
+
+    public function updateStudentTransfer(Request $request){
+        $data =[
+            'id'                        =>  $request->id,
+            'org_id'                    =>  $this->getWrkingAgencyId(),
+            'dzo_id'                    =>  $this->getUserDzoId(),
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/students/admission/updateStudentTransfer', $data);
         return $response_data;
     }
 
