@@ -197,7 +197,7 @@ class AcademicMastersController extends Controller
             if($request['action_type']=="edit"){
                 $rules = [
                     'aca_sub_id' => 'required',
-                    'aca_assmnt_type_id' => 'required',
+                    'aca_assmnt_type' => 'required',
                     'name'  =>  'required',
                     'code' => 'required',
                     'display_order' => 'required',
@@ -205,7 +205,7 @@ class AcademicMastersController extends Controller
                 ];
                 $customMessages = [
                     'aca_sub_id.required' => 'This field is required',
-                    'aca_assmnt_type_id.required' => 'This field is required',
+                    'aca_assmnt_type.required' => 'This field is required',
                     'name.required' => 'This field is required',
                     'code.required' => 'This field is required',
                     'display_order.required' => 'This field is required',
@@ -215,10 +215,10 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = AssessmentArea::find($request['id']);
-                $messs_det='aca_sub_id:'.$data->aca_sub_id.'; aca_assmnt_type_id:'.$data->aca_assmnt_type_id.'; aca_rating_type_id:'.$data->aca_rating_type_id.'; display_order'.$data->display_order.'; name'.$data->name.'; code'.$data->code.'; status:'.$data->status;
+                $messs_det='aca_sub_id:'.$data->aca_sub_id.'; aca_assmnt_type:'.$data->aca_assmnt_type.'; aca_rating_type_id:'.$data->aca_rating_type_id.'; display_order'.$data->display_order.'; name'.$data->name.'; code'.$data->code.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_assessment_area','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->aca_rating_type_id = $request['aca_rating_type_id'];
-                $data->aca_assmnt_type_id = $request['aca_assmnt_type_id'];
+                $data->aca_assmnt_type = $request['aca_assmnt_type'];
                 $data->name = $request['name'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->code = $request['code'];
