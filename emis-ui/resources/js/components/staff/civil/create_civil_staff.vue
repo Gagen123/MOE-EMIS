@@ -30,7 +30,7 @@
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="1"> Regular
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="2"> Contract
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="3"> Volunteer & Project Based
-                                    <!-- <input type="radio" name="etype" @click="showemptypedtab(false)" value="Project Based"> Project Based -->
+                                    <input type="radio" v-model="personal_form.emp_type" name="etype" value="4"> ESP/GSP
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
@@ -170,9 +170,16 @@
                                     </select>
                                     <has-error :form="personal_form" field="organization_type"></has-error>
                                 </div>
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                                    <label class="mb-0.5">Department:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.department" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('department') }" class="form-control select2" name="department" id="department">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="department"></has-error>
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
-                                    <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
                                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                         <option value=""> --Select--</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -613,6 +620,7 @@ export default {
             p_gewog_list:[],
             p_villageList:[],
             villageList:[],
+            departmentList:[],
             orgList:[],
             subjectList:[],
             qualificationsubjectList:[],
@@ -1433,6 +1441,19 @@ export default {
             });
         },
 
+        getDepartmentList(){
+            let uri = 'loadCommons/loadHeaquarterList/all_ministry_headquarters/AllDepartmentsAtMinistry';
+            this.gewog_list =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.departmentList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
         allOrgList(){
             let dzo_id=$('#dzongkhag').val();
             let org_type=$('#organization_type').val();
@@ -1546,7 +1567,14 @@ export default {
             }
             if(id=="organization_type"){
                 this.personal_form.organization_type=$('#organization_type').val();
-                this.allOrgList();
+                if($('#organization_type').val()=="Ministry"){
+                    this.getDepartmentList();
+                    // $('#departmentdiv').show();
+                }
+                else{
+                    this.allOrgList();
+                    // $('#departmentdiv').hide();
+                }
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
