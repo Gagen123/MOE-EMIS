@@ -99,7 +99,7 @@ export default {
 		    var aca_sub_category_id = $('#aca_sub_id option:selected').data('category-id')
             var ratingtypes = "<option value=''>--Select--</option>"
             this.rating_type_list.forEach((item,index)=>{
-                if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){
+                if((item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id) || item.aca_sub_category_id === null )){
                     ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
                 }
             })

@@ -48,7 +48,7 @@ class RatingTypeSeeder extends Seeder
                
                 'id' => 'ad1aacc8-b8c5-11eb-b80d-b07b2586b8c6',
                 'name' => 'Descriptive',
-                'aca_sub_category_id' =>'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_category_id' =>null,
                 'input_type'=>'2',
                 'status' => '1',
                 'created_by' => 'd77d1e56-2b24-4b16-bc18-2b947d62018f',

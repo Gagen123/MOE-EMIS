@@ -20,7 +20,7 @@ class InstructionalDaysForSpecialCase extends Model
         'org_class_stream_id',
         'class_stream_section',
         'std_student_id',
-        'aca_term_id',
+        'aca_assmt_term_id',
         'instructional_days',
         'remarks',
         'created_by',
