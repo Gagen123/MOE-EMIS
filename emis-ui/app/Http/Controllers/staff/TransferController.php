@@ -137,10 +137,6 @@ class TransferController extends Controller{
                 }
             }
         }
-        // if($loadTransferDetails->data!=""){
-        //     $data=json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$loadTransferDetails->data->staff_id))->data;
-        //     $loadTransferDetails->data->applicant_details=$data;
-        // }
         return json_encode($loadTransferDetails);
     }
     public function updateTransferApplication(Request $request){
@@ -155,24 +151,51 @@ class TransferController extends Controller{
             $work_status=10;
         }
         if($request->actiontype=="forward"){
-            $org_status="Transfer Approved";
+            $org_status="Forwarded";
             $work_status=9;
         }
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>"inter transfer",
-            'application_number'=>$request->application_no,
-            'screen_id'         =>$request->application_no,
-            'status_id'         =>$work_status,
-            'remarks'           =>$request->remarks,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-            'dzongkhagApproved' =>$request->userDzongkhag, 
-        ];
-        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        if($request->actiontype=="report"){
+            $org_status="Joined";
+            $work_status=8;
+        }
+        if($request->transferType == "intra_transfer"){
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>"intra transfer",
+                'preference_school' =>$request->preference_school,
+                'application_number'=>$request->application_no,
+                'screen_id'         =>$request->application_no,
+                'status_id'         =>$work_status,
+                'remarks'           =>$request->remarks,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+                'dzongkhagApproved' =>$request->userDzongkhag, 
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
+        if($request->transferType == "inter_transfer"){
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>"inter transfer",
+                'preference_school' =>$request->preference_school,
+                'application_number'=>$request->application_no,
+                'screen_id'         =>$request->application_no,
+                'status_id'         =>$work_status,
+                'remarks'           =>$request->remarks,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+                'dzongkhagApproved' =>$request->userDzongkhag, 
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        }
+    
         // $files = $request->attachments;
         // $filenames = $request->attachmentname;
         // $remarks = $request->remarks;
@@ -201,7 +224,6 @@ class TransferController extends Controller{
             $data =[
                 'id'                            =>  $request->id,
                 'status'                        =>  $org_status,
-                'preference_school'             =>  $request->preference_school,
                 'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,
@@ -209,9 +231,11 @@ class TransferController extends Controller{
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
                 'service_name'                  =>  "intra transfer",
+                'preference_school'             =>$request->preference_school,
                 'dzongkhagApproved'             =>$request->userDzongkhag,
+                'schoolApproved'                =>$request->schoolApproved,
                 // 'attachment_details'            =>   $attachment_details,
-                'user_id'                       =>   $this->userId()
+                'user_id'                       =>  $this->userId()
             ];
             
             $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
@@ -220,10 +244,10 @@ class TransferController extends Controller{
             $data =[
                 'id'                            =>  $request->id,
                 'status'                        =>  $org_status,
-                'preference_school'             =>  $request->preference_school,
                 'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,
+                'preference_school'             =>$request->preference_school,
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
@@ -248,7 +272,62 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$type.'/'.$userId);
         return $response_data;
     }
+    public function loadApplicationDetails($id=""){
+        $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
+        return $response_data;
+        
 
-    
+    }
+    public function getapplicatName($id=""){
+        $response_data = $this->apiService->listData('emis/staff/transfer/getapplicatName/'.$id);
+        return $response_data;
+    }
+    public function LoadApplicationDetailsByUserId($user_id=""){
+        $response_data = $this->apiService->listData('emis/staff/transfer/LoadApplicationDetailsByUserId/'.$user_id);
+        return $response_data;
+    }
 
+    public function SaveTransferAppeal(Request $request){
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'Please mention the reasons for transfer appeal ',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'TransferAppeal';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                   move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'              =>  $file_store_path,
+                            'original_name'     =>  $file_name,
+                            'user_defined_name' =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
+        $request_data =[
+            'id'                                =>  $request->id,
+            'transferType'                      =>  $request->transferType,
+            'name'                              =>  $request->name,
+            'description'                       =>  $request->description,
+            'attachment_details'                =>  $attachment_details,
+            'user_id'                           =>  $request->user_id,
+            'status'                            =>  $request->status,
+        ];
+        dd($request_data);
+        $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
+       
+    }
 }

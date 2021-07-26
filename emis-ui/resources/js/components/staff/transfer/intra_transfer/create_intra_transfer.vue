@@ -313,7 +313,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.SchoolList =  data.data.data;
+                this.SchoolList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -471,6 +471,7 @@ export default {
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/intra_transfer')
            .then((response) => {
+               
                 let data=response.data.data[0];
                  if(data!=null){
                     this.form.transferwindow_id=data.id;

@@ -336,6 +336,7 @@ export default {
         LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
             axios.get(uri)
             .then(response =>{
+                
                 this.form.type_id = response.data.data.id;
 
             })
@@ -473,7 +474,7 @@ export default {
         },
         
         loadtransferwindow(){
-            axios.get('masters/loadGlobalMasters/intra_transfer')
+            axios.get('masters/loadGlobalMasters/inter_transfer')
            .then((response) => {
                 let data=response.data.data[0];
                  if(data!=null){

@@ -342,11 +342,22 @@ class AcademicController extends Controller
         $response_data = $this->apiService->createData('emis/academics/unlockForEdit/'.$Id,[]);
         return $response_data;
     }
-    public function loadConsolidatedResultList($termId){
+    public function loadConsolidatedResultList(Request $request){
         $staffId = $this->staffId();
         $orgId= $this->getWrkingAgencyId();
-        $class_term= $this->apiService->listData('emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId.'/'.$termId);
-        return $class_term;
+
+        $uri = 'emis/academics/loadConsolidatedResultList/'.$staffId.'/'.$orgId;
+
+        $uri .= ('?org_class_id='.$request->org_class_id);
+
+        if($request->org_stream_id !== null){
+            $uri .= (('&org_stream_id='.$request->org_stream_id));
+        }
+        if($request->org_section_id !== null){
+            $uri .= (('&org_section_id='.$request->org_section_id));
+        }
+        $consolidated= $this->apiService->listData($uri);
+        return $consolidated;
     }
     public function loadAssessmentAreasForConsolidated($class_id, $stream_id="",$term_id=""){
         $uri = 'emis/academics/loadAssessmentAreasForConsolidated';
@@ -365,7 +376,7 @@ class AcademicController extends Controller
 
     public function loadConsolidatedResult(Request $request){
         $org_id = $this->getWrkingAgencyId();
-
+        $termId = "final-term";
         $uri = 'emis/academics/loadConsolidatedResult/'.$org_id;
 
         $uri .= ('?org_class_id='.$request->classId);
@@ -378,9 +389,10 @@ class AcademicController extends Controller
         }
         if($request->aca_assmt_term_id){
             $uri .= (('&aca_assmt_term_id='.$request->aca_assmt_term_id));
+            $termId = $request->aca_assmt_term_id;
         }
         $students = $this->getStudents($org_id,$request->OrgClassStreamId,$request->sectionId);
-        // return $consolidatedResult = $this->apiService->listData($uri);
+        // return $consolidatedResult = $this->apiService->listData($uri); 
         $consolidatedResult = json_decode($this->apiService->listData($uri),true);
         $instructionalDaysPerYear = array_column($consolidatedResult["data"]['instructionalDays'],"instructional_days");
         $overAllInstructionalDays = array_sum($instructionalDaysPerYear);
@@ -437,18 +449,15 @@ class AcademicController extends Controller
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["position"]["area_total"]['score'] = $studentsRank['rank'];
                         $students[$i][$studentsRank["aca_assmt_term_id"]]["remarks"]["area_total"]['score'] = $studentsRank['remarks'];
 
-                        // $students[$i][$studentsRank["aca_assmt_term_id"]]["result"]["area_total"]['score'] = 1;
                     }
                 }
-                // if($consolidatedResult["data"]['passFail'] !== null){
-                //     foreach($consolidatedResult["data"]['passFail'] as $passFail){
-                //         if($passFail['std_student_id'] == $students[$i]["std_student_id"]){
-                //             $students[$i][$passFail["aca_assmt_term_id"]]["result"]["area_total"]['score'] = $passFail['passed'];
-                //         }
-                //     }
-                // }else {
-
-                // }
+                if($consolidatedResult["data"]['passFail'] !== null){
+                    foreach($consolidatedResult["data"]['passFail'] as $passFail){
+                        if($passFail['std_student_id'] == $students[$i]["std_student_id"]){
+                            $students[$i]["final-result"]["result"]["area_total"]['score'] = $passFail['passed'];
+                        }
+                    }
+                }
                 if($overAllInstructionalDays == 0){
                     $students[$i][$consolidated["aca_assmt_term_id"]]["instructional_days"]["area_total"]["score"] = 0;
                     $students[$i][$consolidated["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = 0;
@@ -458,18 +467,20 @@ class AcademicController extends Controller
                     $students[$i][$consolidated["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = $overAllInstructionalDays;
                     $students[$i][$consolidated["aca_assmt_term_id"]]["attendance_in_percentage"]["area_total"]["score"] ="100%";
                 }
-                foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
-                    if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = ($overAllInstructionalDays - $absentDay['absent_days']);
-                        $students[$i][$absentDay["aca_assmt_term_id"]]["attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$overAllInstructionalDays),0)."%";
-                    }
-                }
-                // dd($consolidatedResult["data"]['instructionalDaysForSpecialCase']);
                 foreach($consolidatedResult["data"]['instructionalDaysForSpecialCase'] as $instructionalDay){
                     if($instructionalDay['std_student_id'] == $students[$i]["std_student_id"]){
                         $students[$i][$instructionalDay["aca_assmt_term_id"]]["instructional_days"]["area_total"]["score"] = $instructionalDay['instructional_days'];
                     }
                 }
+                foreach($consolidatedResult["data"]['absentDays'] as $absentDay){
+                    if($absentDay['std_student_id'] == $students[$i]["std_student_id"]){
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"] = ($overAllInstructionalDays - $absentDay['absent_days']);
+                        $students[$i][$absentDay["aca_assmt_term_id"]]["attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$absentDay["aca_assmt_term_id"]]["no_of_days_attended"]["area_total"]["score"]/$students[$i][$absentDay["aca_assmt_term_id"]]["instructional_days"]["area_total"]["score"]),0)."%";
+                    }
+                }
+                // $students[$i][$termId]["attendance_in_percentage"]["area_total"]["score"] =round(100*($students[$i][$termId]["no_of_days_attended"]["area_total"]["score"]/$students[$i][$termId]["instructional_days"]["area_total"]["score"]),0)."%";
+                // dd($absentDay["aca_assmt_term_id"],$instructionalDay["aca_assmt_term_id"]);
+                
            }
        }
        $lastTermId = "";
@@ -501,9 +512,12 @@ class AcademicController extends Controller
 
                     
                     //Insert Result (Pass/Fail) column at the end of a term
-                    // array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result","sub_dzo_name"=>""]]);
-                    // array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
-                    // $indexAddTerm++; //To adjust the index after inserting percentage column
+                    if($area["aca_assmt_term_id"] == "final-result"){
+                        array_splice($subjects, $key+1, 0, [["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result","sub_dzo_name"=>""]]);
+                        array_splice($originalAreas, $key+1 + $indexAddSubject, 0, [["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]]);
+                        $indexAddTerm++; //To adjust the index after inserting percentage column
+                    }
+                    
                     
                 }
                 // Insert Instructioanl Days column at the end of a term
@@ -559,9 +573,10 @@ class AcademicController extends Controller
             array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"position", "subject"=>"Position", "sub_dzo_name"=>"","is_aggregate"=>1]);
             array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"position","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
 
-            // array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result", "sub_dzo_name"=>"","is_aggregate"=>1]);
-            // array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
-            
+            if($area["aca_assmt_term_id"] == "final-result"){
+                array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"result", "subject"=>"Result", "sub_dzo_name"=>"","is_aggregate"=>1]);
+                array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"result","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
+            }
             array_push($subjects,["aca_assmt_term_id"=>$lastTermId,"aca_sub_id"=>"instructional_days", "subject"=>"Instructional Days", "sub_dzo_name"=>"","is_aggregate"=>1]);
             array_push($originalAreas,["aca_assmt_term_id"=> $lastTermId,"aca_sub_id"=>"instructional_days","aca_assmt_area_id"=>"area_total", "assessment_area"=>"", "weightage"=>"", "aca_rating_type_id"=>"", "input_type"=>1]);
 

@@ -40,7 +40,7 @@ use App\Models\staff_masters\TransferConfigDetails;
 
 class StaffMastersController extends Controller{
     use ApiResponser;
-    public $database="emis_staff_db";
+    public $database="staff_db";
     public $audit_database;
     public function __construct() {
         date_default_timezone_set('Asia/Dhaka');
@@ -135,11 +135,17 @@ class StaffMastersController extends Controller{
                 $response_data = $data;
             }
         }
-            if($request['record_type']=="transfer_type"){
-                    $response_data = TransferType::create();
-                return $response_data;
+            if($request->actiontype=="add"){
+                $data = [
+                    'name'       =>  $request['name'],
+                    'status'     =>  $request['status'],
+                    'created_by' =>  $request['user_id'],
+                    'created_at' =>  date('Y-m-d h:i:s'),
+                ];
+                if($request['record_type']=="transfer_type"){
+                    $response_data = TransferType::create($data);
+                }
             }
-
             if($request['record_type']=="staff_qualification"){
             if($request->actiontype=="add"){
                 $table="";

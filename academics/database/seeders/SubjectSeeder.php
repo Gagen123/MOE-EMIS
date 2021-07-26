@@ -312,7 +312,7 @@ class SubjectSeeder extends Seeder
              //HPE subject is Compulsory but not Graded
              [
                 'id' => '3f846f32-cef5-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
                 'name' => 'Health and Physical Education',
                 'dzo_name'=> '',
@@ -326,7 +326,7 @@ class SubjectSeeder extends Seeder
             //Values Education is Compulsory but not Graded
             [
                 'id' => '9b864903-cef5-11eb-8c53-e89eb413ce43',
-                'aca_sub_category_id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
+                'aca_sub_category_id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
                 'aca_sub_id' => null,
                 'name' => 'Values Education',
                 'dzo_name'=> '',

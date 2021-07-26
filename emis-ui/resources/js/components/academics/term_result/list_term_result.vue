@@ -4,7 +4,7 @@
         <div class="form-group row">
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label>Class:<span class="text-danger">*</span></label> 
-                <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms()">
+                <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms(); getTermResult();">
                     <option value=""> --Select--</option>
                     <option v-for="(item, index) in classList" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                         {{ item.class_stream_section }} 
@@ -54,7 +54,7 @@
                                     </div>
                                 </div>
                                 <div v-if="item.std_assmt_id" class="ml-2 mt-1 btn-group btn-group-sm">
-                                    <router-link :to="{name:'view_term_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
+                                    <router-link :to="{name:'view_term_result', params: {data:item,classes:class_stream_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
                                 </div>
                               
                             </td>
@@ -109,7 +109,7 @@ export default {
              }   
            },
         showedit(data){
-            this.$router.push({name:'edit_term_result',params: {data:data}});
+            this.$router.push({name:'edit_term_result',params: {data:data,class_stream_section:this.class_stream_section_id}});
         },
         getTerms(){
             this.terms=[];
@@ -121,7 +121,8 @@ export default {
                 this.terms = response.data.data
             })
         },
-        getTermResult(){
+       async getTermResult(){
+            this.TermsResultList = []
             let uri = 'academics/loadStudentAssessmentList'
             uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&org_class_id='+this.class_stream_section_id[1])
            if(this.class_stream_section_id[2] !== null){
@@ -130,8 +131,51 @@ export default {
             if(this.class_stream_section_id[3] !== null){
                 uri += ('&org_section_id='+this.class_stream_section_id[3])
             }
+            //  let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+            //     let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
+            //     studentsConsolidatedResult.forEach((item,index) => {
+            //         classSections.forEach(item1 => {
+            //             if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
+            //                 studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
+            //                 if(item1.stream && item1.section){
+            //                      studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
+            //                 }else if(item1.stream){
+            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
+            //                 }else if(item1.section){
+            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
+            //                 }
+            //                 else{
+            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class
+            //                 }
+            //                 studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
+            //             }
+            //         })
+            // })
+            let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
             axios.get(uri).then(response=>{
-                this.TermsResultList= response.data.data
+                let data = response.data.data
+                data.forEach((item,index)=>{
+                    classSections.forEach(item1 => {
+                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
+                            if(item1.stream && item1.section){
+                                 data[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
+                            }else if(item1.stream){
+                                data[index]['class_stream_section'] = item1.class+' '+item1.stream
+                            }else if(item1.section){
+                                data[index]['class_stream_section'] = item1.class+' '+item1.section
+                            }
+                            else{
+                                data[index]['class_stream_section'] = item1.class
+                            }
+                            data[index]['OrgClassStreamId'] = item1.OrgClassStreamId
+                        
+                        }
+
+                    })
+
+                })
+              
+                this.TermsResultList = data
             })
         },
         unlockForEdit(Id){
