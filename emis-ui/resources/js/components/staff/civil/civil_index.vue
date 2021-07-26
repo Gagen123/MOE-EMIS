@@ -10,8 +10,12 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_civil_staff')"><i class="fa fa-plus"></i> Add New</button>
                 </span>
             </div>
-            <div class="pb-1 mb-0 pt-1 mt-0">
-                <router-view></router-view>
+            <div class="card-body">
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <router-view></router-view>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -495,6 +495,15 @@ const routes = [
                     { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
                 ],
             },
+            { path: '/transfer_appeal',
+            component: require('./components/staff/transfer/transfer_appeal/transfer_appeal_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/list_transfer_appeal.vue').default },
+                    { path: '/list_transfer_appeal',name:'list_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/list_transfer_appeal.vue').default },
+                    { path: '/create_transfer_appeal',name:'create_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/create_transfer_appeal.vue').default },
+                    { path: '/edit_transfer_appeal', name:'edit_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/edit_transfer_appeal.vue').default },
+                ],
+            },
 
         ]
     },

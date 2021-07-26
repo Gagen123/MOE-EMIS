@@ -474,10 +474,14 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitIntialapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitIntialapplicantDetails'])->name('submitIntialapplicantDetails');
         Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
+        Route::post('/SaveTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'SaveTransferAppeal'])->name('SaveTransferAppeal');
+        Route::get('/LoadApplicationDetailsByUserId/{user_id}', [App\Http\Controllers\staff\TransferController::class, 'LoadApplicationDetailsByUserId'])->name('LoadApplicationDetailsByUserId');
         Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
         Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
         Route::get('/LoadSchoolByDzoId/{param}/{id}', [App\Http\Controllers\staff\TransferController::class, 'LoadSchoolByDzoId'])->name('LoadSchoolByDzoId');
         Route::get('/loadtransferDetails/{param}', [App\Http\Controllers\staff\TransferController::class, 'loadtransferDetails'])->name('loadtransferDetails');
+        Route::get('/getapplicatName/{id}', [App\Http\Controllers\staff\TransferController::class, 'getapplicatName'])->name('getapplicatName');
+        Route::get('/loadApplicationDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'loadApplicationDetails'])->name('loadApplicationDetails');
         Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
 
     });

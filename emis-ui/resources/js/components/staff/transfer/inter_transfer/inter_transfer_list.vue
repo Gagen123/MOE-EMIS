@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.staff_id}}</td>
+                            <td>{{form.staff_name}}</td>
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
@@ -36,7 +36,7 @@ export default {
     data(){
         return{
             totle:0,
-            staffList:{},
+            staffArray:{},
             transfer_list:[],
             loaddetails:[],
             staffName:[],
@@ -44,6 +44,7 @@ export default {
             form: new form({
                 staff_id: '',
                 status:'',
+                staff_name:'',
 
             })
         }
@@ -55,26 +56,36 @@ export default {
         loadtransferDetails(){
             axios.get('staff/transfer/loadtransferDetails/inter_transfer')
             .then((response) => {
-                // alert(JSON.stringify(response.data[0].status));
                 this.transfer_list =  response.data;
-                this.form.staff_id = response.data.staff_id;
+                this.form.staff_id = response.data[0].staff_id;
+                this.getapplicatName(response.data[0].staff_id);
                 this.form.status = response.data[0].status;
-
-                if(this.form.status=="Transfer Approved"){
-                    this.action=true;
-                }
              })
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
         },
+        getapplicatName(staff_id){
+            let uri ='staff/transfer/getapplicatName/'+staff_id;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                this.form.staff_name = data.name;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
         loadstaff(){
             let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.length;i++){
-                 this.staffList[data.data[i].id] = data.data[i].name;
+                let data = response.data.data;
+                // alert(JSON.stringify(response.data.data))
+                for(let i=0;i<data.length;i++){
+                 this.staffArray[data[i].id] = data[i].name;
+
                 }
             })
             .catch(function (error){
@@ -88,6 +99,7 @@ export default {
         mounted() {
             this.loadtransferDetails();
             this.loadstaff();
+            this.getapplicatName();
             this.dt =  $("#training-table").DataTable()
         },
         watch: {

@@ -637,8 +637,6 @@ export default {
                 let data=response.data.data;
 
                 this.personal_form.personal_id=data.id;
-                this.qualification_form.personal_id=data.id;
-                this.nomination_form.personal_id=data.id;
                 this.personal_form.emp_type=data.emp_type_id;
                 this.personal_form.emp_id=data.emp_id;
                 this.personal_form.cid_work_permit=data.cid_work_permit;
@@ -672,8 +670,8 @@ export default {
                 this.personal_form.emp_file_code=data.employee_code;
                 this.personal_form.remarks=data.remarks;
                 this.personal_form.initial_appointment_date=data.initial_appointment_date;
-                this.loadqualication(this.personal_form.personal_id);
-                this.loadnomination(this.personal_form.personal_id);
+                this.loadqualication(data.id);
+                this.loadnomination(data.id);
             })
             .catch((error) => {
                 console.log("Error......"+error);

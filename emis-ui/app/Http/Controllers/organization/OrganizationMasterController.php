@@ -35,13 +35,15 @@ class OrganizationMasterController extends Controller{
             'status'                    =>  $request->status,
             'action_type'               =>  $request->action_type,
             'model'                     =>  $request->model,
+            'dzo_id'                    =>  $request->dzo_id,
+            'type'                      =>  $request->type,
             'user_id'                   =>  $this->userId()
         ];
-      //  dd($request_data);
+    //    dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/organizationMasterController/saveOrganizationMaster', $request_data);
         return $response_data;
     }
-    
+
     public function loadOrganizaitonmasters($type="",$model=""){
       //  dd('m here at UI');
         $type = $this->apiService->listData('emis/organization/organizationMasterController/loadOrganizaitonmasters/'.$type.'/'.$model);
@@ -57,6 +59,6 @@ class OrganizationMasterController extends Controller{
         return $type;
 
     }
-    
-    
+
+
 }

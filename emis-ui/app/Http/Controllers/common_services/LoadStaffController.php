@@ -34,34 +34,48 @@ class LoadStaffController extends Controller{
                 $param=$this->getUserDzoId();
             }
         }
-        if($type=="dzoWsirRegContract"){
-            $param=$param.','.$this->getUserDzoId();
+
+        //updated by Tshewang on 2021/07/26
+        if($type=="userDzoWiseCivilServent" || $type=="selectedDzoWiseCivilServent"){
+            if($type=="userDzoWiseCivilServent"){ //load all civil servent by user logedin dzo id
+                $param=$this->getUserDzoId();
+            }else{ //load all civil servent by selected dzo id
+                $param=$parent_id;
+            }
+            $type="dzoWiseCivilServent";
         }
 
-        //type=userworkingagency: to list with working agency from user login
-        if($type=="userworkingagency"){
-            $param=$this->getWrkingAgencyId();
-        }
-        if($type=="orgWsirRegContract"){
-            $param=$param.','.$this->getWrkingAgencyId();
+        if($type=="userOrgWiseCivilServent" || $type=="selectedOrgWiseCivilServent"){
+            if($type=="userOrgWiseCivilServent"){ //load all civil servent by user logedin org id
+                $param=$this->getWrkingAgencyId();
+            }else{ //load all civil servent by selected org id
+                $param=$parent_id;
+            }
+            $type="orgWiseCivilServent";
         }
 
+        if($type=="userDzoWisePrivateStaff" || $type=="selectedDzoWisePrivateStaff"){
+            if($type=="userDzoWisePrivateStaff"){ //load all Private servent by user logedin dzo id
+                $param=$this->getUserDzoId();
+            }else{ //load all private servent by selected dzo id
+                $param=$parent_id;
+            }
+            $type="dzoWisePrivateStaff";
+        }
 
-        //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
-        if($type=="dzongkhagwise"){
+        if($type=="userOrgWisePrivateStaff" || $type=="selectedOrgWisePrivateStaff"){
+            if($type=="userOrgWisePrivateStaff"){ //load all Private servent by user logedin org id
+                $param=$this->getWrkingAgencyId();
+            }else{ //load all civil servent by selected org id
+                $param=$parent_id;
+            }
+            $type="orgWisePrivateStaff";
+        }
+
+        if($type=="allCivilServent" || $type=="allPrivateStaff"){//all civil servent and private staff, by ministry user
             $param=$parent_id;
         }
 
-        //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise" || $type=="dzo_hq_departmentwise"){
-            $param=$parent_id;
-        }
-        if($type=="emptype"){
-            $param=$parent_id;
-        }
-
-
-        // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }
