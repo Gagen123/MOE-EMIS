@@ -20,7 +20,7 @@
                             <td> {{item.dateOfrelease}}</td>
                             <!-- <td> {{dzongkhagList[item.dzongkhag]}}</td>
                             <td> {{orgList[item.organization]}}{{orgList}}</td> -->
-                            <td> {{quarterList[item.quarter]}}{{quarterList}}</td>
+                            <td> {{quarterList[item.quarter_id]}}</td>
                             <td> {{ item.remarks}}</td>
                             <td>
                               <div class="btn-group btn-group-sm">
@@ -136,22 +136,22 @@ export default {
                console.log(error);
             });
         },
+        
 
-
-        viewfoodreleasenote:function(item){
-            this.displayItem="";
-            this.displayItem=item;
-           // alert(this.displayItem.foodreleaseId);
-            axios.get('mess_manage/getFoodReleaseItem/' + this.displayItem.id)
-            .then(response => {
-                let data = response;
-                this.itemrelease_list =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-            $('#viewfoodreleasenote').modal('show');
-		},
+        // viewfoodreleasenote:function(item){
+        //     this.displayItem="";
+        //     this.displayItem=item;
+        //    // alert(this.displayItem.foodreleaseId);
+        //     axios.get('mess_manage/getFoodReleaseItem/' + this.displayItem.id)
+        //     .then(response => {
+        //         let data = response;
+        //         this.itemrelease_list =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+        //     $('#viewfoodreleasenote').modal('show');
+		// },
         viewFoodReleaseList(data){
             data.action='edit';
             this.$router.push({name:'FoodReleaseEdit',params: {data:data}});

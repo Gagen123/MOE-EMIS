@@ -26,7 +26,8 @@
                               <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
-                                  <th>Quantity</th>
+                                  <th>Quantity Receive</th>
+                                  <th>Damage Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -42,6 +43,9 @@
                                     </td>
                                     <td>
                                         <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
+                                    </td>
+                                     <td>
+                                        <input type="damagequantity" name="quantity" class="form-control" v-model="item.damagequantity"/>
                                     </td>
                                     <!-- <td>
                                         <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
@@ -95,7 +99,7 @@ export default {
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
                 [{
-                    item:'',quantity:'',unit:'', remarks:'',
+                    item:'',quantity:'',unit:'', remarks:'', damagequantity:'',
                 }],
             })
         }
@@ -115,7 +119,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
         },
 
         /**
@@ -268,7 +272,8 @@ export default {
                     // unit:this.unitArray[data.stockreceived[i].unit_id],
                     quantity:data.stockreceived[i].receivedquantity,
                     measurement_unit:data.stockreceived[i].unit_id,
-                    remarks:data.stockreceived[i].remarks});
+                    remarks:data.stockreceived[i].remarks,
+                    damagequantity:data.stockreceived[i].damagequantity});
                 }
                 this.count=data.length;
 

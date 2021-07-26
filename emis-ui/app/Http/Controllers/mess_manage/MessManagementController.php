@@ -154,16 +154,16 @@ class MessManagementController extends Controller
         $this->validate($request, $rules, $customMessages);
         $stockreceived =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
-            'dzoId'                        =>  $this->getUserDzoId(),
+            'dzoId'                         =>  $this->getUserDzoId(),
             'dateOfreceived'                =>  $request['dateOfreceived'],
             'quarter'                       =>  $request['quarter'],
             'remarks'                       =>  $request['remarks'],
             'id'                            =>  $request['id'],
-            'items_received'                =>  $request->items_received,
+            'itemList'                      =>  $request->itemList,
             'user_id'                       =>  $this->userId()
 
         ];
-       // dd($stockreceived);
+      // dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;

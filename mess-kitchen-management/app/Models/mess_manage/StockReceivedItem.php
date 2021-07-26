@@ -18,6 +18,7 @@ class StockReceivedItem extends Model
         'item_id',
         'receivedquantity',
         'unit_id',
+        'damagequantity',
         'remarks',
         'created_by',
         'updated_by'

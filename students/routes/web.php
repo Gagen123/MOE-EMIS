@@ -59,6 +59,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadActiveCounsellingMaster/{param}','Masters\StudentMasterController@loadActiveCounsellingMaster');
         $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
 
+        $router->post('/saveFoodSourceType', ['uses' => 'Masters\StudentMasterController@saveFoodSourceType']);
+        $router->get('/loadfoodSourceList', ['uses' => 'Masters\StudentMasterController@loadfoodSourceList']);
+        $router->get('/loadActiveFoodSourceMaster','Masters\StudentMasterController@loadActiveFoodSourceMaster');
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {

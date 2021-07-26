@@ -65,9 +65,10 @@
                              <tbody>
                                  <tr v-for="(tableitem, index) in itemreceived_list" :key="index">
                                      <td> {{index + 1}}</td>
-                                     <td> {{itemList[tableitem.item]}}</td>
-                                     <td> {{tableitem.quantity}}</td>
-                                     <td> {{unitList[tableitem.unit]}}</td>
+                                     <td> {{itemList[tableitem.item_id]}}</td>
+                                     <!-- <td> {{tableitem.Name}}</td> -->
+                                     <td> {{tableitem.receivedquantity}}</td>
+                                     <td> {{unitList[tableitem.unit_id]}}</td>
                                      <td> {{tableitem.remarks}}</td>
                                  </tr>
                              </tbody>
@@ -121,8 +122,9 @@ export default {
                 this.displayItem=item;
                 axios.get('mess_manage/viewitemreceived/' + this.displayItem.id)
                 .then(response => {
-                    let data = response;
-                    this.itemreceived_list =  data.data;
+                    let data = response.data;
+                    this.displayItem=data
+                    this.itemreceived_list =  data.facility;
                 })
                 .catch(function (error) {
                     console.log(error);

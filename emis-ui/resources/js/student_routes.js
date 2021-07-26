@@ -83,6 +83,7 @@ const routes = [
                     { path: '/counselling_class_list', name:'counselling_class_list', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_list.vue').default },
                 ]
             },
+            
         ]
     },
     //Students validation and others
@@ -232,6 +233,16 @@ const routes = [
         { path: '/quarter_name_edit', name:'quarter_name_edit', component: require('./components/masters/student_masters/programs_clubs/quarter_name_edit.vue').default },
         { path: '/quarter_name_list', name:'quarter_name_list', component: require('./components/masters/student_masters/programs_clubs/quarter_name_list.vue').default },
       ]
+    },
+
+    { path: '/foodSource_type_index',
+        component: require('./components/masters/student_masters/foodSource_types/foodSource_type_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_list.vue').default },
+            { path: '/foodSource_type_add', name:'foodSource_type_add', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_add.vue').default },
+            { path: '/foodSource_type_edit', name:'foodSource_type_edit', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_edit.vue').default },
+            { path: '/foodSource_type_list', name:'foodSource_type_list', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_list.vue').default },
+        ]
     },
   ]
 },

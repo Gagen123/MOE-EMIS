@@ -246,7 +246,7 @@ export default {
                 else if(data.programType!=null && data.programType!=""){
                     $('#PrgType'+data.programType).prop('checked',true);
                 }
-                
+                 
               //+'selcid'
                
                 

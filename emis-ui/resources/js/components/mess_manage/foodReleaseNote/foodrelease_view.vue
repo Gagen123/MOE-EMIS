@@ -7,16 +7,24 @@
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label> 
                         <span class="text-blue text-bold">{{form.dateOfrelease}}</span>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">Quarter:<span class="text-danger">*</span></label> 
+                        <span class="text-blue text-bold">{{quarterList[form.quarter]}}</span>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label class="mb-0.5">Remarks:</label>
+                        <span class="text-blue text-bold">{{form.remarks}}</span>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label> 
                         <span class="text-blue text-bold">{{dzongkhagList[form.dzongkhag]}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">School Name:<span class="text-danger">*</span></label> 
                         <span class="text-blue text-bold">{{orgList[form.organizaiton]}}</span>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
                         <span class="text-blue text-bold">{{quarterList[form.quarter]}}</span>
@@ -25,7 +33,7 @@
                         <label class="mb-0.5">Remarks:</label>
                         <span class="text-blue text-bold">{{form.remarks}}</span>
                     </div>
-                </div>
+                </div> -->
                 <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="mb-0.5">Attachments</label>
@@ -61,14 +69,14 @@ export default {
     data(){
         return{
             attachments:'',
-            dzongkhagList:{},
-            orgList:{},
+         //   dzongkhagList:{},
+        //    orgList:{},
             quarterList:{},
           //  itemrelease:[],
             // items_released: [],
           
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',quarter: '', remarks: '',
+                 id: '', dateOfrelease: '', quarter: '', remarks: '',
                  attachments:
                 [{
                     file_name:'',attachment:''
@@ -91,9 +99,9 @@ export default {
                 let data=response.data.data
                 this.form.id=data.id
                 this.form.dateOfrelease=data.dateOfrelease;
-                this.form.dzongkhag=data.dzongkhag_id;
-                this.allOrgList(data.dzongkhag_id,data.org_id);
-                this.form.organizaiton=data.org_id;
+                // this.form.dzongkhag=data.dzongkhag_id;
+                // this.allOrgList(data.dzongkhag_id,data.org_id);
+                // this.form.organizaiton=data.org_id;
                 this.form.quarter=data.quarter_id;
                 this.form.remarks=data.remarks;
                 this.attachments=data.attachments;
@@ -217,8 +225,8 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadactivedzongkhagList();
-        this.allOrgList();
+    //    this.loadactivedzongkhagList();
+   //   this.allOrgList();
         this.loadActiveQuarterList();
 
         this.ViewFoodReleaseDetials(this.$route.params.data.id);

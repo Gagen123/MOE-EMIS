@@ -31,19 +31,20 @@ class StockReceiveController extends Controller{
             $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
 
             DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
-            foreach ($request->input('items_received') as  $i=> $facility){
-                $itm_id=explode('_',$facility['item'])[0];
-                $unitid=explode('_',$facility['item'])[1];
+            foreach ($request->input('itemList') as  $i=> $facility){
+             //   $itm_id=explode('_',$facility['item'])[0];
+              //  $unitid=explode('_',$facility['item'])[1];
                 $remarks="";
                 if(isset($facility['remarks'])){
                     $remarks=$facility['remarks'];
                 }
                 $receiveditem = array(
                     'stockreceivedId'               =>  $request->id,
-                    'item_id'                       =>  $itm_id,
+                    'item_id'                       =>  $facility['Name'],
                     'receivedquantity'              =>  $facility['quantity'],
-                    'unit_id'                       =>  $unitid,
+                    'unit_id'                       =>  $facility['Unit_id'],
                     'remarks'                       =>  $remarks,
+                    'damagequantity'                =>  $facility['damagequantity'],
                     'updated_by'                    =>  $request->user_id,
                     'created_at'                    =>  date('Y-m-d h:i:s')
                 );
@@ -62,41 +63,46 @@ class StockReceiveController extends Controller{
                 'created_by'               =>  $request->user_id,
                 'created_at'               =>  date('Y-m-d h:i:s')
             ];
+           // dd($stockreceive);
             $stcrcv = StockReceived::create($stockreceive);
             $stockreceivedId = $stcrcv->id;
-            foreach ($request->input('items_received') as  $i=> $facility){
-                $itm_id=explode('_',$facility['item'])[0];
-                $unitid=explode('_',$facility['item'])[1];
+             //dd($request->input('itemList'));
+            foreach ($request->input('itemList') as  $i=> $facility){
+             //   dd($facility);
+               // $itm_id=explode('_',$facility['item'])[0];
+               // $unitid=explode('_',$facility['item'])[1];
                 $remarks="";
                 if(isset($facility['remarks'])){
-                    $remarks=$facility['remarks'];
+                    $remarks=$facility['remarks'];   
                 }
                 $receiveditem = array(
                     'stockreceivedId'              =>  $stockreceivedId,
-                    'item_id'                      =>  $itm_id,
+                    'item_id'                      =>  $facility['id'],
                     'receivedquantity'             =>  $facility['quantity'],
-                    'unit_id'                      =>  $unitid,
+                    'unit_id'                      =>  $facility['Unit_id'],
                     'remarks'                      =>  $remarks,
+                    'damagequantity'               =>  $facility['damagequantity'],
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
+               // dd( $receiveditem);
                StockReceivedItem::create($receiveditem);
-               $checkitem=TransactionTable::where('item_id',$itm_id)->where('procured_type','Central')
+               $checkitem=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
                ->where('organizationId',$request['organizationId'])->first();
                 if($checkitem!=null && $checkitem!=""){
-                    $qty=$facility['quantity']+$checkitem->available_qty;
+                    $qty=$facility['quantity']-$facility['damagequantity']+$checkitem->available_qty;
                     $update_data=[
                         'available_qty' => $qty,
                         'updated_by'    =>$request->user_id,
                         'updated_at'    =>  date('Y-m-d h:i:s'),
                     ];
-                    TransactionTable::where('item_id',$itm_id)->where('procured_type','Central')->update($update_data);
+                    TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')->update($update_data);
                 }
                 else{
                     $create_data=[
                         'procured_type'  =>'Central',
                         'organizationId' =>$request['organizationId'],
-                        'item_id'        =>$itm_id,
+                        'item_id'        =>$facility['id'],
                         'available_qty'  =>$facility['quantity'],
                         'created_by'     =>$request->user_id,
                         'created_at'     =>  date('Y-m-d h:i:s'),
@@ -119,12 +125,16 @@ class StockReceiveController extends Controller{
         return $response_data;
     }
     public function viewitemreceived($stockreceivedId=""){
-        $list = DB::table('stock_received_items as a')
-        ->join('stock_receiveds as b', 'a.stockreceivedId', '=','b.id')
-        ->select('b.dateOfreceived as dateOfreceived','b.quarter_id as quarter',
-        'a.item_id as item','a.receivedquantity as quantity','a.unit_id as unit',
-        'a.remarks as remarks')->where('a.stockreceivedId',$stockreceivedId)->get();
-        return $list;
+        $response_data=StockReceived::where('id',$stockreceivedId)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->facility=StockReceivedItem::where('stockreceivedId',$response_data->id)->get();
+        }
+        // $list = DB::table('stock_received_items as a')
+        // ->leftjoin('stock_receiveds as b', 'a.stockreceivedId', '=','b.id')
+        // ->select('b.dateOfreceived as dateOfreceived','b.quarter_id as quarter',
+        // 'a.item_id as id','a.receivedquantity as quantity','a.unit_id as Unit_id',
+        // 'a.remarks as remarks')->where('a.stockreceivedId',$stockreceivedId)->get();
+        return $response_data;
         //dd($list);
         //  dd('from services');
     }
