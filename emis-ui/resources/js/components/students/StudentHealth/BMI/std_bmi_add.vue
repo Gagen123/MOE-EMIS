@@ -221,15 +221,16 @@ export default {
             let selectedDate=new Date($('#date').val());
             let date_of_birth = new Date(DateOfBirth);
             let month=0;
-            if (selectedDate.getMonth() + 1 < date_of_birth.getMonth() + 1){
-                // example: March 2010 (3) and January 2011 (1); this should be 10 monts
-                // 12 - 3 + 1 = 10
-                // Take the 12 months of a year into account
-                month = 12 - date_of_birth.getMonth() + 1 + selectedDate.getMonth() + 1;
-            }
-            else{
-                month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1;
-            }
+            // if (selectedDate.getMonth() + 1 < date_of_birth.getMonth() + 1){
+            //     // example: March 2010 (3) and January 2011 (1); this should be 10 monts
+            //     // 12 - 3 + 1 = 10
+            //     // Take the 12 months of a year into account
+            //     month = 12 - date_of_birth.getMonth() + 1 + selectedDate.getMonth() + 1;
+            // }
+            // else{
+            //     month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1;
+            // }
+            month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1
             return month;
         },
         remove_err(field_id){
