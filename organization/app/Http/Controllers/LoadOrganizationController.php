@@ -18,6 +18,7 @@ use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
+use App\Models\DepartmentModel;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -28,7 +29,7 @@ class LoadOrganizationController extends Controller{
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
-            $response_data=OrganizationDetails::where('id',$id)
+            $response_data=OrganizationDetails::where('id',$id)->wherein('category',['public_school','public_eccd','public_ecr'])
             ->where('status','1')
             ->select( 'id','name','levelId','dzongkhagId')->get();
         }
@@ -42,11 +43,10 @@ class LoadOrganizationController extends Controller{
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','public_ecr')->get();
         }
         if($type=="gewoggwise"){
-            $response_data=OrganizationDetails::where('gewogId',$id)->select( 'id','name','levelId','dzongkhagId')->get();
+            $response_data=OrganizationDetails::where('gewogId',$id)->wherein('category',['public_school','public_eccd','public_ecr'])->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->get();
-            return $response_data;
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','public_eccd','public_ecr'])->get();
         }
 
         if($type=="allorganizationList"){
@@ -56,6 +56,9 @@ class LoadOrganizationController extends Controller{
             else{        // dd($request);
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
+        }
+        if($type=="private"){
+            $response_data=OrganizationDetails::wherein('category',['private_school','private_eccd'])->where('dzongkhagId',$id)->get();
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
             foreach($response_data as $res){
@@ -82,9 +85,10 @@ class LoadOrganizationController extends Controller{
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
             if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!=""){
-                $response_data->level=Level::where('id',$response_data->levelId)->first();
+                $level=Level::where('id',$response_data->levelId)->first();
+                // $response_data->level=$level;
+                $response_data->name=$response_data->name.' '.$level->name;
             }
-
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
@@ -140,8 +144,15 @@ class LoadOrganizationController extends Controller{
 
     public function loadHeaquarterList($type="", $id=""){
         $response_data="";
-        if($type=="all_dzongkhag_headquarters" || $type=="all_ministry_headquarters"){
-            $response_data=HeadQuaterDetails::where('organizationType',$id)->select('id','agencyName AS name','dzongkhagId','organizationType')->get();
+        if($type=="all_ministry_departments"){
+            $response_data=DepartmentModel::where('type',$id)->get();
+        }
+        if($type=="user_dzongkhag"){
+            $response_data=DepartmentModel::where('dzo_id',$id)->get();
+        }
+
+        if($type=="all_division"){
+            $response_data=HeadQuaterDetails::where('departmentId',$id)->select('id','agencyName AS name','dzongkhagId')->get();
         }
         if($type=="allList"){
             $response_data=HeadQuaterDetails::select('id','agencyName AS name','dzongkhagId','organizationType')->all();

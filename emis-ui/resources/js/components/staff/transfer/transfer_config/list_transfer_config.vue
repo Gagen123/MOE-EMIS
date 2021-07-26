@@ -36,7 +36,6 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                //  alert(JSON.stringify(data.data.data));
                 this.transferConfigurationList = data.data.data;
             })
             .catch(function (error){
@@ -48,9 +47,9 @@ export default {
         LoadTransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.transfertypeList[data.data.data[i].id] = data.data.data[i].type;
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.transfertypeList[data[i].id] =data[i].type;
                 }
             })
             .catch(function (error){
@@ -61,9 +60,9 @@ export default {
         loadroleList(uri = 'masters/getroles/allActiveRoles'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                 for(let i=0;i<data.data.length;i++){
-                    this.roleList[data.data[i].id] = data.data[i].Name;
+                let data = response.data;
+                 for(let i=0;i<data.length;i++){
+                    this.roleList[data[i].id] = data[i].Name;
                 }
             })
             .catch(function (error){

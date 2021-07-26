@@ -9,6 +9,7 @@
                                 <th>SL#</th>
                                 <th>Class</th>
                                 <th>Assessment Frequency</th>
+                                <th>Academic Transcript Format</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -20,8 +21,18 @@
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select v-model="classAssessmentFrequencyList[index].aca_assmt_frequency_id" class="form-control select2 editable_fields" > 
-                                            <option selected="selected" value="">--SELECT--</option>
+                                            <option selected="selected" value="">---Select---</option>
                                             <option v-for="(item1, index1) in assesmentFrequencyList" :key="index1" :value="item1.id">{{ item1.name }}</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                 <td>
+                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                        <select v-model="classAssessmentFrequencyList[index].aca_assmnt_type" class="form-control select2 editable_fields" > 
+                                            <option selected="selected" value="">---Select---</option>
+                                            <option value="0">NA</option>
+                                            <option value="1">Subjects as Rows </option>
+                                            <option value="2">Subjects as Columns</option>
                                         </select>
                                     </div>
                                 </td>
@@ -76,7 +87,8 @@ export default {
                     }
                     renameId['org_class_id'] = item.classId;
                     renameId['org_stream_id'] = item.streamId;
-                    renameId['aca_assmt_frequency_id'] =''
+                    renameId['aca_assmt_frequency_id'] ='';
+                    renameId['aca_assmnt_type'] ='';
                     const obj = {...renameId};
                     finalClassStreams.push(obj);
                 }))
@@ -86,6 +98,7 @@ export default {
                     classAssessmentFrequencies.forEach(item => {
                         if(classStream.org_class_id == item.org_class_id && (classStream.org_stream_id == item.org_stream_id || classStream.org_stream_id == null)){
                             finalClassStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
+                            finalClassStreams[index].aca_assmnt_type = item.aca_assmnt_type
                             finalClassStreams[index].id = item.id
                            
                         }

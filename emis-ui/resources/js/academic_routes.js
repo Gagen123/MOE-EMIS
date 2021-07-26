@@ -91,24 +91,7 @@ const routes = [
                 { path: '/create-student-elective-subject',name:'create_students_elective_subject', component:require('./components/academics/students_elective_subject/create_students_elective_subject.vue').default},
             ]
         },
-        { path:'/term-result', component:require('./components/academics/term_result/term_result_index.vue').default,
-            children: [
-                { path: '', component:require('./components/academics/term_result/list_term_result.vue').default},
-                { path: '/list-term-result', name: 'list_term_result', component: require('./components/academics/term_result/list_term_result.vue').default },
-                { path: '/edit-term-result',name:'edit_term_result', component:require('./components/academics/term_result/edit_term_result.vue').default},
-                { path: '/view-term-result',name:'view_term_result', component:require('./components/academics/term_result/view_term_result.vue').default},
-            ]
-        },
-        { path:'/consolidated-result', component:require('./components/academics/consolidated_result/consolidated_result_index.vue').default,
-            children: [
-                { path: '', component:require('./components/academics/consolidated_result/list_consolidated_result.vue').default},
-                { path: '/list-consolidated-result', name: 'list_consolidated_result', component: require('./components/academics/consolidated_result/list_consolidated_result.vue').default },
-                { path: '/view-consolidated-result', name: 'view_consolidated_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
-                { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
-                { path: '/view-detail-consolidated-result', name: 'view_detail_consolidated_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
-
-            ]
-        },
+       
         { path:'/student-attendance', component:require('./components/academics/student_attendance/student_attendance_index.vue').default,
             children: [
                 { path: '', component:require('./components/academics/student_attendance/list_student_attendance.vue').default},
@@ -124,6 +107,26 @@ const routes = [
                 { path: '/list-instructional-days-special-case', name: 'list_instructional_days_special_case', component: require('./components/academics/instructional_days_special_case/list_instructional_days_special_case.vue').default},
                 { path: '/create-instructional-days-special-case', name: 'create_instructional_days_special_case', component: require('./components/academics/instructional_days_special_case/create_instructional_days_special_case.vue').default },
                 { path: '/edit-instructional-days-special-case',name:'edit_instructional_days_special_case', component:require('./components/academics/instructional_days_special_case/edit_instructional_days_special_case.vue').default},
+
+            ]
+        },
+        { path:'/term-result', component:require('./components/academics/term_result/term_result_index.vue').default,
+            children: [
+                { path: '', component:require('./components/academics/term_result/list_term_result.vue').default},
+                { path: '/list-term-result', name: 'list_term_result', component: require('./components/academics/term_result/list_term_result.vue').default },
+                { path: '/edit-term-result',name:'edit_term_result', component:require('./components/academics/term_result/edit_term_result.vue').default},
+                { path: '/view-term-result',name:'view_term_result', component:require('./components/academics/term_result/view_term_result.vue').default},
+            ]
+        },
+        { path:'/consolidated-result', component:require('./components/academics/consolidated_result/consolidated_result_index.vue').default,
+            children: [
+                { path: '', component:require('./components/academics/consolidated_result/list_consolidated_result.vue').default},
+                { path: '/list-consolidated-result', name: 'list_consolidated_result', component: require('./components/academics/consolidated_result/list_consolidated_result.vue').default },
+                { path: '/view-consolidated-result', name: 'view_consolidated_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
+                { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
+                { path: '/view-detail-consolidated-result', name: 'view_detail_consolidated_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
+                { path: '/progress-report-col', name: 'final_result_subject_columns', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
+                { path: '/progress-report-row', name: 'final_result_subject_rows', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
 
             ]
         },

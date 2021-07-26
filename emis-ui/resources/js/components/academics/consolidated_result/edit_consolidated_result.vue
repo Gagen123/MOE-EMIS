@@ -14,7 +14,7 @@
                     <table id="edit-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th rowspan="3">Student Code</th>
+                                <th rowspan="3">Roll No.</th>
                                 <th rowspan="3">Name</th>
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
@@ -41,12 +41,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{item3.CidNo}}</td>
+                                <td>{{index3 + 1}}</td>
                                 <td>
                                     {{ item3.Name }}
                                 </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                     <span v-if="item4['aca_sub_id']=='remarks'">
+                                    <span v-if="item4['aca_sub_id']=='remarks'">
                                         <input type="text" v-model="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']" class="form-control form-control-sm">
                                     </span>
                                     <span v-else-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
@@ -54,7 +54,7 @@
                                             <span v-if="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']==1">
                                                 Promoted
                                             </span>
-                                            <span v-else>
+                                            <span v-else class="text-danger">
                                                 Detained
                                             </span>
                                         </span>
@@ -99,9 +99,11 @@
             form: new form({
                 class_stream_section:'',
                 aca_assmt_term_id:'',
-                classId:'',
-                streamId:'',
-                sectionId:'',
+                org_class_id:'',
+                org_stream_id:'',
+                org_section_id:'',
+                remarks:[]
+
             }),
         }
       
@@ -112,12 +114,12 @@
         },
        async loadConsolidatedResult(){
          let uri = 'academics/loadConsolidatedResult'
-           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.form.classId)
-          if(this.form.streamId !== null){
-                uri += ('&streamId='+this.form.streamId)
+           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.form.org_class_id)
+          if(this.form.org_stream_id !== null){
+                uri += ('&streamId='+this.form.org_stream_id)
             }
-            if(this.form.sectionId !== null){
-                uri += ('&sectionId='+this.form.sectionId)
+            if(this.form.org_section_id !== null){
+                uri += ('&sectionId='+this.form.org_section_id)
             }
              if(this.form.aca_assmt_term_id !== null){
                 uri += ('&aca_assmt_term_id='+this.form.aca_assmt_term_id)
@@ -160,31 +162,36 @@
             return this.areas.filter(item=>item.aca_sub_id == sub_id).length
         },
         save(action=""){
-        if(action == "finalize"){
-            let finalize = { finalize:1 }
-             const newForm = Object.assign(this.form,finalize)
-            Swal.fire({
-                title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        axios.post('/academics/saveConsolidatedResut', this.form)
-                            .then(() => {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Data saved successfully.'
+            this.consolidatedResultList.forEach(item=>{
+                if(item[this.form.aca_assmt_term_id].remarks.area_total.score){
+                    this.form.remarks[item.std_student_id] = item[this.form.aca_assmt_term_id].remarks.area_total.score
+                }
+            })
+            if(action == "finalize"){
+                let finalize = { finalize:1 }
+                const newForm = Object.assign(this.form,finalize)
+                Swal.fire({
+                    title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    }).then((result) => {
+                        if(result.isConfirmed) {
+                            axios.post('/academics/saveConsolidatedResut', this.form)
+                                .then(() => {
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Data saved successfully.'
+                                    })
+                                    this.$router.push('/list-consolidated-result');
                                 })
-                                this.$router.push('/list-consolidated-result');
-                            })
-                            .catch(function(error){
-                            this.errors = error;
-                        });
-                    }
-                })
+                                .catch(function(error){
+                                this.errors = error;
+                            });
+                        }
+                    })
             }else if(action == "publish") {
                 let publish = { publish:1 }
                 const newForm = Object.assign(this.form,publish)
@@ -212,12 +219,7 @@
                 })
             }
             else{
-                this.consolidatedResultList.forEach(item=>{
-                        console.log(item[this.form.aca_assmt_term_id])
-                    // item.forEach(item1=>{
-                    //     console.log(item1.remarks)
-                    // })
-                })
+            
                 axios.post('/academics/saveConsolidatedResut', this.form)
                     .then(() => {
                         Toast.fire({
@@ -234,23 +236,24 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-         this.dt =  $("#promotion-rule-edit-table").DataTable({
-            scrollY:        "300px",
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         false,
-            searching: false,
-            fixedColumns:   {
-                leftColumns: 2
-            },
-            destroy: true,
-        });
+        //  this.dt =  $("#edit-table").DataTable({
+        //     scrollY:        "300px",
+        //     scrollX:        true,
+        //     scrollCollapse: true,
+        //     paging:         false,
+        //     searching: false,
+        //     fixedColumns:   {
+        //         leftColumns: 2
+        //     },
+        //     destroy: true,
+        // });
     },
     created() {
+        console.log(this.$route.params)
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
-        this.form.classId=this.$route.params.data.org_class_id;
-        this.form.streamId=this.$route.params.data.org_stream_id;
-        this.form.sectionId=this.$route.params.data.org_section_id;
+        this.form.org_class_id=this.$route.params.data.org_class_id;
+        this.form.org_stream_id=this.$route.params.data.org_stream_id;
+        this.form.org_section_id=this.$route.params.data.org_section_id;
         this.form.class_stream_section=this.$route.params.data.class_stream_section;
         this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
 

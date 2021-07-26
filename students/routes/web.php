@@ -93,6 +93,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
             //to get the application details
             $router->get('/getApplicationDetails/{id}',['uses' => 'Students\StudentAdmissionController@getApplicationDetails']);
+
+            $router->post('/updateStudentAdmission',['uses' => 'Students\StudentAdmissionController@updateStudentAdmission']);
+            $router->post('/updateStudentTransfer',['uses' => 'Students\StudentAdmissionController@updateStudentTransfer']);
+
+
         });
         //Student Updates
         $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);

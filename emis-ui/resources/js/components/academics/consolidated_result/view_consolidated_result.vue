@@ -14,7 +14,7 @@
                     <table id="view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th rowspan="3">Student Code</th>
+                                <th rowspan="3">Roll  No.</th>
                                 <th rowspan="3">Name</th>
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
@@ -40,12 +40,28 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{item3.CidNo}}</td>
-                                <td>{{ item3.Name }}</td>
+                                <td>{{index3 + 1}}</td>
+                                <td>
+                                    <router-link :to="{name:'final_result_subject_columns'}">{{ item3.Name }}</router-link>
+                                </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
                                     <span v-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
-                                       {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
+                                         <span v-if="item4['aca_sub_id']=='result'">
+                                            <span v-if="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']==1">
+                                                Promoted
+                                            </span>
+                                            <span v-else class="text-danger">
+                                                Detained
+                                            </span>
+                                        </span>
+                                        <span v-else>
+                                        {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
+                                       </span>
                                     </span>
+                                    <!-- <span v-else-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
+                                       
+              
+                                    </span>  -->
                                     <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
                                 </td> 
                             </tr>

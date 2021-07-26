@@ -15,7 +15,7 @@ class AcaResultConsolidatedDetail extends Migration
     {
         Schema::create('aca_result_consolidated_detail', function (Blueprint $table) {
             $table->char('id',36)->primary();
-            $table->char('aca_result_consol_id',36)->index();
+            $table->char('aca_result_consolidated_id',36)->index();
             $table->char('std_student_id',36)->index();
             $table->unsignedTinyInteger('result')->index()->nullable()->comment('1-Promoted; 0-Detained');
             $table->string('remarks',500)->nullable();
@@ -23,7 +23,7 @@ class AcaResultConsolidatedDetail extends Migration
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
 
-            $table->foreign('aca_result_consol_id')->references('id')->on('aca_result_consolidated')->onDelete('cascade');
+            $table->foreign('aca_result_consolidated_id','consolidated_id')->references('id')->on('aca_result_consolidated')->onDelete('cascade');
 
         });
     }

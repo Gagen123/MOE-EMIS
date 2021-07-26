@@ -1,42 +1,42 @@
 <template>
     <div class="card">
         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
-                <div class="card-body pb-0 mb-0" style="display:none">
-                    <div class="callout callout-success">
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Leadership Selection Type:</label>
-                                <select class="form-control select2" id="leadership_type">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in leadershipe_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <span class="text-danger" id="leadership_type_err"></span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label class="mb-0">Feedback Category:</label>
-                                <select class="form-control select2" id="category_type_id">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <span class="text-danger" id="category_type_id_err"></span>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-3">
-                                <button type="button" @click="loaddata()" class="btn btn-success">
-                                    <i class="fas fa-search" ></i> Search
-                                </button>
-                            </div>
+            <div class="card-body pb-0 mb-0" style="display:none">
+                <div class="callout callout-success">
+                    <div class="form-group row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="mb-0">Leadership Selection Type:</label>
+                            <select class="form-control select2" id="leadership_type">
+                                <option value=""> --Select--</option>
+                                <option v-for="(item, index) in leadershipe_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <span class="text-danger" id="leadership_type_err"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label class="mb-0">Feedback Category:</label>
+                            <select class="form-control select2" id="category_type_id">
+                                <option value=""> --Select--</option>
+                                <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <span class="text-danger" id="category_type_id_err"></span>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-3">
+                            <button type="button" @click="loaddata()" class="btn btn-success">
+                                <i class="fas fa-search" ></i> Search
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="card-header pb-0 pt-2">
-                    <h3 class="card-title"><b>Advance Search </b>(Search By Selection Type & Feedback Category)</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-plus" ></i>
-                        </button>
-                    </div>
+            </div>
+            <div class="card-header pb-0 pt-2">
+                <h3 class="card-title"><b>Advance Search </b>(Search By Selection Type & Feedback Category)</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-plus" ></i>
+                    </button>
                 </div>
             </div>
+        </div>
         <div class="card-body pb-1 mb-0 pt-1 mt-0 overflow-auto">
             <table id="data-table" class="table table-bordered text-sm table-striped">
                 <thead>

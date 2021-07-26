@@ -193,9 +193,16 @@
                                     </select>
                                     <has-error :form="personal_form" field="organization_type"></has-error>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                                    <label class="mb-0.5">Department:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.department" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('department') }" class="form-control select2" name="department" id="department">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="department"></has-error>
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
-                                    <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
                                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                         <option value=""> --Select--</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -241,6 +248,12 @@
                                     <input type="radio" name="sen" value="Yes"> Yes
                                     <input type="radio" name="sen"  value="No"> No
                                 </div>  -->
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Initail Appointment Date:<i class="text-danger">*</i></label>
+                                    <input @change="remove_error('initial_appointment_date')" class="form-control" v-model="personal_form.initial_appointment_date" :class="{ 'is-invalid': personal_form.errors.has('initial_appointment_date') }" name="initial_appointment_date" id="initial_appointment_date" type="text">
+                                    <has-error :form="personal_form" field="initial_appointment_date"></has-error>
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
                                     <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
@@ -270,7 +283,6 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-primary" @click="shownexttab('qualification-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
@@ -329,7 +341,7 @@
                                                         <label class="mb-0.5">First Subject:<i class="text-danger">*</i></label>
                                                         <select v-model="qualification_form.firstsub" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('firstsub') }" class="form-control select2" id="firstsub">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in qualificationsubjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
                                                         <has-error :form="qualification_form" field="firstsub"></has-error>
                                                     </div>
@@ -337,7 +349,7 @@
                                                         <label class="mb-0.5">Second subject:</label>
                                                         <select v-model="qualification_form.secondsub" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('secondsub') }" class="form-control select2" id="secondsub">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in qualificationsubjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
                                                         <has-error :form="qualification_form" field="secondsub"></has-error>
                                                     </div>
@@ -402,9 +414,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                            <td v-else></td>
+                                            <td>{{ subjectArray[item.first_subject]}}</td>
+                                            <td>{{ subjectArray[item.second_subject]}}</td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
                                             <td>{{ item.enddate}}</td>
@@ -433,7 +444,7 @@
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h4 class="modal-title">Nomination </h4>
+                                        <h4 class="modal-title">Nomination</h4>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">×</span>
                                         </button>
@@ -486,10 +497,65 @@
                                                         </select>
                                                         <has-error :form="nomination_form" field="nomi_relation"></has-error>
                                                     </div>
-                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <label class="mb-0.5">Is Nominee?:<i class="text-danger">*</i></label>
+                                                        <input type="radio" v-model="nomination_form.isnominee" name="isnominee" value="1"> Yes
+                                                        <input type="radio" v-model="nomination_form.isnominee" name="isnominee" value="0"> No
+                                                        <has-error :form="nomination_form" field="isnominee"></has-error>
+                                                    </div>
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="nomination_form.isnominee==1">
                                                         <label class="mb-0.5"> Percentage:<i class="text-danger">*</i></label>
                                                         <input v-model="nomination_form.nomi_percentage" :class="{ 'is-invalid': nomination_form.errors.has('nomi_percentage') }" type="text" id="nomi_percentage" class="form-control" @change="remove_error('nomi_percentage')">
                                                         <has-error :form="nomination_form" field="nomi_percentage"></has-error>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <label class="mb-0">Upload the Required Documents(if any)</label>
+                                                        <br>
+                                                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>File Name</th>
+                                                                    <th>Upload File</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr v-for='(attach, count) in attachmentDetails' :key="count+1" :id="'esxist'+count">
+                                                                    <template>
+                                                                        <td>
+                                                                            {{attach.user_defined_name}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                                            <span>
+                                                                                <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
+                                                                            </span>
+                                                                        </td>
+                                                                    </template>
+                                                                </tr>
+                                                                <tr id="record1" v-for='(att, index) in nomination_form.fileUpload' :key="index">
+                                                                    <td>
+                                                                        <input type="text" class="form-control" :class="{ 'is-invalid' :nomination_form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                                        <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                                        <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="5">
+                                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                                        @click="addMoreattachment()"><i class="fa fa-plus"></i> Add More</button>
+                                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                                        @click="removeattachment()"><i class="fa fa-trash"></i> Remove</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
                                                     </div>
                                                 </div>
                                             </form>
@@ -515,6 +581,7 @@
                                             <th>Contact Number</th>
                                             <th>Email</th>
                                             <th>Relation</th>
+                                            <th>Is Nominee</th>
                                             <th>Percentage of benifit (%)</th>
                                             <th>Action</th>
                                         </tr>
@@ -528,6 +595,7 @@
                                             <td>{{ item.nomi_contact}}</td>
                                             <td>{{ item.nomi_email}}</td>
                                             <td>{{ item.relations.name}}</td>
+                                            <td>{{ item.isnominee==1? 'Yes' : 'No'}}</td>
                                             <td>{{ item.nomi_percentage}}</td>
                                             <td>
                                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="shownominationedit(item)">Edit</a>
@@ -537,7 +605,7 @@
                                             <td colspan="7" class="text-right">
                                                 Total:
                                             </td>
-                                            <td colspan="2">
+                                            <td colspan="3">
                                                 <input readonly type="number" v-model="grand_total" id="percentagetotla" class="form-control">
                                             </td>
                                         </tr>
@@ -549,14 +617,13 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('qualification-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Done </button>
+                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -564,47 +631,61 @@ export default {
     data(){
         return{
             grand_total:0,
+            qualification_tbl_row_count:0,
             sex_idList:[],
+            sex_Array:{},
             marital_statusList:[],
+            positiontitleList:[],
             countryList:[],
             dzongkhagList:[],
             gewog_list:[],
             p_gewog_list:[],
-            villageList:[],
             p_villageList:[],
+            villageList:[],
             orgList:[],
+            departmentList:[],
             subjectList:[],
+            qualificationsubjectList:[],
+            subjectArray:{},
             cureerstageList:[],
             qualificationDescription:[],
             staffqualificationlist:[],
-            positiontitleList:[],
             coursemodeList:[],
             repationshipList:[],
             staff_nomination_list:[],
-            staff_qualification_list:'',
+            attachmentDetails:[],
+
             personal_form: new form({
+                isteaching:false,
+                organization_type:'',
                 personal_id: '',
-                emp_type: 'Regular',
+                cideid:'',
+                emp_type: 1,
+                emp_id:'',
                 cid_work_permit:'',
                 name:'',
+                p_address:'',
                 position_title:'',
                 sex_id:'',
                 dob:'',
                 marital_status:'',
                 country_id:'',
-                p_dzongkhag:'',
-                p_village_id:'',
-                p_gewog:'',
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
+                department:'',
+                p_dzongkhag:'',
+                p_village_id:'',
+                p_gewog:'',
                 working_agency_id:'',
                 contact_number:'',
                 email:'',
+                alternative_email:'',
                 comp_sub:'',
                 elective_sub1:'',
                 elective_sub2:'',
                 currier_stage:'',
+                initial_appointment_date:'',
                 emp_file_code:'',
                 remarks:'',
                 status:'Created',
@@ -635,13 +716,114 @@ export default {
                 nomi_email:'',
                 nomi_relation:'',
                 nomi_percentage:'',
+                isnominee:1,
                 action_type:'',
+                fileUpload: [],
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
                 status:'Created',
             }),
-
+            staff_qualification_list:'',
         }
     },
     methods: {
+        resetnomidees(){
+            this.nomination_form.nomination_id='';
+            this.nomination_form.nomi_cid='';
+            this.nomination_form.nomi_name='';
+            this.nomination_form.nomi_desig='';
+            this.nomination_form.nomi_address='';
+            this.nomination_form.nomi_contact='';
+            this.nomination_form.nomi_email='';
+            this.nomination_form.nomi_relation='';
+            this.nomination_form.isnominee=1;
+            this.nomination_form.action_type='';
+            this.nomination_form.fileUpload=[];
+            this.nomination_form.attachments=[{ file_name:'',attachment:''}];
+            this.nomination_form.ref_docs=[];
+            this.nomination_form.status='Created';
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.nomination_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+         /**
+         * method to add more fields
+         */
+        addMoreattachment: function(){
+            this.nomination_form.fileUpload.push({file_name:'', file_upload:''})
+        },
+
+        /**
+         * method to remove fields
+         */
+        removeattachment(index){
+            if(this.nomination_form.fileUpload.length>1){
+                this.nomination_form.fileUpload.pop();
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file,count){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            $('#esxist'+count).remove();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
+        remove_error(field_id){
+            if($('#'+field_id).val()!=""){
+                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id+'_err').html('');
+            }
+        },
+
         showaddmodal(type){
             if(type=="qualification-modal"){
                 this.qualification_form.action_type='add';
@@ -655,6 +837,7 @@ export default {
                 $('#enddate').val('');
             }
             if(type=="nomination-modal"){
+                this.resetnomidees();
                 this.nomination_form.action_type='add';
                 $('#nomi_cid').val('');
                 $('#nomi_name').val('');
@@ -668,6 +851,7 @@ export default {
             $('#'+type).modal('show');
         },
         shownominationedit(item){
+
             this.nomination_form.action_type='edit';
             this.nomination_form.nomination_id=item.id;
             $('#nomi_cid').val(item.nomi_cid);
@@ -685,14 +869,14 @@ export default {
             $('#nomi_contact').val(item.nomi_contact);
             this.nomination_form.nomi_contact=item.nomi_contact;
 
-             $('#nomi_email').val(item.nomi_email);
+            $('#nomi_email').val(item.nomi_email);
             this.nomination_form.nomi_email=item.nomi_email;
 
             $('#nomi_relation').val(item.nomi_relation.id).trigger('change');
             this.nomination_form.nomi_relation=item.relations.id;
             $('#nomi_percentage').val(item.nomi_percentage);
             this.nomination_form.nomi_percentage=item.nomi_percentage;
-
+            this.attachmentDetails=item.attachment;
             $('.select2').select2({
                 theme: 'bootstrap4'
             });
@@ -738,16 +922,12 @@ export default {
             if(type=="qualification"){
                 this.qualification_form.post('staff/savequalificationDetails')
                 .then((response) => {
-                    if(response!=""){
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                        this.load_staff_qualication(this.qualification_form.personal_id);
-                        $('#qualification-modal').modal('hide');
-
-                    }
-
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved Successfully'
+                    });
+                    this.loadqualication(this.qualification_form.personal_id);
+                    $('#qualification-modal').modal('hide');
                 })
                 .catch((error) => {
                     console.log("Error:"+error)
@@ -762,30 +942,378 @@ export default {
                     )
                 }
                 else{
-                    this.nomination_form.post('staff/savenominationDetails')
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
+                    let formData = new FormData();
+                    formData.append('personal_id', this.nomination_form.personal_id);
+                    formData.append('ref_docs[]', this.nomination_form.ref_docs);
+                    for(let i=0;i<this.nomination_form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.nomination_form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.nomination_form.ref_docs[i].name);
+                    }
+                    formData.append('nomination_id', this.nomination_form.nomination_id);
+                    formData.append('nomi_cid', this.nomination_form.nomi_cid);
+                    formData.append('nomi_name', this.nomination_form.nomi_name);
+                    formData.append('nomi_desig', this.nomination_form.nomi_desig);
+                    formData.append('nomi_address', this.nomination_form.nomi_address);
+                    formData.append('nomi_contact', this.nomination_form.nomi_contact);
+                    formData.append('nomi_email', this.nomination_form.nomi_email);
+                    formData.append('nomi_relation', this.nomination_form.nomi_relation);
+                    formData.append('status', this.nomination_form.status);
+                    if(this.nomination_form.isnominee==0){
+                        formData.append('nomi_percentage', 0);
+                    }
+                    else{
+                        formData.append('nomi_percentage', this.nomination_form.nomi_percentage);
+                    }
+                    formData.append('isnominee', this.nomination_form.isnominee);
+                    formData.append('action_type', this.nomination_form.action_type);
+                    formData.append('status', this.nomination_form.status);
+                    axios.post('staff/savenominationDetails', formData, config)
+                    // this.nomination_form.post('staff/savenominationDetails')
                     .then((response) => {
                         Toast.fire({
                             icon: 'success',
                             title: 'Data saved Successfully'
                         });
-                        this.load_staff_nomination(this.qualification_form.personal_id);
+                        this.resetnomidees();
+                        this.loadnomination(this.qualification_form.personal_id);
                         $('#nomination-modal').modal('hide');
                     })
                     .catch((error) => {
                         console.log("Error:"+error)
                     });
                 }
+            }
+        },
+        loadqualication(staff_id){
+            if(staff_id!=null && staff_id!=""){
+                let uri = 'staff/loadStaffQualification/'+staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response;
+                    this.staff_qualification_list = data.data.data;
+                })
+                .catch(function (error){
+                    console.log("Error:"+error)
+                });
+            }
+        },
+        remove(type,index){
+            if(type=="qua"){
+                this.qualificationlist.splice(index,1);
+            }
+            else{
+                if(this.nomination_form.nominies.length>1){
+                    this.nomination_form.nominies.splice(index,1);
+                }
+            }
+        },
+        getpersonaldetails(data){
+            data.name='Full Name'+data.cid;
+            data.desig='MR';
+            data.address='Permanent Address '+data.cid;
+        },
+        fetchDetails(){
+            let cid_empid=$('#cideid').val();
+            if (cid_empid!= ""){
+                axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/'+cid_empid)
+                .then(response => {
+                    this.ciderror = '';
+                    let detail = response.data;
+                    if (detail!=""){
+                        this.personal_form.cid_work_permit=detail.cidNumber;
+                        this.personal_form.emp_id=detail.employeeNumber;
+                        let fullname=detail.firstName;
+                        if(detail.middleName!=""){
+                            fullname=fullname+' '+detail.middleName;
+                        }
+                        if(detail.lastName!=""){
+                            fullname=fullname+' '+detail.lastName;
+                        }
+                        this.personal_form.name= fullname;
+                        let dob=detail.dateOfBirth;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.personal_form.dob=dob;
+                        this.personal_form.email=detail.Email;
+                        this.personal_form.initial_appointment_date=detail.dateOfAppointment;
+
+                        this.personal_form.contact_number=detail.MobileNo;
+                        axios.get('getpersonbycid/'+ detail.cidNumber)
+                        .then(response => {
+                            this.ciderror = '';
+                            let personal_detail = response.data;
+                            this.personal_form.p_dzongkhag=personal_detail.dzongkhagId;
+                            let gen='Others';
+                            if(personal_detail.gender=='M'){
+                                gen='Male';
+                            }
+                            if(personal_detail.gender=='F'){
+                                gen='Female';
+                            }
+                            this.personal_form.sex_id=this.sex_Array[gen];
+                            $('#sex_id').val(this.sex_Array[gen]).trigger('change');
+
+                            $('#p_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                            $('#p_dzongkhag').prop('disabled',true);
+                            $('#dob').prop('disabled',true);
+                            $('#sex_id').prop('disabled',true);
+                            $('#cid_work_permit').prop('disabled',true);
+                            $('#name').prop('disabled',true);
+                            this.getPgewoglist(personal_detail.dzongkhagId,personal_detail.gewogId);
+                            this.getPvillagelist(personal_detail.gewogId,personal_detail.villageSerialNo);
+                        })
+                    }else{
+                        this.ciderror = 'Invalid CID.';
+                        Swal.fire({
+                            html: "No data found for matching CID",
+                            icon: 'info'
+                        });
+                    }
+                })
+                .catch((e) => {
+                    this.ciderror = 'Invalid CID / service down.';
+                    Swal.fire({
+                        html: "No data found for this eid "+e,
+                        icon: 'error'
+                    });
+                });
+            }
+        },
+
+        calcualtetotla(data){
+            this.totle+=parseInt(data.percentage);
+            if(this.grand_total>100){
+                this.totle-=parseInt(data.percentage);
+                Swal.fire(
+                    'error!',
+                    'Your total percentage cannot be more the 100.',
+                    'error',
+                )
+                data.percentage=0;
+            }
+            $('#percentagetotla').val(this.totle);
+        },
+        loadqualificationdescription(){
+            let uri = 'masters/loadStaffMasters/all_active_qualification_description_list';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.qualificationDescription = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        loadqualification(){
+            let uri = 'masters/loadStaffMasters/all_active_qualification_List';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.staffqualificationlist = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        loadnomination(staff_id){
+            if(staff_id!=null && staff_id!=""){
+                let uri = 'staff/loadStaffNomination/'+staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response;
+                    this.staff_nomination_list = data.data.data;
+                    this.grand_total=data.data.total_percentage;
+                })
+                .catch(function (error){
+                    console.log("Error:"+error)
+                });
+            }
+        },
+
+        loadcoursemode(){
+            let uri = 'masters/loadStaffMasters/all_active_coursemode_list';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.coursemodeList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        shownexttab(nextclass){
+            if(nextclass=="final-tab"){
+                if(this.staff_nomination_list.length<1){
+                    Swal.fire(
+                        'error!',
+                        'Please provide nomination details.',
+                        'error',
+                    );
+                }else{
+                    Swal.fire({
+                        text: "Are you sure you wish to save this staff details ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            this.nomination_form.post('staff/updatefinalstaffDetails')
+                            .then((response) => {
+                                Swal.fire(
+                                    'Success!',
+                                    'Details has been saved successfully.',
+                                    'success',
+                                )
+                                this.$router.push('/list_civil_staff');
+                            })
+                            .catch((error) => {
+                                console.log("Error:"+error)
+                            });
+                        }
+                    });
+                }
 
             }
+            else{
+                if(nextclass=="qualification-tab"){
+                    this.personal_form.post('staff/savePersonalDetails')
+                    .then((response) =>{
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                        $('.select2').select2();
+                        $('.select2').select2({
+                            theme: 'bootstrap4'
+                        });
+                        if(response.data.data || (response.data.data!=undefined && response.data.data.id!=undefined)){
+                            if(response.data.data.id!=undefined && response.data.data.id!=null && response.data.data.id!=""){
+                                this.qualification_form.personal_id=response.data.data.id;
+                                this.nomination_form.personal_id=response.data.data.id;
+                            }
+                            this.change_tab(nextclass);
+                            this.loadqualificationdescription();
+                            this.loadqualification();
+                            this.loadcoursemode();
+                            this.loadqualication(this.personal_form.personal_id);
+                        }
+                    })
+                    .catch((error) => {
+                        if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
+                            $('#working_agency_id').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#marital_status').attr('class').includes('select2-hidden-accessible')){
+                            $('#marital_status').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
+                            $('#sex_id').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
+                            $('#position_title').addClass('select2-hidden-accessible');
+                        }
+                        if(!$('#currier_stage').attr('class').includes('select2-hidden-accessible')){
+                            $('#currier_stage').addClass('select2-hidden-accessible');
+                        }
+                        if(this.personal_form.isteaching){
+                            if(!$('#comp_sub').attr('class').includes('select2-hidden-accessible')){
+                                $('#comp_sub').addClass('select2-hidden-accessible');
+                            }
+                            if(!$('#elective_sub1').attr('class').includes('select2-hidden-accessible')){
+                                $('#elective_sub1').addClass('select2-hidden-accessible');
+                            }
+                            if(!$('#elective_sub2').attr('class').includes('select2-hidden-accessible')){
+                                $('#elective_sub2').addClass('select2-hidden-accessible');
+                            }
+                        }
+                        console.log("Error:"+error)
+                    });
+                }
+                else if(nextclass=="personal-tab"){
+                    this.change_tab(nextclass);
+                }
+                else{
+                    if(nextclass=="nomination-tab" && this.staff_qualification_list.length<1){
+                        Swal.fire(
+                            'error!',
+                            'Please provide qualification details.',
+                            'error',
+                        );
+                        this.change_tab('qualification-tab');
+                    }
+                    else{
+                        this.change_tab(nextclass);
+                        this.loadnomination(this.personal_form.personal_id);
+                    }
+                }
+            }
+        },
+        change_tab(nextclass){
+            $('.personname').html(this.personal_form.name);
+            $('#tabhead >li >a').removeClass('active');
+            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').addClass('active');
+            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+            $('.'+nextclass+' >a').removeClass('disabled');
+            $('.tab-content-details').hide();
+            $('#'+nextclass).show().removeClass('fade');
+        },
+
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.subjectList =  data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.qualificationsubjectList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.subjectArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.cureerstageList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.leg(error);
+            });
         },
         loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.sex_idList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.sex_Array[data.data.data[i].name] = data.data.data[i].id;
+                }
             })
             .catch(function (error) {
-                console.log("Error......"+error)
+                console.leg(error);
             });
         },
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
@@ -795,9 +1323,28 @@ export default {
                 this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.leg(error);
+            });
+        },
+        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title_with_level"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.positiontitleList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+
+        loadrelationshipList(uri="masters/loadStaffMasters/all_active_relationship_list"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.repationshipList =  data.data.data;
+            })
+            .catch(function (error){
+                console.leg(error);
             });
         },
         loadactivecountryList(uri="masters/loadGlobalMasters/all_active_country"){
@@ -805,6 +1352,11 @@ export default {
             .then(response => {
                 let data = response;
                 this.countryList =  data.data.data;
+                for(let i=0; i<this.countryList.length;i++){
+                    if(this.countryList[i].nationality.toLowerCase().includes('bhutan')){
+                        this.personal_form.country_id=this.countryList[i].id;
+                    }
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -834,32 +1386,62 @@ export default {
                 if(gewog_id!=""){
                     this.personal_form.p_gewog=gewog_id;
                     $('#p_gewog').val(gewog_id).trigger('change');
+                    $('#p_gewog').prop('disabled',true);
                 }
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-        async getgewoglist(id,gewogId){
+        getgewoglist(id,gewogId){
             let dzoId=$('#dzongkhag').val();
             if(id!=""){
                 dzoId=id;
             }
             let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
-            this.gewog_list = [];
+            this.gewog_list =[];
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.gewog_list = data.data.data;
-                if(gewogId!=""){
-                    this.personal_form.p_gewog=gewog_id;
-                    $('#p_gewog').val(gewogId).trigger('change');
-                }
+                this.personal_form.gewog=gewogId;
+                $('#gewog').val(gewogId).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
+
+        getDepartmentList(type){
+            let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
+            this.gewog_list =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.departmentList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        allOrgList(type){
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            if(type=="division"){
+                uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
+            }
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.orgList = data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+
         getPvillagelist(id,vilageid){
             let villageId=$('#p_gewog').val();
             if(id!=""){
@@ -874,15 +1456,16 @@ export default {
                 if(vilageid!=""){
                     this.personal_form.p_village_id=vilageid;
                     $('#p_village_id').val(vilageid).trigger('change');
+                    $('#p_village_id').prop('disabled',true);
                 }
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-        async getvillagelist(id){
+        getvillagelist(id,vil_id){
             let gewogId=$('#gewog').val();
-            if(id!="" && gewogId==null){
+            if(id!=""){
                 gewogId=id;
             }
             let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
@@ -891,301 +1474,27 @@ export default {
             .then(response =>{
                 let data = response;
                 this.villageList = data.data.data;
+                this.personal_form.village_id=vil_id;
+                $('#village_id').val(vil_id).trigger('change');
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-        loadrelationshipList(uri="masters/loadStaffMasters/all_active_relationship_list"){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.repationshipList =  data.data.data;
-            })
-            .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.cureerstageList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        loadactivesubjectList(uri="masters/loadStaffMasters/all_active_subject_List"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subjectList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-        loadcoursemode(){
-            let uri = 'masters/loadStaffMasters/all_active_coursemode_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.coursemodeList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadqualification(){
-            let uri = 'masters/loadStaffMasters/all_active_qualification_List';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffqualificationlist = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadqualificationdescription(){
-            let uri = 'masters/loadStaffMasters/all_active_qualification_description_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.qualificationDescription = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positiontitleList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
-
-        remove(type,index){
-            if(type=="qua"){
-                this.qualificationlist.splice(index,1);
-            }
-            else{
-                if(this.nomination_form.nominies.length>1){
-                    this.nomination_form.nominies.splice(index,1);
-                }
-            }
-        },
-        getpersonaldetails(data){
-            data.name='Full Name'+data.cid;
-            data.desig='MR';
-            data.address='Permanent Address '+data.cid;
-        },
-        fetchDetails(){
-            this.personal_form.name='Pema Dechen';
-            this.personal_form.position_title='Principal';
-            this.personal_form.contact_number='12312312';
-            this.personal_form.email='pema@gov.bt';
-        },
-        shownexttab(nextclass){
-            if(nextclass=="final-tab"){
-                if(this.staff_nomination_list.length<1){
-                    Swal.fire(
-                        'error!',
-                        'Please provide nomination details.',
-                        'error',
-                    );
-                }else{
-                    Swal.fire({
-                        text: "Are you sure you wish to save this staff details ?",
-                        icon: 'info',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Yes!',
-                        }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.$router.push('/list_civil_staff');
-                        }
-                    });
-                }
-
-            }
-            else{
-                if(nextclass=="qualification-tab"){
-                    this.personal_form.post('staff/savePersonalDetails')
-                    .then((response) => {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                        $('.select2').select2();
-                        $('.select2').select2({
-                            theme: 'bootstrap4'
-                        });
-                        this.change_tab(nextclass);
-                        this.loadqualificationdescription();
-                        this.loadqualification();
-                        this.loadcoursemode();
-                        this.load_staff_qualication(this.personal_form.personal_id);
-
-                    })
-                    .catch((error) => {
-                        this.change_tab('personal-tab');
-                        console.log("Error."+error)
-                    });
-                }
-                if(nextclass=="personal-tab"){
-                    this.loadpersonalDetails();
-                    this.change_tab(nextclass);
-                }
-                else{
-                    if(nextclass=="nomination-tab" && this.staff_qualification_list.length<1){
-                        Swal.fire(
-                            'error!',
-                            'Please provide qualification details.',
-                            'error',
-                        );
-                        this.change_tab('qualification-tab');
-                    }
-                    else{
-                        this.change_tab(nextclass);
-                        this.load_staff_nomination(this.personal_form.personal_id);
-                    }
-                }
-            }
-        },
-        change_tab(nextclass){
-            $('.personname').html(this.personal_form.name);
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-        },
-        loadpersonalDetails(){
-            axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
-            .then((response) => {
-                let data=response.data.data;
-
-                this.personal_form.personal_id=data.id;
-                this.personal_form.emp_type=data.emp_type_id;
-                this.personal_form.cid_work_permit=data.cid_work_permit;
-                this.personal_form.name=data.name;
-                this.personal_form.position_title=data.position_title_id;
-                this.personal_form.marital_status=data.merital_status;
-                this.personal_form.dob=data.dob;
-
-                this.personal_form.p_dzongkhag=data.p_dzongkhag;
-                $('#p_dzongkhag').val(data.p_dzongkhag).trigger('change');
-                this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
-                this.getPvillagelist(data.p_gewog,data.p_village);
-
-                this.personal_form.dzongkhag=data.dzo_id;
-                $('#dzongkhag').val(data.dzo_id).trigger('change');
-                this.getgewoglist(data.dzo_id,data.dzo_id);
-                this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
-                this.getvillagelist(JSON.parse(response.data.gewog).data.id);
-                this.personal_form.village_id=data.village_id;
-
-                this.personal_form.sex_id=data.sex_id;
-                this.personal_form.country_id=data.country_id;
-                this.personal_form.working_agency_id=data.working_agency_id;
-                this.personal_form.contact_number=data.contact_no;
-                this.personal_form.email=data.email;
-                this.personal_form.comp_sub=data.comp_sub_id;
-                this.personal_form.elective_sub1=data.elective_sub_id1;
-                this.personal_form.elective_sub2=data.elective_sub_id2;
-                this.personal_form.currier_stage=data.cureer_stagge_id;
-                this.personal_form.emp_file_code=data.employee_code;
-                this.personal_form.remarks=data.remarks;
-                this.qualification_form.personal_id=data.id;
-                this.nomination_form.personal_id=data.id;
-            })
-            .catch((error) => {
-                console.log("Error......"+error);
-            });
-        },
-        load_staff_qualication(staff_id){
-            if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadStaffQualification/'+staff_id;
-                axios.get(uri)
-                .then(response =>{
-                    let data = response;
-                    this.staff_qualification_list = data.data.data;
-                })
-                .catch(function (error){
-                    console.log("Error:"+error)
-                });
-            }
-        },
-        load_staff_nomination(staff_id){
-            if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadStaffNomination/'+staff_id;
-                axios.get(uri)
-                .then(response =>{
-                    let data = response;
-                    this.staff_nomination_list = data.data.data;
-                    this.grand_total=data.data.total_percentage;
-                })
-                .catch(function (error){
-                    console.log("Error:"+error)
-                });
-            }
-        },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
-        getDetailsbyCID(){
-            if (this.nomination_form.nomi_cid.length == 11){
-                axios.get('getpersonbycid/'+ this.nomination_form.nomi_cid)
-                .then(response => {
-                    this.ciderror = '';
-                    if (response.data.citizenDetail[0]) {
-                        let response_data = response.data.citizenDetail[0];
-                        this.nomination_form.nomi_name = response_data.firstName + " " + response_data.lastName;
-                    }else{
-                        this.ciderror = 'Invalid CID.';
-                        Swal.fire({
-                            html: "No data found for matching CID",
-                            icon: 'info'
-                        });
-                    }
-                })
-                .catch((e) => {
-                    this.ciderror = 'Invalid CID / service down.';
-                    Swal.fire({
-                            html: "No data found for matching CID/service down"+e,
-                            icon: 'error'
-                    });
-                });
-            }
-        },
-        async changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
             if(id=="position_title"){
-                this.personal_form.position_title=$('#position_title').val();
+                this.personal_form.position_title=$('#position_title').val().split('_')[0];
+                if($('#position_title').val().split('_')[1].toLowerCase().replaceAll(" ", "")=="teachingservices"){
+                    this.personal_form.isteaching=true;
+                }
+                else{
+                    this.personal_form.isteaching=false;
+                }
             }
             if(id=="sex_id"){
                 this.personal_form.sex_id=$('#sex_id').val();
@@ -1197,8 +1506,9 @@ export default {
                 this.personal_form.village='';
                 this.personal_form.gewog='';
                 this.personal_form.village_id='';
+
                 if($('#country_id option:selected').text().includes('Bhutan')){
-                    $('#bhutanese_address').show();
+                   $('#bhutanese_address').show();
                     $('#foreign_address').hide();
                 }
                 else{
@@ -1207,14 +1517,42 @@ export default {
                 }
                 this.personal_form.country_id=$('#'+id).val();
             }
+            if(id=="p_dzongkhag"){
+                this.personal_form.p_dzongkhag=$('#p_dzongkhag').val();
+                this.getPgewoglist('','');
+            }
+            if(id=="p_gewog"){
+                this.personal_form.p_gewog=$('#p_gewog').val();
+                this.getPvillagelist('','');
+            }
+             if(id=="p_village_id"){
+                this.personal_form.p_village_id=$('#p_village_id').val();
+            }
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+                this.getgewoglist('','');
+                this.allOrgList();
+            }
+            if(id=="organization_type"){
+                this.personal_form.organization_type=$('#organization_type').val();
+                if($('#organization_type').val()=="Ministry" || $('#organization_type').val()=="Dzongkhag"){
+                    this.getDepartmentList($('#organization_type').val());
+                    $('#departmentdiv').show();
+                }
+                else{
+                    this.allOrgList('school');
+                    $('#departmentdiv').hide();
+                }
+            }
+            if(id=="department"){
+                this.personal_form.department=$('#department').val();
+                this.allOrgList('division');
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
-                this.getvillagelist();
+                this.getvillagelist('','');
             }
+
             if(id=="village_id"){
                 this.personal_form.village_id=$('#village_id').val();
             }
@@ -1257,6 +1595,85 @@ export default {
                 this.nomination_form.nomi_relation=$('#nomi_relation').val();
             }
         },
+        getDetailsbyCID(){
+            if (this.nomination_form.nomi_cid.length == 11){
+                axios.get('getpersonbycid/'+ this.nomination_form.nomi_cid)
+                .then(response => {
+                    this.ciderror = '';
+                    let personal_detail = response.data;
+                    if (personal_detail!=""){
+                        this.nomination_form.nomi_name = personal_detail.firstName + " " + personal_detail.lastName;
+                    }else{
+                        this.ciderror = 'Invalid CID.';
+                        Swal.fire({
+                            html: "No data found for matching CID",
+                            icon: 'info'
+                        });
+                    }
+                })
+                .catch((e) => {
+                    this.ciderror = 'Invalid CID / service down.';
+                    Swal.fire({
+                        html: "No data found for matching CID/service down"+e,
+                        icon: 'error'
+                    });
+                });
+            }
+        },
+
+        loadpersonalDetails(){
+            axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
+            .then((response) => {
+                let data=response.data.data;
+                this.personal_form.dzongkhag=data.dzo_id;
+                $('#dzongkhag').val(data.dzo_id).trigger('change');
+                this.getgewoglist(data.dzo_id,data.geowg_id);
+                this.getvillagelist(data.geowg_id,data.village_id);
+                this.personal_form.personal_id=data.id;
+
+                this.qualification_form.personal_id=data.id;
+
+                this.nomination_form.personal_id=data.id;
+                this.personal_form.emp_type=data.emp_type_id;
+                this.personal_form.emp_id=data.emp_id;
+                this.personal_form.cid_work_permit=data.cid_work_permit;
+                this.personal_form.name=data.name;
+                this.personal_form.position_title=data.position_title_id;
+                $('#position_title').val(data.position_title_id).trigger('change');
+                this.personal_form.marital_status=data.merital_status;
+                $('#marital_status').val(data.merital_status).trigger('change');
+                this.personal_form.dob=data.dob;
+                this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                $('#p_dzongkhag').val(data.p_dzongkhag).trigger('change');
+                $('#initial_appointment_date').val(data.p_dzongkhag).trigger('change');
+                $('#p_dzongkhag').prop('disabled',true);
+                $('#dob').prop('disabled',true);
+                $('#sex_id').prop('disabled',true);
+                $('#cid_work_permit').prop('disabled',true);
+                $('#name').prop('disabled',true);
+                this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
+                this.getPvillagelist(data.p_gewog,data.p_village);
+
+                this.personal_form.sex_id=data.sex_id;
+                this.personal_form.country_id=data.country_id;
+                this.personal_form.working_agency_id=data.working_agency_id;
+                this.personal_form.contact_number=data.contact_no;
+                this.personal_form.email=data.email;
+                this.personal_form.alternative_email=data.alternative_email;
+                this.personal_form.comp_sub=data.comp_sub_id;
+                this.personal_form.elective_sub1=data.elective_sub_id1;
+                this.personal_form.elective_sub2=data.elective_sub_id2;
+                this.personal_form.currier_stage=data.cureer_stagge_id;
+                $('#currier_stage').val(data.cureer_stagge_id).trigger('change');
+                this.personal_form.emp_file_code=data.employee_code;
+                this.personal_form.remarks=data.remarks;
+                this.personal_form.initial_appointment_date=data.initial_appointment_date;
+            })
+            .catch((error) => {
+                console.log("Error......"+error);
+            });
+        },
+
     },
 
     mounted() {
@@ -1268,19 +1685,22 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadpersonalDetails();
-
         this.loadactivemaritalList();
         this.loadactivesex_idList();
         this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
+
+        this.loadAcademicMasters();
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
         this.loadrelationshipList();
+        this.loadpersonalDetails();
+
     },
 }
 </script>

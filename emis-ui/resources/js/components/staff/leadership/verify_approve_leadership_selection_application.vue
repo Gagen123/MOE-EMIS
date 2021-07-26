@@ -730,7 +730,7 @@ export default {
         loadStaffList(id,type){
             let uri="";
             if(id=="NA"){
-                uri='loadCommons/loadStaffList/userworkingagency/NA';
+                uri='loadCommons/loadStaffList/userOrgWiseCivilServent/ALL_TYPE';
             }
             else{
                 uri='loadCommons/loadStaffList/'+type+'/'+id;

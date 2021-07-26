@@ -732,7 +732,7 @@ export default {
             .then(res => {
                 if(JSON.stringify(res.data)!='{}'){
                     if(type=="std" && res!=""){
-                        let student_detail = res.data.citizenDetail[0];
+                        let student_detail = res.data;
                         this.student_form.first_name = student_detail.firstName;
                         $('#first_name').prop('readonly',true);
                         this.student_form.middle_name=student_detail.middleName;
@@ -784,7 +784,7 @@ export default {
                         $('#village_id').prop('disabled',true);
                     }
                     if(type=="father" && res!=""){
-                        let father_detail = res.data.citizenDetail[0];
+                        let father_detail = res.data;
                         let full_name=father_detail.firstName;
                         if(father_detail.middleName!="" && father_detail.middleName!=null){
                             full_name+=' '+father_detail.middleName;
@@ -822,7 +822,7 @@ export default {
                         $('#father_village_id').prop('disabled',true);
                     }
                     if(type=="mother" && res!=""){
-                        let mother_detail = res.data.citizenDetail[0];
+                        let mother_detail = res.data;
                         let full_name=mother_detail.firstName;
                         if(mother_detail.middleName!="" && mother_detail.middleName!=null){
                             full_name+=' '+mother_detail.middleName;

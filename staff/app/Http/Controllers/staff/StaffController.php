@@ -58,6 +58,7 @@ class StaffController extends Controller{
             'dob'                   =>  $request->dob,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
+            'org_level'             =>  $request->organization_type,
             'p_dzongkhag'           =>  $request->p_dzongkhag,
             'p_gewog'               =>  $request->p_gewog,
             'p_village'             =>  $request->p_village_id,
@@ -74,7 +75,7 @@ class StaffController extends Controller{
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
             'initial_appointment_date' =>  $request->initial_appointment_date,
-            // 'cureer_stagge_id'      =>  $request->currier_stage,
+            'cureer_stagge_id'      =>  $request->currier_stage,
             'employee_code'         =>  $request->emp_file_code,
             'remarks'               =>  $request->remarks,
             'status'                =>  $request->status,
@@ -97,24 +98,24 @@ class StaffController extends Controller{
 
         if($request->personal_id==""){
             $response_data = PersonalDetails::create($data);
-            $curr_data=[
-                'staff_id'              =>  $response_data->id,
-                'currier_stage'         =>  $request->currier_stage,
-                'remarks'               =>  $request->remarks,
-                'created_by'            =>  $request->user_id,
-                'created_at'            =>  date('Y-m-d h:i:s'),
-            ];
-            CareerStage::create($curr_data);
+            // $curr_data=[
+            //     'staff_id'              =>  $response_data->id,
+            //     'currier_stage'         =>  $request->currier_stage,
+            //     'remarks'               =>  $request->remarks,
+            //     'created_by'            =>  $request->user_id,
+            //     'created_at'            =>  date('Y-m-d h:i:s'),
+            // ];
+            // CareerStage::create($curr_data);
         }
         else{
             $act_det = PersonalDetails::where ('id', $request->personal_id)->firstOrFail();
             $act_det->fill($data);
             $response_data=$act_det->save();
-            $curr_data=[
-                'currier_stage'         =>  $request->currier_stage,
-                'remarks'               =>  $request->remarks,
-            ];
-            CareerStage::where('staff_id',$request->personal_id)->update($curr_data);
+            // $curr_data=[
+            //     'currier_stage'         =>  $request->currier_stage,
+            //     'remarks'               =>  $request->remarks,
+            // ];
+            // CareerStage::where('staff_id',$request->personal_id)->update($curr_data);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -125,7 +126,7 @@ class StaffController extends Controller{
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->where('emp_type_id',$type)->first());
         }
         else{
-            $emp_type=['Regular','Volunteer'];
+            $emp_type=['1','2','3'];
             return $this->successResponse(PersonalDetails::where('created_by',$user_id)->where('status','Pending')->wherein('emp_type_id',$emp_type)->first());
         }
     }
@@ -230,7 +231,7 @@ class StaffController extends Controller{
             'nomi_percentage'                   =>  $request->nomi_percentage,
             'status'                            =>  $request->status,
         ];
-        if($request->status=="Pending"){
+        if($request->status==null || $request->status=="Pending"){
             $nomination_details=array_merge($nomination_details,
                 array('created_by'            =>  $request->user_id,
                       'created_at'            =>  date('Y-m-d h:i:s')
@@ -273,13 +274,19 @@ class StaffController extends Controller{
         $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
             foreach($nomineeDetails as $nom){
-                $nomineeDetails->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
+                $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
             }
         }
         return $this->successResponse($nomineeDetails);
     }
     public function loadStaffNomination($staff_id=""){
-        return $this->successResponse(Nomination::where('personal_id',$staff_id)->where('status','Created')->get());
+        $nomineeDetails=Nomination::where('personal_id',$staff_id)->where('status','Created')->get();
+        if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
+            foreach($nomineeDetails as $nom){
+                $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
+            }
+        }
+        return $this->successResponse($nomineeDetails);
     }
 
     public function updatefinalstaffDetails(Request $request){

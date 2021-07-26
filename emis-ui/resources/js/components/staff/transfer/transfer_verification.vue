@@ -61,7 +61,9 @@
                                             <th>SlNo</th>
                                             <th>Preferences</th>
                                             <th>Dzongkhag/Thromde</th>
+                                            <th id="school">School</th>
                                             <th id="approveDzohead" style="display:none">Select Dzongkhag</th>
+                                            <th v-if="approveSchool" style="display:none">Select School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -71,8 +73,15 @@
                                             <td>
                                                 <span class="text-blue text-bold">{{dzongkhagList[form.preference_dzongkhag1]}}</span>
                                             </td>
+
+                                            <td v-if="school">
+                                                <span class="text-blue text-bold">{{SchoolList[form.preference_school1]}}</span>
+                                            </td>
                                             <td id="approveDzo1" style="display:none">
                                                 <input type="radio" name="dzongkhagApproved" :value="form.preference_dzongkhag1" v-model="form.dzongkhagApproved" id="approvedDzongkhag1">
+                                            </td>
+                                            <td id="approveSchool1" style="display:none">
+                                                <input type="radio" name="schoolApproved" :value="form.preference_school1" v-model="form.schoolApproved" id="approvedSchool1">
                                             </td>
                                         </tr>
                                         <tr>
@@ -81,8 +90,14 @@
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag2!=''">{{dzongkhagList[form.preference_dzongkhag2]}}</span>
                                             </td>
+                                            <td v-if="school">
+                                                <span class="text-blue text-bold" >{{SchoolList[form.preference_school2]}}</span>
+                                            </td>
                                             <td id="approveDzo2" style="display:none">
                                                 <input type="radio" v-model="form.dzongkhagApproved" name="dzongkhagApproved" :value="form.preference_dzongkhag2" id="approvedDzongkhag2">
+                                            </td>
+                                            <td id="approveSchool2" style="display:none">
+                                                <input type="radio" v-model="form.schoolApproved" name="schoolApproved" :value="form.preference_school2" id="approvedSchool2">
                                             </td>
                                         </tr>
                                         <tr>
@@ -91,8 +106,14 @@
                                             <td>
                                                 <span class="text-blue text-bold" v-if="form.preference_dzongkhag3!=''">{{dzongkhagList[form.preference_dzongkhag3]}}</span>
                                             </td>
+                                            <td v-if="school">
+                                                <span class="text-blue text-bold" >{{SchoolList[form.preference_school3]}}</span>
+                                            </td>
                                             <td id="approveDzo3" style="display:none">
                                                 <input type="radio" v-model="form.dzongkhagApproved" :value="form.preference_dzongkhag3" name="dzongkhagApproved" id="approvedDzongkhag3">
+                                            </td>
+                                            <td id="approveSchool3" style="display:none">
+                                                <input type="radio" v-model="form.schoolApproved" :value="form.preference_school3" name="schoolApproved" id="approvedSchool3">
                                             </td>
                                         </tr>
                                     </tbody>
@@ -122,7 +143,6 @@
                                 </table>
                             </div>
                         </div>
-
                         <div v-if="preferenceSchool" class="form-group row" >
                             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Select School</label>
@@ -150,6 +170,7 @@
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Forward </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('report')" style="display:none"  id="reportId"> <i class="fa fa-forward"></i>Joined </button>
                                 <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
@@ -184,7 +205,10 @@ export default {
             training_details_list:[],
             SchoolList:[],
             dzongkhagApproved:true,
+            schoolApproved:true,
             preferenceSchool:false,
+            approveSchool:true,
+            school:true,
 
             form: new form({
                 id: '',
@@ -198,6 +222,9 @@ export default {
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
+                preference_school1:'',
+                preference_school2:'',
+                preference_school3:'',
                 preference_school:'',
                 userDzongkhag:'',
                 attachments:
@@ -216,7 +243,6 @@ export default {
             axios.get('staff/transfer/loadtrainsferDetails/'+appId+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
-                // alert(JSON.stringify(response.data.data));
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
                 this.form.id=data.id;
@@ -224,15 +250,79 @@ export default {
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
                 this.form.transferType=data.transferType;
-                this.draft_attachments=data.attachments;
-
+                this.draft_attachments=data.documents;
+                
+                if(this.form.status_id==9){
+                    $('#reportId').show();
+                }
                  if(this.form.status_id==10 ){
                     $('#forwardId').show();
                     this.dzongkhagApproved=false;
+                    this.schoolApproved=false;
                     this.preferenceSchool=true;
                 }
                 else{
                     this.dzongkhagApproved=true;
+                    this.schoolApproved=true;
+                }
+                if(this.form.transferType == "inter_transfer"){
+                    if(this.form.status_id == 1 || this.form.status_id == 2){
+                    $('#verifyId').show();
+                    }
+                }else{
+                    if(this.form.status_id == 1){
+                    $('#verifyId').show();
+                    }
+                }
+                if(this.form.transferType == "inter_transfer"){
+                    if(this.form.status_id == 3  ){
+                        $('#approveId').show();
+                        $('#verifyId').hide();
+                        $('#approveDzohead').show();
+                        $('#approveDzo1').show();
+                        $('#approveDzo2').show();
+                        $('#approveDzo3').show();
+                        $('#school').hide();
+                        this.school=false;
+                        this.approveSchool=false;
+                        $('#approveSchool').hide();
+                        $('#approveSchool1').hide();
+                        $('#approveSchool2').hide();
+                        $('#approveSchool3').hide();
+                    }
+                }
+                if(this.form.transferType == "intra_transfer"){
+                    if(this.form.status_id == 2 || this.form.status_id == 3 ){
+                        $('#approveId').show();
+                        $('#verifyId').hide();
+                        $('#approveSchool').show();
+                        $('#approveSchool1').show();
+                        $('#approveSchool2').show();
+                        $('#approveSchool3').show();
+
+                        $('#approveDzohead').hide();
+                        $('#approveDzo1').hide();
+                        $('#approveDzo2').hide();
+                        $('#approveDzo3').hide();
+                    }
+                }
+
+                if(this.form.transferType == "intra_transfer" || this.form.status == "Submitted" ||  this.form.status_id==1){
+                    for(let i=0;i<data.preferences.length;i++){
+                        if(i==0){
+                            this.form.preference_school1     =   data.preferences[i].school_id;
+                            $('#approvedSchool1').val(data.preferences[i].school_id);
+                        }
+                        if(i==1){
+                            this.form.preference_school2     =   data.preferences[i].school_id;
+                            $('#approvedSchool2').val(data.preferences[i].school_id);
+                        }
+                        if(i==2){
+                            this.form.preference_school3     =   data.preferences[i].school_id;
+                            $('#approvedSchool3').val(data.preferences[i].school_id);
+
+                        }
+                    }
                 }
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
@@ -245,20 +335,10 @@ export default {
                     }
                     if(i==2){
                         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
-                        $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
+                        $('#approvedDzongkhag3').schoolApprovedval(data.preferences[i].dzongkhag_id);
                     }
                 }
-                if(this.form.status_id!=10 && this.form.status_id!=0){
-                    $('#verifyId').show();
-                }
-                if(this.form.status_id==2 ){
-                    $('#approveId').show();
-                    $('#verifyId').hide();
-                    $('#approveDzohead').show();
-                    $('#approveDzo1').show();
-                    $('#approveDzo2').show();
-                    $('#approveDzo3').show();
-                }
+               
             })
             .catch((error) =>{
                 console.log("Error: "+error);
@@ -283,8 +363,11 @@ export default {
         loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.SchoolList =  data.data;
+                let data = response.data;
+                this.SchoolList =  data;
+                for(let i=0;i<data.length;i++){
+                this.SchoolList[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -309,20 +392,32 @@ export default {
             }
         },
         shownexttab(nextclass){ 
-            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve" || nextclass=="forward"){
+            if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve" || nextclass=="report" || nextclass=="forward"){
                 let action=true;
                 if(nextclass=="reject" && this.form.remarks==""){
                     $('#remarks_err').html('Please mention remarks');
                     $('#remarks').addClass('is-invalid');
                     action=false;
                 }
-                if(nextclass=="approve" && $("input[name='dzongkhagApproved']:checked").val()==undefined){
-                    Swal.fire(
-                        'error!',
-                        'Please select prefernece dzongkhag to approve this Application',
-                        'error',
-                    );
-                    action=false;
+                 if(this.form.transferType == "inter_transfer"){
+                    if(nextclass=="approve" && $("input[name='dzongkhagApproved']:checked").val()==undefined){
+                        Swal.fire(
+                            'error!',
+                            'Please select prefernece dzongkhag to approve this Application',
+                            'error',
+                        );
+                        action=false;
+                    }
+                 }
+                 if(this.form.transferType == "intra_transfer"){
+                    if(nextclass=="approve" && $("input[name='schoolApproved']:checked").val()==undefined){
+                        Swal.fire(
+                            'error!',
+                            'Please select preference school to approve this Application',
+                            'error',
+                        );
+                        action=false;
+                        }
                 }
                 if(action){
                     Swal.fire({
@@ -336,6 +431,7 @@ export default {
                         if (result.isConfirmed) {
                             this.form.actiontype=nextclass;
                             this.form.dzongkhagApproved=$("input[name='dzongkhagApproved']:checked").val();
+                            this.form.schoolApproved=$("input[name='schoolApproved']:checked").val();
                             this.form.post('staff/transfer/updateTransferApplication')
                             .then((response) => {
                                 if(response!=""){

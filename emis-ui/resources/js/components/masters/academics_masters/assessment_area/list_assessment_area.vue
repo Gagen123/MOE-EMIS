@@ -9,6 +9,7 @@
                             <th >Subject</th>
                             <th >Assessment Area</th>
                             <th >Assessment Area Code</th>
+                            <th >Assessment Type</th>
                             <th >Rating Type</th>
                             <th >Status</th>
                             <th >Action</th> 
@@ -26,6 +27,7 @@
                                 <span v-if="item.area_dzo_name"> {{item.area_dzo_name}}</span>
                             </td>
                             <td>{{ item.code }}</td>
+                            <td>{{item.aca_assmnt_type_name}}</td>
                             <td>{{item.rating_type_name}}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>

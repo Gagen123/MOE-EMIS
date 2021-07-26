@@ -30,7 +30,7 @@
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="1"> Regular
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="2"> Contract
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="3"> Volunteer & Project Based
-                                    <!-- <input type="radio" name="etype" @click="showemptypedtab(false)" value="Project Based"> Project Based -->
+                                    <input type="radio" v-model="personal_form.emp_type" name="etype" value="4"> ESP/GSP
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
@@ -193,9 +193,16 @@
                                     </select>
                                     <has-error :form="personal_form" field="organization_type"></has-error>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                                    <label class="mb-0.5">Department:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.department" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('department') }" class="form-control select2" name="department" id="department">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="department"></has-error>
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
-                                    <!-- <input type="text" class="form-control" name="emp_id" id="working"  readonly> -->
                                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
                                         <option value=""> --Select--</option>
                                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -407,9 +414,8 @@
                                             <td>{{ item.qualification.name}}</td>
                                             <td>{{ item.coursemode.name}}</td>
                                             <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                            <td v-else></td>
+                                            <td>{{ subjectArray[item.first_subject]}}</td>
+                                            <td>{{ subjectArray[item.second_subject]}}</td>
                                             <td>{{ item.country.country_name}}</td>
                                             <td>{{ item.startdate}}</td>
                                             <td>{{ item.enddate}}</td>
@@ -517,6 +523,19 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
+                                                                <tr v-for='(attach, count) in attachmentDetails' :key="count+1" :id="'esxist'+count">
+                                                                    <template>
+                                                                        <td>
+                                                                            {{attach.user_defined_name}}
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                                            <span>
+                                                                                <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
+                                                                            </span>
+                                                                        </td>
+                                                                    </template>
+                                                                </tr>
                                                                 <tr id="record1" v-for='(att, index) in nomination_form.fileUpload' :key="index">
                                                                     <td>
                                                                         <input type="text" class="form-control" :class="{ 'is-invalid' :nomination_form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -586,7 +605,7 @@
                                             <td colspan="7" class="text-right">
                                                 Total:
                                             </td>
-                                            <td colspan="2">
+                                            <td colspan="3">
                                                 <input readonly type="number" v-model="grand_total" id="percentagetotla" class="form-control">
                                             </td>
                                         </tr>
@@ -605,7 +624,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -624,6 +642,7 @@ export default {
             p_gewog_list:[],
             p_villageList:[],
             villageList:[],
+            departmentList:[],
             orgList:[],
             subjectList:[],
             qualificationsubjectList:[],
@@ -634,6 +653,7 @@ export default {
             coursemodeList:[],
             repationshipList:[],
             staff_nomination_list:[],
+            attachmentDetails:[],
 
             personal_form: new form({
                 isteaching:false,
@@ -653,6 +673,7 @@ export default {
                 dzongkhag:'',
                 village_id:'',
                 gewog:'',
+                department:'',
                 p_dzongkhag:'',
                 p_village_id:'',
                 p_gewog:'',
@@ -751,6 +772,51 @@ export default {
                 this.nomination_form.fileUpload.pop();
             }
         },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file,count){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            $('#esxist'+count).remove();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -771,6 +837,7 @@ export default {
                 $('#enddate').val('');
             }
             if(type=="nomination-modal"){
+                this.resetnomidees();
                 this.nomination_form.action_type='add';
                 $('#nomi_cid').val('');
                 $('#nomi_name').val('');
@@ -784,6 +851,7 @@ export default {
             $('#'+type).modal('show');
         },
         shownominationedit(item){
+
             this.nomination_form.action_type='edit';
             this.nomination_form.nomination_id=item.id;
             $('#nomi_cid').val(item.nomi_cid);
@@ -808,7 +876,7 @@ export default {
             this.nomination_form.nomi_relation=item.relations.id;
             $('#nomi_percentage').val(item.nomi_percentage);
             this.nomination_form.nomi_percentage=item.nomi_percentage;
-
+            this.attachmentDetails=item.attachment;
             $('.select2').select2({
                 theme: 'bootstrap4'
             });
@@ -894,7 +962,13 @@ export default {
                     formData.append('nomi_contact', this.nomination_form.nomi_contact);
                     formData.append('nomi_email', this.nomination_form.nomi_email);
                     formData.append('nomi_relation', this.nomination_form.nomi_relation);
-                    formData.append('nomi_percentage', this.nomination_form.nomi_percentage);
+                    formData.append('status', this.nomination_form.status);
+                    if(this.nomination_form.isnominee==0){
+                        formData.append('nomi_percentage', 0);
+                    }
+                    else{
+                        formData.append('nomi_percentage', this.nomination_form.nomi_percentage);
+                    }
                     formData.append('isnominee', this.nomination_form.isnominee);
                     formData.append('action_type', this.nomination_form.action_type);
                     formData.append('status', this.nomination_form.status);
@@ -968,7 +1042,6 @@ export default {
                         if(dob.includes('/')){
                             dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
                         }
-
                         this.personal_form.dob=dob;
                         this.personal_form.email=detail.Email;
                         this.personal_form.initial_appointment_date=detail.dateOfAppointment;
@@ -1226,18 +1299,29 @@ export default {
                 this.personal_form.marital_status=data.merital_status;
                 $('#marital_status').val(data.merital_status).trigger('change');
                 this.personal_form.dob=data.dob;
+                this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                $('#initial_appointment_date').val(data.p_dzongkhag).trigger('change');
+                $('#p_dzongkhag').prop('disabled',true);
+                $('#dob').prop('disabled',true);
+                $('#sex_id').prop('disabled',true);
+                $('#cid_work_permit').prop('disabled',true);
+                $('#name').prop('disabled',true);
+                this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
+                this.getPvillagelist(data.p_gewog,data.p_village);
 
                 this.personal_form.sex_id=data.sex_id;
                 this.personal_form.country_id=data.country_id;
                 this.personal_form.working_agency_id=data.working_agency_id;
                 this.personal_form.contact_number=data.contact_no;
                 this.personal_form.email=data.email;
+                this.personal_form.alternative_email=data.alternative_email;
                 this.personal_form.comp_sub=data.comp_sub_id;
                 this.personal_form.elective_sub1=data.elective_sub_id1;
                 this.personal_form.elective_sub2=data.elective_sub_id2;
                 this.personal_form.currier_stage=data.cureer_stagge_id;
                 this.personal_form.emp_file_code=data.employee_code;
                 this.personal_form.remarks=data.remarks;
+                this.personal_form.initial_appointment_date=data.initial_appointment_date;
             })
             .catch((error) => {
                 console.log("Error:"+error);
@@ -1258,6 +1342,9 @@ export default {
             .then(response => {
                 let data = response;
                 this.qualificationsubjectList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.subjectArray[data.data.data[i].id] = data.data.data[i].name;
+                }
             })
             .catch(function (error) {
                 console.log(error);
@@ -1380,22 +1467,29 @@ export default {
             });
         },
 
-        allOrgList(){
-            let dzo_id=$('#dzongkhag').val();
-            let org_type=$('#organization_type').val();
+        getDepartmentList(type){
+            let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
+            this.gewog_list =[];
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.departmentList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
+        allOrgList(type){
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            //Below two should change according to the data from rcsc
-            if(org_type=="Dzongkhag"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            }
-            if(org_type=="Ministry"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
+            if(type=="division"){
+                uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
             }
             this.orgList = [];
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.orgList = data.data;
+                let data = response.data.data;
+                this.orgList = data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -1489,11 +1583,22 @@ export default {
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
-                this.allOrgList();
+                // this.allOrgList('school');
             }
             if(id=="organization_type"){
                 this.personal_form.organization_type=$('#organization_type').val();
-                this.allOrgList();
+                if($('#organization_type').val()=="Ministry" || $('#organization_type').val()=="Dzongkhag"){
+                    this.getDepartmentList($('#organization_type').val());
+                    $('#departmentdiv').show();
+                }
+                else{
+                    this.allOrgList('school');
+                    $('#departmentdiv').hide();
+                }
+            }
+            if(id=="department"){
+                this.personal_form.department=$('#department').val();
+                this.allOrgList('division');
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();

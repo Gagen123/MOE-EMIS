@@ -102,7 +102,6 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                console.log(this.form)
                 this.form.post('/masters/saveAcademicMasters',this.form)
                     .then(() => {
                     Toast.fire({
