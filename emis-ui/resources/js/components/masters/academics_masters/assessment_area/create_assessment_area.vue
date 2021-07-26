@@ -46,13 +46,13 @@
                             <option value="">--Select--</option>
                         </select> 
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                </div>  
+                <div class="row form-group">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="onChange('display_order')" type="number" min="0">
                         <has-error :form="form" field="display_order"></has-error>
                     </div>
-                </div>  
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br> 
