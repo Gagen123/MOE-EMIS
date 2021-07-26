@@ -12,9 +12,9 @@
             <div class="card-body pb-0 mb-0" style="display:none">
                 <div class="callout callout-success">
                     <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="dzosection">
                             <label class="mb-0">Dzongkhag:</label>
-                            <select class="form-control select2" id="dzongkhag_id">
+                            <select class="form-control select2" id="dzongkhag_id" v-model="dzo_id">
                                 <option value=""> --Select--</option>
                                 <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
@@ -23,17 +23,26 @@
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                             <label class="mb-0">Organization Type:<i class="text-danger">*</i></label>
                             <select class="form-control select2" name="organization_type" id="organization_type">
+                                <option value=""> --Select--</option>
                                 <option value="Org">Organization/School </option>
                                 <option value="Dzongkhag">Dzongkhag</option>
                                 <option value="Ministry">Ministry </option>
                             </select>
                             <span class="text-danger" id="organization_type_err"></span>
                         </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                            <label class="mb-0">Department:<i class="text-danger">*</i></label>
+                            <select class="form-control select2" name="department" id="department">
+                                <option value=""> --Select--</option>
+                                <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <span class="text-danger" id="department_err"></span>
+                        </div>
                         <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label class="mb-0">Organization:</label>
+                            <label class="mb-0">Organization:<i class="text-danger">*</i></label>
                             <select class="form-control select2" id="org_id">
                                 <option value=""> --Select--</option>
-                                <option v-for="(item, index) in org_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <span class="text-danger" id="org_id_err"></span>
                         </div>
@@ -47,7 +56,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                 <table id="civil-staff-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
@@ -88,9 +97,11 @@
 export default {
     data(){
         return{
+            accesslevel:'',
             dzongkhagList:[],
+            dzo_id:'',
             departmentList:[],
-            org_list:[],
+            orgList:[],
             substaffList:[],
             genderArray:{},
             positiontitleList:{},
@@ -151,11 +162,29 @@ export default {
         },
         getDepartmentList(type){
             let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
+            if(this.accesslevel=="Dzongkhag"){
+                uri = 'loadCommons/loadHeaquarterList/user_dzongkhag/user_dzongkhag';
+            }
             this.gewog_list =[];
             axios.get(uri)
             .then(response =>{
                 let data = response;
                 this.departmentList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        allOrgList(type){
+            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+this.dzo_id;
+            if(type=="division"){
+                uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
+            }
+            this.orgList = [];
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.orgList = data;
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -182,7 +211,20 @@ export default {
                     $('#departmentdiv').hide();
                 }
             }
+            if(id=="department"){
+                this.allOrgList('division');
+            }
         },
+        loaddata(){
+            axios.get('loadCommons/loadStaffList/'+type)
+            .then((response) => {
+                this.substaffList =  response.data.data;
+             })
+            .catch((error) => {
+                console.log("Error."+error);
+            });
+        }
+
     },
     mounted(){
         this.loadactivedzongkhagList();
@@ -202,12 +244,21 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
+            this.accesslevel=data['acess_level'];
             //1-regualr,2-contract,3-voluntary
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWsirRegContract/1,2,3');
+                this.loadstff('orgWiseCivilServent/1,2,3');
+                this.dzo_id=data['Dzo_Id'];
+                $('#dzongkhag').val(data['Dzo_Id']).trigger('change');
+                $('#adv_serach_ection').hide();
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('dzoWsirRegContract/1,2,3');
+                this.dzo_id=data['Dzo_Id'];
+                $('#dzongkhag').val(data['Dzo_Id']).trigger('change');
+                this.allOrgList('school');
+                $("#organization_type option[value='Ministry']").remove();
+                this.loadstff('dzoWiseCivilServent/1,2,3');
+                $('#dzosection').hide();
             }
             if(data['acess_level']=="Ministry"){
                 this.loadstff('allRegContract/1,2,3');
@@ -217,7 +268,7 @@ export default {
             console.log(errors)
         });
 
-        this.dt =  $("#civil-staff-table").DataTable()
+        this.dt =  $("#civil-staff-table").DataTable();
     },
     watch: {
         substaffList(){

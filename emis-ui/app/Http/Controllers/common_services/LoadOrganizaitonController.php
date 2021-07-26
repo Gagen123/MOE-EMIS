@@ -88,6 +88,11 @@ class LoadOrganizaitonController extends Controller{
         if($type=="all_division"){
             $param=$parent_id;
         }
+
+        if($type=="user_dzongkhag"){
+            $param=$this->getUserDzoId();
+        }
+
         return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);
     }
 

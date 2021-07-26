@@ -90,10 +90,10 @@ export default {
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWsirRegContract/Regular,Volunteer');
+                this.loadstff('orgWiseCivilServent/1,2,3');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('dzoWsirRegContract/Regular,Volunteer');
+                this.loadstff('dzoWiseCivilServent/1,2,3');
             }
             if(data['acess_level']=="allRegContract/Regular,Volunteer"){
                 this.loadstff();

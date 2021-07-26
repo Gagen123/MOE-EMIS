@@ -34,32 +34,22 @@ class LoadStaffController extends Controller{
                 $param=$this->getUserDzoId();
             }
         }
-        if($type=="dzoWsirRegContract"){
+        if($type=="dzoWiseCivilServent"){
             $param=$param.','.$this->getUserDzoId();
+        }
+        if($type=="orgWiseCivilServent"){
+            $param=$param.','.$this->getWrkingAgencyId();
         }
 
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
         }
-        if($type=="orgWsirRegContract"){
-            $param=$param.','.$this->getWrkingAgencyId();
-        }
-
 
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
             $param=$parent_id;
         }
-
-        //type=orgwise, parent_id=?: to list with dzongkhag id
-        if($type=="orgwise" || $type=="dzo_hq_departmentwise"){
-            $param=$parent_id;
-        }
-        if($type=="emptype"){
-            $param=$parent_id;
-        }
-
 
         // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
