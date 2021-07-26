@@ -9,7 +9,7 @@
                                 <th>SL#</th>
                                 <th>Class</th>
                                 <th>Assessment Frequency</th>
-                                <th>Assessment Type</th>
+                                <th>Academic Transcript Format</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -30,9 +30,9 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select v-model="classAssessmentFrequencyList[index].aca_assmnt_type" class="form-control select2 editable_fields" > 
                                             <option selected="selected" value="">---Select---</option>
-                                            <option value="0">Not Assessed</option>
-                                            <option value="1">Summative</option>
-                                            <option value="2">Formative</option>
+                                            <option value="0">NA</option>
+                                            <option value="1">Subjects as Rows </option>
+                                            <option value="2">Subjects as Columns</option>
                                         </select>
                                     </div>
                                 </td>

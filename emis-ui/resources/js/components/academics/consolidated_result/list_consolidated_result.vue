@@ -1,36 +1,28 @@
 <template>
     <div>
         <div class="form-group row">
-             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label>Assessment Frequency:<span class="text-danger">*</span></label> 
-                <select class="form-control select2" id="aca_assmt_frequency_id" v-model="aca_assmt_frequency_id"  @change="getTerms()">
-                    <option value=""> --Select--</option>
-                    <option v-for="(item, index) in frequencies" :key="index" v-bind:value="item.id">
-                        {{ item.name }} 
+           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Class:<span class="text-danger">*</span></label> 
+                <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="loadConsolidatedResultList(); remove_err('class_stream_section_id')">
+                    <option selected="selected" value="">---Select---</option>
+                    <option selected v-for="(item, index) in Classes" :key="index" :value="[item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                        {{ item.class_stream_section }}
                     </option>
                 </select> 
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label>Term:<span class="text-danger">*</span></label> 
-                <select class="form-control select2" id="aca_assmt_term_id" v-model="aca_assmt_term_id"  @change="loadConsolidatedResultList()">
-                    <option value=""> --Select--</option>
-                    <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
-                        {{ item.name }} <span v-if="item.term_dzo_name">( {{ item.term_dzo_name }} )</span>
-                    </option>
-                </select> 
+                <span id= "errorId" class="text-danger">{{ errorMessage }}</span>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
                 <table id="consolidated-result-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Class</th>
+                            <th>Term</th>
                             <th>Result Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in studentConsolidatedResultList" :key="index">
-                            <td>{{ item.class_stream_section }}</td>
+                            <td>{{ item.term }}</td>
                             <td>
                                 <span v-if="item.pubblished">
                                     <strong>Published</strong> on {{ item.published_date }}
@@ -59,7 +51,7 @@
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
                                 </div>
                                 <div class="btn-group btn-group-sm">
-                                    <router-link :to="{name:'view_consolidated_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
+                                    <router-link :to="{name:'view_consolidated_result', params: {data:item,classes:class_stream_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
                                 </div>
                             </td>
                         </tr>
@@ -73,31 +65,59 @@
 export default {
     data(){
         return{
-            frequencies:[],
+            Classes:[],
             terms:[],
             studentConsolidatedResultList:[],
-            aca_assmt_frequency_id:'',
-            aca_assmt_term_id:'',
+            class_stream_section_id:'',
+            errorMessage:'',
             dt:''
         }
     },
     methods:{
-        getAssmntFrequecy(){
-            axios.get('masters/loadAcademicMasters/all_assessment_frequency').then((response)=>{
-                this.frequencies = response.data.data
-            })
+        remove_err(id){
+            if($('#' + id).val()!=""){
+               $('#'+id).removeClass('is-invalid select2');
+               $('#'+id).addClass('select2');
+               $('#errorId').remove()
+            }
         },
-        getTerms(){
-            this.terms = []
-            let uri = 'academics/getTermsByFrequency/'+this.aca_assmt_frequency_id
-            axios.get(uri).then((response)=>{
-                this.terms = response.data.data
+       getClassses(){
+           axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA')
+           .then(response => {
+                let formData = []
+                let classList = response.data
+                classList.forEach(item => {
+                    formData['org_class_id'] = item.org_class_id
+                    formData['org_stream_id'] = item.org_stream_id
+                    formData['org_section_id'] = item.org_section_id
+                    if(item.stream && item.section){
+                        formData['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                    }else if(item.stream){
+                        formData['class_stream_section'] = item.class+' '+item.stream
+                    }else if(item.section){
+                        formData['class_stream_section'] = item.class+' '+item.section
+                    }else{
+                        formData['class_stream_section'] = item.class
+                    }
+                    const object = {...formData}
+                    this.Classes.push(object)
+                });
             })
-        },
+        }, 
         async loadConsolidatedResultList(){
+            if($('#class_stream_section_id').val()===''){
+                this.errorMessage = "This field is required"
+            }
+            let uri = 'academics/loadConsolidatedResultList'
+            uri += ('?org_class_id='+this.class_stream_section_id[0])
+           if(this.class_stream_section_id[1] !== null){
+                    uri += ('&org_stream_id='+this.class_stream_section_id[1])
+            }
+            if(this.class_stream_section_id[2] !== null){
+                uri += ('&org_section_id='+this.class_stream_section_id[2])
+            }
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let uri = 'academics/loadConsolidatedResultList/'+this.aca_assmt_term_id
                 let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
@@ -167,8 +187,7 @@ export default {
         const event = new Event("change", { bubbles: true, cancelable: true });
         e.params.data.element.parentElement.dispatchEvent(event);
         });
-        this.getAssmntFrequecy()
-        this.getTerms()
+        this.getClassses()
         this.dt = $("#consolidated-result-table").DataTable({
             "order": [[ 0, "asc" ]],
             "lengthChange": false,

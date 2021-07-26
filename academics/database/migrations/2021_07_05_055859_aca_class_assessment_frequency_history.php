@@ -18,6 +18,7 @@ class AcaClassAssessmentFrequencyHistory extends Migration
         $table->char('org_class_id',36)->index();
         $table->char('org_stream_id',36)->nullable()->index();
         $table->char('aca_assmt_frequency_id',36)->index();
+        $table->unsignedTinyInteger('aca_assmnt_type')->index()->default(1)->comment('0 - NA ,1 - subjects as rows, 2 - subjects as columns');
         $table->string('class_stream',100);
         $table->string('recorded_for',100);
         $table->string('created_by',36)->index();
