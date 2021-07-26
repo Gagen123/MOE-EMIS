@@ -13,7 +13,7 @@
                     <table id="students-elective-subject-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Student Code</th>
+                                <th>Roll No.</th>
                                 <th>Name</th>
                                 <th v-for="(item0, index0) in electiveSubjectList" :key="index0">
                                     {{item0.subject}}
@@ -24,14 +24,14 @@
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in studentElectiveSubjectList" :key="index">
                                 <td>
-                                    {{ item.CidNo }}
+                                    {{index+1 }}
                                 </td> 
                                   <td>
                                     <input v-model="studentElectiveSubjectList[index].std_student_id" class="form-control" type="hidden">
                                     {{ item.Name}}
                                 </td> 
                                 <td v-for="(item1, index1) in electiveSubjectList" :key="index1">
-                                    <input type="checkbox" v-model="studentElectiveSubjectList[index][item1.aca_sub_id]" :true-value="item1.aca_sub_id" :false-value="false">
+                                    <input class="ml-2" type="checkbox" v-model="studentElectiveSubjectList[index][item1.aca_sub_id]" :true-value="item1.aca_sub_id" :false-value="false">
                                 </td>
                             </tr>
                         </tbody>
@@ -73,8 +73,23 @@ export default {
             }
             try{
                 let studentElectiveSubjects = await axios.get(uri).then(response => response.data)
+                let electiveSubjectList = studentElectiveSubjects.electiveSubjects.data
+                let organizationOptionalSubjects = await axios.get('organization/getSubjectMapping').then(response => response.data)
+                let subjects = [];
+                organizationOptionalSubjects.forEach((element,index) => {
+                    let aa = []
+                    electiveSubjectList.forEach(element1 => {
+                        if(element.aca_sub_id == element1.aca_sub_id && element.classId == element1.org_class_id && (element.streamId == element1.org_stream_id || (element.streamId == null && element1.org_stream_id == null)) && (element.sectionId == this.section_id || element.sectionId == null)){
+                           aa['subject'] = element1.subject
+                           aa['aca_sub_id'] = element1.aca_sub_id
+                           const object = {...aa}
+                           subjects.push(object)
+                        }
+                    })
+                });
                 this.studentElectiveSubjectList = studentElectiveSubjects.students
-                this.electiveSubjectList = studentElectiveSubjects.electiveSubjects.data
+                this.electiveSubjectList = subjects
+
             }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -88,7 +103,7 @@ export default {
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    this.$router.push('/edit-student-elective-subject');
+                    this.$router.push('/list-students-elective-subject');
                 })
                 .catch(function(error){
                 this.errors = response.error;
@@ -100,7 +115,7 @@ export default {
         this.dt = $("#students-elective-subject-table").DataTable({
             columnDefs: [
                 { width: 20, targets: 0},
-                { width: 50, targets: 1},
+                { width: 200, targets: 1},
             ],
         })
     },
@@ -116,7 +131,12 @@ export default {
         studentElectiveSubjectList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#students-elective-subject-table").DataTable()
+                this.dt = $("#students-elective-subject-table").DataTable({
+                    columnDefs: [
+                        { width: 20, targets: 0},
+                        { width: 200, targets: 1},
+                    ],
+                })
             });
         }
     }

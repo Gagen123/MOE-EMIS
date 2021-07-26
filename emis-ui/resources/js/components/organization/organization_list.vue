@@ -109,7 +109,7 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        workingAgency
+        // workingAgency
 
     },
     watch: {

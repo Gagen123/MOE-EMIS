@@ -45,6 +45,10 @@ class LoadOrganizaitonController extends Controller{
         if($type=="gewoggwise"){
             $param=$id;
         }
+        //type=gewoggwise, parent_id=?: to list with gewog id
+        if($type=="private"){
+            $param=$id;
+        }
 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
@@ -77,9 +81,18 @@ class LoadOrganizaitonController extends Controller{
         }
 
         //list headquarters of all ministry
-        if($type=="all_ministry_headquarters"){
-            $param=1;
+        if($type=="all_ministry_departments"){
+            $param=$parent_id;
         }
+        //list headquarters of all ministry
+        if($type=="all_division"){
+            $param=$parent_id;
+        }
+
+        if($type=="user_dzongkhag"){
+            $param=$this->getUserDzoId();
+        }
+
         return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);
     }
 

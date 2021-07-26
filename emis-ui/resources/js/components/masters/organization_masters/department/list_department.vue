@@ -1,20 +1,24 @@
 <template>
-    <div class="card-body"> 
+    <div class="card-body">
         <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
+                    <th>Dzongkhag</th>
                     <th>Department</th>
                     <th>Description</th>
+                    <th>Type</th>
                     <th>Status</th>
-                    <th>Action</th> 
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
+                    <td>{{ dzoArray[item.dzo_id]}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
+                    <td>{{ item.type}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -32,6 +36,7 @@ export default {
     data(){
         return{
             data_list:[],
+            dzoArray:{},
             dt:'',
         }
     },
@@ -50,8 +55,21 @@ export default {
         editmasters(data){
             this.$router.push({name:'edit_department',params: {data:data}});
         },
+        loaddzolist(uri = 'masters/loadGlobalMasters/all_active_dzongkhag'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.dzoArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
     },
     mounted(){
+        this.loaddzolist();
         this.loadContactList();
         this.dt =  $("#org-masters-table").DataTable();
     },

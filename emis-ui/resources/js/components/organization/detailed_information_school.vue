@@ -96,10 +96,8 @@
                                     </div>
                                     <hr>
                                     <div class="row invoice-info">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label class="mb-0"><i><u>Geo-Position Details</u></i></label>
-                                        </div>
-                                        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
                                                 <label class="col-lg-1 col-md-1 col-sm-1 col-xs-12 col-form-label">Long:</label>
                                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -117,10 +115,22 @@
                                             <div class="form-group row">
                                                 <i>Above values are displayed from your current location. Make sure that you are updating this information from your school, Otherwise you can Overwrite then if you know those values </i>
                                             </div>
+                                            <hr />
                                             <div class="form-group row">
-                                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Google Map Path:</label>
-                                                <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
-                                                    <input type="text" v-model="form.map_path" class="form-control editable_fields" id="nameOwner"/>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    <label>Google Map Path:</label>
+                                                    <ol>
+                                                        <li><i>Visit <a href="https://www.google.com/maps" target="_blank">Google Map Search</a></i></li>
+                                                        <li><i>Type your school name in the search box</i></li>
+                                                        <li><i>If your school/organization is registered in the google map, then your school/organization will be located in the map. Otherwise need to register first</i></li>
+                                                        <li><i>Click on the Embed a map link from the popup and press COPY HTML.</i></li>
+                                                        <li><i>Past the link in the above text box.</i></li>
+                                                    </ol>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                    <textarea name="googlemap" class="form-control" v-model="form.map_path" id="googlemap" @change="previewchanges('googlemap','preview_sec')"></textarea>
+                                                    <br>
+                                                    <span id="preview_sec"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,25 +150,29 @@
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Entrance Gate:</label><br>
-                                                    <label><input  type="radio" v-model="form.entranceGate" value="1" tabindex=""/> Yes</label>
-                                                    <label><input  type="radio" v-model="form.entranceGate" value="0" tabindex=""/> No</label>
+                                                    <label><input  type="radio" v-model="form.entranceGate" value="1" @change="showgate(1)" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.entranceGate" value="0" @change="showgate(0)" tabindex=""/> No</label>
                                                 </div>
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="gate_type_section">
+                                                    <label>Gate Type:</label>
+                                                    <select v-model="form.gate_type" class="form-control" name="gate_type" id="gate_type">
+                                                        <option v-for="(item, index) in gate_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Compound Fencing:</label><br>
                                                     <label  v-for="(item, key, index) in  fence_list" :key="index" class="pr-4">
                                                         <input  type="radio" v-model="form.fencingtype" :value="item.id" tabindex=""/>
                                                         {{item.name}}
                                                     </label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-
-
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Disaster Area:</label><br>
-                                                    <label  v-for="(item, index) in  disasterList" :key="index" class="pr-4">
-                                                        <input  type="checkbox" name="disasterArea" v-model="form.disasterArea" :value="item.id"/>
-                                                        {{item.name}}
+                                                    <label v-for="(item, index) in  disasterList" :key="index" class="pr-4">
+                                                        <input type="checkbox" name="disasterArea" :id="'dester'+item.id" :value="item.id"/>
+                                                        {{item.name}}<br />
                                                     </label>
                                                 </div>
                                             </div>
@@ -193,6 +207,7 @@
                 fence_list:[],
                 disasterList:[],
                 climate_type_list:[],
+                gate_type_list:[],
                 form: new form({
                     org_id: '',
                     category:0,
@@ -211,12 +226,18 @@
                     hasCE:'',
                     longitude:'', latitude:'', altitude:'',map_path:'',
                     climate_type:'',distance_from_dzo:'',
-                    fencingtype:'',entranceGate:'',disasterArea:[],
-                    fields_for:'school'
+                    fencingtype:'',entranceGate:'',disasterArea:'',
+                    fields_for:'school',
+                    gate_type:'',
                 })
             }
         },
         methods:{
+            previewchanges(id,preid){
+                if($('#'+id).val()!=""){
+                    this.populategooglemap($('#'+id).val());
+                }
+            },
             getorgProfile(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
@@ -255,14 +276,27 @@
                     if(response_data.locationDetials!=null && response_data.locationDetials!=""){
                         this.form.altitude=response_data.locationDetials.altitude;
                         this.form.climate_type=response_data.locationDetials.climate_type;
+                        if(response_data.locationDetials.disasterArea!=null && response_data.locationDetials.disasterArea!=""){
+                            if(response_data.locationDetials.disasterArea.includes(',')){
+                                response_data.locationDetials.disasterArea.split(',').forEach(itm => {
+                                    $('#dester'+itm).prop('checked',true);
+                                });
+                            }else{
+                                $('#dester'+response_data.locationDetials.disasterArea).prop('checked',true);
+                            }
+                        }
                         this.form.disasterArea=response_data.locationDetials.disasterArea;
                         this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
                         this.form.entranceGate=response_data.locationDetials.entranceGate;
                         this.form.fencingtype=response_data.locationDetials.fencingtypeId;
                         this.form.map_path=response_data.locationDetials.googleMapPath;
+                        if(response_data.locationDetials.googleMapPath!=null && response_data.locationDetials.googleMapPath!=""){
+                            this.populategooglemap(response_data.locationDetials.googleMapPath);
+                        }
                         this.form.latitude=response_data.locationDetials.latitude;
                         this.form.longitude=response_data.locationDetials.longitude;
                         this.form.thramNo=response_data.locationDetials.thramNo;
+                        this.form.gate_type=response_data.locationDetials.gate_type;
                     }
                     let prop=response_data.contactDetails;
                     let contactDetails=[];
@@ -271,14 +305,32 @@
                     }
                     this.count=prop.length;
                     this.form.users=contactDetails;
-
                 })
                 .catch((error) => {
                     console.log("Error: "+error);
                 });
             },
+            populategooglemap(value){
+                let mapid=value;
+                mapid=mapid.replace('width="600"','width="450"');
+                mapid=mapid.replace('height="450"','height="300"');
+                mapid=mapid.replace('width="800"','width="450"');
+                mapid=mapid.replace('height="600"','height=300"');
+                $("#preview_sec").html(mapid);
+            },
 
             updateorg(){
+                let disasval="";
+                $("input[name='disasterArea']:checked").each ( function(index){
+                    if(index==$("input[name='disasterArea']:checked").length-1){
+                        disasval+=$(this).val();
+                    }
+                    else{
+                        disasval+=$(this).val()+',';
+                    }
+
+                });
+                this.form.disasterArea=disasval;
                 this.form.post('organization/updateOrgBasicDetials')
                 .then((response) => {
                     Toast.fire({
@@ -373,6 +425,24 @@
                     $('roadtypeno').show();
                 }
             },
+            loadGatetList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/GateType'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.gate_type_list =  data;
+                })
+                .catch(function (error) {
+                    console.log('error: '+error);
+                });
+            },
+            showgate(type){
+                if(type==0){
+                    $('#gate_type_section').hide();
+                }else{
+                    $('#gate_type_section').show();
+                }
+            }
+
         },
         mounted(){
             this.getContactTypeDropdown();
@@ -381,6 +451,7 @@
             this.loadfencingList();
             this.loadDisasterList();
             this.loadlcimateTypeList();
+            this.loadGatetList();
             axios.get('common/getSessionDetail')
             .then(response =>{
                 let data = response.data.data;

@@ -16,20 +16,29 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Assessment Area:<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="onChange('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Assessment Area (In Dzongkha Text):</label>
-                        <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('dzo_name') }" id="dzo_name" @change="remove_err('dzo_name')" type="text">
+                        <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('dzo_name') }" id="dzo_name" @change="onChange('dzo_name')" type="text">
                         <has-error :form="form" field="dzo_name"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Assessment Area Abbreviation:<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
-                        <has-error :form="form" field="name"></has-error>
+                        <input class="form-control form-control-sm" id="code" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" @change="onChange('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Assessment Type:<span class="text-danger">*</span></label> 
+                           <select class="form-control select2" id="aca_assmnt_type" v-model="form.aca_assmnt_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('aca_assmnt_type') }" @change="onChange('aca_assmnt_type')">
+                             <option value="">--Select--</option>
+                            <option value="0">Continuous Assessment</option>
+                            <option value="1">Term Examination</option>
+                        </select> 
+                        <has-error :form="form" field="aca_assmnt_type"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Rating Type:</label> 
@@ -37,13 +46,13 @@
                             <option value="">--Select--</option>
                         </select> 
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Display Order:<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number" min="0">
-                        <has-error :form="form" field="display_order"></has-error>
-                    </div>
                 </div>  
                 <div class="row form-group">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Display Order:<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="onChange('display_order')" type="number" min="0">
+                        <has-error :form="form" field="display_order"></has-error>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br> 
@@ -68,6 +77,7 @@ export default {
             filtered_rating_type:[],
             form: new form({
                 aca_sub_id:'',
+                aca_assmnt_type:'',
                 aca_rating_type_id:'',
                 name: '',
                 dzo_name: '',
@@ -96,10 +106,10 @@ export default {
                $('#'+id).removeClass('is-invalid select2');
                $('#'+id).addClass('select2');
             }
-		    var aca_sub_category_id = $('#subject_id option:selected').data('category-id')
+		    var aca_sub_category_id = $('#aca_sub_id option:selected').data('category-id')
             var ratingtypes = "<option value=''>--Select--</option>"
             this.rating_type_list.forEach((item,index)=>{
-                if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){
+                if((item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id) || item.aca_sub_category_id === null )){
                     ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
                 }
             })
@@ -119,6 +129,7 @@ export default {
             if(type=="reset"){
                 this.form.aca_sub_id = '';
                 this.form.aca_rating_type_id = '';
+                this.form.aca_assmnt_type = '';
                 this.form.name = '';
                 this.form.dzo_name = '';
                 this.form.name = '';

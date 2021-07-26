@@ -1,80 +1,34 @@
 <template>
     <div>
         <form>
-            <div class="form-group row">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Program/Club:<i class="text-danger">*</i></label>
-                    <select v-model="student_form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program') }" class="form-control select2" name="program" id="program">
-                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="student_form" field="program"></has-error>
-                </div> 
-            </div>
+             <div class="ml-0 row form-group">
+                <div class="mr-3">
+                    <strong>Class: </strong> {{ cl }} <span v-if="stream">{{ stream }}</span> <span v-if="section">{{ section }}</span> 
+                </div>
+             </div>
             <div class="row form-group">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Year of Establishment:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.year" :class="{ 'is-invalid': student_form.errors.has('year') }" id="year" @change="remove_err('year')" type="number">
-                    <has-error :form="student_form" field="year"></has-error>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Supported By:<span class="text-danger">*</span></label> 
-                    <select v-model="student_form.supporter" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('supporter') }" class="form-control select2" name="supporter" id="supporter">
-                        <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="student_form" field="supporter"></has-error>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <table id="subject-table" class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Optional Subject</th>
+                                <th>Is offered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in dataList" :key="index">
+                                <td>
+                                    {{ item.name }}
+                                </td>
+                                <td >
+                                    <input type="checkbox" name="class" v-model="dataList[index].is_offered" :value="item.is_offered">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <span class="text-danger" id="sugject_error"></span>
                 </div>
             </div>
-            <div class="form-group row">
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="student_form.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="student_form" field="remarks"></has-error>
-                </div>
-            </div>
-            <!-- <label>Roles Assigned to Staff </label> -->
-            <!-- <div class="card">
-                <div class="form-group row">
-                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
-                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Teacher</th>
-                                    <th>Role</th>
-                                    <th>Remarks</th>                     
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr id="record1" v-for='(role, index) in student_form.assigned_staff' :key="index">
-                                    <td>
-                                        <select name="teacher" id="teacher" class="form-control" v-model="role.teacher" :class="{ 'is-invalid': student_form.errors.has('teacher') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <select name="role" id="role" class="form-control" v-model="role.role" :class="{ 'is-invalid': student_form.errors.has('role') }">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in teacherRoles" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </td>
-                                    <td>                                
-                                        <input type="text" name="remarks" id="remarks" class="form-control" v-model="role.remarks" :class="{ 'is-invalid': student_form.errors.has('remarks') }" @change="remove_err('remarks')"/>
-                                        <has-error :student_form="form" field="remarks"></has-error>
-                                    </td>
-                                </tr> 
-                                <tr>
-                                    <td colspan="5"> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                                </tr>                                          
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> -->
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -86,78 +40,49 @@
 export default {
     data(){
         return {
-            studentList:[],
-            teacherList:[],
-            programList:[],
-            supportList:[],
-            teacherRoles:[],
-            assigned_staff: [],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
-
-            student_form: new form({
-                id:'',
-                program: '',
-                year: '',
-                supporter:'',
-                remarks:'',
-                assigned_staff: [],
-                record_type:'edit'
-            }),
+            subjectList:[],
+            dataList:[],
+            record_type:'edit',
+            dt:''
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/'+this.org_id){
+        loadAcademicMasters(){
+          let uri = "masters/loadAcademicMasters/optional_subject_classId_"+this.classId
+            if(this.streamId){
+                 uri += '_streamId_'+this.streamId
+            }
+            if(this.sectionId){
+                uri +='_sectionId_'+this.sectionId
+            }
             axios.get(uri)
             .then(response => {
-                let data = response;
-                console.log(data);
-                this.studentList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
+               this.subjectList = response.data.data
+            }).catch((error) => {
+                console.log("Error: "+error);
             });
         },
-        loadTeacherList(uri='students/loadTeacherList/'+this.org_id){
+        loadDataList(uri="organization/getSubjectMapping"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                console.log(data);
-                this.teacherList =  data.data.data;
+                let orgOptionalsubjects = response.data
+                let optionalSubjects = this.subjectList
+                optionalSubjects.forEach((item,index)=>{
+                    optionalSubjects[index]['is_offered'] = 0
+                    optionalSubjects[index]['org_section_id'] = this.sectionId
+                    orgOptionalsubjects.forEach(item2 => {
+                        if(item.aca_sub_id == item2.aca_sub_id && item.org_class_id ==item2.classId && (item.org_stream_id ==item2.streamId || (item.org_stream_id == null && item2.streamId == null)) && item2.sectionId==this.sectionId){
+                            optionalSubjects[index]['org_class_id'] = item2.classId
+                            optionalSubjects[index]['org_stream_id'] = item2.streamId
+                            optionalSubjects[index]['org_section_id'] = this.sectionId
+                            optionalSubjects[index]['is_offered'] = 1
+                        }
+
+                    })
+                })
+                this.dataList=optionalSubjects;
             })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.programList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveSupportList(uri="masters/loadActiveStudentMasters/program_support"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.supportList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveRolesList(uri="masters/loadActiveStudentMasters/program_teacher_roles"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.teacherRoles =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
+
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -165,49 +90,25 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        /**
-         * method to add more fields
-         */
-        addMore: function(){
-            this.count++;
-            this.student_form.assigned_staff.push({teacher:'',role:'', remarks:''})
-        },
-        addMoreStudents: function(){
-            this.count++;
-            this.student_form.assigned_student.push({student:'',std_role:'', remarks:''})   
-        }, 
-        /**
-         * method to remove fields
-         */
-        remove(index){    
-             if(this.student_form.roles.length>1){
-                this.count--;
-                this.student_form.roles.splice(index,1); 
-            }
-        },
-        removeStudents(index){    
-             if(this.student_form.assigned_student.length>1){
-                this.count--;
-                this.student_form.assigned_student.splice(index,1); 
-            }
-        },
+
         formaction: function(type){
             if(type=="reset"){
-                this.student_form.student= '';
-                this.student_form.remarks='';
-                this.student_form.status= 1;
+                this.form.student= '';
+                this.form.remarks='';
+                this.form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveStudentProgram',this.student_form)
+               let filterData = this.dataList.filter(item=>item.is_offered==true)
+                axios.post('/organization/saveSubjectMapping',{data:filterData})
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/student_programs_list');
+                    this.$router.push('/list_subject_offered');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((error) => {
+                    console.log("Error:"+error)
                 })
             }
 		},
@@ -217,61 +118,43 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="program"){
-                this.student_form.program=$('#program').val();
-            }
-            if(id=="supporter"){
-                this.student_form.supporter=$('#supporter').val();
-            }
-        },
-        /**
-         * method to get program details by id
-        */
-        getStudentProgramDetails(id){
-            axios.get('students/getProgramDetails/'+id)
-            .then((response) => {  
-                let data=response.data.data;
-                this.student_form.id= data.Id;
-                this.student_form.name= data.StdStudentId;
-                this.student_form.program= data.CeaProgrammeId;
-                this.student_form.year = data.EstablishmentYear;
-                this.student_form.supporter= data.CeaProgrammeSupporterId;
-                this.student_form.remarks= data.Remarks;
-
-                let prop=data.roles;
-                let rolesAssigned=[];
-                for(let i=0;i<prop.length;i++){
-                    rolesAssigned.push({teacher:prop[i].StfStaffId, role:prop[i].CeaRoleId, remarks:prop[i].Remarks});
-                }
-                this.count=data.length;
-                this.student_form.assigned_staff = rolesAssigned;
-            })
-            .catch((error) =>{  
-                console.log("Error:"+error);
-            }); 
         },
     },
-     mounted() {
+    created(){
+        this.cl =this.$route.params.data.class;
+        this.classId=this.$route.params.data.org_class_id;
+        this.section = this.$route.params.data.section;
+        this.streamId=this.$route.params.data.org_stream_id;
+        this.sectionId=this.$route.params.data.org_section_id;
+        this.stream=this.$route.params.data.stream;
+    },
+    mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        this.loadTeacherList();
-        this.loadActiveProgramList();
-        this.loadActiveSupportList();
-        this.loadActiveRolesList();
+        this.loadAcademicMasters();
+        this.loadDataList();
+        this.dt =  $("#subject-table").DataTable({
+            distroy:true,
+        })
     },
-    created() {
-        this.getStudentProgramDetails(this.$route.params.data.Id);
-    },
+      watch: {
+        dataList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#subject-table").DataTable({
+                    distroy:true,
+                })
+            });
+        }
+    }
 }
 </script>

@@ -2,22 +2,36 @@
 <template>
     <div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Class:<span class="text-danger">*</span></label> 
+                <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms()">
+                    <option value=""> --Select--</option>
+                    <option v-for="(item, index) in classList" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                        {{ item.class_stream_section }} 
+                    </option>
+                </select> 
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Term:<span class="text-danger">*</span></label> 
+                <select class="form-control select2" id="aca_assmt_term_id" v-model="aca_assmt_term_id"  @change="getTermResult()">
+                    <option value=""> --Select--</option>
+                    <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
+                        {{ item.name }} <span v-if="item.term_dzo_name">( {{ item.term_dzo_name }} )</span>
+                    </option>
+                </select> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
                 <table id="assessment-term-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                        <th>Class</th>
                         <th>Subject</th>
-                        <th>Term</th> 
                         <th>Result Status</th> 
                         <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <tr v-for="(item, index) in classSubjectTermList" :key="index">
-                            <td>{{ item.class_stream_section }}</td>
+                        <tr v-for="(item, index) in TermsResultList" :key="index">
                             <td>{{ item.sub_name }} <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name }} )</span></td>
-                            <td>{{item.term_name}} <span v-if="item.term_dzo_name && item.sub_dzo_name">( {{ item.term_dzo_name }} )</span></td>
                             <td>
                                 <span v-if="item.finalized"><strong>Finalized</strong> by
                                     <span v-if="item.assessed_by_class_teacher">class</span>
@@ -55,34 +69,39 @@
 export default {
     data(){
         return{
-            classSubjectTermList:[],
-            dt:''
+            
+            classList:[],
+            terms:[],
+            aca_assmt_term_id:'',
+            class_stream_section_id:'',
+            TermsResultList:[],
+            dt:'',
+            
         }
     },
     methods:{
-        async classSubjectTerm(){
+        async classSubjectTeacher(){
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let classSubjectTerms = await axios.get('academics/loadStudentAssessmentList').then(response => {
-                    return response.data.data
-                })
-                classSubjectTerms.forEach((classSubjectTerm,index) => {
+                let subjectTeachers = await axios.get('academics/loadClassBySubjectTeacher').then(response=> {return response.data.data})
+                subjectTeachers.forEach((subjectTeacher,index) => {
                     classSections.forEach(item => {
-                        if(classSubjectTerm.org_class_id == item.org_class_id && (classSubjectTerm.org_stream_id == item.org_stream_id || (classSubjectTerm.org_stream_id == null && item.org_stream_id == null)) && (classSubjectTerm.org_section_id == item.org_section_id || (classSubjectTerm.org_section_id == null && item.org_section_id == null))){
+                        if(subjectTeacher.org_class_id == item.org_class_id && (subjectTeacher.org_stream_id == item.org_stream_id || (subjectTeacher.org_stream_id == null && item.org_stream_id == null)) && (subjectTeacher.org_section_id == item.org_section_id || (subjectTeacher.org_section_id == null && item.org_section_id == null))){
                             if(item.stream && item.section){
-                                classSubjectTerms[index].class_stream_section = item.class+' '+item.stream+' '+item.section
+                                subjectTeachers[index].class_stream_section = item.class+' '+item.stream+' '+item.section
                             }else if(item.stream){
-                                classSubjectTerms[index].class_stream_section = item.class+' '+item.stream
+                                subjectTeachers[index].class_stream_section = item.class+' '+item.stream
                             }else if(item.section){
-                                classSubjectTerms[index].class_stream_section = item.class+' '+item.section
+                                subjectTeachers[index].class_stream_section = item.class+' '+item.section
                             }else{
-                                classSubjectTerms[index].class_stream_section = item.class
+                                subjectTeachers[index].class_stream_section = item.class
                             }
-                            classSubjectTerms[index].OrgClassStreamId = item.OrgClassStreamId
+                            subjectTeachers[index].OrgClassStreamId = item.OrgClassStreamId
                         }
                     })
                 })
-                this.classSubjectTermList = classSubjectTerms
+
+                this.classList = subjectTeachers
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -91,6 +110,29 @@ export default {
            },
         showedit(data){
             this.$router.push({name:'edit_term_result',params: {data:data}});
+        },
+        getTerms(){
+            this.terms=[];
+            let uri = 'academics/getTermsByClass/'+this.class_stream_section_id[1]
+            if(this.class_stream_section_id[2] !== null){
+                uri += ('/'+this.class_stream_section_id[2])
+            }
+            axios.get(uri).then((response)=>{
+                this.terms = response.data.data
+            })
+        },
+        getTermResult(){
+            let uri = 'academics/loadStudentAssessmentList'
+            uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&org_class_id='+this.class_stream_section_id[1])
+           if(this.class_stream_section_id[2] !== null){
+                    uri += ('&org_stream_id='+this.class_stream_section_id[2])
+            }
+            if(this.class_stream_section_id[3] !== null){
+                uri += ('&org_section_id='+this.class_stream_section_id[3])
+            }
+            axios.get(uri).then(response=>{
+                this.TermsResultList= response.data.data
+            })
         },
         unlockForEdit(Id){
             Swal.fire({
@@ -117,20 +159,40 @@ export default {
                         });
                     }
             })
-        }
+        },
     },
     mounted(){ 
-        this.classSubjectTerm()
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').select2().
+        on("select2:select", e => {
+            const event = new Event("change", { bubbles: true, cancelable: true });
+            e.params.data.element.parentElement.dispatchEvent(event);
+        })
+        .on("select2:unselect", e => {
+        const event = new Event("change", { bubbles: true, cancelable: true });
+        e.params.data.element.parentElement.dispatchEvent(event);
+        });
+        this.classSubjectTeacher()
+        this.getTerms()
         this.dt = $("#assessment-term-table").DataTable({
-            "order": [[ 0, "asc" ]]
+            "order": [[ 0, "asc" ]],
+            "lengthChange": false,
+            "searching": false,
         })
 
     },
     watch: {
-        classSubjectTermList(val) {
+        TermsResultList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#assessment-term-table").DataTable()
+                this.dt = $("#assessment-term-table").DataTable({
+                    "order": [[ 0, "asc" ]],
+                    "lengthChange": false,
+                    "searching": false,
+                })
             });
         }
     }

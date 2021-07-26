@@ -11,7 +11,7 @@ class Locations extends Model
     use HasFactory, Uuid;
     protected $table="organization_locations";
     protected $fillable = [
-        'id','organizationId','entranceGate','longitude','latitude','altitude','compoundFencing','compoundArea',
+        'id','organizationId','entranceGate','gate_type','longitude','latitude','altitude','compoundFencing','compoundArea','landOwnership',
         'thramNo','googleMapPath','climate_type','distance_from_dzo','fencingtypeId','disasterArea','created_by','updated_by'
     ];
 }

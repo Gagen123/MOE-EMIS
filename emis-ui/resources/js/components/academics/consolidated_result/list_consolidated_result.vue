@@ -1,12 +1,29 @@
 <template>
     <div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Assessment Frequency:<span class="text-danger">*</span></label> 
+                <select class="form-control select2" id="aca_assmt_frequency_id" v-model="aca_assmt_frequency_id"  @change="getTerms()">
+                    <option value=""> --Select--</option>
+                    <option v-for="(item, index) in frequencies" :key="index" v-bind:value="item.id">
+                        {{ item.name }} 
+                    </option>
+                </select> 
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Term:<span class="text-danger">*</span></label> 
+                <select class="form-control select2" id="aca_assmt_term_id" v-model="aca_assmt_term_id"  @change="loadConsolidatedResultList()">
+                    <option value=""> --Select--</option>
+                    <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
+                        {{ item.name }} <span v-if="item.term_dzo_name">( {{ item.term_dzo_name }} )</span>
+                    </option>
+                </select> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
                 <table id="consolidated-result-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Class</th>
-                            <th>Term</th>
                             <th>Result Status</th>
                             <th>Action</th> 
                         </tr>
@@ -14,7 +31,6 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in studentConsolidatedResultList" :key="index">
                             <td>{{ item.class_stream_section }}</td>
-                            <td>{{ item.term }}</td>
                             <td>
                                 <span v-if="item.pubblished">
                                     <strong>Published</strong> on {{ item.published_date }}
@@ -22,8 +38,11 @@
                                 <span v-else-if="item.class_teacher_finalized">
                                     <strong>Consolidated and finalized by class teacher</strong> on {{ item.class_teacher_finalized_date }} 
                                 </span>
-                                <span v-else-if="item.subject_teachers_finalized">
+                                <span v-else-if="item.aca_assmt_term_id && item.subject_teachers_finalized">
                                     <strong>Finalized by subject teachers</strong> on {{ item.subject_teachers_finalized_date }} 
+                                </span>
+                                <span v-else-if="!item.aca_assmt_term_id">
+                                    <strong>Under process with class teacher</strong>  
                                 </span>
                                 <span v-else>
                                     <strong>Under process with subject teachers</strong>
@@ -33,7 +52,10 @@
                                 <div v-if="item.is_class_teacher && item.subject_teachers_finalized && !item.class_teacher_finalized" class="btn-group btn-group-sm">
                                     <router-link :to="{name:'edit_consolidated_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
                                 </div>
-                                  <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
+                                <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEditForConsolidated(item.aca_assmt_term_id)"><i class="fa fa-unlock-alt mr-1"></i > Undo Finalize </div>
+                                </div>
+                                 <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
                                 </div>
                                 <div class="btn-group btn-group-sm">
@@ -51,15 +73,32 @@
 export default {
     data(){
         return{
+            frequencies:[],
+            terms:[],
             studentConsolidatedResultList:[],
+            aca_assmt_frequency_id:'',
+            aca_assmt_term_id:'',
             dt:''
         }
     },
     methods:{
+        getAssmntFrequecy(){
+            axios.get('masters/loadAcademicMasters/all_assessment_frequency').then((response)=>{
+                this.frequencies = response.data.data
+            })
+        },
+        getTerms(){
+            this.terms = []
+            let uri = 'academics/getTermsByFrequency/'+this.aca_assmt_frequency_id
+            axios.get(uri).then((response)=>{
+                this.terms = response.data.data
+            })
+        },
         async loadConsolidatedResultList(){
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultList').then(response => {return response.data.data})
+                let uri = 'academics/loadConsolidatedResultList/'+this.aca_assmt_term_id
+                let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
                         if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
@@ -89,7 +128,7 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_consolidated_result',params: {data:data}});
         },
-        unlockForEdit(Id){
+        unlockForEditForConsolidated (Id){
             Swal.fire({
                 title: 'Are you sure you want to unlock for editing?',
                 icon: 'warning',
@@ -99,13 +138,13 @@ export default {
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/unlockForEdit/'+Id)
+                        axios.post('/academics/unlockForEditForConsolidated/'+Id)
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',
-                                    title: 'Result unlocked for editing by subject teacher.'
+                                    title: 'Result unlocked for editing by class teacher.'
                                 })
-                                this.$router.push('/list-term-assessment');
+                                this.$router.push('/list-consolidated-result');
                             })
                             .catch(function(error){
                             this.errors = error;
@@ -115,16 +154,36 @@ export default {
         }
     },
     mounted(){ 
-        this.loadConsolidatedResultList()   
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').select2().
+        on("select2:select", e => {
+            const event = new Event("change", { bubbles: true, cancelable: true });
+            e.params.data.element.parentElement.dispatchEvent(event);
+        })
+        .on("select2:unselect", e => {
+        const event = new Event("change", { bubbles: true, cancelable: true });
+        e.params.data.element.parentElement.dispatchEvent(event);
+        });
+        this.getAssmntFrequecy()
+        this.getTerms()
         this.dt = $("#consolidated-result-table").DataTable({
-            "order": [[ 0, "asc" ]]
+            "order": [[ 0, "asc" ]],
+            "lengthChange": false,
+            "searching": false,
         })
     },
     watch: {
         studentConsolidatedResultList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#consolidated-result-table").DataTable()
+                this.dt = $("#consolidated-result-table").DataTable({
+                "order": [[ 0, "asc" ]],
+                "lengthChange": false,
+                "searching": false,
+                })
             });
         }
     }

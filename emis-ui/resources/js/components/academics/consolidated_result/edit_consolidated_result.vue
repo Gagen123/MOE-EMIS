@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="consolidated-result">
             <div class="ml-1 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{class_stream_section }}
+                <strong>Class: </strong> {{form.class_stream_section }}
               </div>
                <div class="mr-3">
                 <strong>Instructional Days: </strong> {{ instructional_days }}
@@ -11,7 +11,7 @@
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="edit-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
                                 <th rowspan="3">Student Code</th>
@@ -19,53 +19,69 @@
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
                                 </th>
+                                
                             </tr>
                             <tr>
-                                <th v-for="(item1,index1) in subjects" :key="index1" :colspan="areasPerSubject(item1.aca_sub_id)" class="text-center">
-                                    {{item1.subject}}
-                                </th> 
+                                <template v-for="(item1,index1) in subjects">
+                                    <th :rowspan="item1.is_aggregate ? 2 : 1" :key="index1" :colspan="areasPerSubject(item1.aca_sub_id)" class="text-center">
+                                        {{item1.subject}} <span v-if="item1.sub_dzo_name">( {{item1.sub_dzo_name }} )</span>
+                                    </th>
+                                </template>
                             </tr>
                              <tr>
-                                <th v-for="(item2,index2) in areas" :key="index2" class="text-center">
-                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item2.assessment_area_hint">
-                                         {{item2.assessment_area}} 
-                                         <span v-if="item2.input_type==1">({{item2.weightage}}%)</span>
-                                    </span>
-
-                                </th> 
+                                <template v-for="(item2,index2) in areas">
+                                    <th v-if="item2.assessment_area" :key="index2" class="text-center">
+                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item2.assessment_area_hint">
+                                            {{item2.assessment_area}} <span v-if="item2.assmt_area_dzo_name">( {{item2.assmt_area_dzo_name }} )</span>
+                                            <span v-if="item2.input_type==1 && item2.weightage">({{item2.weightage}}%)</span>
+                                        </span>
+                                    </th> 
+                                </template>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
                                 <td>{{item3.CidNo}}</td>
-                                <td>{{ item3.Name }}</td>
+                                <td>
+                                    {{ item3.Name }}
+                                </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                    <!-- <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)"> -->
-                                        <!-- <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_assmt_area_id']" type="hidden">
-                                        <input v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['aca_rating_type_id']" type="hidden">
-                                        <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control text-right" id="assmt_area" type="number" step="0.1" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
-                                        <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" class="form-control" id="assmt_area" type="text">
-                                        <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control ditable_fields" :id="item1.assessment_area"> 
-                                            <option selected value="">--SELECT--</option>
-                                            <option v-for="(item3, index3) in  rating(item2.aca_rating_type_id)" :key="index3" :value="item3.score">{{ item3.name }}</option>
-                                        </select>
-                                    </span> -->
-                                    <!-- <span v-if="!(consolidatedResultList[index3][item4.aca_assmt_term_id]=== undefined)">
-                                       {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
-                                    </span> -->
-                                    <!-- <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)"> -->
+                                     <span v-if="item4['aca_sub_id']=='remarks'">
+                                        <input type="text" v-model="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']" class="form-control form-control-sm">
+                                    </span>
+                                    <span v-else-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
+                                        <span v-if="item4['aca_sub_id']=='result'">
+                                            <span v-if="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']==1">
+                                                Promoted
+                                            </span>
+                                            <span v-else>
+                                                Detained
+                                            </span>
+                                        </span>
+                                        <span v-else>
+                                            {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
+                                       </span>
+                                    </span>                                  
                                 </td> 
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
             <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
                 <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize</button>
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button>
-
             </div>
+            <footer v-if="assessmentAreaCode.length">
+                <ul class="list-inline">
+                    <strong>Abbreviations:</strong>
+                    <li v-for ="(item,index) in assessmentAreaCode" :key="index" class="list-inline-item">
+                        <small class="text-justify">  <b>{{item.code}}  </b>- {{ item.name }}</small>
+                    </li>
+                </ul>
+            </footer>
         </form>
     </div>  
 
@@ -79,7 +95,16 @@
             terms:[],
             subjects:[],
             areas:[],
-            dt:''
+            assessmentAreaCode:[],
+            form: new form({
+                class_stream_section:'',
+                aca_assmt_term_id:'',
+                org_class_id:'',
+                org_stream_id:'',
+                org_section_id:'',
+                remarks:[]
+
+            }),
         }
       
     },
@@ -89,20 +114,21 @@
         },
        async loadConsolidatedResult(){
          let uri = 'academics/loadConsolidatedResult'
-           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
-          if(this.streamId !== null){
-                uri += ('&streamId='+this.streamId)
+           uri += ('?OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.form.org_class_id)
+          if(this.form.org_stream_id !== null){
+                uri += ('&streamId='+this.form.org_stream_id)
             }
-            if(this.sectionId !== null){
-                uri += ('&sectionId='+this.sectionId)
+            if(this.form.org_section_id !== null){
+                uri += ('&sectionId='+this.form.org_section_id)
             }
-             if(this.aca_assmt_term_id !== null){
-                uri += ('&aca_assmt_term_id='+this.aca_assmt_term_id)
+             if(this.form.aca_assmt_term_id !== null){
+                uri += ('&aca_assmt_term_id='+this.form.aca_assmt_term_id)
             }
             try{
                 let consolidatedResult = await axios.get(uri).then(response => response.data)
                 this.instructional_days = consolidatedResult.overAllInstructionalDays
                 this.terms = consolidatedResult.terms
+                this.assessmentAreaCode = consolidatedResult.abbreviations
                 this.subjects = consolidatedResult.subjects
                 this.areas = consolidatedResult.areas
                 this.consolidatedResultList = consolidatedResult.results
@@ -111,8 +137,9 @@
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             }
+         
             setTimeout(function(){
-                $("#view-table").DataTable({
+                $("#edit-table").DataTable({
                     "responsive": false,
                     "autoWidth": true,
                     scrollY:        "300px",
@@ -122,10 +149,11 @@
                     searching: false,
                     fixedColumns:   {
                         leftColumns: 2
-                    }
+                    },
                     
                 }); 
             }, 300);                      
+           
         },
         areasPerTerm(term_id){
            return this.areas.filter(item=>item.aca_assmt_term_id == term_id).length
@@ -134,33 +162,39 @@
             return this.areas.filter(item=>item.aca_sub_id == sub_id).length
         },
         save(action=""){
-        let params = {org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,aca_assmt_term_id:this.aca_assmt_term_id};
-        if(action == "finalize"){
-            params.finalize = 1
-            Swal.fire({
-                title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        axios.post('/academics/saveConsolidatedResut', params)
-                            .then(() => {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Data saved successfully.'
+            this.consolidatedResultList.forEach(item=>{
+                if(item[this.form.aca_assmt_term_id].remarks.area_total.score){
+                    this.form.remarks[item.std_student_id] = item[this.form.aca_assmt_term_id].remarks.area_total.score
+                }
+            })
+            if(action == "finalize"){
+                let finalize = { finalize:1 }
+                const newForm = Object.assign(this.form,finalize)
+                Swal.fire({
+                    title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    }).then((result) => {
+                        if(result.isConfirmed) {
+                            axios.post('/academics/saveConsolidatedResut', this.form)
+                                .then(() => {
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Data saved successfully.'
+                                    })
+                                    this.$router.push('/list-consolidated-result');
                                 })
-                                this.$router.push('/list-consolidated-result');
-                            })
-                            .catch(function(error){
-                            this.errors = error;
-                        });
-                    }
-                })
+                                .catch(function(error){
+                                this.errors = error;
+                            });
+                        }
+                    })
             }else if(action == "publish") {
-                params.publish = 1
+                let publish = { publish:1 }
+                const newForm = Object.assign(this.form,publish)
                 Swal.fire({
                 title: ' Are you sure you want to publish?',
                 icon: 'warning',
@@ -170,7 +204,7 @@
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/saveConsolidatedResut', params)
+                        axios.post('/academics/saveConsolidatedResut', this.form)
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',
@@ -185,7 +219,8 @@
                 })
             }
             else{
-                axios.post('/academics/saveConsolidatedResut', params)
+            
+                axios.post('/academics/saveConsolidatedResut', this.form)
                     .then(() => {
                         Toast.fire({
                             icon: 'success',
@@ -201,56 +236,37 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-        // this.dt = $("#view-table").DataTable({
-        //           scrollY:        "300px",
-        // scrollX:        true,
-        // scrollCollapse: true,
-        // paging:         false,
-        // fixedColumns:   {
-        //     leftColumns: 2
-        // }
-        // })
-            // $("#view-table").DataTable({
-            //         "responsive": true,
-            //         "autoWidth": true,
-            //         "paging": false,
-            //         scrollX: true,
-            //         scrollCollapse: true,
-            //         fixedColumns:   {
-            //             leftColumns: 2
-            //         },
-            //         columnDefs: [
-            //             { width: 2, targets: 0},
-            //         ],
-            //     }); 
-
+         this.dt =  $("#promotion-rule-edit-table").DataTable({
+            scrollY:        "300px",
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         false,
+            searching: false,
+            fixedColumns:   {
+                leftColumns: 2
+            },
+            destroy: true,
+        });
     },
     created() {
-        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
-        this.aca_sub_id = this.$route.params.data.aca_sub_id
-        this.classId=this.$route.params.data.org_class_id;
-        this.streamId=this.$route.params.data.org_stream_id;
-        this.sectionId=this.$route.params.data.org_section_id;
-        this.class_stream_section=this.$route.params.data.class_stream_section;
+        this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
+        this.form.org_class_id=this.$route.params.data.org_class_id;
+        this.form.org_stream_id=this.$route.params.data.org_stream_id;
+        this.form.org_section_id=this.$route.params.data.org_section_id;
+        this.form.class_stream_section=this.$route.params.data.class_stream_section;
         this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
 
     },
-    // watch: {
-    //     consolidatedResultList() {
-    //         this.dt.destroy();
-    //         this.$nextTick(() => {
-    //             this.dt = $("#view-consolidated-result-table").DataTable({
-    //                scrollY:        "300px",
-    //     scrollX:        true,
-    //     scrollCollapse: true,
-    //     paging:         false,
-    //     fixedColumns:   {
-    //         leftColumns: 2
-    //     }
-    //             })
-    //         });
-    //     }
-    // }
+     watch: {
+        consolidatedResultList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#promotion-rule-edit-table").DataTable({
+                     destroy: true,
+                })
+            });
+        }
+    }
 }
 </script>
 <style scoped>

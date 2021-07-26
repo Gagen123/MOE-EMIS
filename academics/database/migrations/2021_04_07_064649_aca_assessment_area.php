@@ -19,8 +19,9 @@ class AcaAssessmentArea extends Migration
             $table->char('id',36)->primary();
             $table->char('aca_sub_id', 36)->index();
             $table->string('name',100);
-            $table->string('dzo_name',255)->nullable();
+            $table->string('dzo_name',1000)->nullable();
             $table->string('code',10);
+            $table->unsignedTinyInteger('aca_assmnt_type')->index()->default(0)->comment('0 - Continuous Assessment, 1 - Term Examination');
             $table->char('aca_rating_type_id',36)->index()->nullable();
             $table->unsignedTinyInteger('display_order')->index();
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0-Disabled');

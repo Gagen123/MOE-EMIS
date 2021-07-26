@@ -401,15 +401,26 @@ const routes = [
                 ]
             },
             { path: '/disastercommittee_index',
-            component: require('./components/masters/organization_masters/disastercommittee/disastercomm_index.vue').default ,
-            children:
-            [
-                { path: '',name:'disastercomm_index', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
-                { path: '/disastercomm_add', name:'DisasterCommitteeAdd', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_add.vue').default },
-                { path: '/disastercomm_edit', name:'DisasterCommitteeEdit', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_edit.vue').default },
-                { path: '/disastercomm_list', name:'DisasterCommitteeList', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
-            ]
-          },
+                component: require('./components/masters/organization_masters/disastercommittee/disastercomm_index.vue').default ,
+                children:
+                [
+                    { path: '',name:'disastercomm_index', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
+                    { path: '/disastercomm_add', name:'DisasterCommitteeAdd', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_add.vue').default },
+                    { path: '/disastercomm_edit', name:'DisasterCommitteeEdit', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_edit.vue').default },
+                    { path: '/disastercomm_list', name:'DisasterCommitteeList', component: require('./components/masters/organization_masters/disastercommittee/disastercomm_list.vue').default },
+                ]
+            },
+
+            { path: '/gate_type_index',
+                component: require('./components/masters/organization_masters/gate_type/gate_type_index.vue').default ,
+                children:
+                [
+                    { path: '',name:'gate_type_index', component: require('./components/masters/organization_masters/gate_type/list_gate_type.vue').default },
+                    { path: '/create_gate_type', name:'create_gate_type', component: require('./components/masters/organization_masters/gate_type/create_gate_type.vue').default },
+                    { path: '/edit_gate_type', name:'edit_gate_type', component: require('./components/masters/organization_masters/gate_type/edit_gate_type.vue').default },
+                    { path: '/list_gate_type', name:'list_gate_type', component: require('./components/masters/organization_masters/gate_type/list_gate_type.vue').default },
+                ]
+            },
         ]
     },
     //Organziation Routes (Establishment)
@@ -981,7 +992,6 @@ const routes = [
       component: require('./components/organization/subject_offered/subject_offered_index.vue').default ,
       children: [
         { path: '',name:'subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
-        { path: '/add_subject_offered', name:'add_subject_offered', component: require('./components/organization/subject_offered/add_subject_offered.vue').default },
         { path: '/edit_subject_offered', name:'edit_subject_offered', component: require('./components/organization/subject_offered/edit_subject_offered.vue').default },
         { path: '/list_subject_offered', name:'list_subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
       ]

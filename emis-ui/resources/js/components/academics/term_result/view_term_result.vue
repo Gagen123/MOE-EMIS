@@ -46,6 +46,8 @@
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
+                                        <!-- <span v-if="item3.dzo_name">{{ item3.dzo_name }}</span>
+                                                 <span v-else> {{ item3.name }}</span> -->
                                         {{studentAssessmentList[index1][item2.aca_assmt_area_id]['score_text']}} 
                                         <input type="hidden" :value="totalScore += (item2.input_type==1 && studentAssessmentList[index1][item2.aca_assmt_area_id]['score'] != null ? parseFloat(studentAssessmentList[index1][item2.aca_assmt_area_id]['score']) : 0)">
                                     </span>
@@ -111,7 +113,11 @@
                         searching: false,
                         fixedColumns:   {
                             leftColumns: 2
-                        }
+                        },
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'print'
+                        ]
                         
                     }); 
             }, 300);  

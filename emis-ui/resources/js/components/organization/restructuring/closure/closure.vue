@@ -528,7 +528,6 @@ export default {
                 console.log(errors)
             });
         },
-
     },
     mounted(){
         $('[data-toggle="tooltip"]').tooltip();

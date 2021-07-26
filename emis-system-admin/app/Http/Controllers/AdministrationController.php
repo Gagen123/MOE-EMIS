@@ -264,8 +264,14 @@ class AdministrationController extends Controller{
         if($param=="all_gewog_List"){
             return $this->successResponse(Gewog::with('dzongkhag')->get());
         }
+        if($param=="all_active_gewog"){
+            return $this->successResponse(Gewog::where('status','1')->get());
+        }
         if($param=="all_village_List"){
             return $this->successResponse(Village::with('dzothroughgewog','gewog')->get());
+        }
+        if($param=="all_active_village"){
+            return $this->successResponse(Village::where('status','1')->get());
         }
         if($param=="all_gender"){
             return $this->successResponse(Gender::all());

@@ -22,8 +22,11 @@
                     <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>Transfer Student</td>
                     <td>Transfer Student</td>
+                    <!-- <td>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                    </td> -->
                     <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('transfer',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('transfer',std.id)"><span clas="fa fa-edit"></span>Admit</a>
                     </td>
                 </tr>
                 <tr v-for="(std, count) in newAdmissionList" :key="count">
@@ -34,8 +37,11 @@
                     <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>New Admission</td>
                     <td>{{ std.Status ==  'pending' ? "Applied" : std.Status}} </td>
-                    <td>
+                    <!-- <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
+                    </td> -->
+                    <td>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Admit</a>
                     </td>
                 </tr>
             </tbody>
@@ -52,6 +58,10 @@ export default {
             stdList:[],
             newAdmissionList:[],
             sex_idList:{},
+
+            student_form: new form({
+                id:'',
+            }),
         }
     },
     methods: {
@@ -83,10 +93,31 @@ export default {
         },
 
         loadeditpage(type,id){
+            this.student_form.id = id;
             if(type=="admission"){
-                this.$router.push({name:'update_student_admission',params: {data:id}});
+                // this.$router.push({name:'update_student_admission',params: {data:id}});
+                this.student_form.post('students/admission/updateStudentAdmission',this.student_form)
+                .then((response) => {  
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved Successfully'
+                    });
+                })
+                .catch((error) => {  
+                    console.log("Error:"+error)
+                });
             }
             else{
+                this.student_form.post('students/admission/updateStudentTransfer',this.student_form)
+                .then((response) => {  
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved Successfully'
+                    });
+                })
+                .catch((error) => {  
+                    console.log("Error:"+error)
+                });
 
             }
         },

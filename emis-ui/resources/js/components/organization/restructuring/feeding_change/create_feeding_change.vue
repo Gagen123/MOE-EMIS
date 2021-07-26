@@ -183,7 +183,6 @@ export default {
                 this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val());
             }
-
         },
 
         getorgdetials(org_id){

@@ -15,7 +15,17 @@ class StaffController extends Controller{
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-
+    public function getEmployeeDetials($emp_type="",$emp_id=""){
+        $person = json_decode($this->apiService->listData('getEmployeeDetials/'. $emp_type.'/'.$emp_id));
+        // dd($person->data->hasdata);
+        if($person->data->hasdata){
+            $response_data = $person->data->employee[0];
+            return  response()->json($response_data);
+        }else{
+            return response()->json('Citizen detail not found. Please check CID and try again.', 404);
+        }
+        return  response()->json($person);
+    }
     public function savePersonalDetails(Request $request){
         $rules = [
             'emp_type'              =>  'required',
@@ -66,12 +76,16 @@ class StaffController extends Controller{
             'cid_work_permit'   =>  $request->cid_work_permit,
             'emp_id'            =>  $request->emp_id,
             'name'              =>  $request->name,
+            'organization_type' =>  $request->organization_type,
             'sex_id'            =>  $request->sex_id,
             'marital_status'    =>  $request->marital_status,
             'dob'               =>  $request->dob,
             'country_id'        =>  $request->country_id,
+            'p_dzongkhag'       =>  $request->p_dzongkhag,
+            'p_gewog'           =>  $request->p_gewog,
+            'p_village_id'      =>  $request->p_village_id,
             'dzo_id'            =>  $request->dzongkhag,
-            'geowg_id'          =>  $request->geowg,
+            'geowg_id'          =>  $request->gewog,
             'village_id'        =>  $request->village_id,
             'address'           =>  $request->address,
             'contact_number'    =>  $request->contact_number,
@@ -83,6 +97,7 @@ class StaffController extends Controller{
             'comp_sub'          =>  $request->comp_sub,
             'elective_sub1'     =>  $request->elective_sub1,
             'elective_sub2'     =>  $request->elective_sub2,
+            'initial_appointment_date' =>  $request->initial_appointment_date,
             'currier_stage'     =>  $request->currier_stage,
             'emp_file_code'     =>  $request->emp_file_code,
             'status'            =>  $request->status,
@@ -162,7 +177,6 @@ class StaffController extends Controller{
             'nomi_contact'      =>  'required',
             'nomi_email'        =>  'required',
             'nomi_relation'     =>  'required',
-            'nomi_percentage'   =>  'required'
         ];
         $customMessages = [
             'nomi_name.required'            => 'This field is required',
@@ -171,9 +185,32 @@ class StaffController extends Controller{
             'nomi_address.required'         => 'This field is required',
             'nomi_email.required'           => 'This field is required',
             'nomi_relation.required'        => 'Country field is required',
-            'nomi_percentage.required'      => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'familyRelationship';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'application_number'     =>  $request->applicationNo,
+                        )
+                    );
+                }
+            }
+        }
 
         $nomination_details =[
             'personal_id'                       =>  $request->personal_id,
@@ -186,11 +223,13 @@ class StaffController extends Controller{
             'nomi_contact'                      =>  $request->nomi_contact,
             'nomi_email'                        =>  $request->nomi_email,
             'nomi_relation'                     =>  $request->nomi_relation,
+            'isnominee'                         =>  $request->isnominee,
+            'attachment_details'                =>  $attachment_details,
             'nomi_percentage'                   =>  $request->nomi_percentage,
             'status'                            =>  $request->status,
             'user_id'                           =>  $this->userId()
         ];
-        // dd($personal_details);
+        // dd($nomination_details);
         $response_data= $this->apiService->createData('emis/staff/savenominationDetails', $nomination_details);
         return $response_data;
     }
