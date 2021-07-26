@@ -19,51 +19,11 @@
                             <label class="mb-0.5">Application Details </label>
                         </a>
                     </li>
-                    <li class="nav-item undertaking-tab" @click="shownexttab('undertaking-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Options & Undertaking</label>
-                        </a>
-                    </li>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
-                            <div class="card-body pb-0 mb-0" style="display:none">
-                                <div class="callout callout-success">
-                                    <div class="form-group row">
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">Year:</label>
-                                            <span class="text-blue text-bold">{{form.t_year}}</span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">From Date:</label>
-                                            <span class="text-blue text-bold">{{form.t_from_date}}</span>
-                                        </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label class="mb-0">End Date:</label>
-                                            <span class="text-blue text-bold">{{form.t_to_date}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <label class="mb-0">Remarks:</label>
-                                            <span class="text-blue text-bold">{{ form.t_remarks}}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-header pb-0 pt-2">
-                                <h3 class="card-title">Transfer Window Details <span v-if="t_warning" class="text-danger">({{t_warning_message}})</span></h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                        <i class="fas fa-plus" ></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Applicant:<i class="text-danger">*</i></label>
@@ -79,7 +39,7 @@
                                 <label class="mb-0.5">Transfer Reason:<i class="text-danger">*</i></label>
                                 <br/>
                                 <span v-for="(item, key, index) in  reasonList" :key="index">
-                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                                    <input type="radio" v-model="reasonArray[form.reason_id]" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
                                 </span>
                                 <has-error :form="form" field="reason_id"></has-error>
                             </div>
@@ -90,63 +50,36 @@
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')">Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade tab-content-details" id="undertaking-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Transfer Preferences</label>
+                                <label class="mb-0.5">Approved Transfer Preferences</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>SlNo</th>
-                                            <th>Preferences</th>
                                             <th>Dzongkhag/Thromde</th>
+                                            <th>School</th>
+                                            <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Preferences 1</td>
                                             <td>
-                                                <select v-model="form.preference_dzongkhag1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag1') }" class="form-control select2" name="preference_dzongkhag1" id="preference_dzongkhag1">
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="form" field="preference_dzongkhag1"></has-error>
-                                                <span class="text-danger" id="preference_dzongkhag1_err"></span>
+                                               <span class="text-blue text-bold">{{dzoArray[form.dzongkhagApproved]}}</span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>Preferences 2</td>
                                             <td>
-                                                <select v-model="form.preference_dzongkhag2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag2') }" class="form-control select2" name="preference_dzongkhag2" id="preference_dzongkhag2">
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="form" field="preference_dzongkhag2"></has-error>
+                                               <span class="text-blue text-bold">{{orgArray[form.preference_school]}}</span>
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>Preferences 3</td>
-                                            <td>
-                                                <select v-model="form.preference_dzongkhag3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag3') }" class="form-control select2" name="preference_dzongkhag3" id="preference_dzongkhag3">
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="form" field="preference_dzongkhag3"></has-error>
-                                            </td> 
+                                             <td>
+                                               <span class="text-blue text-bold">{{this.form.status}}</span>
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div v-if="attact" class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Attachments</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -207,22 +140,23 @@
                         </span>
                         <span class="text-danger" id="undertaking_err"></span>
                         <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
-                            </div>
+                        <div  class="row form-group fa-pull-right">
+                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="tbName">
+                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
+                         </div>
                         </div>
                     </div>
+                    <hr>
+                 </div>
                 </div>
             </div>
         </div>
-    </div>
 </template>
 <script>
 export default {
     data(){
         return {
+            attact:false,
             filecount:1,
             t_warning:false,
             t_warning_message:'',
@@ -230,6 +164,9 @@ export default {
             reasonList:'',
             undertakingList:[],
             dzongkhagList:[],
+            dzoArray:{},
+            orgArray:{},
+            reasonArray:{},
             working_history_list:[],
             training_details_list:[],
             draft_attachments:[],
@@ -246,13 +183,13 @@ export default {
                 description:'',
                 current_date:'',
                 type_id:'',
-                preference_dzongkhag:[],
-                status: 'pending',
+                status:'',
+                remarks:'',
+                dzongkhagApproved:'',
+                preference_school:'',
                 transferType:"inter_transfer",
                 service_name:"inter transfer",
-                preference_dzongkhag1:'',
-                preference_dzongkhag2:'',
-                preference_dzongkhag3:'',
+              
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -289,6 +226,31 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
+        loadApplicationDetails(id){
+            axios.get('staff/transfer/loadApplicationDetails/' +id)
+            .then((response) =>{
+                // alert(JSON.stringify(response.data));
+                let data=response.data;
+                this.form.id=data.id;
+                this.form.transfer_reason_id=data.transfer_reason_id;
+                this.form.description=data.description;
+                this.form.staff_id=data.staff_id;
+                this.form.transferType=data.transferType;
+                this.form.dzongkhagApproved=data.dzongkhagApproved;
+                this.form.preference_school=data.preference_school;
+                this.form.status=data.status;
+                $(document).ready(function() {
+                    $('#tbName').on('input change', function() {
+                    if(this.form.status =="verify" || this.form.status == "approve" || this.form.status =="forward" || this.form.status =="Transfer Approved" ){
+                       $('#button').prop('disabled', false);
+                       this.attact=true;
+                    }else{
+                        $('#button').prop('enabled', true);
+                    }
+                    });
+                });
+          })
+        },
         loadstaff(){
             let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
@@ -300,11 +262,14 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/'+this.form.reason_id){
+        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.reasonList =  data.data.data;
+                let data = response.data.data;
+                this.reasonList =  data;
+                 for(let i=0;i<data.length;i++){
+                 this.reasonArray[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error) {
                console.log("Error:"+error)
@@ -313,8 +278,23 @@ export default {
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.dzongkhagList =  data.data.data;
+                let data = response.data.data
+                this.dzongkhagList =  data;
+                for(let i=0;i<data.length;i++){
+                 this.dzoArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
+        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                 this.orgArray[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -361,7 +341,7 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
-            if(nextclass=="undertaking-tab"){
+            if(nextclass=="final-tab"){
                 // if(this.form.t_to_date <=this.form.current_date){
                     // if(this.form.t_from_date >this.form.current_date){
                     let formData = new FormData();
@@ -470,37 +450,6 @@ export default {
                 console.log(errors)
             });
         },
-        
-        loadtransferwindow(){
-            axios.get('masters/loadGlobalMasters/intra_transfer')
-           .then((response) => {
-                let data=response.data.data[0];
-                 if(data!=null){
-                    this.form.transferwindow_id=data.id;
-                    this.form.t_from_date=data.from_date;
-                    this.form.t_to_date=data.to_date;
-                    this.form.t_year=data.year;
-                    this.form.t_remarks=data.remarks;
-                    this.form.t_id=data.id;
-                    let to_date = new Date(data.to_date);
-                    let today = new Date();
-                    let diffTime = Math.abs(to_date - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if(diffDays<=5){
-                        this.t_warning_message="Only "+diffDays+" day(s) left";
-                        this.t_warning=true;
-                    }
-                }
-                else{
-                    $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');
-                    $('#invalidsection').show();
-                    $('#t_form_details').hide();
-                }
-             })
-            .catch((error) => {
-                console.log("Error."+error);
-            });
-        },
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -557,16 +506,19 @@ export default {
         this.profile_details();
         this.loadstaff();
         this.loadreasons();
+        this.loadApplicationDetails();
         this.loadactivedzongkhagList();
         this.loadundertakingList();
-        this.loadtransferwindow();
         this.LoadTransferType();
+        this.loadOrgList();
+        this.loadreasons(this.$route.params.data.transfer_reason_id);
+        this.loadApplicationDetails(this.$route.params.data.id)
         this.form.id=this.$route.params.data.id;
         this.form.staff_id=this.$route.params.data.staff_id;
         this.form.reason_id=this.$route.params.data.transfer_reason_id;
         this.form.description=this.$route.params.data.description;
-        this.form.dzongkhag_id=this.$route.params.data.dzongkhag_id[0];
-        // this.getTransferConfiguration()
+        this.form.status=this.$route.params.data.status;
+        this.form.dzongkhag_id=this.$route.params.data.dzongkhag_id;
     },
 }
 </script>

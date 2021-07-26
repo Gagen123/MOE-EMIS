@@ -54,11 +54,11 @@ class CommonController extends Controller{
             return DB::select($result_data);
         }
         else{
-            if(strtolower($access_level)=="Dzongkhag"){
+            if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
 
-            if(strtolower($access_level)=="Org"){
+            if(strtolower($access_level)=="org"){
                 $result_data.='t.working_agency_id="'.$org_id.'" AND ';
             }
 

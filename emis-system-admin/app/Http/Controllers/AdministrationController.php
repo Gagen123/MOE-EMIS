@@ -244,7 +244,7 @@ class AdministrationController extends Controller{
             return $this->successResponse(Calender::where('type','Inter Transfer')->first());
         }
         if($param=="intra"){
-            return $this->successResponse(Calender::where('type','Inter Transfer')->first());
+            return $this->successResponse(Calender::where('type','Intra Transfer')->first());
         }
         if($param=="all_transfer_type_list"){
             return $this->successResponse(Calender::all());

@@ -18,6 +18,7 @@ class TransferApplication extends Model{
         'transferType',
         'description',
         'status',
+        'preference_school',
         'dzongkhagApproved',
         'created_by',
         'updated_by',

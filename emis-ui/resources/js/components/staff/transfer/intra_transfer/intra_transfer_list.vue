@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ StaffName[item.staff_id]}}</td>
+                             <td>{{ form.staff_name}}</td>
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
@@ -40,6 +40,12 @@ export default {
             loaddetails:[],
             staff_id:[],
             StaffName:{},
+            form: new form({
+                staff_id: '',
+                status:'',
+                staff_name:'',
+
+            })
 
         }
         
@@ -51,8 +57,8 @@ export default {
         loadtransferDetails(){
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
-                // alert(JSON.stringify(response.data));
                 let data = response.data
+                this.getapplicatName(response.data[0].staff_id);
                 this.transfer_list = data;
              })
             .catch((error) => {
@@ -63,7 +69,6 @@ export default {
             let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
-                // alert(JSON.stringify(response.data.data[0]));
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
                     this.StaffName[data[i].id] = data[i].name;
@@ -73,12 +78,28 @@ export default {
                 console.log("Error:"+error)
             });
         },
+         getapplicatName(staff_id){
+            let uri ='staff/transfer/getapplicatName/'+staff_id;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                this.form.staff_name = data.name;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+        loadeditpage(item){
+            this.$router.push({name:"edit_intra_transfer",params:{data:item}});
+        },
         applyselect2(){
         },
     },
     mounted() {
         this.loadtransferDetails();
         this.loadstaff();
+        this.getapplicatName();
         this.dt =  $("#training-table").DataTable()
     },
     watch: {
