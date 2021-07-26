@@ -765,7 +765,7 @@ Route::prefix('academics')->group(function () {
     Route::post('/saveStudentAssessment', [App\Http\Controllers\academics\AcademicController::class, 'saveStudentAssessment'])->name('saveStudentAssessment');
     Route::post('/unlockForEdit/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'unlockForEdit'])->name('unlockForEdit');
     Route::get('/loadClassBySubjectTeacher', [App\Http\Controllers\academics\AcademicController::class, 'loadClassBySubjectTeacher'])->name('loadClassBySubjectTeacher');
-    Route::get('/loadConsolidatedResultList', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultList'])->name('loadConsolidatedResultList');
+    Route::get('/loadConsolidatedResultList/{termId}', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultList'])->name('loadConsolidatedResultList');
     Route::get('/loadConsolidatedResult', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResult'])->name('loadConsolidatedResult');
     Route::post('/saveConsolidatedResut', [App\Http\Controllers\academics\AcademicController::class, 'saveConsolidatedResut'])->name('saveConsolidatedResut');
     Route::get('/getStudentsForAttendance', [App\Http\Controllers\academics\AcademicController::class, 'getStudentsForAttendance'])->name('getStudentsForAttendance');
@@ -773,6 +773,8 @@ Route::prefix('academics')->group(function () {
     Route::get('/getTermsByClass/{classId}/{streamId?}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByClass'])->name('getTermsByClass');
     Route::post('/saveInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'saveInstrunctionalDays'])->name('saveInstrunctionalDays');
     Route::get('/getInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'getInstrunctionalDays'])->name('getInstrunctionalDays');
+    Route::get('/getTermsByFrequency/{frequencyId}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByFrequency'])->name('getTermsByFrequency');
+    Route::post('/unlockForEditForConsolidated/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'unlockForEditForConsolidated'])->name('unlockForEditForConsolidated');
 
 });
 

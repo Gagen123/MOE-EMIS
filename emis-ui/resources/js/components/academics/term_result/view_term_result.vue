@@ -113,7 +113,11 @@
                         searching: false,
                         fixedColumns:   {
                             leftColumns: 2
-                        }
+                        },
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'print'
+                        ]
                         
                     }); 
             }, 300);  

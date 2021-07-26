@@ -413,7 +413,7 @@ export default {
             });
         },
         loadStaffList(){
-            axios.get('loadCommons/loadStaffList/userworkingagency/NA')
+            axios.get('loadCommons/loadStaffList/userOrgWiseCivilServent/ALL_TYPE')
             .then((response) => {
                 let data=response.data.data;
                 this.staff_list=data;

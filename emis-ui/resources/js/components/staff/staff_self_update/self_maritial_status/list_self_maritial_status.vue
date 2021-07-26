@@ -90,13 +90,13 @@ export default {
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWiseCivilServent/1,2,3');
+                this.loadstff('userOrgWiseCivilServent/ALL_TYPE');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('dzoWiseCivilServent/1,2,3');
+                this.loadstff('userDzoWiseCivilServent/ALL_TYPE');
             }
-            if(data['acess_level']=="allRegContract/Regular,Volunteer"){
-                this.loadstff();
+            if(data['acess_level']=="Ministry"){
+                this.loadstff('allCivilServent/ALL_TYPE');
             }
         })
         .catch(errors => {

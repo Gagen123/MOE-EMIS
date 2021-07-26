@@ -3256,6 +3256,7 @@ class AssessmentAreaSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
         ]);
+        DB::update("UPDATE  aca_assessment_area SET aca_assmnt_type = 1 WHERE name LIKE '%exam%'");
     }
 }
 

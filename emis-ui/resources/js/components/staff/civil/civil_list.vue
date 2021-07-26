@@ -10,47 +10,45 @@
                 </div>
             </div>
             <div class="card-body pb-0 mb-0" style="display:none">
-                <div class="callout callout-success">
-                    <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id="dzosection">
-                            <label class="mb-0">Dzongkhag:</label>
-                            <select class="form-control select2" id="dzongkhag_id" v-model="dzo_id">
-                                <option value=""> --Select--</option>
-                                <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <span class="text-danger" id="dzongkhag_id_err"></span>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label class="mb-0">Organization Type:<i class="text-danger">*</i></label>
-                            <select class="form-control select2" name="organization_type" id="organization_type">
-                                <option value=""> --Select--</option>
-                                <option value="Org">Organization/School </option>
-                                <option value="Dzongkhag">Dzongkhag</option>
-                                <option value="Ministry">Ministry </option>
-                            </select>
-                            <span class="text-danger" id="organization_type_err"></span>
-                        </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
-                            <label class="mb-0">Department:<i class="text-danger">*</i></label>
-                            <select class="form-control select2" name="department" id="department">
-                                <option value=""> --Select--</option>
-                                <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <span class="text-danger" id="department_err"></span>
-                        </div>
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                            <label class="mb-0">Organization:<i class="text-danger">*</i></label>
-                            <select class="form-control select2" id="org_id">
-                                <option value=""> --Select--</option>
-                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <span class="text-danger" id="org_id_err"></span>
-                        </div>
-                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-3">
-                            <button type="button" @click="loaddata()" class="btn btn-success">
-                                <i class="fas fa-search" ></i> Search
-                            </button>
-                        </div>
+                <div class="form-group row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="dzosection">
+                        <label class="mb-0">Dzongkhag: <i class="text-danger">*</i></label>
+                        <select class="form-control select2" id="dzongkhag_id" v-model="dzo_id">
+                            <option value="ALL"> --Select--</option>
+                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <span class="text-danger" id="dzongkhag_id_err"></span>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label class="mb-0">Organization Type: <i class="text-danger">*</i></label>
+                        <select class="form-control select2" name="organization_type" id="organization_type">
+                            <option value="ALL"> --Select--</option>
+                            <option value="Org">Organization/School </option>
+                            <option value="Dzongkhag">Dzongkhag</option>
+                            <option value="Ministry">Ministry </option>
+                        </select>
+                        <span class="text-danger" id="organization_type_err"></span>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
+                        <label class="mb-0">Department: <i class="text-danger">*</i></label>
+                        <select class="form-control select2" name="department" id="department">
+                            <option value="ALL"> --Select--</option>
+                            <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <span class="text-danger" id="department_err"></span>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label class="mb-0">Organization: <i class="text-danger">*</i></label>
+                        <select class="form-control select2" id="org_id">
+                            <option value="ALL"> --Select--</option>
+                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <span class="text-danger" id="org_id_err"></span>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-3">
+                        <button type="button" @click="loaddata()" class="btn btn-success">
+                            <i class="fas fa-search" ></i> Search
+                        </button>
                     </div>
                 </div>
             </div>
@@ -177,6 +175,9 @@ export default {
         },
         allOrgList(type){
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+this.dzo_id;
+            if(this.dzo_id=="" && $('#dzongkhag_id').val()!=""){
+                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag_id').val();
+            }
             if(type=="division"){
                 uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
             }
@@ -187,7 +188,7 @@ export default {
                 this.orgList = data;
             })
             .catch(function (error){
-                console.log("Error:"+error)
+                console.log("Error allOrgList:"+error)
             });
         },
         changefunction(id){
@@ -196,9 +197,11 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="dzongkhag"){
-                this.personal_form.dzongkhag=$('#dzongkhag').val();
-                this.getgewoglist();
+            if(id=="dzongkhag_id"){
+                this.dzo_id=$('#dzongkhag_id').val();
+                this.orgList = [];
+                this.departmentList = [];
+                $('#organization_type').val('ALL').trigger('change');
                 // this.allOrgList('school');
             }
             if(id=="organization_type"){
@@ -216,7 +219,26 @@ export default {
             }
         },
         loaddata(){
-            axios.get('loadCommons/loadStaffList/'+type)
+            // department
+            let dzongkhag_id=$('#dzongkhag_id').val();
+            let organization_type=$('#organization_type').val();
+            let org_id=$('#org_id').val();
+            let url="loadCommons/loadStaffList/";
+            if(organization_type=="Org"){//selct organization
+                if(org_id!="ALL"){
+                    url+='selectedOrgWiseCivilServent/'+org_id;
+                }else{
+                    url+='selectedDzoWiseCivilServent/'+dzongkhag_id;
+                }
+            }
+            else{//ministry and dzongkhag headquarter staff
+                if(org_id!="ALL"){
+                    url+='selectedOrgWiseCivilServent/'+org_id;
+                }else{
+                    url+='selectedDzoWiseCivilServent/'+dzongkhag_id;
+                }
+            }
+            axios.get(url)
             .then((response) => {
                 this.substaffList =  response.data.data;
              })
@@ -247,7 +269,7 @@ export default {
             this.accesslevel=data['acess_level'];
             //1-regualr,2-contract,3-voluntary
             if(data['acess_level']=="Org"){
-                this.loadstff('orgWiseCivilServent/1,2,3');
+                this.loadstff('userOrgWiseCivilServent/ALL_TYPE');
                 this.dzo_id=data['Dzo_Id'];
                 $('#dzongkhag').val(data['Dzo_Id']).trigger('change');
                 $('#adv_serach_ection').hide();
@@ -257,11 +279,11 @@ export default {
                 $('#dzongkhag').val(data['Dzo_Id']).trigger('change');
                 this.allOrgList('school');
                 $("#organization_type option[value='Ministry']").remove();
-                this.loadstff('dzoWiseCivilServent/1,2,3');
+                this.loadstff('userDzoWiseCivilServent/ALL_TYPE');
                 $('#dzosection').hide();
             }
             if(data['acess_level']=="Ministry"){
-                this.loadstff('allRegContract/1,2,3');
+                this.loadstff('allCivilServent/ALL_TYPE');
             }
         })
         .catch(errors => {
