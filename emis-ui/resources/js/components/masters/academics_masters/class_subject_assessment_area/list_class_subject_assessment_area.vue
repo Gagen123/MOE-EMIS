@@ -75,14 +75,15 @@ export default {
     mounted(){ 
         this.classSubAssmtFrequency();
         this.dt =  $("#class_subject_assessment_area-table").DataTable({
-            destroy: true,
             rowGroup: {
                     dataSrc: 0 
-                },
-                columnDefs: [{
-                    targets:  0,
-                    visible: false
-                }]
+            },
+            columnDefs: [{
+                targets:  0,
+                visible: false
+            }],
+            destroy: true,
+            
          }) 
     },
     watch: {
@@ -90,6 +91,13 @@ export default {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#class_subject_assessment_area-table").DataTable({
+                    rowGroup: {
+                    dataSrc: 0 
+                    },
+                    columnDefs: [{
+                        targets:  0,
+                        visible: false
+                    }],
                       destroy: true,
                 })
             });
