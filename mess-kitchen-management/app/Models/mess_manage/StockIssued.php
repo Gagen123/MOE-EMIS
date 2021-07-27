@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StockIssued extends Model
 {
     use HasFactory, Uuid;
+    public $timestamps = false;
     protected $table="stock_issueds";
 
     protected $fillable = [
-        'id',   
-        'organizationId',                         
+        'id',
+        'organizationId',
         'dateOfissue',
         'quantity',
         'item_id',
@@ -20,7 +21,9 @@ class StockIssued extends Model
         'damagequantity',
         'remarks',
         'created_by',
-        'updated_by'
+        'created_at',
+        'updated_by',
+        'updated_at'
     ];
 }
 

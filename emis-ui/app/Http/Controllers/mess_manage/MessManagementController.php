@@ -234,6 +234,7 @@ class MessManagementController extends Controller
        $stockissue =[
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
+            'itemList'                  =>  $request['itemList'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
@@ -243,11 +244,18 @@ class MessManagementController extends Controller
         //dd($response_data);
         return $response_data;
     }
+
+    public function getAvailableStocks($id="",$type=""){
+        // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/getAvailableStocks/'.$id.'/'.$type);
+        return $list;
+    }
     public function StockIssueEditList($lssId=""){
         // dd('from Ui');
         $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
         return $list;
     }
+
 
     public function approvereject(Request $request){
         $request_data =[

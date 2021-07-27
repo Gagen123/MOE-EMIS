@@ -17,10 +17,10 @@
                     <br><span id="error_msg" class="text-danger"></span>
                 </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row" style="display:none" id="details">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                          <thead>
+                            <thead>
                                 <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
@@ -29,8 +29,36 @@
                                   <th>Damage/Loss Quantity(kg)</th>
                                   <th>Remarks</th>
                                 </tr>
-                           </thead>
-                           <tbody>
+                            </thead>
+                            <tbody v-if="this.procured_type=='centrallyProcured'">
+                                <tr id="record1" v-for='(item, index) in itemList' :key="index+'A'">
+                                    <td>
+                                        {{item.Name}}
+                                    </td>
+                                    <td>
+                                        {{unitArray[item.Unit_id]}}
+                                    </td>
+                                    <td>
+                                        <span :id="'avqty'+index">
+                                            <!-- {{getavailabelqty(item.id,'Central',index)}} -->
+                                        </span>
+                                         {{item.available_qty}}
+                                        <input type="hidden" :id="'avqtyinput'+index" :value="item.available_qty"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" :id="'available_qty'+index" class="form-control" v-model="item.issue_qty" @change="checkqty(index,'available_qty')"/>
+                                        <span class="text-danger" :id="'available_qty_err'+index"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" :id="'damagequantity'+index" class="form-control" v-model="item.damagequantity" @change="checkqty(index,'damagequantity')"/>
+                                        <span class="text-danger" :id="'damagequantity_err'+index"></span>
+                                    </td>
+                                    <td>
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-if="this.procured_type=='locallyProcured'">
                                 <tr id="record1" v-for='(item, index) in form.item_issue' :key="index">
                                     <td>
                                         <select name="item" :id="'itemid'+index" class="form-control editable_fields" v-model="item.item" @change="getquantity(index)">
@@ -44,7 +72,7 @@
                                         <span :id="'measurement_unit'+index"></span>
                                     </td>
                                    <td :id="'loadavailableqty'+index">
-                                     {{item.available_qty}}
+                                     {{item.available_qty}} ff
                                   </td>
                                    <td>
                                      <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
@@ -55,24 +83,24 @@
                                   <td>
                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
                                   </td>
-                              </tr>
-                              <tr>
-                                  <td colspan=7>
+                                </tr>
+                                <tr>
+                                    <td colspan=7>
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                  </td>
-                              </tr>
-                          </tbody>
-                     </table>
-                  </div>
-              </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
-             <div class="card-footer text-right">
-                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-             </div>
+                <div class="card-footer text-right">
+                    <button type="button" @click="formaction('reset')" id="resetbtn" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                    <button type="button" @click="formaction('save')" id="savebtn"  class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
             </div>
         </form>
     </div>
@@ -87,9 +115,11 @@ export default {
             unitList:[],
             item_issue: [],
             unitArray:{},
+            procured_type:'',
           //  item:'',
             form: new form({
                 id: '', dateOfissue: '',
+                itemList:[],
                 item_issue:
                 [{
                     item:'', quantity:'',unit:'', damagequantity:'',remarks:'',
@@ -118,8 +148,9 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveStockIssued',this.form)
-                    .then(() => {
+                this.form.itemList=this.itemList;
+                this.form.post('/mess_manage/saveStockIssued',this.form)
+                .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Stock Issued detail is added successfully'
@@ -148,21 +179,21 @@ export default {
         /**
          * method to get unit in dropdown
          */
-    //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
-    //        axios.get(uri)
-    //        .then(response => {
-    //            let data = response;
-    //            this.unitList =  data.data.data;
-    //        })
-    //        .catch(function (error) {
-    //            console.log("Error......"+error)
-    //        });
-    //    },
+        //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        //        axios.get(uri)
+        //        .then(response => {
+        //            let data = response;
+        //            this.unitList =  data.data.data;
+        //        })
+        //        .catch(function (error) {
+        //            console.log("Error......"+error)
+        //        });
+        //    },
 
         /**
          * method to get item in dropdown
          */
-      loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
            axios.get(uri)
            .then(response => {
                let data = response;
@@ -171,17 +202,17 @@ export default {
            .catch(function (error) {
                console.log("Error......"+error)
            });
-       },
-        loadActiveItemList2(uri="masters/loadActiveStudentMasters/program_item_central"){
-           axios.get(uri)
-           .then(response => {
+        },
+        loadCentralItem(uri="masters/loadActiveStudentMasters/program_item_central"){
+            axios.get(uri)
+            .then(response => {
                let data = response;
                this.itemList =  data.data;
-           })
-           .catch(function (error) {
+            })
+            .catch(function (error) {
                console.log("Error......"+error)
-           });
-       },
+            });
+        },
 
         /**
          * method to add more fields
@@ -209,7 +240,7 @@ export default {
 
             let chekva=$("input[type='radio'][name='procuredtype']:checked").val();
             let isvalid=true;
-           
+
             if(chekva==undefined){
                 $('#error_msg').html('Please select procurement type');
                 isvalid=false;
@@ -223,21 +254,21 @@ export default {
                     $('#loadavailableqty'+index).html(data.data.data.available_qty);
 
                 })
-
                 .catch(function (error) {
                     console.log(error);
                 });
-                
             }
 
         },
 
         getItem(type){
+            this.procured_type=type;
+            $('#details').show();
             if(type=="locallyProcured"){
                 this.loadActiveItemList();
             }
             else{
-               this.loadActiveItemList2();
+               this.loadCentralItem();
             }
         },
 
@@ -261,15 +292,35 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        // validatefield(){
-        //     let $qty =
-        //     if(qty)
 
-        // }
-
+        getavailabelqty(id,type,index){
+            let data=0;
+            let uri="mess_manage/getAvailableStocks/"+id+'/'+type;
+            axios.get(uri)
+            .then(response =>{
+                data= response.data.available_qty;
+                if(data!=0){
+                    $('#avqty'+index).html(data);
+                    $('#avqtyinput'+index).val(data);
+                    // return data;
+                }
+            })
+            .catch(function (error){
+                console.log("Error getavailabelqty:"+error);
+            });
+        },
+        checkqty(index,id){
+            if(parseFloat($('#avqtyinput'+index).val())<parseFloat($('#'+id+index).val())){
+                $('#'+id+'_err'+index).html('Cannot be > available quantity');
+                $('#savebtn').hide();
+            }else{
+                $('#'+id+'_err'+index).html('');
+                $('#savebtn').show();
+            }
+        }
     },
     mounted() {
         this.loadActiveUnitList();
-    }
+    },
 }
 </script>

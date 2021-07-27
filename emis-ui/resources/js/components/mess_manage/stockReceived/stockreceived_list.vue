@@ -135,10 +135,12 @@ export default {
                 this.$router.push({name:'stockreceived_view',query: {id:item.id,type:type}});
             }
 		},
+
         viewStockReceivedList(data){
             data.action='edit';
             this.$router.push({name:'StockReceivedEdit',params: {data:data}});
         },
+
         StockReceivedView(data){
             data.action='view';
             this.$router.push({name:'StockReceivedView',params: {data:data}});
@@ -156,11 +158,12 @@ export default {
                 console.log("Error......"+error)
             });
         },
+
         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-               for(let i=0;i<data.data.data.length;i++){
+                for(let i=0;i<data.data.data.length;i++){
                     this.unitList[data.data.data[i].id] = data.data.data[i].Name;
                 }
             })

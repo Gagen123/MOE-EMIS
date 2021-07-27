@@ -54,14 +54,14 @@
                                        <input type="text" disabled name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr>
-                             <tr>
+                             <!-- <tr>
                                   <td colspan=7>
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>
+                              </tr> -->
                           </tbody>
                      </table>
                   </div>
