@@ -7,7 +7,7 @@
                         <tr>
                          <th>SL#</th>
                         <th>Class</th>
-                        <th>Action</th> 
+                        <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -25,7 +25,7 @@
                 </table>
             </div>
         </div>
-    </div>  
+    </div>
 </template>
 <script>
 export default {
@@ -73,7 +73,7 @@ export default {
             this.$router.push({name:'create_students_elective_subject',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.getClassStreamList();
         this.dt = $("#student-elective-subject-table").DataTable({
              columnDefs: [

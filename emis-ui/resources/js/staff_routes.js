@@ -656,6 +656,16 @@ const routes = [
                     { path: '/edit_teacher_subject', name:'edit_teacher_subject', component: require('./components/staff/staff_updates/teacher_subject/edit_teacher_subject.vue').default },
                 ],
             },
+            { path: '/staff_sen',
+                component: require('./components/staff/staff_updates/sen/sen_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
+                    { path: '/list_sen',name:'list_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
+                    { path: '/create_sen',name:'create_sen', component: require('./components/staff/staff_updates/sen/create_sen.vue').default },
+                    { path: '/edit_sen', name:'edit_sen', component: require('./components/staff/staff_updates/sen/edit_sen.vue').default },
+                ],
+            },
+
             { path: '/contact_details',
                 component: require('./components/staff/staff_updates/contact_details/contact_details_index.vue').default,
                 children:[
