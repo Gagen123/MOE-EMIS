@@ -235,6 +235,7 @@ class MessManagementController extends Controller
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
             'itemList'                  =>  $request['itemList'],
+            'category'                  =>  $request['category'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()

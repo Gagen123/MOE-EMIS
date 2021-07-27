@@ -20,6 +20,7 @@ class StockIssued extends Model
         'unit_id',
         'damagequantity',
         'remarks',
+        'category',
         'created_by',
         'created_at',
         'updated_by',

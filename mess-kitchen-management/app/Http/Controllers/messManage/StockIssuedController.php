@@ -135,13 +135,14 @@ class StockIssuedController extends Controller
                     'unit_id'                    =>  $item['Unit_id'],
                     'damagequantity'             =>  $damagequantity,
                     'remarks'                    =>  $rem,
+                    'category'                   =>  $request['category'],
                     'created_by'                 =>  $request->user_id,
                     'created_at'                 =>  date('Y-m-d h:i:s')
                 );
 
                 $itemiss = StockIssued::create($itemIssued);
                 $checkitem=TransactionTable::where('item_id',$item['id'])->where('organizationId',$orgId)->first();
-                $qty=$checkitem->available_qty-($quantity+$damagequantity);
+                $qty=$checkitem->available_qty-($quantity);//$damagequantity,taken out as its contributing negative values in transaction
                 $update_data=[
                     'available_qty' => $qty,
                     'updated_by'    => $request->user_id,
@@ -154,7 +155,7 @@ class StockIssuedController extends Controller
     }
     public function loadStockIssuedList($orgId=""){
             $list = DB::table('stock_issueds')
-            ->select('id','organizationId', 'dateOfissue as dateOfissue','item_id as item', 'quantity as quantity','unit_id as unit')->where('organizationId',$orgId)->get();
+            ->select('id','organizationId', 'dateOfissue as dateOfissue','item_id as item','category', 'quantity as quantity','unit_id as unit')->where('organizationId',$orgId)->get();
             return $list;
     }
 
@@ -164,17 +165,17 @@ class StockIssuedController extends Controller
     }
     public function StockIssueEditList($lssId=""){
         //dd($lssId);
-        $response_data=StockIssued::where('id', $lssId)->get();
+        $response_data=StockIssued::where('id', $lssId)->first();
+        $response_data->availaleqty=TransactionTable::where('item_id',$response_data->item_id)->where('procured_type',$response_data->category)->first()->available_qty;
         return $this->successResponse($response_data);
     }
     public function getquantity($itemId="", $chekva="", $orgId=""){
 
-     // dd( $orgId,$itemId,$chekva  );
-
+    //  dd( $orgId,$itemId,$chekva  );
       $response_data=TransactionTable::where('item_id', $itemId)
       ->where('procured_type',$chekva)
       ->where('organizationId',$orgId )->first();
-     // dd($response_data);
+    //  dd($response_data);
       return $this->successResponse($response_data);
     }
 

@@ -72,7 +72,7 @@
                                         <span :id="'measurement_unit'+index"></span>
                                     </td>
                                    <td :id="'loadavailableqty'+index">
-                                     {{item.available_qty}} ff
+                                     {{item.available_qty}}
                                   </td>
                                    <td>
                                      <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
@@ -289,7 +289,7 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log("Error:"+error)
+                console.log("Error loadActiveUnitList:"+error)
             });
         },
 
