@@ -59,6 +59,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadActiveCounsellingMaster/{param}','Masters\StudentMasterController@loadActiveCounsellingMaster');
         $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
 
+        $router->post('/saveFoodSourceType', ['uses' => 'Masters\StudentMasterController@saveFoodSourceType']);
+        $router->get('/loadfoodSourceList', ['uses' => 'Masters\StudentMasterController@loadfoodSourceList']);
+        $router->get('/loadActiveFoodSourceMaster','Masters\StudentMasterController@loadActiveFoodSourceMaster');
     });
 
     $router->group(['prefix' => 'students'], function () use ($router) {
@@ -160,7 +163,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadViewSupplementationDetails/{param}', ['uses' => 'Students\StudentHealthController@loadViewSupplementationDetails']);
         $router->get('/getSupplementationDetails/{id}', ['uses' => 'Students\StudentHealthController@getSupplementationDetails']);
         $router->get('/getHealthSupplementationDetails/{param}', ['uses' => 'Students\StudentHealthController@getHealthSupplementationDetails']);
-        
+
         $router->post('/addHealthScreeningRecords', ['uses' => 'Students\StudentHealthController@addHealthScreeningRecords']);
         $router->post('/updateHealthScreeningRecords', ['uses' => 'Students\StudentHealthController@updateHealthScreeningRecords']);
         $router->get('/loadHealthScreeningRecords/{param}', ['uses' => 'Students\StudentHealthController@loadHealthScreeningRecords']);
@@ -183,6 +186,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadViewBmiDetails/{param}', ['uses' => 'Students\StudentHealthController@loadViewBmiDetails']);
         $router->get('/getHealthBmiDetails/{param}', ['uses' => 'Students\StudentHealthController@getHealthBmiDetails']);
         $router->get('/getBmiDetails/{id}', ['uses' => 'Students\StudentHealthController@getBmiDetails']);
+        $router->get('/loadresult/{months}/{gender}/{bmi}', ['uses' => 'Students\StudentHealthController@loadresult']);
 
         $router->post('/saveStudentProject', ['uses' => 'Students\StudentProjectController@saveStudentProject']);
         $router->get('/loadStudentProjects/{param}', ['uses' => 'Students\StudentProjectController@loadStudentProjects']);

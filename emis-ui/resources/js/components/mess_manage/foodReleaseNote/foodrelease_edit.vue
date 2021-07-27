@@ -9,7 +9,19 @@
                         v-model="form.dateOfrelease" :class="{ 'is-invalid': form.errors.has('dateOfrelease') }" @change="remove_err('dateOfrelease')">
                         <has-error :form="form" field="dateOfrelease"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                       <label class="">Quarter:<span class="text-danger">*</span></label>
+                       <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
+                            <option v-for="(item, index) in quarterList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="form" field="quarter"></has-error>
+                    </div>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label class="mb-0.5">Remarks:</label>
+                        <textarea @change="remove_err('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                        <has-error :form="form" field="remarks"></has-error>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Dzongkhag:<span class="text-danger">*</span></label>
                         <select v-model="dzongkhag" class="form-control select2" :class="{ 'is-invalid': form.errors.has('dzongkhag') }" name="dzongkhag" id="dzongkhag">
                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -22,9 +34,9 @@
                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="organizaiton"></has-error>
-                    </div>
+                    </div> -->
                 </div>
-                <div class="form-group row">
+                <!-- <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label>
                        <select name="quarter" id="quarter" class="form-control select2" v-model="form.quarter" :class="{ 'is-invalid': form.errors.has('quarter') }" @change="remove_err('quarter')">
@@ -37,7 +49,7 @@
                         <textarea @change="remove_err('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
-                </div>
+                </div> -->
                  <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
@@ -151,14 +163,14 @@
 export default {
     data(){
         return{
-            orgList:[],
+         //   orgList:[],
             quarterList:[],
             itemList:[],
             unitList:[],
             termList:[],
-            dzongkhagList:[],
-            dzongkhag:'',
-            organizaiton:'',
+         //   dzongkhagList:[],
+         //   dzongkhag:'',
+        //    organizaiton:'',
             quarter:'',
             attachmentDetails:'',
 
@@ -166,7 +178,7 @@ export default {
             // items_released: [],
 
             form: new form({
-                 id: '', dateOfrelease: '', dzongkhag: '', organizaiton: '',quarter: '', remarks: '',
+                 id: '', dateOfrelease: '', quarter: '', remarks: '',
                 //  items_released:
                 // [{
                 //     item:'',quantity:'',unit:'', remarks:'',
@@ -187,8 +199,8 @@ export default {
          */
         restForm(){
             this.form.dateOfrelease= '';
-            this.form.dzongkhag= '';
-            this.form.organizaiton= '';
+         //   this.form.dzongkhag= '';
+         //   this.form.organizaiton= '';
             this.form.quarter= '';
             this.form.remarks='';
             // let formReset =this.form.items_released;
@@ -204,20 +216,7 @@ export default {
             if(type=="reset"){
                 this.restForm();
             }
-            // if(type=="save"){
-            //         this.form.post('/mess_manage/saveFoodRelease',this.form)
-            //         .then(() => {
-            //         Toast.fire({
-            //             icon: 'success',
-            //             title: 'Food release detail is added successfully'
-            //         })
-            //         this.$router.push('/foodrelease_list');
-            //     })
-            //     .catch(() => {
-            //         console.log("Error......");
-            //         this.applyselect();
-            //     })
-            // }
+         
             if(type=="save"){
                  const config = {
                     headers: {
@@ -226,10 +225,10 @@ export default {
                 }
                 let formData = new FormData();
                 formData.append('dateOfrelease', this.form.dateOfrelease);
-                formData.append('dzongkhag', this.form.dzongkhag);
+            //    formData.append('dzongkhag', this.form.dzongkhag);
                 // alert(this.form.attachments);
                 formData.append('id', this.form.id);
-                formData.append('organizaiton', this.form.organizaiton);
+            //    formData.append('organizaiton', this.form.organizaiton);
                 formData.append('quarter', this.form.quarter);
                 formData.append('remarks', this.form.remarks);
                  for(let i=0;i<this.form.ref_docs.length;i++){
@@ -251,33 +250,7 @@ export default {
 
 
         },
-        //     if(type=="save"){
-        //         const config = {
-        //             headers: {
-        //                 'content-type': 'multipart/form-data'
-        //             }
-        //         }
-        //         let formData = new FormData();
-        //         formData.append('id', this.form.id);
-        //         formData.append('ref_docs[]', this.form.ref_docs);
-        //         for(let i=0;i<this.form.ref_docs.length;i++){
-        //             formData.append('attachments[]', this.form.ref_docs[i].attachment);
-        //             formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
-        //         }
-        //         axios.post('/mess_manage/saveFoodRelease', formData, config)
-        //             .then(() => {
-        //             Toast.fire({
-        //                 icon: 'success',
-        //                 title: 'Food Release Note is added successfully'
-        //             })
-
-        //            this.$router.push('/foodrelease_list');
-        //         })
-        //         .catch((err) => {
-        //             console.log("Error."+err.message)
-        //         })
-        //     }
-		// },
+       
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
@@ -294,12 +267,12 @@ export default {
             if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
                 $('#quarter').addClass('select2-hidden-accessible');
             }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-             if(!$('#organizaiton').attr('class').includes('select2-hidden-accessible')){
-                $('#organizaiton').addClass('select2-hidden-accessible');
-            }
+            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+            //     $('#dzongkhag').addClass('select2-hidden-accessible');
+            // }
+            //  if(!$('#organizaiton').attr('class').includes('select2-hidden-accessible')){
+            //     $('#organizaiton').addClass('select2-hidden-accessible');
+            // }
 
 
         },
@@ -442,18 +415,7 @@ export default {
         },
 
 
-        // loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         for(let i=0;i<data.data.data.length;i++){
-        //             this.dzongkhagList[data.data.data[i].id] = data.data.data[i].name;
-        //         }
-        //     })
-        //     .catch(function (error) {
-        //         console.log("Error......"+error)
-        //     });
-        // },
+       
 
 
         /**
@@ -510,11 +472,11 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 this.form.dateOfrelease         =    data.dateOfrelease;
-                this.form.dzongkhag             =    data.dzongkhag_id;
-                $('#dzongkhag').val(data.dzongkhag_id).trigger('change');
-                this.loadactivedzongkhagList();
-                this.form.organizaiton          =    data.org_id;
-                this.allOrgList(data.dzongkhag_id,data.org_id);
+                // this.form.dzongkhag             =    data.dzongkhag_id;
+                // $('#dzongkhag').val(data.dzongkhag_id).trigger('change');
+                // this.loadactivedzongkhagList();
+                // this.form.organizaiton          =    data.org_id;
+                // this.allOrgList(data.dzongkhag_id,data.org_id);
 
                 this.form.quarter               =    data.quarter_id;
                  $('#quarter').val(data.quarter_id).trigger('change');
@@ -544,10 +506,9 @@ export default {
 
     },
     created(){
-        this.loadactivedzongkhagList();
+     //   this.loadactivedzongkhagList();
         this.loadActiveQuarterList();
-        this.loadActiveItemList();
-        this.loadActiveUnitList();
+    
         // this.allOrgList();
         this.getFoodReleaseDetails(this.$route.params.data.id);
     },

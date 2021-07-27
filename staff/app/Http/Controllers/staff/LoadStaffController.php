@@ -25,37 +25,40 @@ class LoadStaffController extends Controller{
                 return $this->successResponse(PersonalDetails::where('dzo_id',$parent_id)->where('emp_type_id','!=','Private')->where('status','Created')->get());
             }
         }
-        if($type=="orgwise" || $type=="userworkingagency" || $type=="dzo_hq_departmentwise"){
-            return $this->successResponse(PersonalDetails::where('working_agency_id',$parent_id)->where('status','Created')->get());
+        // if($type=="orgwise" || $type=="userworkingagency" || $type=="dzo_hq_departmentwise"){
+        //     return $this->successResponse(PersonalDetails::where('working_agency_id',$parent_id)->where('status','Created')->get());
+        // }
+        if($type=="orgWiseCivilServent"){
+            $emp_type=[1,2,3];//regualr,contract and volunteer
+            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('working_agency_id',$parent_id)->get());
+        }
+        if($type=="orgWisePrivateStaff"){
+            return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->where('working_agency_id',$parent_id)->get());
         }
 
-        if($type=="orgWsirRegContract" || $type=="dzoWsirRegContract"){
-            $emp_type=[];
-            $id="";
-            foreach(explode(',',$parent_id) as $emp){
-                //1-regular, 2-contract,
-                if($emp=="1" || $emp=="2" || $emp=="Private"){
-                    array_push($emp_type,$emp);
-                }
-                else{
-                    $id=$emp;
-                }
-            }
-            if($type=="orgWsirRegContract"){
-                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('working_agency_id',$id)->get());
-            }
-            if($type=="dzoWsirRegContract"){
-                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('dzo_id',$id)->where('status','Created')->get());
-            }
+        if($type=="dzoWiseCivilServent"){
+            $emp_type=[1,2,3];//regualr,contract and volunteer
+            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
-
-        if($type=="allRegContract"){
-            $emp_type=[];
-            foreach(explode(',',$parent_id) as $emp){
-                array_push($emp_type,$emp);
-            }
+        if($type=="dzoWisePrivateStaff"){
+            return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('dzo_id',$parent_id)->where('status','Created')->get());
+        }
+        if($type=="allCivilServent"){
+            $emp_type=[1,2,3];//regualr,contract and volunteer
             return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
         }
+        if($type=="allPrivateStaff"){
+            return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get());
+        }
+
+
+        // if($type=="allRegContract"){
+        //     $emp_type=[];
+        //     foreach(explode(',',$parent_id) as $emp){
+        //         array_push($emp_type,$emp);
+        //     }
+        //     return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+        // }
     }
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         if($type=="allstaff"){

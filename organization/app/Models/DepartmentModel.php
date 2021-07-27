@@ -12,6 +12,7 @@ class DepartmentModel extends Model{
     protected $table="master_department";
     protected $fillable = [
         'id',
+        'dzo_id',
         'name',
         'description',
         'type',

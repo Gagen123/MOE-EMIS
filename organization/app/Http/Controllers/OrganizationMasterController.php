@@ -47,6 +47,12 @@ class OrganizationMasterController extends Controller{
                 'applicableTo'              =>  implode(', ', $request->addfield_1),
             ];
         }
+        if($request->model=="DepartmentMaster"){
+            $master_data =$master_data+[
+                'dzo_id'            =>  $request->dzo_id,
+                'type'              =>  $request->type,
+            ];
+        }
         if($request->model=="FinancialInformation"){
             $master_data =$master_data+[
                 'applicableTo'              =>  $request->addfield_1,
@@ -66,7 +72,6 @@ class OrganizationMasterController extends Controller{
                 'updated_by'        =>  $request->user_id,
                 'updated_at'        =>  date('Y-m-d h:i:s'),
             ];
-
             //Audit Trails
             $data = $model::find($request->id);
             $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;

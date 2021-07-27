@@ -18,6 +18,7 @@ use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaScoutSectionLevel;
 use App\Models\Masters\CeaScoutProficiencyBadge;
 use App\Models\Masters\CounsellingType;
+use App\Models\Masters\FoodSourceType;
 
 class StudentMasterController extends Controller
 {
@@ -561,5 +562,43 @@ class StudentMasterController extends Controller
        public function getCounsellingTypeDropdown(){
         // dd('from microserve ');
          return CounsellingType::where('status',1)->get();
+    }
+
+    public function saveFoodSourceType(Request $request){
+    //  dd($request);
+        $id = $request->id;
+        if( $id != null){
+            $data =[
+                 'id'                =>  $request->id,
+                'Name'              =>  $request->Name,
+                'Description'       =>  $request->Description,
+                'Status'            =>  $request->Status,
+                'updated_by'        =>  $request['user_id'],
+                'updated_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            FoodSourceType::where('id', $id)->update($data);
+            $response_data = FoodSourceType::where('id', $id)->first();
+        } else {
+            $data =[
+             'id'                =>  $request->id,
+             'Name'              =>  $request->Name,
+             'Description'       =>  $request->Description,
+             'Status'            =>  $request->Status,
+             'created_by'        =>  $request['user_id'],
+             'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = FoodSourceType::create($data);
+        }
+         // dd($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
+    public function loadfoodSourceList(){
+        $data = FoodSourceType::all();
+        return $data;
+    }
+    public function loadActiveFoodSourceMaster(){
+        // dd('from microserve ');
+         return FoodSourceType::where('status',1)->get();
     }
 }

@@ -79,7 +79,7 @@ class FurnitureController extends Controller
                 'item'                      =>  $request['item'],
                 'usable'                    =>  $request['usable'],
                 'notusable'                 =>  $request['notusable'],
-                'id'                        =>   $request->id,
+                'id'                        =>  $request->id,
                 'updated_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];

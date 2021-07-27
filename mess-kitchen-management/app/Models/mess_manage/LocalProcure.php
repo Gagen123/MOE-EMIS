@@ -19,6 +19,7 @@ class LocalProcure extends Model
         'quantity',
         'unit_id',
         'amount',
+        'food_source',
         'remark',
         'created_by',
         'updated_by'

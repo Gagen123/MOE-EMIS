@@ -27,6 +27,8 @@ class OrganizationCompoundDetail extends Model
         'playgroundArea',
         'playgroundAreaUsable',
         'status',
+        'statusofplay',
+        'programType',
         'agricultureArea',
         'agricultureAreaUsed',
         'created_by',

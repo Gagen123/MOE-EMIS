@@ -80,6 +80,11 @@
                     Measurement 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('foodSource_type_index')">
+                    <router-link to="/foodSource_type_index" id="foodSource_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Food Source Type
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>
