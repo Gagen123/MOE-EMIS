@@ -13,8 +13,10 @@ use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\CeaRole;
+use App\Models\Masters\VaccineType;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
+use App\Models\Masters\CeaProgramItem;
 use App\Models\Masters\CeaScoutSectionLevel;
 use App\Models\Masters\CeaScoutProficiencyBadge;
 use App\Models\Masters\CounsellingType;
@@ -178,10 +180,6 @@ class StudentMasterController extends Controller
             $assigned_to = '2';
             return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
 
-        } else if($param == 'vaccine_type'){
-            // $vacinetype = StudentType::all();
-            // return $vacinetype;
-
         } else if($param == 'program_name'){
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
             $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
@@ -219,9 +217,6 @@ class StudentMasterController extends Controller
             return $this->successResponse($model::where('status',$status)->get());
         }
 
-      //  dd($program_student_roles);
-
-
     }
 
     /**
@@ -248,7 +243,7 @@ class StudentMasterController extends Controller
         $model = new $modelName();
 
         $response_data = $model::create($data);
-       // dd($data);
+
         return $response_data;
     }
 
@@ -279,6 +274,7 @@ class StudentMasterController extends Controller
             $data->Central   =  $dataRequest['Central'];
             $data->Local     =  $dataRequest['Local'];
             $data->Unit_id   =  $dataRequest['Unit_id'];
+            $data->CeaProgrammeItemVarietyId   =  $dataRequest['variety'];
         }
         $data->Description = $dataRequest['Description'];
         $data->Status = $dataRequest['Status'];
@@ -314,6 +310,7 @@ class StudentMasterController extends Controller
                     'Central'   =>  $request['central'],
                     'Local'     =>  $request['local'],
                     'Unit_id'   =>  $request['unit_id'],
+                    'CeaProgrammeItemVarietyId'   =>  $request['variety'],
                 ];
                 $data = $data + $additional_data;
             }
@@ -477,6 +474,16 @@ class StudentMasterController extends Controller
                     $databaseModel = "CeaProgramItem";
                     break;
                 }
+            case "item_variety" : {
+                    $databaseModel = "CeaProgramItemVariety";
+                    if($type =='data'){
+                        $additional_data = [
+                            'UnitId' => $request->unit_id
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
             case "program_measurement" : {
                     $databaseModel = "CeaProgramMeasurement";
                     break;
@@ -522,6 +529,12 @@ class StudentMasterController extends Controller
     /**Get Scout Badge in Dropdown By ScoutSectionID*/
     public function getScoutBadge($scoutSectionId){
         $data=CeaScoutProficiencyBadge::select('id','name')->where('CeaScoutSectionId',$scoutSectionId)->get();
+        return $data;
+    }
+
+    /**Get the program items by varity id*/
+    public function getProgramItems($id){
+        $data=CeaProgramItem::select('id','name', 'Unit_id')->where('CeaProgrammeItemVarietyId',$id)->get();
         return $data;
     }
 

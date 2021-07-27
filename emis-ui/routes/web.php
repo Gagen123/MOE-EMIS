@@ -141,6 +141,8 @@ Route::prefix('masters')->group(function () {
     //Get Scouts Section Level By Scouts Section Level
     Route::get('/getScoutSectionLevel/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSectionLevel'])->name('getScoutSectionLevel');
     Route::get('/getScoutBadge/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutBadge'])->name('getScoutBadge');
+    //Program AJAX
+    Route::get('/getProgramItems/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getProgramItems'])->name('getProgramItems');
 
     Route::post('/saveValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'saveValidationcondition'])->name('saveValidationcondition');
     Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
@@ -687,8 +689,10 @@ Route::prefix('students')->group(function () {
     //Vaccinations
     Route::post('/addVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addVaccinationRecords'])->name('addVaccinationRecords');
     Route::post('/updateVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'updateVaccinationRecords'])->name('updateVaccinationRecords');
-    Route::post('/loadVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationRecords'])->name('loadVaccinationRecords');
-
+    Route::get('/loadVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationRecords'])->name('loadVaccinationRecords');
+    Route::get('/getHealthVaccinationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthVaccinationDetails'])->name('getHealthVaccinationDetails');
+    Route::get('/loadViewVaccinationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewVaccinationDetails'])->name('loadViewVaccinationDetails');
+    Route::get('/getVaccinationDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getVaccinationDetails'])->name('getVaccinationDetails');
 
     Route::post('/addBmiRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addBmiRecords'])->name('addBmiRecords');
     Route::post('/updateBmiRecord', [App\Http\Controllers\student\StudentHealthController::class, 'updateBmiRecord'])->name('updateBmiRecord');
@@ -698,6 +702,8 @@ Route::prefix('students')->group(function () {
     Route::get('/loadViewBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewBmiDetails'])->name('loadViewBmiDetails');
     Route::get('/getHealthBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthBmiDetails'])->name('getHealthBmiDetails');
     Route::get('/getBmiDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getBmiDetails'])->name('getBmiDetails');
+    //Endorse Health Record Routes
+    Route::get('/loadHealthSummary', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthSummary'])->name('loadHealthSummary');
 
     Route::post('/saveStudentProject', [App\Http\Controllers\student\StudentProjectController::class, 'saveStudentProject'])->name('saveStudentProject');
     Route::get('/loadStudentProjects/{param}', [App\Http\Controllers\student\StudentProjectController::class, 'loadStudentProjects'])->name('loadStudentProjects');

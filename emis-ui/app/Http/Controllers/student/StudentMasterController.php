@@ -29,7 +29,8 @@ class StudentMasterController extends Controller{
         $data =[
             'id'             =>  $request->id,
             'name'           =>  $request->name,
-            'unit_id'           =>  $request->unit_id,
+            'variety'        =>  $request->variety,
+            'unit_id'        =>  $request->unit_id,
             'central'        =>  $request->central,
             'local'          =>  $request->local,
             'description'    =>  $request->description,
@@ -38,7 +39,7 @@ class StudentMasterController extends Controller{
             'recordtype'     =>  $request->record_type,
             'user_id'        => $this->userId()
         ];
-        //dd($data);
+        
         if($request->record_type == 'student_awards'){
             $additional_data = [
                 'award_type_id' => $request->award_type_id,
@@ -83,6 +84,14 @@ class StudentMasterController extends Controller{
             ];
             $data = $data + $additional_data;
         }
+
+        if($request->record_type == 'item_variety'){
+            $additional_data = [
+                'unit_id' => $request->unit_id
+            ];
+            $data = $data + $additional_data;
+        }
+
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
 
@@ -147,7 +156,6 @@ class StudentMasterController extends Controller{
     }
 
     public function loadActiveStudentMasters($param=""){
-       // dd('m here');
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }
@@ -188,7 +196,16 @@ class StudentMasterController extends Controller{
         // dd('m here');
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveCounsellingMaster/'.$param);
          return $student_masters;
-     }
+    }
 
+    /**
+     * To get the list of program items based on the variety for Programs
+     * the id is the program_item_variety id
+     */
+
+    public function getProgramItems($id=""){
+        $program_items = $this->apiService->listData('emis/masters/students/getProgramItems/'.$id);
+        return $program_items;
+    }
 
 }

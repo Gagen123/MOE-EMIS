@@ -43,9 +43,10 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th rowspan="2" width="20%">Variety</th>
                                                 <th rowspan="2" width="20%">Item</th>
-                                                <th rowspan="2" width="20%">Previous Month Balance</th>
-                                                <th colspan="3" width="35%">For the Month</th>
+                                                <th rowspan="2" width="15%">Previous Month Balance</th>
+                                                <th colspan="3" width="25%">For the Month</th>
                                                 <th rowspan="2" width="25%">Remarks</th>
                                             </tr>
                                             <tr>
@@ -57,9 +58,15 @@
                                         <tbody>
                                             <tr id="record" v-for='(inventory, index) in form.inventoryDetails' :key="index">
                                                 <td>
+                                                    <select name="variety" :id="'variety'+index" class="form-control editable_fields" v-model="inventory.variety" @change="loadItemList('inventory',index)">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in varietyList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
                                                     <select name="inventory" :id="'inventory'+index" class="form-control editable_fields" v-model="inventory.item_id" @change="selectunit('inventory',index)">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
+                                                        <!-- <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.name }}</option> -->
                                                     </select>
                                                 </td>
                                                 <td>
@@ -110,10 +117,10 @@
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th>Variety</th>
                                                 <th>Item</th>
                                                 <th>Quantity Unit</th>
                                                 <th>Quantity Produced</th>
-                                                <th>No. of Varieties</th>
                                                 <th>Amount Generated from Sales</th>
                                                 <th>Remarks</th>
                                             </tr>
@@ -121,9 +128,15 @@
                                         <tbody>
                                             <tr id="record2" v-for='(production, index) in form.productionDetails' :key="index">
                                                 <td>
+                                                    <select name="produced_variety" :id="'produced_variety'+index" class="form-control editable_fields" v-model="production.variety" @change="loadItemList('production',index)">
+                                                        <option value="">--- Please Select ---</option>
+                                                        <option v-for="(item, index) in varietyList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                                    </select>
+                                                </td>
+                                                <td>
                                                     <select name="item_produced" :id="'item_produced'+index" class="form-control editable_fields" v-model="production.item_produced" @change="selectunit('production',index)">
                                                         <option value="">--- Please Select ---</option>
-                                                        <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
+                                                        <!-- <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.name }}</option> -->
                                                     </select>
                                                 </td>
                                                 <td>
@@ -136,9 +149,9 @@
                                                 <td>
                                                     <input type="text" name="quantity_produced" class="form-control" v-model="production.quantity_produced"/>
                                                 </td>
-                                                <td>
+                                                <!-- <td>
                                                     <input type="number" min="0" name="no_varieties" class="form-control" v-model="production.no_varieties"/>
-                                                </td>
+                                                </td> -->
                                                 <td>
                                                     <input type="number" min="0" name="amount_generated" class="form-control" v-model="production.amount_generated"/>
                                                 </td>
@@ -232,6 +245,7 @@ export default {
 
             programList:[],
             itemList:[],
+            varietyList:[],
             unitList:[],
             unitArray:{},
             inventoryDetails: [],
@@ -261,6 +275,40 @@ export default {
                 $('#production_measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
             }
 
+        },
+        loadItemList(type, index){
+            if(type=="inventory"){
+                let itemval=$('#variety'+index).val();
+
+                axios.get('/masters/getProgramItems/'+itemval)
+                    .then((response) => {
+                        let itemList = response.data;
+                        let option='';
+                        itemList.forEach(itm => {
+                            option+='<option value="'+itm.id+'_'+itm.Unit_id+'">'+itm.name+'</option>';
+                        });
+                        $('#inventory'+index).append(option);
+                    })
+                    .catch((e) => {
+                        console.log("Error:"+e)
+                });
+            }
+            else{
+                let itemval=$('#produced_variety'+index).val();
+
+                axios.get('/masters/getProgramItems/'+itemval)
+                    .then((response) => {
+                        let itemList = response.data;
+                        let option='';
+                        itemList.forEach(itm => {
+                            option+='<option value="'+itm.id+'_'+itm.Unit_id+'">'+itm.name+'</option>';
+                        });
+                        $('#item_produced'+index).append(option);
+                    })
+                    .catch((e) => {
+                        console.log("Error:"+e)
+                });
+            }
         },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
@@ -312,16 +360,26 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveVarietyList(uri="masters/loadActiveStudentMasters/item_variety"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.itemList =  data.data.data;
+                this.varietyList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
+        // loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.itemList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
         loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)
             .then(response => {
@@ -431,10 +489,10 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.loadStudentList();
-        // this.loadTeacherList();
+        
         this.loadActiveProgramList();
-        this.loadActiveItemList();
+        this.loadActiveVarietyList();
+        //this.loadActiveItemList();
         this.loadActiveUnitList();
 
     },

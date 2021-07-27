@@ -819,30 +819,26 @@ class StudentHealthController extends Controller
             'section'               => $request->std_section,
             'std_id'                => $request->std_id,
             'std_vaccinated'        => $request->std_vaccinated,
-            'organization_id'       => $request->organization_id,
             'user_id'               => $request->user_id
         ];
 
         $std_ids = $data['std_id'];
         $std_vaccinated = $data['std_vaccinated'];
-        $dose = $data['dose'];
 
         unset($data['std_id']);
-        unset($data['dose']);
         unset($data['std_vaccinated']);
 
         $response_data = StudentHealthVaccination::create($data);
         $lastInsertId = $response_data->id;
 
-        //insert students that are not given
+        //insert students that are given
         foreach($std_vaccinated as $key => $value){
-            $data = [
+            $vaccination_data = [
                 'StdHealthVaccinationId'    => $lastInsertId,
                 'StdStudentId'              => $value,
-                'dose'                      => $dose,
                 'status'                    => 'vaccinated'
             ];
-            StudentVaccination::create($data);
+            StudentVaccination::create($vaccination_data);
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -850,10 +846,87 @@ class StudentHealthController extends Controller
     }
 
     public function loadVaccinationRecords($param=""){
-        //
+        $org_id =$param;
+
+        $records = DB::table('std_health_vaccination')
+                    ->select('std_health_vaccination.id', 'std_health_vaccination.dose', 
+                                'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId',
+                                'std_vaccine_type.Name as vaccine_type')
+                    ->leftjoin('std_student_vaccination', 'std_health_vaccination.id', '=', 'std_student_vaccination.StdHealthVaccinationId')
+                    ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_vaccination.section')
+                    ->join('std_vaccine_type', 'std_vaccine_type.id', '=', 'std_health_vaccination.StdVaccineTypeId')
+                    ->groupBy('std_student_class_stream.SectionDetailsId', 'std_student_class_stream.SectionDetailsId')
+                    ->get();
+
+        return $this->successResponse($records);
     }
 
     public function updateVaccinationRecords($param=""){
         //
+    }
+
+    /**
+     * Load the vaccination details of the view
+     * The param takes 4 parameters - class, stream, section and health id separated by __ (double underscore)
+     */
+
+    public function loadViewVaccinationDetails($param=''){
+        $param_details = explode('__', $param);
+
+        $records = DB::table('std_health_vaccination')
+                    ->select('std_health_vaccination.id as id', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
+                                'std_student_vaccination.id as vaccination_id', 'std_student_vaccination.status as given', 
+                                'std_student.DateOfBirth', 'std_student.CmnSexId', 'std_vaccine_type.Name as vaccination_type')
+                    ->leftjoin('std_student_class_stream', 'std_health_vaccination.section', '=', 'std_student_class_stream.SectionDetailsId')
+                    ->join('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
+                    ->join('std_student_vaccination', 'std_student_vaccination.StdStudentId', '=', 'std_student.id')
+                    ->join('std_vaccine_type', 'std_vaccine_type.id', '=', 'std_health_vaccination.StdVaccineTypeId')
+                    ->where('std_health_vaccination.section', $param_details[1])
+                    ->where('std_health_vaccination.id', $param_details[3])
+                    ->get();
+
+        return $this->successResponse($records);
+        
+        return $response_data;
+    }
+
+    /**
+     * Load the health vaccination details of an individual student to edit
+     * The is  vaccination id and student id separated by __ (double underscore)
+     */
+
+    public function getHealthVaccinationDetails($id=''){
+        
+        $response_data = DB::table('std_vaccine_type')
+                    ->select('std_health_vaccination.id', 'std_health_vaccination.date', 'std_health_vaccination.class', 
+                                'std_health_vaccination.section', 'std_health_vaccination.stream', 'std_vaccine_type.Name AS vaccine_type')
+                    ->join('std_health_vaccination', 'std_health_vaccination.StdVaccineTypeId', '=', 'std_vaccine_type.id')
+                    ->where('std_health_vaccination.id', $id)
+                    ->get();
+        return $response_data;
+    }
+
+    public function getVaccinationDetails($param=""){
+        $param_details = explode('__', $param);
+
+        $response_data = DB::table('std_health_vaccination')
+                            ->select('std_health_vaccination.*', 'std_student_vaccination.status as vaccinated','std_student.id AS StdStudentId',
+                                    'std_student_vaccination.id as vaccination_id', 
+                                    'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
+                            ->leftjoin('std_student_class_stream', 'std_health_vaccination.section', '=', 'std_student_class_stream.SectionDetailsId')
+                            ->join('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
+                            ->join('std_student_vaccination', 'std_student_vaccination.StdStudentId', '=', 'std_student.id')
+                            ->where('std_health_vaccination.id', $param_details[0])
+                            ->where('std_student.id', $param_details[1])
+                            ->get();
+        return $response_data;
+    }
+
+    /**
+     * Functions for Endorsing Health Records
+     */
+
+    public function loadHealthSummary($org_id=""){
+
     }
 }

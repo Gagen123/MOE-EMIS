@@ -14,6 +14,7 @@ class CeaProgramItem extends Model
 
     protected $fillable = [
         'id',
+        'CeaProgrammeItemVarietyId',
         'Name',
         'Description',
         'Central',

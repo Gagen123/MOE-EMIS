@@ -11,7 +11,7 @@
                         <has-error :form="student_form" field="vaccination"></has-error>
                     </div> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Date of Vacination:</label>
+                        <label>Date of Vacination: </label><small>(Optional)</small>
                         <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
                         <has-error :form="student_form" field="date"></has-error>
                     </div> 
@@ -56,7 +56,7 @@
                                     <th>Name</th> 
                                     <th>Sex</th>
                                     <th>Age</th>
-                                    <th>Vaccinated
+                                    <th>Received Vaccine
                                         <input type="checkbox" name="vaccinated" class="form-control-input" id="vaccinatedid" @change="checkall('vaccinatedcheck','vaccinatedid')"/>
                                     </th>
                                 </tr>
@@ -67,7 +67,7 @@
                                     <td>{{ student.Name}}</td>
                                     <td> {{genderArray[student.CmnSexId]}} </td>
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
-                                    <td>{{getAge(student.DateOfBirth)}}</td>
+                                    <td>{{getAge(student.DateOfBirth)}} (Y), {{getMonth(student.DateOfBirth)}} (M)</td>
                                     <td>
                                         <input type="checkbox" name="vaccinated" class="form-control-input vaccinatedcheck" v-model="student_form.std_vaccinated[index]" :value="student.std_student_id"/>
                                     </td>
@@ -117,9 +117,10 @@ export default {
         loadActiveVaccineList(uri="masters/loadActiveStudentMasters/vaccine_type"){
             axios.get(uri)
             .then(response => {
-                let data = response;
+                //let data = response.data;
                 //alert(JSON.stringify(response.data.data.name));
-                this.vaccineList =  data.data;
+                this.vaccineList = response.data.data;
+
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -187,13 +188,30 @@ export default {
                 console.log("Error:"+error)
             });
         },
-
         
         getAge(DateOfBirth){
+            let selectedDate=new Date();
             let date_of_birth = new Date(DateOfBirth);
-            var diff_ms = Date.now() - date_of_birth.getTime();
-            var age_dt = new Date(diff_ms);
-            return Math.abs(age_dt.getUTCFullYear()-1970);
+            // var diff_ms = Date.now() - date_of_birth.getTime();
+            // var age_dt = new Date(diff_ms);
+            // return Math.abs(age_dt.getUTCFullYear()-1970);
+            let year = selectedDate.getFullYear() - date_of_birth.getFullYear();
+            return year;
+        },
+        getMonth(DateOfBirth){
+            let selectedDate=new Date();
+            let date_of_birth = new Date(DateOfBirth);
+            let month=0;
+            if (selectedDate.getMonth() + 1 < date_of_birth.getMonth() + 1){
+                // example: March 2010 (3) and January 2011 (1); this should be 10 monts
+                // 12 - 3 + 1 = 10
+                // Take the 12 months of a year into account
+                month = 12 - date_of_birth.getMonth() + 1 + selectedDate.getMonth() + 1;
+            }
+            else{
+                month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1;
+            }
+            return month;
         },
         
         remove_error(field_id){
