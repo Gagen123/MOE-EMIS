@@ -30,7 +30,7 @@ class AdministrationController extends Controller{
         }
         if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
             $rules = [
-            'name'          =>  'required',
+                'name'      =>  'required',
                 'code'      =>  'required',
                 'status'    =>  'required',
             ];
@@ -39,7 +39,7 @@ class AdministrationController extends Controller{
             $rules = [
                 'from_date'         =>  'required | date',
                 'to_date'           =>  'required | date | after:from_date',
-                'type'              =>  'required',
+                'type'              =>  'required', 
             ];
             $customMessages = [
                 'from_date.required' => 'This field is required',

@@ -70,6 +70,11 @@
                     Quarter 
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('item_variety_index')">
+                    <router-link to="/item_variety_index" id="item_variety_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Item Variety
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1" @click="activatelink('program_item_index')">
                     <router-link to="/program_item_index" id="program_item_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Program Items 

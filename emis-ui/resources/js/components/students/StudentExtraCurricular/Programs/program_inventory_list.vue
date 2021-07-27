@@ -7,8 +7,6 @@
                      <th >No.</th>
                      <th >Program</th>
                      <th >For Month</th>
-                     <th >Increase in Quantity</th>
-                     <th >Decrease in Quantity</th>
                      <th >Action</th>
                 </tr>
             </thead>
@@ -17,11 +15,9 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.program_name}}</td>
                     <td>{{ item.ForMonth}}</td>
-                    <td>{{ item.IncreaseInQuantity}}</td>
-                    <td>{{ item.DecreaseInQuantity}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
                         </div>
                     </td>
                 </tr>
@@ -51,6 +47,9 @@ export default {
         },
         showedit(data){
             this.$router.push({name:'program_inventory_edit',params: {data:data}});
+        },
+        showview(data){
+            this.$router.push({name:'program_inventory_view',params: {data:data}});
         },
     },
     mounted(){

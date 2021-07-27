@@ -95,6 +95,11 @@ Setting up the system administration, and user management:
 
     added initial_appointment_date in stf_staff table, and changed table name to stf_family_detail from stf_nominee with additional field: isnominee
 
+    26th July
+    student vaccination tables changed - dose removed from std_student_vaccination and dose added to std_health_vaccination(also date made nullable)
+
+    table cea_programme_item_variety added
+
 
 ***************Staff*****************
 staff history - table changed
@@ -105,6 +110,8 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
             from the contact_details table, removed foreign key to organizaiton detials as this table is also refering by headquarters.
         Table changed in staff:
             added new field org_level
+
+
 
 
 

@@ -372,6 +372,7 @@ class StudentProgramController extends Controller
             'month.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
         if($request->actionType=="add"){
             $data =[
                 // 'id'                    => $request->id,
@@ -384,16 +385,14 @@ class StudentProgramController extends Controller
                 // 'expenditureDetails'    => $request->expenditureDetails,
                 //'user_id'        => $this->user_id()
             ];
-            // $inventory_details      = $data['inventoryDetails'];
-            // $production_details     = $data['productionDetails'];
-            // $expenditure_details    = $data['expenditureDetails'];
+            $inventory_details      = $request->inventoryDetails;
+            $production_details     = $request->productionDetails;
+            $expenditure_details    = $request->expenditureDetails;
 
-            // unset($data['inventoryDetails']);
-            // unset($data['productionDetails']);
-            // unset($data['expenditureDetails']);
             $response = CeaProgramInventory::create($data);
             $lastInsertId = $response->id;
-            foreach($request->inventoryDetails as $key => $value){
+
+            foreach($inventory_details as $key => $value){
                 $inventory_data['CeaProgrammeInventoryId'] = $lastInsertId;
                 $inventory_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_id'])[0];
                 $inventory_data['IncreaseInQuantity'] = $value['increase_quantity'];
@@ -403,16 +402,15 @@ class StudentProgramController extends Controller
                 CeaProgramInventoryDetail::create($inventory_data);
             }
 
-            foreach($request->productionDetails as $key => $value){
+            foreach($production_details as $key => $value){
                 $production_data['CeaProgrammeInventoryId'] = $lastInsertId;
                 $production_data['CeaProgrammeInventoryItemId'] = explode('_',$value['item_produced'])[0];
                 $production_data['QuantityProduced'] = $value['quantity_produced'];
-                $production_data['NoOfVariety'] = $value['no_varieties'];
                 $production_data['AmountGenerated'] = $value['amount_generated'];
                 $production_data['Remarks'] = $value['production_remarks'];
                 CeaProgramInventoryProduction::create($production_data);
             }
-            foreach($request->expenditureDetails as $key => $value){
+            foreach($expenditure_details as $key => $value){
                 $expenditure_data['CeaProgrammeInventoryId'] = $lastInsertId;
                 $expenditure_data['Particular'] = $value['expenditure_details'];
                 $expenditure_data['Amount'] = $value['expenditure_amount'];
@@ -456,7 +454,7 @@ class StudentProgramController extends Controller
                 $expenditure_response = CeaProgramInventoryExpenditure::create($expenditure_data);
             }
         }
-        //dd( $data);
+        
         return $this->successResponse($expenditure_response, Response::HTTP_CREATED);
     }
 
@@ -466,26 +464,53 @@ class StudentProgramController extends Controller
 
     public function loadProgramInventory($param=""){
 
+        // $records = CeaProgramInventory::selectRaw('monthname(ForMonth) as ForMonth')
+        //                 ->join('cea_programme', 'cea_programme_inventory.CeaProgrammeId', '=', 'cea_programme.id')
+        //                 ->select('cea_programme_inventory_detail.*', 'cea_programme.name AS program_name')
+        //                 ->get();
+
         $records = DB::table('cea_programme')
                 ->join('cea_programme_inventory', 'cea_programme_inventory.CeaProgrammeId', '=', 'cea_programme.id')
-                ->join('cea_programme_inventory_detail', 'cea_programme_inventory.id', '=', 'cea_programme_inventory_detail.CeaProgrammeInventoryId')
-                ->select('cea_programme_inventory.ForMonth', 'cea_programme_inventory_detail.*', 'cea_programme.name AS program_name')
+                ->select('cea_programme.name AS program_name', 'cea_programme_inventory.id AS id')
+                ->selectRaw('monthname(ForMonth) as ForMonth')
                 ->get();
 
         return $this->successResponse($records);
     }
+
     public function loadInventoryDetials($param=""){
 
-        $records =CeaProgramInventory::where('id',$param)->first();
-        $CeaProgramInventoryDetail=CeaProgramInventoryDetail::where('CeaProgrammeInventoryId',$param)->get();
+        $records =CeaProgramInventory::where('cea_programme_inventory.id',$param)
+                    ->join('cea_programme', 'cea_programme_inventory.CeaProgrammeId', '=', 'cea_programme.id')
+                    ->select('cea_programme.name AS program_name', 'cea_programme_inventory.*')
+                    ->first();
+        
+        $CeaProgramInventoryDetail=CeaProgramInventoryDetail::where('CeaProgrammeInventoryId',$param)
+                                    ->join('cea_programme_item', 'cea_programme_inventory_detail.CeaProgrammeInventoryItemId', '=', 'cea_programme_item.id')
+                                    ->join('cea_programme_item_variety', 'cea_programme_item_variety.id', '=', 'cea_programme_item.CeaProgrammeItemVarietyId')
+                                    ->join('cea_programme_measurement', 'cea_programme_measurement.id', '=', 'cea_programme_item.Unit_id')
+                                    ->select('cea_programme_item_variety.name AS variety_name', 'cea_programme_measurement.Name AS unit_name', 
+                                                'cea_programme_item.name AS item_name','cea_programme_inventory_detail.*')
+                                    ->get();
+
         if($CeaProgramInventoryDetail!=null && $CeaProgramInventoryDetail!=""){
             $records->details=$CeaProgramInventoryDetail;
         }
-        $CeaProgramInventoryProduction=CeaProgramInventoryProduction::where('CeaProgrammeInventoryId',$param)->get();
+
+        $CeaProgramInventoryProduction=CeaProgramInventoryProduction::where('CeaProgrammeInventoryId',$param)
+                                    ->join('cea_programme_item', 'cea_programme_inventory_production.CeaProgrammeInventoryItemId', '=', 'cea_programme_item.id')
+                                    ->join('cea_programme_item_variety', 'cea_programme_item_variety.id', '=', 'cea_programme_item.CeaProgrammeItemVarietyId')
+                                    ->join('cea_programme_measurement', 'cea_programme_measurement.id', '=', 'cea_programme_item.Unit_id')
+                                    ->select('cea_programme_item_variety.name AS variety_name','cea_programme_measurement.Name AS unit_name', 
+                                                'cea_programme_item.name AS item_name', 'cea_programme_inventory_production.*')
+                                    ->get();
+
         if($CeaProgramInventoryProduction!=null && $CeaProgramInventoryProduction!=""){
             $records->production=$CeaProgramInventoryProduction;
         }
+
         $CeaProgramInventoryExpenditure=CeaProgramInventoryExpenditure::where('CeaProgrammeInventoryId',$param)->get();
+
         if($CeaProgramInventoryExpenditure!=null && $CeaProgramInventoryExpenditure!=""){
             $records->expenditure=$CeaProgramInventoryExpenditure;
         }
