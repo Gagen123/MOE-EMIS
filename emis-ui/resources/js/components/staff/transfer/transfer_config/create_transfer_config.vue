@@ -5,9 +5,10 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Transfer Type:<span class="text-danger">*</span></label> 
-                            <select class="form-control select2" id="transfer_type_id" v-model="form.transfer_type_id" :class="{ 'is-invalid': form.errors.has('transfer_type_id') }">
-                                <option v-for="(item, index) in transferType" :key="index" v-bind:value="item.id">{{ item.type }}</option>
-                            </select> 
+                              <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                                    <option v-for="(item, index) in transferType" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                              </select>
+
                         <has-error :form="form" field="transfer_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -93,7 +94,6 @@ export default {
             this.count++;
             this.form.role_action_mapp.push({sequence:this.count,authority:'',role:''})
         },
-
         remove(){    
             if(this.form.role_action_mapp.length>1){
                 this.count--;
@@ -105,11 +105,11 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadtransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        loadtransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.transferType = data.data.data;
+                let data = response.data.data;
+                this.transferType = data;
             })
             .catch(function (error){
                 console.log(error);
@@ -148,7 +148,14 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            
+            if(id=="transfer_type_id"){
+                this.form.transfer_type_id=$('#transfer_type_id').val();
+                this.getLeave_details($('#role_id').val());
+            }
+            if(id=="role_id"){
+                this.form.role_id=$('#role_id').val();
+                this.getLeave_details();
+            }
         },
         
         applyselect2(){

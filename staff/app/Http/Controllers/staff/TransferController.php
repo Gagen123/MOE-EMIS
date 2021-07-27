@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\staff\TransferWindow;
 use App\Models\staff\StaffHistory;
+use App\Models\staff_services\StaffAppeal;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\TransferApplication;
 use App\Models\staff\ApplicationSequence;
@@ -369,6 +370,11 @@ class TransferController extends Controller{
         $response_data=TransferApplication::where ('id', $id)->first();
         return$response_data;
    }
+
+   public function LoadTransferAppealDetails($user_id=""){
+    $response_data=StaffAppeal::where ('user_id', $user_id)->first();
+    return$response_data;
+}
    public function getapplicatName($id=""){
         $response_data=PersonalDetails::where ('id', $id)->first();
         return$response_data;
@@ -376,6 +382,81 @@ class TransferController extends Controller{
     public function LoadApplicationDetailsByUserId($user_id=""){
         $response_data=TransferApplication::where ('created_by', $user_id)->first();
         return$response_data;
+    }
+    public function SaveTransferAppeal(Request $request){
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'Please mention the reasons for transfer appeal ',
+        ];
+        $this->validate($request, $rules,$customMessages);
+
+        $last_seq=ApplicationSequence::where('service_name','transfer appeal')->first();
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'transfer appeal',
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::where('service_name', 'transfer appeal')->update($app_details);
+        }
+        $application_no='TRA_-';
+        if(strlen($last_seq)==1){
+            $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
+        }
+        $request_data =[
+            'id'                                =>  $request->id,
+            'transferType'                      =>  $request->transferType,
+            'name'                              =>  $request->name,
+            'application_no'                    =>  $application_no,
+            'description'                       =>  $request->description,
+            'user_id'                           =>  $request->user_id,
+            'status'                            =>  $request->status,
+            'org_id'                            =>  $request->working_agency_id,
+        ];
+        $response_data=TransferApplication::where('created_by',$request->user_id)->first();
+        if($response_data!=null || $response_data!=""){
+            if($response_data->status=="Transfer Approved" || $response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Forwarded"){
+                $response_data = StaffAppeal::create($request_data);
+            }
+                else{
+                    return "Not Approved";
+                }
+        return $response_data;
+        }
+        else{
+            return "Not Contain";
+        }
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $request->id,
+                    'attachment_for'                   =>  'Transfer Appeal',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                $doc = DocumentDetails::create($doc_data);
+            }
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     
 }

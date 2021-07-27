@@ -33,7 +33,7 @@ export default {
         }
     },
     methods:{
-        loadundertakingList(uri = 'masters/loadStaffMasters/all_transfe_undertakingr'){
+        loadtransferTypeList(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -50,7 +50,7 @@ export default {
         },
     },
     mounted(){ 
-        this.loadundertakingList();
+        this.loadtransferTypeList();
         this.dt =  $("#working-agency-table").DataTable()
     },
     watch: {

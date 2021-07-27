@@ -5,15 +5,17 @@
                 <tr>
                     <th >SL#</th>
                     <th >Transfer Type</th>
-                    <th >Submitter</th>
+                    <th >Date of Apply</th>
+                    <th> Status</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in transferConfigurationList" :key="index">
+                <tr v-for="(item, index) in transferAppealDetails" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{transfertypeList[item.transfer_type_id]}}</td>
-                    <td>{{ roleList[item.submitter_role_id]}}</td>
+                    <td>{{item.transfer_type_id}}</td>
+                     <td>{{ item.submitter_role_id}}</td>
+                    <td>{{ item.submitter_role_id}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
@@ -26,7 +28,7 @@
 export default {
     data(){
         return{
-            transferConfigurationList:[],
+            transferAppealDetails:[],
             transfertypeList:{},
             roleList:{},
         }
@@ -57,27 +59,28 @@ export default {
             });
 
         },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
+        LoadTransferAppealDetails(uri = 'staff/transfer/LoadTransferAppealDetails/'){
             axios.get(uri)
             .then(response =>{
-                let data = response.data;
-                 for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].id] = data[i].Name;
-                }
+                let data = response.data.data.data;
+                this.transferAppealDetails = data;
+                
             })
             .catch(function (error){
                 console.log(error);
             });
-        },
 
+        },
+      
         showedit(data){
             this.$router.push({name:'create_transfer_appeal',params: {data:data.id}});
         },
     },
         mounted(){ 
-            this.TransferConfigurationList();
+            this.transferAppealDetails();
             this.LoadTransferType();
-            this.loadroleList();
+            this.LoadTransferAppealDetails();
+          
 
         },
         watch:{
