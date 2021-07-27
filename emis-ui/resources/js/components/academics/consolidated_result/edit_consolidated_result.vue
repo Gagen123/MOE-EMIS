@@ -14,7 +14,7 @@
                     <table id="edit-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th rowspan="3">Student Code</th>
+                                <th rowspan="3">Roll No.</th>
                                 <th rowspan="3">Name</th>
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
@@ -41,12 +41,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{item3.CidNo}}</td>
+                                <td>{{index3 + 1}}</td>
                                 <td>
                                     {{ item3.Name }}
                                 </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
-                                     <span v-if="item4['aca_sub_id']=='remarks'">
+                                    <span v-if="item4['aca_sub_id']=='remarks'">
                                         <input type="text" v-model="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']" class="form-control form-control-sm">
                                     </span>
                                     <span v-else-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
@@ -54,7 +54,7 @@
                                             <span v-if="consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']==1">
                                                 Promoted
                                             </span>
-                                            <span v-else>
+                                            <span v-else class="text-danger">
                                                 Detained
                                             </span>
                                         </span>
@@ -236,19 +236,20 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-         this.dt =  $("#promotion-rule-edit-table").DataTable({
-            scrollY:        "300px",
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         false,
-            searching: false,
-            fixedColumns:   {
-                leftColumns: 2
-            },
-            destroy: true,
-        });
+        //  this.dt =  $("#edit-table").DataTable({
+        //     scrollY:        "300px",
+        //     scrollX:        true,
+        //     scrollCollapse: true,
+        //     paging:         false,
+        //     searching: false,
+        //     fixedColumns:   {
+        //         leftColumns: 2
+        //     },
+        //     destroy: true,
+        // });
     },
     created() {
+        console.log(this.$route.params)
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;

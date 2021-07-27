@@ -106,6 +106,15 @@ const routes = [
                     { path: '/edit_internet_accessible',name:'edit_internet_accessible', component: require('./components/masters/organization_masters/Internet_accessible/edit_internet_accessible.vue').default },
                   ]
               },
+              { path: '/program_type_index',
+                component: require('./components/masters/organization_masters/program_type/program_type_index.vue').default ,
+                  children: [
+                    { path: '/',name:'program_type_index', component: require('./components/masters/organization_masters/program_type/list_program_type.vue').default },
+                    { path: '/list_program_type',name:'list_program_type', component: require('./components/masters/organization_masters/program_type/list_program_type.vue').default },
+                    { path: '/create_program_type',name:'create_program_type', component: require('./components/masters/organization_masters/program_type/create_program_type.vue').default },
+                    { path: '/edit_program_type',name:'edit_program_type', component: require('./components/masters/organization_masters/program_type/edit_program_type.vue').default },
+                  ]
+              },
 
 
             { path: '/furnitureType_index',

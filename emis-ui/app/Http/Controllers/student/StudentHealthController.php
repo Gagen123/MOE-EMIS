@@ -293,7 +293,13 @@ class StudentHealthController extends Controller
         $student_records = $this->apiService->listData('emis/students/getBmiDetails/'.$id);
         return $student_records;
     }
-    
+
+    public function loadresult($months="",$gender="",$bmi=""){
+        $student_records = $this->apiService->listData('emis/students/loadresult/'.$months.'/'.$gender.'/'.$bmi);
+        return $student_records;
+    }
+
+
 
     /**
      * Load the health details of the view
@@ -314,7 +320,7 @@ class StudentHealthController extends Controller
         $student_records = $this->apiService->listData('emis/students/getScreeningDetails/'.$id);
         return $student_records;
     }
-    
+
     /**
      * Load the health supplementation details of the view
      * The param takes 4 parameters - class, stream, section and health id separated by __ (double underscore)

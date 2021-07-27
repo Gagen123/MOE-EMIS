@@ -1075,7 +1075,7 @@ class AssessmentAreaSeeder extends Seeder
             [
                 'id' => 'edcfdfb1-d029-11eb-a9e6-e89eb413ce43',
                 'name' => 'My World (Class Activity)',
-                'code' => 'MW (CW)',
+                'code' => 'MW (CA)',
                 'dzo_name'=>'',
                 'aca_sub_id' => '2f733141-d029-11eb-a9e6-e89eb413ce43',
                 'aca_rating_type_id ' => null,
@@ -3256,6 +3256,7 @@ class AssessmentAreaSeeder extends Seeder
                 'created_at' => Carbon::now(),
             ],
         ]);
+        DB::update("UPDATE  aca_assessment_area SET aca_assmnt_type = 1 WHERE name LIKE '%exam%'");
     }
 }
 

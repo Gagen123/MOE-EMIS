@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\staff\TransferWindow;
 use App\Models\staff\StaffHistory;
+use App\Models\staff_services\StaffAppeal;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\TransferApplication;
 use App\Models\staff\ApplicationSequence;
@@ -75,6 +76,7 @@ class TransferController extends Controller{
             'transferType.required'     => 'Please select this',
         ];
         $this->validate($request, $rules,$customMessages);
+
         $last_seq=ApplicationSequence::where('service_name','Transfer')->first();
         if($last_seq==null || $last_seq==""){
             $last_seq=1;
@@ -91,24 +93,22 @@ class TransferController extends Controller{
             ];
             ApplicationSequence::where('service_name', 'Transfer')->update($app_details);
         }
-        $appNo='TR_';
+
+        $application_no='TR_-';
         if(strlen($last_seq)==1){
-            $appNo= $appNo.date('Y').'.'.date('m').'_0000'.$last_seq;
+            $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
         }
         else if(strlen($last_seq)==2){
-            $appNo= $appNo.date('Y').'.'.date('m').'_000'.$last_seq;
+            $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
         }
         else if(strlen($last_seq)==3){
-            $appNo= $appNo.date('Y').'.'.date('m').'_00'.$last_seq;
+            $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
         }
         else if(strlen($last_seq)==4){
-            $appNo= $appNo.date('Y').'.'.date('m').'_0'.$last_seq;
-        }
-        else if(strlen($last_seq)==5){
-            $appNo= $appNo.date('Y').'.'.date('m').'_'.$last_seq;
+            $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
         }
         $app_data=[
-            'aplication_number'     =>  $appNo,
+            'aplication_number'     =>  $application_no,
             'status'                =>  'Submitted'
         ];
         TransferApplication::where('id', $request->id)->update($app_data);
@@ -207,22 +207,14 @@ class TransferController extends Controller{
 
     public function loadtrainsferDetails($appNo=""){
         $response_data=TransferApplication::where('aplication_number',$appNo)->first();
-        $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
-        $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();
-        return $this->successResponse($response_data);
-    }
-    public function updateTransferApplication(Request $request){
-        // $request_data =[
-        //     'id'                           =>  $request->id,
-        //     'status'                       =>  $request->status,
-        //     'dzongkhagApproved'            =>  $request->dzongkhagApproved,
-        //     'updated_by'                   =>  $request->user_id,
-        //     'updated_at'                   =>  date('Y-m-d h:i:s'),
-        //     'service_name'                 =>  $request->service_name,
-        //     'current_status'               =>  $request->current_status,
-        //     'aplication_number'            =>  $request->application_number,
 
-        // ];
+        if($response_data!="" && $response_data!=null){
+            $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();  
+        }
+        $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
+            return $this->successResponse($response_data);
+        }
+    public function updateTransferApplication(Request $request){
         $extra_data =[
             'id'                           =>  $request->id,
             'status'                       =>  $request->status,
@@ -230,6 +222,7 @@ class TransferController extends Controller{
             'updated_by'                   =>  $request->user_id,
             'updated_at'                   =>  date('Y-m-d h:i:s'),
             'aplication_number'            =>  $request->application_number,
+            'preference_school'            =>  $request->preference_school,
 
         ];
         if($request->status=="Approved"|| $request->status =="Transfer Approved"){
@@ -256,8 +249,9 @@ class TransferController extends Controller{
             ];
             PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
         }
-        if($request->status=="Approved"){
+        if($request->status=="Joined"){
             $additional_data=[
+                'preference_school'  =>  $request->preference_school,
                 'dzongkhagApproved'  =>   $request->dzongkhagApproved,
                 'status'             =>  $request->status,
             ];
@@ -372,4 +366,97 @@ class TransferController extends Controller{
          $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
          return$response_data;
     }
+    public function loadApplicationDetails($id=""){
+        $response_data=TransferApplication::where ('id', $id)->first();
+        return$response_data;
+   }
+
+   public function LoadTransferAppealDetails($user_id=""){
+    $response_data=StaffAppeal::where ('user_id', $user_id)->first();
+    return$response_data;
+}
+   public function getapplicatName($id=""){
+        $response_data=PersonalDetails::where ('id', $id)->first();
+        return$response_data;
+    }
+    public function LoadApplicationDetailsByUserId($user_id=""){
+        $response_data=TransferApplication::where ('created_by', $user_id)->first();
+        return$response_data;
+    }
+    public function SaveTransferAppeal(Request $request){
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'Please mention the reasons for transfer appeal ',
+        ];
+        $this->validate($request, $rules,$customMessages);
+
+        $last_seq=ApplicationSequence::where('service_name','transfer appeal')->first();
+        if($last_seq==null || $last_seq==""){
+            $last_seq=1;
+            $app_details = [
+                'service_name'                  =>  'transfer appeal',
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::create($app_details);
+        }
+        else{
+            $last_seq=$last_seq->last_sequence+1;
+            $app_details = [
+                'last_sequence'                 =>  $last_seq,
+            ];
+            ApplicationSequence::where('service_name', 'transfer appeal')->update($app_details);
+        }
+        $application_no='TRA_-';
+        if(strlen($last_seq)==1){
+            $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
+        }
+        else if(strlen($last_seq)==2){
+            $application_no= $application_no.date('Y').date('m').'-00'.$last_seq;
+        }
+        else if(strlen($last_seq)==3){
+            $application_no= $application_no.date('Y').date('m').'-0'.$last_seq;
+        }
+        else if(strlen($last_seq)==4){
+            $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
+        }
+        $request_data =[
+            'id'                                =>  $request->id,
+            'transferType'                      =>  $request->transferType,
+            'name'                              =>  $request->name,
+            'application_no'                    =>  $application_no,
+            'description'                       =>  $request->description,
+            'user_id'                           =>  $request->user_id,
+            'status'                            =>  $request->status,
+            'org_id'                            =>  $request->working_agency_id,
+        ];
+        $response_data=TransferApplication::where('created_by',$request->user_id)->first();
+        if($response_data!=null || $response_data!=""){
+            if($response_data->status=="Transfer Approved" || $response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Forwarded"){
+                $response_data = StaffAppeal::create($request_data);
+            }
+                else{
+                    return "Not Approved";
+                }
+        return $response_data;
+        }
+        else{
+            return "Not Contain";
+        }
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $request->id,
+                    'attachment_for'                   =>  'Transfer Appeal',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                $doc = DocumentDetails::create($doc_data);
+            }
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+    
 }

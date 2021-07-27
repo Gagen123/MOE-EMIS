@@ -58,5 +58,10 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadAssessmentAreasForConsolidated',['uses' => 'academic\AcademicController@loadAssessmentAreasForConsolidated']);
         $router->get('/loadConsolidatedResult/{orgId}',['uses' => 'academic\AcademicController@loadConsolidatedResult']); 
         $router->post('/saveConsolidatedResut',['uses' => 'academic\AcademicController@saveConsolidatedResut']);
+        $router->get('/loadClassBySubjectTeacher/{orgId}/{staffId}',['uses' => 'academic\AcademicController@loadClassBySubjectTeacher']);
+        $router->get('/getTermsByFrequency/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequency']);
+        $router->post('/unlockForEditForConsolidated/{Id}',['uses' => 'academic\AcademicController@unlockForEditForConsolidated']);
+
+
     });
 });

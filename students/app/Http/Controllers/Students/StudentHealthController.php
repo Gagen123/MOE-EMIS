@@ -28,7 +28,7 @@ class StudentHealthController extends Controller
 
     /**
      * Function kept for future reference
-     * 
+     *
      * Nice way to count records
      */
 
@@ -259,7 +259,7 @@ class StudentHealthController extends Controller
             'referral_status'       => $request->isReferred,
             'user_id'               => $request->user_id
         ];
-        
+
         // if id is null - record does not exists and its a new record
         if($data['id'] == NULL){
             if($data['referral_status'] == '1'){
@@ -408,7 +408,7 @@ class StudentHealthController extends Controller
     public function getHealthSupplementationDetails($param=""){
         $id = $param;
         $records = DB::table('std_health_supplementation_type')
-                    ->select('std_health_supplementation.id', 'std_health_supplementation.date', 'std_health_supplementation.class', 
+                    ->select('std_health_supplementation.id', 'std_health_supplementation.date', 'std_health_supplementation.class',
                                 'std_health_supplementation.section', 'std_health_supplementation.stream', 'std_health_supplementation_type.Name AS supplementation_type',
                                 'std_screening_endorsed_by.Name AS endorsed_by', 'std_screening_position_title.Name AS position')
                     ->join('std_health_supplementation', 'std_health_supplementation.StdHealthSupplementationTypeId', '=', 'std_health_supplementation_type.id')
@@ -417,7 +417,7 @@ class StudentHealthController extends Controller
                     ->where('std_health_supplementation.id', $id)
                     ->get();
 
-        return $this->successResponse($records); 
+        return $this->successResponse($records);
     }
 
     /**
@@ -430,7 +430,7 @@ class StudentHealthController extends Controller
 
         $records = DB::table('std_health_supplementation')
                     ->select('std_health_supplementation.*', 'std_student_health_supplementation.status as given','std_student.id AS StdStudentId',
-                            'std_student_health_supplementation.id as supplementation_id', 
+                            'std_student_health_supplementation.id as supplementation_id',
                             'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
                     ->leftjoin('std_student_class_stream', 'std_health_supplementation.section', '=', 'std_student_class_stream.SectionDetailsId')
                     ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
@@ -444,7 +444,7 @@ class StudentHealthController extends Controller
 
     /**
      * method to save or update student health supplementation records
-     * 
+     *
     */
 
     public function updateHealthSupplementationRecords(Request $request){
@@ -464,7 +464,7 @@ class StudentHealthController extends Controller
             'given'                         => $request->given,
             'user_id'                       => $request->user_id
         ];
-        
+
         // if id is null - record does not exists and its a new record
         if($data['id'] == NULL){
             if($data['given'] == '0'){
@@ -653,8 +653,8 @@ class StudentHealthController extends Controller
                     ->where('std_student.id', $param_details[1])
                     ->first();
 
-            } catch(\Illuminate\Database\QueryException $ex){ 
-                dd($ex->getMessage()); 
+            } catch(\Illuminate\Database\QueryException $ex){
+                dd($ex->getMessage());
                 // Note any method of class PDOException can be called on $ex.
             }
 
@@ -670,6 +670,74 @@ class StudentHealthController extends Controller
         return $this->successResponse($records);
     }
 
+    public function loadresult($months='',$gender="",$bmi=""){
+        try{
+            $num=(floatval($months)+0.5);
+            $rewult=$months-intval($num);
+            //alert(val+' : '+num+' : '+parseInt(num)+': '+parseFloat(rewult+0.5) );
+            //calculating the incremental values
+            $increment=round(floatval($rewult+0.5),2);
+
+            $selectedrange1 = DB::select('SELECT * FROM master_cdc_bmi a WHERE a.age<= "'.($months+1).'" ORDER BY a.age DESC LIMIT 1 ');
+
+            $selectedrange = DB::select('SELECT * FROM master_cdc_bmi a WHERE a.age<= "'.$months.'" ORDER BY a.age DESC LIMIT 1 ');
+
+            // dd($selectedrange);
+            //calculating values for L.M & S for male and female
+            if($gender=="Male"){
+                $L=($increment*floatval($selectedrange1[0]->maleL))+(1-$increment)*(floatval($selectedrange[0]->maleL));
+                $M=($increment*floatval($selectedrange1[0]->maleM))+(1-$increment)*(floatval($selectedrange[0]->maleM));
+                $S=($increment*floatval($selectedrange1[0]->maleS))+(1-$increment)*(floatval($selectedrange[0]->maleS));
+            }
+            if($gender=="Female"){
+                $L=($increment*floatval($selectedrange1[0]->femaleL))+(1-$increment)*(floatval($selectedrange[0]->femaleL));
+                $M=($increment*floatval($selectedrange1[0]->femaleM))+(1-$increment)*(floatval($selectedrange[0]->femaleM));
+                $S=($increment*floatval($selectedrange1[0]->femaleS))+(1-$increment)*(floatval($selectedrange[0]->femaleS));
+            }
+            //calculating z_scores
+            $z_scre=(pow(($bmi/$M),$L)-1)/($L*$S);
+            //$percentile=$L*$z_scre*100;
+
+            //result
+            $result="";
+            if($months<240 && !is_infinite($z_scre)){//20 years
+                if($z_scre<-3){
+                    $result="Severe Thinness";
+                }
+                if($z_scre>=-3 && $z_scre<-2){
+                    $result="Thinness";
+                }
+                if($z_scre>=-2 && $z_scre<1){
+                    $result="Normal";
+                }
+                if($z_scre>=1 && $z_scre<2){
+                    $result="Overweight";
+                }
+                if($z_scre>=2){
+                    $result="Obese";
+                }
+            }
+            else{
+                if($bmi<18.5){
+                    $result="Underweight";
+                }
+                if($bmi>=18.5 && $bmi<=24.99){
+                    $result="Normal";
+                }
+                if($bmi>25 && $bmi<30){
+                    $result="Overweight";
+                }
+                if($bmi>=30){
+                    $result="Obese";
+                }
+            }
+
+        } catch(\Illuminate\Database\QueryException $ex){
+            dd($ex->getMessage());
+        }
+        return $result;
+    }
+
     /**
      * get the health bmi details
      */
@@ -681,7 +749,7 @@ class StudentHealthController extends Controller
                     ->where('std_student_bmi_summary.id', $id)
                     ->get();
 
-        return $this->successResponse($records); 
+        return $this->successResponse($records);
     }
 
     /**
@@ -790,7 +858,7 @@ class StudentHealthController extends Controller
 
         $records = DB::table('std_health_supplementation')
                     ->select('std_health_supplementation.id as id', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
-                                'std_student_health_supplementation.id as supplementation_id', 'std_student_health_supplementation.status as given', 
+                                'std_student_health_supplementation.id as supplementation_id', 'std_student_health_supplementation.status as given',
                                 'std_student.DateOfBirth', 'std_student.CmnSexId', 'std_health_supplementation_type.Name as supplementation_type')
                     ->leftjoin('std_student_class_stream', 'std_health_supplementation.section', '=', 'std_student_class_stream.SectionDetailsId')
                     ->leftjoin('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')

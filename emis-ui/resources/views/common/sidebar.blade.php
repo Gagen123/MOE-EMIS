@@ -518,7 +518,7 @@
                         <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
-                                Updates by Staff
+                                Self service
                             </p>
                         </router-link>
                     </li>

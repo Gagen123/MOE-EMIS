@@ -14,6 +14,7 @@ class RatingType extends Model
     protected $fillable = [
         'id',
         'name',
+        'description',
         'status', 
         'created_by',
         'created_at',

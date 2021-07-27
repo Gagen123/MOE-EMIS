@@ -495,10 +495,21 @@ const routes = [
                     { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
                 ],
             },
+            { path: '/transfer_appeal',
+            component: require('./components/staff/transfer/transfer_appeal/transfer_appeal_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/list_transfer_appeal.vue').default },
+                    { path: '/list_transfer_appeal',name:'list_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/list_transfer_appeal.vue').default },
+                    { path: '/create_transfer_appeal',name:'create_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/create_transfer_appeal.vue').default },
+                    { path: '/edit_transfer_appeal', name:'edit_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/edit_transfer_appeal.vue').default },
+                ],
+            },
 
         ]
     },
+    
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+    { path: '/transferAppeal_verification',name:'transferAppeal_verification', component: require('./components/staff/transfer/transferAppeal_verification .vue').default },
 
     // Recuritment by gagen
     //principal recuritment
@@ -647,6 +658,16 @@ const routes = [
                     { path: '/edit_teacher_subject', name:'edit_teacher_subject', component: require('./components/staff/staff_updates/teacher_subject/edit_teacher_subject.vue').default },
                 ],
             },
+            { path: '/staff_sen',
+                component: require('./components/staff/staff_updates/sen/sen_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
+                    { path: '/list_sen',name:'list_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
+                    { path: '/create_sen',name:'create_sen', component: require('./components/staff/staff_updates/sen/create_sen.vue').default },
+                    { path: '/edit_sen', name:'edit_sen', component: require('./components/staff/staff_updates/sen/edit_sen.vue').default },
+                ],
+            },
+
             { path: '/contact_details',
                 component: require('./components/staff/staff_updates/contact_details/contact_details_index.vue').default,
                 children:[

@@ -26,36 +26,40 @@
                               <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
-                                  <th>Quantity</th>
+                                  <th>Quantity Receive</th>
+                                  <th>Damage Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                              <tr id="record1" v-for='(item, index) in itemList' :key="index">
                                   <td>
-                                    <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
+                                    {{item.Name}}
+                                    <!-- <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
                                          <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
-                                      </select>
+                                      </select> -->
                                   </td>
                                   <td>
-                                    <span :id="'measurement_unit'+index"></span>
+                                    {{unitArray[item.Unit_id]}}
                                   </td>
                                   <td>
                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
-
+                                  <td>
+                                    <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
+                                  </td>
                                   <td>
                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr>
-                             <tr>
+                             <!-- <tr>
                                   <td colspan=7>
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>
+                              </tr> -->
                           </tbody>
                      </table>
                   </div>
@@ -86,13 +90,15 @@ export default {
             itemList:[],
             unitList:[],
             unitArray:{},
-            items_received: [],
+            // itemList:{},
+           // items_received: [],
             form: new form({
-                 id: '', dateOfreceived: '', quarter: '', remarks: '',
-                 items_received:
-                [{
-                    item:'',quantity:'',unit:'', remarks:'',
-                }],
+                itemList:[],
+              //   id: '', dateOfreceived: '', quarter: '', remarks: '',
+                //  items_received:
+                // [{
+                //     item:'',quantity:'',unit:'', remarks:'',damagequantity:'',
+                // }],
             })
         }
     },
@@ -107,7 +113,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
         },
 
         /**
@@ -118,6 +124,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
+                this.form.itemList=this.itemList;
                     this.form.post('/mess_manage/saveStockReceived',this.form)
                     .then(() => {
                     Toast.fire({
@@ -193,16 +200,16 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.itemList =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+        // loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.itemList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
 
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -221,7 +228,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-                item:'',quantity:'',unit:'',remarks:''})
+                item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
         },
         /**
          * method to remove fields
@@ -236,8 +243,20 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.itemList=data;
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
     },
     mounted() {
+        this.loadActiveUnitList();
+        this.loadActiveItemList();
         this.loadActiveQuarterList();
         $('.select2').select2();
         $('.select2').select2({
@@ -249,8 +268,7 @@ export default {
          Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveUnitList();
-        this.loadActiveItemList();
+       
     }
 }
 </script>

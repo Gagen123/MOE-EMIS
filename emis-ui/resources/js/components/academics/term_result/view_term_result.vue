@@ -17,8 +17,8 @@
                     <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
                         <thead>
                             <tr>
-                                <th>Student Code 
-                                    <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span>
+                                <th>Roll No.
+                                    <!-- <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span> -->
                                 </th> 
                                 <th>Name 
                                     <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span>
@@ -42,7 +42,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{item1.CidNo}}<input type="hidden" :value="totalScore = 0"></td>
+                                <td>{{index1 + 1}}<input type="hidden" :value="totalScore = 0"></td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
@@ -113,7 +113,11 @@
                         searching: false,
                         fixedColumns:   {
                             leftColumns: 2
-                        }
+                        },
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'print'
+                        ]
                         
                     }); 
             }, 300);  

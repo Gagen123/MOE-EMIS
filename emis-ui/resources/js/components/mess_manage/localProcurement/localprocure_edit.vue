@@ -16,43 +16,44 @@
                           <thead>
                               <tr>
                                   <th>Item</th>
-                                  <th>Quantity Purchased</th>
                                   <th>Unit</th>
+                                  <th>Quantity Purchased</th>
                                   <th>Amount</th>
+                                  <th>Source of Food</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
                                   <td>
-                                    <select name="item" :id="'itemid'+index" class="form-control" v-model="item.item" @change="selectunit('itemid',index)">
-                                         <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id+'_'+item.Unit_id">{{ item.Name }}</option>
-                                      </select>
+                                    <span>{{item.item}}</span>
+                                  </td>
+                                 <td>
+                                    <span>{{item.unit}}</span>
                                   </td>
                                   <td>
                                      <input type="text" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
-                                 <td>
-                                <!-- <select name="unit" id="unit" class="form-control" v-model="item.unit">
-                                         <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                     </select> -->
-                                    <span :id="'measurement_unit'+index"></span>
-                                  </td>
                                   <td>
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
                                  </td>
+                                 <td>
+                                     <select name="source" id="source" class="form-control" v-model="item.source">
+                                          <option v-for="(item, index) in foodSourceList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                     </select> 
+                                  </td>
                                   <td>
                                       <input type="text" name="remark" class="form-control" v-model="item.remark">
                                   </td>
                               </tr>
-                              <tr>
+                              <!-- <tr>
                                   <td colspan=7>
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>
+                              </tr> -->
                           </tbody>
                      </table>
                   </div>
@@ -72,15 +73,16 @@ export default {
     data(){
         return{
             count:1,
-            itemList:[],
+            itemList:{},
             unitList:[],
             unitArray:{},
             local_item: [],
+            foodSourceList:[],
             form: new form({
                 id: '', dateOfprocure: '',
                 local_item:
                 [{
-                    item:'',quantity:'',unit:'', amount:'',remark:'',
+                    item:'',quantity:'',unit:'', amount:'',remark:'', source:''
                 }],
             })
         }
@@ -95,7 +97,7 @@ export default {
             this.form.dateOfprocure= '';
             let formReset =this.form.dateOfprocure;
             formReset.splice(0, formReset.length);
-            this.form.local_item.push({item:'',quantity:'',unit:'',amount:'',remark:''})
+            this.form.local_item.push({item:'',quantity:'',unit:'',amount:'',remark:'', source:''})
         },
 
         /**
@@ -153,11 +155,24 @@ export default {
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+    //    loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+    //         axios.get(uri)
+    //         .then(response => {
+    //             let data = response;
+    //             this.itemList =  data.data;
+    //         })
+    //         .catch(function (error) {
+    //             console.log("Error......"+error)
+    //         });
+    //     },
+
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.itemList =  data.data;
+               for(let i=0;i<data.data.length;i++){
+                    this.itemList[data.data[i].id] = data.data[i].Name;
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -170,15 +185,19 @@ export default {
                 let data=response.data.data;
                // alert(data.length);
                 for(let i=0; i<data.length;i++){
+                 //   alert(data[i].item_id);
                     this.form.dateOfprocure         = data[i].dateOfprocure;
                     this.form.id                    = data[i].id;
                     this.form.local_item.push({
-                       item:data[i].item_id,
+                        item:this.itemList[data[i].item_id],
+                     //  item:data[i].item_id,
                        quantity:data[i].quantity,
-                       unit:data[i].unit_id,
+                       unit:this.unitArray[data[i].unit_id],
                        amount:data[i].amount,
+                       source:data[i].food_source,
                        remark:data[i].remark
                     });
+                   
                 }
                 this.count=data.length;
             })
@@ -193,7 +212,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.local_item.push({
-                item:'',quantity:'',unit:'',amount:'',remark:''})
+                item:'',quantity:'',unit:'',amount:'',remark:'', source:''})
         },
         /**
          * method to remove fields
@@ -207,6 +226,16 @@ export default {
          selectunit(type,index){
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
+        },
+        loadActiveFoodSourceMaster(uri = 'masters/loadActiveFoodSourceMaster'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.foodSourceList =  data.data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
         },
     },
      mounted() {
@@ -224,9 +253,11 @@ export default {
 
     },
     created() {
-        this.localProcureEditList(this.$route.params.data.id);
         this.loadActiveItemList();
         this.loadActiveUnitList();
+        this.loadActiveFoodSourceMaster();
+        this.localProcureEditList(this.$route.params.data.id);
+        
     }
 }
 </script>

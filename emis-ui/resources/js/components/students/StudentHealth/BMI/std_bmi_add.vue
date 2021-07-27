@@ -48,7 +48,7 @@
                                     <th style="width:15%">Name</th>
                                     <th style="width:5%">Sex</th>
                                     <th style="width:13%">DOB</th>
-                                    <th style="width:12%">Age</th>
+                                    <th style="width:12%">Age (Months)</th>
                                     <th style="width:15%">Height (in cm)</th>
                                     <th style="width:15%">Weight (in Kg)</th>
                                     <th style="width:10%">BMI</th>
@@ -63,12 +63,15 @@
                                     <td> {{genderArray[student.CmnSexId]}}  </td>
                                         <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>{{student.DateOfBirth}}</td>
-                                    <td>{{getAge(student.DateOfBirth)}} (Y), {{getMonth(student.DateOfBirth)}} (M)</td>
-                                    <td>
-                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student.height" @change="calcualteBMI(index)"/>
+                                    <td>{{monthDiff(student.DateOfBirth)}}
+                                        <!-- I: {{incrementedval(monthDiff(student.DateOfBirth))}} -->
+                                        <!-- {{getAge(student.DateOfBirth)}} (Y), {{getMonth(student.DateOfBirth)}} (M) -->
                                     </td>
                                     <td>
-                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student.weight" @change="calcualteBMI(index)"/>
+                                        <input type="number" name="height" :id="'height'+index" class="form-control" v-model="student.height" @change="calcualteBMI(index,monthDiff(student.DateOfBirth),genderArray[student.CmnSexId])"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="weight" :id="'weight'+index" class="form-control" v-model="student.weight" @change="calcualteBMI(index,monthDiff(student.DateOfBirth),genderArray[student.CmnSexId])"/>
                                     </td>
                                     <td>
                                         <!-- <input type="text" readonly name="bmi" :id="'bmi'+index" class="form-control" v-model="student.bmi"/> -->
@@ -123,13 +126,19 @@ export default {
     },
 
     methods: {
-        calcualteBMI(index){
-           let height=$('#height'+index).val()/100;
-           let weight=$('#weight'+index).val();
-           let bmi=(weight/(height*height)).toFixed(2);
-           $('#bmi'+index).html(bmi);
+        calcualteBMI(index,months,gender){
+            let height=$('#height'+index).val()/100;
+            let weight=$('#weight'+index).val();
+            let bmi=(weight/(height*height)).toFixed(2);
+            $('#bmi'+index).html(bmi);
             // this.student_form.studentList.bmi=bmi;
-           $('#result'+index).html(bmi);
+            axios.get('/students/loadresult/'+months+'/'+gender+'/'+bmi)
+                .then((response) => {
+                $('#result'+index).html(response.data);
+            })
+            .catch(() => {
+                consoele.log("Error:"+e)
+            });
         },
         loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
             axios.get(uri)
@@ -230,8 +239,32 @@ export default {
             else{
                 month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1;
             }
+            // month = selectedDate.getMonth() + 1 - date_of_birth.getMonth() + 1
             return month;
         },
+        monthDiff(DateOfBirth){
+            let selectedDate=new Date($('#date').val());
+            let date_of_birth = new Date(DateOfBirth);
+            // One day in milliseconds
+            const oneDay = 1000 * 60 * 60 * 24;
+
+            // Calculating the time difference between two dates
+            const diffInTime = selectedDate.getTime() - date_of_birth.getTime();
+
+            // Calculating the no. of days between two dates
+            const diffInDays = Math.round(diffInTime / oneDay);
+
+            //calcualting the months
+            return (diffInDays/30.4375).toFixed(2);
+        },
+        incrementedval(months,gender){
+            let num=(parseFloat(months)+0.5);
+            let rewult=months-parseInt(num);
+            //alert(val+' : '+num+' : '+parseInt(num)+': '+parseFloat(rewult+0.5) );
+            let val=parseFloat(rewult+0.5).toFixed(2);
+            return val;
+        },
+
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');

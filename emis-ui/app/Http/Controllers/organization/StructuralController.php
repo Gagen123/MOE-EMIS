@@ -112,13 +112,13 @@ class StructuralController extends Controller
         $rules = [
             'category'                   =>  'required',
             'subCategory'                =>  'required',
-            'yearOfConstruction'         =>  'required',
+         //   'yearOfConstruction'         =>  'required',
             // 'presentCondition'           =>  'required',
         ];
         $customMessages = [
             'category.required'                 => 'Category is required',
             'subCategory.required'              => 'Sub Category is required',
-            'yearOfConstruction.required'       => 'Year of Construction is required',
+           // 'yearOfConstruction.required'       => 'Year of Construction is required',
             // 'presentCondition.required'         => 'Present Condition of Structure is required',
         ];
         $this->validate($request, $rules, $customMessages);
@@ -129,7 +129,7 @@ class StructuralController extends Controller
             'subCategory'               =>  $request['subCategory'],
             'constructionType'          =>  $request['constructionType'],
             'structureNo'               =>  $request['structureNo'],
-            'yearOfConstruction'        =>  $request['yearOfConstruction'],
+            'yearofconstructinNo'       =>  $request['yearofconstructinNo'],
             'plintchArea'               =>  $request['plintchArea'],
             'noOfFloor'                 =>  $request['noOfFloor'], 
             'totalCapacity'             =>  $request['totalCapacity'],
@@ -140,6 +140,7 @@ class StructuralController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
+      //  dd($infrastructure);
         $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
         return $response_data;
         // try{

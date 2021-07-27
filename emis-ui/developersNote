@@ -106,7 +106,7 @@ staff history - table changed
 stf_relationship table created - talk to Tshewang (nominations table might suffice)
         /////////2021-07-25//////
         Table changed in organization:
-            added field type in the master_department to identify the department type for ministry and dzongkhags
+            added field type and dzo_id in the master_department to identify the department type for ministry and dzongkhags
             from the contact_details table, removed foreign key to organizaiton detials as this table is also refering by headquarters.
         Table changed in staff:
             added new field org_level

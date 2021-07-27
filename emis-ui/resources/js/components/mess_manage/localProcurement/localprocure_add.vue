@@ -19,6 +19,7 @@
                                   <th>Quantity Purchased</th>
                                   <th>Unit</th>
                                   <th>Amount</th>
+                                  <th>Source of Food</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -41,6 +42,11 @@
                                   <td>
                                      <input type="text" name="amount" class="form-control" v-model="item.amount">
                                  </td>
+                                  <td>
+                                        <select name="source" id="source" class="form-control" v-model="item.source">
+                                          <option v-for="(item, index) in foodSourceList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                                       </select> 
+                                  </td>
                                   <td>
                                       <input type="text" name="remark" class="form-control" v-model="item.remark">
                                   </td>
@@ -75,12 +81,13 @@ export default {
             itemList:[],
             unitList:[],
             unitArray:{},
+            foodSourceList:[],
             local_item: [],
             form: new form({
                 id: '', dateOfprocure: '',
                 local_item:
                 [{
-                    item:'',quantity:'',unit:'', amount:'',remark:'',
+                    item:'',quantity:'',unit:'', amount:'',remark:'', source:'',
                 }],
             })
         }
@@ -95,7 +102,7 @@ export default {
             this.form.dateOfprocure= '';
             let formReset =this.form.dateOfprocure;
             formReset.splice(0, formReset.length);
-            this.form.local_item.push({item:'',quantity:'',unit:'',amount:'',remark:''})
+            this.form.local_item.push({item:'',quantity:'',unit:'',amount:'',remark:'', source:''})
         },
 
         /**
@@ -153,7 +160,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-       loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -185,6 +192,17 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
+
+        loadActiveFoodSourceMaster(uri = 'masters/loadActiveFoodSourceMaster'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.foodSourceList =  data.data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
     },
      mounted() {
        $('.select2').select2();
@@ -199,6 +217,7 @@ export default {
         });
       this.loadActiveItemList();
       this.loadActiveUnitList();
+      this.loadActiveFoodSourceMaster();
 
     }
 }

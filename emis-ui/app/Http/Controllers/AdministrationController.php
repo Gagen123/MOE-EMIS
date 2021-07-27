@@ -30,7 +30,7 @@ class AdministrationController extends Controller{
         }
         if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
             $rules = [
-            'name'          =>  'required',
+                'name'      =>  'required',
                 'code'      =>  'required',
                 'status'    =>  'required',
             ];
@@ -39,7 +39,7 @@ class AdministrationController extends Controller{
             $rules = [
                 'from_date'         =>  'required | date',
                 'to_date'           =>  'required | date | after:from_date',
-                'type'              =>  'required',
+                'type'              =>  'required', 
             ];
             $customMessages = [
                 'from_date.required' => 'This field is required',
@@ -289,6 +289,7 @@ class AdministrationController extends Controller{
         if($request['record_type'] == 'assessment_area') {
             $rules = [
                 'aca_sub_id' => 'required',
+                'aca_assmnt_type' => 'required',
                 'name'  =>  'required',
                 'code' => 'required',
                 'display_order' => 'required',
@@ -296,6 +297,7 @@ class AdministrationController extends Controller{
             ];
             $customMessages = [
                 'aca_sub_id.required' => 'This field is required',
+                'aca_assmnt_type.required' => 'This field is required',
                 'name.required' => 'This field is required',
                 'code.required' => 'This field is required',
                 'display_order.required' => 'This field is required',
@@ -354,9 +356,12 @@ class AdministrationController extends Controller{
     public function saveAssessmentFrequency(Request $request){
         $rules = [
            'data.*.aca_assmt_frequency_id' => 'required',
+           'data.*.aca_assmnt_type' => 'required',
         ];
         $customMessages = [
             'data.*.aca_assmt_frequency_id.required' => 'All the fields are required',
+            'data.*.aca_assmnt_type.required' => 'All the fields are required',
+
         ];
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();

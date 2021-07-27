@@ -382,7 +382,7 @@ class AcademicController extends Controller
          GROUP BY t1.id,t1.org_id,t1.org_class_stream_id, t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.class_stream_section,t1.std_student_id,t1.aca_assmt_term_id,t2.name,t1.instructional_days,t1.remarks");
         return $this->successResponse($instructional_days_special_case);
     }
-    public function loadStudentAssessmentList($staffId, $orgId){
+    public function loadStudentAssessmentList(Request $request,$staffId, $orgId){
         // $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
         //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_stream_id)),6) AS org_stream_id,
         //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.id)),6) AS aca_assmt_term_id,
@@ -433,13 +433,21 @@ class AcademicController extends Controller
             FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id=t2.id
                 JOIN (aca_class_assessment_frequency x1 JOIN aca_assessment_term x2 ON x1.aca_assmt_frequency_id=x2.aca_assmt_frequency_id) ON t1.org_class_id = x1.org_class_id AND (t1.org_stream_id = x1.org_stream_id OR (t1.org_stream_id IS NULL AND x1.org_stream_id IS NULL))
                 LEFT JOIN aca_class_subject_teacher t3 ON t3.stf_staff_id = ? AND t3.org_id = ? AND t1.aca_sub_id = t3.aca_sub_id AND t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL))
-                LEFT JOIN aca_class_teacher t4 ON t4.stf_staff_id = ? AND t4.org_id = ? AND t2.assessed_by_class_teacher=1 AND t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL))
-                LEFT JOIN aca_student_assessment t6 ON t4.org_id = ? AND x2.id=t6.aca_assmt_term_id AND t1.org_class_id = t6.org_class_id AND (t1.org_stream_id = t6.org_stream_id OR (t1.org_stream_id IS NULL AND t6.org_stream_id IS NULL)) AND t1.aca_sub_id = t6.aca_sub_id AND (IFNULL(t3.org_section_id,t4.org_section_id)=t6.org_section_id OR (IFNULL(t3.org_section_id,t4.org_section_id) IS NULL AND t6.org_section_id IS NULL))
-            WHERE t3.id IS NOT NULL OR t4.id IS NOT NULL";
+                LEFT JOIN aca_class_teacher t4 ON t4.stf_staff_id = ? AND t4.org_id = ? AND t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL)) AND (t2.assessed_by_class_teacher=1 OR (t3.org_section_id=t4.org_section_id OR (t3.org_section_id IS NULL AND t4.org_section_id IS NULL)))
+                LEFT JOIN aca_student_assessment t6 ON t6.org_id = ? AND x2.id=t6.aca_assmt_term_id AND t1.org_class_id = t6.org_class_id AND (t1.org_stream_id = t6.org_stream_id OR (t1.org_stream_id IS NULL AND t6.org_stream_id IS NULL)) AND t1.aca_sub_id = t6.aca_sub_id AND (IFNULL(t3.org_section_id,t4.org_section_id)=t6.org_section_id OR (IFNULL(t3.org_section_id,t4.org_section_id) IS NULL AND t6.org_section_id IS NULL))
+            WHERE (t3.id IS NOT NULL OR t4.id IS NOT NULL) AND x2.id = ? AND t1.org_class_id = ?";
+            $param=[$staffId, $orgId, $staffId, $orgId, $orgId,$request->aca_assmt_term_id,$request->org_class_id];
 
-           
+            if($request->org_stream_id !== null){
+                $classTeacherSubjects .= " AND t1.org_stream_id = ?";
+                array_push($param,$request->org_stream_id);
+            }
+            if($request->org_section_id !== null){
+                $classTeacherSubjects .= " AND IFNULL(t3.org_section_id,t4.org_section_id) = ?";
+                array_push($param,$request->org_section_id);
+            }
         try{
-            return $this->successResponse(DB::select($classTeacherSubjects,[$staffId, $orgId, $staffId, $orgId, $orgId]));
+            return $this->successResponse(DB::select($classTeacherSubjects,$param));
         }catch(Exception $e){
             dd($e);
         }
@@ -653,7 +661,23 @@ class AcademicController extends Controller
      DB::update('UPDATE aca_student_assessment SET finalized = 0, finalized_date = NULL WHERE id = ?', [$Id]);
        return $this->successResponse(1, Response::HTTP_CREATED);
     }
-    public function loadConsolidatedResultList($staffId, $orgId){
+    public function loadConsolidatedResultList(Request $request,$staffId, $orgId){
+        $termResultCondition = "";
+        $finalResultCondition = "";
+        $termResultParams = [$staffId, $orgId, $orgId, $staffId,$request->org_class_id];
+        $finalResultParams = [$staffId, $orgId, $orgId, $orgId, $request->org_class_id];
+        $extraParams = [];
+        if($request->org_stream_id !== null){
+            $termResultCondition = " AND t1.org_stream_id = ?";
+            $finalResultCondition = " AND t1.org_stream_id = ?";
+            array_push($extraParams,$request->org_stream_id);
+        }
+        if($request->org_section_id !== null){
+            $termResultCondition .= " AND t1.org_section_id = ?";
+            $finalResultCondition .= " AND t2.org_section_id = ?";
+            array_push($extraParams,$request->org_section_id);
+
+        }
         $termResult = "SELECT t5.id AS aca_result_consolidated_id,(t4.stf_staff_id=?) AS is_class_teacher,
                         t1.org_class_id,t1.org_stream_id,t1.org_section_id,t2.aca_assmt_term_id,t3.name AS term,
                         IF(COUNT(IF(t2.finalized,1,NULL))>=t1.no_of_subjects,1,0) AS subject_teachers_finalized,
@@ -662,45 +686,36 @@ class AcademicController extends Controller
                         DATE_FORMAT(t5.finalized_date,'%d-%m-%Y %H:%i %p') AS class_teacher_finalized_date,
                         t5.published,DATE_FORMAT(t5.published_date,'%d-%m-%Y %H:%i %p') AS published_date
             FROM (SELECT org_id,org_class_id,org_stream_id,org_section_id,COUNT(aca_sub_id) AS no_of_subjects FROM aca_class_subject_teacher 
-            WHERE org_id = ? GROUP BY org_id,org_class_id,org_stream_id,org_section_id) t1
+                WHERE org_id = ? GROUP BY org_id,org_class_id,org_stream_id,org_section_id) t1
                 JOIN aca_student_assessment t2 ON t1.org_id = t2.org_id AND t1.org_class_id = t2.org_class_id AND (t1.org_stream_id = t2.org_stream_id OR (t1.org_stream_id IS NULL 
-                AND t2.org_stream_id IS NULL)) AND (t1.org_section_id = t2.org_section_id OR (t1.org_section_id IS NULL AND t2.org_section_id IS NULL)) AND t1.org_id = ?
+                    AND t2.org_stream_id IS NULL)) AND (t1.org_section_id = t2.org_section_id OR (t1.org_section_id IS NULL AND t2.org_section_id IS NULL)) AND t1.org_id = ?
                 JOIN aca_assessment_term t3 ON t2.aca_assmt_term_id = t3.id
                 LEFT JOIN aca_class_teacher t4 ON t1.org_id = t4.org_id AND t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL)) AND (t1.org_section_id = t4.org_section_id OR (t1.org_section_id IS NULL AND t4.org_section_id IS NULL)) AND t4.stf_staff_id = ?
                 LEFT JOIN aca_result_consolidated t5 ON t1.org_id = t5.org_id AND t1.org_class_id = t5.org_class_id AND (t1.org_stream_id = t5.org_stream_id OR (t1.org_stream_id IS NULL AND t5.org_stream_id IS NULL)) AND (t1.org_section_id = t5.org_section_id OR (t1.org_section_id IS NULL AND t5.org_section_id IS NULL)) AND t2.aca_assmt_term_id= t5.aca_assmt_term_id
+                WHERE t1.org_class_id = ? $termResultCondition
             GROUP BY t5.id,t4.stf_staff_id,t1.org_class_id,t1.org_stream_id,t1.org_section_id,t2.aca_assmt_term_id,t3.name,t5.published,t5.published_date,t1.no_of_subjects,t5.finalized,t5.finalized_date";
 
         $finalResult = "SELECT t4.id AS aca_result_consolidated_id,(t3.stf_staff_id=?) AS is_class_teacher,t1.org_class_id,t1.org_stream_id,t2.org_section_id,NULL AS aca_assmt_term_id,'Final Result' AS term,1 AS subject_teachers_finalized,t4.finalized AS class_teacher_finalized,NULL AS subject_teachers_finalized_date,DATE_FORMAT(t4.finalized_date,'%d-%m-%Y %H:%i %p') AS subject_teachers_finalized_date,t4.published, DATE_FORMAT(t4.published_date,'%d-%m-%Y %H:%i %p') AS published_date
-        FROM (SELECT aa.org_class_id,aa.org_stream_id,COUNT(bb.id) AS no_of_terms FROM aca_class_assessment_frequency aa JOIN aca_assessment_term bb ON aa.aca_assmt_frequency_id = bb.aca_assmt_frequency_id GROUP BY aa.org_class_id,aa.org_stream_id) t1
-            LEFT JOIN (SELECT org_class_id,org_stream_id,org_section_id,COUNT(id) AS no_of_terms_finalized FROM aca_result_consolidated WHERE finalized=1 AND org_id = ? GROUP BY org_class_id,org_stream_id,org_section_id) t2 ON t1.org_class_id = t2.org_class_id AND (t1.org_stream_id = t2.org_stream_id OR (t1.org_stream_id IS NULL AND t2.org_stream_id IS NULL))
-            LEFT JOIN aca_class_teacher t3 ON t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL)) AND (t2.org_class_id IS NULL OR (t2.org_section_id = t3.org_section_id OR (t2.org_section_id IS NULL AND t3.org_section_id IS NULL))) AND t3.org_id = ?
-            LEFT JOIN aca_result_consolidated t4 ON t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL)) AND (t2.org_class_id IS NULL OR (t2.org_section_id = t4.org_section_id OR (t2.org_section_id IS NULL AND t4.org_section_id IS NULL))) AND t4.aca_assmt_term_id IS NULL AND t4.org_id = ?
-        WHERE t4.id IS NOT NULL OR t2.no_of_terms_finalized >= t1.no_of_terms";
-        $result_consolidated = DB::select("$termResult UNION $finalResult", [$staffId, $orgId, $orgId, $staffId, $staffId, $orgId, $orgId, $orgId ]);
+            FROM (SELECT aa.org_class_id,aa.org_stream_id,COUNT(bb.id) AS no_of_terms FROM aca_class_assessment_frequency aa JOIN aca_assessment_term bb ON aa.aca_assmt_frequency_id = bb.aca_assmt_frequency_id GROUP BY aa.org_class_id,aa.org_stream_id) t1
+                LEFT JOIN (SELECT org_class_id,org_stream_id,org_section_id,COUNT(id) AS no_of_terms_finalized FROM aca_result_consolidated WHERE finalized=1 AND org_id = ? GROUP BY org_class_id,org_stream_id,org_section_id) t2 ON t1.org_class_id = t2.org_class_id AND (t1.org_stream_id = t2.org_stream_id OR (t1.org_stream_id IS NULL AND t2.org_stream_id IS NULL))
+                LEFT JOIN aca_class_teacher t3 ON t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL)) AND (t2.org_class_id IS NULL OR (t2.org_section_id = t3.org_section_id OR (t2.org_section_id IS NULL AND t3.org_section_id IS NULL))) AND t3.org_id = ?
+                LEFT JOIN aca_result_consolidated t4 ON t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL)) AND (t2.org_class_id IS NULL OR (t2.org_section_id = t4.org_section_id OR (t2.org_section_id IS NULL AND t4.org_section_id IS NULL))) AND t4.aca_assmt_term_id IS NULL AND t4.org_id = ?
+            WHERE (t4.id IS NOT NULL OR t2.no_of_terms_finalized >= t1.no_of_terms) AND t1.org_class_id = ? $finalResultCondition";
+
+      try{  $result_consolidated = DB::select("$termResult UNION $finalResult", array_merge($termResultParams, $extraParams, $finalResultParams, $extraParams));}catch(Exception $e){
+          dd($e);
+      }
         return $this->successResponse ($result_consolidated);
     }
 
     public function loadConsolidatedResult($orgId,Request $request){
-        try{   
+    try{   
+        // $ratings = null;
         $areaFormat = DB::table("aca_setting")->where("id",1)->value("value");
-        $query = "SELECT t11.display_order AS term_display_order,t12.display_order AS subject_display_order,
-            IFNULL(t13.display_order,t21.display_order) AS area_display_order,t1.id, t1.aca_assmt_term_id, t2.std_student_id,
-            t1.aca_sub_id, t2.aca_assmt_area_id, t2.aca_rating_type_id, t11.name AS term,t11.dzo_name AS term_dzo_name,
-            t12.name AS subject,t12.dzo_name AS sub_dzo_name, IF($areaFormat=2,t21.name,IFNULL(t21.code,t21.name)) AS assessment_area,IF($areaFormat=2,'',t21.name) AS assessment_area_hint,
-            t21.dzo_name AS assmt_area_dzo_name,TRIM(t13.weightage)+0 AS weightage,t4.input_type, IF(t4.input_type=2,t2.descriptive_score,
-            IFNULL(t3.name,NULLIF(TRIM(t2.score)+0,0))) AS score, t2.remarks
-        FROM (aca_student_assessment t1 JOIN aca_assessment_term t11 ON t1.aca_assmt_term_id = t11.id JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
-            JOIN (aca_student_assessment_detail t2 JOIN aca_assessment_area t21 ON t2.aca_assmt_area_id = t21.id) ON t1.id=t2.aca_student_assmt_id
-            JOIN aca_class_subject_assessment t13 ON t1.aca_assmt_term_id=t13.aca_assmt_term_id AND t1.aca_sub_id=t13.aca_sub_id
-                AND t2.aca_assmt_area_id=t13.aca_assmt_area_id
-                AND t1.org_class_id = t13.org_class_id AND (t1.org_stream_id = t13.org_stream_id OR (t1.org_stream_id IS NULL AND t13.org_stream_id IS NULL))
-            JOIN aca_rating_type t4 ON t2.aca_rating_type_id=t4.id
-            LEFT JOIN aca_rating t3 ON t2.aca_rating_type_id = t3.aca_rating_type_id AND IFNULL((TRIM(t2.score)+0),0) = t3.score
-        WHERE t1.org_id = ? AND t1.org_class_id = ? ";
+        
         $condition = "";
-        $condition1 = "";
         $param = [$orgId,$request->org_class_id];
-        $params1 = [];
+        // $params1 = [];
         if($request->org_stream_id){
             $condition .= ' AND t1.org_stream_id = ?';
             array_push($param, $request->org_stream_id);
@@ -709,57 +724,124 @@ class AcademicController extends Controller
             $condition .= ' AND t1.org_section_id = ?';
             array_push($param, $request->org_section_id);
         }
-        $query = $query . $condition;
         if($request->aca_assmt_term_id){
-            $query .= ' AND t1.aca_assmt_term_id = ?';
             array_push($param, $request->aca_assmt_term_id);
-            $params1 = $param;
-        }else{
-            $queryFinalResult = " UNION SELECT 1000 AS term_display_order,t12.display_order AS subject_display_order,IFNULL(t13.display_order,t21.display_order) AS area_display_order,
-                't1id' AS id, 't1aca_assmt_term_id' AS aca_assmt_term_id, t2.std_student_id, t1.aca_sub_id, IF(t4.input_type=1,t1.aca_sub_id,t2.aca_assmt_area_id) AS aca_assmt_area_id,
-                t2.aca_rating_type_id,'Final Result' AS term, t12.name AS subject, IF(t4.input_type=1,'',t21.name) AS assessment_area,TRIM(t13.weightage)+0 AS weightage,t4.input_type,
-                CASE t4.input_type WHEN 0 THEN ROUND(AVG(t3.score)) WHEN 1 THEN TRIM(SUM(t2.score))+0 ELSE MAX(t2.score) END AS score,
+
+            $query = "SELECT t11.display_order AS term_display_order,
+                t12.display_order AS subject_display_order,
+                IFNULL(t13.display_order,t21.display_order) AS area_display_order,
+                t1.id,
+                t1.aca_assmt_term_id,
+                t2.std_student_id,
+                t1.aca_sub_id,
+                t2.aca_assmt_area_id,
+                t2.aca_rating_type_id,
+                t11.name AS term,
+                t11.dzo_name AS term_dzo_name,
+                t12.name AS subject,
+                t12.dzo_name AS sub_dzo_name,
+                IF($areaFormat=2,t21.name,IFNULL(t21.code,t21.name)) AS assessment_area,
+                IF($areaFormat=2,'',t21.name) AS assessment_area_hint,
+                t21.dzo_name AS assmt_area_dzo_name,
+                TRIM(t13.weightage)+0 AS weightage,
+                t4.input_type,
+                IF(t4.input_type=2,t2.descriptive_score,
+                IFNULL(t3.name,NULLIF(TRIM(t2.score)+0,0))) AS score,
                 t2.remarks
-            FROM (aca_student_assessment t1 JOIN aca_class_subject t11 ON t1.org_class_id = t11.org_class_id AND (t1.org_stream_id = t11.org_stream_id OR (t1.org_stream_id is null AND t11.org_stream_id IS NULL)) JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
+            FROM (aca_student_assessment t1 JOIN aca_assessment_term t11 ON t1.aca_assmt_term_id = t11.id JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
                 JOIN (aca_student_assessment_detail t2 JOIN aca_assessment_area t21 ON t2.aca_assmt_area_id = t21.id) ON t1.id=t2.aca_student_assmt_id
-                JOIN aca_class_subject_assessment t13 ON t1.aca_assmt_term_id=t13.aca_assmt_term_id AND t1.aca_sub_id=t13.aca_sub_id AND t2.aca_assmt_area_id=t13.aca_assmt_area_id AND t1.org_class_id = t13.org_class_id AND (t1.org_stream_id = t13.org_stream_id OR (t1.org_stream_id is null AND t13.org_stream_id IS NULL))
+                JOIN aca_class_subject_assessment t13 ON t1.aca_assmt_term_id=t13.aca_assmt_term_id AND t1.aca_sub_id=t13.aca_sub_id
+                    AND t2.aca_assmt_area_id=t13.aca_assmt_area_id
+                    AND t1.org_class_id = t13.org_class_id AND (t1.org_stream_id = t13.org_stream_id OR (t1.org_stream_id IS NULL AND t13.org_stream_id IS NULL))
                 JOIN aca_rating_type t4 ON t2.aca_rating_type_id=t4.id
                 LEFT JOIN aca_rating t3 ON t2.aca_rating_type_id = t3.aca_rating_type_id AND IFNULL((TRIM(t2.score)+0),0) = t3.score
-            WHERE t1.org_id = ? AND t1.org_class_id = ?";
-
-            $query = "$query $queryFinalResult $condition GROUP BY t12.display_order,IFNULL(t13.display_order,t21.display_order),
-            t2.std_student_id,t1.aca_sub_id, IF(t4.input_type=1,t1.aca_sub_id,t2.aca_assmt_area_id),
-            t2.aca_rating_type_id,t12.name,IF(t4.input_type=1,'',t21.name),t13.weightage,t4.input_type,t2.remarks";
-
-            $params1 = array_merge($param,$param);
-        }
-        $consolidatedResult = DB::select("$query ORDER BY term_display_order,subject_display_order,area_display_order", $params1);
-        if($request->aca_assmt_term_id){
-            $condition1 .= ' AND t1.aca_assmt_term_id = ?';
-
-        }
-        $studentRank = DB::select("SELECT t2.std_student_id,t1.aca_assmt_term_id,RANK() OVER (ORDER BY SUM(if(t4.input_type=1,t2.score,0)) DESC) AS rank,t6.remarks
+            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition AND t1.aca_assmt_term_id = ?";
+            
+            $studentRank = DB::select("SELECT t2.std_student_id,t1.aca_assmt_term_id,DENSE_RANK() OVER (ORDER BY SUM(if(t4.input_type=1,t2.score,0)) DESC) AS rank,t6.remarks
             FROM aca_student_assessment t1 JOIN aca_student_assessment_detail t2 ON t1.id=t2.aca_student_assmt_id
             JOIN aca_rating_type t4 ON t2.aca_rating_type_id=t4.id
             LEFT JOIN (aca_result_consolidated t5 
             JOIN aca_result_consolidated_detail t6 ON t5.id=t6.aca_result_consolidated_id) ON t2.std_student_id=t6.std_student_id AND t1.aca_assmt_term_id=t5.aca_assmt_term_id
-            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition $condition1
+            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition AND t1.aca_assmt_term_id = ?
             GROUP BY t2.std_student_id,t1.aca_assmt_term_id,t6.remarks", $param);
-       if($request->aca_assmt_term_id){
-        $condition .= ' AND t2.id = ?';
-       }
-       
-       $instructional_days = DB::select("SELECT t2.id AS aca_assmt_term_id, COUNT(t1.id) AS instructional_days
-                FROM aca_student_attendance t1
-                    JOIN aca_assessment_term t2 ON t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
+
+            $instructional_days = DB::select("SELECT t2.id AS aca_assmt_term_id, COUNT(t1.id) AS instructional_days
+            FROM aca_student_attendance t1
+                JOIN aca_class_assessment_frequency t3 ON t1.org_class_id=t3.org_class_id AND (t1.org_stream_id=t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL))
+                JOIN aca_assessment_term t2 ON t3.aca_assmt_frequency_id=t2.aca_assmt_frequency_id AND t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
                         AND CONCAT(YEAR(CURDATE()),'-',LPAD(t2.to_month,2,'0'),'-',LPAD(t2.to_date,2,'0')) 
-                WHERE t1.org_id = ? AND t1.org_class_id = ? $condition GROUP BY t2.id",$param);
-        $absent_days = DB::select("SELECT t2.id AS aca_assmt_term_id,t3.std_student_id,COUNT(t3.id) AS absent_days
+            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition AND t2.id = ? GROUP BY t2.id",$param);
+
+            $absent_days = DB::select("SELECT t2.id AS aca_assmt_term_id,t3.std_student_id,COUNT(t3.id) AS absent_days
+            FROM aca_student_attendance t1
+            JOIN aca_student_attendance_detail t3 ON t1.id = t3.aca_std_attendance_id
+                JOIN aca_assessment_term t2 ON t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
+                    AND CONCAT(YEAR(CURDATE()),'-',LPAD(t2.to_month,2,'0'),'-',LPAD(t2.to_date,2,'0')) 
+            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition AND t2.id = ? GROUP BY t2.id, t3.std_student_id",$param);
+
+            $instructional_days_special_case = $this->specialInstructionalDays($orgId,$request->org_class_id,$request->org_stream_id,$request->org_section_id,$request->aca_assmt_term_id);
+            // $params1 = $param;
+        }else{
+            $queryFinalResult = "SELECT 1000 AS term_display_order,
+					 t12.display_order AS subject_display_order,
+					 IFNULL(t13.display_order,t21.display_order) AS area_display_order,
+					 't1id' AS id,
+					 'final-result' AS aca_assmt_term_id,
+					 t2.std_student_id,
+					 t1.aca_sub_id,
+					 t2.aca_assmt_area_id,
+					 t2.aca_rating_type_id,
+					 'Final Result' AS term,
+					 '' AS term_dzo_name,
+					 t12.name AS subject,
+					 t12.dzo_name AS sub_dzo_name,
+					 IF($areaFormat=2,t21.name,IFNULL(t21.code,t21.name)) AS assessment_area,
+					 IF($areaFormat=2,'',t21.name) AS assessment_area_hint,
+					 t21.dzo_name AS assmt_area_dzo_name,
+					 TRIM(SUM(t13.weightage))+0 AS weightage,
+					 t4.input_type,
+					 IF(t4.input_type=2,GROUP_CONCAT(t2.descriptive_score SEPARATOR ', '),CASE t4.input_type WHEN 0 THEN ROUND(AVG(t2.score)) WHEN 1 THEN TRIM(SUM(t2.score))+0 ELSE MAX(t2.score) END) AS score,
+					 t2.remarks
+				 FROM (aca_student_assessment t1 JOIN aca_subject t12 ON t1.aca_sub_id=t12.id)
+					 JOIN (aca_student_assessment_detail t2 JOIN aca_assessment_area t21 ON t2.aca_assmt_area_id = t21.id) ON t1.id=t2.aca_student_assmt_id
+					 JOIN aca_class_subject_assessment t13 ON t1.aca_assmt_term_id=t13.aca_assmt_term_id AND t1.aca_sub_id=t13.aca_sub_id AND t2.aca_assmt_area_id=t13.aca_assmt_area_id AND t1.org_class_id = t13.org_class_id AND (t1.org_stream_id = t13.org_stream_id OR (t1.org_stream_id is null AND t13.org_stream_id IS NULL))
+					 JOIN aca_rating_type t4 ON t2.aca_rating_type_id=t4.id
+					 LEFT JOIN aca_rating t3 ON t2.aca_rating_type_id = t3.aca_rating_type_id AND IFNULL((TRIM(t2.score)+0),0) = t3.score
+				 WHERE t1.org_id = ? AND t1.org_class_id = ?";
+
+            $query = "$queryFinalResult $condition GROUP BY t12.display_order,
+					IFNULL(t13.display_order,t21.display_order),
+					t2.std_student_id,t1.aca_sub_id, t2.aca_assmt_area_id,
+					t2.aca_rating_type_id,t12.dzo_name,t21.dzo_name,t12.name,IF($areaFormat=2,t21.name,IFNULL(t21.code,t21.name)),
+					IF($areaFormat=2,'',t21.name),t4.input_type,t2.remarks";
+
+            $studentRank = DB::select("SELECT t2.std_student_id,'final-result' AS aca_assmt_term_id,RANK() OVER (ORDER BY SUM(if(t4.input_type=1,t2.score,0)) DESC) AS rank,t6.remarks
+                FROM aca_student_assessment t1 JOIN aca_student_assessment_detail t2 ON t1.id=t2.aca_student_assmt_id
+                JOIN aca_rating_type t4 ON t2.aca_rating_type_id=t4.id
+                LEFT JOIN (aca_result_consolidated t5 
+                JOIN aca_result_consolidated_detail t6 ON t5.id=t6.aca_result_consolidated_id) ON t2.std_student_id=t6.std_student_id AND t5.aca_assmt_term_id IS NULL
+                WHERE t1.org_id = ? AND t1.org_class_id = ? $condition
+                GROUP BY t2.std_student_id,t6.remarks", $param);
+
+            $instructional_days = DB::select("SELECT 'final-result' AS aca_assmt_term_id, COUNT(t1.id) AS instructional_days
                 FROM aca_student_attendance t1
-                JOIN aca_student_attendance_detail t3 ON t1.id = t3.aca_std_attendance_id
-                    JOIN aca_assessment_term t2 ON t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
-                        AND CONCAT(YEAR(CURDATE()),'-',LPAD(t2.to_month,2,'0'),'-',LPAD(t2.to_date,2,'0')) 
-                WHERE t1.org_id = ? AND t1.org_class_id = ? $condition GROUP BY t2.id, t3.std_student_id",$param);
+                WHERE t1.org_id = ? AND t1.org_class_id = ? $condition",$param);
+
+            $absent_days = DB::select("SELECT 'final-result' AS aca_assmt_term_id,t3.std_student_id,COUNT(t3.id) AS absent_days
+                FROM aca_student_attendance t1
+                    JOIN aca_student_attendance_detail t3 ON t1.id = t3.aca_std_attendance_id
+                WHERE t1.org_id = ? AND t1.org_class_id = ? $condition GROUP BY t3.std_student_id",$param);
+
+            $instructional_days_special_case = $this->specialInstructionalDays($orgId,$request->org_class_id,$request->org_stream_id,$request->org_section_id);
+
+                    // $ratings = DB::select('SELECT aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');
+        }
+      try{
+            $consolidatedResult = DB::select("$query ORDER BY term_display_order,subject_display_order,area_display_order", $param);
+      }catch(Exception $e){
+          dd($e);
+      }
+        
                 if($areaFormat==2){
                     $abbreviations = [];
                 }else{
@@ -793,11 +875,10 @@ class AcademicController extends Controller
                     $pass_fail = DB::select($pass_fail_query,$pass_fail_param);
                 }
 
-                $instructional_days_special_case = $this->specialInstructionalDays($orgId,$request->org_class_id,$request->org_stream_id,$request->org_section_id,$request->aca_assmt_term_id);
-// dd($consolidatedResult);
-        return $this->successResponse(["consolidatedResult"=>$consolidatedResult,"studentRank"=> $studentRank,"passFail"=>$pass_fail,"instructionalDaysForSpecialCase"=> $instructional_days_special_case, "instructionalDays"=>$instructional_days,"absentDays"=>$absent_days,'abbreviations'=>$abbreviations]);}catch(Exception $e){
-         dd($e);
-     }
+                return $this->successResponse(["consolidatedResult"=>$consolidatedResult,"studentRank"=> $studentRank,"passFail"=>$pass_fail,"instructionalDaysForSpecialCase"=> $instructional_days_special_case, "instructionalDays"=>$instructional_days,"absentDays"=>$absent_days,'abbreviations'=>$abbreviations]);
+            }catch(Exception $e){
+                dd($e);
+            }
 
     }
     public function saveConsolidatedResut(Request $request){
@@ -861,6 +942,20 @@ class AcademicController extends Controller
     }
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
+    public function loadClassBySubjectTeacher($orgId,$staffId) {
+      return $this->successResponse(
+          DB::select('SELECT DISTINCT org_class_id, org_stream_id, org_section_id 
+                FROM aca_class_subject_teacher WHERE org_id = ? AND stf_staff_id = ? ',[$orgId,$staffId])
+            );
+    }
+    public function getTermsByFrequency($frequencyId){
+        return $this->successResponse(
+            DB::select('SELECT id,name,dzo_name FROM aca_assessment_term WHERE aca_assmt_frequency_id = ?',[$frequencyId]));
+    }
+    public function unlockForEditForConsolidated($Id){
+       $unlockForConsolidated = DB::update('UPDATE aca_result_consolidated SET finalized = 0, finalized_date = NULL WHERE aca_assmt_term_id = ?', [$Id]);
+       return $this->successResponse($unlockForConsolidated, Response::HTTP_CREATED);
+    }
     private function updateConsolidatedResut($request){
         foreach($request['data'] as $resultConsolidatedDetail){
             $data = [
@@ -890,26 +985,57 @@ class AcademicController extends Controller
        $code = DB::select('SELECT DISTINCT name,code,dzo_name FROM aca_assessment_area ORDER BY code');
         return $code;
     }
-    private function specialInstructionalDays($orgId,$classId,$streamId,$sectionId,$termId){
-        $query = "SELECT std_student_id,aca_assmt_term_id,MAX(instructional_days) AS instructional_days
-                    FROM aca_instructional_days_special_case 
-                    WHERE org_id = ? AND org_class_id = ?";
+    private function specialInstructionalDays($orgId,$classId,$streamId,$sectionId,$termId=""){
+        $condition ="";
         $param = [$orgId,$classId];
 
         if($streamId){
-            $query .=" AND org_stream_id = ?";
+            $condition .=" AND org_stream_id = ?";
             array_push($param,$streamId);
         }
         if($sectionId){
-            $query .=" AND org_section_id = ?";
+            $condition .=" AND org_section_id = ?";
             array_push($param,$sectionId);
         }
         if($termId){
-            $query .=" AND aca_assmt_term_id = ?";
             array_push($param,$termId);
+            $query = "SELECT std_student_id,aca_assmt_term_id,MAX(instructional_days) AS instructional_days
+                        FROM aca_instructional_days_special_case 
+                    WHERE org_id = ? AND org_class_id = ? $condition AND aca_assmt_term_id = ? GROUP BY std_student_id,aca_assmt_term_id";
+            return DB::select($query, $param);
+        }else{
+            $instructional_days = DB::select("SELECT t2.id AS aca_assmt_term_id, COUNT(t1.id) AS instructional_days
+            FROM aca_student_attendance t1
+                JOIN aca_class_assessment_frequency t3 ON t1.org_class_id=t3.org_class_id AND (t1.org_stream_id=t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL))
+                JOIN aca_assessment_term t2 ON t3.aca_assmt_frequency_id=t2.aca_assmt_frequency_id AND t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
+                        AND CONCAT(YEAR(CURDATE()),'-',LPAD(t2.to_month,2,'0'),'-',LPAD(t2.to_date,2,'0')) 
+            WHERE t1.org_id = ? AND t1.org_class_id = ? $condition GROUP BY t2.id",$param);
+
+            $instructional_days_special = DB::select("SELECT std_student_id,aca_assmt_term_id,MAX(instructional_days) AS instructional_days
+                        FROM aca_instructional_days_special_case 
+                    WHERE org_id = ? AND org_class_id = ? $condition GROUP BY std_student_id,aca_assmt_term_id", $param);
+//   dd($instructional_days,$instructional_days_special);
+            $instructional_days_final = [];
+            foreach($instructional_days_special as $instructional_day_special){
+                if(!array_key_exists($instructional_day_special->std_student_id,$instructional_days_final)){
+                    $instructional_days_final[$instructional_day_special->std_student_id] = 0;
+                }
+                foreach($instructional_days as $instructional_day){
+                    if($instructional_day->aca_assmt_term_id == $instructional_day_special->aca_assmt_term_id){
+                        $instructional_days_final[$instructional_day_special->std_student_id] += $instructional_day_special->instructional_days;
+                    }else{
+                        $instructional_days_final[$instructional_day_special->std_student_id] += $instructional_day->instructional_days;
+                    }
+                }
+            }
+            $instructional_days_1 = [];
+            foreach($instructional_days_final as $key=>$value){
+                array_push($instructional_days_1, ["std_student_id"=>$key, "aca_assmt_term_id"=>"final-result", "instructional_days"=>$value]); 
+            }
+            return $instructional_days_1;
         }
-        return DB::select($query." GROUP BY std_student_id,aca_assmt_term_id",$param);
     }
+   
     
 
 

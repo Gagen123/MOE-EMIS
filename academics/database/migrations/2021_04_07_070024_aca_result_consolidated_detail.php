@@ -23,7 +23,7 @@ class AcaResultConsolidatedDetail extends Migration
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();
 
-            $table->foreign('aca_result_consolidated_id')->references('id')->on('aca_result_consolidated')->onDelete('cascade');
+            $table->foreign('aca_result_consolidated_id','consolidated_id')->references('id')->on('aca_result_consolidated')->onDelete('cascade');
 
         });
     }
