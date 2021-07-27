@@ -133,8 +133,8 @@
                     <br><br>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Internet Accessible to:</label><br>
-                        <label  v-for="(item, key, index) in  internetAccessibleList" :key="index" class="pr-4">
-                            <input  type="checkbox" v-model="form.internetAccessible" :value="item.id" tabindex=""/> 
+                        <label  v-for="(item, index) in  internetAccessibleList" :key="index" class="pr-4">
+                            <input  type="checkbox" v-model="form.internetAccessible" :value="item.id"/> 
                             {{item.name}}
                         </label>
                     </div>

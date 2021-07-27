@@ -25,7 +25,8 @@
                               <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
-                                  <th>Quantity</th>
+                                  <th>Quantity Receive</th>
+                                  <th>Damage Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -44,6 +45,9 @@
                                   </td>
                                   <td>
                                     <input type="number" disabled name="quantity" class="form-control" v-model="item.quantity"/>
+                                  </td>
+                                   <td>
+                                    <input type="number" disabled name="damagequantity" class="form-control" v-model="item.damagequantity"/>
                                   </td>
 
                                   <td>
@@ -123,7 +127,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
         },
 
         /**
@@ -264,7 +268,7 @@ export default {
                 this.form.items_received=[];
                 data.itemDetails.forEach(itm => {
                     this.form.items_received.push({
-                        item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks
+                        item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks, damagequantity:itm.damagequantity
                     });
                 });
                 this.remarks1=data.remarks;

@@ -145,6 +145,11 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'saveValidationcondition'])->name('saveValidationcondition');
     Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
     Route::post('/saveCounsellingType', [App\Http\Controllers\student\StudentMasterController::class, 'saveCounsellingType'])->name('saveCounsellingType');
+    
+    Route::post('/saveFoodSourceType', [App\Http\Controllers\student\StudentMasterController::class, 'saveFoodSourceType'])->name('saveFoodSourceType');
+    Route::get('/loadfoodSourceList', [App\Http\Controllers\student\StudentMasterController::class, 'loadfoodSourceList'])->name('loadfoodSourceList');
+    Route::get('/loadActiveFoodSourceMaster', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveFoodSourceMaster'])->name('loadActiveFoodSourceMaster');
+    
 
     // Academic Master
     Route::post('/saveAcademicMasters', [App\Http\Controllers\AdministrationController::class, 'saveAcademicMasters'])->name('saveAcademicMasters');
@@ -386,6 +391,7 @@ Route::prefix('organization')->group(function () {
     //Compound Details
     Route::post('/saveSchoolCompundDetails', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveSchoolCompundDetails');
     Route::get('/loadcompoundareadetials', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
+    Route::get('/getEditCompoundDetail/{compId}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'getEditCompoundDetail'])->name('getEditCompoundDetail');
 
     //disaster Information
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');

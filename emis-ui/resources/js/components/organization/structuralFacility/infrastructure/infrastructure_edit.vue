@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
                                     <option value="">--- Please Select ---</option>
@@ -41,9 +41,18 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Structure No:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo" @change="getfields('structureNo')">
+                            </div>
+                           
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
+                                 <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
+                                <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
+                                v-model="yr.consYear" >
+                              
                             </div>
                         </div>
                     </div>
@@ -56,13 +65,8 @@
                         <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                         <p>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Year of Construction:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text" 
-                                v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
-                                <has-error :form="form" field="yearOfConstruction"></has-error>
-                            </div>
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area:<span class="text-danger">*</span></label>
+                            
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area (Sq. meter):<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
                             </div>
@@ -109,11 +113,12 @@
                             <thead>
                                 <tr>
                                     <th style="width: 23%">Facility Type</th>
-                                    <th style="width: 15%">Facility No./Name</th>
-                                    <th style="width: 10%">Capacity</th>
+                                    <!-- <th style="width: 15%">Facility No./Name</th> -->
+                                    <th style="width: 10%">Capacity/Unit</th>
                                     <th style="width: 10%">Total Number</th>
-                                    <th style="width: 20%">Is Accessible to Disabled</th>
-                                    <th style="width: 22%">With Internet Connection</th>                            
+                                    <th style="width: 15%">Is Accessible to Disabled</th>
+                                    <th style="width: 20%">Remarks</th>
+                                    <th style="width: 22%">With Internet Connection</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -124,14 +129,14 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-                                    
-                                    <td>                                
+<!-- 
+                                    <td>
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
-                                    </td>
-                                    <td>                                
+                                    </td> -->
+                                    <td>
                                         <input type="number" name="capacity" class="form-control" v-model="user.capacity"/>
                                     </td>
-                                    <td>                                
+                                    <td>
                                         <input type="number" name="noOfFacility" class="form-control" v-model="user.noOfFacility"/>
                                     </td>
                                     <td>
@@ -141,31 +146,35 @@
 
                                     </td>
                                     <td>
+                                        <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                    </td> 
+                                    <td>
                                         <!-- <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/> -->
                                         <label><input v-model="user.internetConnection"  type="radio" value="1"/> Yes</label>
                                         <label><input v-model="user.internetConnection"  type="radio" value="0" /> No</label>
                                     </td>
-                                </tr> 
+                                </tr>
                                 <tr>
-                                    <td colspan=7> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
+                                    <td colspan=7>
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
+                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
-                                </tr>                                          
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
+
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-            </div> 
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+            </div>
         </form>
     </div>
+
 </template>
 
 <script>
@@ -180,11 +189,23 @@ export default {
             contructionTypeList:[],
             users: [],
             form: new form({
-                id: '',organizationId:'1', category: '',subCategory: '',structureNo: '',yearOfConstruction: '', constructionType:'',
-                plintchArea: '',noOfFloor: '',totalCapacity: '',rampAccess: '1',presentCondition: '',design: '',
+                id: '',
+                organizationId:'',
+                category: '',
+                subCategory: '',
+                constructionType:'',
+                structureNo: '',
+               // yearOfConstruction: '',
+                plintchArea: '',
+                noOfFloor: '',
+                totalCapacity: '',
+                rampAccess: '1',
+                presentCondition: '1',
+                design: '',
+                yearofconstructinNo:[],
                 users:
                 [{
-                    facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
+                    facility:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
                 }],
             })
         }
@@ -209,7 +230,7 @@ export default {
             this.form.design='';
             let formReset =this.form.users;
             formReset.splice(0, formReset.length);
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
+            this.form.users.push({facility:'',type:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
         },
 
         /**
@@ -220,11 +241,11 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                this.form.post('/organization/saveInfrastructure',this.form)
+                    this.form.post('/organization/saveInfrastructure',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Infrastructure details is updated successfully'
+                        title: 'Infrastructure is added successfully'
                     })
                     this.$router.push('/infrastructure_list');
                 })
@@ -266,17 +287,6 @@ export default {
         },
 
         /**
-         * method to get category in dropdown
-         */
-        getDesignerDropdown(uri = '/organization/getDesignerDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.designerList = data;
-            });
-        },
-
-        /**
          * method to get facility in dropdown
          */
         getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
@@ -284,6 +294,17 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.facilityList = data;
+            });
+        },
+
+        /**
+         * method to get category in dropdown
+         */
+        getDesignerDropdown(uri = '/organization/getDesignerDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.designerList = data;
             });
         },
         loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
@@ -296,26 +317,31 @@ export default {
                     console.log('error: '+error);
             });
         },
+
         /**
          * method to add more fields
          */
         addMore: function(){
             this.count++;
-            this.form.users.push({facility:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})    
-        }, 
+            this.form.users.push({
+                facility:'',type:'',remarks:'',capacity:'',noOfFacility:'',
+                accessibleDisabled:'',internetConnection:''})
+        },
         /**
          * method to remove fields
          */
-        remove(index){    
+        remove(index){
              if(this.form.users.length>1){
                 this.count--;
-                this.form.users.splice(index,1); 
+                this.form.users.splice(index,1);
             }
         },
-
-        /**
-         * method to get infrasture details
-         */
+        getfields(id){
+            this.form.yearofconstructinNo=[];
+            for(let i=0;i<$('#'+id).val();i++){
+                this.form.yearofconstructinNo.push({consYear:''});
+            }
+        },
         getInfrastructureDetails(infraId){
             axios.get('organization/getInfrastructureDetails/'+infraId)
             .then((response) => {  
@@ -327,7 +353,7 @@ export default {
                 this.form.structureNo           =    data.structureNo;
                 this.form.constructionType      =    data.constructionType;
                 this.form.organizationId        =    data.organizationId;
-                this.form.yearOfConstruction    =    data.yearOfConstruction;
+                //this.form.yearOfConstruction    =    data.yearOfConstruction;
                 this.form.plintchArea           =    data.plintchArea;
                 this.form.noOfFloor             =    data.noOfFloor;
                 this.form.totalCapacity         =    data.totalCapacity;
@@ -336,16 +362,22 @@ export default {
                 this.form.design                =    data.design;
                 this.form.id                    =    data.id;
 
+                let yr=data.infra.yearofconstructinNo.split(',');
+                this.form.yearofconstructinNo=[];
+                for(let i=0;i<yr.length;i++){
+                    this.form.yearofconstructinNo.push({yearofconstructinNo:yr[i]});
+                }
                 let prop=data.facility;
                 let facilityDetails=[];
                 for(let i=0;i<prop.length;i++){
                     facilityDetails.push({facility:prop[i].facilityTypeId,
-                    facilityNo:prop[i].facilityName,
+                    remarks:prop[i].remarks,
                     capacity:prop[i].capacity,
                     noOfFacility:prop[i].noOfFacility,
                     accessibleDisabled:prop[i].noAccessibleToDisabled,
                     internetConnection:prop[i].noWithInternetConnection});
                 }
+
                 this.count=data.length;
                 this.form.users=facilityDetails;
                 
@@ -355,7 +387,6 @@ export default {
             }); 
         },
     },
-
     created(){
         this.getCategoryDropdown();
         this.getFacilityDropdown();
@@ -364,7 +395,7 @@ export default {
         this.getInfrastructureDetails(this.$route.params.data.id);
     },
 
-     mounted() { 
+    mounted() { 
 
     }
 }

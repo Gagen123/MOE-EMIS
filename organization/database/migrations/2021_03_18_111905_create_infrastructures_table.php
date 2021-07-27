@@ -22,10 +22,10 @@ class CreateInfrastructuresTable extends Migration
             $table->char('subCategoryId',36);
             $table->foreign('subCategoryId')->references('id')->on('structure_sub_categories');
             $table->integer('structureNo')->nullable(true);
-            $table->integer('yearOfConstruction');
-            $table->string('plintchArea')->nullable(true);;
-            $table->integer('noOfFloor')->nullable(true);;
-            $table->integer('totalCapacity')->nullable(true);;
+            $table->string('yearofconstructinNos');
+            $table->string('plintchArea')->nullable(true);
+            $table->integer('noOfFloor')->nullable(true);
+            $table->integer('totalCapacity')->nullable(true);
             $table->tinyInteger('rampAccess');
             $table->integer('presentCondition');
             $table->char('design',36)->nullable(true);
