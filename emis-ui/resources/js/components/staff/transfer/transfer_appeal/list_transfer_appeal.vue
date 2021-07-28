@@ -1,95 +1,103 @@
 <template>
-    <div class="card-body">
-        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
-            <thead>
-                <tr>
-                    <th >SL#</th>
-                    <th >Transfer Type</th>
-                    <th >Date of Apply</th>
-                    <th> Status</th>
-                    <th >Action</th> 
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(item, index) in transferAppealDetails" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{item.transfer_type_id}}</td>
-                     <td>{{ item.submitter_role_id}}</td>
-                    <td>{{ item.submitter_role_id}}</td>
-                    <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>      
+    <div>
+        <div class="form-group row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <table id="training-table" class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sl#</th>
+                            <th>Applicant Name</th>
+                            <th>Application Number</th>
+                            <th>Date of Apply</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in transfer_list" :key="index">
+                            <td>{{ index + 1 }}</td>
+                             <td>{{ form.staff_name}}</td>
+                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                            <td>{{ item.created_at}}</td>
+                           <td><span class="badge badge-success">{{ item.status}}</span></td>
+                           <td>
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            transferAppealDetails:[],
-            transfertypeList:{},
-            roleList:{},
-        }
-    },
-    methods:{
-        TransferConfigurationList(uri = 'masters/loadAllTransferConfigMasters/'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.transferConfigurationList = data.data.data;
+            totle:0,
+            transfer_list:[],
+            loaddetails:[],
+            staff_id:[],
+            StaffName:{},
+            form: new form({
+                staff_id: '',
+                status:'',
+                staff_name:'',
+
             })
-            .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+
+        }
+        
+    },
+    methods: {
+        showedit(staff){
+            this.$router.push({name:"edit_transfer_window",params:{data:staff}});
+		},
+        loadtransferDetails(){
+            axios.get('staff/transfer/loadtransferDetails/intra_transfer')
+            .then((response) => {
+                let data = response.data
+                this.getapplicatName(response.data[0].staff_id);
+                this.transfer_list = data;
+             })
+            .catch((error) => {
+                console.log("Error in retrieving ."+error);
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        loadstaff(){
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.transfertypeList[data[i].id] =data[i].type;
+                    this.StaffName[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error){
-                console.log(error);
+                console.log("Error:"+error)
             });
-
         },
-        LoadTransferAppealDetails(uri = 'staff/transfer/LoadTransferAppealDetails/'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data.data;
-                this.transferAppealDetails = data;
-                
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-
+        loadeditpage(item){
+            this.$router.push({name:"edit_intra_transfer",params:{data:item}});
         },
-      
-        showedit(data){
-            this.$router.push({name:'create_transfer_appeal',params: {data:data.id}});
+        applyselect2(){
         },
     },
-        mounted(){ 
-            this.transferAppealDetails();
-            this.LoadTransferType();
-            this.LoadTransferAppealDetails();
-          
+    mounted() {
+        this.loadtransferDetails();
+        this.loadstaff();
+    },
+    watch: {
+        transfer_list(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#training-table").DataTable()
+            });
+        }
+    },
 
-        },
-        watch:{
-            leaveConfigurationList() {
-                this.dt.destroy();
-                this.$nextTick(() => {
-                    this.dt =  $("#working-agency-table").DataTable()
-                });
-            }
-        },
 }
 </script>
+
+
