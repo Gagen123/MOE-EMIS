@@ -40,7 +40,7 @@ export default {
           try{
               let classes = []
               let  classStreamSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => {return response.data});
-              let classWithElectiveSubjects = await axios.get('academics/getClassWithElectiveSubject').then(response => response.data.data);
+              let classWithElectiveSubjects = await axios.get('academics/getClassWithElectiveSubject').then(response => {return response.data.data});
               let aa = []
                classWithElectiveSubjects.forEach((classWithElectiveSubject,index)=>{
                     classStreamSections.forEach((classStreamSection) =>{

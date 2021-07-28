@@ -102,6 +102,7 @@ export default {
                 })
 
                 this.classList = subjectTeachers
+                console.log(this.classList);
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
