@@ -50,8 +50,8 @@
                                                 <th rowspan="2" width="25%">Remarks</th>
                                             </tr>
                                             <tr>
-                                                <th>Increase in Quantity</th>
-                                                <th>Decrease in Quantity</th>
+                                                <th>Quantity Produced</th>
+                                                <th>Damaged</th>
                                                 <th>Unit</th>
                                             </tr>
                                         </thead>
