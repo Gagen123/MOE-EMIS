@@ -113,6 +113,7 @@
                                             <td>Preferences 1</td>
                                             <td>
                                                 <select v-model="form.preference_school1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school1') }" class="form-control select2" name="preference_school1" id="preference_school1">
+                                                    <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_school1"></has-error>
@@ -124,9 +125,11 @@
                                             <td>Preferences 2</td>
                                             <td>
                                                 <select v-model="form.preference_school2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school2') }" class="form-control select2" name="preference_school2" id="preference_school2">
+                                                    <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_school2"></has-error>
+                                                <span class="text-danger" id="preference_school2_err"></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -134,9 +137,11 @@
                                             <td>Preferences 3</td>
                                             <td>
                                                 <select v-model="form.preference_school3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school3') }" class="form-control select2" name="preference_school3" id="preference_school3">
+                                                    <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_school3"></has-error>
+                                                <span class="text-danger" id="preference_school3_err"></span>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -358,88 +363,88 @@ export default {
         },
         shownexttab(nextclass){
             if(nextclass=="undertaking-tab"){
-              if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
-                    let formData = new FormData();
+                if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
+                        let formData = new FormData();
+                            formData.append('type_id', this.form.type_id);
+                            formData.append('transferwindow_id', this.form.transferwindow_id);
+                            formData.append('name', this.form.name);
+                            formData.append('reason_id', this.form.reason_id);
+                            formData.append('description', this.form.description);
+                            formData.append('transferType', this.form.transferType);
 
-                        formData.append('type_id', this.form.type_id);
-                        formData.append('transferwindow_id', this.form.transferwindow_id);
-                        formData.append('name', this.form.name);
-                        formData.append('reason_id', this.form.reason_id);
-                        formData.append('description', this.form.description);
-                        formData.append('transferType', this.form.transferType);
-
-                    axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
-                    .then((response) =>{
-                        if(response!="" && response!="No Screen"){
-                            this.form.id=response.data.data.id;
-                            this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Application for Transfer has been submitted for further action'
-                            });
-                        }
-                    })
-
-                    .catch((error) => {
-                        console.log("Errors:"+error)
-                    });
-                    this.change_tab(nextclass);
-              }
-                 else{
-                  Swal.fire({
-                    text: "Time period for applying intra transfer is closed for the moment!",
-                    icon: 'error',
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Okay!',
-                    })
-             }
-            }
-                else if(nextclass=="final-tab"){
-                    if(this.validated_final_form()){
-                        Swal.fire({
-                            text: "Are you sure you wish to submit for further approval ?",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes!',
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                const config = {
-                                    headers: {
-                                        'content-type': 'multipart/form-data'
-                                    }
-                                }
-                                let formData = new FormData();
-                                formData.append('id', this.form.id);
-                                formData.append('type_id', this.form.type_id);
-                                formData.append('service_name', this.form.service_name);
-                                formData.append('preference_school1', this.form.preference_school1);
-                                formData.append('preference_school2', this.form.preference_school2);
-                                formData.append('preference_school3', this.form.preference_school3);
-                                formData.append('transferType', this.form.transferType);
-                                for(let i=0;i<this.form.ref_docs.length;i++){
-                                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
-                                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
-                                }
-                                axios.post('staff/transfer/submitFinalapplicantDetails', formData, config)
-                                .then((response) =>{
-                                    if(response!="" && response!="No Screen"){
-                                        this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                                        Toast.fire({
-                                            icon: 'success',
-                                            title: 'Application for Transfer has been submitted for further action'
-                                        });
-                                    }
-                                })
-                                .catch((error) => {
-                                    console.log("Errors:"+error)
+                        axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
+                        .then((response) =>{
+                            if(response!="" && response!="No Screen"){
+                                this.form.id=response.data.data.id;
+                                this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application for Transfer has been submitted for further action'
                                 });
                             }
+                        })
+
+                        .catch((error) => {
+                            console.log("Errors:"+error)
                         });
-                    }
+                        this.change_tab(nextclass);
                 }
+                    else{
+                    Swal.fire({
+                        text: "Time period for applying intra transfer is closed for the moment!",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        })
+                }
+            }
+            else if(nextclass=="final-tab"){
+                if(this.validated_final_form()){
+                    Swal.fire({
+                        text: "Are you sure you wish to submit for further approval ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            const config = {
+                                headers: {
+                                    'content-type': 'multipart/form-data'
+                                }
+                            }
+                            let formData = new FormData();
+                            formData.append('id', this.form.id);
+                            formData.append('type_id', this.form.type_id);
+                            formData.append('service_name', this.form.service_name);
+                            formData.append('preference_school1', this.form.preference_school1);
+                            formData.append('preference_school2', this.form.preference_school2);
+                            formData.append('preference_school3', this.form.preference_school3);
+                            formData.append('transferType', this.form.transferType);
+                            for(let i=0;i<this.form.ref_docs.length;i++){
+                                formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                                formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                            }
+                            axios.post('staff/transfer/submitFinalapplicantDetails', formData, config)
+                            .then((response) =>{
+                                if(response.data!="" && response!="No Screen"){
+                                    let message=" Your transfer application has been submitted with the system generated applicaiton number: "+response.data.application_number;
+                                    this.$router.push({name:'intra_transfer_acknowledgement',params: {data:message}});
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Application for Transfer has been submitted for further action'
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                console.log("Errors:"+error)
+                            });
+                        }
+                    });
+                }
+            }
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -503,14 +508,16 @@ export default {
             }
             if(id=="preference_school1"){
                 this.form.preference_school1=$('#preference_school1').val();
+                this.checkforselectedval(1);
             }
             if(id=="preference_school2"){
                 this.form.preference_school2=$('#preference_school2').val();
+                this.checkforselectedval(2);
             }
             if(id=="preference_school3"){
                 this.form.preference_school3=$('#preference_school3').val();
+                this.checkforselectedval(3);
             }
-
         },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
@@ -526,6 +533,20 @@ export default {
             .catch(errors =>{
                 console.log(errors)
             });
+        },
+        checkforselectedval(cout){
+            if($('#preference_school1').val()!="" && $('#preference_school2').val()!="" && $('#preference_school1').val()==$('#preference_school2').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
+            if($('#preference_school2').val()!="" && $('#preference_school3').val()!="" && $('#preference_school2').val()==$('#preference_school3').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
+            if($('#preference_school1').val()!="" && $('#preference_school3').val()!="" && $('#preference_school1').val()==$('#preference_school3').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
         }
     },
     mounted() {

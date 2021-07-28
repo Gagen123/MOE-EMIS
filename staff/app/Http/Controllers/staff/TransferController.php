@@ -58,7 +58,7 @@ class TransferController extends Controller{
             catch(\Illuminate\Database\QueryException $ex){
                 dd($ex);
             }
-           
+
         }
         else{
             $act_det = TransferApplication::where ('id', $request->id)->first();
@@ -100,7 +100,7 @@ class TransferController extends Controller{
             ApplicationSequence::where('service_name', 'Transfer')->update($app_details);
         }
 
-        $application_no='TR_-';
+        $application_no='TR-';
         if(strlen($last_seq)==1){
             $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
         }
@@ -194,7 +194,7 @@ class TransferController extends Controller{
             ];
             TransPrefenreces::create($request_data);
         }
-        
+
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $doc_data =[
@@ -215,7 +215,7 @@ class TransferController extends Controller{
         $response_data=TransferApplication::where('aplication_number',$appNo)->first();
 
         if($response_data!="" && $response_data!=null){
-            $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();  
+            $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();
         }
         $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
             return $this->successResponse($response_data);
@@ -265,7 +265,7 @@ class TransferController extends Controller{
         }
         $response_data=TransferApplication::where('id', $request->id)->update($extra_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
-       
+
     }
 
     public function getTransferConfigDetails($role_ids=""){
@@ -277,13 +277,13 @@ class TransferController extends Controller{
                 $roles.="'$role',";
             }
             $roles=rtrim($roles,',');
-            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l 
-            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id  
+            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l
+            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id
             WHERE d.role_id IN(".$roles.")";
         }
         else{
-            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l 
-            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id 
+            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l
+            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id
             WHERE d.role_id ='".$role_ids."'";
         }
         return DB::select($result_data);
@@ -465,5 +465,5 @@ class TransferController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
 }

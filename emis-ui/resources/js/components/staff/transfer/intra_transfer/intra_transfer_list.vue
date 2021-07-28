@@ -10,7 +10,7 @@
                             <th>Application Number</th>
                             <th>Date of Apply</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th class="pl-4 pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,7 +23,7 @@
                            <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
                             </td>
-                            
+
                         </tr>
                     </tbody>
                 </table>
@@ -48,7 +48,7 @@ export default {
             })
 
         }
-        
+
     },
     methods: {
         showedit(staff){

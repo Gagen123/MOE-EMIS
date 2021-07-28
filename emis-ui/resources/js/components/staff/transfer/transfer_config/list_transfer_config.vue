@@ -6,13 +6,13 @@
                     <th >SL#</th>
                     <th >Transfer Type</th>
                     <th >Submitter</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(item, index) in transferConfigurationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{transfertypeList[item.transfer_type_id]}}</td>
+                    <td>{{transfertypeList}} {{transfertypeList[item.transfer_type_id]}} {{item.transfer_type_id}}</td>
                     <td>{{ roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -20,7 +20,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -74,10 +74,12 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-        mounted(){ 
-            this.TransferConfigurationList();
+        mounted(){
             this.LoadTransferType();
             this.loadroleList();
+
+            this.TransferConfigurationList();
+
 
         },
         watch:{

@@ -97,6 +97,7 @@ class TransferController extends Controller{
             'user_id'                           =>  $this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
+        // dd($response_data);
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -172,7 +173,7 @@ class TransferController extends Controller{
                 'access_level'      =>$this->getAccessLevel(),
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
-                'dzongkhagApproved' =>$request->userDzongkhag, 
+                'dzongkhagApproved' =>$request->userDzongkhag,
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
@@ -190,12 +191,12 @@ class TransferController extends Controller{
                 'access_level'      =>$this->getAccessLevel(),
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
-                'dzongkhagApproved' =>$request->userDzongkhag, 
+                'dzongkhagApproved' =>$request->userDzongkhag,
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         }
-    
+
         // $files = $request->attachments;
         // $filenames = $request->attachmentname;
         // $remarks = $request->remarks;
@@ -237,7 +238,7 @@ class TransferController extends Controller{
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>  $this->userId()
             ];
-            
+
             $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         }
         else if($request->transferType=='inter_transfer'){
@@ -275,7 +276,7 @@ class TransferController extends Controller{
     public function loadApplicationDetails($id=""){
         $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
         return $response_data;
-        
+
 
     }
     public function getapplicatName($id=""){
@@ -352,7 +353,7 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
         return $response_data;
 
-        
+
     }
-    
+
 }
