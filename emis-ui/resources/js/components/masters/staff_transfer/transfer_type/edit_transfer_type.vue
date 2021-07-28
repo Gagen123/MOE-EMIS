@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Undertaking:<span class="text-danger">*</span></label> 
+                        <label>transfer Type1:<span class="text-danger">*</span></label> 
                         <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text"></textarea>
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -33,7 +33,7 @@ export default {
                 name: '',
                 code:'001',
                 status:'',
-                record_type:'transfer_uindertaking',
+                record_type:'transfer_type',
                 action_type:'edit',
             })
         }
@@ -57,7 +57,7 @@ export default {
                         icon: 'success',
                         title: 'Details updated successfully'
                     })
-                    this.$router.push('/list_transfer_undertaking');
+                    this.$router.push('/list_transfer_type');
                 })
                 .catch(() => { 
                     console.log("Error......")

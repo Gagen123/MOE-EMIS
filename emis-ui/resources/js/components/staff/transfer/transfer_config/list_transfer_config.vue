@@ -6,7 +6,7 @@
                     <th >SL#</th>
                     <th >Transfer Type</th>
                     <th >Submitter</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +20,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -44,12 +44,12 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        LoadTransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.transfertypeList[data[i].id] =data[i].type;
+                    this.transfertypeList[data[i].id] =data[i].name;
                 }
             })
             .catch(function (error){
@@ -62,7 +62,7 @@ export default {
             .then(response =>{
                 let data = response.data;
                  for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].id] = data[i].Name;
+                    this.roleList[data[i].Id] = data[i].Name;
                 }
             })
             .catch(function (error){
@@ -74,10 +74,12 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-        mounted(){ 
-            this.TransferConfigurationList();
+        mounted(){
             this.LoadTransferType();
             this.loadroleList();
+
+            this.TransferConfigurationList();
+
 
         },
         watch:{
