@@ -10,6 +10,7 @@ class StockReceivedItem extends Model
 {
     //
     use HasFactory, Uuid;
+    public $timestamps = false;
     protected $table="stock_received_items";
 
     protected $fillable = [
@@ -21,6 +22,8 @@ class StockReceivedItem extends Model
         'damagequantity',
         'remarks',
         'created_by',
+        'created_at',
+        'updated_at',
         'updated_by'
     ];
 

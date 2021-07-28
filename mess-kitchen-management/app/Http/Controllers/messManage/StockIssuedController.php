@@ -81,104 +81,101 @@ class StockIssuedController extends Controller
         $date = $request['dateOfissue'];
 
         if($id != null){
-          DB::table('stock_issueds')->where('id', $request->id)->delete();
-          foreach ($request->item_issue as $i=> $item){
-            $itm_id=explode('_',$item['item'])[0];
-            $unitid=explode('_',$item['item'])[1];
-            $rem="NA";
-            if(isset($item['remarks'])){
-                $rem=$item['remarks'];
+            DB::table('stock_issueds')->where('id', $request->id)->delete();
+            foreach ($request->itemList as $i=> $item){
+                $rem="NA";
+                if(isset($item['remarks'])){
+                    $rem=$item['remarks'];
+                }
+                $quantity=0;
+                if(isset($item['available_qty'])){
+                    $quantity=$item['available_qty'];
+                }
+                $damagequantity=0;
+                if(isset($item['damagequantity'])){
+                    $damagequantity=$item['damagequantity'];
+                }
+                $itemIssued = array(
+                    'organizationId'              =>  $orgId,
+                    'dateOfissue'                 =>  $date,
+                    'id'                         =>  $id,
+                    'item_id'                    =>  $item['id'],
+                    'quantity'                   =>  $quantity,
+                    'unit_id'                    =>  $item['Unit_id'],
+                    'damagequantity'             =>  $damagequantity,
+                    'remarks'                    =>  $rem,
+                    'updated_by'                 =>  $request->user_id,
+                    'created_at'                 =>  date('Y-m-d h:i:s')
+                );
+                $itemiss = StockIssued::create($itemIssued);
             }
-            $quantity=0;
-            if(isset($item['quantity'])){
-                $quantity=$item['quantity'];
-            }
-            $damagequantity=0;
-            if(isset($item['damagequantity'])){
-                $damagequantity=$item['damagequantity'];
-            }
-            $itemIssued = array(
-              'organizationId'              =>  $orgId,
-              'dateOfissue'                 =>  $date,
-               'id'                         =>  $id,
-               'item_id'                    =>  $itm_id,
-               'quantity'                   =>  $quantity,
-               'unit_id'                    =>  $unitid,
-               'damagequantity'             =>  $damagequantity,
-               'remarks'                    =>  $rem,
-               'updated_by'                 =>  $request->user_id,
-               'created_at'                 =>  date('Y-m-d h:i:s')
-            );
-
-              $itemiss = StockIssued::create($itemIssued);
-            }
-           return $this->successResponse($itemiss,Response::HTTP_CREATED);
-          }else {
+            return $this->successResponse($itemiss,Response::HTTP_CREATED);
+        }else {
         //  dd($request);
-          $orgId = $request['organizationId'];
-          $date = $request['dateOfissue'];
-          foreach ($request->item_issue as $i=> $item){
-            $itm_id=explode('_',$item['item'])[0];
-            $unitid=explode('_',$item['item'])[1];
-            $rem="NA";
-            if(isset($item['remarks'])){
-                $rem=$item['remarks'];
-            }
-            $quantity=0;
-            if(isset($item['quantity'])){
-                $quantity=$item['quantity'];
-            }
-            $damagequantity=0;
-            if(isset($item['damagequantity'])){
-                $damagequantity=$item['damagequantity'];
-            }
-              $itemIssued = array(
-               'organizationId'             =>  $orgId,
-               'dateOfissue'                =>  $date,
-               'item_id'                    =>  $itm_id,
-               'quantity'                   =>  $quantity,
-               'unit_id'                    =>  $unitid,
-               'damagequantity'             =>  $damagequantity,
-               'remarks'                    =>  $rem,
-               'updated_by'                 =>  $request->user_id,
-               'created_at'                 =>  date('Y-m-d h:i:s')
-              );
+            $orgId = $request['organizationId'];
+            $date = $request['dateOfissue'];
+            foreach ($request->itemList as $i=> $item){
+                $rem="NA";
+                if(isset($item['remarks'])){
+                    $rem=$item['remarks'];
+                }
+                $quantity=0;
+                if(isset($item['issue_qty'])){
+                    $quantity=$item['issue_qty'];
+                }
+                $damagequantity=0;
+                if(isset($item['damagequantity'])){
+                    $damagequantity=$item['damagequantity'];
+                }
+                $itemIssued = array(
+                    'organizationId'             =>  $orgId,
+                    'dateOfissue'                =>  $date,
+                    'item_id'                    =>  $item['id'],
+                    'quantity'                   =>  $quantity,
+                    'unit_id'                    =>  $item['Unit_id'],
+                    'damagequantity'             =>  $damagequantity,
+                    'remarks'                    =>  $rem,
+                    'category'                   =>  $request['category'],
+                    'created_by'                 =>  $request->user_id,
+                    'created_at'                 =>  date('Y-m-d h:i:s')
+                );
 
-           $itemiss = StockIssued::create($itemIssued);
-           $checkitem=TransactionTable::where('item_id',$itm_id)
-               ->where('organizationId',$request['organizationId'])->first();
-                  $qty=$checkitem->available_qty-$item['quantity']-$item['damagequantity'];
-                  $update_data=[
+                $itemiss = StockIssued::create($itemIssued);
+                $checkitem=TransactionTable::where('item_id',$item['id'])->where('organizationId',$orgId)->first();
+                $qty=$checkitem->available_qty-($quantity);//$damagequantity,taken out as its contributing negative values in transaction
+                $update_data=[
                     'available_qty' => $qty,
                     'updated_by'    => $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
-                  ];
-                //  dd($update_data);
-                  TransactionTable::where('item_id',$itm_id)->update($update_data);
-          }
-        //  dd('m here');
-        //s   dd('itemIssued');
-        return $this->successResponse($itemiss, Response::HTTP_CREATED);
+                ];
+                TransactionTable::where('item_id',$item['id'])->update($update_data);
+            }
+            return $this->successResponse($itemiss, Response::HTTP_CREATED);
       }
     }
     public function loadStockIssuedList($orgId=""){
             $list = DB::table('stock_issueds')
-            ->select('id','organizationId', 'dateOfissue as dateOfissue','item_id as item', 'quantity as quantity','unit_id as unit')->where('organizationId',$orgId)->get();
+            ->select('id','organizationId', 'dateOfissue as dateOfissue','item_id as item','category', 'quantity as quantity','unit_id as unit')->where('organizationId',$orgId)->get();
             return $list;
+    }
+
+    public function getAvailableStocks($id="",$type=""){
+        $response_data=TransactionTable::where('item_id',$id)->where('procured_type',$type)->first();
+        return $response_data;
     }
     public function StockIssueEditList($lssId=""){
         //dd($lssId);
-        $response_data=StockIssued::where('id', $lssId)->get();
+        $response_data=StockIssued::where('id', $lssId)->first();
+        $response_data->availaleqty=TransactionTable::where('item_id',$response_data->item_id)->where('procured_type',$response_data->category)->first()->available_qty;
         return $this->successResponse($response_data);
     }
     public function getquantity($itemId="", $chekva="", $orgId=""){
 
-     // dd( $orgId,$itemId,$chekva  );
-    
+    //  dd( $orgId,$itemId,$chekva  );
       $response_data=TransactionTable::where('item_id', $itemId)
       ->where('procured_type',$chekva)
       ->where('organizationId',$orgId )->first();
-     // dd($response_data);
+    //  dd($response_data);
       return $this->successResponse($response_data);
     }
 
