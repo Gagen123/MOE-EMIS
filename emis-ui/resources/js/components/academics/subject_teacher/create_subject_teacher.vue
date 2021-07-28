@@ -21,16 +21,16 @@
                                 <td>{{ index+1}}</td>
                                 <td>
                                     <input v-model="subjectTeacherList[index].aca_sub_id" class="form-control" type="hidden">
-                                    {{ item.name }}
+                                    {{ item.name }} 
                                     <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
                                 </td>                                                                               
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select v-model="subjectTeacherList[index].stf_staff_id" class="form-control select2"> 
-                                            <option  selected="selected" value="">---SELECT---</option>
+                                            <option selected="selected" value="">---Select---</option>
                                             <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
-                                                {{ item1.name }}, {{item1.position_title}} 
+                                                {{ item1.name }}, {{item1.position_title}}
                                             </option>
                                         </select>
                                     </div>
@@ -88,7 +88,6 @@ export default {
              }  
         },
          async getsubjectTeachers(){
-             let finalSubjectTeachers =[];
             let uri = 'academics/getSubjectTeacher'
             uri += ('?org_class_id='+this.org_class_id)
             if(this.org_stream_id !== null){
@@ -101,7 +100,7 @@ export default {
                 let subjectTeachers = await axios.get(uri).then(response => response.data.data)
                 subjectTeachers["classSubjects"].forEach((finalSubjectTeacher,index) => {
                     subjectTeachers["classSubjectTeachers"].forEach(classSubjectTeacher => {
-                        if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || (finalSubjectTeacher.org_stream_id == null && classSubjectTeacher.org_stream_id == null))){
+                        if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || ((finalSubjectTeacher.org_stream_id == null || finalSubjectTeacher.org_stream_id == "") && (classSubjectTeacher.org_stream_id == null)|| classSubjectTeacher.org_stream_id == ""))){
                             subjectTeachers["classSubjects"][index].stf_staff_id = classSubjectTeacher.stf_staff_id
                         }
                     });

@@ -96,7 +96,7 @@ export default {
             let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
             classTeachers.forEach((classTeacher,index) => {
                 classSections.forEach(item => {
-                    if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || (classTeacher.org_stream_id == null && item.org_stream_id == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.org_section_id == null && item.org_section_id == null))){
+                    if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || ((classTeacher.org_stream_id == null || classTeacher.org_stream_id == "" ) && (item.org_stream_id == null || item.org_stream_id == ""))) && (classTeacher.org_section_id == item.org_section_id || ((classTeacher.org_section_id == null || classTeacher.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
                         classTeachers[index].org_class_id = item.org_class_id;
                         classTeachers[index].org_stream_id = item.org_stream_id
                         classTeachers[index].org_section_id = item.org_section_id

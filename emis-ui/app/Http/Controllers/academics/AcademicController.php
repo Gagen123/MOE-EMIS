@@ -102,13 +102,13 @@ class AcademicController extends Controller
         $org_id = $this->getWrkingAgencyId();
         $uri = 'emis/academics/getAttendanceData/'.$org_id;
 
-        $uri .= ('?org_class_id='.$request->classId.'&std_id='.$request->studentId.'&aca_assmt_term_id='.$request->termId);
+        $uri .= ('?org_class_id='.$request->org_class_id.'&std_id='.$request->std_id.'&aca_assmt_term_id='.$request->aca_assmt_term_id);
 
         if($request->streamId !== null){
-            $uri .= (('&org_stream_id='.$request->streamId));
+            $uri .= (('&org_stream_id='.$request->org_stream_id));
         }
         if($request->sectionId !== null){
-            $uri .= (('&org_section_id='.$request->sectionId));
+            $uri .= (('&org_section_id='.$request->org_section_id));
         }
         return $this->apiService->listData($uri);
     }
