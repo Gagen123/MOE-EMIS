@@ -146,6 +146,21 @@ class StaffMastersController extends Controller{
                     $response_data = TransferType::create($data);
                 }
             }
+            if($request->actiontype=="edit"){
+
+                $data = [
+                    'name'       =>  $request['name'],
+                    'status'     =>  $request['status'],
+                    'created_by' =>  $request['user_id'],
+                    'created_at' =>  date('Y-m-d h:i:s'),
+                ];
+                if($request['record_type']=="transfer_type"){
+                    if($request->id!="" || $request->id!=null){
+                        $response_data=TransferType::where('id', $request->id)->update($data);
+                    }
+                   
+                }
+            }
             if($request['record_type']=="staff_qualification"){
             if($request->actiontype=="add"){
                 $table="";
