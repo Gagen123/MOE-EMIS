@@ -25,18 +25,18 @@ class TransferController extends Controller{
 
     public function submitIntialapplicantDetails(Request $request){
         $rules = [
-            'staff_id'              =>  'required  ',
+            'name'                  =>  'required  ',
             'reason_id'             =>  'required',
         ];
         $customMessages = [
-            'staff_id.required'     => 'Please select applicant',
+            'name.required'         => 'Please select applicant',
             'reason_id.required'    => 'Please select transfer reason',
         ];
         $this->validate($request, $rules,$customMessages);
         $request_data =[
             'id'                                =>  $request->id,
             'record_type_id'                    =>  $request->type_id,
-            'staff_id'                          =>  $request->staff_id,
+            'name'                              =>  $request->name,
             'transferType'                      =>  $request->transferType,
             'transferwindow_id'                 =>  $request->transferwindow_id,
             'reason_id'                         =>  $request->reason_id,

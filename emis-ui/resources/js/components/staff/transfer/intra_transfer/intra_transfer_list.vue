@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ form.staff_name}}</td>
+                             <td>{{ form.applicant_name}}</td>
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
@@ -41,7 +41,7 @@ export default {
             staff_id:[],
             StaffName:{},
             form: new form({
-                staff_id: '',
+                applicant_name: '',
                 status:'',
                 staff_name:'',
 
@@ -58,7 +58,7 @@ export default {
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
                 let data = response.data
-                this.getapplicatName(response.data[0].staff_id);
+                this.form.applicant_name = response.data[0].applicant_name;
                 this.transfer_list = data;
              })
             .catch((error) => {
@@ -78,18 +78,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-         getapplicatName(staff_id){
-            let uri ='staff/transfer/getapplicatName/'+staff_id;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data;
-                this.form.staff_name = data.name;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-
-        },
         loadeditpage(item){
             this.$router.push({name:"edit_intra_transfer",params:{data:item}});
         },
@@ -99,7 +87,6 @@ export default {
     mounted() {
         this.loadtransferDetails();
         this.loadstaff();
-        this.getapplicatName();
         this.dt =  $("#training-table").DataTable()
     },
     watch: {
