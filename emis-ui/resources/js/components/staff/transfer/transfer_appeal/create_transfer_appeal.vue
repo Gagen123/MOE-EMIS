@@ -309,8 +309,8 @@ export default {
                             }
                             else if(response=="Not Contain"){
                                 Toast.fire({
-                                icon: 'warning',
-                                title: 'You are not allowed to apply transfer appeal since you have not applied transfer yet!'
+                                icon: 'error',
+                                html: 'You are not allowed to apply transfer appeal since you have not applied transfer yet!'
                             });
                             }
                             else{

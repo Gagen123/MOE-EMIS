@@ -328,6 +328,7 @@ class TransferController extends Controller{
             'working_agency_id'                 =>  $this->getWrkingAgencyId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
+        dd($response_data);
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -346,7 +347,6 @@ class TransferController extends Controller{
         return  $response_data;
     }
     public function LoadTransferAppealDetails($user_id=""){
-        dd("dsadsad");
         $user_id=$this->userId();
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
         return $response_data;
