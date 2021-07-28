@@ -99,6 +99,7 @@ Setting up the system administration, and user management:
     student vaccination tables changed - dose removed from std_student_vaccination and dose added to std_health_vaccination(also date made nullable)
 
     table cea_programme_item_variety added
+    table std_health_endorsement added
 
 
 ***************Staff*****************
