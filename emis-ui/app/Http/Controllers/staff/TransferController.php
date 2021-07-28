@@ -328,22 +328,23 @@ class TransferController extends Controller{
             'working_agency_id'                 =>  $this->getWrkingAgencyId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
-        dd($response_data);
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$request->service_name,
-            'application_number'=>  json_decode($response_data)->application_no,
-            'screen_id'         =>  json_decode($response_data)->application_no,
-            'status_id'         =>  1,
-            'app_role_id'       => $this->getRoleIds('roleIds'),
-            'record_type_id'    => json_decode($response_data)->transferType,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
-        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$request->service_name,
+                'application_number'=>  json_decode($response_data)->application_no,
+                'screen_id'         =>  json_decode($response_data)->application_no,
+                'status_id'         =>  1,
+                'app_role_id'       => $this->getRoleIds('roleIds'),
+                'record_type_id'    => json_decode($response_data)->transferType,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+    }
         return  $response_data;
     }
     public function LoadTransferAppealDetails($user_id=""){

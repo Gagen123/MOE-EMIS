@@ -436,14 +436,15 @@ class TransferController extends Controller{
             if($response_data->status=="Transfer Approved" || $response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Forwarded"){
                 $response_data = StaffAppeal::create($request_data);
             }
-                else{
-                    return "Not Approved";
-                }
-        return $response_data;
+            else{
+                return "Not Approved";
+            }
         }
         else{
             return "Not Contain";
         }
+        return $response_data;
+
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $doc_data =[

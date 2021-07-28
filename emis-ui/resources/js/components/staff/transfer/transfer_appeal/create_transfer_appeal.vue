@@ -296,31 +296,36 @@ export default {
                         }
                         axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
                         .then((response) =>{
-                            alert(JSON.stringify(res))
-                            if(response=="Not Approved"){
+                            if(response.data=="Not Approved"){
+                               Swal.fire({
+                                    html: "Your application is still under process ! ",
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
+                            });
+                            }
+                            else if(response.data=="Not Contain"){
                                 Swal.fire({
-                                text: "Your transfer application has not yet approved! ",
-                                icon: 'warning',
-                                showCancelButton: true,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Yes!',
+                                    html: "You are not eligible for applying transfer appeal since you have not applied any type transfer yet! ",
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
                                 })
                             }
-                            else if(response=="Not Contain"){
-                                Toast.fire({
-                                icon: 'error',
-                                html: 'You are not allowed to apply transfer appeal since you have not applied transfer yet!'
-                            });
-                            }
                             else{
-                                Toast.fire({
-                                icon: 'success',
-                                title: 'You have applied transfer appeal successfully'
+                                 Swal.fire({
+                                    html: "Your application for transfer appeal has been submitted successfully ",
+                                    icon: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
                             });
-                            }
                             this.applyselect2();
                             this.$router.push('/list_transfer_appeal');
+                            }
+                            
                         })
                         .catch((error) => {
                             console.log("Errors:"+error)
