@@ -15,7 +15,7 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <div id="loginsection">
-                    <p class="login-box-msg">Register</p>
+                    <p class="login-box-msg">New Registration</p>
                     <form action="/new_register" method="POST">
                         @if($Invalid!=null)
                             <div class="alert alert-danger col-12"> {{ $Invalid }}</div>

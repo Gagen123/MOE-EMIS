@@ -28,6 +28,12 @@
                     Student BMI
                 </router-link>
             </li>
+            <li class="nav-item pr-1" @click="activatelink('endorse_health_records')">
+                <router-link to="/endorse_health_records" id="endorse_health_records" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class="fas fa-notes-medical"></span>
+                    Endorse Health Records
+                </router-link>
+            </li>
         </ul>
         <router-view></router-view>
     </div>

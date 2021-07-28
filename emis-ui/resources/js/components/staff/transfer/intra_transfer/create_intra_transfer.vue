@@ -140,7 +140,7 @@
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_school3"></has-error>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -313,7 +313,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.SchoolList =  data.data;
+                this.SchoolList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -364,14 +364,14 @@ export default {
             //   if(this.form.t_to_date <=this.form.current_date){
             //         if(this.form.t_from_date >this.form.current_date){
                     let formData = new FormData();
-                        
+
                         formData.append('type_id', this.form.type_id);
                         formData.append('transferwindow_id', this.form.transferwindow_id);
                         formData.append('staff_id', this.form.staff_id);
                         formData.append('reason_id', this.form.reason_id);
                         formData.append('description', this.form.description);
                         formData.append('transferType', this.form.transferType);
-                    
+
                     axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
                     .then((response) =>{
                         if(response!="" && response!="No Screen"){
@@ -467,11 +467,11 @@ export default {
                 console.log(errors)
             });
         },
-        
+
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/intra_transfer')
            .then((response) => {
-               
+
                 let data=response.data.data[0];
                  if(data!=null){
                     this.form.transferwindow_id=data.id;

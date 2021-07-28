@@ -20,7 +20,7 @@ class FacilityInStructure extends Model
         'id',
         'infrastructureId',
         'facilityTypeId',
-        'facilityName',
+        'remarks',
         'capacity',
         'noOfFacility',
         'noAccessibleToDisabled',

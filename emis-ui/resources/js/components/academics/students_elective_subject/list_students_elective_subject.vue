@@ -7,7 +7,7 @@
                         <tr>
                          <th>SL#</th>
                         <th>Class</th>
-                        <th>Action</th> 
+                        <th>Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
@@ -25,7 +25,7 @@
                 </table>
             </div>
         </div>
-    </div>  
+    </div>
 </template>
 <script>
 export default {
@@ -44,7 +44,7 @@ export default {
               let aa = []
                classWithElectiveSubjects.forEach((classWithElectiveSubject,index)=>{
                     classStreamSections.forEach((classStreamSection) =>{
-                        if(classStreamSection.org_class_id == classWithElectiveSubject.org_class_id && (classStreamSection.org_stream_id == classWithElectiveSubject.org_stream_id || (classStreamSection.org_stream_id == null && classWithElectiveSubject.org_stream_id == null))){
+                        if(classStreamSection.org_class_id == classWithElectiveSubject.org_class_id && (classStreamSection.org_stream_id == classWithElectiveSubject.org_stream_id || ((classStreamSection.org_stream_id == null || classStreamSection.org_stream_id == "") && (classWithElectiveSubject.org_stream_id == null || classWithElectiveSubject.org_stream_id == "")))){
                             if(classStreamSection.stream && classStreamSection.section){
                                 aa["class_stream_section"] =  classStreamSection.class+' '+classStreamSection.stream+' '+classStreamSection.section
                             }else if(classStreamSection.stream){
@@ -73,7 +73,7 @@ export default {
             this.$router.push({name:'create_students_elective_subject',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.getClassStreamList();
         this.dt = $("#student-elective-subject-table").DataTable({
              columnDefs: [

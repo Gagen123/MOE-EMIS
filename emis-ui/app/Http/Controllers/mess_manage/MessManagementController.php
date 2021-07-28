@@ -67,22 +67,22 @@ class MessManagementController extends Controller
        // dd($attachment_details);
         $rules = [
             'dateOfrelease'            =>  'required',
-            'dzongkhag'                =>  'required',
-            'organizaiton'             =>  'required',
+        //    'dzongkhag'                =>  'required',
+        //    'organizaiton'             =>  'required',
             'quarter'                  =>  'required',
         ];
         $customMessages = [
             'dateOfrelease.required'    =>  'dateOfrelease is required',
-            'dzongkhag.required'        =>  'dzongkhag is required',
-            'organizaiton.required'     =>  'organizaiton  is required',
+        //    'dzongkhag.required'        =>  'dzongkhag is required',
+        //    'organizaiton.required'     =>  'organizaiton  is required',
             'quarter.required'          =>  'quarter is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $foodrelease =[
             //'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfrelease'            =>  $request['dateOfrelease'],
-            'dzongkhag'                =>  $request['dzongkhag'],
-            'organizaiton'             =>  $request['organizaiton'],
+        //    'dzongkhag'                =>  $request['dzongkhag'],
+        //    'organizaiton'             =>  $request['organizaiton'],
             'quarter'                  =>  $request['quarter'],
             'remarks'                  =>  $request['remarks'],
             'attachment_details'       =>  $attachment_details,
@@ -154,16 +154,16 @@ class MessManagementController extends Controller
         $this->validate($request, $rules, $customMessages);
         $stockreceived =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
-            'dzoId'                        =>  $this->getUserDzoId(),
+            'dzoId'                         =>  $this->getUserDzoId(),
             'dateOfreceived'                =>  $request['dateOfreceived'],
             'quarter'                       =>  $request['quarter'],
             'remarks'                       =>  $request['remarks'],
             'id'                            =>  $request['id'],
-            'items_received'                =>  $request->items_received,
+            'itemList'                      =>  $request->itemList,
             'user_id'                       =>  $this->userId()
 
         ];
-       // dd($stockreceived);
+      // dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -234,6 +234,8 @@ class MessManagementController extends Controller
        $stockissue =[
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
+            'itemList'                  =>  $request['itemList'],
+            'category'                  =>  $request['category'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
@@ -243,11 +245,18 @@ class MessManagementController extends Controller
         //dd($response_data);
         return $response_data;
     }
+
+    public function getAvailableStocks($id="",$type=""){
+        // dd('from Ui');
+        $list = $this->apiService->listData('emis/messManagement/getAvailableStocks/'.$id.'/'.$type);
+        return $list;
+    }
     public function StockIssueEditList($lssId=""){
         // dd('from Ui');
         $list = $this->apiService->listData('emis/messManagement/StockIssueEditList/'.$lssId);
         return $list;
     }
+
 
     public function approvereject(Request $request){
         $request_data =[

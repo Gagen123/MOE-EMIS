@@ -14,6 +14,7 @@ class StudentHealthVaccination extends Model
     protected $fillable = [
         'id',
         'StdVaccineTypeId',
+        'dose',
         'date',
         'class',
         'section',

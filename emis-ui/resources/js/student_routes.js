@@ -83,6 +83,7 @@ const routes = [
                     { path: '/counselling_class_list', name:'counselling_class_list', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_list.vue').default },
                 ]
             },
+            
         ]
     },
     //Students validation and others
@@ -206,6 +207,15 @@ const routes = [
         { path: '/training_list', name:'StudentTrainingList', component: require('./components/masters/student_masters/trainings/training_list.vue').default },
       ]
     },
+    { path: '/item_variety_index',
+    component: require('./components/masters/student_masters/programs_clubs/item_variety_index.vue').default ,
+      children: [
+        { path: '', component: require('./components/masters/student_masters/programs_clubs/item_variety_list.vue').default },
+        { path: '/item_variety_add', name:'ItemVarietyAdd', component: require('./components/masters/student_masters/programs_clubs/item_variety_add.vue').default },
+        { path: '/item_variety_edit', name:'ItemVarietyEdit', component: require('./components/masters/student_masters/programs_clubs/item_variety_edit.vue').default },
+        { path: '/item_variety_list', name:'ItemVarietyList', component: require('./components/masters/student_masters/programs_clubs/item_variety_list.vue').default },
+      ]
+    },
     { path: '/program_item_index',
     component: require('./components/masters/student_masters/programs_clubs/program_item_index.vue').default ,
       children: [
@@ -232,6 +242,16 @@ const routes = [
         { path: '/quarter_name_edit', name:'quarter_name_edit', component: require('./components/masters/student_masters/programs_clubs/quarter_name_edit.vue').default },
         { path: '/quarter_name_list', name:'quarter_name_list', component: require('./components/masters/student_masters/programs_clubs/quarter_name_list.vue').default },
       ]
+    },
+
+    { path: '/foodSource_type_index',
+        component: require('./components/masters/student_masters/foodSource_types/foodSource_type_index.vue').default ,
+        children: [
+            { path: '', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_list.vue').default },
+            { path: '/foodSource_type_add', name:'foodSource_type_add', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_add.vue').default },
+            { path: '/foodSource_type_edit', name:'foodSource_type_edit', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_edit.vue').default },
+            { path: '/foodSource_type_list', name:'foodSource_type_list', component: require('./components/masters/student_masters/foodSource_types/foodSource_type_list.vue').default },
+        ]
     },
   ]
 },
@@ -582,6 +602,7 @@ const routes = [
                 { path: '/', name:'program_inventory_index', component: require('./components/students/StudentExtraCurricular/Programs/program_inventory_list.vue').default },
                 { path: '/program_inventory_list', name:'program_inventory_list', component: require('./components/students/StudentExtraCurricular/Programs/program_inventory_list.vue').default },
                 { path: '/program_inventory_add', name:'program_inventory_add', component: require('./components/students/StudentExtraCurricular/Programs/program_inventory_add.vue').default },
+                { path: '/program_inventory_view', name:'program_inventory_view', component: require('./components/students/StudentExtraCurricular/Programs/program_inventory_view.vue').default },
                 { path: '/program_inventory_edit', name:'program_inventory_edit', component: require('./components/students/StudentExtraCurricular/Programs/program_inventory_edit.vue').default },
             ]
         },
@@ -693,7 +714,6 @@ const routes = [
                 { path: '/std_deworming_view', name:'std_deworming_view', component: require('./components/students/StudentHealth/Deworming/std_deworming_view.vue').default },
             ]
         },
-
         //supplementation
         { path: '/std_supplementation',
         component: require('./components/students/StudentHealth/Supplementation/std_supplementation.vue').default,
@@ -725,6 +745,17 @@ const routes = [
                 { path: '/std_bmi_add', name:'std_bmi_add', component: require('./components/students/StudentHealth/BMI/std_bmi_add.vue').default },
                 { path: '/std_bmi_edit', name:'std_bmi_edit', component: require('./components/students/StudentHealth/BMI/std_bmi_edit.vue').default },
                 { path: '/std_bmi_view', name:'std_bmi_view', component: require('./components/students/StudentHealth/BMI/std_bmi_view.vue').default },
+            ]
+        },
+        // Endorse Records
+        { path: '/endorse_health_records',
+        component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_index.vue').default,
+            children: [
+                { path: '/', name:'endorse_health_records', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
+                { path: '/endorse_records_list', name:'endorse_records_list', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
+                { path: '/endorse_records_add', name:'endorse_records_add', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_add.vue').default },
+                { path: '/endorse_records_edit', name:'endorse_records_edit', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_edit.vue').default },
+                { path: '/endorse_records_view', name:'endorse_records_view', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_view.vue').default },
             ]
         },
     ]

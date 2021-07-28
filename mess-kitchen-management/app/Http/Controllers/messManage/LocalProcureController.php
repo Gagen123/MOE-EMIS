@@ -21,10 +21,11 @@ class LocalProcureController extends Controller
     public function saveLocalProcure(Request $request){
       $id = $request->id;
       if($id != null){
-        DB::table('local_procures')->where('id', $request->id)->delete();
+      //  DB::table('local_procures')->where('id', $request->id)->update();
         foreach ($request->local_item as $i=> $item){
-            $itm_id=explode('_',$item['item'])[0];
-            $unitid=explode('_',$item['item'])[1];
+            // $itm_id=explode('_',$item['item'])[0];
+            // $unitid=explode('_',$item['item'])[1];
+            
             $remarks='NA';
             if(isset($item['remark'])){
                 $remarks= $item['remark'];
@@ -37,19 +38,23 @@ class LocalProcureController extends Controller
             if(isset($item['amount'])){
                 $amount= $item['amount'];
             }
+            $source = $item['source'];
             $localprocure = array(
              'organizationId'             =>  $request->organizationId,
              'dateOfprocure'              =>  $request->dateOfprocure,
              'id'                         =>  $request->id,
-             'item_id'                    =>  $itm_id,
+             'item_id'                    =>  $item['item'],
              'quantity'                   =>  $quantity,
-             'unit_id'                    =>  $unitid,
+             'unit_id'                    =>  $item['unit'],
              'amount'                     =>  $amount,
+             'food_source'                =>  $source,
              'remark'                     =>  $remarks,
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
             );
-            $localpro = LocalProcure::create($localprocure);
+         //   dd($localprocure);
+            LocalProcure::where('id'.$id)->update($localprocure);
+            $localpro = LocalProcure::where('id',$id)->first();
         }
          return $this->successResponse($localpro,Response::HTTP_CREATED);
         }else {
@@ -71,6 +76,7 @@ class LocalProcureController extends Controller
             if(isset($item['amount'])){
                 $amount= $item['amount'];
             }
+            $source = $item['source'];
             $localprocure = array(
              'organizationId'             =>  $orgId,
              'dateOfprocure'              =>  $date,
@@ -78,6 +84,7 @@ class LocalProcureController extends Controller
              'quantity'                   =>  $quantity,
              'unit_id'                    =>  $unitid,
              'amount'                     =>  $amount,
+             'food_source'                =>  $source,
              'remark'                     =>  $remarks,
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
@@ -125,5 +132,6 @@ class LocalProcureController extends Controller
        //  dd($locId);
         $response_data=LocalProcure::where('id', $locId)->get();
         return $this->successResponse($response_data);
+       
     }
 }

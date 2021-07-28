@@ -15,7 +15,6 @@ class StudentVaccination extends Model
         'id',
         'StdHealthVaccinationId',
         'StdStudentId',
-        'dose',
         'status',
     ];
 }

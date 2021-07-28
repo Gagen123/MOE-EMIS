@@ -25,7 +25,8 @@
                               <tr>
                                   <th>Item</th>
                                   <th>Unit</th>
-                                  <th>Quantity</th>
+                                  <th>Quantity Receive</th>
+                                  <th>Damage Quantity</th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -45,19 +46,22 @@
                                   <td>
                                     <input type="number" disabled name="quantity" class="form-control" v-model="item.quantity"/>
                                   </td>
+                                   <td>
+                                    <input type="number" disabled name="damagequantity" class="form-control" v-model="item.damagequantity"/>
+                                  </td>
 
                                   <td>
                                        <input type="text" disabled name="remarks" class="form-control" v-model="item.remarks">
                                   </td>
                               </tr>
-                             <tr>
+                             <!-- <tr>
                                   <td colspan=7>
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>
+                              </tr> -->
                           </tbody>
                      </table>
                   </div>
@@ -123,7 +127,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
         },
 
         /**
@@ -264,7 +268,7 @@ export default {
                 this.form.items_received=[];
                 data.itemDetails.forEach(itm => {
                     this.form.items_received.push({
-                        item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks
+                        item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks, damagequantity:itm.damagequantity
                     });
                 });
                 this.remarks1=data.remarks;

@@ -13,11 +13,7 @@
                          <input type="text" class="form-control" @change="removeerror('plotno')" :class="{ 'is-invalid': form.errors.has('plotno') }" id="plotno" v-model="form.plotno" placeholder="plotno">
                         <has-error :form="form" field="plotno"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Lag Tharm(Peg Information): </label>
-                        <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
-                        <has-error :form="form" field="attachments"></has-error>
-                    </div>
+                   
                 </div>
 
                 <div class="form-group row">
@@ -26,7 +22,22 @@
                         <input type="text" class="form-control" @change="removeerror('sizecompound')" :class="{ 'is-invalid': form.errors.has('sizecompound') }" id="sizecompound" v-model="form.sizecompound" >
                         <has-error :form="form" field="sizecompound"></has-error>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label >Lag Tharm(Peg Information): </label>
+                        <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
+                        <has-error :form="form" field="attachments"></has-error>
+                    </div>
+                </div>
+                 <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Does the School/ECCD/ECR have Playground area?<span class="text-danger">*</span></label>
+                        <br>
+                        <label><input v-model="form.statusofplay"  type="radio" value="0" @click="showtextboxPlay('No')" />No</label>
+                        <label><input v-model="form.statusofplay"  type="radio" value="1" @click="showtextboxPlay('Yes')"/>Yes</label>
+                    </div>
+                </div>
+                <div class="form-group row" style="display:none" id="playgroundarea">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Size of Play Ground Area:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizeplayground')" :class="{ 'is-invalid': form.errors.has('sizeplayground') }" id="dob" v-model="form.sizeplayground">
                         <has-error :form="form" field="sizeplayground"></has-error>
@@ -36,7 +47,8 @@
                         <label>Size of Playground area used:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('playgroundused')" :class="{ 'is-invalid': form.errors.has('playgroundused') }" id="playgroundused" v-model="form.playgroundused">
                         <has-error :form="form" field="playgroundused"></has-error>
-                    </div> -->
+                    </div>
+                 
                     <!-- commented by tshewang, need to check insert link
                     comment: SAP: program type field is requred- Piggery, Poultry Cattle.. with add more features -->
                 </div>
@@ -60,6 +72,15 @@
 
                     </div>
                 </div>
+                <div class="form-group row">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label>Program Practise By the Organization:</label><br>
+                        <label  v-for="(item, index) in  programTypeList" :key="index" class="pr-4">
+                            <input  type="checkbox" name="programType" v-model="form.programType" :value="item.id"/> 
+                            {{item.name}}
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <div class="card-footer text-right">
@@ -75,6 +96,7 @@
 export default {
     data(){
         return{
+            programTypeList:[],
 
             form: new form({
                 id: '',
@@ -85,8 +107,10 @@ export default {
                 sizeplayground:'',
                 playgroundused: '',
                 status: '0',
+                statusofplay: '',
                 agriculturalarea: '',
                 areaused:'',
+                programType:[],
 
             })
         }
@@ -102,14 +126,23 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-       showtextbox:function(type){
-                if(type=="Yes"){
-                    $('#agriculturalarea').show();
-                }
-                else{
-                    $('#agriculturalarea').hide();
-                }
-            },
+        showtextbox:function(type){
+            if(type=="Yes"){
+                $('#agriculturalarea').show();
+            }
+            else{
+                $('#agriculturalarea').hide();
+            }
+        },  
+
+        showtextboxPlay:function(type){
+            if(type=="Yes"){
+                $('#playgroundarea').show();
+            }
+            else{
+                $('#playgroundarea').hide();
+            }
+        },
 
         onChangeFileUpload(e){
             this.form.attachments = e.target.files[0];
@@ -125,8 +158,10 @@ export default {
             this.form.sizeplayground= '';
             this.form.playgroundused= '';
             this.form.status= '';
+            this.form.statusofplay= '';
             this.form.agriculturalarea='';
             this.form.areaused = '';
+            
         },
 
         /**
@@ -151,8 +186,10 @@ export default {
                 formData.append('sizeplayground', this.form.sizeplayground);
                 formData.append('playgroundused', this.form.playgroundused);
                 formData.append('status', this.form.status);
+                formData.append('statusofplay', this.form.statusofplay);
                 formData.append('agriculturalarea', this.form.agriculturalarea);
                 formData.append('areaused', this.form.areaused);
+                formData.append('programType', this.form.programType);
                     axios.post('/organization/saveSchoolCompundDetails',formData,config)
                     .then(() => {
                     Toast.fire({
@@ -175,11 +212,18 @@ export default {
                 $('#'+errid).html('');
             }
         },
+        loadProgramTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProgramType'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.programTypeList =  data;
+            })
+        },
 
     },
-     mounted() {
+    mounted() {
 
-           $('.select2').select2();
+        $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
@@ -187,6 +231,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadProgramTypeList();
     }
 }
 </script>

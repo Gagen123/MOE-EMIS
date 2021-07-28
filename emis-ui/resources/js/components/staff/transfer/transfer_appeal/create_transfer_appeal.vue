@@ -67,11 +67,11 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
-                                <br/>
-                                <select class="form-control select2" id="transfer_type_id" v-model="form.transfer_type_id" :class="{ 'is-invalid': form.errors.has('transfer_type_id') }">
-                                <option v-for="(item, index) in transferType" :key="index" v-bind:value="item.id">{{ item.type }}</option>
-                            </select> 
+                            <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
+                             <br/>
+                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                                <option v-for="(item, index) in transfertypeList" :key="index" v-bind:value="item.id">{{ item.type }}</option>
+                            </select>
                         <has-error :form="form" field="transfer_type_id"></has-error>
                             </div>
                         </div>
@@ -163,9 +163,12 @@ export default {
                 transfer_type_id:'',
                 description:'',
                 current_date:'',
-                status:'',
+                status:'Submitted',
                 remarks:'',
+                service_name:'transfer appeal',
                 attachments:
+              
+
                 [{
                     file_name:'',attachment:''
                 }],
@@ -201,11 +204,11 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
-        loadAlltransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        loadtransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
-                let data = response.data.data;
-                this.transferType = data.data.data;
+                let data = response;
+                this.transfertypeList =  data.data.data;
             })
             .catch(function (error){
                 console.log(error);
@@ -215,7 +218,7 @@ export default {
         LoadApplicationDetailsByUserId(user_id){
               axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/' +user_id)
                 .then(response =>{
-                    this.form.status = response.data.status;
+                    // this.form.status = response.data.status;
                     if(response.data!="null" || response.data!=""||response.data.status == "Transfer Approved" || response.data.status == "Rejected"){
                     }
                     else if(response.data=="null" || response.data=="") {
@@ -231,15 +234,8 @@ export default {
             });
 
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
-            axios.get(uri)
-            .then(response =>{
-                this.form.type_id = response.data.data.id;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+        
+        
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/inter_transfer')
            .then((response) => {
@@ -272,41 +268,70 @@ export default {
         },
         shownexttab(nextclass){
             if(nextclass=="submit"){
-                        Swal.fire({
-                            text: "Are you sure you wish to submit for transfer approval ?",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes!',
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                const config = {
-                                    headers: {
-                                        'content-type': 'multipart/form-data'
-                                    }
-                                }
-                                let formData = new FormData();
-                                formData.append('id', this.form.id);
-                                formData.append('transfer_type_id', this.form.transfer_type_id);
-                                formData.append('name', this.form.name);
-                                formData.append('user_id', this.form.user_id);
-                                formData.append('status', this.form.status);
-                                formData.append('description', this.form.description);
-                                for(let i=0;i<this.form.ref_docs.length;i++){
-                                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
-                                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
-                                }
-                                axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
-                                .then((response) =>{
-                                    this.applyselect2();
-                                    this.$router.push('/list_inter_transfer');
-                                })
-                                .catch((error) => {
-                                    console.log("Errors:"+error)
-                                });
+                Swal.fire({
+                    text: "Are you sure you wish to submit for transfer appeal ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
                             }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('transfer_type_id', this.form.transfer_type_id);
+                        formData.append('name', this.form.name);
+                        formData.append('user_id', this.form.user_id);
+                        formData.append('status', this.form.status);
+                        formData.append('service_name', this.form.service_name);
+                        formData.append('description', this.form.description);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                        }
+                        axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
+                        .then((response) =>{
+                            if(response.data=="Not Approved"){
+                               Swal.fire({
+                                    html: "Your application is still under process ! ",
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
+                            });
+                            }
+                            else if(response.data=="Not Contain"){
+                                Swal.fire({
+                                    html: "You are not eligible for applying transfer appeal since you have not applied any type transfer yet! ",
+                                    icon: 'error',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
+                                })
+                            }
+                            else{
+                                 Swal.fire({
+                                    html: "Your application for transfer appeal has been submitted successfully ",
+                                    icon: 'success',
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'okay!',
+                            });
+                            this.applyselect2();
+                            this.$router.push('/list_transfer_appeal');
+                            }
+                            
+                        })
+                        .catch((error) => {
+                            console.log("Errors:"+error)
                         });
+                    }
+                });
                 }
         },
         change_tab(nextclass){
@@ -330,19 +355,19 @@ export default {
                 console.log(errors)
             });
         },
-        changefunction(id){
+         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
+            if(id=="transfer_type_id"){
+                this.form.transfer_type_id=$('#transfer_type_id').val();
+            }
         },
         applyselect2(){
             if(!$('#transfer_type_id').attr('class').includes('select2-hidden-accessible')){
                 $('#transfer_type_id').addClass('select2-hidden-accessible');
-            }
-            if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
-                $('#role_id').addClass('select2-hidden-accessible');
             }
         }, 
     },
@@ -363,8 +388,7 @@ export default {
         this.changefunction(id);
         });
         this.profile_details();
-        this.LoadTransferType();
-        this.loadAlltransferType();
+        this.loadtransferType();
         this.loadtransferwindow();
         this.LoadApplicationDetailsByUserId();
     },

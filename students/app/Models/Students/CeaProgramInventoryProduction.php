@@ -16,7 +16,6 @@ class CeaProgramInventoryProduction extends Model
         'CeaProgrammeInventoryId',
         'CeaProgrammeInventoryItemId',
         'QuantityProduced',
-        'NoOfVariety',
         'AmountGenerated',
         'Remarks'
     ];

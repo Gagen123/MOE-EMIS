@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
                                     <option value="">--- Please Select ---</option>
@@ -43,7 +43,16 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo" @change="getfields('structureNo')">
+                            </div>
+                           
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
+                                 <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
+                                <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
+                                v-model="yr.consYear" >
+                              
                             </div>
                         </div>
                     </div>
@@ -56,12 +65,7 @@
                         <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                         <p>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Year of Construction:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields" name="yearOfConstruction" id="yearOfConstruction" type="text"
-                                v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
-                                <has-error :form="form" field="yearOfConstruction"></has-error>
-                            </div>
+                            
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area (Sq. meter):<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
@@ -109,10 +113,11 @@
                             <thead>
                                 <tr>
                                     <th style="width: 23%">Facility Type</th>
-                                    <th style="width: 15%">Facility No./Name</th>
-                                    <th style="width: 10%">Capacity</th>
+                                    <!-- <th style="width: 15%">Facility No./Name</th> -->
+                                    <th style="width: 10%">Capacity/Unit</th>
                                     <th style="width: 10%">Total Number</th>
-                                    <th style="width: 20%">Is Accessible to Disabled</th>
+                                    <th style="width: 15%">Is Accessible to Disabled</th>
+                                    <th style="width: 20%">Remarks</th>
                                     <th style="width: 22%">With Internet Connection</th>
                                 </tr>
                             </thead>
@@ -124,10 +129,10 @@
                                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                     </td>
-
+<!-- 
                                     <td>
                                         <input type="text" name="facilityNo" class="form-control" v-model="user.facilityNo"/>
-                                    </td>
+                                    </td> -->
                                     <td>
                                         <input type="number" name="capacity" class="form-control" v-model="user.capacity"/>
                                     </td>
@@ -140,6 +145,9 @@
                                         <label><input v-model="user.accessibleDisabled"  type="radio" value="0" /> No</label>
 
                                     </td>
+                                    <td>
+                                        <input type="text" name="remarks" class="form-control" v-model="user.remarks"/>
+                                    </td> 
                                     <td>
                                         <!-- <input type="number" name="internetConnection" class="form-control" v-model="user.internetConnection"/> -->
                                         <label><input v-model="user.internetConnection"  type="radio" value="1"/> Yes</label>
@@ -187,16 +195,17 @@ export default {
                 subCategory: '',
                 constructionType:'',
                 structureNo: '',
-                yearOfConstruction: '',
+               // yearOfConstruction: '',
                 plintchArea: '',
                 noOfFloor: '',
                 totalCapacity: '',
                 rampAccess: '1',
                 presentCondition: '1',
                 design: '',
+                yearofconstructinNo:[],
                 users:
                 [{
-                    facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
+                    facility:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
                 }],
             })
         }
@@ -221,7 +230,7 @@ export default {
             this.form.design='';
             let formReset =this.form.users;
             formReset.splice(0, formReset.length);
-            this.form.users.push({facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
+            this.form.users.push({facility:'',type:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
         },
 
         /**
@@ -315,7 +324,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.users.push({
-                facility:'',type:'',facilityNo:'',capacity:'',noOfFacility:'',
+                facility:'',type:'',remarks:'',capacity:'',noOfFacility:'',
                 accessibleDisabled:'',internetConnection:''})
         },
         /**
@@ -327,6 +336,12 @@ export default {
                 this.form.users.splice(index,1);
             }
         },
+        getfields(id){
+            this.form.yearofconstructinNo=[];
+            for(let i=0;i<$('#'+id).val();i++){
+                this.form.yearofconstructinNo.push({consYear:''});
+            }
+        }
     },
     mounted() {
         this.getCategoryDropdown();

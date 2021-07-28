@@ -23,7 +23,7 @@ class Infrastructure extends Model
         'subCategoryId',
         'constructionType',
         'structureNo',
-        'yearOfConstruction',
+        'yearofconstructinNo',
         'plintchArea',
         'noOfFloor',
         'totalCapacity',

@@ -205,7 +205,7 @@ class TransferController extends Controller{
         //     if(sizeof($files)>0 && !is_dir($file_store_path)){
         //         mkdir($file_store_path,0777,TRUE);
         //     }
-        //     if(sizeof($files)>0){
+        //     if(sizeof($files)>0){insertWorkflow
         //         foreach($files as $index => $file){
         //             $file_name = time().'_' .$file->getClientOriginalName();
         //             move_uploaded_file($file,$file_store_path.'/'.$file_name);
@@ -319,15 +319,40 @@ class TransferController extends Controller{
         }
         $request_data =[
             'id'                                =>  $request->id,
-            'transferType'                      =>  $request->transferType,
+            'transferType'                      =>  $request->transfer_type_id,
             'name'                              =>  $request->name,
             'description'                       =>  $request->description,
             'attachment_details'                =>  $attachment_details,
             'user_id'                           =>  $request->user_id,
             'status'                            =>  $request->status,
+            'working_agency_id'                 =>  $this->getWrkingAgencyId(),
         ];
-        dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
-       
+        if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$request->service_name,
+                'application_number'=>  json_decode($response_data)->application_no,
+                'screen_id'         =>  json_decode($response_data)->application_no,
+                'status_id'         =>  1,
+                'app_role_id'       => $this->getRoleIds('roleIds'),
+                'record_type_id'    => json_decode($response_data)->transferType,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
     }
+        return  $response_data;
+    }
+    public function LoadTransferAppealDetails($user_id=""){
+        $user_id=$this->userId();
+        $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
+        return $response_data;
+
+        
+    }
+    
 }

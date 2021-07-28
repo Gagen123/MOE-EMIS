@@ -4,8 +4,15 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Item Variety:<span class="text-danger">*</span></label>
+                        <select v-model="form.variety" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('variety') }" class="form-control" name="variety" id="variety">
+                            <option v-for="(item, index) in varietyList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="form" field="variety"></has-error>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Item Name:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -45,9 +52,11 @@ export default {
     data() {
         return {
             measurementList:[],
+            varietyList:[],
             form: new form({
                 id: '',
                 name: '',
+                variety:'',
                 central:'',
                 unit_id:'',
                 local:'',
@@ -107,9 +116,20 @@ export default {
                 console.log(error);
             });
         },
+        loadVarietyList(uri = 'masters/loadActiveStudentMasters/item_variety'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.varietyList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
     },
     created() {
         this.loadMeasurementList();
+        this.loadVarietyList();
     },
 
 }

@@ -26,8 +26,8 @@ class FoodReleaseController extends Controller
          if($id != null){
             $foodrelease = [
                 'dateOfrelease'             =>  $request['dateOfrelease'],
-                'dzongkhag_id'              =>  $request['dzongkhag'],
-                'org_id'                    =>  $request['organizaiton'],
+            //    'dzongkhag_id'              =>  $request['dzongkhag'],
+            //    'org_id'                    =>  $request['organizaiton'],
                 'quarter_id'                =>  $request['quarter'],
                 'remarks'                   =>  $request['remarks'],
                 'id'                        =>  $request['id'],
@@ -47,7 +47,6 @@ class FoodReleaseController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
-                  
                     FoodReleaseDocuments::create($attach);
                 }
             }
@@ -56,13 +55,14 @@ class FoodReleaseController extends Controller
         }else{
             $foodrelease = [
                 'dateOfrelease'             =>  $request['dateOfrelease'],
-                'dzongkhag_id'              =>  $request['dzongkhag'],
-                'org_id'                    =>  $request['organizaiton'],
+             //   'dzongkhag_id'              =>  $request['dzongkhag'],
+            //    'org_id'                    =>  $request['organizaiton'],
                 'quarter_id'                =>  $request['quarter'],
                 'remarks'                   =>  $request['remarks'],
                 'updated_by'                =>  $request->user_id,
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
+
             $foodrel = FoodRelease::create($foodrelease);
             $attachmentId =  $foodrel->id;
             if($request->attachment_details!=null && $request->attachment_details!=""){
@@ -114,34 +114,41 @@ class FoodReleaseController extends Controller
         }
     }
     public function loadFoodReleaseList($param=""){
-        $type=explode('__',$param)[1];
-        $id=explode('__',$param)[0];
-        if($type=="Org"){
-            $list = DB::table('food_releases')
-            ->select( 'dateOfrelease as dateOfrelease',
-             'dzongkhag_id as dzongkhag','org_id as organization',
-             'quarter_id as quarter','remarks as remarks','id'
-             )
-             ->where('org_id',$id)
-             ->get();
-        }
-        if($type=="Dzongkhag"){
-            $list = DB::table('food_releases')
-            ->select( 'dateOfrelease as dateOfrelease',
-             'dzongkhag_id as dzongkhag','org_id as organization',
-             'quarter_id as quarter','remarks as remarks','id'
-             )
-             ->where('dzongkhag_id',$id)
-             ->get();
-        }
-        if($type=="All"){
-            $list = DB::table('food_releases')
-            ->select( 'dateOfrelease as dateOfrelease',
-             'dzongkhag_id as dzongkhag','org_id as organization',
-             'quarter_id as quarter','remarks as remarks','id'
-             )->get();
-        }
-        return $list;
+        // $list = DB::table('food_releases')
+        // ->select( 'dateOfrelease as dateOfrelease','quarter_id as quarter','remarks as remarks')->where('foodreleaseId',$foodreleaseId)->get();
+        // return $list;
+        $response_data=FoodRelease::all();
+        return $response_data;
+
+        // $type=explode('__',$param)[1];
+        // $id=explode('__',$param)[0];
+        // if($type=="Org"){
+        //     $list = DB::table('food_releases')
+        //     ->select( 'dateOfrelease as dateOfrelease',
+
+        //      'quarter_id as quarter','remarks as remarks','id'
+        //      )
+        //      ->where('org_id',$id)
+        //      ->get();
+        // }
+        // if($type=="Dzongkhag"){
+        //     $list = DB::table('food_releases')
+        //     ->select( 'dateOfrelease as dateOfrelease',
+        //      'dzongkhag_id as dzongkhag','org_id as organization',
+        //      'quarter_id as quarter','remarks as remarks','id'
+        //      )
+        //      ->where('dzongkhag_id',$id)
+        //      ->get();
+        // }
+        // if($type=="All"){
+        //     $list = DB::table('food_releases')
+        //     ->select( 'dateOfrelease as dateOfrelease',
+        //      'dzongkhag_id as dzongkhag','org_id as organization',
+        //      'quarter_id as quarter','remarks as remarks','id'
+        //      )->get();
+        // }
+        // return $list;
+
     }
 
     public function getFoodReleaseItem($foodreleaseId=''){

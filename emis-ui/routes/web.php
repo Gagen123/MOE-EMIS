@@ -141,10 +141,17 @@ Route::prefix('masters')->group(function () {
     //Get Scouts Section Level By Scouts Section Level
     Route::get('/getScoutSectionLevel/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSectionLevel'])->name('getScoutSectionLevel');
     Route::get('/getScoutBadge/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutBadge'])->name('getScoutBadge');
+    //Program AJAX
+    Route::get('/getProgramItems/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getProgramItems'])->name('getProgramItems');
 
     Route::post('/saveValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'saveValidationcondition'])->name('saveValidationcondition');
     Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
     Route::post('/saveCounsellingType', [App\Http\Controllers\student\StudentMasterController::class, 'saveCounsellingType'])->name('saveCounsellingType');
+
+    Route::post('/saveFoodSourceType', [App\Http\Controllers\student\StudentMasterController::class, 'saveFoodSourceType'])->name('saveFoodSourceType');
+    Route::get('/loadfoodSourceList', [App\Http\Controllers\student\StudentMasterController::class, 'loadfoodSourceList'])->name('loadfoodSourceList');
+    Route::get('/loadActiveFoodSourceMaster', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveFoodSourceMaster'])->name('loadActiveFoodSourceMaster');
+
 
     // Academic Master
     Route::post('/saveAcademicMasters', [App\Http\Controllers\AdministrationController::class, 'saveAcademicMasters'])->name('saveAcademicMasters');
@@ -386,6 +393,7 @@ Route::prefix('organization')->group(function () {
     //Compound Details
     Route::post('/saveSchoolCompundDetails', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveSchoolCompundDetails');
     Route::get('/loadcompoundareadetials', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
+    Route::get('/getEditCompoundDetail/{compId}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'getEditCompoundDetail'])->name('getEditCompoundDetail');
 
     //disaster Information
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
@@ -476,6 +484,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
         Route::post('/SaveTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'SaveTransferAppeal'])->name('SaveTransferAppeal');
         Route::get('/LoadApplicationDetailsByUserId/{user_id}', [App\Http\Controllers\staff\TransferController::class, 'LoadApplicationDetailsByUserId'])->name('LoadApplicationDetailsByUserId');
+        Route::get('/LoadTransferAppealDetails', [App\Http\Controllers\staff\TransferController::class, 'LoadTransferAppealDetails'])->name('LoadTransferAppealDetails');
         Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
         Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
         Route::get('/LoadSchoolByDzoId/{param}/{id}', [App\Http\Controllers\staff\TransferController::class, 'LoadSchoolByDzoId'])->name('LoadSchoolByDzoId');
@@ -605,6 +614,7 @@ Route::prefix('loadCommons')->group(function () {
 });
 
 Route::prefix('students')->group(function () {
+
     Route::prefix('admission')->group(function (){
         Route::post('/saveStudentDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentDetails'])->name('saveStudentDetails');
         Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
@@ -691,8 +701,10 @@ Route::prefix('students')->group(function () {
     //Vaccinations
     Route::post('/addVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addVaccinationRecords'])->name('addVaccinationRecords');
     Route::post('/updateVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'updateVaccinationRecords'])->name('updateVaccinationRecords');
-    Route::post('/loadVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationRecords'])->name('loadVaccinationRecords');
-
+    Route::get('/loadVaccinationRecords', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationRecords'])->name('loadVaccinationRecords');
+    Route::get('/getHealthVaccinationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthVaccinationDetails'])->name('getHealthVaccinationDetails');
+    Route::get('/loadViewVaccinationDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewVaccinationDetails'])->name('loadViewVaccinationDetails');
+    Route::get('/getVaccinationDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getVaccinationDetails'])->name('getVaccinationDetails');
 
     Route::post('/addBmiRecords', [App\Http\Controllers\student\StudentHealthController::class, 'addBmiRecords'])->name('addBmiRecords');
     Route::post('/updateBmiRecord', [App\Http\Controllers\student\StudentHealthController::class, 'updateBmiRecord'])->name('updateBmiRecord');
@@ -702,6 +714,10 @@ Route::prefix('students')->group(function () {
     Route::get('/loadViewBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewBmiDetails'])->name('loadViewBmiDetails');
     Route::get('/getHealthBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthBmiDetails'])->name('getHealthBmiDetails');
     Route::get('/getBmiDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getBmiDetails'])->name('getBmiDetails');
+    //Endorse Health Record Routes
+    Route::get('/loadHealthSummary', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthSummary'])->name('loadHealthSummary');
+    Route::get('/loadresult/{months}/{gender}/{bmi}', [App\Http\Controllers\student\StudentHealthController::class, 'loadresult'])->name('loadresult');
+
 
     Route::post('/saveStudentProject', [App\Http\Controllers\student\StudentProjectController::class, 'saveStudentProject'])->name('saveStudentProject');
     Route::get('/loadStudentProjects/{param}', [App\Http\Controllers\student\StudentProjectController::class, 'loadStudentProjects'])->name('loadStudentProjects');
@@ -813,6 +829,7 @@ Route::prefix('mess_manage')->group(function () {
   //  Route::get('/loadStockReceivedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceivedList'])->name('loadStockReceivedList');
 
     Route::post('/saveStockIssued', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssued'])->name('saveStockIssued');
+    Route::get('/getAvailableStocks/{id}/{type}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getAvailableStocks'])->name('getAvailableStocks');
     Route::get('/StockIssueEditList/{lssId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'StockIssueEditList'])->name('StockIssueEditList');
     Route::get('/loadStockIssuedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockIssuedList'])->name('loadStockIssuedList');
     Route::get('/getquantity/{itemId}/{chekva}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getquantity'])->name('getquantity');

@@ -24,13 +24,14 @@
                         <label>Calander For:</label>
                         <select class="form-control select2" id="type" v-model="form.type" :class="{ 'is-invalid': form.errors.has('type') }">
                             <option value="">--Select--</option>
-                                <template v-if="form.user_type=='Dzongkhag'">
+                                <template >
                                     <option value="Intra Transfer">Intra Transfer</option>
-                                    <option value="Intra Transfer Appeal">Intra Transfer Appeal</option>
                                 </template>
-                                <template v-if="form.user_type=='Ministry'">
+                                <template >
                                     <option value="Inter Transfer">Inter Transfer</option>
-                                    <option value="Inter Transfer Appeal">Inter Transfer Appeal</option>
+                                </template>
+                                <template >
+                                    <option value="Inter Transfer">Transfer Appeal</option>
                                 </template>
                         </select>
                         <has-error :form="form" field="type"></has-error>

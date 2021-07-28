@@ -16,10 +16,10 @@ class LoadOrganizaitonController extends Controller{
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
         //if Ministry then give entire list
-        $access_level = $this->getAccessLevel();
-        if($access_level == 'Ministry' && $type!="dzongkhagwise" && $type!="gewoggwise"){
-            $type = "allorganizationList";
-        }
+        // $access_level = $this->getAccessLevel();
+        // if($access_level == 'Ministry'){//&& $type!="dzongkhagwise" && $type!="gewoggwise"  this line is taken out
+        //     $type = "allorganizationList";
+        // }
 
         $param="";
         //type=allorganizationList: to list entire organization
@@ -88,9 +88,8 @@ class LoadOrganizaitonController extends Controller{
         if($type=="all_division"){
             $param=$parent_id;
         }
-
         if($type=="user_dzongkhag"){
-            $param=$this->getUserDzoId();
+            $param=$parent_id;
         }
 
         return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);

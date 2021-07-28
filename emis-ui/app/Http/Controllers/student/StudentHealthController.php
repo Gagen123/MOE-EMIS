@@ -293,7 +293,13 @@ class StudentHealthController extends Controller
         $student_records = $this->apiService->listData('emis/students/getBmiDetails/'.$id);
         return $student_records;
     }
-    
+
+    public function loadresult($months="",$gender="",$bmi=""){
+        $student_records = $this->apiService->listData('emis/students/loadresult/'.$months.'/'.$gender.'/'.$bmi);
+        return $student_records;
+    }
+
+
 
     /**
      * Load the health details of the view
@@ -314,7 +320,7 @@ class StudentHealthController extends Controller
         $student_records = $this->apiService->listData('emis/students/getScreeningDetails/'.$id);
         return $student_records;
     }
-    
+
     /**
      * Load the health supplementation details of the view
      * The param takes 4 parameters - class, stream, section and health id separated by __ (double underscore)
@@ -347,7 +353,6 @@ class StudentHealthController extends Controller
     public function addVaccinationRecords(Request $request){
         $rules = [
             'vaccination'           => 'required',
-            'date'                  => 'required',
             'dose'                  => 'required',
             'std_class'             => 'required',
             'std_section'           => 'required',
@@ -355,12 +360,12 @@ class StudentHealthController extends Controller
 
         $customMessages = [
             'vaccination.required'              => 'This field is required',
-            'date.required'                     => 'This field is required',
             'dose.required'                     => 'This field is required',
             'std_class.required'                => 'This field is required',
             'std_section.required'              => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
+        
 
         $data =[
             'id'                    => $request->id,
@@ -383,5 +388,41 @@ class StudentHealthController extends Controller
         catch(GuzzleHttp\Exception\ClientException $e){
             return $e;
         }
+    }
+
+    /**
+     * load the vaccination records for listing
+     */
+
+    public function loadVaccinationRecords(){
+        $param = $this->getWrkingAgencyId();
+        $student_records = $this->apiService->listData('emis/students/loadVaccinationRecords/'.$param);
+        return $student_records;
+    }
+
+    public function getHealthVaccinationDetails($param=""){
+        $student_records = $this->apiService->listData('emis/students/getHealthVaccinationDetails/'.$param);
+        return $student_records;
+    }
+
+    
+    public function loadViewVaccinationDetails($param=''){
+        $student_records = $this->apiService->listData('emis/students/loadViewVaccinationDetails/'.$param);
+        return $student_records;
+    }
+    
+    public function getVaccinationDetails($id=''){
+        $student_records = $this->apiService->listData('emis/students/getVaccinationDetails/'.$id);
+        return $student_records;
+    }
+
+    /**
+     * Functions for Endorsing health records
+     */
+
+    public function loadHealthSummary(){
+        $org_id = $this->getWrkingAgencyId();
+        $health_records = $this->apiService->listData('emis/students/loadHealthSummary/'.$org_id);
+        return $health_records;
     }
 }
