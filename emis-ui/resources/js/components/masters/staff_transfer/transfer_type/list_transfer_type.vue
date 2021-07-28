@@ -46,18 +46,16 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_transfer_undertaking',params: {data:data}});
+            this.$router.push({name:'edit_transfer_type',params: {data:data}});
         },
     },
     mounted(){ 
         this.loadtransferTypeList();
-        this.dt =  $("#working-agency-table").DataTable()
     },
     watch: {
         transferList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
             });
         }
     },
