@@ -420,9 +420,41 @@ class StudentHealthController extends Controller
      * Functions for Endorsing health records
      */
 
+    
+    public function saveHealthEndorsement(Request $request){
+        $data =[
+            'id'                            => $request->id,
+            'endorsed_by'                   => $this->userId(),
+            'health_record_type'            => $request->health_record_type,
+            'organization_id'               => $this->getWrkingAgencyId(),
+            'user_id'                       => $this->userId()
+        ];
+
+        $response_data= $this->apiService->createData('emis/students/saveHealthEndorsement', $data);
+        return $response_data;
+    }
+
     public function loadHealthSummary(){
         $org_id = $this->getWrkingAgencyId();
         $health_records = $this->apiService->listData('emis/students/loadHealthSummary/'.$org_id);
+        return $health_records;
+    }
+
+    public function loadScreeningEndorsement(){
+        $org_id = $this->getWrkingAgencyId();
+        $health_records = $this->apiService->listData('emis/students/loadScreeningEndorsement/'.$org_id);
+        return $health_records;
+    }
+
+    public function loadVaccinationEndorsement(){
+        $org_id = $this->getWrkingAgencyId();
+        $health_records = $this->apiService->listData('emis/students/loadVaccinationEndorsement/'.$org_id);
+        return $health_records;
+    }
+
+    public function loadSupplementationEndorsement(){
+        $org_id = $this->getWrkingAgencyId();
+        $health_records = $this->apiService->listData('emis/students/loadSupplementationEndorsement/'.$org_id);
         return $health_records;
     }
 }

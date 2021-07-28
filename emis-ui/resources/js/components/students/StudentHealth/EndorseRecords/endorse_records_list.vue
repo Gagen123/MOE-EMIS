@@ -19,8 +19,11 @@
                             <td>{{ item.date}}</td>
                             <td>{{ item.not_given}}</td>
                             <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="showview(item)"><i class="fas fa-search"></i > View</a>
+                                <div class="btn-group btn-group-sm" v-if="showmess">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'view')"><i class="fas fa-eye"></i ></a>
+                                </div>
+                                <div class="btn-group btn-group-sm" v-if="showprincipaltask">
+                                    <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'open')"><i class="fa fa-file-signature"></i > Open</a>
                                 </div>
                             </td>
                         </tr>
@@ -103,6 +106,30 @@ export default {
         this.loadStreamArrayList();
         
         this.loadDataList();
+        // axios.get('common/getSessionDetail')
+        // .then(response => {
+        //     let data = response.data.data;
+        //     let roleName="";
+        //     for(let i=0;i<data['roles'].length;i++){
+        //         if(i==data['roles'].length-1){
+        //             roleName+=data['roles'][i].roleName;
+        //         }
+        //         else{
+        //             roleName+=data['roles'][i].roleName+', ';
+        //         }
+        //     }
+        //     if(roleName.toLowerCase().includes('teacher')){
+        //         this.showmess=true;
+        //         this.loadFoodReleaseListing('Creater');
+        //     }
+        //     if(roleName.toLowerCase().includes('principal') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
+        //         this.showprincipaltask=true;
+        //         this.loadFoodReleaseListing('OrgWise');
+        //     }
+        // })
+        // .catch(errors =>{
+        //     console.log(errors)
+        // });
     },
 }
 </script>

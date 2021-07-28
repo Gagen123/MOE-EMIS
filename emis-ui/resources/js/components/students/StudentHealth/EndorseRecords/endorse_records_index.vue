@@ -4,6 +4,7 @@
             <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('endorse_records_list')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('endorse_records_add')"><i class="fa fa-plus"></i> Prepare Health Record</button>
                 </span>
             </div>
             <div class="card-body">  
