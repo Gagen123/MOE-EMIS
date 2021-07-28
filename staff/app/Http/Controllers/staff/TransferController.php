@@ -31,11 +31,11 @@ class TransferController extends Controller{
 
     public function submitIntialapplicantDetails(Request $request){
         $rules = [
-            'staff_id'              =>  'required  ',
+            'name'                  =>  'required  ',
             'reason_id'             =>  'required',
         ];
         $customMessages = [
-            'staff_id.required'     => 'Please select applicant',
+            'name.required'         => 'Please select applicant',
             'reason_id.required'    => 'Please select transfer reason',
         ];
         $this->validate($request, $rules,$customMessages);
@@ -43,7 +43,7 @@ class TransferController extends Controller{
             'id'                                =>  $request->id,
             'transfer_type_id'                  =>  $request->record_type_id,
             'transfer_window_id'                =>  $request->transferwindow_id,
-            'staff_id'                          =>  $request->staff_id,
+            'applicant_name'                    =>  $request->name,
             'transferType'                      =>  $request->transferType,
             'transfer_reason_id'                =>  $request->reason_id,
             'description'                       =>  $request->description,
@@ -52,7 +52,13 @@ class TransferController extends Controller{
             'created_at'                        =>  date('Y-m-d h:i:s'),
         ];
         if($request->id=="" || $request->id==null){
+            try{
             $response_data = TransferApplication::create($request_data);
+            }
+            catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+            }
+           
         }
         else{
             $act_det = TransferApplication::where ('id', $request->id)->first();

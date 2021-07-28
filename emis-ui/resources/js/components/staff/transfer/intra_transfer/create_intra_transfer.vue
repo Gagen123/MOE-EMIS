@@ -66,12 +66,9 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Applicant:<i class="text-danger">*</i></label>
-                                <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="staff_id"></has-error>
+                                <label class="mb-0.5">Applicant Name:</label>
+                                <span class="text-blue text-bold">{{this.form.name}}</span>
+                                <has-error :form="form" field="name"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -237,11 +234,11 @@ export default {
             form: new form({
                 id: '',
                 t_year:'',
+                name:'',
                 t_from_date:'',
                 t_to_date:'',
                 t_remarks:'',
                 transferwindow_id:'',
-                staff_id: '',
                 reason_id:'',
                 description:'',
                 current_date:'',
@@ -361,13 +358,12 @@ export default {
         },
         shownexttab(nextclass){
             if(nextclass=="undertaking-tab"){
-            //   if(this.form.t_to_date <=this.form.current_date){
-            //         if(this.form.t_from_date >this.form.current_date){
+              if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
                     let formData = new FormData();
 
                         formData.append('type_id', this.form.type_id);
                         formData.append('transferwindow_id', this.form.transferwindow_id);
-                        formData.append('staff_id', this.form.staff_id);
+                        formData.append('name', this.form.name);
                         formData.append('reason_id', this.form.reason_id);
                         formData.append('description', this.form.description);
                         formData.append('transferType', this.form.transferType);
@@ -376,7 +372,6 @@ export default {
                     .then((response) =>{
                         if(response!="" && response!="No Screen"){
                             this.form.id=response.data.data.id;
-                            // let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                             this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
                             Toast.fire({
                                 icon: 'success',
@@ -389,14 +384,16 @@ export default {
                         console.log("Errors:"+error)
                     });
                     this.change_tab(nextclass);
-            //     }
-            //   }
-            //      else{
-            //       Toast.fire({
-            //             icon: 'error',
-            //             title: 'Your application failed to submit since transfer window period is closed'
-            //         });
-            //  }
+              }
+                 else{
+                  Swal.fire({
+                    text: "Time period for applying intra transfer is closed for the moment!",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Okay!',
+                    })
+             }
             }
                 else if(nextclass=="final-tab"){
                     if(this.validated_final_form()){
@@ -429,7 +426,6 @@ export default {
                                 axios.post('staff/transfer/submitFinalapplicantDetails', formData, config)
                                 .then((response) =>{
                                     if(response!="" && response!="No Screen"){
-                                        // let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                         this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
                                         Toast.fire({
                                             icon: 'success',
@@ -458,10 +454,7 @@ export default {
         profile_details(){
             axios.get('common/getSessionDetail')
             .then(response => {
-                let data5689
-                p = response.data.data;
-                this.form.staff_id=data['staff_id'];
-                $('#staff_id').val(data['staff_id']).trigger('change');
+                this.form.name = response.data.data.Full_Name;
             })
             .catch(errors =>{
                 console.log(errors)

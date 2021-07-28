@@ -78,18 +78,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-         getapplicatName(staff_id){
-            let uri ='staff/transfer/getapplicatName/'+staff_id;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data;
-                this.form.staff_name = data.name;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-
-        },
         loadeditpage(item){
             this.$router.push({name:"edit_intra_transfer",params:{data:item}});
         },
@@ -99,8 +87,6 @@ export default {
     mounted() {
         this.loadtransferDetails();
         this.loadstaff();
-        this.getapplicatName();
-        this.dt =  $("#training-table").DataTable()
     },
     watch: {
         transfer_list(){
