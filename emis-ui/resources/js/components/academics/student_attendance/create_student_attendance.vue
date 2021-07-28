@@ -7,13 +7,13 @@
                     <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                    <label>Select Class:<span class="text-danger">*</span></label> 
+                    <label>Select Class:<span class="text-danger">*</span></label>
                     <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="remove_err('class_stream_section_id')">
                         <option selected="selected" value="">---Select---</option>
                         <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                             {{ item.class_stream_section }}
                         </option>
-                    </select> 
+                    </select>
                     <span id= "errorId" class="text-danger">{{ errorMessage }}</span>
                 </div>
                 <div class="col-auto pt-1 mt-4">
@@ -42,7 +42,7 @@
                                     <div class="form-check">
                                         <input  v-model="studentList[index].is_present" class="form-check-input" type="checkbox" id="present">
                                     </div>
-                                </td>   
+                                </td>
                                 <td>
                                     <div v-if="item.is_present==0">
                                         <select class="select2 form-control form-control-sm" required v-model="studentList[index].aca_absence_reason_id">
@@ -50,9 +50,9 @@
                                             <option selected v-for="(item1, index1) in remarkList" :key="index1" :value="item1.id">
                                                 {{ item1.name }}
                                             </option>
-                                        </select> 
+                                        </select>
                                     </div>
-                                </td>                                                                           
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -61,9 +61,9 @@
             <div class="card-footer text-right">
                 <button v-if="studentList.length" type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button v-if="studentList.length" type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div>        
+            </div>
         </form>
-    </div>     
+    </div>
 </template>
 
 <script>
@@ -95,7 +95,7 @@ export default {
                 let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
                 classTeachers.forEach((classTeacher,index) => {
                     classSections.forEach(item => {
-                        if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || (classTeacher.org_stream_id == null && item.org_stream_id == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.org_section_id == null && item.org_section_id == null))){
+                        if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || ((classTeacher.org_stream_id == null ||classTeacher.org_stream_id == "") && (item.org_stream_id == null || item.org_stream_id == ""))) && (classTeacher.org_section_id == item.org_section_id || ((classTeacher.org_section_id == null || classTeacher.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
                             classTeachers[index].org_class_id = item.org_class_id;
                             classTeachers[index].org_stream_id = item.org_stream_id
                             classTeachers[index].org_section_id = item.org_section_id
@@ -112,8 +112,7 @@ export default {
                         }
                     })
                 });
-                this.classTecherClass = classTeachers
-
+                this.classTecherClass = classTeachers;
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -121,17 +120,18 @@ export default {
              }
         },
         getStudents(){
-            if($('#class_stream_section_id').val()===''){
+            if($('#class_stream_section_id').val()==''){
                 this.errorMessage = "This field is required"
             }
-           let uri = 'academics/getStudentsForAttendance'
+            let uri = 'academics/getStudentsForAttendance'
             uri += ('?action='+this.action+'&attendance_date='+this.attendance_date+'&class_stream_section='+this.class_stream_section_id[4]+'&OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
-           if(this.class_stream_section_id[2] !== null){
+            if(this.class_stream_section_id[2] !== null && this.class_stream_section_id[2] !== ""){
                     uri += ('&streamId='+this.class_stream_section_id[2])
             }
-            if(this.class_stream_section_id[3] !== null){
+            if(this.class_stream_section_id[3] !== null && this.class_stream_section_id[3] !== ""){
                 uri += ('&sectionId='+this.class_stream_section_id[3])
             }
+            alert(uri);
                 axios.get(uri)
                 .then(response => {
                     if(response.data.error){
@@ -140,13 +140,13 @@ export default {
                             text: response.data.error,
                         })
                     }else{
-                        let studentList = response.data.student 
+                        let studentList = response.data.student
                         let aa = []
                         studentList.forEach((item)=>{
                             aa['CidNo'] = item.CidNo
                             aa['Name'] = item.Name
                             aa['std_student_id'] = item.std_student_id
-                            aa['is_present'] = 1 
+                            aa['is_present'] = 1
                             const obj = {...aa};
                             this.studentList.push(obj);
                         })
@@ -181,7 +181,6 @@ export default {
                 .catch(function(error){
                 console.log( error);
             });
-       
         },
     },
     mounted(){
@@ -218,8 +217,8 @@ export default {
                 });
             },
         })
-       
-    }, 
+
+    },
     watch: {
         studentList(val) {
             this.dt.destroy();

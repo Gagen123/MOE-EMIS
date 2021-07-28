@@ -334,7 +334,7 @@ export default {
                         this.student_form.studentList = response.data;
                 })
                 .catch(() => {
-                    consoele.log("Error:"+e)
+                    console.log("Error:"+e)
                 });
 
                 this.student_form.std_section=$('#std_section').val();

@@ -44,7 +44,7 @@ export default {
               let aa = []
                classWithElectiveSubjects.forEach((classWithElectiveSubject,index)=>{
                     classStreamSections.forEach((classStreamSection) =>{
-                        if(classStreamSection.org_class_id == classWithElectiveSubject.org_class_id && (classStreamSection.org_stream_id == classWithElectiveSubject.org_stream_id || (classStreamSection.org_stream_id == null && classWithElectiveSubject.org_stream_id == null))){
+                        if(classStreamSection.org_class_id == classWithElectiveSubject.org_class_id && (classStreamSection.org_stream_id == classWithElectiveSubject.org_stream_id || ((classStreamSection.org_stream_id == null || classStreamSection.org_stream_id == "") && (classWithElectiveSubject.org_stream_id == null || classWithElectiveSubject.org_stream_id == "")))){
                             if(classStreamSection.stream && classStreamSection.section){
                                 aa["class_stream_section"] =  classStreamSection.class+' '+classStreamSection.stream+' '+classStreamSection.section
                             }else if(classStreamSection.stream){

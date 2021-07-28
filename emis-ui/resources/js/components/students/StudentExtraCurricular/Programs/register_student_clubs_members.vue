@@ -34,7 +34,7 @@
                 </div>
                
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Responsibilities:</label>
@@ -42,7 +42,7 @@
                     <has-error :form="student_form" field="responsibilities"></has-error>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- Need to fix this later -->
             <!-- <div class="row">
                 <div class="col-sm-6">
