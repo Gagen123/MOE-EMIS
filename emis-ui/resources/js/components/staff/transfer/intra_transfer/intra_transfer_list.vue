@@ -16,7 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ form.applicant_name}}</td>
+                             <td>{{ item.applicant_name}}</td>
                             <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
@@ -58,7 +58,7 @@ export default {
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
                 let data = response.data
-                this.form.applicant_name = response.data[0].applicant_name;
+                // this.form.applicant_name = response.data[0].applicant_name;
                 this.transfer_list = data;
              })
             .catch((error) => {
