@@ -112,6 +112,7 @@
                                             <td>Preferences 1</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag1') }" class="form-control select2" name="preference_dzongkhag1" id="preference_dzongkhag1">
+                                                    <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag1"></has-error>
@@ -123,9 +124,11 @@
                                             <td>Preferences 2</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag2') }" class="form-control select2" name="preference_dzongkhag2" id="preference_dzongkhag2">
+                                                  <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag2"></has-error>
+                                                <span class="text-danger" id="preference_dzongkhag2_err"></span>
                                             </td>
                                         </tr>
                                         <tr>
@@ -133,9 +136,11 @@
                                             <td>Preferences 3</td>
                                             <td>
                                                 <select v-model="form.preference_dzongkhag3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag3') }" class="form-control select2" name="preference_dzongkhag3" id="preference_dzongkhag3">
+                                                   <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
+                                               <span class="text-danger" id="preference_dzongkhag3_err"></span>
                                             </td> 
                                         </tr>
                                     </tbody>
@@ -425,17 +430,14 @@ export default {
                                 }
                                 axios.post('/staff/transfer/submitFinalapplicantDetails', formData, config)
                                 .then((response) =>{
-                                    if(response!="" && response!="No Screen"){
-                                        this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-
-                                        Swal.fire({
-                                        text: "Application for Transfer has been submitted for further action",
+                                    if(response.data!="" && response!="No Screen"){
+                                    let message=" Your transfer application has been submitted with the system generated applicaiton number: "+response.data.application_number;
+                                    this.$router.push({name:'inter_transfer_acknowledgement',params: {data:message}});
+                                    
+                                    Toast.fire({
                                         icon: 'success',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#3085d6',
-                                        cancelButtonColor: '#d33',
-                                        confirmButtonText: 'Yes!',
-                                        })
+                                        title: 'Application for Transfer has been submitted for further action'
+                                    });
                                     }
                                     this.applyselect2();
                                     this.$router.push('/list_inter_transfer');
@@ -499,6 +501,7 @@ export default {
                 console.log("Error."+error);
             });
         },
+         
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -510,14 +513,31 @@ export default {
             }
             if(id=="preference_dzongkhag1"){
                 this.form.preference_dzongkhag1=$('#preference_dzongkhag1').val();
+                this.checkforselectedval(1);
             }
             if(id=="preference_dzongkhag2"){
                 this.form.preference_dzongkhag2=$('#preference_dzongkhag2').val();
+                this.checkforselectedval(2);
             }
             if(id=="preference_dzongkhag3"){
                 this.form.preference_dzongkhag3=$('#preference_dzongkhag3').val();
+                this.checkforselectedval(3);
             }
 
+        },
+        checkforselectedval(cout){
+            if($('#preference_dzongkhag1').val()!="" && $('#preference_dzongkhag2').val()!="" && $('#preference_dzongkhag1').val()==$('#preference_dzongkhag2').val()){
+                $('#preference_dzongkhag'+cout+'_err').html('This dzongkhag is already selected');
+                $('#preference_dzongkhag'+cout).val('').trigger('change');
+            }
+            if($('#preference_dzongkhag2').val()!="" && $('#preference_dzongkhag3').val()!="" && $('#preference_dzongkhag2').val()==$('#preference_dzongkhag3').val()){
+                $('#preference_dzongkhag'+cout+'_err').html('This dzongkhag is already selected');
+                $('#preference_dzongkhag'+cout).val('').trigger('change');
+            }
+            if($('#preference_dzongkhag1').val()!="" && $('#preference_dzongkhag3').val()!="" && $('#preference_dzongkhag1').val()==$('#preference_dzongkhag3').val()){
+                $('#preference_dzongkhag'+cout+'_err').html('This dzongkhag is already selected');
+                $('#preference_dzongkhag'+cout).val('').trigger('change');
+            }
         },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
