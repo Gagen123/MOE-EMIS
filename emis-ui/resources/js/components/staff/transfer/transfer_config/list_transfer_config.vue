@@ -12,7 +12,7 @@
             <tbody>
                 <tr v-for="(item, index) in transferConfigurationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{transfertypeList}} {{transfertypeList[item.transfer_type_id]}} {{item.transfer_type_id}}</td>
+                    <td>{{transfertypeList[item.transfer_type_id]}}</td>
                     <td>{{ roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -44,12 +44,12 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        LoadTransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.transfertypeList[data[i].id] =data[i].type;
+                    this.transfertypeList[data[i].id] =data[i].name;
                 }
             })
             .catch(function (error){
@@ -62,7 +62,7 @@ export default {
             .then(response =>{
                 let data = response.data;
                  for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].id] = data[i].Name;
+                    this.roleList[data[i].Id] = data[i].Name;
                 }
             })
             .catch(function (error){

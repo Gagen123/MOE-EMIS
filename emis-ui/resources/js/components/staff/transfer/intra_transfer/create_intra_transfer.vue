@@ -30,6 +30,14 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
+                            <div class="card-header pb-0 pt-2">
+                                <h3 class="card-title">Transfer Window Details <span v-if="t_warning" class="text-danger">({{t_warning_message}})</span></h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-plus" ></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="card-body pb-0 mb-0" style="display:none">
                                 <div class="callout callout-success">
                                     <div class="form-group row">
@@ -54,14 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-header pb-0 pt-2">
-                                <h3 class="card-title">Transfer Window Details <span v-if="t_warning" class="text-danger">({{t_warning_message}})</span></h3>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                        <i class="fas fa-plus" ></i>
-                                    </button>
-                                </div>
-                            </div>
+
                         </div>
 
                         <div class="form-group row">
@@ -469,9 +470,9 @@ export default {
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/intra_transfer')
            .then((response) => {
-
                 let data=response.data.data[0];
                  if(data!=null){
+                     alert(data.to_date);
                     this.form.transferwindow_id=data.id;
                     this.form.t_from_date=data.from_date;
                     this.form.t_to_date=data.to_date;
@@ -480,12 +481,26 @@ export default {
                     this.form.t_id=data.id;
                     let to_date = new Date(data.to_date);
                     let today = new Date();
-                    let diffTime = Math.abs(to_date - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    let diffTime = Math.abs(today - to_date);
+                    let diffDays = Math.abs(diffTime / (1000 * 60 * 60 * 24));
+
+                    let todate=new Date(data.to_date);
+                    let formdate = today;
+                    // One day in milliseconds
+                    const oneDay = 1000 * 60 * 60 * 24;
+
+                    // Calculating the time difference between two dates
+                    const diffInTime = todate.getTime() - formdate.getTime();
+
+                    // Calculating the no. of days between two dates
+                    const diffInDays = Math.round(diffInTime / oneDay);
+
                     if(diffDays<=5){
                         this.t_warning_message="Only "+diffDays+" day(s) left";
                         this.t_warning=true;
                     }
+                    this.t_warning_message=diffDays + ':' +diffInDays;
+                        this.t_warning=true;
                 }
                 else{
                     $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');
