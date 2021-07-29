@@ -1,12 +1,12 @@
 <template>
     <div>
-        <form class="bootbox-form" id="localprocureId">
+        <form class="bootbox-form" id="localprocureId"> 
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label>
                         <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
-                        v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
+                        v-model="form.data.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
                         <has-error :form="form" field="dateOfprocure"></has-error>
                     </div>
                 </div>
@@ -24,26 +24,27 @@
                               </tr>
                            </thead>
                            <tbody>
-                              <tr id="record1" v-for='(item, index) in form.local_item' :key="index">
+                               <tr>
+                              <!-- <tr id="record1" v-for='(item, index) in form.local_item' :key="index"> -->
                                   <td>
-                                    <span>{{item.item}}</span>
+                                    <span>{{itemList[form.data.item_id]}}</span>
                                   </td>
                                  <td>
-                                    <span>{{item.unit}}</span>
+                                    <span>{{unitArray[form.data.unit_id]}}</span>
                                   </td>
                                   <td>
-                                     <input type="text" name="quantity" class="form-control" v-model="item.quantity">
+                                     <input type="text" name="quantity" class="form-control" v-model="form.data.quantity">
                                  </td>
                                   <td>
-                                     <input type="text" name="amount" class="form-control" v-model="item.amount">
+                                     <input type="text" name="amount" class="form-control" v-model="form.data.amount">
                                  </td>
                                  <td>
-                                     <select name="source" id="source" class="form-control" v-model="item.source">
+                                     <select name="source" id="source" class="form-control" v-model="form.data.source">
                                           <option v-for="(item, index) in foodSourceList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                      </select> 
                                   </td>
                                   <td>
-                                      <input type="text" name="remark" class="form-control" v-model="item.remark">
+                                      <input type="text" name="remark" class="form-control" v-model="form.data.remark">
                                   </td>
                               </tr>
                               <!-- <tr>
@@ -73,6 +74,7 @@ export default {
     data(){
         return{
             count:1,
+            itemList:[],
             itemList:{},
             unitList:[],
             unitArray:{},
@@ -80,6 +82,7 @@ export default {
             foodSourceList:[],
             form: new form({
                 id: '', dateOfprocure: '',
+                data:'',
                 local_item:
                 [{
                     item:'',quantity:'',unit:'', amount:'',remark:'', source:''
@@ -182,24 +185,25 @@ export default {
             this.form.local_item=[];
             axios.get('mess_manage/localProcureEditList/' +locId)
             .then((response) =>{
-                let data=response.data.data;
-               // alert(data.length);
-                for(let i=0; i<data.length;i++){
-                 //   alert(data[i].item_id);
-                    this.form.dateOfprocure         = data[i].dateOfprocure;
-                    this.form.id                    = data[i].id;
-                    this.form.local_item.push({
-                        item:this.itemList[data[i].item_id],
-                     //  item:data[i].item_id,
-                       quantity:data[i].quantity,
-                       unit:this.unitArray[data[i].unit_id],
-                       amount:data[i].amount,
-                       source:data[i].food_source,
-                       remark:data[i].remark
-                    });
+                this.form.data=response.data.data;
+            //     let data=response.data.data;
+            //    // alert(data.length);
+            //     for(let i=0; i<data.length;i++){
+            //      //   alert(data[i].item_id);
+            //         this.form.dateOfprocure         = data[i].dateOfprocure;
+            //         this.form.id                    = data[i].id;
+            //         this.form.local_item.push({
+            //             item:this.itemList[data[i].item_id],
+            //          //  item:data[i].item_id,
+            //            quantity:data[i].quantity,
+            //            unit:this.unitArray[data[i].unit_id],
+            //            amount:data[i].amount,
+            //            source:data[i].food_source,
+            //            remark:data[i].remark
+            //         });
                    
-                }
-                this.count=data.length;
+            //     }
+            //     this.count=data.length;
             })
             .catch((error) =>{
                 console.log("Error:"+error);

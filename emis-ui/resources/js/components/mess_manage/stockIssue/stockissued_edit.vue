@@ -217,7 +217,7 @@ export default {
             });
         }
     },
-     mounted() {
+    mounted() {
         this.loadActiveUnitList();
         this.loadActiveItemList(this.$route.params.data.category);
         this.StockIssueEditList(this.$route.params.data.id);
