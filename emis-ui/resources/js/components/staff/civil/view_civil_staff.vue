@@ -1,303 +1,315 @@
 <template>
-    <div>
-        <div class="card card-primary card-outline card-outline-tabs">
-            <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item personal-tab" @click="shownexttab('personal-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Appointment </label>
-                        </a>
-                    </li>
-                    <li class="nav-item qualification-tab" @click="shownexttab('qualification-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Qualification </label>
-                        </a>
-                    </li>
-                    <li class="nav-item nomination-tab" @click="shownexttab('nomination-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Nominees & Family Members</label>
-                        </a>
-                    </li>
-                </ul>
+<div>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">User Profile</li>
+                    </ol>
+                </div>
             </div>
-            <div class="card-body pt-0 mt-1">
-                <div class="tab-content">
-                    <div class="tab-pane fade active show tab-content-details" id="personal-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row" id="searchemp">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label class="mb-0.5">Emp Type: </label>
-                                    <span class="text-blue text-bold">
-                                        {{personal_form.emp_type==1 ? 'Regualr' : personal_form.emp_type==2 ? 'Contract' :'Volunteer' }}
-                                    </span>
+        </div>
+    </section>
 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success">
-                            <span class=""><label><u>Personal Detail</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Emp Id:</label>
-                                    <span class="text-blue text-bold">{{personal_form.emp_id}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">CID/Work Permit No:</label>
-                                    <span class="text-blue text-bold">{{personal_form.cid_work_permit}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Full Name:</label>
-                                    <span class="text-blue text-bold">{{personal_form.name}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Date of Birth: </label>
-                                    <span class="text-blue text-bold">{{personal_form.dob}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Sex:</label>
-                                    <span class="text-blue text-bold">{{sex_Array[personal_form.sex_id]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Position Title (Level):</label>
-                                    <span class="text-blue text-bold">{{positiontitleList[personal_form.position_title]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Marital Status:</label>
-                                    <span class="text-blue text-bold">{{marital_statusList[personal_form.marital_status]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Nationality:</label>
-                                    <span class="text-blue text-bold">{{countryList[personal_form.country_id]}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success">
-                            <span class=""><label><u>Contacts</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Contact Number:</label>
-                                    <span class="text-blue text-bold">{{personal_form.contact_number}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5"></label>
-                                    <span class="text-blue text-bold">{{personal_form.email}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Alternative Email:</label>
-                                    <span class="text-blue text-bold">{{personal_form.alternative_email}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success">
-                            <span class=""><label><u>Permanent Address</u></label></span>
-                            <div class="form-group row" id="bhutanese_address">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{dzongkhagList[personal_form.p_dzongkhag]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Gewog:</label>
-                                    <span class="text-blue text-bold">{{personal_form.p_gewog}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Village:</label>
-                                    <span class="text-blue text-bold">{{personal_form.p_village_id}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" id="foreign_address" style="display:none">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0.5">Address:</label>
-                                    <span class="text-blue text-bold">{{personal_form.address}}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="callout callout-success">
-                            <span class="text-blue"><label><u>Working Address</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{dzongkhagList[personal_form.dzongkhag]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Gewog:</label>
-                                    <span class="text-blue text-bold">{{personal_form.gewog}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Village:</label>
-                                    <span class="text-blue text-bold">{{personal_form.village_id}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Organization Type:</label>
-                                    <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
-                                        <option value="Org">Organization/School </option>
-                                        <option value="Dzongkhag">Dzongkhag</option>
-                                        <option value="Ministry">Ministry </option>
-                                    </select>
-                                    <has-error :form="personal_form" field="organization_type"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Working Agency:</label>
-                                    <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
-                                        <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="working_agency_id"></has-error>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success" v-if="personal_form.isteaching">
-                            <span class="text-blue"><label><u>Subjects</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Compulsory Subject:</label>
-                                    <span class="text-blue text-bold">{{subjectList[personal_form.comp_sub]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Elective Subject 1:</label>
-                                    <span class="text-blue text-bold">{{subjectList[personal_form.elective_sub1]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Elective Subject 2:</label>
-                                    <span class="text-blue text-bold">{{subjectList[personal_form.elective_sub2]}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success">
-                            <span class="text-blue"><label><u>Others</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Initail Appointment Date:</label>
-                                    <span class="text-blue text-bold">{{personal_form.initial_appointment_date}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Career Stage:</label>
-                                    <span class="text-blue text-bold">{{cureerstageList[personal_form.currier_stage]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Employee File Code:</label>
-                                    <span class="text-blue text-bold">{{personal_form.emp_file_code}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0.5">Remarks:</label>
-                                    <span class="text-blue text-bold">{{personal_form.remarks}}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('qualification-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="profile-img">
+                        <img class="profile-user-img img-fluid img-circle" src="img/user.png" alt="User profile picture">
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="qualification-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-cyan mb-2 pb-1 pr-1 pt-1">
-                                Details for: <span class="personname"></span>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="training-table" class="table table-sm table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Desciption</th>
-                                            <th>Qualification</th>
-                                            <th>Course Mode/Type</th>
-                                            <th>Course Title</th>
-                                            <th>First Subject</th>
-                                            <th>Second subject</th>
-                                            <th>Country</th>
-                                            <th>Start Date</th>
-                                            <th>End Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in staff_qualification_list" :key="index">
-                                            <td>{{ item.description.name}}</td>
-                                            <td>{{ item.qualification.name}}</td>
-                                            <td>{{ item.coursemode.name}}</td>
-                                            <td>{{ item.coursetitle}}</td>
-                                            <td>{{ item.first_subject.name}}</td>
-                                            <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                            <td v-else></td>
-                                            <td>{{ item.country.country_name}}</td>
-                                            <td>{{ item.startdate}}</td>
-                                            <td>{{ item.enddate}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('personal-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('nomination-tab')"> <i class="fa fa-arrow-right"></i>Save & Next </button>
-                            </div>
-                        </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="profile-head">
+                        <h5>{{personal_form.name}}</h5>
+                        <h6>Gender: {{sex_Array[personal_form.sex_id]}}</h6>
+                        <h6>Nationality: {{countryList[personal_form.country_id]}}</h6>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="nomination-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-cyan mb-2 pb-1 pr-1 pt-1">
-                            Details for: <span class="personname"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <hr>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-basic-tab" data-toggle="pill" href="#custom-tabs-four-basic" role="tab" aria-controls="custom-tabs-four-basic" aria-selected="true">Basic Info</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-personal-tab" data-toggle="pill" href="#custom-tabs-four-personal" role="tab" aria-controls="custom-tabs-four-personal" aria-selected="false">Personal Details</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-work-tab" data-toggle="pill" href="#custom-tabs-four-work" role="tab" aria-controls="custom-tabs-four-work" aria-selected="false">Work Experience</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-education-tab" data-toggle="pill" href="#custom-tabs-four-education" role="tab" aria-controls="custom-tabs-four-education" aria-selected="false">Education</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-promotion-tab" data-toggle="pill" href="#custom-tabs-four-promotion" role="tab" aria-controls="custom-tabs-four-promotion" aria-selected="false">Promotion Record</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-training-tab" data-toggle="pill" href="#custom-tabs-four-training" role="tab" aria-controls="custom-tabs-four-training" aria-selected="false">Training Record</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-nominations-tab" data-toggle="pill" href="#custom-tabs-four-nominations" role="tab" aria-controls="custom-tabs-four-nominations" aria-selected="false">Nominations</a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <table id="training-table" class="table table-sm table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>CID</th>
-                                            <th>Name</th>
-                                            <th>Designation/Position Title</th>
-                                            <th>Address</th>
-                                            <th>Contact Number</th>
-                                            <th>Email</th>
-                                            <th>Relation</th>
-                                            <th>Is Nominee</th>
-                                            <th>Percentage of benifit (%)</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr v-for="(item, index) in staff_nomination_list" :key="index">
-                                            <td>{{ item.nomi_cid}}</td>
-                                            <td>{{ item.nomi_name}}</td>
-                                            <td>{{ item.nomi_desig}}</td>
-                                            <td>{{ item.nomi_address}}</td>
-                                            <td>{{ item.nomi_contact}}</td>
-                                            <td>{{ item.nomi_email}}</td>
-                                            <td>{{ item.relations.name}}</td>
-                                            <td>{{ item.isnominee==1? 'Yes' : 'No'}}</td>
-                                            <td>{{ item.nomi_percentage}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="7" class="text-right">
-                                                Total:
-                                            </td>
-                                            <td colspan="3">
-                                                <input readonly type="number" v-model="grand_total" id="percentagetotla" class="form-control">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('qualification-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade show active" id="custom-tabs-four-basic" role="tabpanel" aria-labelledby="custom-tabs-four-basic-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:15%">Employee Id:</td>
+                                                    <td style="width:35%">{{ personal_form.emp_id }}</td>
+                                                    <td style="width:15%"></td>
+                                                    <td style="width:35%"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Working Agency:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:15%">Dzongkhag:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:15%">Title:</td>
+                                                    <td style="width:35%">{{ positiontitleList[personal_form.position_title] }}</td>
+                                                    <td style="width:15%">Position:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Department:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:15%">Dzongkhag:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Occupational Group:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:15%">Employee Type:</td>
+                                                    <td style="width:35%">{{ personal_form.emp_type==1 ? 'Regular' : personal_form.emp_type==2 ? 'Contract' :'Volunteer'  }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Date of Joining:</td>
+                                                    <td style="width:35%">{{ }}</td>
+                                                    <td>{{ }}</td>
+                                                    <td>{{ }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-personal" role="tabpanel" aria-labelledby="custom-tabs-four-personal-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:15%">CID/Work Permit:</td>
+                                                    <td style="width:35%">{{ personal_form.cid_work_permit }}</td>
+                                                    <td style="width:15%">Date of Birth</td>
+                                                    <td style="width:35%">{{ personal_form.dob }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Contact No:</td>
+                                                    <td style="width:35%">{{ personal_form.contact_number }}</td>
+                                                    <td style="width:15%">Email</td>
+                                                    <td style="width:35%">{{ personal_form.email }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Alternative Email:</td>
+                                                    <td style="width:35%">{{ personal_form.alternative_email }}</td>
+                                                    <td style="width:15%"></td>
+                                                    <td style="width:35%">{{  }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width:15%">Marital Status:</td>
+                                                    <td style="width:35%">{{ marital_statusList[personal_form.marital_status] }}</td>
+                                                    <td style="width:15%">Nationality:</td>
+                                                    <td style="width:35%">{{ countryList[personal_form.country_id] }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:15%">Present Dzongkhag:</td>
+                                                    <td style="width:15%">{{ dzongkhagList[personal_form.dzongkhag] }}</td>
+                                                    <td style="width:15%">Present Gewog:</td>
+                                                    <td style="width:15%">{{ personal_form.gewog }}</td>
+                                                    <td style="width:15%">Present Village:</td>
+                                                    <td style="width:15%">{{ personal_form.village_id }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table class="table table-borderless table-sm">
+                                            <tbody>
+                                                <tr>
+                                                    <td style="width:15%">Permanant Dzongkhag:</td>
+                                                    <td style="width:15%">{{ dzongkhagList[personal_form.p_dzongkhag] }}</td>
+                                                    <td style="width:15%">Permanant Gewog:</td>
+                                                    <td style="width:15%">{{ personal_form.p_gewog }}</td>
+                                                    <td style="width:15%">Permanant Village:</td>
+                                                    <td style="width:15%">{{ personal_form.p_village_id }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-work" role="tabpanel" aria-labelledby="custom-tabs-four-work-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="training-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <td>Position Title</td>
+                                                <td>Working Agency</td>
+                                                <td>Dzongkhag</td>
+                                                <td>From Date</td>
+                                                <td>To Date</td>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-education" role="tabpanel" aria-labelledby="custom-tabs-four-education-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="training-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Desciption</th>
+                                                    <th>Qualification</th>
+                                                    <th>Course Mode/Type</th>
+                                                    <th>Course Title</th>
+                                                    <th>First Subject</th>
+                                                    <th>Second subject</th>
+                                                    <th>Country</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item, index) in staff_qualification_list" :key="index">
+                                                    <td>{{ item.description.name}}</td>
+                                                    <td>{{ item.qualification.name}}</td>
+                                                    <td>{{ item.coursemode.name}}</td>
+                                                    <td>{{ item.coursetitle}}</td>
+                                                    <td>{{ item.first_subject.name}}</td>
+                                                    <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
+                                                    <td v-else></td>
+                                                    <td>{{ item.country.country_name}}</td>
+                                                    <td>{{ item.startdate}}</td>
+                                                    <td>{{ item.enddate}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-promotion" role="tabpanel" aria-labelledby="custom-tabs-four-promotion-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="promotion-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date of Promotion</th>
+                                                    <th>Position Level</th>
+                                                    <th>Position Title</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-training" role="tabpanel" aria-labelledby="custom-tabs-four-training-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="training-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Training Type</th>
+                                                    <th>Course Title</th>
+                                                    <th>Location</th>
+                                                    <th>From Date</th>
+                                                    <th>To Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-nominations" role="tabpanel" aria-labelledby="custom-tabs-four-nominations-tab">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <table id="training-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>CID</th>
+                                                    <th>Name</th>
+                                                    <th>Designation/Position Title</th>
+                                                    <th>Address</th>
+                                                    <th>Contact Number</th>
+                                                    <th>Email</th>
+                                                    <th>Relation</th>
+                                                    <th>Is Nominee</th>
+                                                    <th>Percentage of benifit (%)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(item, index) in staff_nomination_list" :key="index">
+                                                    <td>{{ item.nomi_cid}}</td>
+                                                    <td>{{ item.nomi_name}}</td>
+                                                    <td>{{ item.nomi_desig}}</td>
+                                                    <td>{{ item.nomi_address}}</td>
+                                                    <td>{{ item.nomi_contact}}</td>
+                                                    <td>{{ item.nomi_email}}</td>
+                                                    <td>{{ item.relations.name}}</td>
+                                                    <td>{{ item.isnominee==1? 'Yes' : 'No'}}</td>
+                                                    <td>{{ item.nomi_percentage}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="7" class="text-right">
+                                                        Total:
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <input readonly type="number" v-model="grand_total" id="percentagetotla" class="form-control">
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+</div>
 </template>
 <script>
 export default {
