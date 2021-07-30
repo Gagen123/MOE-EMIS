@@ -482,10 +482,13 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitIntialapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitIntialapplicantDetails'])->name('submitIntialapplicantDetails');
         Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
+        Route::post('/UpdatedApplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'UpdatedApplicantDetails'])->name('UpdatedApplicantDetails');
         Route::post('/SaveTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'SaveTransferAppeal'])->name('SaveTransferAppeal');
         Route::get('/LoadApplicationDetailsByUserId/{user_id}', [App\Http\Controllers\staff\TransferController::class, 'LoadApplicationDetailsByUserId'])->name('LoadApplicationDetailsByUserId');
         Route::get('/LoadTransferAppealDetails', [App\Http\Controllers\staff\TransferController::class, 'LoadTransferAppealDetails'])->name('LoadTransferAppealDetails');
         Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
+        Route::get('/loadattachementDetails/{appNo}', [App\Http\Controllers\staff\TransferController::class, 'loadattachementDetails'])->name('loadattachementDetails');
+        Route::get('/loadPreference/{id}', [App\Http\Controllers\staff\TransferController::class, 'loadPreference'])->name('loadPreference');
         Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
         Route::get('/LoadSchoolByDzoId/{param}/{id}', [App\Http\Controllers\staff\TransferController::class, 'LoadSchoolByDzoId'])->name('LoadSchoolByDzoId');
         Route::get('/loadtransferDetails/{param}', [App\Http\Controllers\staff\TransferController::class, 'loadtransferDetails'])->name('loadtransferDetails');
@@ -715,7 +718,12 @@ Route::prefix('students')->group(function () {
     Route::get('/getHealthBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthBmiDetails'])->name('getHealthBmiDetails');
     Route::get('/getBmiDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getBmiDetails'])->name('getBmiDetails');
     //Endorse Health Record Routes
+    Route::post('/saveHealthEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'saveHealthEndorsement'])->name('saveHealthEndorsement');
     Route::get('/loadHealthSummary', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthSummary'])->name('loadHealthSummary');
+    Route::get('/loadScreeningEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadScreeningEndorsement'])->name('loadScreeningEndorsement');
+    Route::get('/loadVaccinationEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationEndorsement'])->name('loadVaccinationEndorsement');
+    Route::get('/loadSupplementationEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadSupplementationEndorsement'])->name('loadSupplementationEndorsement');
+
     Route::get('/loadresult/{months}/{gender}/{bmi}', [App\Http\Controllers\student\StudentHealthController::class, 'loadresult'])->name('loadresult');
 
 

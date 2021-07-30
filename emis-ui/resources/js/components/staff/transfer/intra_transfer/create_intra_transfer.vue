@@ -472,20 +472,14 @@ export default {
            .then((response) => {
                 let data=response.data.data[0];
                  if(data!=null){
-                     alert(data.to_date);
                     this.form.transferwindow_id=data.id;
                     this.form.t_from_date=data.from_date;
                     this.form.t_to_date=data.to_date;
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                    let to_date = new Date(data.to_date);
-                    let today = new Date();
-                    let diffTime = Math.abs(today - to_date);
-                    let diffDays = Math.abs(diffTime / (1000 * 60 * 60 * 24));
-
                     let todate=new Date(data.to_date);
-                    let formdate = today;
+                    let formdate = new Date();
                     // One day in milliseconds
                     const oneDay = 1000 * 60 * 60 * 24;
 
@@ -493,14 +487,16 @@ export default {
                     const diffInTime = todate.getTime() - formdate.getTime();
 
                     // Calculating the no. of days between two dates
-                    const diffInDays = Math.round(diffInTime / oneDay);
-
-                    if(diffDays<=5){
-                        this.t_warning_message="Only "+diffDays+" day(s) left";
+                    const diffInDays =(diffInTime / oneDay);
+                    if(diffInDays<=5 && diffInDays>0){
+                        this.t_warning_message="Only "+Math.ceil(diffInDays)+" day(s) left to apply";
                         this.t_warning=true;
                     }
-                    this.t_warning_message=diffDays + ':' +diffInDays;
-                        this.t_warning=true;
+                    else if(diffInDays<=0){
+                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#invalidsection').show();
+                        $('#t_form_details').hide();
+                    }
                 }
                 else{
                     $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');

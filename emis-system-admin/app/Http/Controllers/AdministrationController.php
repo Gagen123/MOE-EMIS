@@ -120,7 +120,6 @@ class AdministrationController extends Controller{
                         'created_by'    =>  $request['user_id'],
                         'created_at'    =>  date('Y-m-d h:i:s'),
                     ];
-
                     $response_data = Calender::create($data);
                 }
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -233,6 +232,10 @@ class AdministrationController extends Controller{
     }
     public function loadGlobalMasters($param=""){
         // dd("inside system admin serices");
+        
+        if($param=="transfer_appeal"){
+            return $this->successResponse(Calender::where('type','Transfer Appeal')->get());
+        }
         if($param=="intra_transfer"){
             return $this->successResponse(Calender::where('type','Intra Transfer')->get());
         }

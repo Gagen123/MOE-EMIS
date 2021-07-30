@@ -753,7 +753,13 @@ const routes = [
             children: [
                 { path: '/', name:'endorse_health_records', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
                 { path: '/endorse_records_list', name:'endorse_records_list', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
-                { path: '/endorse_records_add', name:'endorse_records_add', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_add.vue').default },
+                { path: '/endorse_records_add', name:'endorse_records_add', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_add.vue').default,
+                    children: [
+                        { path: '/endorse_vaccination', name:'endorse_vaccination', component: require('./components/students/StudentHealth/EndorseRecords/endorse_vaccination.vue').default },
+                        { path: '/endorse_supplementation', name:'endorse_supplementation', component: require('./components/students/StudentHealth/EndorseRecords/endorse_supplementation.vue').default },
+                        { path: '/endorse_screening', name:'endorse_screening', component: require('./components/students/StudentHealth/EndorseRecords/endorse_screening.vue').default },
+                    ]
+                },
                 { path: '/endorse_records_edit', name:'endorse_records_edit', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_edit.vue').default },
                 { path: '/endorse_records_view', name:'endorse_records_view', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_view.vue').default },
             ]

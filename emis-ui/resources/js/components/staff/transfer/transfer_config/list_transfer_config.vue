@@ -82,11 +82,10 @@ export default {
 
 
         },
-        watch:{
-            leaveConfigurationList() {
-                this.dt.destroy();
+       watch: {
+            transfer_list(){
                 this.$nextTick(() => {
-                    this.dt =  $("#working-agency-table").DataTable()
+                    this.dt =  $("#training-table").DataTable()
                 });
             }
         },

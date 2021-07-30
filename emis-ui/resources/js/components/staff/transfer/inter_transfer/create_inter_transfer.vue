@@ -482,16 +482,28 @@ export default {
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                    let to_date = new Date(data.to_date);
-                    let today = new Date();
-                    let diffTime = Math.abs(to_date - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if(diffDays<=5){
-                        this.t_warning_message="Only "+diffDays+" day(s) left";
+                  
+                    let todate=new Date(data.to_date);
+                    let formdate = new Date();
+                    // One day in milliseconds
+                    const oneDay = 1000 * 60 * 60 * 24;
+
+                    // Calculating the time difference between two dates
+                    const diffInTime = todate.getTime() - formdate.getTime();
+
+                    // Calculating the no. of days between two dates
+                    const diffInDays =(diffInTime / oneDay);
+                    if(diffInDays<=5 && diffInDays>0){
+                        this.t_warning_message="Only "+Math.ceil(diffInDays)+" day(s) left to apply";
                         this.t_warning=true;
                     }
+                    else if(diffInDays<=0){
+                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#invalidsection').show();
+                        $('#t_form_details').hide();
+                    }
                 }
-                else{
+                 else{
                     $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');
                     $('#invalidsection').show();
                     $('#t_form_details').hide();

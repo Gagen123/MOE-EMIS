@@ -36,7 +36,7 @@
                                 <label class="mb-0.5">Transfer Reason:<i class="text-danger">*</i></label>
                                 <br/>
                                 <span v-for="(item, key, index) in  reasonList" :key="index">
-                                    <input type="radio" v-model="reasonArray[form.reason_id]" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
                                 </span>
                                 <has-error :form="form" field="reason_id"></has-error>
                             </div>
@@ -49,7 +49,84 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Approved Transfer Preferences</label>
+                                <label class="mb-0.5">Transfer Preferences</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Preferences</th>
+                                            <th>Select School</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Preferences 1</td>
+                                            <td>
+                                                <select v-model="form.preference_school1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school1') }" class="form-control select2" name="preference_school1" id="preference_school1">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="preference_school1"></has-error>
+                                                <span class="text-danger" id="preference_school1_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Preferences 2</td>
+                                            <td>
+                                                <select v-model="form.preference_school2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school2') }" class="form-control select2" name="preference_school2" id="preference_school2">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="preference_school2"></has-error>
+                                                <span class="text-danger" id="preference_school2_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Preferences 3</td>
+                                            <td>
+                                                <select v-model="form.preference_school3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school3') }" class="form-control select2" name="preference_school3" id="preference_school3">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="preference_school3"></has-error>
+                                                <span class="text-danger" id="preference_school3_err"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Organization Details</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Dzongkhag/Thromde</th>
+                                            <th>School</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>
+                                               <span class="text-blue text-bold">{{form.dzoName}}</span>
+                                            </td>
+                                            <td>
+                                               <span class="text-blue text-bold">{{form.schoolName}} {{form.level}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Approved Transfer Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -89,8 +166,9 @@
                                             </td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
+                                                <span>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                </span>
                                             </td>
                                         </tr>
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
@@ -115,27 +193,9 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5"><u>Undertaking</u></label><br />
-                                <label>I hereby declare that the information given herein is true to the best of my knowledge and I also certify that:</label>
-                            </div>
-                        </div>
-                        <span v-for="(item, index) in  undertakingList" :key="index">
-                            <div class="form-group row">
-                                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
-                                    <input type="checkbox" name="undertaking" class="icheck-success d-inline" :id="'undertaking'+index" :value="item.id">
-                                </div>
-                                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11">
-                                    <label class="pr-4"> &nbsp;{{ item.name }}</label><br />
-                                </div>
-                            </div>
-                        </span>
-                        <span class="text-danger" id="undertaking_err"></span>
-                        <hr>
                         <div  class="row form-group fa-pull-right">
                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="tbName">
-                            <button type="submit" id="button" disabled="disabled" class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
+                            <button type="submit"  class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
                          </div>
                         </div>
                     </div>
@@ -156,6 +216,7 @@ export default {
             reasonList:'',
             undertakingList:[],
             dzongkhagList:[],
+            SchoolList:[],
             dzoArray:{},
             orgArray:{},
             reasonArray:{},
@@ -176,10 +237,15 @@ export default {
                 current_date:'',
                 type_id:'',
                 status:'',
+                application_number:'',                
                 dzongkhagApproved:'',
                 preference_school:'',
-                transferType:"inter_transfer",
-                service_name:"inter transfer",
+                preference_school1:'',
+                preference_school2:'',
+                preference_school3:'',
+                dzoName:'',
+                schoolName:'',
+                schoolLevel:'',
               
                 attachments:
                 [{
@@ -189,6 +255,7 @@ export default {
             })
         }
     },
+
     methods: {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -229,6 +296,8 @@ export default {
                 this.form.dzongkhagApproved=data.dzongkhagApproved;
                 this.form.preference_school=data.preference_school;
                 this.form.status=data.status;
+                this.form.application_number = data.aplication_number;
+                this.loadattachementDetails(data.aplication_number);
                 $(document).ready(function() {
                     $('#tbName').on('input change', function() {
                     if(this.form.status =="verify" || this.form.status == "approve" || this.form.status =="forward" || this.form.status =="Transfer Approved" ){
@@ -277,13 +346,11 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+       loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                 this.orgArray[data[i].id] = data[i].name;
-                }
+                let data = response;
+                this.SchoolList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error:"+error)
@@ -311,111 +378,64 @@ export default {
                 console.log(error);
             });
         },
-        validated_final_form(){
-            let returntue=true;
-            if($('#preference_dzongkhag1').val()==null){
-                $('#preference_dzongkhag1_err').html('Please select this dzongkhag');
-                $('#preference_dzongkhag1').focus();
-                $('#preference_dzongkhag1').addClass('is-invalid');
-                returntue=false;
-            }
-            for(let i=0;i<this.undertakingList.length;i++){
-                if($('#undertaking'+i).prop('checked')==false){
-                    $('#undertaking_err').html('You need to accept all of the undertakings');
-                    $('#undertaking').focus();
-                    $('#undertaking').addClass('is-invalid');
-                    returntue=false;
-                }
-            }
-            return returntue;
-        },
+        
         shownexttab(nextclass){
             if(nextclass=="final-tab"){
                 if(this.form.t_to_date <=this.form.current_date || this.form.t_from_date >this.form.current_date){
-                    let formData = new FormData();
-                        formData.append('type_id', this.form.type_id);
-                        formData.append('transferwindow_id', this.form.transferwindow_id);
-                        formData.append('staff_id', this.form.staff_id);
-                        formData.append('reason_id', this.form.reason_id);
-                        formData.append('description', this.form.description);
-                        formData.append('transferType', this.form.transferType);
-                    
-                    axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
-                    .then((response) =>{
-                        if(response!="" && response!="No Screen"){
-                            this.form.id=response.data.data.id;
-                            this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Application for Transfer has been submitted for further action'
-                            });
-                        }
-                    })
-
-                    .catch((error) => {
-                        console.log("Errors:"+error)
-                    });
-                    this.change_tab(nextclass);
-                }
-                 else{
                     Swal.fire({
-                        text: "Time period for applying intra transfer is closed for the moment!",
-                        icon: 'error',
+                        text: "Are you sure you wish to submit for further approval ?",
+                        icon: 'info',
+                        showCancelButton: true,
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
-                        confirmButtonText: 'Okay!',
-                        })
-                 }
-             }
-
-                else if(nextclass=="final-tab"){
-                    if(this.validated_final_form()){
-                        Swal.fire({
-                            text: "Are you sure you wish to submit for further approval ?",
-                            icon: 'info',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes!',
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                const config = {
-                                    headers: {
-                                        'content-type': 'multipart/form-data'
-                                    }
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            const config = {
+                                headers: {
+                                    'content-type': 'multipart/form-data'
                                 }
-                                let formData = new FormData();
-                                formData.append('id', this.form.id);
-                                formData.append('type_id', this.form.type_id);
-                                formData.append('service_name', this.form.service_name);
-                                formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
-                                formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
-                                formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
-                                formData.append('transferType', this.form.transferType);
-                                for(let i=0;i<this.form.ref_docs.length;i++){
-                                    formData.append('attachments[]', this.form.ref_docs[i].attachment);
-                                    formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
-                                }
-                                axios.post('/staff/transfer/submitFinalapplicantDetails', formData, config)
-                                .then((response) =>{
-                                    if(response!="" && response!="No Screen"){
-                                        // let message="Application for Transfer has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                        this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                                        Toast.fire({
-                                            icon: 'success',
-                                            title: 'Application for Transfer has been submitted for further action'
-                                        });
-                                    }
-                                    this.applyselect2();
-                                    this.$router.push('/list_inter_transfer');
-                                })
-                                .catch((error) => {
-                                    console.log("Errors:"+error)
-                                });
                             }
-                        });
-                    }
+                            let formData = new FormData();
+                            formData.append('id', this.form.id);
+                            formData.append('reason_id', this.form.reason_id);
+                            formData.append('description', this.form.description);
+                            formData.append('application_number', this.form.application_number);
+                            formData.append('preference_school1', this.form.preference_school1);
+                            formData.append('preference_school2', this.form.preference_school2);
+                            formData.append('preference_school3', this.form.preference_school3);
+                            for(let i=0;i<this.form.ref_docs.length;i++){
+                                formData.append('attachments[]', this.form.ref_docs[i].attachment);
+                                formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
+                            }
+                            axios.post('/staff/transfer/UpdatedApplicantDetails', formData, config)
+                             .then((response) =>{
+                                if(response.data!="" && response!="No Screen"){
+                                    let message=" Your transfer application has been updated successfully for applicaiton number: "+ this.form.application_number;
+                                    this.$router.push({name:'intra_transfer_acknowledgement',params: {data:message}});
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Application for Transfer has been submitted for further action'
+                                    });
+                                }
+                            })
+                            .catch((error) => {
+                                console.log("Errors:"+error)
+                            });
+                        }
+                    });
                 }
+                else{
+                Swal.fire({
+                    text: "Time period for applying intra transfer is closed for the moment!",
+                    icon: 'error',
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Okay!',
+                    })
+                }
+            }
+        
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -431,9 +451,58 @@ export default {
             axios.get('common/getSessionDetail')
             .then(response => {
                 this.form.name = response.data.data.Full_Name;
+                this.getDzongkhagName(response.data.data.Dzo_Id)
+                this.getOrgaName(response.data.data.Agency_Code);
+                
+
             })
             .catch(errors =>{
                 console.log(errors)
+            });
+        },
+        getDzongkhagName(id){
+            axios.get('common/getDzoNameById/' +id)
+            .then(response => {
+                this.form.dzoName = response.data.name;
+
+            })
+            .catch(errors =>{
+                console.log(errors)
+            });
+        },
+        getOrgaName(id){
+            axios.get('organization/getOrgProfile/' +id)
+            .then(response => {
+                this.form.schoolName = response.data.data.orgName;
+                this.form.level = response.data.data.level;
+
+            })
+            .catch(errors =>{
+                console.log(errors)
+            });
+        },
+        loadattachementDetails(appId){
+             axios.get('staff/transfer/loadattachementDetails/'+appId)
+            .then((response) =>{
+                let data = response.data.data;
+                for(let i=0;i<data.preferences.length;i++){
+                    if(i==0){
+                        this.form.preference_school1     =   data.preferences[i].school_id;
+                        $('#preference_school1').val(data.preferences[i].school_id).trigger('change');
+                    }
+                    if(i==1){
+                        this.form.preference_school2     =   data.preferences[i].school_id;
+                        $('#preference_school2').val(data.preferences[i].school_id).trigger('change');
+                    }
+                    if(i==2){
+                        this.form.preference_school3     =   data.preferences[i].school_id;
+                        $('#preference_school3').val(data.preferences[i].school_id).trigger('change');
+                    }
+                }
+                this.draft_attachments=data.documents;
+            })
+            .catch(errors =>{
+                console.log('error loadattachementDetails: '+errors)
             });
         },
         changefunction(id){
@@ -445,16 +514,76 @@ export default {
             if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
             }
-            if(id=="preference_dzongkhag1"){
-                this.form.preference_dzongkhag1=$('#preference_dzongkhag1').val();
+            if(id=="preference_school1"){
+                this.form.preference_school1=$('#preference_school1').val();
+                this.checkforselectedval(1);
             }
-            if(id=="preference_dzongkhag2"){
-                this.form.preference_dzongkhag2=$('#preference_dzongkhag2').val();
+            if(id=="preference_school2"){
+                this.form.preference_school2=$('#preference_school2').val();
+                this.checkforselectedval(2);
             }
-            if(id=="preference_dzongkhag3"){
-                this.form.preference_dzongkhag3=$('#preference_dzongkhag3').val();
+            if(id=="preference_school3"){
+                this.form.preference_school3=$('#preference_school3').val();
+                this.checkforselectedval(3);
             }
+        },
+        checkforselectedval(cout){
+            if($('#preference_school1').val()!="" && $('#preference_school2').val()!="" && $('#preference_school1').val()==$('#preference_school2').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
+            if($('#preference_school2').val()!="" && $('#preference_school3').val()!="" && $('#preference_school2').val()==$('#preference_school3').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
+            if($('#preference_school1').val()!="" && $('#preference_school3').val()!="" && $('#preference_school1').val()==$('#preference_school3').val()){
+                $('#preference_school'+cout+'_err').html('This school is already selected');
+                $('#preference_school'+cout).val('').trigger('change');
+            }
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
 
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
         },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
@@ -491,13 +620,11 @@ export default {
         this.getDraftDetails();
         this.profile_details();
         this.loadstaff();
+        this.loadOrgList();
         this.loadreasons();
-        this.loadApplicationDetails();
         this.loadactivedzongkhagList();
         this.loadundertakingList();
         this.LoadTransferType();
-        this.loadOrgList();
-        this.loadreasons(this.$route.params.data.transfer_reason_id);
         this.loadApplicationDetails(this.$route.params.data.id)
         this.form.id=this.$route.params.data.id;
         this.form.staff_id=this.$route.params.data.staff_id;
