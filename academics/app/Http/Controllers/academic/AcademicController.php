@@ -541,11 +541,12 @@ class AcademicController extends Controller
         return $this->successResponse(["studentAttendanceDetail"=>$studentAttendanceDetail,"hasAttendance"=>$hasAttendance]);
     }
     public function getAttendanceData($orgId,Request $request){
-        $query = "SELECT COUNT(t1.id) AS no_instructional_days,(COUNT(t1.id)-COUNT(t2.id)) AS no_days_present FROM aca_student_attendance t1 
-            JOIN aca_assessment_term t3 ON t1.attendance_date 
-                BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t3.from_month,2,'0'),'-',LPAD(t3.from_date,2,'0')) 
-                AND CONCAT(YEAR(CURDATE()),'-',LPAD(t3.to_month,2,'0'),'-',LPAD(t3.to_date,2,'0')) 
-            LEFT JOIN aca_student_attendance_detail t2 ON t1.id = t2.aca_std_attendance_id AND t2.std_student_id = ? WHERE t1.org_id = ? AND t3.id = ? AND t1.org_class_id = ? ";
+        $query = "SELECT COUNT(t1.id) AS no_instructional_days,(COUNT(t1.id)-COUNT(t2.id)) AS no_days_present
+            FROM aca_student_attendance t1 
+                JOIN aca_assessment_term t2 ON t1.attendance_date BETWEEN CONCAT(YEAR(CURDATE()),'-',LPAD(t2.from_month,2,'0'),'-',LPAD(t2.from_date,2,'0')) 
+                    AND CONCAT(YEAR(CURDATE()),'-',LPAD(t2.to_month,2,'0'),'-',LPAD(t2.to_date,2,'0')) 
+                LEFT JOIN aca_student_attendance_detail t3 ON t1.id = t3.aca_std_attendance_id AND t3.std_student_id = ?
+            WHERE t1.org_id = ? AND t2.id = ? AND t1.org_class_id = ? ";
             $params = [$request->std_id,$orgId,$request->aca_assmt_term_id,$request->org_class_id];
             if($request->org_stream_id){
                 $query.= ' AND t1.org_stream_id = ?';

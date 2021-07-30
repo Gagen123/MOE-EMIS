@@ -91,7 +91,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/submitIntialapplicantDetails', ['uses' => 'staff\TransferController@submitIntialapplicantDetails']);
             $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']);
             $router->post('/submitFinalapplicantDetails', ['uses' => 'staff\TransferController@submitFinalapplicantDetails']);
+            $router->post('/UpdatedApplicantDetails', ['uses' => 'staff\TransferController@UpdatedApplicantDetails']);
             $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']);
+            $router->get('/loadPreference/{id}', ['uses' => 'staff\TransferController@loadPreference']);
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
             $router->post('/SaveTransferAppeal', ['uses' => 'staff\TransferController@SaveTransferAppeal']);
             $router->get('/loadtransferDetails/{type}/{userId}', ['uses' => 'staff\TransferController@loadtransferDetails']);
@@ -211,6 +213,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     //Staff Update Services
     $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
         $router->post('/saveStaffCareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffCareerStage']);
-
+        $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
     });
 });

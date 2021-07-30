@@ -10,7 +10,7 @@
                             <th>Application Number</th>
                             <th>Date of Apply</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th class="pl-4 pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,7 +90,6 @@ export default {
     },
     watch: {
         transfer_list(){
-            this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#training-table").DataTable()
             });

@@ -158,7 +158,7 @@ class StaffMastersController extends Controller{
                     if($request->id!="" || $request->id!=null){
                         $response_data=TransferType::where('id', $request->id)->update($data);
                     }
-                   
+
                 }
             }
             if($request['record_type']=="staff_qualification"){
@@ -294,11 +294,11 @@ class StaffMastersController extends Controller{
                     'name'  =>  'required|unique:'.$table,
                     'status'    =>  'required',
                 ];
-                if($request['record_type']!="master_transfer_undertaking"){
-                    $rules=array_merge($rules,
-                        array('code'    =>  'required|unique:'.$table,)
-                    );
-                }
+                // if($request['record_type']!="master_transfer_undertaking"){
+                //     $rules=array_merge($rules,
+                //         array('code'    =>  'required|unique:'.$table,)
+                //     );
+                // }
                 $this->validate($request, $rules);
                 $data = [
                     'name'  =>  $request['name'],
@@ -306,11 +306,11 @@ class StaffMastersController extends Controller{
                     'created_by'=>$request['user_id'],
                     'created_at'=>date('Y-m-d h:i:s'),
                 ];
-                if($request['record_type']!="master_transfer_undertaking"){
-                    $data=array_merge($data,
-                        array('code'    =>  $request['code'],)
-                    );
-                }
+                // if($request['record_type']!="master_transfer_undertaking"){
+                //     $data=array_merge($data,
+                //         array('code'    =>  $request['code'],)
+                //     );
+                // }
                 if($request['record_type']=="transfer_reason"){
                     $response_data = TransferReason::create($data);
                 }

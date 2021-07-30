@@ -23,7 +23,7 @@
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select v-model="classTeacherList[index].stf_staff_id" class="form-control select2">
-                                            <option selected="selected" value="">---SELECT CLASS TEACHER---</option>
+                                            <option selected="selected" value="">---Select---</option>
                                             <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span>
                                                 {{ item1.name }}, {{item1.position_title}}

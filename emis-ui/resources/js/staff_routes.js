@@ -510,7 +510,7 @@ const routes = [
 
         ]
     },
-    
+
     { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
     { path: '/transferAppeal_verification',name:'transferAppeal_verification', component: require('./components/staff/transfer/transferAppeal_verification .vue').default },
 
@@ -666,7 +666,7 @@ const routes = [
                 children:[
                     { path: '/', name:'staff_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
                     { path: '/list_sen',name:'list_sen',  component: require('./components/staff/staff_updates/sen/list_sen.vue').default },
-                    { path: '/create_sen',name:'create_sen', component: require('./components/staff/staff_updates/sen/create_sen.vue').default },
+                    { path: '/view_sen',name:'view_sen', component: require('./components/staff/staff_updates/sen/view_sen.vue').default },
                     { path: '/edit_sen', name:'edit_sen', component: require('./components/staff/staff_updates/sen/edit_sen.vue').default },
                 ],
             },

@@ -121,7 +121,7 @@ export default {
                 let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
-                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
+                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || ((item.org_stream_id == null || item.org_stream_id == "") && (item1.org_stream_id == null || item.org_stream_id == ""))) && (item.org_section_id == item1.org_section_id || ((item.org_section_id == null || item.org_section_id == "") && (item1.org_section_id == null || item.org_section_id == "")))){
                             studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
                             if(item1.stream && item1.section){
                                  studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section

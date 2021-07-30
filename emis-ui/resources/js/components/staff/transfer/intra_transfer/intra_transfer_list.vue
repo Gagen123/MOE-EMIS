@@ -9,15 +9,15 @@
                             <th>Applicant Name</th>
                             <th>Application Number</th>
                             <th>Date of Apply</th>
-                            <th>Status</th>
+                            <th pl-5 pr-5>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ form.applicant_name}}</td>
-                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                            <td>{{ item.applicant_name}}</td>
+                             <td>{{ item.aplication_number}}</td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
                            <td>

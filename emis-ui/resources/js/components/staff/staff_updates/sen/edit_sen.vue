@@ -1,26 +1,40 @@
 <template>
     <div>
         <form>
-
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                    <select @change="remove_error('currier_stage')" v-model="form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                        <option value=""> --Select--</option>
-                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="currier_stage"></has-error>
+                    <label class="mb-0.5">Emp Id:</label><br>
+                    {{emp_id}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name:</label><br>
+                    {{name}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Title:</label><br>
+                    {{position_title}}
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Is SEN:</label>
+                    <input type="radio" v-model="form.is_sen" name="is_sen" value="1"> Yes
+                    <input type="radio" v-model="form.is_sen" name="is_sen" value="0"> No
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="mb-0.5">Has teacher/ECCD facilitators received any training on supporting children/students with disabilities?</label>
+                    <input type="radio" v-model="form.is_trained_in_sen" name="is_trained_in_sen" value="1"> Yes
+                    <input type="radio" v-model="form.is_trained_in_sen" name="is_trained_in_sen" value="0"> No
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.sen_remarks" :class="{ 'is-invalid': form.errors.has('sen_remarks') }" name="sen_remarks" id="sen_remarks"></textarea>
                     <has-error :form="form" field="remarks"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
@@ -29,14 +43,15 @@
 <script>
 export default {
     data(){
-        return {
-            cureerstageArray:{},
-            cureerstageList:[],
+        return{
+            positiontitleList:{},
+            emp_id:'',name:'',position_title:'',
             form: new form({
                 id:'',
                 staff_id:'',
-                currier_stage: '',
-                remarks:'',
+                is_sen: '',
+                is_trained_in_sen: '',
+                sen_remarks:'',
             }),
         }
     },
@@ -48,51 +63,38 @@ export default {
             }
         },
         formaction: function(type){
-            if(type=="reset"){
-                this.form.currier_stage= '';
-                $('#currier_stage').val('').trigger('change');
-                this.form.remarks= '';
-            }
             if(type=="save"){
-                this.form.post('staff/staffUpdateController/saveStaffcareerStage')
+                this.form.post('staff/staffUpdateController/saveSEN')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_career_stage');
+                    this.$router.push('/list_sen');
                 })
                 .catch(() => {
                     console.log("Error:")
                 })
             }
 		},
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="currier_stage"){
-                this.form.currier_stage=$('#currier_stage').val();
-            }
 
-        },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
-                this.cureerstageList=data.data.data;
+                this.position_title=this.positiontitleList[positionid];
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(function (error){
+                console.log('Error: '+error);
             });
         },
     },
      mounted(){
+        this.loadpositionTitleList(this.$route.params.data.position_title_id);
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -104,10 +106,13 @@ export default {
         Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
-
-        this.loadactivecureerstageList();
-        this.form.id=this.$route.params.id;
-        this.form.staff_id=this.$route.params.id;
+        // this.loadStaff(this.$route.params.id);
+        this.emp_id=this.$route.params.data.emp_id;
+        this.name=this.$route.params.data.name;
+        this.form.id=this.$route.params.data.id;
+        this.form.is_sen=this.$route.params.data.is_sen;
+        this.form.is_trained_in_sen=this.$route.params.data.is_trained_in_sen;
+        this.form.sen_remarks=this.$route.params.data.sen_remarks;
     },
 }
 </script>

@@ -110,5 +110,17 @@ class StaffUpdateController extends Controller{
         $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveStaffRelativeDetails', $request_data);
         return $response_data;
     }
-    
+    public function saveSEN(Request $request){
+        $request_data =[
+            'id'                                =>  $request->id,
+            'is_sen'                            =>  $request->is_sen,
+            'is_trained_in_sen'                 =>  $request->is_trained_in_sen,
+            'sen_remarks'                       =>  $request->sen_remarks,
+            'user_id'                           =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveSEN', $request_data);
+        return $response_data;
+    }
+
+
 }
