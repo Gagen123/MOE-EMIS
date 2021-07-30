@@ -13,12 +13,12 @@
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                    <select @change="remove_error('currier_stage')" v-model="form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                    <label class="mb-0.5">Marital Status:<i class="text-danger">*</i></label>
+                    <select v-model="form.marital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('marital_status') }" class="form-control select2" name="marital_status" id="marital_status">
                         <option value=""> --Select--</option>
-                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in marital_statusList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="form" field="currier_stage"></has-error>
+                    <has-error :form="form" field="marital_status"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -41,7 +41,7 @@ export default {
         return {
             cureerstageArray:{},
             staffList:[],
-            cureerstageList:[],
+            marital_statusList:[],
             form: new form({
                 id:'',
                 staff_id:'',
@@ -99,17 +99,14 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
-                }
-                this.cureerstageList=data.data.data;
+                this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                console.log(error);
+                console.leg(error);
             });
         },
     },
@@ -126,7 +123,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadactivecureerstageList();
+        this.loadactivemaritalList();
         this.loadstaff();
         this.form.id=this.$route.params.id;
         this.form.staff_id=this.$route.params.id;

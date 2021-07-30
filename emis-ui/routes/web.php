@@ -441,6 +441,8 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveStaffTeacherSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffTeacherSubject'])->name('saveStaffTeacherSubject');
         Route::post('/saveStaffRelativeDetails', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffRelativeDetails'])->name('saveStaffRelativeDetails');
         Route::post('/saveSEN', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveSEN'])->name('saveSEN');
+        Route::post('/saveTeachinSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveTeachinSubject'])->name('saveTeachinSubject');
+
     });
 
 

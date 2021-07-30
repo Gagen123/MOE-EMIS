@@ -46,7 +46,7 @@
                             <th>Position Title</th>
                             <th>Working Agency</th>
                             <th>Career Stage</th>
-                            <th v-if="showedit">Action</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +57,7 @@
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
                             <td>{{ item.working_agency}}</td>
                             <td>{{ cureerstageArray[item.cureer_stagge_id]}}</td>
-                            <td v-if="showedit">
+                            <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Update</a>
                             </td>
                         </tr>
@@ -84,7 +84,7 @@ export default {
     },
     methods: {
         loadeditpage(staff){
-            this.$router.push({name:"edit_career_stage",params:{id:staff.id}});
+            this.$router.push({name:"create_relative_details",params:{id:staff.id}});
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)

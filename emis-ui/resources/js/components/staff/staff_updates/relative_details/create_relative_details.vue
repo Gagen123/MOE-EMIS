@@ -42,10 +42,22 @@
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0.5">Designation:<i class="text-danger">*</i></label>
+                                        <input v-model="form.nomi_desig" :class="{ 'is-invalid': form.errors.has('nomi_desig') }" type="text" id="nomi_desig" class="form-control" @change="remove_error('nomi_desig')">
+                                        <has-error :form="form" field="nomi_desig"></has-error>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label class="mb-0.5">Address:<i class="text-danger">*</i></label>
+                                        <textarea v-model="form.nomi_address" :class="{ 'is-invalid': form.errors.has('nomi_address') }" id="nomi_address" class="form-control" @change="remove_error('nomi_address')"></textarea>
+                                        <has-error :form="form" field="nomi_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label class="mb-0.5">Relationship:<i class="text-danger">*</i></label>
                                         <select v-model="form.nomi_relation" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('nomi_relation') }" class="form-control select2" id="nomi_relation">
                                             <option value="">--Select--</option>
-                                            <option v-for="(item, index) in repationshipList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                            <option v-for="(item, index) in relationshipList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                         <has-error :form="form" field="nomi_relation"></has-error>
                                     </div>
@@ -134,7 +146,7 @@
                             <th>Email</th>
                             <th>Relation</th>
                             <th>Is Nominee</th>
-                            <th>Percentage of benifit (%)</th>
+                            <th>% of Benefit</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -172,8 +184,11 @@ export default {
     data(){
         return {
             cureerstageArray:{},
+            grand_total:0,
             staffList:[],
             relationshipList:[],
+            attachmentDetails:[],
+            staff_nomination_list:[],
             form: new form({
                 personal_id: '',
                 nomination_id:'',
@@ -198,6 +213,22 @@ export default {
         }
     },
     methods: {
+        resetnomidees(){
+            this.form.nomination_id='';
+            this.form.nomi_cid='';
+            this.form.nomi_name='';
+            this.form.nomi_desig='';
+            this.form.nomi_address='';
+            this.form.nomi_contact='';
+            this.form.nomi_email='';
+            this.form.nomi_relation='';
+            this.form.isnominee=1;
+            this.form.action_type='';
+            this.form.fileUpload=[];
+            this.form.attachments=[{ file_name:'',attachment:''}];
+            this.form.ref_docs=[];
+            this.form.status='Pending';
+        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -206,20 +237,9 @@ export default {
         },
 
         showaddmodal(type){
-            if(type=="qualification-modal"){
-                this.qualification_form.action_type='add';
-                $('#description').val('').trigger('change');
-                $('#qualification').val('').trigger('change');
-                $('#coursemode').val('').trigger('change');
-                $('#coursetitle').val('').trigger('change');
-                $('#qualificationcountry').val('').trigger('change');
-                $('#firstsub').val('');
-                $('#startdate').val('');
-                $('#enddate').val('');
-            }
             if(type=="nomination-modal"){
                 this.resetnomidees();
-                this.nomination_form.action_type='add';
+                this.form.action_type='add';
                 $('#nomi_cid').val('');
                 $('#nomi_name').val('');
                 $('#nomi_desig').val('');
@@ -231,6 +251,39 @@ export default {
             }
             $('#'+type).modal('show');
         },
+        shownominationedit(item){
+
+            this.form.action_type='edit';
+            this.form.nomination_id=item.id;
+            $('#nomi_cid').val(item.nomi_cid);
+            this.form.nomi_cid=item.nomi_cid;
+
+            $('#nomi_name').val(item.nomi_name);
+            this.form.nomi_name=item.nomi_name;
+
+            $('#nomi_desig').val(item.nomi_desig);
+            this.form.nomi_desig=item.nomi_desig;
+
+            $('#nomi_address').val(item.nomi_address);
+            this.form.nomi_address=item.nomi_address;
+
+            $('#nomi_contact').val(item.nomi_contact);
+            this.form.nomi_contact=item.nomi_contact;
+
+            $('#nomi_email').val(item.nomi_email);
+            this.form.nomi_email=item.nomi_email;
+
+            $('#nomi_relation').val(item.nomi_relation.id).trigger('change');
+            this.form.nomi_relation=item.relations.id;
+            $('#nomi_percentage').val(item.nomi_percentage);
+            this.form.nomi_percentage=item.nomi_percentage;
+            this.attachmentDetails=item.attachment;
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            });
+            $('#nomination-modal').modal('show');
+        },
+
         formaction: function(type){
             if(type=="reset"){
                 this.form.relationship= '';
@@ -260,19 +313,22 @@ export default {
             if(id=="relationship"){
                 this.form.relationship=$('#relationship').val();
             }
+            if(id=="nomi_relation"){
+                this.form.nomi_relation=$('#nomi_relation').val();
+            }
 
         },
-        loadstaff(){
-            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
+        // loadstaff(){
+        //     let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         this.staffList = data.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log("Error:"+error)
+        //     });
+        // },
         loadrelationship(uri = 'masters/loadStaffMasters/all_active_relationship_list'){
             axios.get(uri)
             .then(response => {
@@ -284,6 +340,117 @@ export default {
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
+        },
+        /**
+         * method to add more fields
+         */
+        addMoreattachment: function(){
+            this.form.fileUpload.push({file_name:'', file_upload:''})
+        },
+
+        /**
+         * method to remove fields
+         */
+        removeattachment(index){
+            if(this.form.fileUpload.length>1){
+                this.form.fileUpload.pop();
+            }
+        },
+        addMore: function(type){
+            if(type=="nomination"){
+                if(parseInt(this.grand_total)+parseInt(this.form.nomi_percentage)>100){
+                    Swal.fire(
+                        'error!',
+                        'Your total percentage cannot be more the 100.',
+                        'error',
+                    )
+                }
+                else{
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
+                    let formData = new FormData();
+                    formData.append('personal_id', this.form.personal_id);
+                    formData.append('ref_docs[]', this.form.ref_docs);
+                    for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
+                    formData.append('nomination_id', this.form.nomination_id);
+                    formData.append('nomi_cid', this.form.nomi_cid);
+                    formData.append('nomi_name', this.form.nomi_name);
+                    formData.append('nomi_desig', this.form.nomi_desig);
+                    formData.append('nomi_address', this.form.nomi_address);
+                    formData.append('nomi_contact', this.form.nomi_contact);
+                    formData.append('nomi_email', this.form.nomi_email);
+                    formData.append('nomi_relation', this.form.nomi_relation);
+                    formData.append('status', this.form.status);
+                    if(this.form.isnominee==0){
+                        formData.append('nomi_percentage', 0);
+                    }
+                    else{
+                        formData.append('nomi_percentage', this.form.nomi_percentage);
+                    }
+                    formData.append('isnominee', this.form.isnominee);
+                    formData.append('action_type', this.form.action_type);
+                    formData.append('status', this.form.status);
+                    axios.post('staff/savenominationDetails', formData, config)
+                    // this.form.post('staff/savenominationDetails')
+                    .then((response) => {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data saved Successfully'
+                        });
+                        this.resetnomidees();
+                        this.loadnomination(this.form.personal_id);
+                        $('#nomination-modal').modal('hide');
+                    })
+                    .catch((error) => {
+                        console.log("Error:"+error)
+                    });
+                }
+            }
+        },
+        getDetailsbyCID(){
+            if (this.form.nomi_cid.length == 11){
+                axios.get('getpersonbycid/'+ this.form.nomi_cid)
+                .then(response => {
+                    this.ciderror = '';
+                    let personal_detail = response.data;
+                    if (personal_detail!=""){
+                        this.form.nomi_name = personal_detail.firstName + " " + personal_detail.lastName;
+                    }else{
+                        this.ciderror = 'Invalid CID.';
+                        Swal.fire({
+                            html: "No data found for matching CID",
+                            icon: 'info'
+                        });
+                    }
+                })
+                .catch((e) => {
+                    this.ciderror = 'Invalid CID / service down.';
+                    Swal.fire({
+                        html: "No data found for matching CID/service down"+e,
+                        icon: 'error'
+                    });
+                });
+            }
+        },
+        loadnomination(staff_id){
+            if(staff_id!=null && staff_id!=""){
+                let uri = 'staff/loadNominations/'+staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response;
+                    this.staff_nomination_list = data.data.data;
+                    this.grand_total=data.data.total_percentage;
+                })
+                .catch(function (error){
+                    console.log("Error:"+error)
+                });
+            }
         },
     },
      mounted(){
@@ -300,7 +467,10 @@ export default {
         });
 
         this.loadrelationship();
-        this.loadstaff();
+        //this.loadstaff();
+        this.form.personal_id=this.$route.params.id;
+        this.loadnomination(this.$route.params.id);
+
     },
 }
 </script>

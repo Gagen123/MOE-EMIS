@@ -122,5 +122,17 @@ class StaffUpdateController extends Controller{
         return $response_data;
     }
 
+    public function saveTeachinSubject(Request $request){
+        $request_data =[
+            'id'                                =>  $request->id,
+            'comp_sub_id'                       =>  $request->comp_sub_id,
+            'elective_sub_id1'                  =>  $request->elective_sub_id1,
+            'elective_sub_id2'                  =>  $request->elective_sub_id2,
+            'user_id'                           =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveTeachinSubject', $request_data);
+        return $response_data;
+    }
+
 
 }

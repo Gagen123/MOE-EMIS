@@ -18,31 +18,27 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Compulsory Subject:</label>
-                    <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
+                    <select v-model="form.comp_sub_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('comp_sub_id') }" class="form-control select2" name="comp_sub_id" id="comp_sub_id">
                         <option value=""> --Select--</option>
                         <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id+'__'+item.is_special_educational_needs">{{ item.name }}</option>
                     </select>
+                     <has-error :form="form" field="comp_sub_id"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
+                    <label class="mb-0.5">Elective Subject 1:</label>
+                    <select v-model="form.elective_sub_id1" :class="{'is-invalid select2 select2-hidden-accessible': form.errors.has('elective_sub_id1') }" class="form-control select2" name="elective_sub_id1" id="elective_sub_id1">
                         <option value=""> --Select--</option>
                         <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="personal_form" field="elective_sub1"></has-error>
+                    <has-error :form="form" field="elective_sub_id1"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <select v-model="personal_form.elective_sub2" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub2') }" class="form-control select2" name="elective_sub2" id="elective_sub2">
+                    <label class="mb-0.5">Elective Subject 2:</label>
+                    <select v-model="form.elective_sub_id2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('elective_sub_id2') }" class="form-control select2" name="elective_sub_id2" id="elective_sub_id2">
                         <option value=""> --Select--</option>
                         <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="personal_form" field="elective_sub2"></has-error>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.sen_remarks" :class="{ 'is-invalid': form.errors.has('sen_remarks') }" name="sen_remarks" id="sen_remarks"></textarea>
-                    <has-error :form="form" field="remarks"></has-error>
+                    <has-error :form="form" field="elective_sub_id2"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -60,10 +56,9 @@ export default {
             emp_id:'',name:'',position_title:'',
             form: new form({
                 id:'',
-                staff_id:'',
-                is_sen: '',
-                is_trained_in_sen: '',
-                sen_remarks:'',
+                comp_sub_id:'',
+                elective_sub_id1: '',
+                elective_sub_id2: '',
             }),
         }
     },
@@ -76,13 +71,13 @@ export default {
         },
         formaction: function(type){
             if(type=="save"){
-                this.form.post('staff/staffUpdateController/saveSEN')
+                this.form.post('staff/staffUpdateController/saveTeachinSubject')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_sen');
+                    this.$router.push('/list_teacher_subject');
                 })
                 .catch(() => {
                     console.log("Error:")
@@ -114,10 +109,26 @@ export default {
                 console.log(error);
             });
         },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="comp_sub_id"){
+                this.form.comp_sub_id=$('#comp_sub_id').val();
+            }
+            if(id=="elective_sub_id1"){
+                this.form.elective_sub_id1=$('#elective_sub_id1').val();
+            }
+            if(id=="elective_sub_id2"){
+                this.form.elective_sub_id2=$('#elective_sub_id2').val();
+            }
+        },
     },
      mounted(){
         this.loadAcademicMasters();
-        this.loadpositionTitleList(this.$route.params.data.position_title_id);
+        this.loadpositionTitleList(this.$route.query.data.position_title_id);
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -130,12 +141,15 @@ export default {
             this.changefunction(id);
         });
         // this.loadStaff(this.$route.params.id);
-        this.emp_id=this.$route.params.data.emp_id;
-        this.name=this.$route.params.data.name;
-        this.form.id=this.$route.params.data.id;
-        this.form.is_sen=this.$route.params.data.is_sen;
-        this.form.is_trained_in_sen=this.$route.params.data.is_trained_in_sen;
-        this.form.sen_remarks=this.$route.params.data.sen_remarks;
+        this.emp_id=this.$route.query.data.emp_id;
+        this.name=this.$route.query.data.name;
+        this.form.id=this.$route.query.data.id;
+        this.form.comp_sub_id=this.$route.query.data.comp_sub_id;
+        $('#comp_sub_id').val(this.$route.query.data.comp_sub_id).trigger('change');
+        this.form.elective_sub_id1=this.$route.query.data.elective_sub_id1;
+        $('#elective_sub_id1').val(this.$route.query.data.elective_sub_id1).trigger('change');
+        this.form.elective_sub_id2=this.$route.query.data.elective_sub_id2;
+        $('#elective_sub_id2').val(this.$route.query.data.elective_sub_id2).trigger('change');
     },
 }
 </script>

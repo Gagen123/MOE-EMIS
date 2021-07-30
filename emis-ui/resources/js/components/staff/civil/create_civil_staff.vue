@@ -587,7 +587,7 @@
                                             <th>Email</th>
                                             <th>Relation</th>
                                             <th>Is Nominee</th>
-                                            <th>Percentage of benifit (%)</th>
+                                            <th>Percentage of benefit (%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
