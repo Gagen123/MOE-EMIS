@@ -193,6 +193,12 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="form-group row" id="Withdraw">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label><i class="text-danger">(If you wish to cancel the transfer after processing)</i></label><br/>
+                                <label class="mb-1">Withdraw: <input type="checkbox" name="withdraw" v-model="form.withdraw" id="withdraw" class="icheck-success d-inline"></label>
+                            </div>
+                        </div>
                         <div  class="row form-group fa-pull-right">
                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="tbName">
                             <button type="submit"  class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
@@ -237,6 +243,7 @@ export default {
                 current_date:'',
                 type_id:'',
                 status:'',
+                withdraw:'',
                 application_number:'',                
                 dzongkhagApproved:'',
                 preference_school:'',
@@ -398,6 +405,7 @@ export default {
                             }
                             let formData = new FormData();
                             formData.append('id', this.form.id);
+                            formData.append('withdraw', this.form.withdraw);
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('application_number', this.form.application_number);
