@@ -87,7 +87,7 @@ class StaffMastersController extends Controller{
                     $response_data = StaffSubMajorGrop::create($data);
                 }
                 if($request['record_type']=="position_title"){
-                    $data=$data+['position_level_id'   =>$request->position_level];
+                    $data=$data+[' '   =>$request->position_level];
                     $response_data = PositionTitle::create($data);
                 }
                 if($request['record_type']=="staff_subject"){
