@@ -16,7 +16,7 @@ class StaffUpdateController extends Controller{
         $this->apiService = $apiService;
     }
 
-    public function saveStaffCareerStage(Request $request){
+    public function saveStaffcareerStage(Request $request){
         $rules = [
             'currier_stage'              =>  'required  ',
         ];
@@ -131,6 +131,18 @@ class StaffUpdateController extends Controller{
             'user_id'                           =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveTeachinSubject', $request_data);
+        return $response_data;
+    }
+
+    public function saveStaffContact(Request $request){
+        $request_data =[
+            'id'                                =>  $request->id,
+            'alternative_email'                 =>  $request->alternative_email,
+            'contact_no'                        =>  $request->contact_no,
+            'email'                             =>  $request->email,
+            'user_id'                           =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveStaffContact', $request_data);
         return $response_data;
     }
 

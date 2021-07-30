@@ -114,7 +114,7 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
 
 2021-07-29
     Conumn change in stf_staff:
-        added : is_sen, is_trained_in_sen,sen_remarks
+        added : is_sen, is_trained_in_sen,sen_remarks,currier_stage__remarks
 
 
 

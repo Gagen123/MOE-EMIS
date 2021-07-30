@@ -93,6 +93,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/submitFinalapplicantDetails', ['uses' => 'staff\TransferController@submitFinalapplicantDetails']);
             $router->post('/UpdatedApplicantDetails', ['uses' => 'staff\TransferController@UpdatedApplicantDetails']);
             $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']);
+            $router->get('/loadAppealattachementDetails/{appNo}', ['uses' => 'staff\TransferController@loadAppealattachementDetails']);
             $router->get('/loadPreference/{id}', ['uses' => 'staff\TransferController@loadPreference']);
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
             $router->post('/SaveTransferAppeal', ['uses' => 'staff\TransferController@SaveTransferAppeal']);
@@ -212,9 +213,13 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     //Staff Update Services
     $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
-        $router->post('/saveStaffCareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffCareerStage']);
+        $router->post('/saveStaffcareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffcareerStage']);
         $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
         $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
+<<<<<<< HEAD
+=======
+        $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
+>>>>>>> a99f900cd9364cfd9493c0dfd5e7d0d7175517e4
 
     });
 });

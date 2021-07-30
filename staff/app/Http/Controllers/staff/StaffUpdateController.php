@@ -20,7 +20,7 @@ class StaffUpdateController extends Controller{
         $this->audit_database = config('services.constant.auditdb');
     }
 
-    public function saveStaffCareerStage(Request $request){
+    public function saveStaffcareerStage(Request $request){
         $rules = [
             'currier_stage'              =>  'required  ',
         ];
@@ -28,40 +28,16 @@ class StaffUpdateController extends Controller{
             'currier_stage.required'     => 'Please select applicant',
         ];
         $this->validate($request, $rules,$customMessages);
-        $curr_det=CareerStage::where('staff_id',$request->staff_id)->first();
-        if($curr_det!=null && $curr_det!=""){
-            $his_data=[
-                'id'                        =>  $curr_det->id,
-                'staff_id'                  =>  $curr_det->staff_id,
-                'currier_stage'             =>  $curr_det->currier_stage,
-                'remarks'                   =>  $curr_det->remarks,
-                'created_by'                =>  $curr_det->created_by,
-                'created_at'                =>  $curr_det->created_at,
-                'updated_by'                =>  $curr_det->updated_by,
-                'updated_at'                =>  $curr_det->updated_at,
-                'recorded_by'               =>  $request->user_id,
-                'recorded_at'               =>  date('Y-m-d h:i:s')
-            ];
-            CareerStageHistory::create($his_data);
+        $curr_data = PersonalDetails::where('id',$request->id)->first();
+        //insert into audit
+        $messs_det=' cureer_stagge_id:'.$curr_data->cureer_stagge_id.'; currier_stage__remarks:'.$curr_data->currier_stage__remarks;
+        DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','stf_staff','".$request->id."','".$messs_det."','".$request->user_id."','Currier Stage Edit')");
 
-            $data =[
-                'currier_stage'             =>  $request->currier_stage,
-                'remarks'                   =>  $request->remarks,
-                'updated_by'                =>  $request->user_id,
-                'updated_at'                =>  date('Y-m-d h:i:s')
-            ];
-            $response_data = CareerStage::where('staff_id',$request->staff_id)->update($data);
-        }
-        else{
-            $data =[
-                'staff_id'                  =>  $request->staff_id,
-                'currier_stage'             =>  $request->currier_stage,
-                'remarks'                   =>  $request->remarks,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
-            ];
-            $response_data = CareerStage::create($data);
-        }
+        $data =[
+            'cureer_stagge_id'             =>  '$request->currier_stage',
+            'currier_stage_remarks'        =>  $request->remarks,
+        ];
+        $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -94,4 +70,22 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+<<<<<<< HEAD
+=======
+
+    public function saveStaffContact(Request $request){
+        $curr_data = PersonalDetails::where('id',$request->id)->first();
+        //insert into audit
+        $messs_det=' email:'.$curr_data->email.'; alternative_email:'.$curr_data->alternative_email.'; contact_no:'.$curr_data->contact_no;
+        DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','stf_staff','".$request->id."','".$messs_det."','".$request->user_id."','Contact Edit')");
+
+        $data =[
+            'email'                   =>  $request->email,
+            'alternative_email'       =>  $request->alternative_email,
+            'contact_no'              =>  $request->contact_no,
+        ];
+        $response_data = PersonalDetails::where('id',$request->id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+>>>>>>> a99f900cd9364cfd9493c0dfd5e7d0d7175517e4
 }

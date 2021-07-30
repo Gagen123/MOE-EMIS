@@ -2,7 +2,7 @@
     <div>
         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-header pb-0 pt-2">
-                <h3 class="card-title"><b>Advance Search </b></h3>
+                <h3 class="card-title"><b>Search </b></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-plus" ></i>
@@ -62,7 +62,7 @@
                             <td>{{ subjectList[item.elective_sub_id1]}}</td>
                             <td>{{ subjectList[item.elective_sub_id2]}}</td>
                             <td v-if="showedit">
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Update</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -113,7 +113,7 @@ export default {
         },
         loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
                     this.subjectList[data.data.data[i].id] = data.data.data[i].name;

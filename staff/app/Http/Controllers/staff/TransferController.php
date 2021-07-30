@@ -275,7 +275,13 @@ class TransferController extends Controller{
                 TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
             }
        
-        
+         if($request->withdraw == "true"){
+                $status =[
+                    'status'        =>  'Rejected'
+                ];
+                TransferApplication::where('aplication_number', $request->application_number)->update($status);
+                
+            }
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $doc_data =[
@@ -294,12 +300,19 @@ class TransferController extends Controller{
 
     public function loadtrainsferDetails($appNo=""){
         $response_data=TransferApplication::where('aplication_number',$appNo)->first();
-
         if($response_data!="" && $response_data!=null){
             $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();
         }
         $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
             return $this->successResponse($response_data);
+        }
+    public function loadAppealattachementDetails($appNo=""){
+        $response_data=StaffAppeal::where('application_no',$appNo)->first();
+        if($response_data!="" && $response_data!=null){
+            $response_data->documents=DocumentDetails::where('parent_id',$response_data->id)->get();
+        }
+        $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
+                return $this->successResponse($response_data);
         }
     public function updateTransferApplication(Request $request){
         $extra_data =[
@@ -459,7 +472,7 @@ class TransferController extends Controller{
    }
 
    public function LoadTransferAppealDetails($user_id=""){
-    $response_data=StaffAppeal::where ('user_id', $user_id)->first();
+    $response_data=StaffAppeal::where ('user_id', $user_id)->get();
     return$response_data;
 }
    public function getapplicatName($id=""){
@@ -475,7 +488,9 @@ class TransferController extends Controller{
         $response_data=TransPrefenreces::where ('transfer_application_id', $id)->get();
         return$response_data;
     }
+
     public function SaveTransferAppeal(Request $request){
+     if($request->id==""){
         $rules = [
             'description'              =>  'required  ',
         ];
@@ -523,6 +538,7 @@ class TransferController extends Controller{
             'status'                            =>  $request->status,
             'org_id'                            =>  $request->working_agency_id,
         ];
+
         $response_data=TransferApplication::where('created_by',$request->user_id)->first();
         if($response_data!=null || $response_data!=""){
             if($response_data->status=="Transfer Approved" || $response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Forwarded"){
@@ -551,5 +567,56 @@ class TransferController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    else{
+        
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'Please mention the reasons for transfer appeal ',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $request_data =[
+            'id'                                =>  $request->id,
+            'transferType'                      =>  $request->transferType,
+            'description'                       =>  $request->description,
+        ];
+        $response_data=TransferApplication::where('created_by',$request->user_id)->first();
+        
+        if($response_data!=null || $response_data!=""){
+            if( $response_data->status=="submitted"){
+               StaffAppeal::where('application_no', $request->application_no)->update($request_data);
+            }
+            else{
+                return "Approved or rejected    ";
+            }
+        }
+        else{
+            return "Not Contain";
+        }
+        if($request->withdraw == "true"){
+            $status =[
+                'status'        =>  'Rejected'
+            ];
+            StaffAppeal::where('application_no', $request->application_no)->update($status);
+            
+        }
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $request->id,
+                    'attachment_for'                   =>  'Transfer Appeal',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                $doc = DocumentDetails::create($doc_data);
+            }
+        }
+       
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+    }
+  }
 
 }
