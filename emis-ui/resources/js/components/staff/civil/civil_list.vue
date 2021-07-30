@@ -111,7 +111,7 @@ export default {
             if(type=="edit"){
                 this.$router.push({name:"edit_civil_staff",params:{data:staff}});
             }
-            else{
+            else {
                 this.$router.push({name:"view_civil_staff",params:{data:staff}});
             }
 		},

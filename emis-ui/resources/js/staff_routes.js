@@ -423,6 +423,9 @@ const routes = [
 
         ]
     },
+    //STAFF PROFILE (Detailed Profile)
+
+    { path: '/staff_profile',name:'staff_profile', component: require('./components/staff/staff_profile/staff_profile.vue').default },
 
     //STAFF Transactions
     { path:'/staff_registration',
