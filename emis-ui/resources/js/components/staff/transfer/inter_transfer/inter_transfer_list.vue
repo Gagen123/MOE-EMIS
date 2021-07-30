@@ -17,7 +17,7 @@
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{form.applicant_name}}</td>
-                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                            <td>{{ item.aplication_number}}</td>
                             <td>{{ item.created_at}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
@@ -84,7 +84,6 @@ export default {
         mounted() {
             this.loadtransferDetails();
             this.loadstaff();
-            this.dt =  $("#training-table").DataTable()
         },
         watch: {
             transfer_list(){

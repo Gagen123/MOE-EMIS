@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Undertaking</th>
+                    <th >Type</th>
                     <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th> 
@@ -51,11 +51,14 @@ export default {
     },
     mounted(){ 
         this.loadtransferTypeList();
+        this.dt =  $("#working-agency-table").DataTable()
+
     },
     watch: {
         transferList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
             });
         }
     },

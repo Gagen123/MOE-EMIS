@@ -9,15 +9,15 @@
                             <th>Applicant Name</th>
                             <th>Application Number</th>
                             <th>Date of Apply</th>
-                            <th>Status</th>
+                            <th pl-5 pr-5>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ item.applicant_name}}</td>
-                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                            <td>{{ item.applicant_name}}</td>
+                             <td>{{ item.aplication_number}}</td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
                            <td>
@@ -58,7 +58,7 @@ export default {
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
                 let data = response.data
-                // this.form.applicant_name = response.data[0].applicant_name;
+                this.form.applicant_name = response.data[0].applicant_name;
                 this.transfer_list = data;
              })
             .catch((error) => {

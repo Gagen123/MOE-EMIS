@@ -74,6 +74,7 @@ class TransferController extends Controller{
         return $this->successResponse($response_data);
     }
 
+
     public function submitFinalapplicantDetails(Request $request){
         $rules = [
             'transferType'              =>  'required  ',
@@ -208,6 +209,86 @@ class TransferController extends Controller{
             }
         }
         $response_data = TransferApplication::where ('id', $request->id)->first();
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+
+    public function UpdatedApplicantDetails(Request $request){
+        $request_data1 =[
+            'description'                         =>  $request->description,
+            'transfer_reason_id'                  =>  $request->reason_id,
+        ];
+        TransferApplication::where('aplication_number', $request->application_number)->update($request_data1);
+        $response_data = TransferApplication::where ('aplication_number', $request->application_number)->first();
+
+        if($request->preference_school1!=""){
+            $request_data =[
+                'school_id'                     =>$request->preference_school1,
+                'preference'                    =>  1,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',1)->update($request_data);
+        }
+        if($request->preference_school2!=""){
+            $request_data =[
+                
+                'school_id'                     =>$request->preference_school2,
+                'preference'                    =>  2,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
+            
+        }
+
+        if($request->preference_school3!=""){
+            $request_data =[
+                
+                'school_id'                     =>  $request->preference_school3,
+                'preference'                    =>  3,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
+
+        }
+        if($request->preference_dzongkhag1!=""){
+            $request_data =[
+                'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
+                'preference'                    =>  1,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',1)->update($request_data);
+        }
+            if($request->preference_dzongkhag2!=""){
+                $request_data =[
+                    'dzongkhag_id'                  =>  $request->preference_dzongkhag2,
+                    'preference'                    =>  2,
+                    'created_at'                    =>date('Y-m-d h:i:s'),
+                ];
+                TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
+            }
+            if($request->preference_dzongkhag3!=""){
+                $request_data =[
+                    'dzongkhag_id'                  =>  $request->preference_dzongkhag3,
+                    'preference'                    =>  3,
+                    'created_at'                    =>date('Y-m-d h:i:s'),
+                ];
+                TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
+            }
+       
+        
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $request->id,
+                    'attachment_for'                   =>  'Transfer',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                $response_data=DocumentDetails::create($doc_data);
+            }
+        }
+
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -387,6 +468,11 @@ class TransferController extends Controller{
     }
     public function LoadApplicationDetailsByUserId($user_id=""){
         $response_data=TransferApplication::where ('created_by', $user_id)->first();
+        return$response_data;
+    }
+
+    public function loadPreference($id=""){
+        $response_data=TransPrefenreces::where ('transfer_application_id', $id)->get();
         return$response_data;
     }
     public function SaveTransferAppeal(Request $request){
