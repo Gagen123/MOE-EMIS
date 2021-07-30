@@ -95,7 +95,7 @@ export default {
             let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
             classTeachers.forEach((classTeacher,index) => {
                 classSections.forEach(item => {
-                    if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || (classTeacher.org_stream_id == null && item.org_stream_id == null)) && (classTeacher.org_section_id == item.org_section_id || (classTeacher.org_section_id == null && item.org_section_id == null))){
+                    if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || ((classTeacher.org_stream_id == null || classTeacher.org_stream_id == "" ) && (item.org_stream_id == null || item.org_stream_id == ""))) && (classTeacher.org_section_id == item.org_section_id || ((classTeacher.org_section_id == null || classTeacher.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
                         classTeachers[index].org_class_id = item.org_class_id;
                         classTeachers[index].org_stream_id = item.org_stream_id
                         classTeachers[index].org_section_id = item.org_section_id
@@ -142,16 +142,15 @@ export default {
         getAttendanceData(){
             let uri = 'academics/getAttendanceData'
             let std_id = $('#std_student_id').val()
-            uri += ('?studentId='+std_id+'&termId='+this.form.aca_assmt_term_id+'&classId='+this.class_stream_section_id[1])
-           if(this.class_stream_section_id[2] !== ""){
-                uri += ('&streamId='+this.class_stream_section_id[2])
+            uri += ('?std_id='+std_id+'&aca_assmt_term_id='+this.form.aca_assmt_term_id+'&org_class_id='+this.class_stream_section_id[1])
+           if(this.class_stream_section_id[2] !== "" || this.class_stream_section_id[2] !== null){
+                uri += ('&org_stream_id='+this.class_stream_section_id[2])
             }
-            if(this.class_stream_section_id[3]!==""){
-                uri += ('&sectionId='+this.class_stream_section_id[3])
+            if(this.class_stream_section_id[3]!=="" || this.class_stream_section_id[3] !== null){
+                uri += ('&org_section_id='+this.class_stream_section_id[3])
             }
             axios.get(uri).then(response =>{
                 let instructional_days = response.data.data
-                console.log(instructional_days);
                 instructional_days.forEach(item=>{
                     this.no_instructional_days = item.no_instructional_days
                     this.no_days_present = item.no_days_present

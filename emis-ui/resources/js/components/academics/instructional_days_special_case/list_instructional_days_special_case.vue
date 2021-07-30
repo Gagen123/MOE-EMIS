@@ -63,10 +63,10 @@ export default {
 
             let uri = 'academics/getStudentsForAttendance'
             uri += ('?OrgClassStreamId='+this.org_class_stream_id+'&classId='+this.org_class_id)
-                if(this.org_stream_id !== null){
+                if(this.org_stream_id !== null && this.org_stream_id !== ""){
                     uri += ('&streamId='+this.org_stream_id)
                 }
-                if(this.org_section_id !== null){
+                if(this.org_section_id !== null && this.org_section_id !== ""){
                     uri += ('&sectionId='+this.org_section_id)
                 }
             let student = await axios.get(uri).then(response=>response.data.student)
