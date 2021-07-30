@@ -7,7 +7,7 @@
                     <th >Undertaking</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -22,13 +22,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            undertakingList:[], 
+            undertakingList:[],
             dt:'',
         }
     },
@@ -49,12 +49,12 @@ export default {
             this.$router.push({name:'edit_transfer_undertaking',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadundertakingList();
         this.dt =  $("#working-agency-table").DataTable()
     },
     watch: {
-        transferList(val) {
+        undertakingList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#working-agency-table").DataTable()

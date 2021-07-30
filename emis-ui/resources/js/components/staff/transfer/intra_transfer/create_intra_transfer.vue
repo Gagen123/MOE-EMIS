@@ -484,7 +484,10 @@ export default {
                     const oneDay = 1000 * 60 * 60 * 24;
 
                     // Calculating the time difference between two dates
-                    const diffInTime = todate.getTime() - formdate.getTime();
+                    let diffInTime = todate.getTime() - formdate.getTime();
+
+                    //consider last day
+                    diffInTime=diffInTime+oneDay;
 
                     // Calculating the no. of days between two dates
                     const diffInDays =(diffInTime / oneDay);

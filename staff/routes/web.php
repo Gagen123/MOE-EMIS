@@ -214,6 +214,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     //Staff Update Services
     $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
         $router->post('/saveStaffCareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffCareerStage']);
+        $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
+        $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
 
     });
 });

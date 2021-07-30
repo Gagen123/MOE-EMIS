@@ -44,25 +44,7 @@ import spms_routes from "./spms_routes";
 import mess_manage_routes from "./mess_manage_routes";
 import dietary from "./dietary";
 
-Vue.mixin({
-    methods: {
-        //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
-        checkminmax: function (id, type,num,btnid) {
-            if(type=='min' && parseInt($('#'+id).val())<num){
-                $('#'+id+'_err').html('This value cannot be less than '+num);
-                $('#'+btnid).prop('disabled',true);
-            }
-            else if(type=='max' && parseInt($('#'+id).val())>num){
-                $('#'+id+'_err').html('This value cannot be greater than '+num);
-                $('#'+btnid).prop('disabled',true);
-            }
-            else{
-                $('#'+id+'_err').html('');
-                $('#'+btnid).prop('disabled',false);
-            }
-        },
-    },
-})
+require('./common');
 
 var allRoutes = [];
 allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes,spms_routes,dietary);

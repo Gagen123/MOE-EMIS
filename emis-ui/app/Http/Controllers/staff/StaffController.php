@@ -80,6 +80,7 @@ class StaffController extends Controller{
             'sex_id'            =>  $request->sex_id,
             'marital_status'    =>  $request->marital_status,
             'dob'               =>  $request->dob,
+            'issen'             =>  $request->issen,
             'country_id'        =>  $request->country_id,
             'p_dzongkhag'       =>  $request->p_dzongkhag,
             'p_gewog'           =>  $request->p_gewog,
