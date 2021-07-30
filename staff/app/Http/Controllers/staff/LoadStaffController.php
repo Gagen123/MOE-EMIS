@@ -30,7 +30,11 @@ class LoadStaffController extends Controller{
         // }
         if($type=="orgWiseCivilServent"){
             $emp_type=[1,2,3];//regualr,contract and volunteer
-            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('working_agency_id',$parent_id)->get());
+            if(strpos($parent_id,'SEN')!==false){
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('is_sen',1)->where('working_agency_id',$parent_id)->get());
+            }else{
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('working_agency_id',$parent_id)->get());
+            }
         }
         if($type=="orgWisePrivateStaff"){
             return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->where('working_agency_id',$parent_id)->get());
@@ -38,14 +42,23 @@ class LoadStaffController extends Controller{
 
         if($type=="dzoWiseCivilServent"){
             $emp_type=[1,2,3];//regualr,contract and volunteer
-            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('dzo_id',$parent_id)->where('status','Created')->get());
+            if(strpos($parent_id,'SEN')!==false){
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('is_sen',1)->where('dzo_id',$parent_id)->get());
+            }else{
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('dzo_id',$parent_id)->where('status','Created')->get());
+            }
         }
         if($type=="dzoWisePrivateStaff"){
             return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="allCivilServent"){
             $emp_type=[1,2,3];//regualr,contract and volunteer
-            return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+            if(strpos($parent_id,'SEN')!==false){
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('is_sen',1)->get());
+            }else{
+                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+            }
+
         }
         if($type=="allPrivateStaff"){
             return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get());

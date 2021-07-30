@@ -46,7 +46,9 @@ class LoadStaffController extends Controller{
         }
 
         if($type=="userOrgWiseCivilServent" || $type=="selectedOrgWiseCivilServent"){
-            if($type=="userOrgWiseCivilServent"){ //load all civil servent by user logedin org id
+            if($parent_id=="SEN"){ //load all sen civil servent by user logedin org id
+                $param='SEN__'.$this->getWrkingAgencyId();
+            }else if($type=="userOrgWiseCivilServent"){ //load all civil servent by user logedin org id
                 $param=$this->getWrkingAgencyId();
             }else{ //load all civil servent by selected org id
                 $param=$parent_id;
@@ -73,7 +75,12 @@ class LoadStaffController extends Controller{
         }
 
         if($type=="allCivilServent" || $type=="allPrivateStaff"){//all civil servent and private staff, by ministry user
-            $param=$parent_id;
+            if($parent_id=="SEN"){ //load all sen civil servent by user logedin org id
+                $param='SEN__'.$parent_id;
+            }
+            else{
+                $param=$parent_id;
+            }
         }
 
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
