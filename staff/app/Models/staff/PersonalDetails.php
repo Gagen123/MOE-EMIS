@@ -42,6 +42,7 @@ class PersonalDetails extends Model{
         'employee_code',
         'remarks',
         'sen_remarks',
+        'currier_stage_remarks',
         'created_by',
         'updated_by',
         'created_at',

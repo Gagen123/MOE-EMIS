@@ -38,6 +38,7 @@ class StfPersonalDetails extends Migration{
             $table->char('employee_code',100)->nullable(true);
             $table->char('initial_appointment_date',50)->nullable();
             $table->string('sen_remarks')->nullable(true);
+            $table->string('currier_stage_remarks')->nullable(true);
             $table->string('remarks')->nullable(true);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
