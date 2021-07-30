@@ -87,7 +87,7 @@ export default {
     },
     methods: {
         loadeditpage(staff){
-            this.$router.push({name:"edit_teacher_subject",params:{id:staff.id}});
+            this.$router.push({name:"edit_teacher_subject",query:{data:staff}});
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)
@@ -123,6 +123,7 @@ export default {
                 console.log(error);
             });
         },
+
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -134,6 +135,15 @@ export default {
                 this.orgList=await this.schoolList($('#dzongkhag_id').val());
             }
         },
+        async loaddata(){
+            this.staffList=[];
+            if($('#org_id').val()!="ALL"){
+                this.staffList=await this.staffSchoolwise($('#org_id').val());
+            }
+            if($('#dzongkhag_id').val()!="ALL" && $('#org_id').val()=='ALL'){
+                this.staffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
+            }
+        }
     },
     async mounted(){
         this.dzongkhagList= await this.loadactivedzongkhags();

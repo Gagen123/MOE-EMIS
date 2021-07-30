@@ -21,19 +21,19 @@ class LoadStaffController extends Controller{
     public function loadStaffList($type="",$parent_id=""){
         $param=$parent_id;
         //type=allstaff: to listentire staff
-        if($type=="allstaff"){
-            $param='NA';
-        }
+        // if($type=="allstaff"){
+        //     $param='NA';
+        // }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
-        if($type=="userdzongkhagwise"){
-            if($parent_id=="Private"){
-                $param='Private__'.$this->getUserDzoId();
-            }
-            else{
-                $param=$this->getUserDzoId();
-            }
-        }
+        // if($type=="userdzongkhagwise"){
+        //     if($parent_id=="Private"){
+        //         $param='Private__'.$this->getUserDzoId();
+        //     }
+        //     else{
+        //         $param=$this->getUserDzoId();
+        //     }
+        // }
 
         //updated by Tshewang on 2021/07/26
         if($type=="userDzoWiseCivilServent" || $type=="selectedDzoWiseCivilServent"){
@@ -82,7 +82,10 @@ class LoadStaffController extends Controller{
                 $param=$parent_id;
             }
         }
-
+        if($type=="allStaffSchoolwise" || $type=='staffDzongkhagwise'){//all civil servent and private staff, by ministry user
+            $param=$parent_id;
+        }
+        // dd($type.'/'.$param);
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$type.'/'.$param);
         return $response_data;
     }

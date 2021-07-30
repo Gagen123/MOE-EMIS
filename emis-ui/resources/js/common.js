@@ -32,6 +32,22 @@ try {
                     console.log('error loadactivedzongkhags '+e);
                 }
             },
+            staffSchoolwise(org_id){
+                let uri = 'loadCommons/loadStaffList/staffSchoolwise/'+org_id;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error staffSchoolwise '+e);
+                }
+            },
+            staffDzongkhagwise(dzo_id){
+                let uri = 'loadCommons/loadStaffList/staffDzongkhagwise/'+dzo_id;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error staffDzongkhagwise '+e);
+                }
+            }
         },
     })
 
