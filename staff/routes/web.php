@@ -213,13 +213,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     //Staff Update Services
     $router->group(['prefix' => 'staffUpdateController'], function () use ($router) {
-        $router->post('/saveStaffcareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffcareerStage']);
-        $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
-        $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
-<<<<<<< HEAD
-=======
-        $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
->>>>>>> a99f900cd9364cfd9493c0dfd5e7d0d7175517e4
+        $router->post('/saveStaffCareerStage', ['uses' => 'staff\StaffUpdateController@saveStaffCareerStage']);
 
     });
 });

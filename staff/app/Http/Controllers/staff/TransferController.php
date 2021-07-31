@@ -277,7 +277,7 @@ class TransferController extends Controller{
        
          if($request->withdraw == "true"){
                 $status =[
-                    'status'        =>  'Rejected'
+                    'status'        =>  'withdrawn'
                 ];
                 TransferApplication::where('aplication_number', $request->application_number)->update($status);
                 
@@ -568,6 +568,13 @@ class TransferController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     else{
+        if($request->withdraw == "true"){
+            $status =[
+                'status'        =>  'withdrawn'
+            ];
+            StaffAppeal::where('application_no', $request->application_no)->update($status);
+            
+        }
         
         $rules = [
             'description'              =>  'required  ',
@@ -584,23 +591,17 @@ class TransferController extends Controller{
         $response_data=TransferApplication::where('created_by',$request->user_id)->first();
         
         if($response_data!=null || $response_data!=""){
-            if( $response_data->status=="submitted"){
+            if( $response_data->status=="Submitted"){
                StaffAppeal::where('application_no', $request->application_no)->update($request_data);
             }
             else{
-                return "Approved or rejected    ";
+                return "Approved or rejected";
             }
         }
         else{
             return "Not Contain";
         }
-        if($request->withdraw == "true"){
-            $status =[
-                'status'        =>  'Rejected'
-            ];
-            StaffAppeal::where('application_no', $request->application_no)->update($status);
-            
-        }
+       
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $doc_data =[

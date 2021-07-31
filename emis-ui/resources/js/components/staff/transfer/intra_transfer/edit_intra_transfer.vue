@@ -305,6 +305,10 @@ export default {
                 this.form.status=data.status;
                 this.form.application_number = data.aplication_number;
                 this.loadattachementDetails(data.aplication_number);
+                
+                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
+                     $('#Withdraw').hide();
+                }
                 $(document).ready(function() {
                     $('#tbName').on('input change', function() {
                     if(this.form.status =="verify" || this.form.status == "approve" || this.form.status =="forward" || this.form.status =="Transfer Approved" ){

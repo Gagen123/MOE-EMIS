@@ -222,10 +222,8 @@ export default {
                 let data = response.data.data;
                 this.draft_attachments=data.documents;
                 this.form.status=data.status;
-
-                if(this.form.status =="Approved"){
+                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
-
                 }
             })
             .catch(errors =>{
@@ -325,7 +323,7 @@ export default {
                             }
                              else if(response.data=="Approved or rejected"){
                                 Swal.fire({
-                                    html: "You are not eligible for applying transfer appeal since your application has be already verified or approved ",
+                                    html: "You are not eligible for applying transfer appeal since your application has been already verified or approved ",
                                     icon: 'error',
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
