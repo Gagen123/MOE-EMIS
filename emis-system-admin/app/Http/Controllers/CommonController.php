@@ -96,7 +96,7 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
             }
 
             //pulling application for the transfer
@@ -104,7 +104,7 @@ class CommonController extends Controller{
             if($work_flow_for_transfer!=""){
                 $result_data.='  OR (t.claimed_by IS NULL AND (';
                 foreach($work_flow_for_transfer as $i => $srcn){
-                    $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                    $result_data.='( (t.application_number like "TR%" || t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_transfer)-1==$i){
                         $result_data.='))';
                     }

@@ -32,6 +32,14 @@ try {
                     console.log('error loadactivedzongkhags '+e);
                 }
             },
+            getdepartmentList(departmentId){
+                let uri = 'loadCommons/loadHeaquarterList/all_division/'+departmentId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error getdepartmentList '+e);
+                }
+            },
             staffSchoolwise(org_id){
                 let uri = 'loadCommons/loadStaffList/staffSchoolwise/'+org_id;
                 try{

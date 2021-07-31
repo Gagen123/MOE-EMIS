@@ -531,7 +531,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="staff_services_index">
-                        <router-link to="/staff_services_index" class="nav-link">
+                        <router-link to="/staff_second_seperation" class="nav-link">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
                                 Secondment/Separation

@@ -21,8 +21,23 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
+
                         <div class="callout callout-success">
                             <span><label><u>Applicant Detials</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Applicantion Number:</label><br>
+                                    <span class="text-blue text-bold">{{response_data.aplication_number}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Status:</label><br>
+                                    <span class="text-blue text-bold">{{response_data.status}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                     <label class="mb-0">Application Submission Date:</label><br>
+                                    <span class="text-blue text-bold">{{response_data.created_at}}</span>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Applicant Name:</label><br>
@@ -209,6 +224,7 @@ export default {
             preferenceSchool:false,
             approveSchool:true,
             school:true,
+            response_data:[],
 
             form: new form({
                 id: '',
@@ -233,7 +249,7 @@ export default {
                 }],
                 ref_docs:[],
                 remarks:'',
-                
+
                 actiontype:'',
             }),
         }
@@ -243,6 +259,7 @@ export default {
             axios.get('staff/transfer/loadtrainsferDetails/'+appId+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
+                this.response_data=data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
                 this.form.id=data.id;
@@ -251,7 +268,7 @@ export default {
                 this.form.staff_id=data.staff_id;
                 this.form.transferType=data.transferType;
                 this.draft_attachments=data.documents;
-                
+
                 if(this.form.status_id==9){
                     $('#reportId').show();
                 }
@@ -335,10 +352,10 @@ export default {
                     }
                     if(i==2){
                         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
-                        $('#approvedDzongkhag3').schoolApprovedval(data.preferences[i].dzongkhag_id);
+                        $('#approvedDzongkhag3').val(data.preferences[i].dzongkhag_id);
                     }
                 }
-               
+
             })
             .catch((error) =>{
                 console.log("Error: "+error);
@@ -391,7 +408,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        shownexttab(nextclass){ 
+        shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="verify" || nextclass=="approve" || nextclass=="report" || nextclass=="forward"){
                 let action=true;
                 if(nextclass=="reject" && this.form.remarks==""){
