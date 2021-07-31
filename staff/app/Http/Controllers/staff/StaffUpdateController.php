@@ -70,6 +70,8 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+<<<<<<< HEAD
+=======
 
     public function saveStaffContact(Request $request){
         $curr_data = PersonalDetails::where('id',$request->id)->first();
@@ -85,4 +87,5 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+>>>>>>> a99f900cd9364cfd9493c0dfd5e7d0d7175517e4
 }
