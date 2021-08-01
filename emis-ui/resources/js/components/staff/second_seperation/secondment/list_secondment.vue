@@ -45,7 +45,7 @@
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-3">
+                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-4">
                         <button type="button" @click="loaddata()" class="btn btn-success">
                             <i class="fas fa-search" ></i> Search
                         </button>

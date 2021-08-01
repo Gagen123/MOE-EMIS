@@ -14,6 +14,7 @@ class CourseMode extends Model{
         'name',
         'code',
         'status',
+        'description',
         'created_by',
         'created_at',
         'updated_by',

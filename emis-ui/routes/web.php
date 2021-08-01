@@ -17,7 +17,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/load_dzongkhag_details_by_id/{id}', [App\Http\Controllers\AdministrationController::class, 'load_dzongkhag_details_by_id'])->name('load_dzongkhag_details_by_id');
     Route::get('/getroles/{param}', [App\Http\Controllers\AdministrationController::class, 'getroles'])->name('getroles');
     Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
-    Route::post('/saveStaffMasters', [App\Http\Controllers\AdministrationController::class, 'saveStaffMasters'])->name('saveStaffMasters');
+
     Route::get('/loadStaffMasters/{param}', [App\Http\Controllers\AdministrationController::class, 'loadStaffMasters'])->name('loadStaffMasters');
     Route::get('/loadStaffDropdownMasters/{model}/{parent_id}', [App\Http\Controllers\AdministrationController::class, 'loadStaffDropdownMasters'])->name('loadStaffDropdownMasters');
     Route::post('/saveHrDevelopmentMasters', [App\Http\Controllers\staff\HrDevelopmentMastersController::class, 'saveHrDevelopmentMasters'])->name('saveHrDevelopmentMasters');
@@ -41,6 +41,10 @@ Route::prefix('masters')->group(function () {
         Route::get('/loadFinacialtype', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadFinacialtype'])->name('loadFinacialtype');
         Route::get('/loadincomeList', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadincomeList'])->name('loadincomeList');
         Route::get('/loadOrganizaitonmasters/{type}/{model}', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadOrganizaitonmasters'])->name('loadOrganizaitonmasters');
+
+    });
+    Route::prefix('staffMasterController')->group(function (){
+        Route::post('/saveStaffMaster', [App\Http\Controllers\staff\StaffMasterController::class, 'saveStaffMaster'])->name('saveStaffMaster');
 
     });
 
@@ -409,6 +413,9 @@ Route::prefix('questionAnswerController')->group(function () {
 
 
 Route::prefix('staff')->group(function () {
+    Route::post('/saveStaffMasters', [App\Http\Controllers\staff\StaffMasterController::class, 'saveStaffMasters'])->name('saveStaffMasters');
+    Route::get('/loadStaffMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadStaffMasters'])->name('loadStaffMasters');
+
     Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
