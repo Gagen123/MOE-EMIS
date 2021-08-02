@@ -8,11 +8,11 @@
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
-                        <has-error :form="form" field="name"></has-error>
-                    </div>
+                        <has-error :form="form" field="code"></has-error>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -35,7 +35,7 @@ export default {
             subject_category_list:[],
             form: new form({
                 name: '',
-                code:'',
+                // code:'',
                 status:1,
                 record_type:'domain',
                 action_type:'add',
@@ -45,14 +45,14 @@ export default {
     methods: {
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id).removeClass('is-invalid')
             }
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.code = '';
-                this.form.status= 1;
+                this.form.name= ''
+                // this.form.code = ''
+                this.form.status= 1
             }
             if(type=="save"){
                 this.form.post('/masters/saveSpmMasters',this.form)
@@ -61,7 +61,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-domain');
+                    this.$router.push('/list-domain')
                 })
                 .catch(() => {
                     console.log("Error.")

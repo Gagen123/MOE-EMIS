@@ -16,6 +16,26 @@
                        Domain
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('area')">
+                    <router-link id="area" to="/area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Area
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('paramter')">
+                    <router-link id="paramter" to="/parameter-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Parameter
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('indicator')">
+                    <router-link id="indicator" to="/indicator-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Indicator
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('rating')">
+                    <router-link id="rating" to="/rating-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Rating
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

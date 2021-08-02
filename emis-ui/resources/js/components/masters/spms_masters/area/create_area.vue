@@ -4,15 +4,27 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Name:<span class="text-danger">*</span></label> 
+                        <label>Domain :<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="spm_domain_id" v-model="form.spm_domain_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_domain_id') }" @change="remove_err('spm_domain_id')">
+                            <option value=""> ---Select---</option>
+                            <option v-for="(item, index) in domains" :key="index" v-bind:value="item.id">
+                                {{ item.name }}
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="spm_domain_id"></has-error>
+                    </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Area:<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
-                        <has-error :form="form" field="name"></has-error>
-                    </div>
+                        <has-error :form="form" field="code"></has-error>
+                    </div> -->
+                <!-- </div> 
+                <div class="row form-group"> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -32,27 +44,41 @@
 export default {
     data(){
         return {
-            subject_category_list:[],
+            domains:[],
             form: new form({
                 name: '',
-                code:'',
+                spm_domain_id:'',
+                // code:'',
                 status:1,
-                record_type:'domain',
+                record_type:'area',
                 action_type:'add',
             })
         }
     },
     methods: {
+        getDomains(){
+            axios.get('masters/loadSpmMasters/all_active_domains')
+            .then(response => {
+                let data = response 
+                this.domains =  data.data.data
+            })
+            .catch(function (error){
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
+                $('#'+field_id).removeClass('is-invalid')
             }
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.name= '';
-                this.form.code = '';
-                this.form.status= 1;
+                this.form.name= ''
+                this.form.spm_domain_id = ''
+                // this.form.code = ''
+                this.form.status= 1
             }
             if(type=="save"){
                 this.form.post('/masters/saveSpmMasters',this.form)
@@ -61,7 +87,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-domain');
+                    this.$router.push('/list-area')
                 })
                 .catch(() => {
                     console.log("Error.")
@@ -69,5 +95,21 @@ export default {
             }
 		}, 
     },
+    mounted(){
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').select2().
+        on("select2:select", e => {
+            const event = new Event("change", { bubbles: true, cancelable: true })
+            e.params.data.element.parentElement.dispatchEvent(event)
+        })
+        .on("select2:unselect", e => {
+        const event = new Event("change", { bubbles: true, cancelable: true })
+        e.params.data.element.parentElement.dispatchEvent(event)
+        });
+        this.getDomains()
+    }
 }
 </script>
