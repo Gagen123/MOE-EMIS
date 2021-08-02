@@ -70,17 +70,17 @@ class LoadOrganizaitonController extends Controller{
 
     public function loadHeaquarterList($type="",$parent_id=""){
         $param="";
-        //type=allList: to list entire headquarters
-        if($type=="allList"){
-            $param="NA";
-        }
+        // type=allList: to list entire headquarters
+        // if($type=="allList"){
+        //     $param="NA";
+        // }
 
         //list headquarters of all dzongkhg
         if($type=="all_dzongkhag_headquarters"){
             $param=2;
         }
 
-        //list headquarters of all ministry
+        //list all departments at ministry
         if($type=="all_ministry_departments"){
             $param=$parent_id;
         }
@@ -88,6 +88,8 @@ class LoadOrganizaitonController extends Controller{
         if($type=="all_division"){
             $param=$parent_id;
         }
+
+        //list department dzongkhag wise
         if($type=="user_dzongkhag"){
             $param=$parent_id;
         }

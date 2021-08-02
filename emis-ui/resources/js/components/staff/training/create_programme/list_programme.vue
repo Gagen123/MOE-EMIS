@@ -42,7 +42,11 @@ export default {
     },
     methods: {
         loadeditpage(id,type){
-            this.$router.push({name:'edit_training_programme',params: {data:id,type:type}});
+            if(type=="view"){
+                this.$router.push({name:'view_training_programme',params: {data:id,type:type}});
+            }else{
+                this.$router.push({name:'edit_training_programme',params: {data:id,type:type}});
+            }
         },
         loadStaffList(){
             let uri='/staff/hrdevelopment/loadprogramDetails';

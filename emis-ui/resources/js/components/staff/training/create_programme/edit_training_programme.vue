@@ -212,14 +212,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
+                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1" :id="'attachview'+count">
                                             <td>
                                                 <input type="text" class="form-control" readonly :value="attach.user_defined_name">
                                             </td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span v-if="dis_status==true">
-                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
                                                 </span>
                                             </td>
                                         </tr>
@@ -453,7 +453,7 @@ export default {
             //     console.log("Error:"+error);
             // });
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -475,6 +475,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachview'+count).remove();
                             this.loadDetails();
                         }
                         else{

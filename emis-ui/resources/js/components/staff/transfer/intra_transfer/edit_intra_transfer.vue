@@ -160,14 +160,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
+                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1" :id="'attachemnt'+count">
                                             <td>
                                                 <input type="text" class="form-control" readonly :value="attach.user_defined_name">
                                             </td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span>
-                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
                                                 </span>
                                             </td>
                                         </tr>
@@ -244,7 +244,7 @@ export default {
                 type_id:'',
                 status:'',
                 withdraw:'',
-                application_number:'',                
+                application_number:'',
                 dzongkhagApproved:'',
                 preference_school:'',
                 preference_school1:'',
@@ -253,7 +253,7 @@ export default {
                 dzoName:'',
                 schoolName:'',
                 schoolLevel:'',
-              
+
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -385,7 +385,7 @@ export default {
                 console.log(error);
             });
         },
-        
+
         shownexttab(nextclass){
             if(nextclass=="final-tab"){
                 if(this.form.t_to_date <=this.form.current_date || this.form.t_from_date >this.form.current_date){
@@ -443,7 +443,7 @@ export default {
                     })
                 }
             }
-        
+
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -461,7 +461,7 @@ export default {
                 this.form.name = response.data.data.Full_Name;
                 this.getDzongkhagName(response.data.data.Dzo_Id)
                 this.getOrgaName(response.data.data.Agency_Code);
-                
+
 
             })
             .catch(errors =>{
@@ -555,7 +555,7 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -565,9 +565,9 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    let file_path=file.path+'/'+file.name;
+                    let file_path=file.path+'/'+file.original_name;
                     file_path=file_path.replaceAll('/', 'SSS');
-                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
                     axios.get(uri)
                     .then(response => {
                         let data = response;
@@ -577,6 +577,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachemnt'+count).remove();
                         }
                         else{
                         Swal.fire(
@@ -642,4 +643,3 @@ export default {
     },
 }
 </script>
-    

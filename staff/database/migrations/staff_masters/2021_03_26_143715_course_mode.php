@@ -11,6 +11,7 @@ class CourseMode extends Migration{
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
+            $table->string('description',225)->nullable();
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);

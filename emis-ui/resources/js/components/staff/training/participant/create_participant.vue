@@ -108,21 +108,22 @@
                                         </select>
                                         <span class="text-danger" id="dzongkhag_err"></span>
                                     </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school_section" style="display:none">
-                                        <label>School:<span class="text-danger">*</span></label>
+
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="department_section" style="display:none">
+                                        <label>Department:<span class="text-danger">*</span></label>
+                                        <select class="form-control select2" v-model="form.department" @change="remove_error('department')" name="department" id="department">
+                                            <option value="">- Please Select -</option>
+                                            <option v-for="(item, index) in department_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                        </select>
+                                        <span class="text-danger" id="department_err"></span>
+                                    </div>
+                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school_section" style="display:none">
+                                        <label>Organization:<span class="text-danger">*</span></label>
                                         <select class="form-control select2" v-model="form.school" @change="remove_error('school')" name="school" id="school">
                                             <option value="">- Please Select -</option>
                                             <option v-for="(item, index) in school_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                         </select>
                                         <span class="text-danger" id="school_err"></span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="department_section" style="display:none">
-                                        <label>Department/Division:<span class="text-danger">*</span></label>
-                                        <select class="form-control select2" v-model="form.department" @change="remove_error('school')" name="department" id="department">
-                                            <option value="">- Please Select -</option>
-                                            <option v-for="(item, index) in department_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                        </select>
-                                        <span class="text-danger" id="department_err"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -164,10 +165,10 @@
                                         <input type="file"  v-on:change="onChangeFileUpload" class="form-control" id="file">
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <span v-for="(doc, index) in editdocument" :key="index">
+                                        <span v-for="(doc, index) in editdocument" :key="index" :id="'attachment'+index">
                                             <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            <a href="#" @click="deletefile(doc)" class="fa fa-times text-danger"> Delete </a><br>
+                                            <a href="#" @click="deletefile(doc,index)" class="fa fa-times text-danger"> Delete </a><br>
                                         </span>
                                     </div>
                                 </div>
@@ -233,7 +234,7 @@
                     <hr>
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button class="btn btn-primary" @click="submitforapproval()"> <i class="fa fa-save"></i>Submit</button>
+                            <button class="btn btn-primary" @click="submitforapproval()"> <i class="fa fa-save"></i>Update</button>
                         </div>
                     </div>
                 </div>
@@ -322,7 +323,7 @@ export default {
                 }
                 if(type=="active_nature_of_participant_list"){
                     for(let i=0;i<data.length;i++){
-                        this.nature_of_participantListname[data[i].id] = data[i].name+', '+data[i].name;
+                        this.nature_of_participantListname[data[i].id] = data[i].name;
                     }
                 }
             })
@@ -330,7 +331,7 @@ export default {
                 console.log("Error:"+error);
             });
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -352,6 +353,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachment').remove();
                         }
                         else{
                         Swal.fire(
@@ -368,7 +370,7 @@ export default {
                 }
             });
         },
-        showSearch(type){
+        async showSearch(type){
             $('#dzongkhag_section').hide();
             $('#school_section').hide();
             $('#department_section').hide();
@@ -377,11 +379,13 @@ export default {
                 $('#school_section').show();
             }
             if(type=="Dzongkhag"){
-                this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
+                 this.department_list=await this.getDepartmentListbydzo('DzongkhagHeadquarter','All');
+                // this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
                 $('#department_section').show();
             }
             if(type=="Ministry"){
-                this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
+                this.department_list=await this.getDepartmentListbydzo('Ministry',14);
+                // this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
                 $('#department_section').show();
             }
         },
@@ -480,24 +484,10 @@ export default {
                 console.log("Error:"+error);
             });
         },
-        loadStaffList(id,type){
-            let uri="";
-            if(id=="NA"){
-                uri='loadCommons/loadStaffList/userOrgWiseCivilServent/ALL_TYPE';
-            }
-            else{
-                uri='loadCommons/loadStaffList/'+type+'/'+id;
-            }
-            axios.get(uri)
-            .then((response) => {
-                let data=response.data.data;
-                this.staff_list=data;
-            })
-            .catch((error) => {
-                console.log("Error:"+error);
-            });
-        },
-        changefunction(id){
+        // async loadStaffList(id){
+        //     this.staff_list=await this.staffOrgwise(id);
+        // },
+        async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
@@ -510,16 +500,24 @@ export default {
                 this.form.contact=valu.split('_')[1];
             }
             if(id=="dzongkhag"){
+                this.school_list=[];
                 this.form.dzongkhag=$('#dzongkhag').val();
-                this.getSchoolList($('#dzongkhag').val());
+                this.school_list=await this.schoolList($('#dzongkhag').val());
+                // this.getSchoolList($('#dzongkhag').val());
             }
             if(id=="department"){
+                this.school_list=[];
                 this.form.department=$('#department').val();
-                this.loadStaffList($('#department').val(),'dzo_hq_departmentwise');
+                if($('#department').val()!=""){
+                    this.school_list=await this.getdivisionList($('#department').val());
+                    $('#school_section').show();
+                }
             }
             if(id=="school"){
+                this.staff_list=[];
                 this.form.school=$('#school').val();
-                this.loadStaffList($('#school').val(),'orgwise');
+                this.staff_list=await this.staffOrgwise($('#school').val());
+                // this.loadStaffList($('#school').val());
             }
         },
         addrecords(){
@@ -660,16 +658,16 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        getSchoolList(dzoId){
-            axios.get('loadCommons/loadOrgList/dzongkhagwise/'+dzoId)
-            .then((response) => {
-                let data=response.data.data;
-                this.school_list=data;
-            })
-            .catch((error) =>{
-                console.log("Error in retrieving school List:"+error);
-            });
-        },
+        // getSchoolList(dzoId){
+        //     axios.get('loadCommons/loadOrgList/dzongkhagwise/'+dzoId)
+        //     .then((response) => {
+        //         let data=response.data.data;
+        //         this.school_list=data;
+        //     })
+        //     .catch((error) =>{
+        //         console.log("Error in retrieving school List:"+error);
+        //     });
+        // },
 
     },
 
@@ -692,7 +690,6 @@ export default {
         this.loadHrDevelopmentMasters('active_related_programme_list');
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
         this.loadDetails(this.$route.params.data,this.$route.params.statusId);
-        this.loadStaffList('NA','NA');
     },
 }
 </script>
