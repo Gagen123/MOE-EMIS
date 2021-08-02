@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 bg-cyan mb-2 pb-1 pr-1 pt-1">
-            Providing details for: <span class="personname"></span>
+            Providing details for: <span class="personname">{{name}} ({{emp_id}})</span>
             <a class="btn btn-dark btn-flat fa-pull-right pb-0 pl-2 pr-2 pt-0" type="button" @click="showaddmodal('nomination-modal')"><i class="fa fa-plus"></i> Add Nomination</a>
         </div>
         <div class="modal fade" id="nomination-modal" tabindex="-1" role="dialog">
@@ -189,6 +189,8 @@ export default {
             relationshipList:[],
             attachmentDetails:[],
             staff_nomination_list:[],
+            name:'',
+            emp_id:'',
             form: new form({
                 personal_id: '',
                 nomination_id:'',
@@ -452,6 +454,20 @@ export default {
                 });
             }
         },
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+                }
+                this.position_title=this.positiontitleList[positionid];
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
     },
      mounted(){
         $('.select2').select2();
@@ -466,8 +482,12 @@ export default {
             this.changefunction(id);
         });
 
+        
+        this.loadpositionTitleList(this.$route.query.data.position_title_id);
         this.loadrelationship();
-        //this.loadstaff();
+        this.form.id=this.$route.params.id;
+        this.name=this.$route.query.data.name;
+        this.emp_id=this.$route.query.data.emp_id;
         this.form.personal_id=this.$route.params.id;
         this.loadnomination(this.$route.params.id);
 

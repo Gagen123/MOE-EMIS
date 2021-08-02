@@ -3,12 +3,12 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
-                    <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
-                        <option value=""> --Select--</option>
-                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="staff_id"></has-error>
+                    <label class="mb-0.5">Emp Id:</label><br>
+                    {{emp_id}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name:</label><br>
+                    {{name}}
                 </div>
             </div>
             <div class="form-group row">
@@ -40,8 +40,10 @@ export default {
     data(){
         return {
             cureerstageArray:{},
-            staffList:[],
             marital_statusList:[],
+            position_title:'',
+            name:'',
+            emp_id:'',
             form: new form({
                 id:'',
                 staff_id:'',
@@ -88,17 +90,6 @@ export default {
             }
 
         },
-        loadstaff(){
-            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
@@ -107,6 +98,20 @@ export default {
             })
             .catch(function (error) {
                 console.leg(error);
+            });
+        },
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+                }
+                this.position_title=this.positiontitleList[positionid];
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
             });
         },
     },
@@ -123,9 +128,11 @@ export default {
             this.changefunction(id);
         });
 
+        this.loadpositionTitleList(this.$route.query.data.position_title_id);
         this.loadactivemaritalList();
-        this.loadstaff();
         this.form.id=this.$route.params.id;
+        this.name=this.$route.query.data.name;
+        this.emp_id=this.$route.query.data.emp_id;
         this.form.staff_id=this.$route.params.id;
     },
 }

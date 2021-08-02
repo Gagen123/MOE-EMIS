@@ -16,7 +16,7 @@ class StaffUpdateController extends Controller{
     public $database="emis_staff_db";
     public $audit_database;
     public function __construct() {
-        date_default_timezone_set('Asia/Dhaka');
+        date_default_timezone_set('Asia/newDhaka');
         $this->audit_database = config('services.constant.auditdb');
     }
 
@@ -70,10 +70,9 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-<<<<<<< HEAD
-=======
 
     public function saveStaffContact(Request $request){
+        dd('MS');
         $curr_data = PersonalDetails::where('id',$request->id)->first();
         //insert into audit
         $messs_det=' email:'.$curr_data->email.'; alternative_email:'.$curr_data->alternative_email.'; contact_no:'.$curr_data->contact_no;
@@ -84,8 +83,8 @@ class StaffUpdateController extends Controller{
             'alternative_email'       =>  $request->alternative_email,
             'contact_no'              =>  $request->contact_no,
         ];
+        
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
->>>>>>> a99f900cd9364cfd9493c0dfd5e7d0d7175517e4
 }

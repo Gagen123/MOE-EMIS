@@ -709,7 +709,7 @@ const routes = [
         { path: '/self_contact_details',
             component: require('./components/staff/staff_self_update/self_contact_details/self_contact_details_index.vue').default,
             children:[
-                { path: '/', name:'self_contact_details',  component: require('./components/staff/staff_self_update/self_contact_details/list_self_contact_details.vue').default },
+                { path: '/', name:'self_contact_details',  component: require('./components/staff/staff_self_update/self_contact_details/create_self_contact_details.vue').default },
                 { path: '/list_self_contact_details',name:'list_self_contact_details',  component: require('./components/staff/staff_self_update/self_contact_details/list_self_contact_details.vue').default },
                 { path: '/create_self_contact_details',name:'create_self_contact_details', component: require('./components/staff/staff_self_update/self_contact_details/create_self_contact_details.vue').default },
                 { path: '/edit_self_contact_details', name:'edit_self_contact_details', component: require('./components/staff/staff_self_update/self_contact_details/edit_self_contact_details.vue').default },
@@ -718,7 +718,7 @@ const routes = [
         { path: '/self_relative_details',
             component: require('./components/staff/staff_self_update/self_relative_details/self_relative_details_index.vue').default,
             children:[
-                { path: '/', name:'self_relative_details',  component: require('./components/staff/staff_self_update/self_relative_details/list_self_relative_details.vue').default },
+                { path: '/', name:'self_relative_details',  component: require('./components/staff/staff_self_update/self_relative_details/create_self_relative_details.vue').default },
                 { path: '/list_self_relative_details',name:'list_self_relative_details',  component: require('./components/staff/staff_self_update/self_relative_details/list_self_relative_details.vue').default },
                 { path: '/create_self_relative_details',name:'create_self_relative_details', component: require('./components/staff/staff_self_update/self_relative_details/create_self_relative_details.vue').default },
                 { path: '/edit_self_relative_details', name:'edit_self_relative_details', component: require('./components/staff/staff_self_update/self_relative_details/edit_self_relative_details.vue').default },
@@ -727,7 +727,7 @@ const routes = [
         { path: '/self_maritial_status',
             component: require('./components/staff/staff_self_update/self_maritial_status/self_maritial_status_index.vue').default,
             children:[
-                { path: '/', name:'self_maritial_status',  component: require('./components/staff/staff_self_update/self_maritial_status/list_self_maritial_status.vue').default },
+                { path: '/', name:'self_maritial_status',  component: require('./components/staff/staff_self_update/self_maritial_status/create_self_maritial_status.vue').default },
                 { path: '/list_self_maritial_status',name:'list_self_maritial_status',  component: require('./components/staff/staff_self_update/self_maritial_status/list_self_maritial_status.vue').default },
                 { path: '/create_self_maritial_status',name:'create_self_maritial_status', component: require('./components/staff/staff_self_update/self_maritial_status/create_self_maritial_status.vue').default },
                 { path: '/edit_self_maritial_status', name:'edit_self_maritial_status', component: require('./components/staff/staff_self_update/self_maritial_status/edit_self_maritial_status.vue').default },
