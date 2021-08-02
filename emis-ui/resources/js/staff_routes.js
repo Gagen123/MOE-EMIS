@@ -80,14 +80,23 @@ const routes = [
                 ],
             },
             { path: '/seperation',
-            component: require('./components/masters/staff_masters/seperation/seperation_index.vue').default,
-            children:[
-                { path: '/',name:'staff_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
-                { path: '/list_seperation',name:'list_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
-                { path: '/create_seperation',name:'create_seperation', component: require('./components/masters/staff_masters/seperation/create_seperation.vue').default },
-                { path: '/edit_seperation', name:'edit_seperation', component: require('./components/masters/staff_masters/seperation/edit_seperation.vue').default },
-            ],
-        },
+                component: require('./components/masters/staff_masters/seperation/seperation_index.vue').default,
+                children:[
+                    { path: '/',name:'staff_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
+                    { path: '/list_seperation',name:'list_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
+                    { path: '/create_seperation',name:'create_seperation', component: require('./components/masters/staff_masters/seperation/create_seperation.vue').default },
+                    { path: '/edit_seperation', name:'edit_seperation', component: require('./components/masters/staff_masters/seperation/edit_seperation.vue').default },
+                ],
+            },
+            { path: '/contract_category',
+                component: require('./components/masters/staff_masters/contract_category/contract_category_index.vue').default,
+                children:[
+                    { path: '/', name:'contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+                    { path: '/list_contract_category',name:'list_contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+                    { path: '/create_contract_category',name:'create_contract_category', component: require('./components/masters/staff_masters/contract_category/create_contract_category.vue').default },
+                    { path: '/edit_contract_category', name:'edit_contract_category', component: require('./components/masters/staff_masters/contract_category/edit_contract_category.vue').default },
+                ],
+            },
 
         ],
     },
@@ -782,6 +791,8 @@ const routes = [
                     { path: '/edit_seperation_details', name:'edit_seperation_details', component: require('./components/staff/second_seperation/secondment_details/edit_secondment_details.vue').default },
                 ],
             },
+
+
         ]
     },
 

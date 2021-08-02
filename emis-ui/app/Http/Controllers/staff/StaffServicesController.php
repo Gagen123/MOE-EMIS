@@ -271,6 +271,10 @@ class StaffServicesController extends Controller{
             return 'No role mapping found for this selected user. Please contact with system administrator';
         }
     }
+    public function loadLeaveDetailsForEdit($id=""){
+        $updated_data=$this->apiService->listData('emis/staff/staffServices/loadLeaveDetailsForEdit/'.$id);
+        return $updated_data;
+    }
 
     public function editLeaveApplication(Request $request){
         $rules = [
@@ -342,7 +346,7 @@ class StaffServicesController extends Controller{
             'action_by'                     =>  $this->userId(),
         ];
         $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
-        // dd($appRole_id,$request->staff_id);
+        // dd($request->staff_id,$appRole_id,$request->staff_id);
         $user_id=$appRole_id[0]->user_id;
         if($request->actiontype=="reject"){
             $work_status=0;

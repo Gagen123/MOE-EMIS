@@ -167,6 +167,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
             $router->post('/submitLeaveApplication', ['uses' => 'staff\StaffServicesController@submitLeaveApplication']);
             $router->get('/loadLeaveDetails/{appNo}', ['uses' => 'staff\StaffServicesController@loadLeaveDetails']);
+            $router->get('/loadLeaveDetailsForEdit/{id}', ['uses' => 'staff\StaffServicesController@loadLeaveDetailsForEdit']);
             $router->post('/verifyApproveRejectLeaveApplication', ['uses' => 'staff\StaffServicesController@verifyApproveRejectLeaveApplication']);
             $router->get('/getApprovedLeaveCount/{staff_id}/{leave_type_id}', ['uses' => 'staff\StaffServicesController@getApprovedLeaveCount']);
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
@@ -223,6 +224,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
         $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
         $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
+
+    });
+    //Staff Seleration and Secondment Services
+    $router->group(['prefix' => 'staffSepSecController'], function () use ($router) {
+        $router->post('/saveSecondmentSeperation', ['uses' => 'staff\StaffSepSecController@saveSecondmentSeperation']);
+        $router->get('/loadSecondment/{type}/{model}', ['uses' => 'staff\StaffSepSecController@loadSecondment']);
 
     });
 });

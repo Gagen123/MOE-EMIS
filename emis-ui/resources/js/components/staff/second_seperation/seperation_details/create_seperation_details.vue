@@ -57,15 +57,15 @@
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-1">From Date:<i class="text-danger">*</i></label>
+                    <label class="mb-1">Seperation Date:<i class="text-danger">*</i></label>
                     <input type="date" @change="remove_error('start_date')" v-model="form.start_date" :class="{ 'is-invalid': form.errors.has('start_date') }" class="form-control" name="start_date" id="start_date">
                     <has-error :form="form" field="start_date"></has-error>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-1">To Date:<i class="text-danger">*</i></label>
                     <input type="date" @change="remove_error('end_date')" v-model="form.end_date" :class="{ 'is-invalid': form.errors.has('end_date') }" class="form-control" name="end_date" id="end_date">
                     <has-error :form="form" field="end_date"></has-error>
-                </div>
+                </div> -->
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

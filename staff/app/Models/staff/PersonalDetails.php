@@ -15,6 +15,7 @@ class PersonalDetails extends Model{
         'emp_id',
         'name',
         'cid_work_permit',
+        'contract_category',
         'position_title_id',
         'sex_id',
         'dob',

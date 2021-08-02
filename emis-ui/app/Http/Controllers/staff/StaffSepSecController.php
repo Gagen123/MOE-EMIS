@@ -17,12 +17,12 @@ class StaffSepSecController extends Controller{
         $rules = [
             'staff_id'              =>  'required',
             'start_date'            =>  'required',
-            'end_date'              =>  'required',
+            // 'end_date'              =>  'required',
         ];
         $customMessages = [
             'staff_id.required'     => 'Please select applicant',
             'start_date.required'   => 'This field is required',
-            'end_date.required'     => 'This field is required',
+            // 'end_date.required'     => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $request_data =[
@@ -33,6 +33,7 @@ class StaffSepSecController extends Controller{
             'start_date'                        =>  $request->start_date,
             'end_date'                          =>  $request->end_date,
             'model'                             =>  $request->model,
+            'agency'                            =>  $request->agency,
             'action_type'                       =>  $request->action_type,
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId(),
