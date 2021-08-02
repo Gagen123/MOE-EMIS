@@ -540,7 +540,8 @@ const routes = [
         ]
     },
 
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+    { path: '/inter_transfer_verification',name:'inter_transfer_verification', component: require('./components/staff/transfer/inter_transfer_verification.vue').default },
+    { path: '/intra_transfer_verification',name:'intra_transfer_verification', component: require('./components/staff/transfer/intra_transfer_verification.vue').default },
     { path: '/transferAppeal_verification',name:'transferAppeal_verification', component: require('./components/staff/transfer/transferAppeal_verification .vue').default },
 
     // Recuritment by gagen
@@ -736,7 +737,6 @@ const routes = [
         component: require('./components/staff/staff_self_update/staff_self_update_index.vue').default,
         children:[
             { path: '/', name:'staff_self_update', component: require('./components/staff/staff_self_update/staff_self_update_list.vue').default },
-
             { path: '/self_contact_details',
                 component: require('./components/staff/staff_self_update/self_contact_details/self_contact_details_index.vue').default,
                 children:[
@@ -795,6 +795,35 @@ const routes = [
 
         ]
     },
+        // { path: '/self_contact_details',
+        //     component: require('./components/staff/staff_self_update/self_contact_details/self_contact_details_index.vue').default,
+        //     children:[
+        //         { path: '/', name:'self_contact_details',  component: require('./components/staff/staff_self_update/self_contact_details/create_self_contact_details.vue').default },
+        //         { path: '/list_self_contact_details',name:'list_self_contact_details',  component: require('./components/staff/staff_self_update/self_contact_details/list_self_contact_details.vue').default },
+        //         { path: '/create_self_contact_details',name:'create_self_contact_details', component: require('./components/staff/staff_self_update/self_contact_details/create_self_contact_details.vue').default },
+        //         { path: '/edit_self_contact_details', name:'edit_self_contact_details', component: require('./components/staff/staff_self_update/self_contact_details/edit_self_contact_details.vue').default },
+        //     ],
+        // },
+        // { path: '/self_relative_details',
+        //     component: require('./components/staff/staff_self_update/self_relative_details/self_relative_details_index.vue').default,
+        //     children:[
+        //         { path: '/', name:'self_relative_details',  component: require('./components/staff/staff_self_update/self_relative_details/create_self_relative_details.vue').default },
+        //         { path: '/list_self_relative_details',name:'list_self_relative_details',  component: require('./components/staff/staff_self_update/self_relative_details/list_self_relative_details.vue').default },
+        //         { path: '/create_self_relative_details',name:'create_self_relative_details', component: require('./components/staff/staff_self_update/self_relative_details/create_self_relative_details.vue').default },
+        //         { path: '/edit_self_relative_details', name:'edit_self_relative_details', component: require('./components/staff/staff_self_update/self_relative_details/edit_self_relative_details.vue').default },
+        //     ],
+        // },
+        // { path: '/self_maritial_status',
+        //     component: require('./components/staff/staff_self_update/self_maritial_status/self_maritial_status_index.vue').default,
+        //     children:[
+        //         { path: '/', name:'self_maritial_status',  component: require('./components/staff/staff_self_update/self_maritial_status/create_self_maritial_status.vue').default },
+        //         { path: '/list_self_maritial_status',name:'list_self_maritial_status',  component: require('./components/staff/staff_self_update/self_maritial_status/list_self_maritial_status.vue').default },
+        //         { path: '/create_self_maritial_status',name:'create_self_maritial_status', component: require('./components/staff/staff_self_update/self_maritial_status/create_self_maritial_status.vue').default },
+        //         { path: '/edit_self_maritial_status', name:'edit_self_maritial_status', component: require('./components/staff/staff_self_update/self_maritial_status/edit_self_maritial_status.vue').default },
+        //     ],
+        // },
+        //     ]
+        // },
 
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
 

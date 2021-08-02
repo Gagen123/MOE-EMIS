@@ -3,22 +3,22 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
-                    <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
-                        <option value=""> --Select--</option>
-                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="staff_id"></has-error>
+                    <label class="mb-0.5">Emp Id:</label><br>
+                    {{emp_id}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name:</label><br>
+                    {{name}}
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                    <select @change="remove_error('currier_stage')" v-model="form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                    <label class="mb-0.5">Marital Status:<i class="text-danger">*</i></label>
+                    <select v-model="form.marital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('marital_status') }" class="form-control select2" name="marital_status" id="marital_status">
                         <option value=""> --Select--</option>
-                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in marital_statusList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="form" field="currier_stage"></has-error>
+                    <has-error :form="form" field="marital_status"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -40,8 +40,9 @@ export default {
     data(){
         return {
             cureerstageArray:{},
-            staffList:[],
-            cureerstageList:[],
+            marital_statusList:[],
+            position_title:'',name:'',emp_id:'',
+            staff_id:'',
             form: new form({
                 id:'',
                 staff_id:'',
@@ -64,13 +65,13 @@ export default {
                 this.form.remarks= '';
             }
             if(type=="save"){
-                this.form.post('staff/staffUpdateController/saveStaffcareerStage')
+                this.form.post('staff/staffUpdateController/saveStaffMaritialStatus')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_career_stage');
+                    this.$router.push('/list_maritial_status');
                 })
                 .catch(() => {
                     console.log("Error:")
@@ -88,28 +89,44 @@ export default {
             }
 
         },
-        loadstaff(){
-            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
-                }
-                this.cureerstageList=data.data.data;
+                this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                console.log(error);
+                console.leg(error);
+            });
+        },
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+                }
+                this.position_title=this.positiontitleList[positionid];
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
+        loadStaffDetails(id){
+            let uri = 'loadCommons/viewStaffDetails/by_id/'+id;
+            axios.get(uri)
+            .then(response =>{
+                this.staffDetails = response.data.data;
+                this.form.contact_no = this.staffDetails.contact_no;
+                this.form.email = this.staffDetails.email;
+                this.emp_id = this.staffDetails.emp_id;
+                this.form.alternative_email = this.staffDetails.alternative_email;
+                this.loadpositionTitleList(this.staffDetails.position_title_id);
+
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
             });
         },
     },
@@ -125,11 +142,28 @@ export default {
         Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                let roleName="";
+                
+                this.name=data['Full_Name'];
+                this.staff_id=data['staff_id'];
 
-        this.loadactivecureerstageList();
-        this.loadstaff();
-        this.form.id=this.$route.params.id;
-        this.form.staff_id=this.$route.params.id;
+                this.loadStaffDetails(this.staff_id);
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+
+        this.loadactivemaritalList();
+        //this.loadpositionTitleList(this.$route.query.data.position_title_id);
+        // this.name=this.$route.query.data.name;
+        // this.form.id=this.$route.query.data.id;
+        // this.emp_id=this.$route.query.data.emp_id;
+        // this.form.alternative_email=this.$route.query.data.alternative_email;
+        // this.form.contact_no=this.$route.query.data.contact_no;
+        // this.form.email=this.$route.query.data.email;
     },
 }
 </script>

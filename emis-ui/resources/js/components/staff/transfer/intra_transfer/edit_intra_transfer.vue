@@ -47,7 +47,7 @@
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="option">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Transfer Preferences</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -124,7 +124,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="approvedDetails">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Approved Transfer Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -181,7 +181,7 @@
                                                 <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr >
                                             <td colspan="3">
                                                 <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                 @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
@@ -305,15 +305,19 @@ export default {
                 this.form.status=data.status;
                 this.form.application_number = data.aplication_number;
                 this.loadattachementDetails(data.aplication_number);
-                $(document).ready(function() {
-                    $('#tbName').on('input change', function() {
-                    if(this.form.status =="verify" || this.form.status == "approve" || this.form.status =="forward" || this.form.status =="Transfer Approved" ){
-                       $('#button').prop('disabled', false);
-                    }else{
-                        $('#button').prop('disabled', true);
-                    }
-                    });
-                });
+                if(this.form.status =="Approved"){
+                     $('#approvedDetails').show();
+                     $('#option').hide();
+                     
+                }else{
+                    $('#approvedDetails').hide();
+                    $('#option').show();
+                }
+                
+                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
+                     $('#Withdraw').hide();
+                     $('#tbName').hide();
+                }
           })
         },
         loadstaff(){
@@ -356,8 +360,11 @@ export default {
        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.SchoolList =  data.data.data;
+                let data = response.data.data;
+                this.SchoolList =  data;
+                for(let i=0;i<data.length;i++){
+                 this.orgArray[data[i].id] = data[i].name;
+                }
             })
             .catch(function (error) {
                 console.log("Error:"+error)

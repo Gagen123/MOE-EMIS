@@ -262,7 +262,7 @@
                                 </div>  -->
 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Initail Appointment Date:<i class="text-danger">*</i></label>
+                                    <label class="mb-0.5">Initial Appointment Date:<i class="text-danger">*</i></label>
                                     <input @change="remove_error('initial_appointment_date')" class="form-control" v-model="personal_form.initial_appointment_date" :class="{ 'is-invalid': personal_form.errors.has('initial_appointment_date') }" name="initial_appointment_date" id="initial_appointment_date" type="text">
                                     <has-error :form="personal_form" field="initial_appointment_date"></has-error>
                                 </div>
