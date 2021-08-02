@@ -450,10 +450,11 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveSEN', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveSEN'])->name('saveSEN');
         Route::post('/saveTeachinSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveTeachinSubject'])->name('saveTeachinSubject');
         Route::post('/saveStaffContact', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffContact'])->name('saveStaffContact');
-
     });
-
-
+    Route::prefix('staffSepSecController')->group(function (){
+        Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
+        Route::get('/loadSecondment/{type}/{model}', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadSecondment'])->name('loadSecondment');
+    });
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');
     Route::get('/loadQualification/{staff_id}', [App\Http\Controllers\staff\StaffController::class, 'loadQualification'])->name('loadQualification');

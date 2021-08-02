@@ -17,6 +17,21 @@ try {
                 }
             },
 
+            getDepartmentListbydzo(type,dzoId){
+                let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
+                if(type=="DzongkhagHeadquarter"){
+                    uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/dzongkhag';
+                }
+                if(type=="Dzongkhag"){
+                    uri = 'loadCommons/loadHeaquarterList/user_dzongkhag/'+dzoId;
+                }
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error getdepartmentList '+e);
+                }
+            },
+
             loadactivedzongkhags(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
@@ -32,12 +47,13 @@ try {
                     console.log('error loadactivedzongkhags '+e);
                 }
             },
-            getdepartmentList(departmentId){
+
+            getdivisionList(departmentId){
                 let uri = 'loadCommons/loadHeaquarterList/all_division/'+departmentId;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error getdepartmentList '+e);
+                    console.log('error getdivisionList '+e);
                 }
             },
             staffSchoolwise(org_id){
@@ -55,7 +71,16 @@ try {
                 }catch(e){
                     console.log('error staffDzongkhagwise '+e);
                 }
-            }
+            },
+            staffOrgwise(orgId){
+                let uri = 'loadCommons/loadStaffList/staffOrgwise/'+orgId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error staffDzongkhagwise '+e);
+                }
+            },
+
         },
     })
 

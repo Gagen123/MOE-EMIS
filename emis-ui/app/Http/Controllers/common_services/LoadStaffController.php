@@ -82,7 +82,7 @@ class LoadStaffController extends Controller{
                 $param=$parent_id;
             }
         }
-        if($type=="allStaffSchoolwise" || $type=='staffDzongkhagwise'){//all civil servent and private staff, by ministry user
+        if($type=="staffOrgwise" || $type=='staffDzongkhagwise'){//all civil servent and private staff, by ministry user
             $param=$parent_id;
         }
         // dd($type.'/'.$param);
