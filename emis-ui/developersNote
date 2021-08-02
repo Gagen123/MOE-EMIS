@@ -118,6 +118,7 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
 
 2021-08-01:
     added new master table: secondment and seperation, and added new field called description on master_course_mode
+    added new transaction table staff_secondment,staff_seperation
 
 
 
