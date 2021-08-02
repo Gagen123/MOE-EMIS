@@ -10,14 +10,14 @@
                             <th>Application Number</th>
                             <th>Date of Apply</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            <th class="pl-4 pr-4">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ form.staff_name}}</td>
-                            <td><span class="badge badge-success">{{ item.aplication_number}}</span></td>
+                             <td>{{ item.name}}</td>
+                            <td>{{ item.application_no}}</td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
                            <td>
@@ -37,56 +37,37 @@ export default {
         return{
             totle:0,
             transfer_list:[],
-            loaddetails:[],
-            staff_id:[],
-            StaffName:{},
             form: new form({
-                staff_id: '',
                 status:'',
                 staff_name:'',
 
             })
-
         }
-        
     },
     methods: {
-        showedit(staff){
-            this.$router.push({name:"edit_transfer_window",params:{data:staff}});
+        showedit(item){
+            this.$router.push({name:"edit_transfer_window",params:{data:item}});
 		},
-        loadtransferDetails(){
-            axios.get('staff/transfer/loadtransferDetails/intra_transfer')
+        loadTransferAppealDetails(){
+            axios.get('staff/transfer/LoadTransferAppealDetails')
             .then((response) => {
                 let data = response.data
-                this.getapplicatName(response.data[0].staff_id);
                 this.transfer_list = data;
+
              })
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
         },
-        loadstaff(){
-            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.StaffName[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
         loadeditpage(item){
-            this.$router.push({name:"edit_intra_transfer",params:{data:item}});
+            this.$router.push({name:"edit_transfer_appeal",params:{data:item}});
         },
         applyselect2(){
         },
     },
     mounted() {
-        this.loadtransferDetails();
-        this.loadstaff();
+        this.loadTransferAppealDetails();
+        this.dt =  $("#training-table").DataTable()
     },
     watch: {
         transfer_list(){

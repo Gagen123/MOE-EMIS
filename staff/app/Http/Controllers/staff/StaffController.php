@@ -49,6 +49,10 @@ class StaffController extends Controller{
             $this->validate($request, $rules);
         }
 
+        $sen=0;
+        if($request->issen=="Yes"){
+            $sen=1;
+        }
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
@@ -56,6 +60,7 @@ class StaffController extends Controller{
             'name'                  =>  $request->name,
             'sex_id'                =>  $request->sex_id,
             'dob'                   =>  $request->dob,
+            'is_sen'                =>  $sen,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
             'org_level'             =>  $request->organization_type,
@@ -68,10 +73,10 @@ class StaffController extends Controller{
             'address'               =>  $request->address,
             'contact_no'            =>  $request->contact_number,
             'email'                 =>  $request->email,
-            'alternative_email' =>  $request->alternative_email,
+            'alternative_email'     =>  $request->alternative_email,
             'position_title_id'     =>  $request->position_title,
             'working_agency_id'     =>  $request->working_agency_id,
-            'comp_sub_id'           =>  $request->comp_sub,
+            'comp_sub_id'           =>  $request->comp_sub[0],
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
             'initial_appointment_date' =>  $request->initial_appointment_date,
@@ -80,7 +85,7 @@ class StaffController extends Controller{
             'remarks'               =>  $request->remarks,
             'status'                =>  $request->status,
         ];
-
+        // dd($data);
         if($request->status=="Pending"){
             $data=array_merge($data,
                 array('created_by'            =>  $request->user_id,
@@ -279,6 +284,7 @@ class StaffController extends Controller{
         }
         return $this->successResponse($nomineeDetails);
     }
+    
     public function loadStaffNomination($staff_id=""){
         $nomineeDetails=Nomination::where('personal_id',$staff_id)->where('status','Created')->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){

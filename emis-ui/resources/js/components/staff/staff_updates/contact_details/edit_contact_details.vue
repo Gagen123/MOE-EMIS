@@ -1,22 +1,36 @@
 <template>
     <div>
         <form>
-
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                    <select @change="remove_error('currier_stage')" v-model="form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                        <option value=""> --Select--</option>
-                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="currier_stage"></has-error>
+                    <label class="mb-0.5">Emp Id:</label><br>
+                    {{emp_id}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name:</label><br>
+                    {{name}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Title:</label><br>
+                    {{position_title}}
                 </div>
             </div>
+            <hr>
             <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="form" field="remarks"></has-error>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Contact No:</label>
+                    <input type="number" @change="remove_error('contact_no')" v-model="form.contact_no" :class="{ 'is-invalid': form.errors.has('contact_no') }" class="form-control" name="contact_no" id="contact_no" max='8' min='8' />
+                    <has-error :form="form" field="contact_no"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Email:</label>
+                    <input type="text" @change="remove_error('email')" v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" name="email" id="email" >
+                    <has-error :form="form" field="email"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Alternative Email:</label>
+                    <input type="text" @change="remove_error('alternative_email')" v-model="form.alternative_email" :class="{ 'is-invalid': form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                    <has-error :form="form" field="alternative_email"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -32,11 +46,13 @@ export default {
         return {
             cureerstageArray:{},
             cureerstageList:[],
+            positiontitleList:{},
+            position_title:'',name:'',emp_id:'',
             form: new form({
                 id:'',
-                staff_id:'',
-                currier_stage: '',
-                remarks:'',
+                alternative_email:'',
+                email: '',
+                contact_no:'',
             }),
         }
     },
@@ -54,13 +70,13 @@ export default {
                 this.form.remarks= '';
             }
             if(type=="save"){
-                this.form.post('staff/staffUpdateController/saveStaffcareerStage')
+                this.form.post('staff/staffUpdateController/saveStaffContact')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_career_stage');
+                    this.$router.push('/list_contact_details');
                 })
                 .catch(() => {
                     console.log("Error:")
@@ -78,17 +94,19 @@ export default {
             }
 
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
                 }
-                this.cureerstageList=data.data.data;
+                this.position_title=this.positiontitleList[positionid];
             })
-            .catch(function (error) {
-                console.log(error);
+            .catch(function (error){
+                console.log('Error: '+error);
             });
         },
     },
@@ -105,9 +123,13 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadactivecureerstageList();
-        this.form.id=this.$route.params.id;
-        this.form.staff_id=this.$route.params.id;
+        this.loadpositionTitleList(this.$route.query.data.position_title_id);
+        this.name=this.$route.query.data.name;
+        this.form.id=this.$route.query.data.id;
+        this.emp_id=this.$route.query.data.emp_id;
+        this.form.alternative_email=this.$route.query.data.alternative_email;
+        this.form.contact_no=this.$route.query.data.contact_no;
+        this.form.email=this.$route.query.data.email;
     },
 }
 </script>

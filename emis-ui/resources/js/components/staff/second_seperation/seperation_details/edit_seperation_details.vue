@@ -2,23 +2,29 @@
     <div>
         <form>
             <div class="form-group row">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
-                    <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
+                    <input type="text" class="form-control" name="staff" readonly id="staff" v-model="form.staffname">
+                </div>
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="mb-0.5">Secondment type:<i class="text-danger">*</i></label><br>
+                    <select @change="remove_error('seperation_type')" v-model="form.seperation_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('seperation_type') }" class="form-control select2" name="seperation_type" id="seperation_type">
                         <option value=""> --Select--</option>
-                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}</option>
+                        <option v-for="(item, index) in seperationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="form" field="staff_id"></has-error>
+                    <has-error :form="form" field="seperation_type"></has-error>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                    <select @change="remove_error('currier_stage')" v-model="form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                        <option value=""> --Select--</option>
-                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="currier_stage"></has-error>
+                    <label class="mb-1">From Date:<i class="text-danger">*</i></label>
+                    <input type="date" @change="remove_error('start_date')" v-model="form.start_date" :class="{ 'is-invalid': form.errors.has('start_date') }" class="form-control" name="start_date" id="start_date">
+                    <has-error :form="form" field="start_date"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-1">To Date:<i class="text-danger">*</i></label>
+                    <input type="date" @change="remove_error('end_date')" v-model="form.end_date" :class="{ 'is-invalid': form.errors.has('end_date') }" class="form-control" name="end_date" id="end_date">
+                    <has-error :form="form" field="end_date"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -39,14 +45,20 @@
 export default {
     data(){
         return {
-            cureerstageArray:{},
-            staffList:[],
+            seperationList:[],
             cureerstageList:[],
+            positiontitleList:{},
+            position_title:'',name:'',emp_id:'',
             form: new form({
                 id:'',
                 staff_id:'',
-                currier_stage: '',
+                staffname:'',
+                seperation_type: '',
+                start_date:'',
+                end_date:'',
                 remarks:'',
+                model:'Secondment',
+                action_type:'edit'
             }),
         }
     },
@@ -59,18 +71,21 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.currier_stage= '';
-                $('#currier_stage').val('').trigger('change');
+                this.form.staff_id= '';
+                this.form.seperation_type= '',
+                this.form.start_date= '';
+                this.form.end_date= '';
                 this.form.remarks= '';
+                $('#staff_id').val('').trigger('change');
             }
             if(type=="save"){
-                this.form.post('staff/staffUpdateController/saveStaffTeacherSubject')
+                this.form.post('staff/staffSepSecController/saveSecondmentSeperation')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_teacher_subject');
+                    this.$router.push('/list_secondment_details');
                 })
                 .catch(() => {
                     console.log("Error:")
@@ -88,30 +103,18 @@ export default {
             }
 
         },
-        loadstaff(){
-            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+
+        loadactiveseperationListList(uri="staff/loadStaffMasters/active/SeperationMaster"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
-                }
-                this.cureerstageList=data.data.data;
+                this.seperationList=data.data.data;
             })
             .catch(function (error) {
                 console.log(error);
             });
         },
+
     },
      mounted(){
         $('.select2').select2();
@@ -126,10 +129,14 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadactivecureerstageList();
-        this.loadstaff();
-        this.form.id=this.$route.params.id;
-        this.form.staff_id=this.$route.params.id;
+        this.loadactiveseperationListList();
+        this.form.staffname=this.$route.query.data.staff_detials.name;
+        this.form.seperation_type=this.$route.query.data.seperation_type_id;
+        this.form.from_date=this.$route.query.data.from_date;
+        this.form.to_date=this.$route.query.data.to_date;
+        this.form.id=this.$route.query.data.id;
+        this.form.staff_id=this.$route.query.data.staff_id;
+        this.form.remarks=this.$route.query.data.remarks;
     },
 }
 </script>

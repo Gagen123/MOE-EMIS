@@ -11,19 +11,19 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/relative_details" id="relative_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/self_relative_details" id="self_relative_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Relative Details
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/maritial_status" id="maritial_status" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/self_maritial_status" id="self_maritial_status" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Maritial Status
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/contact_details" id="contact_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/self_contact_details" id="self_contact_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Contact Details
                     </router-link>

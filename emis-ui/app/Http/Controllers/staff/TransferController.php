@@ -117,6 +117,67 @@ class TransferController extends Controller{
         return $work_response_data;
     }
 
+    public function UpdatedApplicantDetails(Request $request){
+        
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'please mention the description',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'Transfer';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                   move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'              =>  $file_store_path,
+                            'original_name'     =>  $file_name,
+                            'user_defined_name' =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
+        $request_data =[
+            'id'                                =>  $request->id,
+            'reason_id'                         =>  $request->reason_id,
+            'withdraw'                          =>  $request->withdraw,
+            'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
+            'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
+            'description'                       =>  $request->description,
+            'application_number'                =>  $request->application_number,
+            'preference_school1'                =>  $request->preference_school1,
+            'preference_school2'                =>  $request->preference_school2,
+            'preference_school3'                =>  $request->preference_school3,
+            'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
+            'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
+            'preference_dzongkhag3'             =>  $request->preference_dzongkhag3,
+            'attachment_details'                =>  $attachment_details,
+        ];
+        $response_data= $this->apiService->createData('emis/staff/transfer/UpdatedApplicantDetails', $request_data);
+        return $response_data;
+    }
+
+    public function loadattachementDetails($appNo=""){
+        $loadTransferDetails = $this->apiService->listData('emis/staff/transfer/loadtrainsferDetails/'.$appNo);
+        return $loadTransferDetails;
+
+    }
+    public function loadAppealattachementDetails($appNo=""){
+        $loadTransferDetails = $this->apiService->listData('emis/staff/transfer/loadAppealattachementDetails/'.$appNo);
+        return $loadTransferDetails;
+
+    }
     public function loadtrainsferDetails($appNo="",$type=""){
         $update_data=[
             'applicationNo'     =>  $appNo,
@@ -273,6 +334,7 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$type.'/'.$userId);
         return $response_data;
     }
+    
     public function loadApplicationDetails($id=""){
         $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
         return $response_data;
@@ -289,7 +351,8 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
-        $rules = [
+     if($request->id == ""){
+         $rules = [
             'description'              =>  'required  ',
         ];
         $customMessages = [
@@ -345,6 +408,52 @@ class TransferController extends Controller{
                 'action_by'         =>$this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
+    }
+    else{
+        $rules = [
+            'description'              =>  'required  ',
+        ];
+        $customMessages = [
+            'description.required'     => 'Please mention the reasons for transfer appeal ',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'TransferAppeal';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                   move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'              =>  $file_store_path,
+                            'original_name'     =>  $file_name,
+                            'user_defined_name' =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
+        $request_data =[
+            'id'                                =>  $request->id,
+            'transferType'                      =>  $request->transfer_type_id,
+            'name'                              =>  $request->name,
+            'withdraw'                          =>  $request->withdraw,
+            'aplication_number'                 =>  $request->aplication_number,
+            'description'                       =>  $request->description,
+            'attachment_details'                =>  $attachment_details,
+            'user_id'                           =>  $request->user_id,
+            'status'                            =>  $request->status,
+            'working_agency_id'                 =>  $this->getWrkingAgencyId(),
+        ];
+        $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
+
     }
         return  $response_data;
     }
@@ -352,7 +461,12 @@ class TransferController extends Controller{
         $user_id=$this->userId();
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
         return $response_data;
+        
 
+    }
+    public function loadPreference($id=""){
+        $response_data = $this->apiService->listData('emis/staff/transfer/loadPreference/'.$id);
+        return $response_data;
 
     }
 

@@ -111,7 +111,7 @@ export default {
             if(type=="edit"){
                 this.$router.push({name:"edit_civil_staff",params:{data:staff}});
             }
-            else{
+            else {
                 this.$router.push({name:"view_civil_staff",params:{data:staff}});
             }
 		},
@@ -148,16 +148,7 @@ export default {
                 console.log('Error: '+error);
             });
         },
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dzongkhagList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+
         getDepartmentList(type){
             let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
             if(this.accesslevel=="Dzongkhag"){
@@ -248,8 +239,8 @@ export default {
         }
 
     },
-    mounted(){
-        this.loadactivedzongkhagList();
+    async mounted(){
+        this.dzongkhagList = await this.loadactivedzongkhags();
         this.loadgenderList();
         this.loadpositionTitleList();
         $('.select2').select2();
