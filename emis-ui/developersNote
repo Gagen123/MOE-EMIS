@@ -116,6 +116,9 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
     Conumn change in stf_staff:
         added : is_sen, is_trained_in_sen,sen_remarks,currier_stage_remarks
 
+2021-08-01:
+    added new master table: secondment and seperation, and added new field called description on master_course_mode
+
 
 
 

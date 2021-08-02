@@ -69,6 +69,26 @@ const routes = [
                 { path: '/edit_relationship', name:'edit_relationship', component: require('./components/masters/staff_masters/relationship/edit_relationship.vue').default },
                 ],
             },
+
+            { path: '/secondment',
+                component: require('./components/masters/staff_masters/secondment/secondment_index.vue').default,
+                children:[
+                    { path: '/',name:'staff_secondment', component: require('./components/masters/staff_masters/secondment/list_secondment.vue').default },
+                    { path: '/list_secondment',name:'list_secondment', component: require('./components/masters/staff_masters/secondment/list_secondment.vue').default },
+                    { path: '/create_secondment',name:'create_secondment', component: require('./components/masters/staff_masters/secondment/create_secondment.vue').default },
+                    { path: '/edit_secondment', name:'edit_secondment', component: require('./components/masters/staff_masters/secondment/edit_secondment.vue').default },
+                ],
+            },
+            { path: '/seperation',
+            component: require('./components/masters/staff_masters/seperation/seperation_index.vue').default,
+            children:[
+                { path: '/',name:'staff_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
+                { path: '/list_seperation',name:'list_seperation', component: require('./components/masters/staff_masters/seperation/list_seperation.vue').default },
+                { path: '/create_seperation',name:'create_seperation', component: require('./components/masters/staff_masters/seperation/create_seperation.vue').default },
+                { path: '/edit_seperation', name:'edit_seperation', component: require('./components/masters/staff_masters/seperation/edit_seperation.vue').default },
+            ],
+        },
+
         ],
     },
 
@@ -742,7 +762,6 @@ const routes = [
         component: require('./components/staff/second_seperation/second_seperation_index.vue').default,
         children:[
             { path: '/', name:'staff_update_services', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
-
             { path: '/secondment',
                 component: require('./components/staff/second_seperation/secondment/secondment_index.vue').default,
                 children:[

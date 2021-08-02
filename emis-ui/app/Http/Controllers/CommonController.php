@@ -99,7 +99,7 @@ class CommonController extends Controller{
         ];
         // dd( $task_data);
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
-        // dd($response_data);
+        dd($response_data);
         return $response_data;
 
     }

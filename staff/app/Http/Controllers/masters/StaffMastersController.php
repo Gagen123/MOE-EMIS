@@ -37,7 +37,6 @@ use App\Models\staff_masters\LeaveConfiguration;
 use App\Models\staff_masters\LeaveConfigurationDetials;
 use App\Models\staff_masters\TransferConfig;
 use App\Models\staff_masters\TransferConfigDetails;
-
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="staff_db";
