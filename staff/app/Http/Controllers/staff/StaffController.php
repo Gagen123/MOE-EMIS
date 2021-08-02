@@ -284,6 +284,7 @@ class StaffController extends Controller{
         }
         return $this->successResponse($nomineeDetails);
     }
+    
     public function loadStaffNomination($staff_id=""){
         $nomineeDetails=Nomination::where('personal_id',$staff_id)->where('status','Created')->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){

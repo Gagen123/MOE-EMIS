@@ -15,16 +15,20 @@
                     {{position_title}}
                 </div>
             </div>
+            <hr>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Contact No:</label>
                     <input type="number" @change="remove_error('contact_no')" v-model="form.contact_no" :class="{ 'is-invalid': form.errors.has('contact_no') }" class="form-control" name="contact_no" id="contact_no" max='8' min='8' />
                     <has-error :form="form" field="contact_no"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Email:</label>
                     <input type="text" @change="remove_error('email')" v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" class="form-control" name="email" id="email" >
                     <has-error :form="form" field="email"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Alternative Email:</label>
                     <input type="text" @change="remove_error('alternative_email')" v-model="form.alternative_email" :class="{ 'is-invalid': form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
                     <has-error :form="form" field="alternative_email"></has-error>
                 </div>

@@ -84,7 +84,7 @@ export default {
     },
     methods: {
         loadeditpage(staff){
-            this.$router.push({name:"create_maritial_status",params:{id:staff.id}});
+            this.$router.push({name:"create_maritial_status",query:{data:staff}});
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)
