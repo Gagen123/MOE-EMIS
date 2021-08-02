@@ -97,7 +97,6 @@ class TransferController extends Controller{
             'user_id'                           =>  $this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
-        // dd($response_data);
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -118,7 +117,6 @@ class TransferController extends Controller{
     }
 
     public function UpdatedApplicantDetails(Request $request){
-        
         $rules = [
             'description'              =>  'required  ',
         ];
@@ -179,6 +177,9 @@ class TransferController extends Controller{
 
     }
     public function loadtrainsferDetails($appNo="",$type=""){
+        $workflowstatus="";
+        $screen_id="";
+        $sequence="";
         $update_data=[
             'applicationNo'     =>  $appNo,
             'type'              =>  $type,
@@ -204,6 +205,7 @@ class TransferController extends Controller{
     public function updateTransferApplication(Request $request){
         $org_status='Verified';
         $work_status=$request->status_id+1;
+
         if($request->actiontype=="reject"){
             $work_status=0;
             $org_status="Rejected";
@@ -224,8 +226,8 @@ class TransferController extends Controller{
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>"intra transfer",
-                'preference_school' =>$request->preference_school,
+                'service_name'      =>"Intra Transfer",
+                'preference_school' =>$request->schoolApproved,
                 'application_number'=>$request->application_no,
                 'screen_id'         =>$request->application_no,
                 'status_id'         =>$work_status,
@@ -242,7 +244,7 @@ class TransferController extends Controller{
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>"inter transfer",
+                'service_name'      =>"Inter Transfer",
                 'preference_school' =>$request->preference_school,
                 'application_number'=>$request->application_no,
                 'screen_id'         =>$request->application_no,
@@ -292,10 +294,10 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
-                'service_name'                  =>  "intra transfer",
-                'preference_school'             =>$request->preference_school,
+                'service_name'                  =>  "Intra Transfer",
+                'preference_school'             =>$request->schoolApproved,
                 'dzongkhagApproved'             =>$request->userDzongkhag,
-                'schoolApproved'                =>$request->schoolApproved,
+                // 'schoolApproved'                =>$request->schoolApproved,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>  $this->userId()
             ];
@@ -313,7 +315,7 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
-                'service_name'                  =>  "inter transfer",
+                'service_name'                  =>  "Inter Transfer",
                 'dzongkhagApproved'             =>$request->userDzongkhag,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>   $this->userId()
@@ -345,8 +347,8 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/getapplicatName/'.$id);
         return $response_data;
     }
-    public function LoadApplicationDetailsByUserId($user_id=""){
-        $response_data = $this->apiService->listData('emis/staff/transfer/LoadApplicationDetailsByUserId/'.$user_id);
+    public function LoadApplicationDetailsByUserId($param="" ,$user_id=""){
+        $response_data = $this->apiService->listData('emis/staff/transfer/LoadApplicationDetailsByUserId/'.$param.'/'.$user_id);
         return $response_data;
     }
 
@@ -383,6 +385,7 @@ class TransferController extends Controller{
         }
         $request_data =[
             'id'                                =>  $request->id,
+            'record_type_id'                    =>  $request->type_id,
             'transferType'                      =>  $request->transfer_type_id,
             'name'                              =>  $request->name,
             'description'                       =>  $request->description,

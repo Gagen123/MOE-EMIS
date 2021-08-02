@@ -78,7 +78,7 @@ class CommonController extends Controller{
             //pulling leave application
             if($work_flow_for_leave!=""){
                 if($work_flow_from_system_admin_status==null || $work_flow_from_system_admin_status==""){
-                    $result_data.=' (t.claimed_by IS NULL AND (';
+                    $result_data.='(t.claimed_by IS NULL AND (';
                 }
                 else{
                     $result_data.=' OR (t.claimed_by IS NULL AND (';
@@ -104,7 +104,7 @@ class CommonController extends Controller{
             if($work_flow_for_transfer!=""){
                 $result_data.='  OR (t.claimed_by IS NULL AND (';
                 foreach($work_flow_for_transfer as $i => $srcn){
-                    $result_data.='( t.application_number like "TR%" AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                    $result_data.='( (t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_transfer)-1==$i){
                         $result_data.='))';
                     }
@@ -115,10 +115,10 @@ class CommonController extends Controller{
             }
             //pulling approved transfer Application for DEO
             if($request->approved_transfer_data=="Valid"){
-                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "inter transfer")';
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
             }
             //final query
-            return $result_data;
+            // return $result_data;
             return DB::select($result_data);
         }
     }

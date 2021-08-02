@@ -57,7 +57,7 @@
                                             <th>Preferences</th>
                                             <th>Dzongkhag/Thromde</th>
                                         </tr>
-                                    </thead>
+                                    </thead>approvedDetails
                                     <tbody>
                                         <tr>
                                             <td>1</td>
@@ -78,7 +78,7 @@
                                                 <select v-model="form.preference_dzongkhag2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag2') }" class="form-control select2" name="preference_dzongkhag2" id="preference_dzongkhag2">
                                                   <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
+                                                </select>approvedDetails
                                                 <has-error :form="form" field="preference_dzongkhag2"></has-error>
                                                 <span class="text-danger" id="preference_dzongkhag2_err"></span>
                                             </td>
@@ -124,7 +124,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row" id="approvedDetails">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Approved Transfer Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -160,14 +160,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
+                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1" :id="'attachemnt'+count">
                                             <td>
                                                 <input type="text" class="form-control" readonly :value="attach.user_defined_name">
                                             </td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span>
-                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
                                                 </span>
                                             </td>
                                         </tr>
@@ -305,6 +305,11 @@ export default {
                 this.form.application_number = data.aplication_number;
                 this.form.status=data.status;
                 this.loadattachementDetails(data.aplication_number);
+                if(this.form.status =="Approved"){
+                     $('#approvedDetails').show();
+                }else{
+                    $('#approvedDetails').hide();
+                }
                 
                 if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
@@ -449,7 +454,7 @@ export default {
                                     this.$router.push({name:'intra_transfer_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
-                                        title: 'Application for Transfer has been submitted for further action'
+                                        title: ' Your transfer application has been updated successfully'
                                     });
                                 }
                             })
@@ -583,7 +588,7 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -593,9 +598,9 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    let file_path=file.path+'/'+file.name;
+                    let file_path=file.path+'/'+file.original_name;
                     file_path=file_path.replaceAll('/', 'SSS');
-                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
                     axios.get(uri)
                     .then(response => {
                         let data = response;
@@ -605,6 +610,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachemnt'+count).remove();
                         }
                         else{
                         Swal.fire(

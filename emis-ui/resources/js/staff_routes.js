@@ -531,7 +531,8 @@ const routes = [
         ]
     },
 
-    { path: '/transfer_verification',name:'transfer_verification', component: require('./components/staff/transfer/transfer_verification.vue').default },
+    { path: '/inter_transfer_verification',name:'inter_transfer_verification', component: require('./components/staff/transfer/inter_transfer_verification.vue').default },
+    { path: '/intra_transfer_verification',name:'intra_transfer_verification', component: require('./components/staff/transfer/intra_transfer_verification.vue').default },
     { path: '/transferAppeal_verification',name:'transferAppeal_verification', component: require('./components/staff/transfer/transferAppeal_verification .vue').default },
 
     // Recuritment by gagen

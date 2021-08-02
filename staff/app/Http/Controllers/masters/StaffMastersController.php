@@ -488,6 +488,15 @@ class StaffMastersController extends Controller{
         if($param=="all_transfer_type_list"){
             return $this->successResponse(TransferType::all());
         }
+        if($param=="intra"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%intra%')->get());
+        }
+        if($param=="inter"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%inter%')->get());
+        }
+        if($param=="appeal"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%appeal%')->get());
+        }
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());
         }

@@ -13,6 +13,7 @@ class StaffAppeal extends Model
     public $timestamps = false;
     protected $fillable = [
         'id',
+        'record_type_id',
         'transferType',
         'name',
         'application_no',

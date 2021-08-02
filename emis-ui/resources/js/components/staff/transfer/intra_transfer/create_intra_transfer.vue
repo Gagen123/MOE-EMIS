@@ -251,7 +251,7 @@ export default {
                 type_id:'',
                 preference_dzongkhag:[],
                 transferType:"intra_transfer",
-                service_name:"intra transfer",
+                service_name:"Intra Transfer",
                 preference_school1:'',
                 preference_school2:'',
                 preference_school3:'',
@@ -334,10 +334,10 @@ export default {
                 }
             });
         },
-          LoadTransferType(uri = 'masters/loadGlobalMasters/intra'){
+          LoadTransferType(uri = 'masters/loadStaffMasters/intra'){
             axios.get(uri)
             .then(response =>{
-                this.form.type_id = response.data.data.id;
+                this.form.type_id = response.data.data[0].id;
 
             })
             .catch(function (error){
