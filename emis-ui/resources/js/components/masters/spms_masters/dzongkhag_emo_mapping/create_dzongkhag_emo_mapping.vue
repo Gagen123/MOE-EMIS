@@ -21,7 +21,8 @@
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <!-- <select v-model="classTeacherList[index].stf_staff_id" class="form-control select2">
                                             <option selected="selected" value="">---Select---</option>
-                                            <option v-for="(item1, index1) in emos" :key="index1" :value="item1.stf_staff_id">
+                                            <option v-for="(item1, index1) in emos 
+                                            " :key="index1" :value="item1.stf_staff_id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span>
                                                 {{ item1.name }}, {{item1.position_title}}
                                             </option>
@@ -61,7 +62,8 @@ export default {
 
         },
         getDzongkhagEMO(){
-            // let emo = await axios.get('academics/getDzoEMO').then(response => response.data.data);
+       
+            // let emo = await axios.get('spm/getDzoEMO').then(response => response.data.data);
             // this.dzongkhags.forEach((item,index)=>{
 
             // })
@@ -89,6 +91,30 @@ export default {
     },
     async mounted(){
         this.dzongkhags = await this.loadactivedzongkhags()
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                let roleName="";
+                for(let i=0;i<data['roles'].length;i++){
+                    if(i==data['roles'].length-1){
+                        roleName+=data['roles'][i].roleName;
+                    }
+                    else{
+                        roleName+=data['roles'][i].roleName+', ';
+                    }
+                }
+                if(roleName.toLowerCase().includes('mess')){
+                    // this.showmess=true;
+                    // this.loadFoodReleaseListing('Creater');
+                }
+                if(roleName.toLowerCase().includes('deo') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
+                    // this.showprincipaltask=true;
+                    // this.loadFoodReleaseListing('OrgWise');
+                }
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
         this.dt = $("#dzo-emo-table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
