@@ -499,7 +499,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
         Route::post('/UpdatedApplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'UpdatedApplicantDetails'])->name('UpdatedApplicantDetails');
         Route::post('/SaveTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'SaveTransferAppeal'])->name('SaveTransferAppeal');
-        Route::get('/LoadApplicationDetailsByUserId/{user_id}', [App\Http\Controllers\staff\TransferController::class, 'LoadApplicationDetailsByUserId'])->name('LoadApplicationDetailsByUserId');
+        Route::get('/LoadApplicationDetailsByUserId/{param}/{user_id}', [App\Http\Controllers\staff\TransferController::class, 'LoadApplicationDetailsByUserId'])->name('LoadApplicationDetailsByUserId');
         Route::get('/LoadTransferAppealDetails', [App\Http\Controllers\staff\TransferController::class, 'LoadTransferAppealDetails'])->name('LoadTransferAppealDetails');
         Route::get('/loadtrainsferDetails/{appNo}/{type}', [App\Http\Controllers\staff\TransferController::class, 'loadtrainsferDetails'])->name('loadtrainsferDetails');
         Route::get('/loadattachementDetails/{appNo}', [App\Http\Controllers\staff\TransferController::class, 'loadattachementDetails'])->name('loadattachementDetails');

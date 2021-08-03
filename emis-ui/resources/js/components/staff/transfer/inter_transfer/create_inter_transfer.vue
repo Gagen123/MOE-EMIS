@@ -250,7 +250,7 @@ export default {
                 preference_dzongkhag:[],
                 status: 'pending',
                 transferType:"inter_transfer",
-                service_name:"inter transfer",
+                service_name:"Inter Transfer",
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
@@ -333,10 +333,10 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffMasters/inter'){
             axios.get(uri)
             .then(response =>{
-                this.form.type_id = response.data.data.id;
+                this.form.type_id = response.data.data[0].id;
 
             })
             .catch(function (error){
