@@ -57,11 +57,11 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        getEMO(){
+        getEMOs(data){
             
 
         },
-        getDzongkhagEMO(){
+        getDzongkhagEMOs(){
        
             // let emo = await axios.get('spm/getDzoEMO').then(response => response.data.data);
             // this.dzongkhags.forEach((item,index)=>{
@@ -93,23 +93,15 @@ export default {
         this.dzongkhags = await this.loadactivedzongkhags()
         axios.get('common/getSessionDetail')
             .then(response => {
-                let data = response.data.data;
+                let data = response.data.data
                 let roleName="";
                 for(let i=0;i<data['roles'].length;i++){
                     if(i==data['roles'].length-1){
-                        roleName+=data['roles'][i].roleName;
+                        roleName+=data['roles'][i].roleName
                     }
                     else{
-                        roleName+=data['roles'][i].roleName+', ';
+                        roleName+=data['roles'][i].roleName+', '
                     }
-                }
-                if(roleName.toLowerCase().includes('mess')){
-                    // this.showmess=true;
-                    // this.loadFoodReleaseListing('Creater');
-                }
-                if(roleName.toLowerCase().includes('deo') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
-                    // this.showprincipaltask=true;
-                    // this.loadFoodReleaseListing('OrgWise');
                 }
         })
         .catch(errors =>{
