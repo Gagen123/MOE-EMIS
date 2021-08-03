@@ -40,6 +40,13 @@
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mt-4 pt-2">
                                     <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
                                 </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="contrct_type" style="display:none">
+                                    <label class="mb-0.5">Contract Category:</label>
+                                    <span v-for="(cat, index) in categoryList" :key="index" >
+                                        <input type="radio" @change="remove_error('nature_of_participant')" v-model="personal_form.contract_category" :class="{ 'is-invalid' :personal_form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="cat.id">
+                                        <label class="pr-3"> {{cat.name }} </label>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
@@ -659,11 +666,12 @@ export default {
             repationshipList:[],
             staff_nomination_list:[],
             attachmentDetails:[],
-
+            categoryList:[],
             personal_form: new form({
                 isteaching:false,
                 organization_type:'',
                 personal_id: '',
+                contract_category:'',
                 cideid:'',
                 emp_type: 1,
                 emp_id:'',
@@ -1024,6 +1032,9 @@ export default {
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){
+            if(this.personal_form.emp_type=="2"){
+                $('#contrct_type').show();
+            }
             let cid_empid=$('#cideid').val();
             if (cid_empid!= ""){
                 axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/'+cid_empid)
@@ -1633,6 +1644,7 @@ export default {
                     });
                 });
             }
+
         },
 
         loadpersonalDetails(){
@@ -1693,11 +1705,25 @@ export default {
                 this.personal_form.emp_file_code=data.employee_code;
                 this.personal_form.remarks=data.remarks;
                 this.personal_form.initial_appointment_date=data.initial_appointment_date;
+                if(data.emp_type_id==2){
+                    $('#contrct_type').show();
+                }
             })
             .catch((error) => {
                 console.log("Error......"+error);
             });
         },
+        loadcontractcategory(uri = 'staff/loadStaffMasters/active/ContractCategory'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.categoryList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log('error: '+error);
+            });
+        },
+
 
     },
 
@@ -1719,13 +1745,12 @@ export default {
         this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
-
+        this.loadcontractcategory();
         this.loadAcademicMasters();
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
         this.loadrelationshipList();
         this.loadpersonalDetails();
-
     },
 }
 </script>

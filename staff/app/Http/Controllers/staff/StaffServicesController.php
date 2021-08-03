@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\staff;
 use App\Http\Controllers\Controller;
+use App\Models\staff\ApplicationAttachments;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -378,6 +379,20 @@ class StaffServicesController extends Controller{
                 'created_at'                =>  date('Y-m-d h:i:s')
             ];
             $response_data = LeaveApplication::create($data_data);
+            if($response_data!=""){
+                if($request->attachment_details!=null && $request->attachment_details!=""){
+                    foreach($request->attachment_details as $att){
+                        $attach =[
+                            'ApplicationDetailsId'      =>  $response_data->id,
+                            'path'                      =>  $att['path'],
+                            'user_defined_file_name'    =>  $att['user_defined_name'],
+                            'name'                      =>  $att['original_name'],
+                            'updoad_type'               =>  'Applicant',
+                        ];
+                        ApplicationAttachments::create($attach);
+                    }
+                }
+            }
         }
         else{
             $udpate_data =[
@@ -390,12 +405,34 @@ class StaffServicesController extends Controller{
             ];
             LeaveApplication::where('id',$request->id)->update($udpate_data);
             $response_data = LeaveApplication::where('id',$request->id)->first();
+            if($response_data!=""){
+                if($request->attachment_details!=null && $request->attachment_details!=""){
+                    foreach($request->attachment_details as $att){
+                        $attach =[
+                            'ApplicationDetailsId'      =>  $request->id,
+                            'path'                      =>  $att['path'],
+                            'user_defined_file_name'    =>  $att['user_defined_name'],
+                            'name'                      =>  $att['original_name'],
+                            'updoad_type'               =>  'Applicant',
+                        ];
+                        ApplicationAttachments::create($attach);
+                    }
+                }
+            }
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
     public function loadLeaveDetails($appNo=""){
         $leave_detials=LeaveApplication::where('application_number',$appNo)->first();
+        return $this->successResponse($leave_detials);
+    }
+
+    public function loadLeaveDetailsForEdit($id=""){
+        $leave_detials=LeaveApplication::where('id',$id)->first();
+        if($leave_detials!=""){
+            $leave_detials->attachment=ApplicationAttachments::where('ApplicationDetailsId',$leave_detials->id)->get();
+        }
         return $this->successResponse($leave_detials);
     }
 

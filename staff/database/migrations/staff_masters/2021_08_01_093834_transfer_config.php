@@ -18,6 +18,6 @@ class TransferConfig extends Migration{
     }
 
     public function down(){
-        Schema::dropIfExists('master_staff_leave_config');
+        Schema::dropIfExists('master_staff_transfer_config');
     }
 }

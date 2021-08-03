@@ -4,7 +4,7 @@
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
-                    <input type="text" name="staff" id="staff" v-model="form.staffname">
+                    <input type="text" class="form-control" name="staff" readonly id="staff" v-model="form.staffname">
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Secondment type:<i class="text-danger">*</i></label><br>
@@ -25,6 +25,13 @@
                     <label class="mb-1">To Date:<i class="text-danger">*</i></label>
                     <input type="date" @change="remove_error('end_date')" v-model="form.end_date" :class="{ 'is-invalid': form.errors.has('end_date') }" class="form-control" name="end_date" id="end_date">
                     <has-error :form="form" field="end_date"></has-error>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="mb-1">Working Agency:<i class="text-danger">*</i></label>
+                    <input type="text" @change="remove_error('agency')" v-model="form.agency" :class="{ 'is-invalid': form.errors.has('agency') }" class="form-control" name="agency" id="agency">
+                    <has-error :form="form" field="agency"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -53,6 +60,7 @@ export default {
                 id:'',
                 staff_id:'',
                 staffname:'',
+                agency:'',
                 secondment_typ: '',
                 start_date:'',
                 end_date:'',
@@ -134,6 +142,8 @@ export default {
         this.form.secondment_typ=this.$route.query.data.secondment_id;
         this.form.from_date=this.$route.query.data.from_date;
         this.form.to_date=this.$route.query.data.to_date;
+        this.form.staff_id=this.$route.query.data.staff_id;
+        this.form.agency=this.$route.query.data.agency;
         this.form.id=this.$route.query.data.id;
     },
 }

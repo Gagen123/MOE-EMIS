@@ -64,7 +64,6 @@
                             <th>Position Title</th>
                             <th>Seperation Type</th>
                             <th>From Date</th>
-                            <th>To Date</th>
                             <!-- <th>Working Agency</th> -->
                             <th class="pr-4 pl-5">Action</th>
                         </tr>
@@ -77,7 +76,6 @@
                             <td>{{ positiontitleList[item.staff_detials.position_title_id]}}</td>
                             <td>{{ seperationList[item.seperation_id]}}</td>
                             <td>{{ item.from_date}}</td>
-                            <td>{{ item.to_date}}</td>
 
                             <!-- <td>{{ item.staff_detials.working_agency}}</td> -->
                             <td>

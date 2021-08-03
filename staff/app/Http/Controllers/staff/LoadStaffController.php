@@ -58,13 +58,12 @@ class LoadStaffController extends Controller{
             }else{
                 return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
             }
-
         }
         if($type=="allPrivateStaff"){
             return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get());
         }
 
-        if($type=="staffSchoolwise"){
+        if($type=="staffOrgwise"){
             return $this->successResponse(PersonalDetails::where('status','Created')->where('working_agency_id',$parent_id)->get());
         }
         if($type=="staffDzongkhagwise"){

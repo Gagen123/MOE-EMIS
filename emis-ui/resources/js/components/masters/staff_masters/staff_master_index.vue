@@ -16,7 +16,11 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-
+                <li class="nav-item active pr-1">
+                    <router-link to="/contract_category" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Contract Category
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_relationship'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Staff Relationship
@@ -27,7 +31,7 @@
                        Marital Status
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1">
+                <li class="nav-item active pr-1">
                     <router-link to="/subject_area_masters" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Subject Area
                     </router-link>

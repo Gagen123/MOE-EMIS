@@ -12,6 +12,7 @@ class StfPersonalDetails extends Migration{
             $table->char('emp_type_id',36)->nullable(false);
             $table->string('name',250)->nullable(false);
             $table->string('cid_work_permit',100)->nullable(false);
+            $table->char('contract_category',36)->nullable(false);
             $table->string('sex_id',100)->nullable(true);
             $table->date('dob',20)->nullable(true);
             $table->char('working_agency_id',36)->nullable(false);
