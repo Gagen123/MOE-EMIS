@@ -175,7 +175,10 @@ Route::prefix('masters')->group(function () {
     //SPMS Masters
     Route::post('/saveSpmMasters', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveSpmMasters'])->name('saveSpmMasters');
     Route::get('/loadSpmMasters/{param}', [App\Http\Controllers\spms\SpmsMasterController::class, 'loadSpmMasters'])->name('loadSpmMasters');
-
+    Route::get('/getDzoEMO', [App\Http\Controllers\spms\SpmsMasterController::class, 'getDzoEMO'])->name('getDzoEMO');
+    Route::post('/saveDzoEMO', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveDzoEMO'])->name('saveDzoEMO');
+    Route::get('/getSchoolDEO', [App\Http\Controllers\spms\SpmsMasterController::class, 'getSchoolDEO'])->name('getSchoolDEO');
+    Route::post('/saveSchoolDEO', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveSchoolDEO'])->name('saveSchoolDEO');
 });
 
     //Mess Manage Master

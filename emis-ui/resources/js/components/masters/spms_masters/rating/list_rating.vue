@@ -6,6 +6,9 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Domain</th>
+                            <th>Area</th>
+                            <th>Parameter</th>
                             <th>Indicator</th>
                             <th>Score</th>
                             <th>Description</th>
@@ -16,8 +19,11 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in ratings" :key="index">
                             <td class="text-right">{{ index + 1 }}</td>
+                            <td>{{ item.domain }} </td>
+                            <td>{{ item.area }} </td>
+                            <td>{{ item.parameter }} </td>
                             <td>{{ item.indicator }} </td>
-                            <td>{{ item.score }} </td>
+                            <td class="text-right">{{ item.score }} </td>
                             <td>{{ item.description }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
 
@@ -62,11 +68,16 @@ export default {
         this.getRatings();
         this.dt =  $("#rating-data-table").DataTable({
             columnDefs: [
-                { width: 25, targets: 0},
-                { width: 500, targets: 1},
+                { width: 10, targets: 0},
+                { width: 100, targets: 2},
+                { width: 500, targets: 4},
                 { width: 50, targets: 2},
-                { width: 50, targets: 4},
-                { width: 50, targets: 5},
+                { width: 10, targets: 5},
+                { width: 300, targets: 6},
+                { width: 20, targets: 7},
+                { width: 20, targets: 8},
+
+
 
 
             ],

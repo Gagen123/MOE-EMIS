@@ -102,4 +102,26 @@ class SpmsMasterController extends Controller
         $global_masters = $this->apiService->listData('emis/masters/loadSpmMasters/'.$param);
         return $global_masters;
     }
+    public function saveDzoEMO(Request $request){
+        // $this->validate($request, $rules, $customMessages);
+        // $request['user_id'] = $this->userId();
+        // $data = $request->all();
+        // $response_data = $this->apiService->createData('emis/masters/saveDzoEMO', $data);
+        // return $response_data;
+    }
+    public function getDzoEMO(){
+        $global_masters = $this->apiService->listData('emis/masters/getDzoEMO');
+        return $global_masters;
+    }
+    public function saveSchoolDEO(Request $request){
+        // $this->validate($request, $rules, $customMessages);
+        // $request['user_id'] = $this->userId();
+        // $data = $request->all();
+        // $response_data = $this->apiService->createData('emis/masters/saveSchoolDEO', $data);
+        // return $response_data;
+    }
+    public function getSchoolDEO(){
+        $global_masters = $this->apiService->listData('emis/masters/getSchoolDEO');
+        return $global_masters;
+    }
 }

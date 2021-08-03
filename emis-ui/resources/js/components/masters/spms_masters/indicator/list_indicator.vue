@@ -6,6 +6,8 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Domain</th>
+                            <th>Area</th>
                             <th>Parameter</th>
                             <th>Indicator</th>
                             <th>Status</th>
@@ -15,6 +17,8 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in indicators" :key="index">
                             <td class="text-right">{{ index + 1 }}</td>
+                            <td>{{ item.domain }} </td>
+                            <td>{{ item.area }} </td>
                             <td>{{ item.parameter }} </td>
                             <td>{{ item.name }} </td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
@@ -60,10 +64,13 @@ export default {
         this.getIndicators();
         this.dt =  $("#indicator-data-table").DataTable({
             columnDefs: [
-                { width: 50, targets: 0},
-                { width: 100, targets: 1},
-                { width: 50, targets: 3},
-                { width: 50, targets: 4},
+                { width: 20, targets: 0},
+                { width: 50, targets: 1},
+                { width: 50, targets: 2},
+                { width: 150, targets: 3},
+                { width: 200, targets: 4},
+                { width: 50, targets: 5},
+                { width: 50, targets: 6},
             ],
         })
     },

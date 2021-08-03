@@ -46,6 +46,19 @@ const routes = [
                     { path: '/edit-rating', name: 'edit_rating', component: require('./components/masters/spms_masters/rating/edit_rating.vue').default },
                 ]
             },
+            { path: '/dzo-emo-master', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/dzongkhag_emo_mapping_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/create_dzongkhag_emo_mapping.vue').default },
+                    { path: '/create-dzo-emo', name: 'create_dzo_emo', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/create_dzongkhag_emo_mapping.vue').default },
+                ]
+            },
+            { path: '/school-deo-master', component: require('./components/masters/spms_masters/school_deo_mapping/school_deo_mapping_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/spms_masters/school_deo_mapping/create_school_deo_mapping.vue').default },
+                    { path: '/create-school-deo', name: 'create_school_deo', component: require('./components/masters/spms_masters/school_deo_mapping/create_school_deo_mapping.vue').default },
+                ]
+            },
+    
             
 
         ]

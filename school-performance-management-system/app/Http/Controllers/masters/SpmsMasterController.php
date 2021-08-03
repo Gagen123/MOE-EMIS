@@ -249,44 +249,84 @@ class SpmsMasterController extends Controller
     }
     public function loadSpmMasters($param=""){
         if($param == "all_domains"){
-            $domain = DB::select('SELECT id,name,code,status FROM spm_domain');
-            return $this->successResponse($domain);
+            $domains = DB::select('SELECT id,name,code,status FROM spm_domain');
+            return $this->successResponse($domains);
         }
         if($param == "all_active_domains"){
-            $domain = DB::select('SELECT id,name,code,status FROM spm_domain WHERE status = 1');
-            return $this->successResponse($domain);
+            $domains = DB::select('SELECT id,name,code,status FROM spm_domain WHERE status = 1');
+            return $this->successResponse($domains);
         }
         if($param == "all_areas"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_domain_id,t2.name AS domain FROM spm_area t1 JOIN spm_domain t2 ON t1.spm_domain_id = t2.id');
-            return $this->successResponse($domain);
+            $domains = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_domain_id,t2.name AS domain FROM spm_area t1 JOIN spm_domain t2 ON t1.spm_domain_id = t2.id');
+            return $this->successResponse($domains);
         }
-        if($param == "all_active_areas"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_domain_id,t2.name AS domain FROM spm_area t1 JOIN spm_domain t2 ON t1.spm_domain_id = t2.id WHERE t1.status = 1');
-            return $this->successResponse($domain);
+        if(strpos($param,'all_active_areas_')!== false){
+            $params=explode("_",$param);  
+            $areas = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_domain_id,t2.name AS domain FROM spm_area t1 JOIN spm_domain t2 ON t1.spm_domain_id = t2.id WHERE t1.status = 1 AND t1.spm_domain_id = ?',[$params[3]]);
+            return $this->successResponse($areas);
         }
         if($param == "all_parameters"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_area_id,t2.name AS area FROM spm_parameter t1 JOIN spm_area t2 ON t1.spm_area_id = t2.id');
-            return $this->successResponse($domain);
+            $paramaters = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_area_id,t2.spm_domain_id,t3.name as domain,t2.name AS area FROM spm_parameter t1 JOIN spm_area t2 ON t1.spm_area_id = t2.id JOIN spm_domain t3 ON t2.spm_domain_id = t3.id');
+            return $this->successResponse($paramaters);
         }
-        if($param == "all_active_parameters"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_area_id,t2.name AS area FROM spm_parameter t1 JOIN spm_area t2 ON t1.spm_area_id = t2.id WHERE t1.status = 1');
-            return $this->successResponse($domain);
+        if(strpos($param,'all_active_parameters_')!== false){
+            $params=explode("_",$param);  
+            $paramaters = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_area_id,t2.name AS area FROM spm_parameter t1 JOIN spm_area t2 ON t1.spm_area_id = t2.id WHERE t1.status = 1 AND t1.spm_area_id = ?',[$params[3]]);
+            return $this->successResponse($paramaters);
         }
         if($param == "all_indicators"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_parameter_id, t2.name AS parameter FROM spm_indicator t1 JOIN  spm_parameter t2 ON t1.spm_parameter_id = t2.id');
-            return $this->successResponse($domain);
+            $indicators = DB::select('SELECT t1.id,t3.spm_domain_id,t2.spm_area_id,t1.spm_parameter_id,t4.name AS domain,t3.name AS area,t2.name AS parameter,t1.name,t1.code,t1.status FROM spm_indicator t1 
+                    JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
+                    JOIN spm_area t3 ON t2.spm_area_id = t3.id JOIN spm_domain t4 ON t3.spm_domain_id= t4.id');
+            return $this->successResponse($indicators);
         }
-        if($param == "all_active_indicators"){
-            $domain = DB::select('SELECT t1.id,t1.name,t1.code,t1.status,t1.spm_parameter_id, t2.name AS parameter FROM spm_indicator t1 JOIN  spm_parameter t2 ON t1.spm_parameter_id = t2.id WHERE t1.status = 1');
-            return $this->successResponse($domain);
+        if(strpos($param,'all_active_indicators_')!== false){
+            $params=explode("_",$param);  
+            $indicators = DB::select('SELECT t1.id,t3.spm_domain_id,t2.spm_area_id,t1.spm_parameter_id,t4.name AS domain,t3.name AS area,t2.name AS parameter,t1.name,t1.code,t1.status FROM spm_indicator t1 
+            JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
+            JOIN spm_area t3 ON t2.spm_area_id = t3.id JOIN spm_domain t4 ON t3.spm_domain_id= t4.id WHERE t1.status = 1 AND t1.spm_parameter_id = ?',[$params[3]]);
+            return $this->successResponse($indicators);
         }
         if($param == "all_ratings"){
-            $domain = DB::select('SELECT t1.id,t1.score,t1.description,t1.status,t1.spm_indicator_id, t2.name AS indicator FROM  spm_rating t1 JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id');
-            return $this->successResponse($domain);
+                $ratings = DB::select('SELECT t1.id,t1.score,t1.description,t1.status,t1.spm_indicator_id,t2.spm_parameter_id,
+                t3.spm_area_id,t4.spm_domain_id,t5.name AS domain,t4.name AS area, t3.name AS parameter,t2.name AS indicator FROM  spm_rating t1 
+                JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id 
+                JOIN spm_parameter t3 ON t2.spm_parameter_id = t3.id 
+                JOIN spm_area t4 ON t3.spm_area_id = t4.id 
+                JOIN spm_domain t5 ON t4.spm_domain_id = t5.id');
+            return $this->successResponse($ratings);
         }
-        if($param == "all_active_indicators"){
-            $domain = DB::select('SELECT t1.id,t1.score,t1.description,t1.status,t1.spm_indicator_id, t2.name AS indicator FROM  spm_rating t1 JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id WHERE t1.status = 1');
-            return $this->successResponse($domain);
+        if(strpos($param,'all_active_ratings_')!== false){
+            $params=explode("_",$param);  
+            $ratings = DB::select('SELECT t1.id,t1.score,t1.description,t1.status,t1.spm_indicator_id,t2.spm_parameter_id,
+                    t3.spm_area_id,t4.spm_domain_id,t5.name AS domain,t4.name AS area, t3.name AS parameter,t2.name AS indicator FROM  spm_rating t1 
+                    JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id 
+                    JOIN spm_parameter t3 ON t2.spm_parameter_id = t3.id 
+                    JOIN spm_area t4 ON t3.spm_area_id = t4.id JOIN spm_domain t5 ON t4.spm_domain_id = t5.id 
+             WHERE t1.status = 1 AND t1.spm_parameter_id = ?',[$params[3]]);
+            return $this->successResponse($ratings);
         }
+    }
+    public function saveDzoEMO(Request $request){
+        // $this->validate($request, $rules, $customMessages);
+        // $request['user_id'] = $this->userId();
+        // $data = $request->all();
+        // $response_data = $this->apiService->createData('emis/masters/saveDzoEMO', $data);
+        // return $response_data;
+    }
+    public function getDzoEMO(){
+        // $response_data = $this->successResponse($this->spmservice->listData('masters/getDzoEMO'));
+        // return $response_data;
+    }
+    public function saveSchoolDEO(Request $request){
+        // $this->validate($request, $rules, $customMessages);
+        // $request['user_id'] = $this->userId();
+        // $data = $request->all();
+        // $response_data = $this->apiService->createData('emis/masters/saveSchoolDEO', $data);
+        // return $response_data;
+    }
+    public function getSchoolDEO(){
+        // $response_data = $this->successResponse($this->spmservice->listData('masters/getDzoEMO'));
+        // return $response_data;
     }
 }

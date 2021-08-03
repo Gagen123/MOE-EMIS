@@ -36,6 +36,16 @@
                        Rating
                     </router-link>
                 </li>
+                  <li class="nav-item active pr-1" @click="activatelink('dzo_emo')">
+                    <router-link id="dzo_emo" to="/dzo-emo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Dzongkhag-EMO
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('school_deo')">
+                    <router-link id="school_deo" to="/school-deo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       School-DEO/TEO
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

@@ -1,8 +1,28 @@
 <template>
-     <div>
+    <div>
         <form class="bootbox-form" autocomplete="off">
             <div class="card-body">
                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Domain :<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="spm_domain_id" v-model="spm_domain_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_domain_id') }" @change="getAreas(); remove_err('spm_domain_id')">
+                            <option value=""> ---Select---</option>
+                            <option v-for="(item, index) in domains" :key="index" v-bind:value="item.id">
+                                {{ item.name }}
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="spm_domain_id"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Area :<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="spm_area_id" v-model="spm_area_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_area_id') }" @change="getParameters(); remove_err('spm_area_id')">
+                            <option value=""> ---Select---</option>
+                            <option v-for="(item, index) in areas" :key="index" v-bind:value="item.id">
+                                {{ item.name }}
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="spm_area_id"></has-error>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Parameter :<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_parameter_id" v-model="form.spm_parameter_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_parameter_id') }" @change="remove_err('spm_parameter_id')">
@@ -35,34 +55,55 @@
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>   
+    </div>     
 </template>
 <script>
 export default {
     data(){
         return {
+            domains:[],
+            spm_domain_id:'',
+            areas:[],
+            spm_area_id:'',
             parameters:[],
             form: new form({
-                id:'',
                 name: '',
                 spm_parameter_id:'',
                 status:1,
                 record_type:'indicator',
-                action_type:'edit',
+                action_type:'add',
             })
         }
     },
     methods: {
+        getDomains(){
+            axios.get('masters/loadSpmMasters/all_active_domains')
+            .then(response => {
+                let data = response 
+                this.domains =  data.data.data
+            })
+            .catch(function (error){
+                console.log("Error"+error)
+            });
+        },
         getAreas(){
-            axios.get('masters/loadSpmMasters/all_active_parameters')
+            axios.get('masters/loadSpmMasters/all_active_areas_'+this.spm_domain_id)
+            .then(response => {
+                let data = response 
+                this.areas =  data.data.data
+            })
+            .catch(function (error){
+                console.log("Error"+error)
+            });
+        },
+        getParameters(){
+            axios.get('masters/loadSpmMasters/all_active_parameters_'+this.spm_area_id)
             .then(response => {
                 let data = response 
                 this.parameters =  data.data.data
             })
             .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error"+error)
             });
         },
         remove_err(field_id){
@@ -74,6 +115,7 @@ export default {
             if(type=="reset"){
                 this.form.name= ''
                 this.form.spm_parameter_id = ''
+                // this.form.code = ''
                 this.form.status= 1
             }
             if(type=="save"){
@@ -105,10 +147,15 @@ export default {
         const event = new Event("change", { bubbles: true, cancelable: true })
         e.params.data.element.parentElement.dispatchEvent(event)
         });
+        this.getDomains()
         this.getAreas()
+        this.getParameters()
+
     },
     created(){
         this.form.id = this.$route.params.data.id
+        this.spm_domain_id = this.$route.params.data.spm_domain_id
+        this.spm_area_id = this.$route.params.data.spm_area_id
         this.form.spm_parameter_id = this.$route.params.data.spm_parameter_id
         this.form.name = this.$route.params.data.name
         this.form.status = this.$route.params.data.status

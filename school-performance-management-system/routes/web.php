@@ -22,6 +22,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveSpmMasters', ['uses' => 'masters\SpmsMasterController@saveSpmMasters']);
         $router->get('/loadSpmMasters/{param}', ['uses' => 'masters\SpmsMasterController@loadSpmMasters']);
+        $router->post('/saveDzoEMO', ['uses' => 'masters\SpmsMasterController@saveDzoEMO']);
+        $router->get('/getDzoEMO', ['uses' => 'masters\SpmsMasterController@getDzoEMO']);
+        $router->post('/saveSchoolDEO', ['uses' => 'masters\SpmsMasterController@saveSchoolDEO']);
+        $router->get('/getSchoolDEO', ['uses' => 'masters\SpmsMasterController@getSchoolDEO']);
+
+
     });
 
     //Transaction Route

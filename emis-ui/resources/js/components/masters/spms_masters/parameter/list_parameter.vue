@@ -6,6 +6,7 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
                             <!-- <th>Code</th> -->
@@ -16,6 +17,7 @@
                     <tbody id="tbody">
                         <tr v-for="(item, index) in parameters" :key="index">
                             <td class="text-right">{{ index + 1 }}</td>
+                            <td>{{ item.domain }} </td>
                             <td>{{ item.area }} </td>
                             <td>{{ item.name }} </td>
                             <!-- <td>{{ item.code }}</td> -->

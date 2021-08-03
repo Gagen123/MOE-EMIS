@@ -4,6 +4,16 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Domain :<span class="text-danger">*</span></label> 
+                        <select class="form-control select2" id="spm_domain_id" v-model="spm_domain_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_domain_id') }" @change="getAreas(); remove_err('spm_domain_id')">
+                            <option value=""> ---Select---</option>
+                            <option v-for="(item, index) in domains" :key="index" v-bind:value="item.id">
+                                {{ item.name }}
+                            </option>
+                        </select> 
+                        <has-error :form="form" field="spm_domain_id"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Area :<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_area_id" v-model="form.spm_area_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_area_id') }" @change="remove_err('spm_area_id')">
                             <option value=""> ---Select---</option>
@@ -18,13 +28,6 @@
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label>
-                        <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
-                        <has-error :form="form" field="code"></has-error>
-                    </div>
-                </div> 
-                <div class="row form-group"> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -44,6 +47,8 @@
 export default {
     data(){
         return {
+            domains:[],
+            spm_domain_id:'',
             areas:[],
             form: new form({
                 name: '',
@@ -56,16 +61,24 @@ export default {
         }
     },
     methods: {
+        getDomains(){
+            axios.get('masters/loadSpmMasters/all_active_domains')
+            .then(response => {
+                let data = response 
+                this.domains =  data.data.data
+            })
+            .catch(function (error){
+                console.log("Error"+error)
+            });
+        },
         getAreas(){
-            axios.get('masters/loadSpmMasters/all_active_areas')
+            axios.get('masters/loadSpmMasters/all_active_areas_'+this.spm_domain_id)
             .then(response => {
                 let data = response 
                 this.areas =  data.data.data
             })
             .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error"+error)
             });
         },
         remove_err(field_id){
@@ -109,7 +122,7 @@ export default {
         const event = new Event("change", { bubbles: true, cancelable: true })
         e.params.data.element.parentElement.dispatchEvent(event)
         });
-        this.getAreas()
+        this.getDomains()
     }
 }
 </script>
