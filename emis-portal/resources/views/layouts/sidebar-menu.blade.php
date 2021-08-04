@@ -50,7 +50,6 @@
             </li>
         @endif
         <li class="nav-item">
-
             <a href="#" onclick="logout()" class="dropdown-item">
                 <i class="fa fa-sign-out-alt pr-4"></i>Sign out
             </a>
