@@ -7,13 +7,14 @@
         <title>Emis Portal</title>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     </head>
-    <body class="hold-transition login-page">
+    <body class="hold-transition login-page" style="background-image: url('{{ asset('images/school.jpg')}}');background-size: cover; background-repeat: no-repeat;">
     <div class="login-box">
-        <div class="login-logo">
-            <a href="#"><b>Ministry of Education</b></a>
-        </div>
+
         <div class="card">
             <div class="card-body login-card-body">
+                <div class="login-logo">
+                    <a href="#"><b>Ministry of Education</b></a><hr>
+                </div>
                 <div id="loginsection">
                     <p class="login-box-msg">Sign in to start your session </p>
                     <form action="/userlogin" method="get">
@@ -24,7 +25,7 @@
                             <span class="text-danger">{{ $error }}</span> <br>
                         @endforeach
                         <div class="input-group mb-3">
-                            <input type="email" id="emails" :class="{ 'is-invalid': form.errors.has('email') }" name="email"
+                            <input type="text" id="emails" :class="{ 'is-invalid': form.errors.has('email') }" name="email"
                             placeholder="user name" class="form-control">
                             <div class="input-group-append">
                                 <div class="input-group-text">
