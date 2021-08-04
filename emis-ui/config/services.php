@@ -42,7 +42,8 @@ return [
         'notification_leadership_selection_applicaiton' => env('APPLICATION_SUBMISSION_FOR_LEADERSHIP_SELECTION'),
         'hrd_role_id'=> env('HRD_ROLE_ID'),
         'deo_role_id'=> env('DEO_ROLE_ID'),
-        
+        'emd_role_id'=> env('EMD_ROLE_ID'),
+
 
     ],
 

@@ -24,14 +24,19 @@
                             <span class="text-danger">{{ $error }}</span> <br>
                         @endforeach
                         <div class="form-group">
-                            <input type="cid" id="cid" :class="{ 'is-invalid': form.errors.has('cid') }" name="cid"
-                            placeholder="Student CID" class="form-control">
-                            <has-error :form="form" field="cid"></has-error>
-                        </div>
-                        <div class="form-group">
                             <input type="name" id="name" :class="{ 'is-invalid': form.errors.has('name') }" name="name"
-                            placeholder="Name" class="form-control">
+                            placeholder="Student Name" class="form-control">
                             <has-error :form="form" field="name"></has-error>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="contact" id="contact" :class="{ 'is-invalid': form.errors.has('contact') }" name="contact"
+                            placeholder="Mobile Number" class="form-control">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-phone"></span>
+                                </div>
+                            </div>
+                            <has-error :form="form" field="email"></has-error>
                         </div>
                         <div class="input-group mb-3">
                             <input type="email" id="emails" :class="{ 'is-invalid': form.errors.has('email') }" name="email"

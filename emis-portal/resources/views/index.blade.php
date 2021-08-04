@@ -78,7 +78,7 @@
                 </div>
             @endif --}}
             <div class="top-right links">
-                <a href="{{ url('user_register') }}">Register</a>
+                <a href="{{ url('new_register') }}">Register</a>
                 <a href="{{ url('login_screen') }}">Login</a>
             </div>
             <div class="content">
