@@ -31,12 +31,15 @@ use Illuminate\Support\Facades\Route;
         Route::get('/all_active_dropdowns/{model}/{parent_id}', [App\Http\Controllers\AdminstratorController::class, 'all_active_dropdowns'])->name('all_active_dropdowns');
 
         Route::get('/getOrgList/{dzoId}/{orgType}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
-
+        Route::get('/getHssSchoolList/{dzo_id}', [App\Http\Controllers\AdminstratorController::class, 'getHssSchoolList'])->name('getHssSchoolList');
+        
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
         Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
         Route::get('/loadValidationcondition', [App\Http\Controllers\AdminstratorController::class, 'loadValidationcondition'])->name('loadValidationcondition');
         Route::get('/active_marital_list', [App\Http\Controllers\AdminstratorController::class, 'active_marital_list'])->name('active_marital_list');
+        Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\AdminstratorController::class, 'getStudentDetails'])->name('getStudentDetails');
+        Route::get('/getFullSchoolDetails/{id}', [App\Http\Controllers\AdminstratorController::class, 'getFullSchoolDetails'])->name('getFullSchoolDetails');
     });
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
     Route::get('/loadSchoolList/{dzoId}/{type}', [App\Http\Controllers\NotenrolledController::class, 'loadSchoolList'])->name('loadSchoolList');
@@ -96,9 +99,5 @@ use Illuminate\Support\Facades\Route;
     //New Routes created by Phuntsho
     Route::prefix('track_application')->group(function (){
         Route::get('/getApplicationDetails/{id}', [App\Http\Controllers\TrackApplicationController::class, 'getApplicationDetails'])->name('getApplicationDetails');
-    });
-
-    Route::prefix('xi_admission')->group(function (){
-        Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
     });
 

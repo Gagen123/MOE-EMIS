@@ -34,8 +34,6 @@
             <p> Apply to Schools</p>
             </router-link>
         </li>
-        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Parent')
-
         @endif
         @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent')
             <li class="nav-item">
