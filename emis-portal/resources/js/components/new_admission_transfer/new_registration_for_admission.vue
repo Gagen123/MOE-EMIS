@@ -1,5 +1,10 @@
 <template>
     <div class="container-fluid">
+        <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <tr class="bg-cyan">
+                <td colspan="2"><b>New Student Registration Form</b></td>
+            </tr>
+        </table>
         <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -25,15 +30,15 @@
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Bhutanese" id="s-bhutanese" @click="showstdidentity('Student-Bhutanese')" checked> Bhutanese <br>
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Bhutanese Under Process" id="s-bhutanese-underprocess" @click="showstdidentity('Student-Bhutanese-underprocess')" checked> Bhutanese (under process)<br>
                                     <input type="radio" name="snationality" v-model="student_form.snationality" value="Foreign" id="s-foreign" @click="showstdidentity('Student-Non-Bhutanese')"> Non-Bhutanese
-                                    <span class="text-danger" id="snationality_err"></span>
+                                    <br><span class="text-danger" id="snationality_err"></span>
                                 </div>
                                 <div class="row form-group col-lg-9 col-md-9 col-sm-9 col-xs-12">
                                     <div class="card card-primary">
                                         <div class="card-body">
                                             <div class="row form-group">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                    <label id="level_name"></label>
-                                                    <input type="text" class="form-control"  @change="removeerror('cid_passport')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
+                                                    <label>CID/Identification Number:<span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control"  @change="removeerror('cid_passport'), getChildDetailsbyCID('cid_passport','std')" @keyup.enter="getChildDetailsbyCID('cid_passport','std')" :class="{ 'is-invalid': student_form.errors.has('cid_passport') }" id="cid_passport" v-model="student_form.cid_passport" placeholder="Identification No">
                                                     <has-error :form="student_form" field="cid_passport"></has-error>
                                                 </div>
                                             </div>
@@ -709,22 +714,34 @@ export default {
             this.student_form.attachments = e.target.files[0];
         },
         getChildDetailsbyCID(cid,type){
-            this.student_form.cid_passport = cid;
-            $('#cid_passport').prop('readonly',true);
-            if(type=="std" && $('#cid').val()!="" && $('#cid').val()!=undefined){
-                cid=  $('#cid').val();
+            if(this.student_form.snationality==""){
+                $('#snationality_err').html('Please select nationality');
+                $('#'+cid).val('');
             }
-            this.getPersonalDetailsbyCID(cid,type);
-            let fatherCid="";
-            let motherCid="";
-            if(type=='std'){
-                axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
-                .then(response => {
-                    fatherCid=response.data[0].fatherCID;
-                    motherCid=response.data[0].motherCID;
-                    this.getPersonalDetailsbyCID(fatherCid,'father');
-                    this.getPersonalDetailsbyCID(motherCid,'mother');
-                });
+            else{
+                $('#snationality_err').html('');
+            }
+            if(this.student_form.snationality=="Bhutanese"){
+                // this.student_form.cid_passport = cid;
+                cid=$('#'+cid).val();
+                this.student_form.cid_passport =cid;
+                this.getPersonalDetailsbyCID(cid,type);
+                let fatherCid="";
+                let motherCid="";
+                if(type=='std'){
+                    axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
+                    .then(response => {
+                        let data=response.data.data.parentDetail[0];
+                        fatherCid=data.fatherCID;
+                        if(fatherCid!=null && fatherCid!=""){
+                            this.getPersonalDetailsbyCID(fatherCid,'father');
+                        }
+                        motherCid=data.motherCID;
+                        if(motherCid!=null && motherCid!=""){
+                            this.getPersonalDetailsbyCID(motherCid,'mother');
+                        }
+                    });
+                }
             }
         },
         getPersonalDetailsbyCID(cid,type){
@@ -753,17 +770,17 @@ export default {
                         $('#dob').val(year+ "-"+month + "-" + day);
                         $('#dob').prop('readonly',true);
 
-                        if(student_detail.genter=="M"){
-                            student_detail.genter="male";
+                        if(student_detail.gender=="M"){
+                            student_detail.gender="male";
                         }
-                        else if(student_detail.genter=="F"){
-                            student_detail.genter="female";
+                        else if(student_detail.gender=="F"){
+                            student_detail.gender="female";
                         }
                         else{
-                            student_detail.genter="others";
+                            student_detail.gender="others";
                         }
                         for(let i=0; i<this.sex_idList.length;i++){
-                            if(this.sex_idList[i].name.toLowerCase()==student_detail.genter){
+                            if(this.sex_idList[i].name.toLowerCase()==student_detail.gender){
                                 $('#sex_id').val(this.sex_idList[i].id).trigger('change');
                                 this.student_form.sex_id =  this.sex_idList[i].id;
                                 $('#sex_id').prop('disabled',true);
@@ -1476,7 +1493,6 @@ export default {
     created() {
         this.loadVlidation();
          let cid=this.$route.query.cid;
-         this.getChildDetailsbyCID(cid,'std');
          this.getdzongkhagList();
         //  this.getschoolList();
          this.getclassList();
