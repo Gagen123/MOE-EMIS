@@ -1,34 +1,77 @@
 <template>
     <div>
-        <form class="bootbox-form" id="compoundarea-detial">
+        <form class="bootbox-form" id="compoundarea-detail">
             <div class="card-body">
-                <div class="row form-group">
+                <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label >Thram No:<span class="text-danger">*</span> </label>
                         <input type="text" class="form-control" @change="removeerror('thramno')" :class="{ 'is-invalid': form.errors.has('thramno') }" id="first_name" v-model="form.thramno" placeholder="thramno">
-                            <has-error :form="form" field="thramno"></has-error>
+                        <has-error :form="form" field="thramno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label > Plot No: </label>
-                         <input type="text" class="form-control" @change="removeerror('plotno')" :class="{ 'is-invalid': form.errors.has('plotno') }" id="plotno" v-model="form.plotno" placeholder="plotno">
+                        <input type="text" class="form-control" @change="removeerror('plotno')" :class="{ 'is-invalid': form.errors.has('plotno') }" id="plotno" v-model="form.plotno" placeholder="plotno">
                         <has-error :form="form" field="plotno"></has-error>
                     </div>
-                   
-                </div>
-
-                <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                       <label>Size of Compound Area:<span class="text-danger">*</span></label>
+                        <label>Size of Compound Area:<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizecompound')" :class="{ 'is-invalid': form.errors.has('sizecompound') }" id="sizecompound" v-model="form.sizecompound" >
                         <has-error :form="form" field="sizecompound"></has-error>
-                    </div>
-                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Lag Tharm(Peg Information): </label>
-                        <input type="file" class="form-control" v-on:change="onChangeFileUpload" >
-                        <has-error :form="form" field="attachments"></has-error>
+                    </div> 
+                    
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Lag Thram/Peg Info & other related document <span class="text-danger">*</span></label>
                     </div>
                 </div>
-                 <div class="form-group row">
+                <div class="form-group row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>File Name</th>
+                                    <th>Upload File</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='(attach, count) in attachmentDetails' :key="count+1" :id="'attachdel'+count">
+                                <template>
+                                    <td>
+                                        {{attach.user_defined_name}}
+                                    </td>
+                                    <td>
+                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                        <span>
+                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
+                                        </span>
+                                    </td>
+                                </template>
+                                </tr>
+                                 <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                        <td>
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                        </td>
+                                        <td>
+                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                        </td> 
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- </div> -->
+                <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Does the School/ECCD/ECR have Playground area?<span class="text-danger">*</span></label>
                         <br>
@@ -73,7 +116,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                   <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Program Practise By the Organization:</label><br>
                         <label  v-for="(item, index) in  programTypeList" :key="index" class="pr-4">
                             <input  type="checkbox" :id="'PrgType'+item.id" name="programType" v-model="form.programType" :value="item.id" /> 
@@ -81,29 +124,29 @@
                         </label>
                     </div>
                 </div>
-            </div>
-
-            <div class="card-footer text-right">
-                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <div class="card-footer text-right">
+                    <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
+                </div> 
             </div>
         </form>
     </div>
-
 </template>
 
 <script>
 export default {
     data(){
         return{
+            filecount:1,
             programTypeList:[],
+            attachments:[],
+            attachmentDetails:[],
             display:'',
-
             form: new form({
                 id: '',
                 thramno:'',
                 plotno: '',
-                attachments: '',
+              //  attachments: [],
                 sizecompound:'',
                 sizeplayground:'',
                 playgroundused: '',
@@ -112,20 +155,31 @@ export default {
                 agriculturalarea: '',
                 areaused:'',
                 programType:[],
-
-            })
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
+            }),
         }
     },
 
     methods:{
 
         /**
-         * method to remove error
+         * method to reset form
          */
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
+        restForm(){
+            this.form.thramno= '';
+            this.form.plotno = '';
+            this.form.attachments = '';
+            this.form.sizecompound= '';
+            this.form.sizeplayground= '';
+            this.form.playgroundused= '';
+            this.form.status= '';
+            this.form.statusofplay= '';
+            this.form.agriculturalarea='';
+            this.form.areaused = '';
         },
         showtextbox:function(type){
             if(type=="Yes"){
@@ -145,26 +199,6 @@ export default {
             }
         },
 
-        onChangeFileUpload(e){
-            this.form.attachments = e.target.files[0];
-        },
-        /**
-         * method to reset form
-         */
-        restForm(){
-            this.form.thramno= '';
-            this.form.plotno = '';
-            this.form.attachments = '';
-            this.form.sizecompound= '';
-            this.form.sizeplayground= '';
-            this.form.playgroundused= '';
-            this.form.status= '';
-            this.form.statusofplay= '';
-            this.form.agriculturalarea='';
-            this.form.areaused = '';
-            
-        },
-
         /**
          * method to save data
          */
@@ -182,7 +216,7 @@ export default {
                 formData.append('thramno', this.form.thramno);
                 formData.append('plotno', this.form.plotno);
                 // alert(this.form.attachments);
-                formData.append('attachments', this.form.attachments);
+               // formData.append('attachments', this.form.attachments);
                 formData.append('sizecompound', this.form.sizecompound);
                 formData.append('sizeplayground', this.form.sizeplayground);
                 formData.append('playgroundused', this.form.playgroundused);
@@ -191,6 +225,10 @@ export default {
                 formData.append('agriculturalarea', this.form.agriculturalarea);
                 formData.append('areaused', this.form.areaused);
                 formData.append('programType', this.form.programType);
+                for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
                     axios.post('/organization/saveSchoolCompundDetails',formData,config)
                     .then(() => {
                     Toast.fire({
@@ -205,8 +243,6 @@ export default {
                 })
             }
 		},
-
-
         removeerror(fieldid,errid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
@@ -220,15 +256,44 @@ export default {
                 this.programTypeList =  data;
             })
         },
-        
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#file_name'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#file_name'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#file_name'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
+        addMore: function(){
+            this.filecount++;
+            this.form.attachments.push({file_name:'', attachment:''});
+        },
+        remove(){
+            if(this.form.attachments.length>1){
+                this.filecount--;
+                this.form.attachments.pop();
+                this.form.ref_docs.pop();
+            }
+        },
+
+        // removeattachments(index){
+        //     if(this.form.attachments.length>1){
+        //         this.filecount--;
+        //         this.form.attachments.pop();
+        //         this.form.ref_docs.pop();
+        //     }
+        // },
         getEditCompoundDetail(compId){
             axios.get('organization/getEditCompoundDetail/'+compId)
             .then((response) => {  
-                let data=response.data;
-                this.display=response.data;
+                let data=response.data.data;
+                this.display=response.data.data;
                 this.form.thramno                       =    data.thramNo;
                 this.form.plotno                        =    data.plotNo;
-                this.form.attachments                   =    data.attachments;
+            //    this.form.attachments                   =    data.attachments;
                 this.form.sizecompound                  =    data.compoundArea;
                 this.form.sizeplayground                =    data.playgroundArea;
                 this.form.playgroundused                =    data.playgroundAreaUsable;
@@ -237,6 +302,7 @@ export default {
                 this.form.agriculturalarea              =    data.agricultureArea;
                 this.form.areaused                      =    data.agricultureAreaUsed;
                 this.form.id                            =    data.id;
+                this.attachmentDetails                  =    data.attachments;
                 if(data.programType!=null && data.programType.includes(',')){
                     for(let i=0;i<data.programType.split(',').length;i++){
                         let ret_data=data.programType.split(',')[i];
@@ -255,10 +321,54 @@ export default {
                 console.log("Error:"+error);
             }); 
         },
+        deletefile(file,count){
+            alert(file.original_name);
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            $('#attachdel'+count).remove();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
 
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
     },
-    mounted() {
-
+    mounted() { 
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));

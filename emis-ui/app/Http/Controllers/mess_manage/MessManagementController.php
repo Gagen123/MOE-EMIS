@@ -234,13 +234,13 @@ class MessManagementController extends Controller
        $stockissue =[
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
-            'itemList'                  =>  $request['itemList'],
-            'category'                  =>  $request['category'],
+            'itemList'                 =>  $request['itemList'],
+            'category'                 =>  $request['category'],
             'id'                       =>  $request['id'],
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
         ];
-        //   dd($stockissue);
+        //  dd($stockissue);
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
         //dd($response_data);
         return $response_data;
@@ -306,5 +306,69 @@ class MessManagementController extends Controller
         $orgId=$this->getWrkingAgencyId();
         $list = $this->apiService->listData('emis/messManagement/getquantity/'.$itemId. "/".$chekva. "/".$orgId);
         return $list;
+    }
+    
+    public function saveStockIssuedEdit(Request $request){
+        //return $request
+        $rules = [
+            'dateOfissue'         =>  'required',
+          ];
+         $customMessages = [
+            'dateOfissue.required'            => 'dateOfissue is required',
+            ];
+            $this->validate($request, $rules, $customMessages);
+        $stockissue =[
+            'organizationId'           =>  $this->getWrkingAgencyId(),
+            'dateOfissue'              =>  $request['dateOfissue'],
+          //  'itemList'                 =>  $request['itemList'],
+            'category'                 =>  $request['category'],
+            'id'                       =>  $request['id'],
+            'item_id'                  =>  $request['item_id'],
+            'unit_id'                  =>  $request['unit_id'],
+            'availaleqty'              =>  $request['availaleqty'],
+            'quantity'                 =>  $request['quantity'],
+            'damagequantity'           =>  $request['damagequantity'],
+            'remarks'                  =>  $request['remarks'],
+            'user_id'                  =>  $this->userId()
+        ];
+       //  dd($stockissue);
+        $response_data= $this->apiService->createData('emis/messManagement/saveStockIssuedEdit', $stockissue);
+        //dd($response_data);
+        return $response_data;
+    }
+    
+    public function saveLocalProcureEdit(Request $request){
+        //return $request
+        $rules = [
+            'dateOfprocure'             =>  'required',
+
+        ];
+        $customMessages = [
+            'dateOfprocure.required'    => 'dateOfprocure is required',
+
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $localprocure =[
+            'organizationId'         =>  $this->getWrkingAgencyId(),
+            'dateOfprocure'          =>  $request['dateOfprocure'],
+            'id'                     =>  $request['id'],
+            'item_id'                =>  $request['item_id'],        
+            'unit_id'                =>  $request['unit_id'],
+            'quantity'               =>  $request['quantity'],
+            'amount'                 =>  $request['amount'],
+            'source'                 =>  $request['source'],
+            'remark'                 =>  $request['remark'],
+            'user_id'                =>  $this->userId()
+        ];
+        // dd($localprocure);
+      // dd($request->local_item);
+        try{
+            $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcureEdit', $localprocure);
+         //   dd($response_data);
+            return $response_data;
+        }
+        catch(\GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
     }
 }

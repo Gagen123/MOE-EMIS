@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Traits\ApiResponser;
 use Illuminate\Support\Facades\DB;
 use App\Models\generalInformation\OrganizationCompoundDetail;
+use App\Models\generalInformation\ThramPegDocuments;
 
 
 class CompoundDetailController extends Controller
@@ -36,18 +37,14 @@ class CompoundDetailController extends Controller
 
     //     return $equip;
     // }
-
-  
-
     public function saveSchoolCompundDetails(Request $request){
       $id = $request->id;
-      if( $id != null)
-       {
+      if( $id != null){
             $data =[
              'organizationId'                => $request->organizationId,
              'thramNo'                       => $request->thramno,
              'plotNo'                        => $request->plotno,
-             'attachments'                   => $request->attachments,
+            // 'attachments'                   => $request->attachments,
              'compoundArea'                  => $request->sizecompound,
              'playgroundArea'                => $request->sizeplayground,
              'playgroundAreaUsable'          => $request->playgroundused,
@@ -62,9 +59,22 @@ class CompoundDetailController extends Controller
              'created_at'                    =>date('Y-m-d h:i:s'),
              'updated_at'                    =>date('Y-m-d h:i:s'),
             ];
-        
-         $response_data = OrganizationCompoundDetail::where('id', $id)->update($data);
-         return $this->successResponse($response_data, Response::HTTP_CREATED);
+            OrganizationCompoundDetail::where('id', $id)->update($data);
+            $response_data=OrganizationCompoundDetail::where('id',$id)->first();
+            if($request->attachment_details!=null && $request->attachment_details!=""){
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'attachmentId'              =>  $id,
+                        'path'                      =>  $att['path'],
+                        'attachment_for'            =>  'Tharm and Peg Document',
+                        'user_defined_name'         =>  $att['user_defined_name'],
+                        'original_name'             =>  $att['original_name'],
+
+                    ];
+                    ThramPegDocuments::create($attach);
+                }
+            }
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
         }
         else
         {   
@@ -72,7 +82,7 @@ class CompoundDetailController extends Controller
                 'organizationId'                => $request->organizationId,
                 'thramNo'                       => $request->thramno,
                 'plotNo'                        => $request->plotno,
-                'attachments'                   => $request->attachments,
+             //   'attachments'                   => $request->attachments,
                 'compoundArea'                  => $request->sizecompound,
                 'playgroundArea'                => $request->sizeplayground,
                 'playgroundAreaUsable'          => $request->playgroundused,
@@ -88,19 +98,40 @@ class CompoundDetailController extends Controller
                 'updated_at'                    =>date('Y-m-d h:i:s'),
             ];
             //  dd($data);
-        }
-        $response_data = OrganizationCompoundDetail::create($data);
-        
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-    
-    }
-    public function getEditCompoundDetail($compId=""){
-       // dd('from microservice');
-        $info = OrganizationCompoundDetail::where('id',$compId)->first();
-        return $info;
-    }
-    
-   
-    
+            $response_data = OrganizationCompoundDetail::create($data);
+            $attachmentId =  $response_data->id;
+            if($request->attachment_details!=null && $request->attachment_details!=""){
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'attachmentId'              =>  $attachmentId,
+                        'path'                      =>  $att['path'],
+                        'attachment_for'            =>  'Tharm and Peg Document',
+                        'user_defined_name'         =>  $att['user_defined_name'],
+                        'original_name'             =>  $att['original_name'],
 
+                    ];
+                  //  dd($attach);
+                  ThramPegDocuments::create($attach);
+                }
+            }
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }
+    }
+    // public function getEditCompoundDetail($compId=""){
+    //    // dd('from microservice');
+    //     $info = OrganizationCompoundDetail::where('id',$compId)->first();
+    //     return $info;
+    // }
+    public function getEditCompoundDetail($compId=""){
+        // dd($foodrelId);
+         $response_data=OrganizationCompoundDetail::where('id',$compId)->first();
+         $response_data->attachments=ThramPegDocuments::where('attachmentId',$response_data->id)->get();
+         return $this->successResponse($response_data);
+    }
+
+    public function deleteFile($id=""){
+        $attachment = ThramPegDocuments::findOrFail($id);
+        $attachment->delete();
+        return $this->successResponse($attachment);
+    }
 }

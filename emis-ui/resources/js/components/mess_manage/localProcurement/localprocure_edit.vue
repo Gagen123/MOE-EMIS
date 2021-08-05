@@ -1,12 +1,12 @@
 <template>
     <div>
-        <form class="bootbox-form" id="localprocureId"> 
+        <form class="bootbox-form" id="localprocureId">
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label>
                         <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
-                        v-model="form.data.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
+                        v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
                         <has-error :form="form" field="dateOfprocure"></has-error>
                     </div>
                 </div>
@@ -24,27 +24,26 @@
                               </tr>
                            </thead>
                            <tbody>
-                               <tr>
-                              <!-- <tr id="record1" v-for='(item, index) in form.local_item' :key="index"> -->
+                              <tr >
                                   <td>
-                                    <span>{{itemList[form.data.item_id]}}</span>
+                                    <span>{{itemList[form.item_id]}}</span>
                                   </td>
                                  <td>
-                                    <span>{{unitArray[form.data.unit_id]}}</span>
+                                    <span>{{unitArray[form.unit_id]}}</span>
                                   </td>
                                   <td>
-                                     <input type="text" name="quantity" class="form-control" v-model="form.data.quantity">
+                                     <input type="text" name="quantity" class="form-control" v-model="form.quantity">
                                  </td>
                                   <td>
-                                     <input type="text" name="amount" class="form-control" v-model="form.data.amount">
+                                     <input type="text" name="amount" class="form-control" v-model="form.amount">
                                  </td>
                                  <td>
-                                     <select name="source" id="source" class="form-control" v-model="form.data.source">
+                                     <select name="source" id="source" class="form-control" v-model="form.source">
                                           <option v-for="(item, index) in foodSourceList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                                      </select> 
                                   </td>
                                   <td>
-                                      <input type="text" name="remark" class="form-control" v-model="form.data.remark">
+                                      <input type="text" name="remark" class="form-control" v-model="form.remark">
                                   </td>
                               </tr>
                               <!-- <tr>
@@ -74,19 +73,14 @@ export default {
     data(){
         return{
             count:1,
-            itemList:[],
             itemList:{},
             unitList:[],
             unitArray:{},
             local_item: [],
             foodSourceList:[],
             form: new form({
-                id: '', dateOfprocure: '',
-                data:'',
-                local_item:
-                [{
-                    item:'',quantity:'',unit:'', amount:'',remark:'', source:''
-                }],
+                id: '', dateOfprocure: '', item_id:'',unit_id:'', quantity:'',amount:'',source:'',remark:''
+               
             })
         }
     },
@@ -111,7 +105,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.post('/mess_manage/saveLocalProcure',this.form)
+                    this.form.post('/mess_manage/saveLocalProcureEdit',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -182,29 +176,21 @@ export default {
             });
         },
         localProcureEditList(locId){
-            this.form.local_item=[];
+        
             axios.get('mess_manage/localProcureEditList/' +locId)
             .then((response) =>{
-                this.form.data=response.data.data;
-            //     let data=response.data.data;
-            //    // alert(data.length);
-            //     for(let i=0; i<data.length;i++){
-            //      //   alert(data[i].item_id);
-            //         this.form.dateOfprocure         = data[i].dateOfprocure;
-            //         this.form.id                    = data[i].id;
-            //         this.form.local_item.push({
-            //             item:this.itemList[data[i].item_id],
-            //          //  item:data[i].item_id,
-            //            quantity:data[i].quantity,
-            //            unit:this.unitArray[data[i].unit_id],
-            //            amount:data[i].amount,
-            //            source:data[i].food_source,
-            //            remark:data[i].remark
-            //         });
-                   
-            //     }
-            //     this.count=data.length;
-            })
+                let data=response.data.data;
+                this.form.dateOfprocure         = data.dateOfprocure;
+                this.form.id                    = data.id;
+                this.form.item_id               = data.item_id;
+                this.form.unit_id               = data.unit_id;
+                this.form.quantity              = data.quantity;
+                this.form.amount                = data.amount;
+                this.form.source                = data.food_source;
+                $('#source').val(data.food_source).trigger('change');
+                this.form.remark                = data.remark;
+                
+             })
             .catch((error) =>{
                 console.log("Error:"+error);
             });

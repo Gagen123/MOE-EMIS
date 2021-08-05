@@ -50,7 +50,7 @@
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
                 </div> -->
-                 <div class="row">
+                <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
                     </div>
@@ -354,10 +354,6 @@ export default {
         //     });
         // },
 
-
-       
-        
-
         /**
          * method to add more fields
          */
@@ -420,11 +416,11 @@ export default {
             this.changefunction(id);
         });
        
-    //    this.loadactivedzongkhagList();
+    //  this.loadactivedzongkhagList();
         this.loadActiveQuarterList();
         this.loadActiveItemList();
         this.loadActiveUnitList(); 
-    //    this.allOrgList(); 
+    //  this.allOrgList(); 
     }
 }
 </script>

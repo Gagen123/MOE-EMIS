@@ -33,6 +33,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadLocalProcure/{orgId}', 'messManage\LocalProcureController@loadLocalProcure');
             $router->post('/saveLocalProcure', 'messManage\LocalProcureController@saveLocalProcure');
             $router->get('/localProcureEditList/{locId}', 'messManage\LocalProcureController@localProcureEditList');
+            $router->post('/saveLocalProcureEdit', 'messManage\LocalProcureController@saveLocalProcureEdit');
         });
 
         $router->group(['prefix' => 'stockissue'], function () use ($router) {
@@ -41,6 +42,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getAvailableStocks/{id}/{type}', 'messManage\StockIssuedController@getAvailableStocks');
             $router->get('/StockIssueEditList/{lssId}', 'messManage\StockIssuedController@StockIssueEditList');
             $router->get('/getquantity/{itemId}/{chekva}/{orgId}', 'messManage\StockIssuedController@getquantity');
+            $router->post('/saveStockIssuedEdit', 'messManage\StockIssuedController@saveStockIssuedEdit');
         });
 
 

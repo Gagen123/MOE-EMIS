@@ -53,22 +53,33 @@ class CompoundDetailsController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
        
-        $file = $request->attachments;
-        $path="";
-        $file_store_path=config('services.constant.file_stored_base_path').'pegdetails';
-        if($file!=null && $file!="" && $file!="undefined"){
-            if(!is_dir($file_store_path)){
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'ThramAndPegInfo';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
                 mkdir($file_store_path,0777,TRUE);
             }
-            $file_name = time().'_' .$file->getClientOriginalName();
-            move_uploaded_file($file,$file_store_path.'/'.$file_name);
-            $path=$file_store_path.'/'.$file_name;
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
         }
         $comp =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
             'thramno'                       =>  $request['thramno'],
             'plotno'                        =>  $request['plotno'],
-            'attachments'                   =>  $path,
+            'attachment_details'            =>  $attachment_details,
             'sizecompound'                  =>  $request['sizecompound'],
             'sizeplayground'                =>  $request['sizeplayground'],
             'playgroundused'                =>  $request['playgroundused'],
@@ -106,7 +117,22 @@ class CompoundDetailsController extends Controller
         //  $orgId=$this->getWrkingAgencyId();
           $data = $this->apiService->listData('emis/organization/compoundDetails/getEditCompoundDetail/'.$compId);
           return $data;
-      }
+    }
+
+    public function deleteFile($full_path="",$id=""){
+       // dd($id);
+        $full_path=str_replace('SSS','/',$full_path);
+        $headers = ['Content-Type: application/pdf'];
+        $file_name = explode('/',$full_path);
+        $finel_name = end($file_name);
+        $response_data="";
+        if (file_exists($full_path)){
+            unlink($full_path);
+            $response_data = $this->apiService->deleteData("emis/organization/compoundDetails/deleteFile", $id);
+        }
+      
+        return $response_data;
+    }
     
 
 }
