@@ -225,7 +225,7 @@ export default {
                 this.form.reason                        =   data.reason;
                 // this.form.staff_id                      =   data.staff_id;
                 this.form.appName                       =   data.applicant_details.name;
-                this.form.staff_id                      =   data.applicant_details.staff_id;
+                this.form.staff_id                      =   data.applicant_details.id;
                 this.form.contact_number                =   data.applicant_details.contact_no;
                 this.form.email                         =   data.applicant_details.email;
                 this.form.gender                        =   data.applicant_details.sex_id;
@@ -249,7 +249,6 @@ export default {
         this.loadpositionTitleList();
         this.form.application_number=this.$route.params.data.application_number;
         this.loadLeaveDetails(this.$route.params.data.application_number,this.$route.params.type);
-        this.form.date_of_application;
     },
 }
 </script>

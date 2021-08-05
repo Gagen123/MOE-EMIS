@@ -153,8 +153,11 @@
                 if(data.service_name.includes('Closure')){
                     this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.application_number.includes('TR')){
-                    this.$router.push({name:"transfer_verification",params:{data:data,type:actiontype}});
+                if(data.service_name.includes('Intra Transfer')){
+                    this.$router.push({name:"intra_transfer_verification",params:{data:data,type:actiontype}});
+                }
+                if(data.service_name.includes('Inter Transfer')){
+                    this.$router.push({name:"inter_transfer_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.application_number.includes('TRA')){
                     this.$router.push({name:"transferAppeal_verification ",params:{data:data,type:actiontype}});

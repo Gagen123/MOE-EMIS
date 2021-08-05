@@ -251,7 +251,7 @@ export default {
                 type_id:'',
                 preference_dzongkhag:[],
                 transferType:"intra_transfer",
-                service_name:"intra transfer",
+                service_name:"Intra Transfer",
                 preference_school1:'',
                 preference_school2:'',
                 preference_school3:'',
@@ -334,10 +334,10 @@ export default {
                 }
             });
         },
-          LoadTransferType(uri = 'masters/loadGlobalMasters/intra'){
+          LoadTransferType(uri = 'masters/loadStaffMasters/intra'){
             axios.get(uri)
             .then(response =>{
-                this.form.type_id = response.data.data.id;
+                this.form.type_id = response.data.data[0].id;
 
             })
             .catch(function (error){
@@ -472,30 +472,22 @@ export default {
            .then((response) => {
                 let data=response.data.data[0];
                  if(data!=null){
-                    //  alert(data.to_date);
                     this.form.transferwindow_id=data.id;
                     this.form.t_from_date=data.from_date;
                     this.form.t_to_date=data.to_date;
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-
-                    // let to_date = new Date(data.to_date);
-
-                    // let diffTime = Math.round(today - to_date);
-                    // let diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
-                    // if(diffDays<=5){
-                    //     this.t_warning_message="Only "+diffDays+" day(s) left";
-                    //     this.t_warning=true;
-                    // }
-
                     let todate=new Date(data.to_date);
                     let formdate = new Date();
                     // One day in milliseconds
                     const oneDay = 1000 * 60 * 60 * 24;
 
                     // Calculating the time difference between two dates
-                    const diffInTime = todate.getTime() - formdate.getTime();
+                    let diffInTime = todate.getTime() - formdate.getTime();
+
+                    //consider last day
+                    diffInTime=diffInTime+oneDay;
 
                     // Calculating the no. of days between two dates
                     const diffInDays =(diffInTime / oneDay);

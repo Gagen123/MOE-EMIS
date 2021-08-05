@@ -3,13 +3,15 @@
 use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
-        return view('welcome');
+        return view('index');
     });
-    Route::get('/user_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
+    Route::get('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
     Route::get('/login_screen', [App\Http\Controllers\Admin\HomeController::class, 'login_screen'])->name('login_screen');
     Route::get('/userlogin', [App\Http\Controllers\Admin\HomeController::class, 'userlogin'])->name('userlogin');
     Route::get('/user_logout', [App\Http\Controllers\Admin\HomeController::class, 'user_logout'])->name('user_logout');
-    Route::post('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'new_register'])->name('new_register');
+    Route::post('/save_new_registration', [App\Http\Controllers\Admin\HomeController::class, 'save_new_registration'])->name('save_new_registration');
+    Route::post('/change_password_portal', [App\Http\Controllers\Admin\HomeController::class, 'change_password_portal'])->name('change_password_portal');
+
     // Auth::routes(['verify' => true]);
     Route::get('/getSessionDetail', [App\Http\Controllers\Admin\HomeController::class, 'getSessionDetail'])->name('getSessionDetail');
 
@@ -60,8 +62,8 @@ use Illuminate\Support\Facades\Route;
     //getting organization details by OrgId
     Route::get('/loadOrganizationDetailsbyOrgId/{OrgOrganizationId}', [App\Http\Controllers\AdminstratorController::class, 'loadOrganizationDetailsbyOrgId'])->name('loadOrganizationDetailsbyOrgId');
 
-    
-    
+
+
     //Getting details by cid from std_student table
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
 

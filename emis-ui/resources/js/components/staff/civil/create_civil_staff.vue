@@ -40,6 +40,13 @@
                                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 mt-4 pt-2">
                                     <button type="button" class="btn btn-sm btn-primary" @click="fetchDetails()"><i class="fa fa-download"></i> Fetch</button>
                                 </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="contrct_type" style="display:none">
+                                    <label class="mb-0.5">Contract Category:</label>
+                                    <span v-for="(cat, index) in categoryList" :key="index" >
+                                        <input type="radio" @change="remove_error('nature_of_participant')" v-model="personal_form.contract_category" :class="{ 'is-invalid' :personal_form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="cat.id">
+                                        <label class="pr-3"> {{cat.name }} </label>
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
@@ -211,22 +218,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="callout callout-success" v-if="personal_form.isteaching">
+                        <div class="callout callout-success" style="display:none" id="isteaching">
                             <span class="text-blue"><label><u>Subjects</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Compulsory Subject:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.comp_sub" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('comp_sub') }" class="form-control select2" name="comp_sub" id="comp_sub">
                                         <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id+'__'+item.is_special_educational_needs">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="comp_sub"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Elective Subject 1:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.elective_sub1" :class="{'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('elective_sub1') }" class="form-control select2" name="elective_sub1" id="elective_sub1">
-                                    <option value=""> --Select--</option>
-                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="elective_sub1"></has-error>
                                 </div>
@@ -237,6 +244,11 @@
                                         <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="elective_sub2"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Is SEN ?:  {{personal_form.issen}}</label>
                                 </div>
                             </div>
                         </div>
@@ -250,7 +262,7 @@
                                 </div>  -->
 
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Initail Appointment Date:<i class="text-danger">*</i></label>
+                                    <label class="mb-0.5">Initial Appointment Date:<i class="text-danger">*</i></label>
                                     <input @change="remove_error('initial_appointment_date')" class="form-control" v-model="personal_form.initial_appointment_date" :class="{ 'is-invalid': personal_form.errors.has('initial_appointment_date') }" name="initial_appointment_date" id="initial_appointment_date" type="text">
                                     <has-error :form="personal_form" field="initial_appointment_date"></has-error>
                                 </div>
@@ -582,7 +594,7 @@
                                             <th>Email</th>
                                             <th>Relation</th>
                                             <th>Is Nominee</th>
-                                            <th>Percentage of benifit (%)</th>
+                                            <th>Percentage of benefit (%)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -633,6 +645,7 @@ export default {
             grand_total:0,
             qualification_tbl_row_count:0,
             sex_idList:[],
+            categoryList:[],
             sex_Array:{},
             marital_statusList:[],
             positiontitleList:[],
@@ -663,11 +676,13 @@ export default {
                 emp_type: 1,
                 emp_id:'',
                 cid_work_permit:'',
+                contract_category:'',
                 name:'',
                 p_address:'',
                 position_title:'',
                 sex_id:'',
                 dob:'',
+                issen:'No',
                 marital_status:'',
                 country_id:'',
                 dzongkhag:'',
@@ -1018,6 +1033,9 @@ export default {
             data.address='Permanent Address '+data.cid;
         },
         fetchDetails(){
+            if(this.personal_form.emp_type=="2"){
+                $('#contrct_type').show();
+            }
             let cid_empid=$('#cideid').val();
             if (cid_empid!= ""){
                 axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/'+cid_empid)
@@ -1078,6 +1096,7 @@ export default {
                             icon: 'info'
                         });
                     }
+
                 })
                 .catch((e) => {
                     this.ciderror = 'Invalid CID / service down.';
@@ -1274,57 +1293,59 @@ export default {
             axios.get('staff/loaddraftpersonalDetails/1')
             .then((response) => {
                 let data=response.data.data;
-                if(data.village_id!=null){
+                if(data!=null){
                     this.personal_form.dzongkhag=JSON.parse(response.data.dzongkhag).data.id;
                     this.getgewoglist(JSON.parse(response.data.dzongkhag).data.id);
                     this.personal_form.gewog=JSON.parse(response.data.gewog).data.id;
                     this.getvillagelist(JSON.parse(response.data.gewog).data.id);
                     this.personal_form.village_id=data.village_id;
+
+                    this.personal_form.personal_id=data.id;
+                    // this.loadqualication(data.id);
+                    this.qualification_form.personal_id=data.id;
+                    this.nomination_form.personal_id=data.id;
+                    this.personal_form.emp_type=data.emp_type_id;
+                    this.personal_form.emp_id=data.emp_id;
+                    this.personal_form.cid_work_permit=data.cid_work_permit;
+                    this.personal_form.name=data.name;
+                    this.personal_form.position_title=data.position_title_id;
+                    $('#position_title').val(data.position_title_id).trigger('change');
+                    this.personal_form.marital_status=data.merital_status;
+                    $('#marital_status').val(data.merital_status).trigger('change');
+                    this.personal_form.dob=data.dob;
+                    this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                    $('#initial_appointment_date').val(data.p_dzongkhag).trigger('change');
+                    $('#p_dzongkhag').prop('disabled',true);
+                    $('#dob').prop('disabled',true);
+                    $('#sex_id').prop('disabled',true);
+                    $('#cid_work_permit').prop('disabled',true);
+                    $('#name').prop('disabled',true);
+                    this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
+                    this.getPvillagelist(data.p_gewog,data.p_village);
+
+                    this.personal_form.sex_id=data.sex_id;
+                    this.personal_form.country_id=data.country_id;
+                    this.personal_form.working_agency_id=data.working_agency_id;
+                    this.personal_form.contact_number=data.contact_no;
+                    this.personal_form.email=data.email;
+                    this.personal_form.alternative_email=data.alternative_email;
+                    this.personal_form.comp_sub=data.comp_sub_id;
+                    this.personal_form.elective_sub1=data.elective_sub_id1;
+                    this.personal_form.elective_sub2=data.elective_sub_id2;
+                    this.personal_form.currier_stage=data.cureer_stagge_id;
+                    this.personal_form.emp_file_code=data.employee_code;
+                    this.personal_form.remarks=data.remarks;
+                    this.personal_form.initial_appointment_date=data.initial_appointment_date;
                 }
                 else{
-                    this.personal_form.address=data.address;
+                    // this.personal_form.address=data.address;
                     $('#bhutanese_address').hide();
                     $('#foreign_address').show();
                 }
-                this.personal_form.personal_id=data.id;
-                // this.loadqualication(data.id);
-                this.qualification_form.personal_id=data.id;
-                this.nomination_form.personal_id=data.id;
-                this.personal_form.emp_type=data.emp_type_id;
-                this.personal_form.emp_id=data.emp_id;
-                this.personal_form.cid_work_permit=data.cid_work_permit;
-                this.personal_form.name=data.name;
-                this.personal_form.position_title=data.position_title_id;
-                $('#position_title').val(data.position_title_id).trigger('change');
-                this.personal_form.marital_status=data.merital_status;
-                $('#marital_status').val(data.merital_status).trigger('change');
-                this.personal_form.dob=data.dob;
-                this.personal_form.p_dzongkhag=data.p_dzongkhag;
-                $('#initial_appointment_date').val(data.p_dzongkhag).trigger('change');
-                $('#p_dzongkhag').prop('disabled',true);
-                $('#dob').prop('disabled',true);
-                $('#sex_id').prop('disabled',true);
-                $('#cid_work_permit').prop('disabled',true);
-                $('#name').prop('disabled',true);
-                this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
-                this.getPvillagelist(data.p_gewog,data.p_village);
 
-                this.personal_form.sex_id=data.sex_id;
-                this.personal_form.country_id=data.country_id;
-                this.personal_form.working_agency_id=data.working_agency_id;
-                this.personal_form.contact_number=data.contact_no;
-                this.personal_form.email=data.email;
-                this.personal_form.alternative_email=data.alternative_email;
-                this.personal_form.comp_sub=data.comp_sub_id;
-                this.personal_form.elective_sub1=data.elective_sub_id1;
-                this.personal_form.elective_sub2=data.elective_sub_id2;
-                this.personal_form.currier_stage=data.cureer_stagge_id;
-                this.personal_form.emp_file_code=data.employee_code;
-                this.personal_form.remarks=data.remarks;
-                this.personal_form.initial_appointment_date=data.initial_appointment_date;
             })
             .catch((error) => {
-                console.log("Error:"+error);
+                console.log("Error loaddraftpersonalDetails:"+error);
             });
         },
         loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
@@ -1543,9 +1564,11 @@ export default {
                 this.personal_form.position_title=$('#position_title').val().split('_')[0];
                 if($('#position_title').val().split('_')[1].toLowerCase().replaceAll(" ", "")=="teachingservices"){
                     this.personal_form.isteaching=true;
+                    $('#isteaching').show();
                 }
                 else{
                     this.personal_form.isteaching=false;
+                    $('#isteaching').hide();
                 }
             }
             if(id=="sex_id"){
@@ -1612,7 +1635,12 @@ export default {
                 this.personal_form.working_agency_id=$('#working_agency_id').val();
             }
             if(id=="comp_sub"){
-                this.personal_form.comp_sub=$('#comp_sub').val();
+                this.personal_form.comp_sub=$('#comp_sub').val().split('__'[0]);
+                if($('#comp_sub').val().split('__')[1]==1){
+                    this.personal_form.issen='Yes';
+                }else{
+                    this.personal_form.issen='No';
+                }
             }
             if(id=="elective_sub1"){
                 this.personal_form.elective_sub1=$('#elective_sub1').val();
@@ -1671,7 +1699,17 @@ export default {
                     });
                 });
             }
-        }
+        },
+        loadcontractcategory(uri = 'staff/loadStaffMasters/active/ContractCategory'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.categoryList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log('error: '+error);
+            });
+        },
 
     },
 
@@ -1694,6 +1732,7 @@ export default {
         this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
+        this.loadcontractcategory();
 
         this.loadAcademicMasters();
         this.loadactivesubjectList();

@@ -394,6 +394,7 @@ class StaffLeadershipSerivcesController extends Controller{
         if($request->action_type=="feedback" && $response_data!=null && $response_data!="" && sizeof(json_decode($response_data))>0){
             $feedback_provider=json_decode($response_data);
             $user_id="";
+            // dd($feedback_provider);
             foreach($feedback_provider as $feed){
                 if($feed->partifipant_from=="outofministry"){
                     //$feed['email'] send email notification

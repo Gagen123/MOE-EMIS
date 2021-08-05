@@ -327,19 +327,45 @@
                         <form class="bootbox-form">
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label>Staff From:<span class="text-danger">*</span></label>
-                                    <input type="radio" v-model="selectstaff.partifipant_from" @change="showSearch('Ministry')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from0" :value="'Ministry'">
+                                    <label>Participating From:<span class="text-danger">*</span></label>
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Ministry')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from0" :value="'Ministry'">
                                     <label class="pr-3"> Ministry </label>
-                                    <input type="radio" v-model="selectstaff.partifipant_from" @change="showSearch('Dzongkhag')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from1" :value="'Dzongkhag'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Dzongkhag')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from1" :value="'Dzongkhag'">
                                     <label class="pr-3"> Dzongkhag Head Quarters </label>
-                                    <input type="radio" v-model="selectstaff.partifipant_from" @change="showSearch('School')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from2" :value="'School'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('School')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from2" :value="'School'">
                                     <label class="pr-3"> Schools </label>
-                                    <input type="radio" v-model="selectstaff.partifipant_from" @change="showSearch('outofministry')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from3" :value="'outofministry'">
-                                    <label class="pr-3"> Out of Ministry (External)</label>
-                                    <span class="text-danger" id="nature_of_participant_err"></span>
+                                    <span class="text-danger" id="partifipant_from_err"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="dzongkhag_section" style="display:none">
+                                    <label>Dzongkhag:<span class="text-danger">*</span></label>
+                                    <select class="form-control select2" v-model="form.dzongkhag" @change="remove_error('dzongkhag')" name="dzongkhag" id="dzongkhag">
+                                        <option value="">- Please Select -</option>
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select>
+                                    <span class="text-danger" id="dzongkhag_err"></span>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="department_section" style="display:none">
+                                    <label>Department:<span class="text-danger">*</span></label>
+                                    <select class="form-control select2" v-model="form.department" @change="remove_error('department')" name="department" id="department">
+                                        <option value="">- Please Select -</option>
+                                        <option v-for="(item, index) in department_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select>
+                                    <span class="text-danger" id="department_err"></span>
+                                </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school_section" style="display:none">
+                                    <label>Organization:<span class="text-danger">*</span></label>
+                                    <select class="form-control select2" v-model="form.school" @change="remove_error('school')" name="school" id="school">
+                                        <option value="">- Please Select -</option>
+                                        <option v-for="(item, index) in school_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select>
+                                    <span class="text-danger" id="school_err"></span>
+                                </div>
+                            </div>
+
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="dzongkhag_section">
                                     <label>Dzongkhag:<span class="text-danger">*</span></label>
                                     <select class="form-control select2" v-model="selectstaff.dzongkhag" @change="remove_error('dzongkhag')" name="dzongkhag" id="dzongkhag">
@@ -364,7 +390,7 @@
                                     </select>
                                     <span class="text-danger" id="department_err"></span>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group row" style="display:none" id="select_staff_section">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Nominee:<span class="text-danger">*</span></label>
@@ -672,29 +698,46 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        showSearch(type){
-            $("#dzongkhag_section").hide();
-            $("#school_section").hide();
-            $("#department_section").hide();
-            $("#select_staff_section").hide();
-            $("#outofministry_section").hide();
+        async showSearch(type){
+            // $("#dzongkhag_section").hide();
+            // $("#school_section").hide();
+            // $("#department_section").hide();
+            // $("#select_staff_section").hide();
+            // $("#outofministry_section").hide();
+            // if(type=="School"){
+            //     $("#dzongkhag_section").show();
+            //     $("#school_section").show();
+            // }
+            // if(type=="Dzongkhag"){
+            //     this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
+            //     $("#dzongkhag_section").show();
+            // }
+            // if(type=="Ministry"){
+            //     this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
+            //     $("#department_section").show();
+            // }
+            // if(type=="outofministry"){
+            //     $("#outofministry_section").show();
+            // }
+            // else{
+            //     $("#select_staff_section").show();
+            // }
+            $('#dzongkhag_section').hide();
+            $('#school_section').hide();
+            $('#department_section').hide();
             if(type=="School"){
-                $("#dzongkhag_section").show();
-                $("#school_section").show();
+                $('#dzongkhag_section').show();
+                $('#school_section').show();
             }
             if(type=="Dzongkhag"){
-                this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
-                $("#dzongkhag_section").show();
+                 this.department_list=await this.getDepartmentListbydzo('DzongkhagHeadquarter','All');
+                // this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
+                $('#department_section').show();
             }
             if(type=="Ministry"){
-                this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
-                $("#department_section").show();
-            }
-            if(type=="outofministry"){
-                $("#outofministry_section").show();
-            }
-            else{
-                $("#select_staff_section").show();
+                this.department_list=await this.getDepartmentListbydzo('Ministry',14);
+                // this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
+                $('#department_section').show();
             }
         },
         getDzongkhagHeadQuarterList(type){
@@ -727,23 +770,23 @@ export default {
                 console.log("Error in retrieving school List:"+error);
             });
         },
-        loadStaffList(id,type){
-            let uri="";
-            if(id=="NA"){
-                uri='loadCommons/loadStaffList/userOrgWiseCivilServent/ALL_TYPE';
-            }
-            else{
-                uri='loadCommons/loadStaffList/'+type+'/'+id;
-            }
-            axios.get(uri)
-            .then((response) => {
-                let data=response.data.data;
-                this.staff_list=data;
-            })
-            .catch((error) => {
-                console.log("Error:"+error);
-            });
-        },
+        // loadStaffList(id,type){
+        //     let uri="";
+        //     if(id=="NA"){
+        //         uri='loadCommons/loadStaffList/userOrgWiseCivilServent/ALL_TYPE';
+        //     }
+        //     else{
+        //         uri='loadCommons/loadStaffList/'+type+'/'+id;
+        //     }
+        //     axios.get(uri)
+        //     .then((response) => {
+        //         let data=response.data.data;
+        //         this.staff_list=data;
+        //     })
+        //     .catch((error) => {
+        //         console.log("Error:"+error);
+        //     });
+        // },
         loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
             axios.get(uri)
             .then(response =>{
@@ -804,23 +847,43 @@ export default {
                 console.log("Error: "+error);
             });
         },
-        changefunction(id){
+        async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
+            // if(id=="dzongkhag"){
+            //     this.selectstaff.dzongkhag=$('#dzongkhag').val();
+            //     this.getSchoolList($('#dzongkhag').val());
+            // }
+            // if(id=="department"){
+            //     this.selectstaff.department=$('#department').val();
+            //     this.loadStaffList($('#department').val(),'dzo_hq_departmentwise');
+            // }
+            // if(id=="school"){
+            //     this.selectstaff.school=$('#school').val();
+            //     this.loadStaffList($('#school').val(),'orgwise');
+            // }
             if(id=="dzongkhag"){
-                this.selectstaff.dzongkhag=$('#dzongkhag').val();
-                this.getSchoolList($('#dzongkhag').val());
+                this.school_list=[];
+                this.form.dzongkhag=$('#dzongkhag').val();
+                this.school_list=await this.schoolList($('#dzongkhag').val());
+                // this.getSchoolList($('#dzongkhag').val());
             }
             if(id=="department"){
-                this.selectstaff.department=$('#department').val();
-                this.loadStaffList($('#department').val(),'dzo_hq_departmentwise');
+                this.school_list=[];
+                this.form.department=$('#department').val();
+                if($('#department').val()!=""){
+                    this.school_list=await this.getdivisionList($('#department').val());
+                    $('#school_section').show();
+                }
             }
             if(id=="school"){
-                this.selectstaff.school=$('#school').val();
-                this.loadStaffList($('#school').val(),'orgwise');
+                this.staff_list=[];
+                this.form.school=$('#school').val();
+                this.staff_list=await this.staffOrgwise($('#school').val());
+                $("#select_staff_section").show();
             }
             if(id=="participant"){
                 let valu=$('#participant').val();

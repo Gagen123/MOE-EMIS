@@ -1,7 +1,20 @@
 <template>
     <div>
         <form>
-
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Emp Id:</label><br>
+                    {{emp_id}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name:</label><br>
+                    {{name}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Title:</label><br>
+                    {{position_title}}
+                </div>
+            </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
@@ -32,6 +45,8 @@ export default {
         return {
             cureerstageArray:{},
             cureerstageList:[],
+            positiontitleList:{},
+            position_title:'',name:'',emp_id:'',
             form: new form({
                 id:'',
                 staff_id:'',
@@ -91,6 +106,20 @@ export default {
                 console.log(error);
             });
         },
+        loadpositionTitleList(positionid){
+            let uri = 'masters/loadStaffMasters/all_active_position_title';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+                }
+                this.position_title=this.positiontitleList[positionid];
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
     },
      mounted(){
         $('.select2').select2();
@@ -106,8 +135,12 @@ export default {
         });
 
         this.loadactivecureerstageList();
-        this.form.id=this.$route.params.id;
-        this.form.staff_id=this.$route.params.id;
+        this.loadpositionTitleList(this.$route.query.data.position_title_id);
+        this.emp_id=this.$route.query.data.emp_id;
+        this.name=this.$route.query.data.name;
+        this.form.id=this.$route.query.data.id;
+        this.form.currier_stage=this.$route.query.data.cureer_stagge_id;
+        $('#cureer_stagge_id').val(this.$route.query.data.cureer_stagge_id).trigger('change');
     },
 }
 </script>

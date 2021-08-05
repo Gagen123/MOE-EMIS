@@ -62,6 +62,33 @@
                                     <has-error :form="form" field="end_date"></has-error>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Financial Source:<i class="text-danger">*</i></label>
+                                    <select v-model="form.financial_source" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('financial_source') }" class="form-control select2" name="financial_source" id="financial_source">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in financialSourceList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="financial_source"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Total Estimated Budget:</label>
+                                    <input type="text" class="form-control" @change="remove_err('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
+                                    <has-error :form="form" field="total_budget"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Total Expenditure:</label>
+                                    <input type="text" class="form-control" @change="remove_err('expenditurel_budget')" :class="{ 'is-invalid' :form.errors.has('expenditurel_budget') }" v-model="form.expenditurel_budget" id="expenditurel_budget"/>
+                                    <has-error :form="form" field="expenditurel_budget"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Institute/Venue:<i class="text-danger">*</i></label>
+                                    <input type="text" class="form-control" @change="remove_err('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
+                                    <has-error :form="form" field="vanue"></has-error>
+                                </div>
+                            </div>
 
                             <span id="professional_development_section" style="display:none">
                                 <hr/>
@@ -98,26 +125,6 @@
                                         <has-error :form="form" field="course_provider"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Institute/Vanue:<i class="text-danger">*</i></label>
-                                        <input type="text" class="form-control" @change="remove_err('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
-                                        <has-error :form="form" field="vanue"></has-error>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Financial Source:<i class="text-danger">*</i></label>
-                                        <select v-model="form.financial_source" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('financial_source') }" class="form-control select2" name="financial_source" id="financial_source">
-                                            <option value=""> --Select--</option>
-                                            <option v-for="(item, index) in financialSourceList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
-                                        </select>
-                                        <has-error :form="form" field="financial_source"></has-error>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Total Budget:</label>
-                                        <input type="text" class="form-control" @change="remove_err('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
-                                        <has-error :form="form" field="total_budget"></has-error>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0.5">Total Hours:<i class="text-danger">*</i></label>
                                         <input type="number" class="form-control" @change="remove_err('total_hrs')" :class="{ 'is-invalid' :form.errors.has('total_hrs') }" v-model="form.total_hrs" id="total_hrs"/>
                                         <has-error :form="form" field="total_hrs"></has-error>
@@ -152,7 +159,6 @@
                                         <has-error :form="form" field="projectofdonor"></has-error>
                                     </div>
                                 </div>
-
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0.5">Country of Study:<i class="text-danger">*</i></label>
@@ -402,6 +408,7 @@ export default {
                 course_provider:'',
                 vanue:'',
                 total_budget:0,
+                expenditurel_budget:0,
                 total_hrs:'',
                 financial_source:'',
 

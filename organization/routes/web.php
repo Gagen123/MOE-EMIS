@@ -279,6 +279,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
         });
 
+        $router->group(['prefix' => 'feeder'], function () use ($router) {
+            $router->post('/saveFeeders', 'generalInformation\ProjectionsController@saveFeeders');
+            $router->get('/loadFeeders/{userId}', 'generalInformation\ProjectionsController@loadFeeders');
+        });
+
         //newly added routs ends here
 
         $router->group(['prefix' => 'section'], function () use ($router) {

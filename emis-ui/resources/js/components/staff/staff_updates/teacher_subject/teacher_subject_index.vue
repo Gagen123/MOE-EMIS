@@ -3,11 +3,11 @@
         <div class="card card-primary card-outline">
             <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white">
                 <span class="card-title">
-                    <b>Update Career Stage List</b>
+                    <b>Update Teaching Subjects</b>
                 </span>
                 <span class="fa-pull-right pt-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_teacher_subject')" id="listnewbtn"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_teacher_subject')" id="addnewbtn"><i class="fa fa-plus"></i> Update Teacher Teaching Subject</button>
+                    <!-- <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_teacher_subject')" id="addnewbtn"><i class="fa fa-plus"></i> Update Teacher Teaching Subject</button> -->
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0" id="errormsg">

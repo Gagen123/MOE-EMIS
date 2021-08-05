@@ -98,7 +98,6 @@
                                             </td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                 <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
                                             </td>
                                         </tr>

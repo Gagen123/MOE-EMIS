@@ -37,7 +37,6 @@ use App\Models\staff_masters\LeaveConfiguration;
 use App\Models\staff_masters\LeaveConfigurationDetials;
 use App\Models\staff_masters\TransferConfig;
 use App\Models\staff_masters\TransferConfigDetails;
-
 class StaffMastersController extends Controller{
     use ApiResponser;
     public $database="staff_db";
@@ -87,7 +86,7 @@ class StaffMastersController extends Controller{
                     $response_data = StaffSubMajorGrop::create($data);
                 }
                 if($request['record_type']=="position_title"){
-                    $data=$data+['position_level_id'   =>$request->position_level];
+                    $data=$data+[' '   =>$request->position_level];
                     $response_data = PositionTitle::create($data);
                 }
                 if($request['record_type']=="staff_subject"){
@@ -158,7 +157,7 @@ class StaffMastersController extends Controller{
                     if($request->id!="" || $request->id!=null){
                         $response_data=TransferType::where('id', $request->id)->update($data);
                     }
-                   
+
                 }
             }
             if($request['record_type']=="staff_qualification"){
@@ -294,11 +293,11 @@ class StaffMastersController extends Controller{
                     'name'  =>  'required|unique:'.$table,
                     'status'    =>  'required',
                 ];
-                if($request['record_type']!="master_transfer_undertaking"){
-                    $rules=array_merge($rules,
-                        array('code'    =>  'required|unique:'.$table,)
-                    );
-                }
+                // if($request['record_type']!="master_transfer_undertaking"){
+                //     $rules=array_merge($rules,
+                //         array('code'    =>  'required|unique:'.$table,)
+                //     );
+                // }
                 $this->validate($request, $rules);
                 $data = [
                     'name'  =>  $request['name'],
@@ -306,11 +305,11 @@ class StaffMastersController extends Controller{
                     'created_by'=>$request['user_id'],
                     'created_at'=>date('Y-m-d h:i:s'),
                 ];
-                if($request['record_type']!="master_transfer_undertaking"){
-                    $data=array_merge($data,
-                        array('code'    =>  $request['code'],)
-                    );
-                }
+                // if($request['record_type']!="master_transfer_undertaking"){
+                //     $data=array_merge($data,
+                //         array('code'    =>  $request['code'],)
+                //     );
+                // }
                 if($request['record_type']=="transfer_reason"){
                     $response_data = TransferReason::create($data);
                 }
@@ -488,6 +487,15 @@ class StaffMastersController extends Controller{
     public function loadStaffMasters($param=""){
         if($param=="all_transfer_type_list"){
             return $this->successResponse(TransferType::all());
+        }
+        if($param=="intra"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%intra%')->get());
+        }
+        if($param=="inter"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%inter%')->get());
+        }
+        if($param=="appeal"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%appeal%')->get());
         }
         if($param=="all_transfer"){
             return $this->successResponse(TransferReason::all());

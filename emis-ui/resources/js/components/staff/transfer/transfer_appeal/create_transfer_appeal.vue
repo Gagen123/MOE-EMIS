@@ -69,10 +69,10 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
-                                <option v-for="(item, index) in transfertypeList" :key="index" v-bind:value="item.id">{{ item.type }}</option>
+                            <select v-model="form.aplication_number" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                                <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
                             </select>
-                        <has-error :form="form" field="transfer_type_id"></has-error>
+                        <has-error :form="form" field="aplication_number"></has-error>
                             </div>
                         </div>
                          <div class="form-group row">
@@ -147,6 +147,7 @@ export default {
             reasonArray:{},
             transferType:[],
             draft_attachments:[],
+            applicationNo:[],
             intratransfer:[],
             form: new form({
                 id: '',
@@ -163,6 +164,7 @@ export default {
                 transfer_type_id:'',
                 description:'',
                 current_date:'',
+                aplication_number:'',
                 status:'Submitted',
                 remarks:'',
                 service_name:'transfer appeal',
@@ -204,40 +206,31 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
-        loadtransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.transfertypeList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-
         LoadApplicationDetailsByUserId(user_id){
-              axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/' +user_id)
+              axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/Approved/' +user_id)
                 .then(response =>{
-                    // this.form.status = response.data.status;
-                    if(response.data!="null" || response.data!=""||response.data.status == "Transfer Approved" || response.data.status == "Rejected"){
-                    }
-                    else if(response.data=="null" || response.data=="") {
-                        this.button=false;
-                         Toast.fire({
-                                icon: 'success',
-                                title: 'You have not applied for transfer yet'
-                            });
-                     }
+                    let data = response.data;
+                     this.applicationNo =  data;
+                     this.form.aplication_number = data.aplication_number;
                 })
                 .catch(function (error){
                 console.log(error);
             });
 
         },
-        
+        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
+            axios.get(uri)
+            .then(response =>{
+                this.form.type_id = response.data.data[0].id;
+
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
         
         loadtransferwindow(){
-            axios.get('masters/loadGlobalMasters/inter_transfer')
+            axios.get('masters/loadGlobalMasters/transfer_appeal')
            .then((response) => {
                 let data=response.data.data[0];
                  if(data!=null){
@@ -247,13 +240,24 @@ export default {
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                    let to_date = new Date(data.to_date);
-                    let today = new Date();
-                    let diffTime = Math.abs(to_date - today);
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    if(diffDays<=5){
-                        this.t_warning_message="Only "+diffDays+" day(s) left";
+                    let todate=new Date(data.to_date);
+                    let formdate = new Date();
+                    // One day in milliseconds
+                    const oneDay = 1000 * 60 * 60 * 24;
+
+                    // Calculating the time difference between two dates
+                    const diffInTime = todate.getTime() - formdate.getTime();
+
+                    // Calculating the no. of days between two dates
+                    const diffInDays =(diffInTime / oneDay);
+                    if(diffInDays<=5 && diffInDays>0){
+                        this.t_warning_message="Only "+Math.ceil(diffInDays)+" day(s) left to apply";
                         this.t_warning=true;
+                    }
+                    else if(diffInDays<=0){
+                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#invalidsection').show();
+                        $('#t_form_details').hide();
                     }
                 }
                 else{
@@ -284,6 +288,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('type_id', this.form.type_id);
                         formData.append('transfer_type_id', this.form.transfer_type_id);
                         formData.append('name', this.form.name);
                         formData.append('user_id', this.form.user_id);
@@ -388,8 +393,8 @@ export default {
         this.changefunction(id);
         });
         this.profile_details();
-        this.loadtransferType();
         this.loadtransferwindow();
+        this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
     },
 }

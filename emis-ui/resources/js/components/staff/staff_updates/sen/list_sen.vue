@@ -1,17 +1,18 @@
 <template>
     <div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                 <table id="career_stage_table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Sl#</th>
-                            <th>Emp Id</th>
-                            <th>Name</th>
-                            <th>Position Title</th>
-                            <th>Working Agency</th>
-                            <th>Career Stage</th>
-                            <th>Action</th>
+                            <th style="width:10%">Sl#</th>
+                            <th style="width:10%">Emp Id</th>
+                            <th style="width:15%">Name</th>
+                            <th style="width:15%">Position Title</th>
+                            <!-- <th style="width:15%">Working Agency</th> -->
+                            <th style="width:15%">Is SEN</th>
+                            <th style="width:15%">Is Tranined</th>
+                            <th style="width:20%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -20,10 +21,12 @@
                             <td>{{ item.emp_id}}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
-                            <td>{{ item.working_agency}}</td>
-                            <td>{{ cureerstageArray[item.cureer_stagge_id]}}</td>
+                            <!-- <td>{{ item.working_agency}}</td> -->
+                            <td>{{ item.is_sen==1 ? 'Yes' : 'No'}}</td>
+                            <td>{{ item.is_trained_in_sen== 1 ? 'Yes' : 'No'}}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Update</a>
+                                <!-- <a href="#" v-if="showedit" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item,'view_sen')"><span class="fa fa-eye"></span> view</a> -->
+                                <a href="#" v-if="showedit" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item,'edit_sen')"><span class="fa fa-edit"></span> Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -36,6 +39,7 @@
 export default {
     data(){
         return{
+            showedit:false,
             substaffList:[],
             genderArray:{},
             cureerstageArray:{},
@@ -44,8 +48,8 @@ export default {
         }
     },
     methods: {
-        loadeditpage(staff){
-            this.$router.push({name:"edit_sen",params:{id:staff.id}});
+        loadeditpage(staff,route){
+            this.$router.push({name:route,params:{data:staff}});
 		},
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)
@@ -56,20 +60,7 @@ export default {
                 console.log("Error."+error);
             });
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageArray[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
+
         loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
             axios.get(uri)
             .then(response =>{
@@ -83,20 +74,20 @@ export default {
             });
         },
     },
-    mounted(){ 
-        this.loadactivecureerstageList();
+    mounted(){
         this.loadpositionTitleList();
          axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
-                this.loadstff('userOrgWiseCivilServent/ALL_TYPE');
+                this.loadstff('userOrgWiseCivilServent/SEN');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadstff('userDzoWiseCivilServent/ALL_TYPE');
+                this.loadstff('userDzoWiseCivilServent/SEN');
             }
             if(data['acess_level']=="Ministry"){
-                this.loadstff('allCivilServent/ALL_TYPE');
+                this.showedit=true;
+                this.loadstff('allCivilServent/SEN');
             }
         })
         .catch(errors => {

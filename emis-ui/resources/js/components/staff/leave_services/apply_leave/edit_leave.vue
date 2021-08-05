@@ -68,14 +68,14 @@ this asdf<template>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1" :id="'attach'+count">
                                         <template>
-                                            <td>{{attach.user_defined_name}} </td>
-                                            <td>  {{attach.original_name}}</td>
+                                            <td>{{attach.user_defined_file_name}} </td>
+                                            <td>  {{attach.name}}</td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span>
-                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
                                                 </span>
                                             </td>
                                         </template>
@@ -161,12 +161,12 @@ export default {
             }
         },
         openfile(file){
-            let file_path=file.path+'/'+file.original_name;
+            let file_path=file.path+'/'+file.name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -176,7 +176,7 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) => {
                 if (result.isConfirmed) {
-                    let file_path=file.path+'/'+file.original_name;
+                    let file_path=file.path+'/'+file.name;
                     file_path=file_path.replaceAll('/', 'SSS');
                     let uri = 'common/deleteFile/'+file_path+'/'+file.id;
                     axios.get(uri)
@@ -188,6 +188,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attach'+count).remove();
                         }
                         else{
                         Swal.fire(
@@ -366,21 +367,32 @@ export default {
                 $('#leave_type_id').addClass('select2-hidden-accessible');
             }
         },
+        loadLeaveDetails(appNo){
+            axios.get('/staff/staffServices/loadLeaveDetailsForEdit/'+appNo)
+            .then((response) =>{
+                let data=response.data.data;
+                this.form.staff_id=data.staff_id;
+                this.form.leave_type_id=data.leave_type_id;
+                this.form.year=data.year;
+                this.form.date_of_application=data.date_of_application;
+                this.form.from_date=data.from_date;
+                this.form.to_date=data.to_date;
+                this.form.no_days=data.no_days;
+                this.form.reason=data.reason;
+                this.form.status=data.status;
+                this.applicationdetailsatt=data.attachment;
+            })
+            .catch((error) =>{
+                console.log("Error: "+error);
+            });
+        }
     },
     mounted(){
         this.loadleaveTypeList();
         this.loadstaff();
         this.form.id=this.$route.params.data.id;
-        this.form.staff_id=this.$route.params.data.staff_id;
-        this.form.leave_type_id=this.$route.params.data.leave_type_id;
-        this.form.year=this.$route.params.data.year;
-        this.form.date_of_application=this.$route.params.data.date_of_application;
-        this.form.from_date=this.$route.params.data.from_date;
-        this.form.to_date=this.$route.params.data.to_date;
-        this.form.no_days=this.$route.params.data.no_days;
-        this.form.reason=this.$route.params.data.reason;
-        this.form.status=this.$route.params.data.status;
-        this.applicationdetailsatt=this.$route.params.data.attachment_details;
+
+        this.loadLeaveDetails(this.$route.params.data.id);
         if(this.$route.params.data.status!="Approved" && this.$route.params.data.status!="Rejected"){
             $('#updatebtn').show();
             this.isset=true;

@@ -52,7 +52,7 @@ class HomeController extends Controller
             ];
             // dd($users);
             Session::put([
-                'User_details'=> $users,
+                'User_details'=> $users['user'],
             ]);
         }
         return redirect()->away('/dashboard');
@@ -60,7 +60,7 @@ class HomeController extends Controller
     public function user_logout(){
         Session::forget('User_details');
         Session::flush();
-        return view('welcome',['Invalid'=>'']);
+        return view('index',['Invalid'=>'']);
     }
 
     public function getSessionDetail(){
@@ -72,8 +72,61 @@ class HomeController extends Controller
         }
     }
 
-    public function new_register(Request $request){
-        dd($request);
+    public function save_new_registration(Request $request){
+        if($request->registrationType==1){
+            $rules = [
+                'name'          =>  'required',
+                'contact'   =>  'required',
+                'email'          =>  'required',
+                'password'        =>  'required',
+            ];
+            $customMessages = [
+                'name.required' => 'Student Name field is required',
+                'contact.required' => 'Contact Field is required',
+                'email.after'             => 'Email is required',
+                'password.required' => 'Password is required',
+
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
+        if($request->registrationType==2){
+            $rules = [
+                'student_code'          =>  'required',
+                'dob'   =>  'required',
+            ];
+            $customMessages = [
+                'student_code.required' => 'Student code is required',
+                'dob.required' => 'DOB is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
+        $request_data=[
+            'registrationType'=>$request->registrationType,
+            'dob'        =>$request->dob,
+            'contact'      =>$request->contact,
+            'name'        =>$request->name,
+            'student_code'      =>$request->student_code,
+            'email'   =>$request->email,
+            'password'      =>$request->password,
+        ];
+        // dd($request_data);
+        $response_data=$this->apiService->createData('save_new_registration', $request_data);
+        return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);
+    }
+    function change_password_portal(Request $request){
+        if(Session::get('User_details')!=""){
+            $data =[
+                'current_password' => $request->input('current_password'),
+                'confirm_password' => $request->input('confirm_password'),
+                'userId' => Session::get('User_details')->id
+            ];
+            $response_data = $this->apiService->createData('change_password_portal', $data);
+            return $response_data;
+        }
+        else{
+            return redirect()->route('session_out');
+        }
+
     }
 
 }
