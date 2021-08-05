@@ -103,7 +103,23 @@ class StudentMasterController extends Controller{
         return $response_data;
 
     }
-
+    public function saveStreamSubject(Request $request){
+        $rules = [
+            
+        ];
+        $customMessages = [
+            
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'id'                        => $request->id,
+            'streamId'                  => $request->streamId,
+            'subjectlist'               =>  $request->subjectlist,
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/students/saveStreamSubject', $data);
+        return $response_data;
+    }
     public function saveValidationcondition(Request $request){
         $rules = [
             'date'          =>  'required',
@@ -138,6 +154,11 @@ class StudentMasterController extends Controller{
     //get Scouts Section
     public function getScoutSection(){
         $scout_section = $this->apiService->listData('emis/masters/students/getScoutSection');
+        return $scout_section;
+    }
+    //by gagen
+    public function loadstreamMarks(){
+        $scout_section = $this->apiService->listData('emis/masters/students/loadstreamMarks');
         return $scout_section;
     }
     public function loadValidationcondition(){

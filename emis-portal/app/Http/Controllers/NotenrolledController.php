@@ -282,9 +282,50 @@ class NotenrolledController extends Controller
         return $response_data;
     }
 
+    public function loadProjection($classId=""){
+        $response_data= $this->apiService->getListData('emis/common_services/loadProjection/'.$classId);
+        return $response_data;
+    }
+
     public function getAllStudentCid(){
         // dd("dsdsad");
-        $response_data= $this->listData('emis/students/admission/getAllStudentCid/');
+        $response_data= $this->apiService->listData('emis/students/admission/getAllStudentCid/');
+        return $response_data;
+    }
+
+    public function saveorgclassDetails(Request $request){
+        $rules = [
+            'dzongkhag'                    => 'required',
+            'school'                    => 'required',
+            'class'                      => 'required',
+
+        ];
+        $customMessages = [
+            'dzongkhag.required'            => 'This field is required',
+            'school.required'            => 'This field is required',
+            'class.required'              => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id']=$this->userId();
+        $data = $request->all();
+        $response_data= $this->apiService->createData('emis/students/admission/saveorgclassDetails', $data);
+        return $response_data;
+    }
+
+    public function savefilanorgclassDetails(Request $request){
+        $request['user_id']=$this->userId();
+        $data = $request->all();
+        $response_data= $this->apiService->createData('emis/students/admission/savefilanorgclassDetails', $data);
+        return $response_data;
+    }
+
+    public function getorgclassDetails($id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getorgclassDetails/'.$id);
+        return $response_data;
+    }
+
+    public function deleteclassDetails($id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/deleteclassDetails/'.$id);
         return $response_data;
     }
 }
