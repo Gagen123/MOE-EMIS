@@ -89,7 +89,10 @@ class AdminstratorController extends Controller
         $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
         return $student_masters;
     }
-
+    public function active_marital_list(){
+        $student_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/active/MaritalStatus');
+        return $student_masters;
+    }
 
     // public function getseatdetailsbyOrgId($orgId){
     //     $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);

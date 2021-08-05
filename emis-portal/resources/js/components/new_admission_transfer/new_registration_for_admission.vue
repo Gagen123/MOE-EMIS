@@ -92,8 +92,7 @@
                                                     <has-error :form="student_form" field="gewog"></has-error>
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-
-                                            <label>Village: </label>
+                                                    <label>Village: </label>
                                                     <select v-model="student_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
                                                         <option value=""> --Select--</option>
                                                         <option v-for="(item, index) in std_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -116,7 +115,7 @@
                             <div class="form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Upload Photo</label>
-                                    <input type="file" class="form-control" v-on:change="onChangeFileUpload">
+                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" id="attachment">
                                     <has-error :form="student_form" field="attachments"></has-error>
                                 </div>
                             </div>
@@ -176,12 +175,10 @@
                         <div class="row form-group">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Parent's Marital Status:</label>
-                                    <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
-                                        <option value=""> --Select--</option>
-                                        <option value="Married">Married</option>
-                                        <option value="Divorce">Divorce</option>
-                                        <option value="Single">Single</option>
-                                    </select>
+                                <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
+                                    <option value=""> --Select--</option>
+                                    <option v-for="(item, index) in maritalStatus" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                                 <has-error :form="guardian_form" field="merital_status"></has-error>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -369,13 +366,13 @@
                                                 <has-error :form="guardian_form" field="mother_village_id"></has-error>
                                             </div>
                                         </div>
-                                        <div class="row form-group">
+                                        <!-- <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                 <label>Permanent Address: </label>
                                                 <textarea class="form-control" @change="removeerror('mother_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('mother_fulladdress') }" id="mother_fulladdress" v-model="guardian_form.mother_fulladdress" placeholder="Permanent Address"></textarea>
                                                 <has-error :form="guardian_form" field="mother_fulladdress"></has-error>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <br>
                                         <label><u> Present Address</u></label>
                                         <div class="row form-group">
@@ -592,6 +589,7 @@ export default {
     },
     data() {
         return {
+            maritalStatus:[],
             s_dzongkhagList:[],
             s_schoolList:[],
             s_classList:[],
@@ -1122,9 +1120,6 @@ export default {
         },
 
         shownexttab(nextclass){
-            // if(nextclass=="basic-tabs"){
-            //     this.changetab('basic-tabs');
-            // }
             if(nextclass=="guardians-tab"){
                 const config = {
                     headers: {
@@ -1144,9 +1139,10 @@ export default {
                 formData.append('gewog', this.student_form.gewog);
                 formData.append('village_id', this.student_form.village_id);
                 formData.append('s_dzongkhag', this.school_form.s_dzongkhag);
-                formData.append('s_school', this.school_form.s_school);
-                formData.append('s_class', this.school_form.s_class);
+                // formData.append('s_school', this.school_form.s_school);
+                // formData.append('s_class', this.school_form.s_class);
                 formData.append('type','new');
+                formData.append('attachments', this.student_form.attachments);
                 formData.append('Status', 'pending');
                 axios.post('/saveStudentDetailsFromPortal',formData, config)
                 .then((response) => {
@@ -1168,27 +1164,38 @@ export default {
                 })
             }
             if(nextclass=="details-tab"){
-                this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
-                this.guardian_form.post('/saveStudentGardianDetails')
-                .then((response) => {
-                    Swal.fire(
-                        'Submitted!',
-                        'The details has been saved successfully.',
-                        'success',
-                    );
-                    this.$Progress.start();
-                    this.$router.push({name:'list_new_admission_transfer'});
-                    this.$Progress.finish();
-                })
-                .catch((error) => {
-                    Toast.fire({
-                        icon: 'error',
-                        title: 'Unexpected error occured. Try again.'
-                    });
-                    this.changetab('guardians-tab');
-                    this.applyselect('guardian');
-                    console.log("Error:"+error);
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this detials ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                }).then((result) => {
+                    if(result.isConfirmed){
+                        this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
+                        this.guardian_form.post('/saveStudentGardianDetails')
+                        .then((response) => {
+                            Swal.fire(
+                                'Submitted!',
+                                'The details has been saved successfully.',
+                                'success',
+                            );
+                            this.$Progress.start();
+                            this.$router.push({name:'list_new_admission_transfer'});
+                            this.$Progress.finish();
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            this.changetab('guardians-tab');
+                            this.applyselect('guardian');
+                            console.log("Error:"+error);
+                        })
+                    }
+                });
             }
         },
         changetab(nextclass){
@@ -1470,7 +1477,40 @@ export default {
             .catch(function (error) {
                 console.log('error: '+error);
             });
-        }
+        },
+        getmeritalStatus(){
+            let uri='masters/active_marital_list';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.maritalStatus =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        getstudentdetials(){
+            axios.get('/getStudentDetailsFromPortal/NA')
+            .then(response => {
+                let data = response.data;
+                this.student_form.snationality=data.CmnCountryId;
+                this.student_form.cid_passport=data.CidNo;
+                this.student_form.first_name=data.FirstName;
+                this.student_form.middle_name=data.MiddleName;
+                this.student_form.last_name=data.LastName;
+                this.student_form.dob=data.DateOfBirth;
+                this.student_form.sex_id=data.CmnSexId;
+                this.student_form.dzongkhag=data.CmnDzoId;
+                this.getvillagelist(data.CmnGewogId,'std');
+                this.getgewoglist(data.CmnDzoId,'std');
+                this.student_form.gewog=data.CmnGewogId;
+                this.student_form.village_id=data.CmnChiwogId;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+
     },
 
     mounted() {
@@ -1485,18 +1525,16 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadVlidation();
+        let cid=this.$route.query.cid;
+        this.getdzongkhagList();
+        this.getclassList();
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('all_active_dzongkhag');
         this.getdzongkhagList();
+        this.getmeritalStatus();
+        this.getstudentdetials();
+
     },
-
-    created() {
-        this.loadVlidation();
-         let cid=this.$route.query.cid;
-         this.getdzongkhagList();
-        //  this.getschoolList();
-         this.getclassList();
-    }
-
 }
 </script>

@@ -20,11 +20,10 @@ use Illuminate\Support\Facades\Route;
     Route::get('home', function () {
         return redirect('/dashboard');
     });
-
-
     Route::get('/{vue_capture?}', function () {
         return view('home');
     });
+
 
     //Global Controller
     Route::prefix('masters')->group(function () {
@@ -36,8 +35,11 @@ use Illuminate\Support\Facades\Route;
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
         Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
         Route::get('/loadValidationcondition', [App\Http\Controllers\AdminstratorController::class, 'loadValidationcondition'])->name('loadValidationcondition');
-
+        Route::get('/active_marital_list', [App\Http\Controllers\AdminstratorController::class, 'active_marital_list'])->name('active_marital_list');
     });
+    Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
+
+
 
     Route::prefix('adminstratorController')->group(function () {
         Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
@@ -65,9 +67,11 @@ use Illuminate\Support\Facades\Route;
 
 
     //Getting details by cid from std_student table
-    Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
+
 
     Route::post('/saveStudentDetailsFromPortal', [App\Http\Controllers\NotenrolledController::class, 'saveStudentDetailsFromPortal'])->name('saveStudentDetailsFromPortal');
+    Route::get('/getStudentDetailsFromPortal/{id}', [App\Http\Controllers\NotenrolledController::class, 'getStudentDetailsFromPortal'])->name('getStudentDetailsFromPortal');
+
     Route::post('/saveStudentGardianDetails', [App\Http\Controllers\NotenrolledController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
     Route::get('/getstudentdetails', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetails'])->name('getstudentdetails');
 

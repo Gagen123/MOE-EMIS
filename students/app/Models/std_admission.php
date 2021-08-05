@@ -5,48 +5,31 @@ use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class std_admission extends Model
-{
+class std_admission extends Model{
     //
     use HasFactory,Uuid;
     public $timestamps = false;
     protected $table="std_admissions";
     protected $fillable = [
         'id',
-        'OrgOrganizationId',
+        'ApplicationId',
         'CidNo',
-        'std_id',
-        'application_id',
-        'snationality',
-        'student_code',
-        'CmnParentsMaritalStatusId',
-        'IsNewAdmission',
-        'IsTransferred',
-        'IsRejoined',
-        'PhotoPath',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'DateOfBirth',
+        'FirstName',
+        'MiddleName',
+        'LastName',
+        'StudentCode',
         'CmnSexId',
-        'dzo_id',
-        'village_id',
-        'Address',
-        'attachments',
-        'parent_marital_status',
-        'PrimaryContact',
-        'dzongkhag',
-        'school',
-        'class_id',
-        'stream_id',
-        'student_type',
-        'dateOfapply',
+        'DateOfBirth',
         'CmnCountryId',
+        'CmnDzoId',
         'CmnGewogId',
         'CmnChiwogId',
         'CmnLanguageId',
-        'Status',
-        'school_decision',
+        'CmnParentsMaritalStatusId',
+        'PrimaryContact',
+        'PhotoPath',
+        'Address',
+        'DateOfApply',
         'Remarks',
         'created_by',
         'created_at',

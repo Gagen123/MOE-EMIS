@@ -10,7 +10,7 @@ use App\Models\generalInformation\Projection;
 use App\Models\generalInformation\Feeder;
 
 use Illuminate\Support\Facades\DB;
-use App\Models\OrganizationClassStream;  
+use App\Models\OrganizationClassStream;
 use App\Models\Masters\Classes;
 
 class ProjectionsController extends Controller
@@ -45,12 +45,16 @@ class ProjectionsController extends Controller
             }else{
                 $organizationId  = $request['organizationId'];
                 foreach ($request->items_received as $i=> $item){
+                    $remarks="";
+                    if(isset($item['remarks'])){
+                        $remarks=$item['remarks'];
+                    }
                     $projection = array(
                         'organizationId'                        =>  $organizationId,
                         'academicYear'                          =>  $request['academicYear'],
                         'ProjectionNo'                          =>  $item['ProjectionNo'],
                         'class'                                 =>  $item['class'],
-                        'remarks'                               =>  $item['remarks'],
+                        'remarks'                               =>  $remarks,
                         'updated_by'                            =>  $request->user_id,
                         'created_at'                            =>  date('Y-m-d h:i:s')
                     );
@@ -79,8 +83,8 @@ class ProjectionsController extends Controller
                 );
                 $spo = Feeder::where('id', $id)->update($projection);
                 return $this->successResponse($projection, Response::HTTP_CREATED);
-                
-            
+
+
             }
 
             }else{
@@ -99,13 +103,13 @@ class ProjectionsController extends Controller
                     // dd($projection);
                     try{
                         $localpro = Feeder::create($projection);
-            
+
                         } catch(\Illuminate\Database\QueryException $ex){
                             dd($ex->getMessage());
                             // Note any method of class PDOException can be called on $ex.
                         }
-                    
-                
+
+
                 }
                 return $this->successResponse($localpro, Response::HTTP_CREATED);
             }
@@ -120,13 +124,13 @@ class ProjectionsController extends Controller
     //    )->where('organizationId',$orgId)->get();
 
     //     return $equip;
-      
+
         $info = Projection::where('organizationId',$orgId)->get();
         return $info;
     }
 
     public function loadFeeders($userId=""){
-      
+
         $feeder = Feeder::where('created_by',$userId)->get();
         return $feeder;
     }
