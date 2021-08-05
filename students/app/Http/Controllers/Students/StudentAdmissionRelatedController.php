@@ -275,4 +275,9 @@ class StudentAdmissionRelatedController extends Controller
         $response_data=Student::where('id', $student_id)->first();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    public function getStudentByCode($student_code="",$dob=""){
+        $response_data = Student::where('student_code',$student_code)->where('DateOfBirth',$dob)->first();
+        return $response_data;
+    }
 }

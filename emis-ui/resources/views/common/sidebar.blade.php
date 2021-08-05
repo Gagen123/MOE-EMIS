@@ -445,23 +445,15 @@
                             </p>
                         </router-link>
                     </li>
-
-                    <!-- <li class="nav-item" id="general" onclick="setclass('organizationlink','','general')">
-                        <router-link to="/general_index" class="nav-link">
+                    <li class="nav-item" id="projection_index" onclick="setclass('organizationlink','','projection_index')">
+                    <!-- <li class="nav-item" id="track_application"> -->
+                        <router-link to="/projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Other Information
+                                Projection & Feeders School 
                             </p>
                         </router-link>
-                    </li> -->
-                    <!-- <li class="nav-item" id="financial_information" onclick="setclass('financial_information','','financial_information')">
-                        <router-link to="/financial_information" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Latest Missing Menus Added
-                            </p>
-                        </router-link>
-                    </li> -->
+                    </li>
                 </ul>
             </li>
             <li class="nav-header"></li>

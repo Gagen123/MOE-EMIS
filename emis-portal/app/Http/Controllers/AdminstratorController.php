@@ -17,18 +17,25 @@ class AdminstratorController extends Controller
     }
 
     public function getpersonbycid($cid){
-        $person = json_decode($this->apiService->listData('getcensusdata/'. $cid));
-        if ($person->citizenDetailsResponse){
-            $response_data = $person->citizenDetailsResponse;
+        $person = json_decode($this->apiService->listData('getCensusData/'. $cid));
+        // if ($person->citizenDetailsResponse){
+        //     $response_data = $person->citizenDetailsResponse;
+        //     return  $response_data;
+        // }else {
+        //     return response()->json('Citizen detail not found. Please check CID and try again.', 404);
+        // }
+        if($person->data->hasdata){
+            $response_data = $person->data->citizenDetail;
             return  response()->json($response_data);
         }else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
+        return  response()->json($person);
     }
 
     public function getchildDetailsOncid($cid=""){
         $personal_data=$this->apiService->listData('getchildDetailsOncid/'. $cid);
-        return json_decode($personal_data)->parentDetailResponse->parentDetail;
+        return $personal_data;
     }
 
 
@@ -82,7 +89,10 @@ class AdminstratorController extends Controller
         $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
         return $student_masters;
     }
-
+    public function active_marital_list(){
+        $student_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/active/MaritalStatus');
+        return $student_masters;
+    }
 
     // public function getseatdetailsbyOrgId($orgId){
     //     $itemList = $this->apiService->listData('emis/organization/section/getseatdetailsbyOrgId/'.$orgId);

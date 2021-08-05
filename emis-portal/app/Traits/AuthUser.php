@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Session;
 trait AuthUser
 {
     public function currentUser(){
-        return Session::get('User_Details');
+        return Session::get('User_details');
 
     }
     public function getRoleIds($param=""){
@@ -22,10 +22,10 @@ trait AuthUser
     }
 
     public function userId(){
-        return $this->currentUser()['User_Id'];
+        return $this->currentUser()->id;
     }
-    public function srdCid(){
-        return $this->currentUser()['cid'];
+    public function stdCid(){
+        return $this->currentUser()->std_cid;
     }
 
 }

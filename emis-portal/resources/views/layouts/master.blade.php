@@ -27,11 +27,7 @@
       @include('layouts.sidebar-menu')
     </div>
   </aside>
-  <div class="content-wrapper">
-    <div class="content-header">
-      <div class="container-fluid">
-      </div>
-    </div>
+  <div class="content-wrapper pt-1">
     <router-view></router-view>
     <vue-progress-bar></vue-progress-bar>
   </div>

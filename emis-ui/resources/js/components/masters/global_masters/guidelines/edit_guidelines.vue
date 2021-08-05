@@ -34,6 +34,8 @@
                             <option value="Management Body">Management Body</option>
                             <option value="Staff Recuritment"> Staff Recuritment</option>
                             <option value="Dietary"> Dietary</option>
+                            <option value="Portal (Student)"> Portal (Student)</option>
+                            <option value="Portal (Parent)"> Portal (Parent)</option>
                         </select>
                         <has-error :form="form" field="guideline_for"></has-error>
                     </div>

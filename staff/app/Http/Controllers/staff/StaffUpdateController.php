@@ -16,7 +16,7 @@ class StaffUpdateController extends Controller{
     public $database="emis_staff_db";
     public $audit_database;
     public function __construct() {
-        date_default_timezone_set('Asia/newDhaka');
+        date_default_timezone_set('Asia/Dhaka');
         $this->audit_database = config('services.constant.auditdb');
     }
 
@@ -34,7 +34,7 @@ class StaffUpdateController extends Controller{
         DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','stf_staff','".$request->id."','".$messs_det."','".$request->user_id."','Currier Stage Edit')");
 
         $data =[
-            'cureer_stagge_id'             =>  '$request->currier_stage',
+            'cureer_stagge_id'             =>  $request->currier_stage,
             'currier_stage_remarks'        =>  $request->remarks,
         ];
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
@@ -72,7 +72,6 @@ class StaffUpdateController extends Controller{
     }
 
     public function saveStaffContact(Request $request){
-        dd('MS');
         $curr_data = PersonalDetails::where('id',$request->id)->first();
         //insert into audit
         $messs_det=' email:'.$curr_data->email.'; alternative_email:'.$curr_data->alternative_email.'; contact_no:'.$curr_data->contact_no;
@@ -83,7 +82,7 @@ class StaffUpdateController extends Controller{
             'alternative_email'       =>  $request->alternative_email,
             'contact_no'              =>  $request->contact_no,
         ];
-        
+
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

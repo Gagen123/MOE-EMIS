@@ -32,5 +32,9 @@ return [
     'api_gateway' => [
         'base_uri' => env('API_GATEWAY_SERVICE_BASE_URL'),
     ],
+    'constant'=>[
+        'file_stored_base_path' => env('FILE__BASE_PATH'),
+    ],
+
 
 ];

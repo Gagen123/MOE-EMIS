@@ -13,10 +13,11 @@ use App\Models\Students\StudentClassAllocation;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
 use App\Models\requestForAdmission;
-use App\Models\Students\StudentGuardainDetails;
+use App\Models\StudentGuardian;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
 use App\Models\Students\StudentAboard;
+use App\Models\Students\StudentGuardainDetails;
 use Exception;
 
 class StudentAdmissionController extends Controller
@@ -169,264 +170,120 @@ class StudentAdmissionController extends Controller
             'sex_id.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
+        $currDetails=std_admission::where('created_by',$request->user_id)->first();
         $data =[
-            'application_id'            =>  $request->application_id,
-            'snationality'              =>  $request->snationality,
-            'student_id'                =>  $request->student_id,
+            'CmnCountryId'              =>  $request->snationality,
             'CidNo'                     =>  $request->cid_passport,
-            'first_name'                =>  $request->first_name,
-            'middle_name'               =>  $request->middle_name,
-            'last_name'                 =>  $request->last_name,
+            'FirstName'                 =>  $request->first_name,
+            'MiddleName'                =>  $request->middle_name,
+            'LastName'                  =>  $request->last_name,
             'DateOfBirth'               =>  $request->dob,
             'CmnSexId'                  =>  $request->sex_id,
-            'dzongkhag'                 =>  $request->dzongkhag,
+            'CmnDzoId'                  =>  $request->dzongkhag,
             'CmnGewogId'                =>  $request->gewog,
-            'village_id'                =>  $request->village_id,
-            // 'village_id'                =>  $request->s_dzongkhag,
-            'OrgOrganizationId'         =>  $request->s_school,
-            'class_id'                  =>  $request->s_class,
-            'address'                   =>  $request->fulladdress,
-            'attachments'               =>  $request->attachments,
-            'student_type'              =>  $request->type,
-            'Status'                    =>  $request->Status,
-            'dateOfapply'               =>  date('Y-m-d'),
-            'IsNewAdmission'            =>  1,
+            'CmnChiwogId'               =>  $request->village_id,
 
+            'Address'                   =>  $request->fulladdress,
+            'PhotoPath'                 =>  $request->file_path,
+            'DateOfApply'               =>  date('Y-m-d'),
+            'created_by'                =>  $request->user_id,
+            'created_at'                =>  date('Y-m-d h:i:s'),
         ];
-        $response_data = std_admission::create($data);
-
+        if($currDetails==null || $currDetails==""){
+            $response_data = std_admission::create($data);
+        }
+        else{
+            $response_data = std_admission::where('created_by',$request->user_id)->update($data);
+            $response_data =std_admission::where('created_by',$request->user_id)->first();
+        }
         return $response_data;
     }
 
 
     public function saveStudentGardianDetails(Request $request){
-        $rules = [
-            'merital_status'                        => 'required',
-            'primary_contact'                       => 'required',
-        ];
-        $customMessages = [
-            'merital_status.required'             => 'This field is required',
-            'primary_contact.required'            => 'This field is required',
-        ];
-        if($request->primary_contact == 'Father'){
-            $additional_rules = [
-                'father_nationality'                    => 'required',
-                'father_cid_passport'                   => 'required',
-                'father_first_name'                     => 'required',
-                'father_fulladdress'                    => 'required',
-                'father_present_dzongkhag'              => 'required',
-                'father_present_gewog'                  => 'required',
-                'father_present_village_id'             => 'required',
-                'father_work_address'                   => 'required',
-                'father_residence_address'              => 'required',
-                'father_occupation'                     => 'required',
-                'father_email'                          => 'required',
-                'father_cntct_no'                       => 'required',
+        $response_data =std_admission::where('created_by',$request->user_id)->first();
+        if($response_data!=""){
+            $update_data =[
+                'CmnParentsMaritalStatusId'          =>  $request->merital_status,
+                'PrimaryContact'                     =>  $request->primary_contact,
             ];
-            $rules = $rules + $additional_rules;
+            std_admission::where('created_by',$request->user_id)->update($update_data);
 
-            $additional_message = [
-                'father_nationality.required'                    => 'This field is required',
-                'father_cid_passport.required'                   => 'This field is required',
-                'father_first_name.required'                     => 'This field is required',
-                'father_fulladdress.required'                    => 'This field is required',
-                'father_present_dzongkhag.required'              => 'This field is required',
-                'father_present_gewog.required'                  => 'This field is required',
-                'father_present_village_id.required'             => 'This field is required',
-                'father_work_address.required'                   => 'This field is required',
-                'father_residence_address.required'              => 'This field is required',
-                'father_occupation.required'                     => 'This field is required',
-                'father_email.required'                          => 'This field is required',
-                'father_cntct_no.required'                       => 'This field is required',
-            ];
-            $customMessages = $customMessages + $additional_message;
-            if($request->father_nationality == 'Bhutanese'){
-                $additional_rules = [
-                    'father_dzongkhag'                      => 'required',
-                    'father_gewog'                          => 'required',
-                    'father_village_id'                     => 'required',
+            if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
+                $data =[
+                    'StdStudentId'                  =>  $response_data->id,
+                    'ContactType'                   =>  'Father',
+                    'Relationship'                  =>  'Father',
+                    'CmnNationalityId'              =>  $request->father_nationality,
+                    'CidNo'                         =>  $request->father_cid_passport,
+                    'Name'                          =>  $request->father_first_name,
+                    'CmnPermanentChiwogId'          =>  $request->father_village_id,
+                    'CmnPresentChiwogId'            =>  $request->father_present_village_id,
+                    'WorkAddress'                   =>  $request->father_work_address,
+                    'ResidenceAddress'              =>  $request->father_residence_address,
+                    'CmnOccupationId'               =>  $request->father_occupation,
+                    'Email'                         =>  $request->father_email,
+                    'ContactNo'                     =>  $request->father_cntct_no,
+                    'created_by'                    =>  $request->user_id,
+                    'created_at'                    =>  date('Y-m-d h:i:s'),
                 ];
-                $rules = $rules + $additional_rules;
-
-                $additional_message = [
-                    'father_dzongkhag.required'                      => 'This field is required',
-                    'father_gewog.required'                          => 'This field is required',
-                    'father_village_id.required'                     => 'This field is required',
+                $response_data = StudentGuardian::create($data);
+            }
+            if($request->mother_cid_passport!="" && $request->mother_cid_passport!=null){
+                $data =[
+                    'StdStudentId'              =>  $response_data->id,
+                    'ContactType'               =>  'Mother',
+                    'Relationship'              =>  'Mother',
+                    'CmnNationalityId'          =>  $request->mother_nationality,
+                    'CidNo'                     =>  $request->mother_cid_passport,
+                    'Name'                      =>  $request->mother_first_name,
+                    'CmnPermanentChiwogId'      =>  $request->mother_village_id,
+                    'CmnPresentChiwogId'        =>  $request->mother_present_village_id,
+                    'WorkAddress'               =>  $request->mother_work_address,
+                    'ResidenceAddress'          =>  $request->mother_residence_address,
+                    'CmnOccupationId'           =>  $request->mother_occupation,
+                    'Email'                     =>  $request->mother_email,
+                    'ContactNo'                 =>  $request->mother_cntct_no,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s'),
                 ];
-                $customMessages = $customMessages + $additional_message;
+                $response_data = StudentGuardian::create($data);
+            }
+            if($request->gardain_cid_passport!="" && $request->gardain_cid_passport!=null){
+                $std_admission =[
+                    'StdStudentId'                  =>  $response_data->id,
+                    'ContactType'                   =>  'Guardian',
+                    'Relationship'                  =>  'Guardian',
+                    'CmnNationalityId'              =>  $request->gardain_nationality,
+                    'CidNo'                         =>  $request->gardain_cid_passport,
+                    'Name'                          =>  $request->gardain_first_name,
+                    'CmnPermanentChiwogId'          =>  $request->gardain_village_id,
+                    'CmnPresentChiwogId'            =>  $request->gardain_present_village_id,
+                    'WorkAddress'                   =>  $request->gardain_work_address,
+                    'ResidenceAddress'              =>  $request->gardain_residence_address,
+                    'CmnOccupationId'               =>  $request->gardain_occupation,
+                    'Email'                         =>  $request->gardain_email,
+                    'ContactNo'                     =>  $request->gardain_cntct_no,
+                    'created_by'                    =>  $request->user_id,
+                    'created_at'                    =>  date('Y-m-d h:i:s'),
+                ];
+                $response_data = StudentGuardian::create($std_admission);
             }
         }
-        if($request->primary_contact == 'Mother'){
-            $additional_rules = [
-                'mother_nationality'                    => 'required',
-                'mother_cid_passport'                   => 'required',
-                'mother_first_name'                     => 'required',
-                'mother_fulladdress'                    => 'required',
-                'mother_present_dzongkhag'              => 'required',
-                'mother_present_gewog'                  => 'required',
-                'mother_present_village_id'             => 'required',
-                'mother_work_address'                   => 'required',
-                'mother_residence_address'              => 'required',
-                'mother_occupation'                     => 'required',
-                'mother_email'                          => 'required',
-                'mother_cntct_no'                       => 'required',
-            ];
-            $rules = $rules + $additional_rules;
-            $additional_message = [
-                'mother_nationality.required'                    => 'This field is required',
-                'mother_cid_passport.required'                   => 'This field is required',
-                'mother_first_name.required'                     => 'This field is required',
-                'mother_dob.required'                            => 'This field is required',
-                'mother_sex_id.required'                         => 'This field is required',
-                'mother_fulladdress.required'                    => 'This field is required',
-                'mother_present_dzongkhag.required'              => 'This field is required',
-                'mother_present_gewog.required'                  => 'This field is required',
-                'mother_present_village_id.required'             => 'This field is required',
-                'mother_work_address.required'                   => 'This field is required',
-                'mother_residence_address.required'              => 'This field is required',
-                'mother_occupation.required'                     => 'This field is required',
-                'mother_email.required'                          => 'This field is required',
-                'mother_cntct_no.required'                       => 'This field is required',
-            ];
-            $customMessages = $customMessages + $additional_message;
-            if($request->mother_nationality == 'Bhutanese'){
-                $additional_rules = [
-                    'mother_dzongkhag'                      => 'required',
-                    'mother_gewog'                          => 'required',
-                    'mother_village_id'                     => 'required',
-                ];
-                $rules = $rules + $additional_rules;
-
-                $additional_message = [
-                    'mother_dzongkhag.required'                      => 'This field is required',
-                    'mother_gewog.required'                          => 'This field is required',
-                    'mother_village_id.required'                     => 'This field is required',
-                ];
-                $customMessages = $customMessages + $additional_message;
-            }
-        }
-        if($request->primary_contact == 'Others'){
-            $additional_rules = [
-                'gardain_nationality'                   => 'required',
-                'gardain_cid_passport'                  => 'required',
-                'gardain_first_name'                    => 'required',
-                'gardain_fulladdress'                   => 'required',
-                'gardain_present_dzongkhag'             => 'required',
-                'gardain_present_gewog'                 => 'required',
-                'gardain_present_village_id'            => 'required',
-                'gardain_work_address'                  => 'required',
-                'gardain_residence_address'             => 'required',
-                'gardain_occupation'                    => 'required',
-                'gardain_email'                         => 'required',
-                'gardain_cntct_no'                      => 'required',
-            ];
-            $rules = $rules + $additional_rules;
-            $additional_message = [
-                'gardain_nationality.required'                    => 'This field is required',
-                'gardain_cid_passport.required'                   => 'This field is required',
-                'gardain_first_name.required'                     => 'This field is required',
-                'gardain_fulladdress.required'                    => 'This field is required',
-                'gardain_present_dzongkhag.required'              => 'This field is required',
-                'gardain_present_gewog.required'                  => 'This field is required',
-                'gardain_present_village_id.required'             => 'This field is required',
-                'gardain_work_address.required'                   => 'This field is required',
-                'gardain_residence_address.required'              => 'This field is required',
-                'gardain_occupation.required'                     => 'This field is required',
-                'gardain_email.required'                          => 'This field is required',
-                'gardain_cntct_no.required'                       => 'This field is required',
-            ];
-            $customMessages = $customMessages + $additional_message;
-            if($request->mother_nationality == 'Bhutanese'){
-                $additional_rules = [
-                    'gardain_dzongkhag'                      => 'required',
-                    'gardain_gewog'                          => 'required',
-                    'gardain_village_id'                     => 'required',
-                ];
-                $rules = $rules + $additional_rules;
-
-                $additional_message = [
-                    'gardain_dzongkhag.required'                      => 'This field is required',
-                    'gardain_gewog.required'                          => 'This field is required',
-                    'gardain_village_id.required'                     => 'This field is required',
-                ];
-                $customMessages = $customMessages + $additional_message;
-            }
-        }
-
-        $this->validate($request, $rules, $customMessages);
-        $update_data =[
-            'CmnParentsMaritalStatusId'     =>  $request->merital_status,
-            'PrimaryContact'           =>  $request->primary_contact,
-        ];
-
-        // $updated_data = Std_Students::where('id',$request->student_id)->update($update_data);
-        //
-        // Ask Tshewang why the delete before inserting
-        //$data = StudentGuardainDetails::where('student_id',$request->student_id)->delete();
-        if($request->father_cid_passport!="" && $request->father_cid_passport!=null){
-            $data =[
-                'student_id'                =>  $request->student_id,
-                'contact_type'              =>  'Father',
-                'nationality'               =>  $request->father_nationality,
-                'cid_passport'              =>  $request->father_cid_passport,
-                'name'                      =>  $request->father_first_name,
-                'village_id'                =>  $request->father_village_id,
-                'address'                   =>  $request->father_fulladdress,
-                'present_village_id'        =>  $request->father_present_village_id,
-                'work_address'              =>  $request->father_work_address,
-                'residence_address'         =>  $request->father_residence_address,
-                'occupation'                =>  $request->father_occupation,
-                'email'                     =>  $request->father_email,
-                'cntct_no'                  =>  $request->father_cntct_no,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = StudentGuardainDetails::create($data);
-        }
-        if($request->mother_cid_passport!="" && $request->mother_cid_passport!=null){
-            $data =[
-                'student_id'                =>  $request->student_id,
-                'contact_type'              =>  'Mother',
-                'nationality'               =>  $request->mother_nationality,
-                'cid_passport'              =>  $request->mother_cid_passport,
-                'name'                      =>  $request->mother_first_name,
-                'village_id'                =>  $request->mother_village_id,
-                'address'                   =>  $request->mother_fulladdress,
-                'present_village_id'        =>  $request->mother_present_village_id,
-                'work_address'              =>  $request->mother_work_address,
-                'residence_address'         =>  $request->mother_residence_address,
-                'occupation'                =>  $request->mother_occupation,
-                'email'                     =>  $request->mother_email,
-                'cntct_no'                  =>  $request->mother_cntct_no,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = StudentGuardainDetails::create($data);
-        }
-        if($request->gardain_cid_passport!="" && $request->gardain_cid_passport!=null){
-            $std_admission =[
-                'student_id'                =>  $request->student_id,
-                'contact_type'              =>  'Guardian',
-                'nationality'               =>  $request->gardain_nationality,
-                'cid_passport'              =>  $request->gardain_cid_passport,
-                'name'                      =>  $request->gardain_first_name,
-                'village_id'                =>  $request->gardain_village_id,
-                'address'                   =>  $request->gardain_fulladdress,
-                'present_village_id'        =>  $request->gardain_present_village_id,
-                'work_address'              =>  $request->gardain_work_address,
-                'residence_address'         =>  $request->gardain_residence_address,
-                'occupation'                =>  $request->gardain_occupation,
-                'email'                     =>  $request->gardain_email,
-                'cntct_no'                  =>  $request->gardain_cntct_no,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = StudentGuardainDetails::create($std_admission);
-        }
-
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    public function getstudentadmissiondetails($user_id=""){
+        $response_data =std_admission::where('created_by',$user_id)->first();
+        if($response_data!=null && $response_data!=""){
+            $gard=StudentGuardian::where('StdStudentId',$response_data->id)->get();
+            if($gard!=null && $gard!="" && sizeof($gard)>0){
+                $response_data->guardians =$gard;
+            }
+        }
+        return $response_data;
+    }
+
 
     //this funtion used for student portal for saving details of enrolled students
     public function  savedetailsEnrolledStd(Request $request){
@@ -944,7 +801,7 @@ class StudentAdmissionController extends Controller
             'IsRejoined'                       =>  1,
             'OrgOrganizationId'                =>  $request->org_id,
         ];
-        
+
         $response_data = Student::where('id',$request->id)->update($data);
         return $this->successResponse($response_data);
 

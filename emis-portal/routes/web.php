@@ -3,13 +3,15 @@
 use Illuminate\Support\Facades\Route;
 
     Route::get('/', function () {
-        return view('welcome');
+        return view('index');
     });
-    Route::get('/user_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
+    Route::get('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'user_register'])->name('user_register');
     Route::get('/login_screen', [App\Http\Controllers\Admin\HomeController::class, 'login_screen'])->name('login_screen');
     Route::get('/userlogin', [App\Http\Controllers\Admin\HomeController::class, 'userlogin'])->name('userlogin');
     Route::get('/user_logout', [App\Http\Controllers\Admin\HomeController::class, 'user_logout'])->name('user_logout');
-    Route::post('/new_register', [App\Http\Controllers\Admin\HomeController::class, 'new_register'])->name('new_register');
+    Route::post('/save_new_registration', [App\Http\Controllers\Admin\HomeController::class, 'save_new_registration'])->name('save_new_registration');
+    Route::post('/change_password_portal', [App\Http\Controllers\Admin\HomeController::class, 'change_password_portal'])->name('change_password_portal');
+
     // Auth::routes(['verify' => true]);
     Route::get('/getSessionDetail', [App\Http\Controllers\Admin\HomeController::class, 'getSessionDetail'])->name('getSessionDetail');
 
@@ -18,11 +20,10 @@ use Illuminate\Support\Facades\Route;
     Route::get('home', function () {
         return redirect('/dashboard');
     });
-
-
     Route::get('/{vue_capture?}', function () {
         return view('home');
     });
+
 
     //Global Controller
     Route::prefix('masters')->group(function () {
@@ -34,8 +35,11 @@ use Illuminate\Support\Facades\Route;
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
         Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
         Route::get('/loadValidationcondition', [App\Http\Controllers\AdminstratorController::class, 'loadValidationcondition'])->name('loadValidationcondition');
-
+        Route::get('/active_marital_list', [App\Http\Controllers\AdminstratorController::class, 'active_marital_list'])->name('active_marital_list');
     });
+    Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
+
+
 
     Route::prefix('adminstratorController')->group(function () {
         Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
@@ -60,12 +64,14 @@ use Illuminate\Support\Facades\Route;
     //getting organization details by OrgId
     Route::get('/loadOrganizationDetailsbyOrgId/{OrgOrganizationId}', [App\Http\Controllers\AdminstratorController::class, 'loadOrganizationDetailsbyOrgId'])->name('loadOrganizationDetailsbyOrgId');
 
-    
-    
+
+
     //Getting details by cid from std_student table
-    Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
+
 
     Route::post('/saveStudentDetailsFromPortal', [App\Http\Controllers\NotenrolledController::class, 'saveStudentDetailsFromPortal'])->name('saveStudentDetailsFromPortal');
+    Route::get('/getStudentDetailsFromPortal/{id}', [App\Http\Controllers\NotenrolledController::class, 'getStudentDetailsFromPortal'])->name('getStudentDetailsFromPortal');
+
     Route::post('/saveStudentGardianDetails', [App\Http\Controllers\NotenrolledController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
     Route::get('/getstudentdetails', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetails'])->name('getstudentdetails');
 

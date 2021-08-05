@@ -2,16 +2,21 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Helper\EmisService;
+use App\Traits\AuthUser;
 use Illuminate\Http\Response;
 
 class NotenrolledController extends Controller
 {
     public $apiService;
+    use AuthUser;
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
     // public $database="student_db";
-
+    public function getStudentDetailsFromPortal($id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$this->userId());
+        return $response_data;
+    }
     public function saveStudentDetailsFromPortal(Request $request){
         // dd($request);
         $rules = [
@@ -30,7 +35,6 @@ class NotenrolledController extends Controller
             'sex_id.required'                  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-
         $file = $request->attachments;
         $path="";
         $file_store_path=config('services.constant.file_stored_base_path').'studentPhotoes';
@@ -38,16 +42,19 @@ class NotenrolledController extends Controller
             if(!is_dir($file_store_path)){
                 mkdir($file_store_path,0777,TRUE);
             }
-            $file_name = time().'_' .$file->getClientOriginalName();
-            move_uploaded_file($file,$file_store_path.'/'.$file_name);
+            $file_name = $this->userId().'_' .$file->getClientOriginalName();
+            if (!file_exists($file_store_path.'/'.$file_name)){
+                move_uploaded_file($file,$file_store_path.'/'.$file_name);
+            }
             $path=$file_store_path.'/'.$file_name;
         }
+        $request['user_id']=$this->userId();
+        $request['file_path']= $path;
         $data = $request->all();
+        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetailsFromPortal', $data);
         return $response_data;
-
     }
-
 
     public function saveStudentGardianDetails(Request $request){
         $rules = [
@@ -63,7 +70,6 @@ class NotenrolledController extends Controller
                 'father_nationality'                    => 'required',
                 'father_cid_passport'                   => 'required',
                 'father_first_name'                     => 'required',
-                'father_fulladdress'                    => 'required',
                 'father_present_dzongkhag'              => 'required',
                 'father_present_gewog'                  => 'required',
                 'father_present_village_id'             => 'required',
@@ -79,7 +85,6 @@ class NotenrolledController extends Controller
                 'father_nationality.required'                    => 'This field is required',
                 'father_cid_passport.required'                   => 'This field is required',
                 'father_first_name.required'                     => 'This field is required',
-                'father_fulladdress.required'                    => 'This field is required',
                 'father_present_dzongkhag.required'              => 'This field is required',
                 'father_present_gewog.required'                  => 'This field is required',
                 'father_present_village_id.required'             => 'This field is required',
@@ -111,7 +116,6 @@ class NotenrolledController extends Controller
                 'mother_nationality'                    => 'required',
                 'mother_cid_passport'                   => 'required',
                 'mother_first_name'                     => 'required',
-                'mother_fulladdress'                    => 'required',
                 'mother_present_dzongkhag'              => 'required',
                 'mother_present_gewog'                  => 'required',
                 'mother_present_village_id'             => 'required',
@@ -128,7 +132,6 @@ class NotenrolledController extends Controller
                 'mother_first_name.required'                     => 'This field is required',
                 'mother_dob.required'                            => 'This field is required',
                 'mother_sex_id.required'                         => 'This field is required',
-                'mother_fulladdress.required'                    => 'This field is required',
                 'mother_present_dzongkhag.required'              => 'This field is required',
                 'mother_present_gewog.required'                  => 'This field is required',
                 'mother_present_village_id.required'             => 'This field is required',
@@ -256,17 +259,18 @@ class NotenrolledController extends Controller
             'gardain_occupation'                =>  $request->gardain_occupation,
             'gardain_email'                     =>  $request->gardain_email,
             'gardain_cntct_no'                  =>  $request->gardain_cntct_no,
-            // 'user_id'                           =>  $this->userId()
+            'user_id'                           =>  $this->userId()
         ];
-        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentGardianDetails', $data);
         return $response_data;
     }
+
+
     public function getstudentdetails($std_id=""){
-        // dd("dsdsad");
         $response_data= $this->apiService->listData('emis/students/admission/getStudentDetails/'.$std_id);
         return $response_data;
     }
+
 
     public function getstudentdetailsbyCid($cid=""){
         $response_data= $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);

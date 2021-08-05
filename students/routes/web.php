@@ -84,6 +84,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+            $router->get('/getstudentadmissiondetails/{user_id}',['uses' => 'Students\StudentAdmissionController@getstudentadmissiondetails']);
             //getting student details by cid number
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
 
@@ -248,6 +249,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
+
+        //added By Tshewang for user creation of student
+        $router->get('/getStudentByCode/{student_code}/{dob}', ['uses' => 'Students\StudentAdmissionRelatedController@getStudentByCode']);
 
         //Counselling Routes
         $router->post('/saveCounsellingInformation', ['uses' => 'Students\StudentCounsellingController@saveCounsellingInformation']);
