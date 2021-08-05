@@ -25,6 +25,11 @@
                        Special Benefits
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1">
+                <router-link to="/streamclass" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    Stream Subject & Bench Marks
+                </router-link>
+            </li>
             </ul>
             <router-view></router-view>
         </div>

@@ -5,9 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Feeder School</th>
-                    <th >Class(VI-VII)</th>
-                    <th >Class (VIII-IX)</th>
-                    <th >Class (X-XI)</th>
+                    <th >Class</th>
                     <th >Parent School</th>
                     <th >Action</th> 
                 </tr>
@@ -16,9 +14,7 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{SchoolList[item.feederschool]}}</td>
-                    <td><span class="badge badge-success">{{ item.classix==  1 ? "Checked" : "Unchecked" }}</span></td>
-                    <td><span class="badge badge-success">{{ item.classvii==  1 ? "Checked ": "Unchecked"}}</span></td>
-                    <td><span class="badge badge-success">{{ item.classxi==  1 ? "Checked" : "UnChecked"}}</span></td>
+                    <td>{{ item.class}}</td>
                     <td>{{SchoolList[item.parentschool]}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
