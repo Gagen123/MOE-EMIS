@@ -20,7 +20,6 @@
                 <p>Change Password</p>
             </router-link>
         </li>
-        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Parent')
         <li class="nav-item">
             <router-link to="/new_admission_page" class="nav-link">
                 {{--  admission_transfer_index --}}
@@ -28,18 +27,20 @@
                 <p>Registration Details</p>
             </router-link>
         </li>
+        <li class="nav-item">
+            <router-link to="/admission_initiated" class="nav-link">
+            <i class="fa fa-save nav-icon"></i>
+            <p> Apply to Schools</p>
+            </router-link>
+        </li>
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Parent')
+
         @endif
         @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent')
             <li class="nav-item">
                 <router-link to="/admissionRequest" class="nav-link">
                     <i class="fa fa-users nav-icon"></i>
                     <p> Request for admission</p>
-                </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link to="/track_application" class="nav-link">
-                <i class="fa fa-search nav-icon"></i>
-                <p> Apply to Schools</p>
                 </router-link>
             </li>
             <li class="nav-item">

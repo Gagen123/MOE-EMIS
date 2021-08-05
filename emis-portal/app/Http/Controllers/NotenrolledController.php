@@ -277,6 +277,11 @@ class NotenrolledController extends Controller
         return $response_data;
     }
 
+    public function loadSchoolList($dzoId="",$type=""){
+        $response_data= $this->apiService->getListData('emis/common_services/loadOrgList/admission_dzongkhagwise__'.$type.'/'.$dzoId);
+        return $response_data;
+    }
+
     public function getAllStudentCid(){
         // dd("dsdsad");
         $response_data= $this->listData('emis/students/admission/getAllStudentCid/');
