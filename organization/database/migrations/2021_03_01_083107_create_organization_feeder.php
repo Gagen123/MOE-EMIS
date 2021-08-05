@@ -16,9 +16,7 @@ class CreateOrganizationFeeder
         Schema::create('organization_feeder', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('feederschool',36);
-            $table->char('classvii');
-            $table->char('classix');
-            $table->char('classxi');
+            $table->char('class');
             $table->char('remarks');
             $table->char('parentschool');
             $table->char('created_by',36)->nullable(true);

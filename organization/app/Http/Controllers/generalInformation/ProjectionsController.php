@@ -68,9 +68,7 @@ class ProjectionsController extends Controller
             foreach ($request->items_received as $i=> $item){
                 $projection = array(
                     'feederschool'              => $request->feederschool,
-                    'classvii'                  => $request->classvii,
-                    'classix'                   => $request->classix,
-                    'classxi'                   => $request->classxi,
+                    'class'                     => $request->class,
                     'parentschool'              =>  $item['parentschool'],
                     'remarks'                   =>  $request['remarks'],
                     'created_by'                =>  $request->user_id,
@@ -87,9 +85,7 @@ class ProjectionsController extends Controller
                 foreach ($request->items_received as $i=> $item){
                     $projection = array(
                         'feederschool'              => $request->feederschool,
-                        'classvii'                  => $request->classvii,
-                        'classix'                   => $request->classix,
-                        'classxi'                   => $request->classxi,
+                        'class'                     => $request->class,
                         'parentschool'              =>  $item['parentschool'],
                         'remarks'                   =>  $request['remarks'],
                         'created_by'                =>  $request->user_id,

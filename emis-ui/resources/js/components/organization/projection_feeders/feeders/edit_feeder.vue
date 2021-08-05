@@ -13,12 +13,9 @@
                 </div>
                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                     <label>Feeder School Class:<span class="text-danger">*</span></label><br>
-                        <label>Class(VI-VII):</label>
-                        <input type="checkbox" class = "messageCheckbox" v-model="form.classvii" value="classvii" />&nbsp;&nbsp;
-                        <label>Class (VIII-IX):</label>
-                        <input type="checkbox" class = "messageCheckbox" v-model="form.classix" value="classix" />&nbsp;&nbsp;
-                        <label>Class (X-XI):</label>
-                        <input type="checkbox"  v-model="form.classxi" value="classxi" />
+                        <input type="radio" name="class" v-model="form.class" value="Class(VI-VII)" id="Class(VI-VII)"  checked> <label>Class(VI-VII):</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="Class (VIII-IX)" id="sClass (VIII-IX)" ><label>Class (VIII-IX)</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="Class (X-XI)" id="Class (X-XI)"> <label>Class (X-XI)</label>
                 </div> 
             </div>
             <div class="form-group row">
@@ -68,9 +65,7 @@ export default {
             form: new form({
                 id:'',
                 preference_school1:'',
-                classvii:'',
-                classix:'',
-                classxi:'',
+                class:'',
                 remarks:'',
                 action_type:'add',
                  items_received:
@@ -180,9 +175,7 @@ export default {
         this.loadOrgList();
         this.form.id=this.$route.params.data.id;
         this.form.preference_school1=this.$route.params.data.feederschool;
-        this.form.classix=this.$route.params.data.classix;
-        this.form.classvii=this.$route.params.data.classvii;
-        this.form.classxi=this.$route.params.data.classxi;
+        this.form.class=this.$route.params.data.class;
         this.form.parentschool=this.$route.params.data.parentschool;
     },
     

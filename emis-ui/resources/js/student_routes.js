@@ -326,12 +326,29 @@ const routes = [
         { path: '/student_type_edit', name:'student_type_edit', component: require('./components/masters/student_masters/student_type/student_type_edit.vue').default },
       ]
     },
+    // stream class setting
+    { path: '/streamclass', component: require('./components/masters/student_masters/streamclass_setup/streamclass_index.vue').default ,
+    children: [
+      { path: '', name:'streamclass', component: require('./components/masters/student_masters/streamclass_setup/streamclass_list.vue').default },
+      { path: '/streamclass_list', name:'streamclass_list', component: require('./components/masters/student_masters/streamclass_setup/streamclass_list.vue').default },
+      { path: '/streamclass_add', name:'streamclass_add', component: require('./components/masters/student_masters/streamclass_setup/streamclass_add.vue').default },
+      { path: '/streamclass_edit', name:'streamclass_edit', component: require('./components/masters/student_masters/streamclass_setup/streamclass_edit.vue').default },
+    ]
+  },
     { path: '/scholar', component: require('./components/masters/student_masters/scholar/scholar_index.vue').default ,
       children: [
         { path: '', name:'scholar', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
         { path: '/scholar_list', name:'scholar_list', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
         { path: '/scholar_add', name:'scholar_add', component: require('./components/masters/student_masters/scholar/scholar_add.vue').default },
         { path: '/scholar_edit', name:'scholar_edit', component: require('./components/masters/student_masters/scholar/scholar_edit.vue').default },
+      ]
+    },
+    { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
+      children: [
+        { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_list', name:'spbenefit_list', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_add', name:'spbenefit_add', component: require('./components/masters/student_masters/spbenefit/spbenefit_add.vue').default },
+        { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
       ]
     },
     { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
