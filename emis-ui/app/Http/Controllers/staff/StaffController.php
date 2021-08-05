@@ -73,6 +73,7 @@ class StaffController extends Controller{
         $personal_details =[
             'personal_id'       =>  $request->personal_id,
             'emp_type'          =>  $request->emp_type,
+            'contract_category' =>  $request->contract_category,
             'cid_work_permit'   =>  $request->cid_work_permit,
             'emp_id'            =>  $request->emp_id,
             'name'              =>  $request->name,

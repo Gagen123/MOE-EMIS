@@ -62,14 +62,14 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1">
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1" :id="'attachment'+count">
                                         <template>
                                             <td>{{attach.user_defined_name}} </td>
                                             <td>  {{attach.original_name}}</td>
                                             <td>
                                                 <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                 <span>
-                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                                    <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,attachment)"> Delete </a>
                                                 </span>
                                             </td>
                                         </template>
@@ -164,7 +164,7 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -186,6 +186,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachment'+count).remove();
                         }
                         else{
                         Swal.fire(

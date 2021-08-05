@@ -195,15 +195,15 @@ class HrDevelopmentController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $participant="";
         if($request->nature_of_participant!=null && $request->nature_of_participant!=""){
-            $participant=implode($request->nature_of_participant,', ');
+            $participant=implode(', ',$request->nature_of_participant);
         }
         $target_group="";
         if($request->target_group!=null && $request->target_group!=""){
-            $target_group=implode($request->target_group,', ');
+            $target_group=implode(', ',$request->target_group);
         }
         $org_level="";
         if($request->org_level!=null && $request->org_level!=""){
-            $org_level=implode($request->org_level,', ');
+            $org_level=implode(', ',$request->org_level);
         }
         $request_data =[
             'nomination_start_date'            =>  $request->nomination_start_date,

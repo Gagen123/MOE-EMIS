@@ -42,4 +42,10 @@ class SpmsMasterController extends Controller
         $global_masters = $this->apiService->listData('emis/masters/loadSpmMasters/'.$param);
         return $global_masters;
     }
+    public function loadEmdUsers(){
+        $role_id=config('services.constant.emd_role_id');
+        $emd_user = $this->apiService->listData('system/getemdusers/'.$role_id);
+        return $emd_user;
+    }
+
 }
