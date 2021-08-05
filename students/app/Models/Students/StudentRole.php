@@ -17,7 +17,8 @@ class StudentRole extends Model
         'StdRoleId',
         'created_by',
         'created_at',
-        'Remarks'
+        'Remarks',
+        'Status'
     ];
 
     public function students(){

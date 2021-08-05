@@ -36,6 +36,7 @@ class StudentResponsibilityController extends Controller
             'student'           =>  $request->student,
             'role_id'           =>  $request->role_id,
             'remarks'           =>  $request->remarks,
+            'status'            =>  $request->status,
             'action_type'       =>  $request->action_type,
             'data_type'         =>  'roles_responsibilities',
             'user_id'           =>  $this->userId(),
