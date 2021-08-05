@@ -10,6 +10,7 @@ export default [
     // { path: '*', component: require('./components/NotFound.vue').default },
 
     { path: '/new_admission_page',name:'new_admission_page', component: require('./components/new_admission_transfer/new_registration_for_admission.vue').default },
+    { path: '/admission_initiated',name:'admission_initiated', component: require('./components/admissions/admission_initiated.vue').default },
 
     { path: '/admission',  name:'admission',  component: require('./components/admissions/admission.vue').default ,
         children:[

@@ -1491,7 +1491,7 @@ export default {
         },
         getstudentdetials(){
             axios.get('/getStudentDetailsFromPortal/NA')
-            .then(response => {
+            .then(response =>{
                 let data = response.data;
                 this.student_form.snationality=data.CmnCountryId;
                 this.student_form.cid_passport=data.CidNo;

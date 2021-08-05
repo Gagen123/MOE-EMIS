@@ -28,6 +28,14 @@
                 <p>Registration Details</p>
             </router-link>
         </li>
+        <li class="nav-item">
+            <router-link to="/admission_initiated" class="nav-link">
+            <i class="fa fa-save nav-icon"></i>
+            <p> Apply to Schools</p>
+            </router-link>
+        </li>
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Parent')
+
         @endif
         @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent')
             <li class="nav-item">
