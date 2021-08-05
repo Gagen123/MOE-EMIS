@@ -19,6 +19,7 @@ use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
 use App\Models\DepartmentModel;
+use App\Models\generalInformation\Projection;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -85,6 +86,12 @@ class LoadOrganizationController extends Controller{
         $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
             ->where('dzongkhagId',$dzo_id)
             ->select( 'id','name','levelId','dzongkhagId')->get();
+        return $response_data;
+    }
+
+    public function loadProjection($classid){
+        $response_data=Projection::where('organizationId',explode('__',$classid)[1])->where('class',explode('__',$classid)[0])
+            ->select( 'id','ProjectionNo','academicYear')->first();
         return $response_data;
     }
 
