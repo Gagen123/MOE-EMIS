@@ -62,6 +62,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
 
         $router->get('/getProgramItems/{id}','Masters\StudentMasterController@getProgramItems');
+        $router->get('/getStudentAwards/{id}','Masters\StudentMasterController@getStudentAwards');
+        $router->get('/getOffenceType/{id}','Masters\StudentMasterController@getOffenceType');
+        $router->get('/getActionTaken/{id}','Masters\StudentMasterController@getActionTaken');
 
         $router->post('/saveFoodSourceType', ['uses' => 'Masters\StudentMasterController@saveFoodSourceType']);
         $router->get('/loadfoodSourceList', ['uses' => 'Masters\StudentMasterController@loadfoodSourceList']);
@@ -83,6 +86,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+            $router->get('/getstudentadmissiondetails/{user_id}',['uses' => 'Students\StudentAdmissionController@getstudentadmissiondetails']);
             //getting student details by cid number
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
 

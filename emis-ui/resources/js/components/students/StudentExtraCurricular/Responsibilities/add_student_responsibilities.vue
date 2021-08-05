@@ -29,6 +29,14 @@
                     <has-error :form="student_form" field="remarks"></has-error>
                 </div>
             </div>
+            <div class="row form-group">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="required">Status:</label>
+                    <br>
+                    <label><input v-model="student_form.status"  type="radio" value="1" /> Active</label>
+                    <label><input v-model="student_form.status"  type="radio" value="0" /> Inactive</label>
+                </div>
+            </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -47,6 +55,7 @@ export default {
                 student: '',
                 role_id: '',
                 remarks:'',
+                status:1,
                 action_type:'add',
             }),
         }

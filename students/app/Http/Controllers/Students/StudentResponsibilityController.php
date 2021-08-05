@@ -43,6 +43,7 @@ class StudentResponsibilityController extends Controller
                 'StdStudentId'      =>  $request->student,
                 'StdRoleId'         =>  $request->role_id,
                 'Remarks'           =>  $request->remarks,
+                'Status'           =>  $request->status,
                 // 'user_id'           => $this->user_id()
             ];
             $response_data = StudentRole::where('id', $id)->update( $data);
@@ -73,6 +74,7 @@ class StudentResponsibilityController extends Controller
                     'StdStudentId'      =>  $request->student,
                     'StdRoleId'         =>  $request->role_id,
                     'Remarks'           =>  $request->remarks,
+                    'Status'            =>  $request->status,
                     'created_by'        => $request->user_id,
                     'created_at'        => date('Y-m-d h:i:s')
                 ];

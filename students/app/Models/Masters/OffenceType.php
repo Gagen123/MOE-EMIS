@@ -14,6 +14,7 @@ class OffenceType extends Model
 
     protected $fillable = [
         'id',
+        'StdDisciplinarySeverity',
         'Name', 
         'Description', 
         'Status'

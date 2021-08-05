@@ -399,6 +399,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
+            $router->get('/getSchoolDzongkhagId/{id}', ['uses' => 'establishment\EstablishmentController@getSchoolDzongkhagId']);
+            $router->get('/getHssSchoolList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getHssSchoolList']);
             $router->get('/getOrgDetailsById/{id}/{usertype}', 'establishment\EstablishmentController@getOrgDetailsById');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/loadorgbygewogId/{gewog_id}', 'establishment\EstablishmentController@loadorgbygewogId');

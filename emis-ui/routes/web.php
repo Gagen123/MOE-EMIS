@@ -147,8 +147,11 @@ Route::prefix('masters')->group(function () {
     //Get Scouts Section Level By Scouts Section Level
     Route::get('/getScoutSectionLevel/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSectionLevel'])->name('getScoutSectionLevel');
     Route::get('/getScoutBadge/{scoutSectionId}', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutBadge'])->name('getScoutBadge');
-    //Program AJAX
+    //AJAX for dropdowns
     Route::get('/getProgramItems/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getProgramItems'])->name('getProgramItems');
+    Route::get('/getStudentAwards/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getStudentAwards'])->name('getStudentAwards');
+    Route::get('/getOffenceType/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getOffenceType'])->name('getOffenceType');
+    Route::get('/getActionTaken/{id}', [App\Http\Controllers\student\StudentMasterController::class, 'getActionTaken'])->name('getActionTaken');
 
     Route::post('/saveValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'saveValidationcondition'])->name('saveValidationcondition');
     Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
