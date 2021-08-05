@@ -576,16 +576,7 @@ const routes = [
                 ]
             },
 
-            { path: '/projections',
-                component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
-
-                children: [
-                  { path: '',name:'projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
-                  { path: '/add_projections', name:'add_projections', component: require('./components/organization/centers_feeders/projections/add_projections.vue').default },
-                  { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/centers_feeders/projections/edit_projections.vue').default },
-                  { path: '/list_projections', name:'list_projections', component: require('./components/organization/centers_feeders/projections/list_projections.vue').default },
-                ]
-              },
+           
 
             //   { path: '/projections',
             //   component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
@@ -1028,6 +1019,32 @@ const routes = [
             { path: '/add_location_details', name:'add_location_details', component: require('./components/organization/general/location_details/add_location_details.vue').default },
             { path: '/edit_location_details', name:'edit_location_details', component: require('./components/organization/general/location_details/edit_location_details.vue').default },
             { path: '/list_location_details', name:'list_location_details', component: require('./components/organization/general/location_details/list_location_details.vue').default },
+          ]
+        },
+      ]
+    },
+    // Organisational Routes (projection and feeder school)
+    { path: '/projection_index', component: require('./components/organization/projection_feeders/projection_index.vue').default,
+      children:[
+        { path: '/',name:"projection_index", component: require('./components/organization/projection_feeders/list_projections.vue').default },
+
+        { path: '/projections',
+        component: require('./components/organization/projection_feeders/projections/projections.vue').default ,
+
+        children: [
+          { path: '',name:'projections', component: require('./components/organization/projection_feeders/projections/list_projections.vue').default },
+          { path: '/add_projections', name:'add_projections', component: require('./components/organization/projection_feeders/projections/add_projections.vue').default },
+          { path: '/edit_projections', name:'edit_projections', component: require('./components/organization/projection_feeders/projections/edit_projections.vue').default },
+          { path: '/list_projections', name:'list_projections', component: require('./components/organization/projection_feeders/projections/list_projections.vue').default },
+        ]
+      },
+        { path: '/feeder_index',
+          component: require('./components/organization/projection_feeders/feeders/feeder_index.vue').default ,
+          children: [
+            { path: '',name:'feeder_index', component: require('./components/organization/projection_feeders/feeders/list_feeder.vue').default },
+            { path: '/add_feeder', name:'add_feeder', component: require('./components/organization/projection_feeders/feeders/add_feeder.vue').default },
+            { path: '/edit_feeder', name:'edit_feeder', component: require('./components/organization/projection_feeders/feeders/edit_feeder.vue').default },
+            { path: '/list_feeder', name:'list_feeder', component: require('./components/organization/projection_feeders/feeders/list_feeder.vue').default },
           ]
         },
       ]

@@ -209,6 +209,10 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveProjections', [App\Http\Controllers\organization\ProjectionsController::class, 'saveProjections'])->name('saveProjections');
     Route::get('/loadProjections', [App\Http\Controllers\organization\ProjectionsController::class, 'loadProjections'])->name('loadProjections');
 
+    //routes for Feeder School
+    Route::post('/saveFeeders', [App\Http\Controllers\organization\ProjectionsController::class, 'saveFeeders'])->name('saveFeeders');
+    Route::get('/loadFeeders', [App\Http\Controllers\organization\ProjectionsController::class, 'loadFeeders'])->name('loadFeeders');
+
     //routes for disasters information
  //   Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
 
