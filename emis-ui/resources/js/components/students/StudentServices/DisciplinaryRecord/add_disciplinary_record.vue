@@ -23,21 +23,21 @@
                 <div class="col-sm-6">
                     <!-- select -->
                     <div class="form-group">
-                        <label class="mb-0.5">Offence Type:<i class="text-danger">*</i></label>
-                        <select v-model="student_form.offence_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('offence_type') }" class="form-control select2" name="offence_type" id="offence_type">
-                            <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                        </select>
-                        <has-error :form="student_form" field="offence_type"></has-error>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <!-- select -->
-                    <div class="form-group">
                         <label class="mb-0.5">Severity:<i class="text-danger">*</i></label>
                         <select v-model="student_form.severity" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('severity') }" class="form-control select2" name="severity" id="severity">
                             <option v-for="(item, index) in severityList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="student_form" field="severity"></has-error>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <!-- select -->
+                    <div class="form-group">
+                        <label class="mb-0.5">Offence Type:<i class="text-danger">*</i></label>
+                        <select v-model="student_form.offence_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('offence_type') }" class="form-control select2" name="offence_type" id="offence_type">
+                            <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                        </select>
+                        <has-error :form="student_form" field="offence_type"></has-error>
                     </div>
                 </div>
             </div>
@@ -101,8 +101,6 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-
-        
           loadStudentList(org_id){
             let uri='students/loadStudentList/'+org_id;
             axios.get(uri)
@@ -115,21 +113,25 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveOffenceTypeList(uri="masters/loadActiveStudentMasters/offence_type"){
+        loadActiveOffenceTypeList(id){
+            this.offenceTypeList=[];
+            let uri = "masters/getOffenceType/"+id;
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.offenceTypeList =  data.data.data;
+                this.offenceTypeList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
-        loadActiveActionTakenList(uri="masters/loadActiveStudentMasters/disciplinary_action_taken"){
+        loadActiveActionTakenList(id){
+            this.actionTakenList=[];
+            let uri = "masters/getActionTaken/"+id;
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.actionTakenList =  data.data.data;
+                this.actionTakenList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -180,15 +182,19 @@ export default {
             if(id=="student"){
                 this.student_form.student=$('#student').val();
             }
+            if(id=="severity"){
+                this.student_form.severity=$('#severity').val();
+                let id = $('#severity').val();
+                this.loadActiveOffenceTypeList(id);
+                this.loadActiveActionTakenList(id);
+            }
             if(id=="offence_type"){
                 this.student_form.offence_type=$('#offence_type').val();
             }
             if(id=="action_taken"){
                 this.student_form.action_taken=$('#action_taken').val();
             }
-            if(id=="severity"){
-                this.student_form.severity=$('#severity').val();
-            }
+            
         },
     },
      mounted() {
@@ -221,8 +227,6 @@ export default {
             console.log(errors)
         });
         this.loadStudentList();
-        this.loadActiveOffenceTypeList();
-        this.loadActiveActionTakenList();
         this.loadActiveSeverityList();
     },
 

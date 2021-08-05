@@ -11,6 +11,8 @@ use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
+use App\Models\Masters\OffenceType;
+use App\Models\Masters\DisciplinaryActionTaken;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\CeaRole;
 use App\Models\Masters\VaccineType;
@@ -336,6 +338,12 @@ class StudentMasterController extends Controller
                 }
             case "offence_type" : {
                     $databaseModel = "OffenceType";
+                    if($type == 'data'){
+                        $additional_data = [
+                            'StdDisciplinarySeverity' => $request->offence_severity_id
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "offence_severity" : {
@@ -344,6 +352,12 @@ class StudentMasterController extends Controller
                 }
             case "disciplinary_action_taken" : {
                     $databaseModel = "DisciplinaryActionTaken";
+                    if($type == 'data'){
+                        $additional_data = [
+                            'StdDisciplinarySeverity' => $request->offence_severity_id
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "roles_responsibilities" : {
@@ -536,6 +550,24 @@ class StudentMasterController extends Controller
     /**Get the program items by varity id*/
     public function getProgramItems($id){
         $data=CeaProgramItem::select('id','name', 'Unit_id')->where('CeaProgrammeItemVarietyId',$id)->get();
+        return $data;
+    }
+
+    /**Get the student awards by award type id*/
+    public function getStudentAwards($id){
+        $data=StudentAwards::select('id','Name')->where('CeaAwardTypeId',$id)->get();
+        return $data;
+    }
+
+    /**Get the student offence type by severity id*/
+    public function getOffenceType($id){
+        $data=OffenceType::select('id','Name')->where('StdDisciplinarySeverity',$id)->get();
+        return $data;
+    }
+
+    /**Get the student action taken by severity id*/
+    public function getActionTaken($id){
+        $data=DisciplinaryActionTaken::select('id','Name')->where('StdDisciplinarySeverity',$id)->get();
         return $data;
     }
 

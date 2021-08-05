@@ -12,21 +12,33 @@
             </div>
             <div class="row">
                 <div class="col-sm-4">
+                    <!-- select -->
+                    <div class="form-group">
+                        <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
+                            <select v-model="student_award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
+                                <option v-for="(item, index) in awardType" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                            </select>
+                            <has-error :form="student_award_form" field="award_type_id"></has-error>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <!-- select -->
+                    <div class="form-group">
+                        <label class="mb-0.5">Award:<i class="text-danger">*</i></label>
+                            <select v-model="student_award_form.award_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('award_id') }" class="form-control select2" name="award_id" id="award_id">
+                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                            </select>
+                            <has-error :form="student_award_form" field="award_id"></has-error>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
                     <div class="form-group">
                         <label class="mb-1">Award Given By:<i class="text-danger">*</i></label>
                         <input type="text" @change="remove_error('award_given_by')" v-model="student_award_form.award_given_by" :class="{ 'is-invalid': student_award_form.errors.has('award_given_by') }" class="form-control" name="award_given_by" id="award_given_by" >
                         <has-error :form="student_award_form" field="award_given_by"></has-error>
                     </div> 
-                </div>
-                <div class="col-sm-4">
-                    <!-- select -->
-                    <div class="form-group">
-                        <label class="mb-0.5">Award Type:<i class="text-danger">*</i></label>
-                            <select v-model="student_award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': student_award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
-                                <option v-for="(item, index) in awardList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                            </select>
-                            <has-error :form="student_award_form" field="award_type_id"></has-error>
-                    </div>
                 </div>
             </div>
             <div class="row form-group">
@@ -61,6 +73,7 @@ export default {
         return {
             studentList:[],
             awardList:[],
+            awardType:[],
             id:'3',
 
             student_award_form: new form({
@@ -68,6 +81,7 @@ export default {
                 student: '',
                 award_given_by: '',
                 award_type_id: '',
+                award_id: '',
                 place: '',
                 date: '',
                 remarks:'',
@@ -89,11 +103,22 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveAwardList(uri="masters/loadActiveStudentMasters/student_awards"){
+        loadActiveAwardTypeList(uri="masters/loadActiveStudentMasters/student_award_type"){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.awardList =  data.data.data;
+                this.awardType =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadActiveAwardList(id){
+            let uri="masters/getStudentAwards/"+id;
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.awardList =  data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -134,9 +159,15 @@ export default {
             if(id=="student"){
                 this.student_award_form.student=$('#student').val();
             }
+            if(id=="award_id"){
+                this.student_award_form.award_id=$('#award_id').val();
+            }
             if(id=="award_type_id"){
                 this.student_award_form.award_type_id=$('#award_type_id').val();
+                let id = $('#award_type_id').val();
+                this.loadActiveAwardList(id);
             }
+            
         },
     },
      mounted() {
@@ -154,7 +185,8 @@ export default {
         });
 
         this.loadStudentList();
-        this.loadActiveAwardList();
+        this.loadActiveAwardTypeList();
+        // this.loadActiveAwardList();
     },
     
 }

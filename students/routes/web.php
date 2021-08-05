@@ -60,6 +60,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
 
         $router->get('/getProgramItems/{id}','Masters\StudentMasterController@getProgramItems');
+        $router->get('/getStudentAwards/{id}','Masters\StudentMasterController@getStudentAwards');
+        $router->get('/getOffenceType/{id}','Masters\StudentMasterController@getOffenceType');
+        $router->get('/getActionTaken/{id}','Masters\StudentMasterController@getActionTaken');
 
         $router->post('/saveFoodSourceType', ['uses' => 'Masters\StudentMasterController@saveFoodSourceType']);
         $router->get('/loadfoodSourceList', ['uses' => 'Masters\StudentMasterController@loadfoodSourceList']);
