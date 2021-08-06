@@ -23,12 +23,12 @@ class CompoundDetailsController extends Controller
     } 
 
     public function saveSchoolCompundDetails(Request $request){
-     //   $file = $request->attachments;
+           //   $file = $request->attachments;
     //    dd($file);
         $rules = [
             'thramno'               =>  'required',
             'plotno'                =>  'required',
-            'attachments'           =>  'required',
+         //   'attachments'           =>  'required',
             'sizecompound'          =>  'required',
            // 'sizeplayground'        =>  'required',
           //  'playgroundused'        =>  'required',
@@ -42,7 +42,7 @@ class CompoundDetailsController extends Controller
         $customMessages = [
             'thramno.required'                  => 'thramno is required',
             'plotno.required'                   => 'plotno is required',
-            'attachments.required'              => 'attachments is required',
+        //    'attachments.required'              => 'attachments is required',
             'sizecompound.required'             => 'sizecompound is required',
          //   'sizeplayground.required'           => 'sizeplayground is required',
          //   'playgroundused.required'           => 'playgroundused is required',
@@ -91,7 +91,7 @@ class CompoundDetailsController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-        //dd( $comp);
+       // dd( $comp);
         // try{
             $response_data= $this->apiService->createData('emis/organization/compoundDetails/saveSchoolCompundDetails', $comp);
             return $response_data;

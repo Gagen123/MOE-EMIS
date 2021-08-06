@@ -28,15 +28,7 @@ class CompoundDetailController extends Controller
         $info = OrganizationCompoundDetail::where('organizationId',$orgId)->get();
         return $info;
     }
-    // public function loadcompoundareadetials($orgId=""){ 
-    //     $equip = DB::table('organization_compound_details')
-    //         ->select('id','organizationId','thramNo',
-    //         'plotNo', 'attachments', 'compoundArea','playgroundArea','playgroundAreaUsable',
-    //         'status','agricultureArea','agricultureAreaUsed')
-    //         ->where('organizationId',$orgId)->get();
-
-    //     return $equip;
-    // }
+ 
     public function saveSchoolCompundDetails(Request $request){
       $id = $request->id;
       if( $id != null){
@@ -44,7 +36,6 @@ class CompoundDetailController extends Controller
              'organizationId'                => $request->organizationId,
              'thramNo'                       => $request->thramno,
              'plotNo'                        => $request->plotno,
-            // 'attachments'                   => $request->attachments,
              'compoundArea'                  => $request->sizecompound,
              'playgroundArea'                => $request->sizeplayground,
              'playgroundAreaUsable'          => $request->playgroundused,
@@ -53,12 +44,11 @@ class CompoundDetailController extends Controller
              'agricultureArea'               => $request->agriculturalarea,
              'agricultureAreaUsed'           => $request->areaused,
              'programType'                   => $request->programType,
-             'id'                            => $request->id,
-             'created_by'                    => $request['user_id'],
+             'id'                            => $id,
              'updated_by'                    => $request['user_id'],
-             'created_at'                    =>date('Y-m-d h:i:s'),
              'updated_at'                    =>date('Y-m-d h:i:s'),
             ];
+          //  dd($data);
             OrganizationCompoundDetail::where('id', $id)->update($data);
             $response_data=OrganizationCompoundDetail::where('id',$id)->first();
             if($request->attachment_details!=null && $request->attachment_details!=""){
@@ -71,6 +61,7 @@ class CompoundDetailController extends Controller
                         'original_name'             =>  $att['original_name'],
 
                     ];
+                  //  dd($attach);
                     ThramPegDocuments::create($attach);
                 }
             }
@@ -93,9 +84,8 @@ class CompoundDetailController extends Controller
                 'programType'                   => $request->programType,
                 'id'                            => $request->id,
                 'created_by'                    => $request['user_id'],
-                'updated_by'                    => $request['user_id'],
                 'created_at'                    =>date('Y-m-d h:i:s'),
-                'updated_at'                    =>date('Y-m-d h:i:s'),
+               
             ];
             //  dd($data);
             $response_data = OrganizationCompoundDetail::create($data);

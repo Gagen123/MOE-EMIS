@@ -14,7 +14,7 @@
                         <has-error :form="form" field="plotno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Size of Compound Area:<span class="text-danger">*</span></label>
+                        <label>Size of Compound Area(sq.meter):<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizecompound')" :class="{ 'is-invalid': form.errors.has('sizecompound') }" id="sizecompound" v-model="form.sizecompound" >
                         <has-error :form="form" field="sizecompound"></has-error>
                     </div> 
@@ -25,7 +25,8 @@
                         <label class="mb-0">Lag Thram/Peg Info & other related document <span class="text-danger">*</span></label>
                     </div>
                 </div>
-                <div class="form-group row">
+                <!-- <div class="card"> -->
+                    <div class="form-group row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                             <thead>
@@ -81,13 +82,13 @@
                 </div>
                 <div class="form-group row" style="display:none" id="playgroundarea">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Size of Play Ground Area:<span class="text-danger">*</span></label>
+                        <label>Size of Play Ground Area(sq.meter):<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('sizeplayground')" :class="{ 'is-invalid': form.errors.has('sizeplayground') }" id="dob" v-model="form.sizeplayground">
                         <has-error :form="form" field="sizeplayground"></has-error>
 
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Size of Playground area used:<span class="text-danger">*</span></label>
+                        <label>Size of Playground area used(sq.meter):<span class="text-danger">*</span></label>
                         <input type="text" class="form-control" @change="removeerror('playgroundused')" :class="{ 'is-invalid': form.errors.has('playgroundused') }" id="playgroundused" v-model="form.playgroundused">
                         <has-error :form="form" field="playgroundused"></has-error>
                     </div>
@@ -97,7 +98,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Does the School have agricultural area?<span class="text-danger">*</span></label>
+                        <label class="">Does the School/ECCD/ECR have agricultural area?<span class="text-danger">*</span></label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="0" @click="showtextbox('No')" />No</label>
                         <label><input v-model="form.status"  type="radio" value="1" @click="showtextbox('Yes')"/>Yes</label>
@@ -105,21 +106,21 @@
                 </div>
                 <div class="form-group row" style="display:none" id="agriculturalarea">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Size of Agriculture Area : </label>
+                        <label>Size of Agriculture Area(sq.meter) : </label>
                         <input type="text" v-model="form.agriculturalarea" class="form-control editable_fields" id="agriculturalarea" />
 
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
-                        <label>Size of Agriculture Area used :</label>
+                        <label>Size of Agriculture Area used(sq.meter) :</label>
                         <input type="text" v-model="form.areaused" class="form-control editable_fields" id="areaused" />
 
                     </div>
                 </div>
                 <div class="form-group row">
-                   <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Program Practise By the Organization:</label><br>
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label>Program Practise By the School/ECCD/ECR:</label><br>
                         <label  v-for="(item, index) in  programTypeList" :key="index" class="pr-4">
-                            <input  type="checkbox" :id="'PrgType'+item.id" name="programType" v-model="form.programType" :value="item.id" /> 
+                            <input  type="checkbox" :id="'PrgType'+item.id" name="programType" v-model="form.programType" :value="item.id"/> 
                             {{item.name}}
                         </label>
                     </div>
@@ -140,8 +141,6 @@ export default {
             filecount:1,
             programTypeList:[],
             attachments:[],
-            attachmentDetails:[],
-            display:'',
             form: new form({
                 id: '',
                 thramno:'',
@@ -154,7 +153,7 @@ export default {
                 statusofplay: '',
                 agriculturalarea: '',
                 areaused:'',
-                programType:[],
+                programType:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -212,10 +211,22 @@ export default {
                         'content-type': 'multipart/form-data'
                     }
                 }
+                let disasval="";
+                $("input[name='programType']:checked").each ( function(index){
+                    if(index==$("input[name='programType']:checked").length-1){
+                        disasval+=$(this).val();
+                    }
+                    else{
+                        disasval+=$(this).val()+',';
+                    }
+
+                });
+                this.form.programType=disasval;
                 let formData = new FormData();
+                formData.append('id', this.form.id);
                 formData.append('thramno', this.form.thramno);
                 formData.append('plotno', this.form.plotno);
-                // alert(this.form.attachments);
+                alert(this.form.ref_docs);
                // formData.append('attachments', this.form.attachments);
                 formData.append('sizecompound', this.form.sizecompound);
                 formData.append('sizeplayground', this.form.sizeplayground);
@@ -224,7 +235,8 @@ export default {
                 formData.append('statusofplay', this.form.statusofplay);
                 formData.append('agriculturalarea', this.form.agriculturalarea);
                 formData.append('areaused', this.form.areaused);
-                formData.append('programType', this.form.programType);
+                formData.append('programType',disasval);
+                formData.append('ref_docs[]', this.form.ref_docs);
                 for(let i=0;i<this.form.ref_docs.length;i++){
                         formData.append('attachments[]', this.form.ref_docs[i].attach);
                         formData.append('attachmentname[]', this.form.ref_docs[i].name);
@@ -279,13 +291,6 @@ export default {
             }
         },
 
-        // removeattachments(index){
-        //     if(this.form.attachments.length>1){
-        //         this.filecount--;
-        //         this.form.attachments.pop();
-        //         this.form.ref_docs.pop();
-        //     }
-        // },
         getEditCompoundDetail(compId){
             axios.get('organization/getEditCompoundDetail/'+compId)
             .then((response) => {  
@@ -367,8 +372,9 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
+       
     },
-    mounted() { 
+     mounted() { 
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
