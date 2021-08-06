@@ -19,6 +19,7 @@ use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
 use App\Models\DepartmentModel;
+use App\Models\generalInformation\Projection;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -57,6 +58,14 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
         }
+        if(strpos($type,'admission_dzongkhagwise')!==false){
+            $category=explode('__',$type)[1];
+            if($category=="ECCD"){
+                $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
+            }else{
+                $response_data=OrganizationDetails::wherein('category',['private_school','public_school'])->where('dzongkhagId',$id)->get();
+            }
+        }
         if($type=="private"){
             $response_data=OrganizationDetails::wherein('category',['private_school','private_eccd'])->where('dzongkhagId',$id)->get();
         }
@@ -77,6 +86,12 @@ class LoadOrganizationController extends Controller{
         $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
             ->where('dzongkhagId',$dzo_id)
             ->select( 'id','name','levelId','dzongkhagId')->get();
+        return $response_data;
+    }
+
+    public function loadProjection($classid){
+        $response_data=Projection::where('organizationId',explode('__',$classid)[1])->where('class',explode('__',$classid)[0])
+            ->select( 'id','ProjectionNo','academicYear')->first();
         return $response_data;
     }
 

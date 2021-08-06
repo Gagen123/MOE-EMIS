@@ -118,7 +118,7 @@
 export default {
   data() {
     return {
-        is_student:false,
+      is_student:false,
       user: "",
       cid:'',
       code:'',
@@ -136,7 +136,7 @@ export default {
         axios.get('getSessionDetail')
         .then(response => {
             let data = response.data.data;
-            this.cid=data['std_cid'];
+            this.cid=data['std_id'];
             this.code=data['std_code'];
             this.type=data['user_type'];
             this.email=data['email'];

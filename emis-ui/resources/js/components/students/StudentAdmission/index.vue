@@ -11,7 +11,6 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-
                 <!-- <li class="nav-item active pr-1">
                     <router-link to="/student_new_registration" id="student_new_registration" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
@@ -32,7 +31,7 @@
                         Admissions
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1">
+                <li class="nav-item active pr-1">
                     <router-link to="/student_admission_request" id="admission_request" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Admission Request
@@ -43,7 +42,7 @@
                     <span class="fa fa-user-clock"></span>
                     Reporting
                     </router-link>
-                </li> -->
+                </li>
                 <li class="nav-item pr-1">
                     <router-link to ="/student_leaving" id="student_leaving" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
@@ -65,7 +64,6 @@
             </ul>
             <router-view></router-view>
         </div>
-
     </div>
 </template>
 <script>

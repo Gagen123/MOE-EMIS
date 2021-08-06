@@ -11,7 +11,10 @@ use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
 use App\Models\Masters\StudentAwardType;
+use App\Models\Masters\OffenceType;
+use App\Models\Masters\DisciplinaryActionTaken;
 use App\Models\Masters\CeaProgram;
+use App\Models\Masters\SubjectMarks;
 use App\Models\Masters\CeaRole;
 use App\Models\Masters\VaccineType;
 use App\Models\Masters\CeaProgramType;
@@ -66,6 +69,58 @@ class StudentMasterController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
+    public function saveStreamSubject(Request $request){
+        $id = $request->id;
+        if($id != null){
+            $subjectlist = [
+                'streamId'           =>  $request['streamId'],
+                'aca_sub_id'         =>  $request['aca_sub_id'],
+                'marks'              =>  $request['marks'],
+                'id'                 =>  $request['id'],
+                'updated_by'         =>  $request->user_id,
+                'created_at'         =>  date('Y-m-d h:i:s')
+                
+            ];
+            $stcrcv = SubjectMarks::where('id', $id)->update($subjectlist);
+            return $this->successResponse($stcrcv, Response::HTTP_CREATED);
+
+        }else{
+            foreach ($request->input('subjectlist') as  $i=> $classstream){
+                   $marks="";
+                   if(isset($classstream['marks'])){
+                       $marks=$classstream['marks'];
+                   }
+                   $aca_sub_id="";
+                   if(isset($classstream['aca_sub_id'])){
+                       $aca_sub_id=$classstream['aca_sub_id'];
+                   }
+                   $data = array(
+                    'streamId'           =>  $request['streamId'],
+                    'aca_sub_id'         =>  $aca_sub_id,
+                    'marks'              =>  $marks,
+                    'id'                 =>  $request['id'],
+                    'created_by'         =>  $request->user_id,
+                    'created_at'         =>  date('Y-m-d h:i:s')
+                   );
+                   try{
+                    SubjectMarks::create($data);
+        
+                    } catch(\Illuminate\Database\QueryException $ex){
+                        dd($ex->getMessage());
+                        // Note any method of class PDOException can be called on $ex.
+                    }
+                   
+               }
+
+            }
+            return $this->successResponse(Response::HTTP_CREATED);
+
+
+        }
+        public function loadstreamMarks(){
+            return $this->successResponse(SubjectMarks::all());
+
+        }
 
     public function saveValidationcondition(Request $request){
         $rules = [
@@ -336,6 +391,12 @@ class StudentMasterController extends Controller
                 }
             case "offence_type" : {
                     $databaseModel = "OffenceType";
+                    if($type == 'data'){
+                        $additional_data = [
+                            'StdDisciplinarySeverity' => $request->offence_severity_id
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "offence_severity" : {
@@ -344,6 +405,12 @@ class StudentMasterController extends Controller
                 }
             case "disciplinary_action_taken" : {
                     $databaseModel = "DisciplinaryActionTaken";
+                    if($type == 'data'){
+                        $additional_data = [
+                            'StdDisciplinarySeverity' => $request->offence_severity_id
+                        ];
+                        $data = $data + $additional_data;
+                    }
                     break;
                 }
             case "roles_responsibilities" : {
@@ -539,6 +606,24 @@ class StudentMasterController extends Controller
         return $data;
     }
 
+    /**Get the student awards by award type id*/
+    public function getStudentAwards($id){
+        $data=StudentAwards::select('id','Name')->where('CeaAwardTypeId',$id)->get();
+        return $data;
+    }
+
+    /**Get the student offence type by severity id*/
+    public function getOffenceType($id){
+        $data=OffenceType::select('id','Name')->where('StdDisciplinarySeverity',$id)->get();
+        return $data;
+    }
+
+    /**Get the student action taken by severity id*/
+    public function getActionTaken($id){
+        $data=DisciplinaryActionTaken::select('id','Name')->where('StdDisciplinarySeverity',$id)->get();
+        return $data;
+    }
+
     /**
      * Counselling Master
      */
@@ -605,7 +690,7 @@ class StudentMasterController extends Controller
          // dd($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadfoodSourceList(){
         $data = FoodSourceType::all();
         return $data;

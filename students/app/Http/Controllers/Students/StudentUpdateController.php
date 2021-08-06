@@ -78,7 +78,15 @@ class StudentUpdateController extends Controller
                 }
             case "update_guardian" : {
                     $additional_data = [
-                        'cid'   => $request->cid
+                        'snationality'    => $request->snationality,
+                        'cid_passport'    => $request->cid_passport,
+                        'first_name'      => $request->first_name,
+                        'middle_name'     => $request->middle_name,
+                        'last_name'       => $request->last_name,
+                        'dob'             => $request->dob,
+                        'dzongkhag'       => $request->dzongkhag,
+                        'gewog'           => $request->gewog,
+                        'village_id'      => $request->village_id
                     ];
                     $data = $data + $additional_data;
                     $response_data = $this->updateStudentGuardianDetails($data);

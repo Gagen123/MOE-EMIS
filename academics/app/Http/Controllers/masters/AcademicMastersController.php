@@ -271,12 +271,26 @@ class AcademicMastersController extends Controller
         }
         return $this->successResponse($responsedata, Response::HTTP_CREATED);
 
+
+    }
+    //written by gagen
+    public function subjectlist($id=""){
+        if($id!="" && $id!=null){
+            $loadclass_dropdown = DB::select('SELECT org_class_id,aca_sub_id FROM aca_class_subject WHERE (org_stream_id = "'.$id.'")');
+            return $this->successResponse($loadclass_dropdown);
+        }
     }
     public function loadAcademicMasters($param=""){
+        
         if($param == "all_subject"){
             $subject = DB::select('SELECT t1.id,t1.name,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
             return $this->successResponse($subject);
         }
+        // if($param == "subjectDropdown"){
+        //     $subject = DB::select('SELECT t1.id,t1.name,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
+        //     return $this->successResponse($subject);
+        // }
+        
         if($param == "all_active_subject"){
             $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,is_special_educational_needs,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject);

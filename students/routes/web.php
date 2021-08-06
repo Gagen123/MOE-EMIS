@@ -44,6 +44,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
     $router->group(['prefix' => 'masters/students'], function () use ($router) {
         $router->post('/saveStudentMasters', ['uses' => 'Masters\StudentMasterController@saveStudentMasters']);
+        $router->post('/saveStreamSubject', ['uses' => 'Masters\StudentMasterController@saveStreamSubject']);
+        $router->get('/loadstreamMarks', ['uses' => 'Masters\StudentMasterController@loadstreamMarks']);
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
         $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
@@ -60,6 +62,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getCounsellingTypeDropdown', ['uses' => 'Masters\StudentMasterController@getCounsellingTypeDropdown']);
 
         $router->get('/getProgramItems/{id}','Masters\StudentMasterController@getProgramItems');
+        $router->get('/getStudentAwards/{id}','Masters\StudentMasterController@getStudentAwards');
+        $router->get('/getOffenceType/{id}','Masters\StudentMasterController@getOffenceType');
+        $router->get('/getActionTaken/{id}','Masters\StudentMasterController@getActionTaken');
 
         $router->post('/saveFoodSourceType', ['uses' => 'Masters\StudentMasterController@saveFoodSourceType']);
         $router->get('/loadfoodSourceList', ['uses' => 'Masters\StudentMasterController@loadfoodSourceList']);
@@ -75,12 +80,17 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
+            $router->post('/saveorgclassDetails', ['uses' => 'Students\StudentAdmissionController@saveorgclassDetails']);
+            $router->get('/deleteclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@deleteclassDetails']);
+            $router->get('/getorgclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@getorgclassDetails']);
+            $router->post('/savefilanorgclassDetails', ['uses' => 'Students\StudentAdmissionController@savefilanorgclassDetails']);
             $router->post('/studentAdmissionupdate', ['uses' => 'students\StudentAdmissionController@studentAdmissionupdate']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
 
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
             $router->get('/getStudentDetails/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentDetails']);
+            $router->get('/getstudentadmissiondetails/{user_id}',['uses' => 'Students\StudentAdmissionController@getstudentadmissiondetails']);
             //getting student details by cid number
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
 

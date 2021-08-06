@@ -60,9 +60,7 @@ class ProjectionsController extends Controller
         $loc =[
             'id'                        => $request->id,
             'feederschool'              => $request->preference_school1,
-            'classvii'                  => $request->classvii,
-            'classix'                   => $request->classix,
-            'classxi'                   => $request->classxi,
+            'class'                     => $request->class,
             'items_received'            =>  $request->items_received,
             'user_id'                   =>  $this->userId()
         ];

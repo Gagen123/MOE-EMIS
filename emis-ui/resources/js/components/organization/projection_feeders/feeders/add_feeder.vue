@@ -13,12 +13,9 @@
                 </div>
                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                     <label>Feeder School Class:<span class="text-danger">*</span></label><br>
-                        <label>Class(VI-VII):</label>
-                        <input type="checkbox" class = "messageCheckbox" v-model="form.classvii" value="classvii" />&nbsp;&nbsp;
-                        <label>Class (VIII-IX):</label>
-                        <input type="checkbox" class = "messageCheckbox" v-model="form.classix" value="classix" />&nbsp;&nbsp;
-                        <label>Class (X-XI):</label>
-                        <input type="checkbox"  v-model="form.classxi" value="classxi" />
+                        <input type="radio" name="class" v-model="form.class" value="Class(VI-VII)" id="Class(VI-VII)"  checked> <label>Class(VI-VII):</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="Class (VIII-IX)" id="sClass (VIII-IX)" ><label>Class (VIII-IX)</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="Class (X-XI)" id="Class (X-XI)"> <label>Class (X-XI)</label>
                 </div> 
             </div>
             <div class="form-group row">
@@ -67,9 +64,7 @@ export default {
             classList:[],
             form: new form({
                 preference_school1:'',
-                classvii:'',
-                classix:'',
-                classxi:'',
+                class:'',
                 remarks:'',
                 action_type:'add',
                  items_received:
