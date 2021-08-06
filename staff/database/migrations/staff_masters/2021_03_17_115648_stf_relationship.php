@@ -5,11 +5,12 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 class StfRelationship extends Migration{
-   
+
     public function up(){
         Schema::create('master_stf_relationship', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
+            $table->string('description',150)->nullable();
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
             $table->string('created_by',36)->nullable(true);
@@ -19,7 +20,7 @@ class StfRelationship extends Migration{
         });
     }
 
-    
+
     public function down() {
         Schema::dropIfExists('master_stf_relationship');
     }

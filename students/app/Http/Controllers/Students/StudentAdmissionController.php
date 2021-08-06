@@ -108,9 +108,9 @@ class StudentAdmissionController extends Controller
                     'OrgOrganizationId'         =>  $request->OrgOrganizationId,
                     'CmnCountryId'              =>  $request->snationality,
                     'CidNo'                     =>  $request->cid_passport,
-                    'first_name'                =>  $request->first_name,
-                    'middle_name'               =>  $request->middle_name,
-                    'last_name'                 =>  $request->last_name,
+                    'FirstName'                =>  $request->first_name,
+                    'MiddleName'               =>  $request->middle_name,
+                    'LastName'                 =>  $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
                     'CmnSexId'                  =>  $request->sex_id,
                     'CmnChiwogId'               =>  $request->village_id,
@@ -126,20 +126,30 @@ class StudentAdmissionController extends Controller
                     'dateOfapply'               =>  date('Y-m-d'),
                 ];
                 $response_data = std_admission::create($data);
+
+                $data =[
+                    'StdAdmissionsId'               =>  $response_data->id,
+                    'Dzongkhagid'                   =>  $request->Dzongkhagid,
+                    'OrgOrganizationId'             =>  $request->OrgOrganizationId,
+                    'class_id'                      =>  $request->std_class,
+                    'dateOfapply'                   =>  date('Y-m-d'),
+                    'Status'                        =>  'Pending',
+                    'created_by'                    =>  $request->user_id,
+                ];
+                $response_data = StudentAdmissionSchool::create($data);
             }
             else{
                 $data =[
                     'OrgOrganizationId'         =>  $request->OrgOrganizationId,
                     'CmnCountryId'              =>  $request->snationality,
                     'CidNo'                     =>  $request->cid_passport,
-                    'first_name'                =>  $request->first_name,
-                    'middle_name'               =>  $request->middle_name,
-                    'last_name'                 =>  $request->last_name,
+                    'FirstName'                =>  $request->first_name,
+                    'MiddleName'               =>  $request->middle_name,
+                    'LastName'                 =>  $request->last_name,
                     'DateOfBirth'               =>  $request->dob,
                     'CmnSexId'                  =>  $request->sex_id,
                     'CmnChiwogId'               =>  $request->village_id,
                     'CmnGewogId'                =>  $request->gewog,
-                    'class_id'                  =>  $request->std_class,
                     'IsNewAdmission'            =>  1,
                     'Address'                   =>  $request->fulladdress,
                     'CmnLanguageId'             =>  $request->mother_tongue,
@@ -191,6 +201,7 @@ class StudentAdmissionController extends Controller
             'created_by'                =>  $request->user_id,
             'created_at'                =>  date('Y-m-d h:i:s'),
         ];
+        // dd($data);
         if($currDetails==null || $currDetails==""){
             $response_data = std_admission::create($data);
         }
