@@ -9,6 +9,7 @@ class StfQualification extends Migration{
         Schema::create('master_stf_qualification', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->char('q_level_id',36)->nullable(false);
+            $table->string('description',255)->nullable(false);
             $table->foreign('q_level_id')->references('id')->on('master_stf_qualification_level');
             $table->char('q_type_id',36)->nullable(false);
             $table->foreign('q_type_id')->references('id')->on('master_stf_qualification_type');
