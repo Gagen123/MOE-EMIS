@@ -22,7 +22,7 @@ class OrganizationCompoundDetail extends Model
         'organizationId',
         'thramNo',
         'plotNo',
-        'attachments',
+       // 'attachmentId',
         'compoundArea',
         'playgroundArea',
         'playgroundAreaUsable',

@@ -86,4 +86,20 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+
+    public function saveStaffMaritialStatus(Request $request){
+
+        $personal_details = PersonalDetails::where('id',$request->staff_id)->first();
+        
+        //insert into audit
+        $messs_det=' Maritial Status:'.$personal_details->merital_status;
+        //DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','stf_staff','".$request->id."','".$messs_det."','".$request->user_id."','Maritial Status Edit')");
+
+        $data =[
+            'merital_status'                   =>  $request->marital_status,
+        ];
+
+        $response_data = PersonalDetails::where('id',$request->staff_id)->update($data);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
 }

@@ -19,8 +19,25 @@ class Visitor extends Model
     protected $fillable = [
         'id',
         'organizationId',
-        'visitor',
+        'visitorname',
+        'designation',
+        'contact',
+        'minitsryOrAgency',
+        'noOfhours',
+        'targetgroup',
+        'deptOrdivision',
+        'purposeOfvisit',
         'dateOfVisit',
-        'remarks'
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+
+
+
+
+
+
+
     ];
 }

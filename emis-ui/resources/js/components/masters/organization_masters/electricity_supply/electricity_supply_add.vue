@@ -5,8 +5,8 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Electricity Supply:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.supplyName" :class="{ 'is-invalid': form.errors.has('supplyName') }" id="supplyName" @change="remove_err('supplyName')" type="text" tabindex="1" autofocus="true">
-                        <has-error :form="form" field="supplyName"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
@@ -36,9 +36,11 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                supplyName: '',
+                name: '',
                 description:'',
                 status: 1,
+                action_type:'add',
+                model:'ElectricitySupply'
             })
         }
     },
@@ -50,12 +52,12 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.supplyName= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/saveElectricitySupply',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

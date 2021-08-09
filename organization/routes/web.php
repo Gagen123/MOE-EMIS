@@ -252,10 +252,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
             $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails');
-             $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
-             $router->get('/getEditCompoundDetail/{compId}', 'generalInformation\CompoundDetailController@getEditCompoundDetail');
+            $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
+            $router->get('/getEditCompoundDetail/{compId}', 'generalInformation\CompoundDetailController@getEditCompoundDetail');
+            //$router->delete('/deleteFile/{id}', 'generalInformation\CompoundDetailController@deleteFile');
+            $router->delete('/deleteFile/{id}', ['uses' => 'generalInformation\CompoundDetailController@deleteFile']);
         });
-
         $router->group(['prefix' => 'disaster'], function () use ($router) {
             $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
             $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');

@@ -485,11 +485,11 @@ export default {
         
         this.loadpositionTitleList(this.$route.query.data.position_title_id);
         this.loadrelationship();
-        this.form.id=this.$route.params.id;
+        
         this.name=this.$route.query.data.name;
         this.emp_id=this.$route.query.data.emp_id;
-        this.form.personal_id=this.$route.params.id;
-        this.loadnomination(this.$route.params.id);
+        this.form.personal_id=this.$route.query.data.id;
+        this.loadnomination(this.$route.query.data.id);
 
     },
 }

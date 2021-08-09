@@ -36,13 +36,13 @@ class StudentProgramController extends Controller
         $rules = [
             'program'            => 'required',
             'supporter'            => 'required',
-            'year'            => 'required'
+           // 'year'            => 'required'
         ];
 
         $customMessages = [
             'program.required'  => 'This field is required',
             'supporter.required'     => 'This field is required',
-            'year.required'  => 'This field is required',
+          //  'year.required'  => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -55,9 +55,10 @@ class StudentProgramController extends Controller
             'Remarks'                   => $request->remarks,
             // 'assigned_staff'            => $request->assigned_staff
         ];
-
+       // dd($data);
         if($request->record_type == 'add'){
             $response_data = CeaSchoolProgramme::create($data);
+          
         } else {
             $school_data = CeaSchoolProgramme::where('id',$request->id)->first();
             $data =$data+[

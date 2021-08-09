@@ -18,7 +18,7 @@
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewStreamList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -36,26 +36,40 @@ export default {
         }
     },
     methods:{
-        loadStreamList(uri = 'masters/loadStream'){
+        // loadStreamList(uri = 'masters/loadStream'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.streamList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#stream-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
+        // viewStreamList(data){
+        //     data.action='edit';
+        //     this.$router.push({name:'StreamEdit',params: {data:data}});
+        // },
+
+        loadStreamList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/Stream'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.streamList =  data.data;
+                let data = response.data.data;
+                this.streamList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#stream-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewStreamList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'StreamEdit',params: {data:data}});
         },
     },

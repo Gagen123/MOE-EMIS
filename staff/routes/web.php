@@ -224,6 +224,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveSEN', ['uses' => 'staff\StaffUpdateController@saveSEN']);
         $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
         $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
+        $router->post('/saveStaffMaritialStatus', ['uses' => 'staff\StaffUpdateController@saveStaffMaritialStatus']);
 
     });
     //Staff Seleration and Secondment Services

@@ -961,7 +961,7 @@ export default {
                             'content-type': 'multipart/form-data'
                         }
                     }
-                    let formData = new FormData();
+                    let formData = new FormData(); 
                     formData.append('personal_id', this.nomination_form.personal_id);
                     formData.append('ref_docs[]', this.nomination_form.ref_docs);
                     for(let i=0;i<this.nomination_form.ref_docs.length;i++){
