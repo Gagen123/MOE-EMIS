@@ -70,9 +70,10 @@ class StudentAdmissionController extends Controller{
             'type'                      =>  $request->type,
             'attachments'               =>  $path,
             'OrgOrganizationId'         =>  $this->getWrkingAgencyId(),
+            'Dzongkhagid'               =>  $this->getUserDzoId(),
             'user_id'                   =>  $this->userId()
         ];
-
+        // dd($data);
         //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
         $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;

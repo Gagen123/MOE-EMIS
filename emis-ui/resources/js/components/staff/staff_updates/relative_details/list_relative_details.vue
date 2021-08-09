@@ -45,7 +45,7 @@
                             <th>Name</th>
                             <th>Position Title</th>
                             <th>Working Agency</th>
-                            <th>Career Stage</th>
+                            <!-- <th>Career Stage</th> -->
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -56,7 +56,7 @@
                             <td>{{ item.name}}</td>
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
                             <td>{{ item.working_agency}}</td>
-                            <td>{{ cureerstageArray[item.cureer_stagge_id]}}</td>
+                            <!-- <td>{{ cureerstageArray[item.cureer_stagge_id]}}</td> -->
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Update</a>
                             </td>

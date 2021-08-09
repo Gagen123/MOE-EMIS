@@ -22,13 +22,13 @@ class StudentProgramController extends Controller
         $rules = [
             'program'         => 'required',
             'supporter'       => 'required',
-            'year'            => 'required|min:4|max:4',
+          //  'year'            => 'required|min:4|max:4',
         ];
 
         $customMessages = [
             'program.required'      => 'This field is required',
             'supporter.required'    => 'This field is required',
-            'year.required'         => 'This field is required',
+           // 'year.required'         => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -42,9 +42,9 @@ class StudentProgramController extends Controller
             'data_type'         => 'school_program',
             'record_type'       => $request->record_type,
             'assigned_staff'    => $request->assigned_staff,
-            'user_id'           => $this->userId()
+            'user_id'           => $this->userId(),
+            'id'                => $request->id
         ];
-
         //Validate to ensure that there is no duplication of entries
         //Not creating but using the createData service as we are sending the $data
         $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);

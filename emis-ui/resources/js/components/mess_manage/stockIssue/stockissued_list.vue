@@ -7,8 +7,8 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Date of Stock Issued</th>
-                            <th>item</th>
-                            <th>Quantity</th>
+                            <th>Item</th>
+                            <th>Quantity Issued</th>
                             <th>Unit</th>
                             <th>Action</th>
                         </tr>

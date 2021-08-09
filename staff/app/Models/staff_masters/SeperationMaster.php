@@ -19,3 +19,4 @@ class SeperationMaster extends Model{
         'updated_at'
     ];
 }
+ 

@@ -9,6 +9,7 @@ class StfSubjectArea extends Migration{
         Schema::create('master_stf_subject_area', function (Blueprint $table) {
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
+            $table->string('description',225)->nullable();
             $table->char('code',4)->nullable(false);
             $table->boolean('status')->default(1);
             $table->string('created_by',36)->nullable(true);

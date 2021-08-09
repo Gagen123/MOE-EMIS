@@ -75,7 +75,7 @@
                                      {{item.available_qty}}
                                   </td>
                                    <td>
-                                     <input type="number" name="quantity" id="quantity" class="form-control"  v-model="item.quantity" />
+                                     <input type="number" name="issue_qty" id="issue_qty" class="form-control"  v-model="item.issue_qty" />
                                  </td>
                                   <td>
                                      <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
@@ -122,7 +122,7 @@ export default {
                 itemList:[],
                 item_issue:
                 [{
-                    item:'', quantity:'',unit:'', damagequantity:'',remarks:'',
+                    item:'', issue_qty:'',unit:'', damagequantity:'',remarks:'',
                 }],
             })
         }
@@ -148,6 +148,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
+               // alert(this.form.itemList);
                 this.form.itemList=this.itemList;
                 this.form.post('/mess_manage/saveStockIssued',this.form)
                 .then(() => {

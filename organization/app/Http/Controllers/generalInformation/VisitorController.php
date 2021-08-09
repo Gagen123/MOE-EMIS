@@ -24,14 +24,14 @@ class VisitorController extends Controller
         //
     }
     public function loadVisitorInformation($orgId=""){
-      // dd('from microservice');
-        // $info = Visitor::where('organizationId',$orgId)->get();
-        // return $info;
-        $list= DB::table('organization_visitor as a')
-        ->join('master_visitor_type as b', 'a.visitor', '=', 'b.id')
-        ->select('a.id as id', 'b.name as visitor', 'a.dateOfVisit as dateOfVisit', 'a.remarks as remarks')
-        ->where('organizationId', $orgId)->get();
-        return $list;
+     // dd('from microservice');
+        $info = Visitor::where('organizationId',$orgId)->get();
+        return $info;
+        // $list= DB::table('organization_visitor as a')
+        // ->join('master_visitor_type as b', 'a.visitor', '=', 'b.id')
+        // ->select('a.id as id', 'b.name as visitor', 'a.dateOfVisit as dateOfVisit', 'a.remarks as remarks')
+        // ->where('organizationId', $orgId)->get();
+        // return $list;
     }
 
     public function saveVisitorInformation(Request $request){
@@ -39,10 +39,19 @@ class VisitorController extends Controller
      //   dd($id);
         if( $id != null){
         $data =[
-            'organizationId'           =>  $request['organizationId'],
-            'visitor'                  =>  $request['visitor_information'],
-            'dateOfVisit'              =>  $request['date'],
-            'remarks'                  =>  $request['remarks'],
+            'organizationId'                =>  $request['organizationId'],
+            'visitorname'                   =>  $request['visitorname'],
+            'designation'                   =>  $request['designation'],
+            'contact'                       =>  $request['contact'],
+            'minitsryOrAgency'              =>  $request['minitsryOrAgency'],
+            'noOfhours'                     =>  $request['noOfhours'],
+            'targetgroup'                   =>  $request['targetgroup'],
+            'deptOrdivision'                =>  $request['deptOrdivision'],
+            'purposeOfvisit'                =>  $request['purposeOfvisit'],
+            'dateOfVisit'                   =>  $request['date'],
+            'id'                            =>  $request['id'],
+            'updated_by'                    =>  $request->user_id,
+            'updated_at'                    =>  date('Y-m-d h:i:s')
         ];
 
         $response_data = Visitor::where('id', $id)->update($data);
@@ -50,12 +59,20 @@ class VisitorController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
          }else{
         $data =[
-            'organizationId'           =>  $request['organizationId'],
-            'visitor'                  =>  $request['visitor_information'],
-            'dateOfVisit'              =>  $request['date'],
-            'remarks'                  =>  $request['remarks'],
+            'organizationId'                =>  $request['organizationId'],
+            'visitorname'                   =>  $request['visitorname'],
+            'designation'                   =>  $request['designation'],
+            'contact'                       =>  $request['contact'],
+            'minitsryOrAgency'              =>  $request['minitsryOrAgency'],
+            'noOfhours'                     =>  $request['noOfhours'],
+            'targetgroup'                   =>  $request['targetgroup'],
+            'deptOrdivision'                =>  $request['deptOrdivision'],
+            'purposeOfvisit'                =>  $request['purposeOfvisit'],
+            'dateOfVisit'                   =>  $request['date'],
+            'created_by'                    =>  $request->user_id,
+            'created_at'                    =>  date('Y-m-d h:i:s')
         ];
-        //dd($data);
+       // dd($data);
         $response_data = Visitor::create($data);
         
         return $this->successResponse($response_data, Response::HTTP_CREATED);

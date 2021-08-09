@@ -20,7 +20,7 @@
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewSportFacilityList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                             <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
                         </div>
                     </td>
@@ -41,26 +41,39 @@ export default {
     },
 
     methods:{
-        loadSportFacilityList(uri = 'masters/loadSportFacility'){
+        // loadSportFacilityList(uri = 'masters/loadSportFacility'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.sportFacilityList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#sportFacility-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
+        // viewSportFacilityList(data){
+        //     data.action='edit';
+        //     this.$router.push({name:'SportFacilityEdit',params: {data:data}});
+        // },
+        loadSportFacilityList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/SportFacilityType'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.sportFacilityList =  data.data;
+                let data = response.data.data;
+                this.sportFacilityList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#sportFacility-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewSportFacilityList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'SportFacilityEdit',params: {data:data}});
         },
     },

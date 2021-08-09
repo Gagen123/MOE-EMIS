@@ -6,8 +6,8 @@
                 <input type="hidden" class="form-control" v-model="form.id"/>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Level Name:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.levelName" :class="{ 'is-invalid': form.errors.has('lev_name') }" id="levelName" @change="remove_err('levelName')" type="text">
-                    <has-error :form="form" field="lev_name"></has-error>
+                    <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                    <has-error :form="form" field="name"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Description:</label> 
@@ -37,10 +37,11 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                levelName: '',
+                name: '',
                 description:'',
                 status: '',
-                // action_type:'edit',
+                action_type:'edit',
+                model:'Level'
             })
         }
     },
@@ -53,12 +54,12 @@ export default {
         },
 		formaction: function(type){
             if(type=="reset"){
-                this.form.levelName= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveLevel',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -74,7 +75,7 @@ export default {
     },
 
     created() {
-        this.form.levelName=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;

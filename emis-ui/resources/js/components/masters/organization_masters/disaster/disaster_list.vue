@@ -20,7 +20,7 @@
                     <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewDisasterList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -40,24 +40,37 @@ export default {
     },
 
     methods:{
-        loadDisasterList(uri = 'masters/loadDisaster'){
+        loadDisasterList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/Disaster'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.disasterList =  data.data;
+                let data = response.data.data;
+                this.disasterList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#disaster-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
+        editmasters(data){
+            this.$router.push({name:'DisasterEdit',params: {data:data}});
+        },
+        // loadDisasterList(uri = 'masters/loadDisaster'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.disasterList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#disaster-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
         viewDisasterList(data){
             data.action='edit';
             this.$router.push({name:'DisasterEdit',params: {data:data}});
