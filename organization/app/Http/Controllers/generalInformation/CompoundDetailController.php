@@ -30,23 +30,23 @@ class CompoundDetailController extends Controller
     }
  
     public function saveSchoolCompundDetails(Request $request){
-      $id = $request->id;
+      $id =  $request['id'];
       if( $id != null){
             $data =[
-             'organizationId'                => $request->organizationId,
-             'thramNo'                       => $request->thramno,
-             'plotNo'                        => $request->plotno,
-             'compoundArea'                  => $request->sizecompound,
-             'playgroundArea'                => $request->sizeplayground,
-             'playgroundAreaUsable'          => $request->playgroundused,
-             'status'                        => $request->status,
-             'statusofplay'                  => $request->statusofplay,
-             'agricultureArea'               => $request->agriculturalarea,
-             'agricultureAreaUsed'           => $request->areaused,
-             'programType'                   => $request->programType,
+             'organizationId'                => $request['organizationId'],
+             'thramNo'                       => $request['thramno'],
+             'plotNo'                        => $request['plotno'],
+             'compoundArea'                  => $request['sizecompound'],
+             'playgroundArea'                => $request['sizeplayground'],
+             'playgroundAreaUsable'          => $request['playgroundused'],
+             'status'                        => $request['status'],
+             'statusofplay'                  => $request['statusofplay'],
+             'agricultureArea'               => $request['agriculturalarea'],
+             'agricultureAreaUsed'           => $request['areaused'],
+             'programType'                   => $request['programType'],
              'id'                            => $id,
              'updated_by'                    => $request['user_id'],
-             'updated_at'                    =>date('Y-m-d h:i:s'),
+             'updated_at'                    => date('Y-m-d h:i:s'),
             ];
           //  dd($data);
             OrganizationCompoundDetail::where('id', $id)->update($data);
@@ -65,24 +65,23 @@ class CompoundDetailController extends Controller
                     ThramPegDocuments::create($attach);
                 }
             }
-            return $this->successResponse($response_data, Response::HTTP_CREATED);
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
         }
         else
         {   
             $data =[
-                'organizationId'                => $request->organizationId,
-                'thramNo'                       => $request->thramno,
-                'plotNo'                        => $request->plotno,
-             //   'attachments'                   => $request->attachments,
-                'compoundArea'                  => $request->sizecompound,
-                'playgroundArea'                => $request->sizeplayground,
-                'playgroundAreaUsable'          => $request->playgroundused,
-                'status'                        => $request->status,
-                'statusofplay'                  => $request->statusofplay,
-                'agricultureArea'               => $request->agriculturalarea,
-                'agricultureAreaUsed'           => $request->areaused,
-                'programType'                   => $request->programType,
-                'id'                            => $request->id,
+                'organizationId'                => $request['organizationId'],
+                'thramNo'                       => $request['thramno'],
+                'plotNo'                        => $request['plotno'],
+                'compoundArea'                  => $request['sizecompound'],
+                'playgroundArea'                => $request['sizeplayground'],
+                'playgroundAreaUsable'          => $request['playgroundused'],
+                'status'                        => $request['status'],
+                'statusofplay'                  => $request['statusofplay'],
+                'agricultureArea'               => $request['agriculturalarea'],
+                'agricultureAreaUsed'           => $request['areaused'],
+                'programType'                   => $request['programType'],
+                'id'                            => $request['id'],
                 'created_by'                    => $request['user_id'],
                 'created_at'                    =>date('Y-m-d h:i:s'),
                

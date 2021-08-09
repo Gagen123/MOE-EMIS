@@ -32,10 +32,10 @@
                                         {{itemList[form.item_id]}}
                                     </td>
                                     <td>
-                                       {{unitArray[form.unit_id]}}
+                                        {{unitArray[form.unit_id]}}
                                     </td>
                                     <td>
-                                     {{form.availaleqty}}
+                                        {{form.availaleqty}}
                                     </td>
                                     <td>
                                         <input type="number" name="quantity" class="form-control" v-model="form.quantity"/>

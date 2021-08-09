@@ -240,7 +240,7 @@ class MessManagementController extends Controller
             'item_issue'               =>  $request->item_issue,
             'user_id'                  =>  $this->userId()
         ];
-        //  dd($stockissue);
+        dd($stockissue);
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
         //dd($response_data);
         return $response_data;

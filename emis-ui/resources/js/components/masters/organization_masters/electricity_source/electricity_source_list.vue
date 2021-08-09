@@ -18,7 +18,7 @@
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewElectricitySourceList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -36,27 +36,40 @@ export default {
         }
     },
     methods:{
-        loadSourceList(uri = 'masters/loadElectricitySource'){
+        // loadSourceList(uri = 'masters/loadElectricitySource'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.electricitySourceList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#source-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
+
+        // viewElectricitySourceList(data){
+        //     data.action='edit';
+        //     this.$router.push({name:'ElectricitySourceEdit',params: {data:data}});
+        // },
+        loadSourceList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/ElectricitySource'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.electricitySourceList =  data.data;
+                let data = response.data.data;
+                this.electricitySourceList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#source-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-
-        viewElectricitySourceList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'ElectricitySourceEdit',params: {data:data}});
         },
     },

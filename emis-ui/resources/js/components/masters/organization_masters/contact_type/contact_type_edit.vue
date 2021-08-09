@@ -6,8 +6,8 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Contact Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.contactName" :class="{ 'is-invalid': form.errors.has('contactName') }" id="contactName" @change="remove_err('contactName')" type="text" tabindex="1" autofocus="true">
-                        <has-error :form="form" field="contactName"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
@@ -36,9 +36,11 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                contactName: '',
+                name: '',
                 description:'',
                 status: 1,
+                action_type:'edit',
+                model:'ContactType'
             })
         }
     },
@@ -51,12 +53,12 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.contactName= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/saveContactType',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -72,7 +74,7 @@ export default {
     },
 
     created() {
-        this.form.contactName=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;

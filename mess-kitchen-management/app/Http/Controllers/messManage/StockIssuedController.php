@@ -50,7 +50,7 @@ class StockIssuedController extends Controller
                 'created_by'                 =>  $request->user_id,
                 'created_at'                 =>  date('Y-m-d h:i:s')
             );
-
+          //  dd($itemIssued);
             $itemiss = StockIssued::create($itemIssued);
             $checkitem=TransactionTable::where('item_id',$item['id'])->where('organizationId',$orgId)->first();
             $qty=$checkitem->available_qty-($quantity);//$damagequantity,taken out as its contributing negative values in transaction

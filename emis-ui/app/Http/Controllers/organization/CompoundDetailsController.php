@@ -25,34 +25,6 @@ class CompoundDetailsController extends Controller
     public function saveSchoolCompundDetails(Request $request){
            //   $file = $request->attachments;
     //    dd($file);
-        $rules = [
-            'thramno'               =>  'required',
-            'plotno'                =>  'required',
-         //   'attachments'           =>  'required',
-            'sizecompound'          =>  'required',
-           // 'sizeplayground'        =>  'required',
-          //  'playgroundused'        =>  'required',
-            'status'                =>  'required',
-            'statusofplay'          =>  'required',
-           // 'agriculturalarea'    =>  'required',
-          //  'areaused'            =>  'required',
-           
-
-        ];
-        $customMessages = [
-            'thramno.required'                  => 'thramno is required',
-            'plotno.required'                   => 'plotno is required',
-        //    'attachments.required'              => 'attachments is required',
-            'sizecompound.required'             => 'sizecompound is required',
-         //   'sizeplayground.required'           => 'sizeplayground is required',
-         //   'playgroundused.required'           => 'playgroundused is required',
-            'status.required'                   => 'agriculturalarea is required',
-            'statusofplay.required'             => 'Select Play ground area status is required',
-         //   'agriculturalarea'                  => 'agriculturalarea is required',
-         //   'areaused'                          => 'areaused is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
-       
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
@@ -75,6 +47,23 @@ class CompoundDetailsController extends Controller
                 }
             }
         }
+        $rules = [
+            'thramno'               =>  'required',
+            'plotno'                =>  'required',
+            'sizecompound'          =>  'required',
+            'status'                =>  'required',
+            'statusofplay'          =>  'required',
+           
+
+        ];
+        $customMessages = [
+            'thramno.required'                  => 'thramno is required',
+            'plotno.required'                   => 'plotno is required',
+            'sizecompound.required'             => 'sizecompound is required',
+            'status.required'                   => 'agriculturalarea is required',
+            'statusofplay.required'             => 'Select Play ground area status is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
         $comp =[
             'organizationId'                =>  $this->getWrkingAgencyId(),
             'thramno'                       =>  $request['thramno'],
@@ -91,14 +80,11 @@ class CompoundDetailsController extends Controller
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];
-       // dd( $comp);
-        // try{
-            $response_data= $this->apiService->createData('emis/organization/compoundDetails/saveSchoolCompundDetails', $comp);
-            return $response_data;
-        // }
-        // catch(GuzzleHttp\Exception\ClientException $e){
-        //     return $e;
-        // }
+        // dd( $comp);
+      
+        $response_data= $this->apiService->createData('emis/organization/compoundDetails/saveSchoolCompundDetails', $comp);
+        return $response_data;
+       
     }
     // public function loadcompoundareadetials($org_id=""){
     //     //  dd('m here');
