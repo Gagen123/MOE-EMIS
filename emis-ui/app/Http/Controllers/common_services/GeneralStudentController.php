@@ -41,7 +41,7 @@ class GeneralStudentController extends Controller{
             'studentList'           => $request->studentList,
             'std_referred'          => $request->std_referred,
             'organization_id'       => $this->getWrkingAgencyId(),
-            'user_id'               =>  $this->userId() 
+            'user_id'               =>  $this->userId()
         ];
         $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber',$data);
         return $response_data;
@@ -55,7 +55,7 @@ class GeneralStudentController extends Controller{
 
     /**
      * Get the student list by class
-     * 
+     *
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
@@ -86,7 +86,7 @@ class GeneralStudentController extends Controller{
 
     /**
      * Load student list by gender
-     * 
+     *
      * Takes class, stream, section and vaccine type as parameter separated by __ (double underscore)
      * We get the gender from master and pass it as an argument in an array
      */
@@ -106,7 +106,7 @@ class GeneralStudentController extends Controller{
     /**
      * For Profile
      * Get Student, Parents, Roles and Responsibilities and Programme/Club Membership of the Student
-     * 
+     *
      * id is the student id
      */
 
@@ -132,7 +132,7 @@ class GeneralStudentController extends Controller{
 
     /**
      * Load the student information e.g. no. of boys and girls
-     * 
+     *
      * $param takes the value such as general, SEN etc
      */
 

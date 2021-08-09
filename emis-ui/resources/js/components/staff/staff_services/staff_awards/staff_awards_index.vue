@@ -72,8 +72,8 @@ export default {
     },
     mounted(){
         this.screen_id=this.$route.query.data;
-        $('#addnewbtn').hide();
-        $('#listnewbtn').hide();
+        // $('#addnewbtn').hide();
+        // $('#listnewbtn').hide();
         this.getprivileges();
     },
 }
