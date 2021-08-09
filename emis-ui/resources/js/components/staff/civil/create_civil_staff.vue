@@ -169,29 +169,6 @@
                             <span class="text-blue"><label><u>Working Address</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Dzongkhag:</label>
-                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Gewog:</label>
-                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="gewog"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Village:</label>
-                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
-                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="village_id"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Organization Type:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.organization_type" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('organization_type') }" class="form-control select2" name="organization_type" id="organization_type">
                                         <option value="Org">Organization/School </option>
@@ -199,6 +176,14 @@
                                         <option value="Ministry">Ministry </option>
                                     </select>
                                     <has-error :form="personal_form" field="organization_type"></has-error>
+                                </div>
+
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Dzongkhag:</label>
+                                    <select v-model="personal_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
+                                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="dzongkhag"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="departmentdiv">
                                     <label class="mb-0.5">Department:<i class="text-danger">*</i></label>
@@ -216,6 +201,20 @@
                                     </select>
                                     <has-error :form="personal_form" field="working_agency_id"></has-error>
                                 </div>
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Gewog:</label>
+                                    <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="gewog"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Village:</label>
+                                    <select v-model="personal_form.village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('village_id') }" class="form-control select2" name="village_id" id="village_id">
+                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="village_id"></has-error>
+                                </div> -->
                             </div>
                         </div>
                         <div class="callout callout-success" style="display:none" id="isteaching">
@@ -1488,25 +1487,27 @@ export default {
             });
         },
 
-        getDepartmentList(type){
-            let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
-            this.gewog_list =[];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.departmentList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
+        async getDepartmentList(type,dzoId){
+            this.departmentList =await this.getDepartmentListbydzo(type,dzoId);
+
+            // this.departmentList =[];
+            // let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
+            // axios.get(uri)
+            // .then(response =>{
+            //     let data = response;
+            //     this.departmentList = data.data.data;
+            // })
+            // .catch(function (error){
+            //     console.log("Error:"+error)
+            // });
         },
 
         allOrgList(type){
+            this.orgList = [];
             let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
             if(type=="division"){
                 uri = 'loadCommons/loadHeaquarterList/all_division/'+$('#department').val();
             }
-            this.orgList = [];
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
@@ -1603,15 +1604,15 @@ export default {
              if(id=="p_village_id"){
                 this.personal_form.p_village_id=$('#p_village_id').val();
             }
+            if(id=="organization_type"){
+                this.personal_form.organization_type=$('#organization_type').val();
+
+            }
             if(id=="dzongkhag"){
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist();
-                // this.allOrgList('school');
-            }
-            if(id=="organization_type"){
-                this.personal_form.organization_type=$('#organization_type').val();
                 if($('#organization_type').val()=="Ministry" || $('#organization_type').val()=="Dzongkhag"){
-                    this.getDepartmentList($('#organization_type').val());
+                    this.getDepartmentList($('#organization_type').val(),$('#dzongkhag').val());
                     $('#departmentdiv').show();
                 }
                 else{

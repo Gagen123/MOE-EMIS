@@ -9,8 +9,8 @@
                      <th >CID</th>
                      <th >Gender</th>
                      <th >Type of Admission</th>
-                     <th >Student Decision</th>
                      <th >School Decision</th>
+                     <th >Student Decision</th>
                      <th >Action</th>
                 </tr>
             </thead>
