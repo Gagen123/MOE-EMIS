@@ -247,6 +247,14 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
+                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="currier_stage"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Is SEN ?:  {{personal_form.issen}}</label>
                                 </div>
                             </div>
@@ -265,14 +273,7 @@
                                     <input @change="remove_error('initial_appointment_date')" class="form-control" v-model="personal_form.initial_appointment_date" :class="{ 'is-invalid': personal_form.errors.has('initial_appointment_date') }" name="initial_appointment_date" id="initial_appointment_date" type="text">
                                     <has-error :form="personal_form" field="initial_appointment_date"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="currier_stage"></has-error>
-                                </div>
+
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Employee File Code:<i class="text-danger">*</i></label>
                                     <input @change="remove_error('emp_file_code')" class="form-control" v-model="personal_form.emp_file_code" :class="{ 'is-invalid': personal_form.errors.has('emp_file_code') }" name="emp_file_code" id="emp_file_code" type="text">

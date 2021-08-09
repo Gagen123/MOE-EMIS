@@ -21,7 +21,7 @@
                         <div class="tab-pane fade active show tab-content-details" id="programme-tab" role="tabpanel" aria-labelledby="basicdetails">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Trainig Type:<i class="text-danger">*</i></label>
+                                    <label class="mb-0.5">Training Type:<i class="text-danger">*</i></label>
                                     <select v-model="form.training_type" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('training_type') }" class="form-control select2" name="training_type" id="training_type">
                                         <option value="">--Select--</option>
                                         <option v-for="(item, index) in trainingtypeList" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
@@ -823,7 +823,7 @@ export default {
             this.loadHrDevelopmentMasters('active_programme_level_list');
             this.loadHrDevelopmentMasters('active_programme_type_list');
             this.loadHrDevelopmentMasters('active_course_type_list');
-            this.loadHrDevelopmentMasters('active_financial_source_list');
+
         },
         displayfields(type_id){
             $('#qualification_upgradation_section').hide();
@@ -988,6 +988,7 @@ export default {
         this.loadorganizerList();
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
         this.loadHrDevelopmentMasters('active_target_group_list');
+        this.loadHrDevelopmentMasters('active_financial_source_list');
         this.loadroleList();
 
     },
