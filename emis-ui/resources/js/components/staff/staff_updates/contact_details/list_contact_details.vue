@@ -46,7 +46,7 @@
                             <th>Position Title</th>
                             <th>Working Agency</th>
                             <th>Email</th>
-                            <th>Cotact Number</th>
+                            <th>Contact Number</th>
                             <th>Alternative Email</th>
                             <th class="pr-4 pl-5">Action</th>
                         </tr>
