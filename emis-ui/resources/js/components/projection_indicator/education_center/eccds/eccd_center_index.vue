@@ -31,8 +31,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="form-group row" id="stockReceived">
+        <!-- <div class="card-body"> -->
+            <div class="form-group row" id="edcuationcenter">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="training-table" class="table w-100 table-sm table-bordered table-striped">
                         <thead>
@@ -57,7 +57,7 @@
                     </table>
                 </div>
             </div>
-        </div>
+        <!-- </div> -->
     </div>
 </template>
 <script>
@@ -72,6 +72,15 @@ export default {
     methods:{
          loadpage:function(type){
             this.$router.push({name:type});
+        },
+        loadeducationCenter(type){
+            axios.get('organization/loadeducationCenter/'+type)
+            .then((response) => {
+                this.educationCenter =  response.data.data;
+             })
+            .catch((error) => {
+                console.log("Error."+error);
+            });
         },
     },
     async mounted() {

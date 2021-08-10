@@ -177,4 +177,7 @@ class LoadOrganizaitonController extends Controller{
         return $this->apiService->getListData('emis/common_services/getSectionArray/'.$org_id);
     }
 
+    public function loadeducationCenter($type=""){
+        return $this->apiService->getListData('emis/common_services/loadeducationCenter/'.$type);
+    }
 }
