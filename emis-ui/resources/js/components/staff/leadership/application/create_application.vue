@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label class="mb-0">Selection For:</label>
+                        <label class="mb-0">Select Post:</label>
                         <select class="form-control select2" id="post_id" v-model="form.post_id" :class="{ 'is-invalid': form.errors.has('post_id') }">
                             <option value="">--Select--</option>
                             <option v-for="(item, index) in postList" :key="index" v-bind:value="item.id">
