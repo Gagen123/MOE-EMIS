@@ -3,31 +3,31 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
-                    <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
+                    <label class="mb-0.5">Staff: {{staffdet}}</label>
+                    <!-- <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
                         <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
                     </select>
-                    <has-error :form="resp_form" field="staff"></has-error>
-                </div> 
+                    <has-error :form="resp_form" field="staff"></has-error> -->
+                </div>
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Offence Date:<span class="text-danger">*</span></label> 
+                    <label>Offence Date:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="resp_form.offence_date" :class="{ 'is-invalid': resp_form.errors.has('offence_date') }" id="date" @change="remove_error('offence_date')" type="date">
                     <has-error :form="resp_form" field="offence_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Offence Type:<span class="text-danger">*</span></label> 
+                    <label>Offence Type:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="offence_type_id" v-model="resp_form.offence_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_type_id') }">
                         <option v-for="(item, index) in offenceTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="resp_form" field="offence_type_id"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Offence severity:<span class="text-danger">*</span></label> 
+                    <label>Offence severity:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="offence_severity_id" v-model="resp_form.offence_severity_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_severity_id') }">
                         <option v-for="(item, index) in offenceSeverityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="resp_form" field="offence_type_id"></has-error>
                 </div>
             </div>
@@ -40,10 +40,10 @@
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Action Taken:<span class="text-danger">*</span></label> 
+                    <label>Action Taken:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="offence_action_id" v-model="resp_form.offence_action_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_action_id') }">
                         <option v-for="(item, index) in offenceActionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="resp_form" field="offence_action_id"></has-error>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -68,6 +68,7 @@ export default {
             offenceTypeList:[],
             offenceSeverityList:[],
             offenceActionList:[],
+            staffdet:'',
             resp_form: new form({
                 id:'',
                 staff: '',
@@ -110,7 +111,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        
+
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -175,7 +176,7 @@ export default {
                 this.resp_form.offence_action_id=$('#offence_action_id').val();
             }
         },
-        
+
     },
      mounted(){
         $('[data-toggle="tooltip"]').tooltip();
@@ -184,9 +185,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -198,6 +199,7 @@ export default {
 
         this.resp_form.id=this.$route.params.data.id;
         this.resp_form.staff=this.$route.params.data.staff_id;
+        this.staffdet=this.$route.params.data.staff.name;
         this.resp_form.offence_date=this.$route.params.data.offence_date;
         this.resp_form.offence_type_id=this.$route.params.data.offence_type_id;
         this.resp_form.offence_severity_id=this.$route.params.data.offence_severity_id;

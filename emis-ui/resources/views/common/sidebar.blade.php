@@ -450,7 +450,7 @@
                         <router-link to="/projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Projection & Feeders School 
+                                Projection & Feeders School
                             </p>
                         </router-link>
                     </li>
@@ -506,14 +506,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="staff_self_update">
+                    {{-- <li class="nav-item has-treeview" id="staff_self_update">
                         <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
                                 Self Service
                             </p>
                         </router-link>
-                    </li>
+                    </li> --}}
                     <li class="nav-item" id="staff_services_index">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>

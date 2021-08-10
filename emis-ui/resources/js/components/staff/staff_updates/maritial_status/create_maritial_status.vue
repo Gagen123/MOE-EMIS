@@ -47,7 +47,7 @@ export default {
             form: new form({
                 id:'',
                 staff_id:'',
-                currier_stage: '',
+                marital_status: '',
                 remarks:'',
             }),
         }
@@ -61,8 +61,8 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.currier_stage= '';
-                $('#currier_stage').val('').trigger('change');
+                this.form.marital_status= '';
+                $('#marital_status').val('').trigger('change');
                 this.form.remarks= '';
             }
             if(type=="save"){
@@ -85,8 +85,8 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="currier_stage"){
-                this.form.currier_stage=$('#currier_stage').val();
+            if(id=="marital_status"){
+                this.form.marital_status=$('#marital_status').val();
             }
 
         },
@@ -130,10 +130,9 @@ export default {
 
         this.loadpositionTitleList(this.$route.query.data.position_title_id);
         this.loadactivemaritalList();
-        this.form.id=this.$route.params.id;
         this.name=this.$route.query.data.name;
         this.emp_id=this.$route.query.data.emp_id;
-        this.form.staff_id=this.$route.params.id;
+        this.form.staff_id=this.$route.query.data.id;
     },
 }
 </script>

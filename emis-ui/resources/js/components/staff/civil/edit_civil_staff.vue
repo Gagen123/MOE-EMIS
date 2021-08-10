@@ -109,28 +109,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="callout callout-success">
-                            <span class="text-blue"><label><u>Contacts</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
-                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
-                                    <has-error :form="personal_form" field="contact_number"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
-                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
-                                    </label>
-                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
-                                    <has-error :form="personal_form" field="email"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Alternative Email:</label>
-                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
-                                    <has-error :form="personal_form" field="alternative_email"></has-error>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="callout callout-success">
                             <span class="text-blue"><label><u>Permanent Address</u></label></span>
                             <div class="form-group row" id="bhutanese_address">
@@ -161,6 +140,29 @@
                                     <label class="mb-0.5">Address:</label>
                                     <textarea class="form-control" id="address" v-model="personal_form.address"></textarea>
                                     <has-error :form="personal_form" field="address"></has-error>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Contacts</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
+                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
+                                    <has-error :form="personal_form" field="contact_number"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
+                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
+                                    </label>
+                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
+                                    <has-error :form="personal_form" field="email"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Alternative Email:</label>
+                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                    <has-error :form="personal_form" field="alternative_email"></has-error>
                                 </div>
                             </div>
                         </div>
@@ -248,6 +250,14 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
+                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="currier_stage"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Is SEN ?:  {{personal_form.issen}}</label>
                                 </div>
                             </div>
@@ -260,20 +270,12 @@
                                     <input type="radio" name="sen" value="Yes"> Yes
                                     <input type="radio" name="sen"  value="No"> No
                                 </div>  -->
-
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Initail Appointment Date:<i class="text-danger">*</i></label>
                                     <input @change="remove_error('initial_appointment_date')" class="form-control" v-model="personal_form.initial_appointment_date" :class="{ 'is-invalid': personal_form.errors.has('initial_appointment_date') }" name="initial_appointment_date" id="initial_appointment_date" type="text">
                                     <has-error :form="personal_form" field="initial_appointment_date"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Career Stage:<i class="text-danger">*</i></label><br>
-                                    <select @change="remove_error('currier_stage')" v-model="personal_form.currier_stage" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('currier_stage') }" class="form-control select2" name="currier_stage" id="currier_stage">
-                                        <option value=""> --Select--</option>
-                                        <option v-for="(item, index) in cureerstageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="personal_form" field="currier_stage"></has-error>
-                                </div>
+
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Employee File Code:<i class="text-danger">*</i></label>
                                     <input @change="remove_error('emp_file_code')" class="form-control" v-model="personal_form.emp_file_code" :class="{ 'is-invalid': personal_form.errors.has('emp_file_code') }" name="emp_file_code" id="emp_file_code" type="text">
@@ -961,7 +963,7 @@ export default {
                             'content-type': 'multipart/form-data'
                         }
                     }
-                    let formData = new FormData(); 
+                    let formData = new FormData();
                     formData.append('personal_id', this.nomination_form.personal_id);
                     formData.append('ref_docs[]', this.nomination_form.ref_docs);
                     for(let i=0;i<this.nomination_form.ref_docs.length;i++){

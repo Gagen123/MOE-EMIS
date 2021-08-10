@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card card-primary card-outline">
-            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white"> 
+            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white">
                 <span class="card-title">
                     <b>Employment Roles & Responsibilities</b>
                 </span>
@@ -10,8 +10,8 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_roles_responsibilities')" id="addnewbtn"><i class="fa fa-plus"></i> Add New</button>
                 </span>
             </div>
-            <div class="card-body pb-1 mb-0 pt-1 mt-0">  
-                <router-view></router-view> 
+            <div class="card-body pb-1 mb-0 pt-1 mt-0">
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -19,13 +19,13 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             screen_id:'',
             privileges:'',
             list:'NA',
             deleteopt:'NA',
             editopt:'NA',
-        } 
+        }
     },
     methods: {
        showadprocess(type){
@@ -36,7 +36,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.privileges =  data.data; 
+                this.privileges =  data.data;
                 for(let i=0;i<data.data.length;i++){
                     if(data.data[i].action_name.toLowerCase().includes('add') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
                         $('#addnewbtn').show();
@@ -63,7 +63,7 @@ export default {
                     }
                 }
             })
-            .catch(function (error){ 
+            .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#errormsg').html('Server down. Please try later');
                 }
@@ -72,8 +72,8 @@ export default {
     },
     mounted() {
         this.screen_id=this.$route.query.data;
-        $('#addnewbtn').hide();
-        $('#listnewbtn').hide();
+        // $('#addnewbtn').hide();
+        // $('#listnewbtn').hide();
         this.getprivileges();
     },
 }

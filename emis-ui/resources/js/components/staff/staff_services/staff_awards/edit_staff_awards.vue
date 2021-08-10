@@ -3,19 +3,19 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
-                    <select v-model="award_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
+                    <label class="mb-0.5">Staff: {{staffdet}}</label>
+                    <!-- <select v-model="award_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
                         <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
                     </select>
-                    <has-error :form="award_form" field="staff"></has-error>
-                </div> 
+                    <has-error :form="award_form" field="staff"></has-error> -->
+                </div>
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Award Category:<span class="text-danger">*</span></label> 
+                    <label>Award Category:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="award_category" v-model="award_form.award_category" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('award_category') }">
                         <option v-for="(item, index) in awardCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="award_form" field="award_category"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -30,18 +30,18 @@
                         <label class="mb-1">Award Given By:<i class="text-danger">*</i></label>
                         <input type="text" @change="remove_error('award_given_by')" v-model="award_form.award_given_by" :class="{ 'is-invalid': award_form.errors.has('award_given_by') }" class="form-control" name="award_given_by" id="award_given_by" >
                         <has-error :form="award_form" field="award_given_by"></has-error>
-                    </div> 
+                    </div>
                 </div>
             </div>
-            
+
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Place:<span class="text-danger">*</span></label> 
+                    <label>Place:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_err('place')" type="text">
                     <has-error :form="award_form" field="place"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Date:<span class="text-danger">*</span></label> 
+                    <label>Date:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="award_form.date" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
@@ -68,6 +68,7 @@ export default {
             awardCategoryList:[],
             awardTypeList:[],
             id:'',
+            staffdet:'',
             award_form: new form({
                 id:'',
                 staff: '',
@@ -170,16 +171,16 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
 
         this.loadStaffList();
         this.loadActiveAwardList();
-        
+
         this.award_form.id=this.$route.params.data.id;
         this.award_form.staff=this.$route.params.data.staff_id;
         this.award_form.award_given_by=this.$route.params.data.award_given_by;
@@ -189,7 +190,8 @@ export default {
         this.award_form.place=this.$route.params.data.place;
         this.award_form.date=this.$route.params.data.date;
         this.award_form.remarks=this.$route.params.data.remarks;
+        this.staffdet=this.$route.params.data.staff.name;
     },
-    
+
 }
 </script>

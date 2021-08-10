@@ -7,7 +7,7 @@
                 </span>
                 <span class="fa-pull-right pt-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_application')" id="listnewbtn"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_application')" id="addnewbtn"><i class="fa fa-plus"></i> Create New Appllication</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_application')" id="addnewbtn"><i class="fa fa-plus"></i> Apply </button>
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0">

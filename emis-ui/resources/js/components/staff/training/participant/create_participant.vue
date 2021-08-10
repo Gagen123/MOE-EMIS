@@ -118,7 +118,7 @@
                                         <span class="text-danger" id="department_err"></span>
                                     </div>
                                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school_section" style="display:none">
-                                        <label>Organization:<span class="text-danger">*</span></label>
+                                        <label>Organization/Division:<span class="text-danger">*</span></label>
                                         <select class="form-control select2" v-model="form.school" @change="remove_error('school')" name="school" id="school">
                                             <option value="">- Please Select -</option>
                                             <option v-for="(item, index) in school_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>

@@ -177,6 +177,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.positionList[data[i].id] = data[i].name;
                 }
+                this.loadAllPostList();
             })
             .catch(function (error){
                 console.log(error);
@@ -316,7 +317,9 @@ export default {
         }
 
     },
-    mounted(){
+
+    async mounted(){
+        this.loadPositionTitleList();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -329,8 +332,6 @@ export default {
         });
         this.getSelectionList();
         this.loadroleList();
-        this.loadPositionTitleList();
-        this.loadAllPostList();
 
     },
 }
