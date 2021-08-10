@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Brief description for seeking transfer</label>
+                                <label class="mb-0.5">Reason for applying the transfer</label>
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
@@ -199,7 +199,14 @@
                                 <label class="mb-1">Withdraw: <input type="checkbox" name="withdraw" v-model="form.withdraw" id="withdraw" class="icheck-success d-inline"></label>
                             </div>
                         </div>
-                        <div  class="row form-group fa-pull-right">
+                        <div lass="form-group row" id="remarks">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks:<i class="text-danger">*</i></label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
+                        <div  class="row form-group fa-pull-right" id="update" >
                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="tbName">
                             <button type="submit"  class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
                          </div>
@@ -241,6 +248,7 @@ export default {
                 reason_id:'',
                 description:'',
                 current_date:'',
+                Remarks:'',
                 type_id:'',
                 status:'',
                 withdraw:'',
@@ -316,7 +324,8 @@ export default {
                 
                 if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
-                     $('#tbName').hide();
+                     $('#remarks').hide();
+                     $('#update').hide();
                 }
           })
         },
@@ -413,6 +422,7 @@ export default {
                             let formData = new FormData();
                             formData.append('id', this.form.id);
                             formData.append('withdraw', this.form.withdraw);
+                            formData.append('remarks', this.form.remarks);
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('application_number', this.form.application_number);

@@ -706,6 +706,62 @@ const routes = [
         },
     ]
     },
+      //External data import Routes
+      { path: '/data_import_index', component: require('./components/students/StudentExtraCurricular/DataImport/data_import.vue').default,
+      children: [
+          //RUB
+          { path: '/', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default},
+          { path: '/rub_data_import', component: require('./components/students/StudentExtraCurricular//DataImport/RUB_Data/rub_data.vue').default,
+              children: [
+                  { path: '/', name:'rub_data_import', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
+                  { path: '/list_instittute', name:'list_instittute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
+                  { path: '/list_staff', name:'list_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_staff.vue').default },
+                  { path: '/list_student', name:'list_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_student.vue').default },
+                  { path: '/list_rub_data', name:'list_rub_data', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_rub_data.vue').default },
+                  { path: '/add_institute', name:'add_institute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_institute.vue').default },
+                  { path: '/add_staff', name:'add_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_staff.vue').default },
+                  { path: '/add_student', name:'add_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_student.vue').default },
+                  { path: '/edit_rub_data', name:'edit_rub_data', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_rub_data.vue').default },
+              ]
+          },
+        //   MOLHR
+          { path: '/student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants.vue').default,
+              children: [
+                  { path: '/', name:'student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                  { path: '/student_trainings_participants_list', name:'student_trainings_participants_list', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                  { path: '/add_student_trainings_participants', name:'add_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/add_student_trainings_participants.vue').default },
+                  { path: '/edit_student_trainings_participants', name:'edit_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/edit_student_trainings_participants.vue').default },
+              ]
+          },
+            //NFCED
+        { path: '/student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants.vue').default,
+            children: [
+                { path: '/', name:'student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/student_trainings_participants_list', name:'student_trainings_participants_list', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/add_student_trainings_participants', name:'add_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/add_student_trainings_participants.vue').default },
+                { path: '/edit_student_trainings_participants', name:'edit_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/edit_student_trainings_participants.vue').default },
+            ]
+        },
+        //   NSB
+        { path: '/student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants.vue').default,
+            children: [
+                { path: '/', name:'student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/student_trainings_participants_list', name:'student_trainings_participants_list', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/add_student_trainings_participants', name:'add_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/add_student_trainings_participants.vue').default },
+                { path: '/edit_student_trainings_participants', name:'edit_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/edit_student_trainings_participants.vue').default },
+            ]
+          },
+            //   DCRC
+        { path: '/student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants.vue').default,
+            children: [
+                { path: '/', name:'student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/student_trainings_participants_list', name:'student_trainings_participants_list', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_participants_list.vue').default },
+                { path: '/add_student_trainings_participants', name:'add_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/add_student_trainings_participants.vue').default },
+                { path: '/edit_student_trainings_participants', name:'edit_student_trainings_participants', component: require('./components/students/StudentExtraCurricular/Trainings/edit_student_trainings_participants.vue').default },
+            ]
+        },
+      ]
+      },
 
     //Student Health
     { path: '/student_health', component: require('./components/students/StudentHealth/index.vue').default,

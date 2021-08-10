@@ -16,6 +16,7 @@ class Feeder extends Model
     protected $fillable = [
         'id', 
         'feederschool',
+        'orgId',
         'class',
         'parentschool',
         'remarks',

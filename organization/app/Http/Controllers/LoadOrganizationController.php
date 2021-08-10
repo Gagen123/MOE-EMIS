@@ -196,6 +196,17 @@ class LoadOrganizationController extends Controller{
 
     }
 
+    public function loadClassStreamSectionIds($organizationType="",$category="",$dzoId=""){
+        if($organizationType=='ECCD'){
+            $response_data = DB::table('organization_class_streams AS c')
+            ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
+            ->select('c.id')
+            ->wherein('o.category',['private_eccd','public_eccd'])
+            ->get();
+            return $this->successResponse($response_data);
+        }
+    }
+
     public function getOrgProfile($id=""){
         //dd($id);
         $response_data =OrgProfile::where('org_id',$id)->first();

@@ -18,6 +18,7 @@ class SubjectMarks extends Model
         'streamId',
         'aca_sub_id',
         'marks',
+        'grade',
         'created_by',
         'created_at',
         'updated_by',
