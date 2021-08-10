@@ -665,6 +665,92 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="Projection&indicator">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="fa fa-adjust fa-poll nav-icon"></i>
+                    <p>
+                        Projection and Indicator On
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="EducationCenter">
+                        <router-link to="/education_center_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Education Center
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="StudentProjection">
+                        <router-link to="/student_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Student/Children/Trainer/Learner
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/teacher_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Teacher/Trainer/Facilitator
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/enrollment_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Enrollment
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/enrollment_byAge_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Enrollment By Age
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/growth_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Indicator on Growth
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/parity_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Gender Parity Index
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/transition_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Transition Rate
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/bcsea_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                BCSEA Reports
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">
