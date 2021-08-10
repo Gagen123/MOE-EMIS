@@ -50,11 +50,24 @@
 </template>
 <script>
 export default {
+    data(){
+        return{
+            dzongkhagList:[],
+            orgList:[],
+        }
+    },
     methods:{
          
     },
-    mounted() {
-        
+    async mounted() {
+        this.dzongkhagList= await this.loadactivedzongkhags();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
     },
    
 }

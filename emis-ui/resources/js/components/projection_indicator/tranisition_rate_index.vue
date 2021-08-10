@@ -43,14 +43,26 @@
 </template>
 <script>
 export default {
+    data(){
+        return{
+            dzongkhagList:[],
+            orgList:[],
+        }
+    },
     methods:{
          loadpage:function(type){
             this.$router.push({name:type});
         },
     },
-    mounted() {
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
+    async mounted() {
+        this.dzongkhagList= await this.loadactivedzongkhags();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
     },
    
 }
