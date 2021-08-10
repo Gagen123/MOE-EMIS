@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div>
         <section class="content ml-n4 mr-n3">
             <div class="container-fluid">
@@ -24,14 +24,14 @@
                         </select>
                         <span class="text-danger" id="dzongkhag_id_err"></span>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="mb-0">Organization Category: <i class="text-danger">*</i></label>
                         <select class="form-control select2" id="org_id">
                             <option value="ALL"> --Select--</option>
                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
-                    </div>
+                    </div> -->
                     
                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-3">
                         <button class="btn btn-primary btn-sm btn-lg mb-lg-n4" @click="generatesdetail()" type="button"> <span class="fa fa-download"></span> Load Details</button>
@@ -39,12 +39,43 @@
                 </div>
             </div>
         </div>
+        
+        <div class="form-group row">
+            <div class="card-body" >
+            <div class="col-lg-6 col-md-9 col-sm-9 col-xs-9 overflow-auto">
+                <table id="career_stage_table" class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>Name</th>
+                            <th>Public</th>
+                            <th>Private</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in educationCenter" :key="index">
+                            <td>{{ index+1}}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.totalpublic}}</td>
+                            <td>{{ item.totalprivate}}</td>
+                           
+                            <td>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data(){
         return{
+            educationCenter:[],
             dzongkhagList:[],
             orgList:[],
         }
