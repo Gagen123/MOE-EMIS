@@ -7,16 +7,18 @@
                     <th >Marital Status</th>
                     <th >Code</th>
                     <th >Status</th>
+                    <th >Description</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
-            <tbody id="tbody">
+            <tbody>
                 <tr v-for="(item, index) in maritalList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -26,35 +28,43 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             maritalList:[],
+            dt:'',
         }
     },
     methods:{
-       loadmaritalList(uri = 'masters/loadStaffMasters/all_marital_list'){
+        loaddataList(uri = 'staff/loadStaffMasters/all/MaritalStatus'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.maritalList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+               console.log('error: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_marital_status',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
-        this.loadmaritalList();
+    mounted(){
+        this.loaddataList();
+        this.dt =  $("#working-agency-table").DataTable()
+    },
+    watch: {
+        maritalList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
     },
 }
 </script>

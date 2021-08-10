@@ -13,6 +13,7 @@ class std_admission extends Model{
     protected $fillable = [
         'id',
         'ApplicationId',
+        'AdmissionType',
         'CidNo',
         'FirstName',
         'MiddleName',
@@ -29,6 +30,7 @@ class std_admission extends Model{
         'PrimaryContact',
         'PhotoPath',
         'Address',
+        'Status',
         'DateOfApply',
         'Remarks',
         'created_by',

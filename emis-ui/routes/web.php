@@ -408,6 +408,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveSchoolCompundDetails', [App\Http\Controllers\organization\CompoundDetailsController::class, 'saveSchoolCompundDetails'])->name('saveSchoolCompundDetails');
     Route::get('/loadcompoundareadetials', [App\Http\Controllers\organization\CompoundDetailsController::class, 'loadcompoundareadetials'])->name('loadcompoundareadetials');
     Route::get('/getEditCompoundDetail/{compId}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'getEditCompoundDetail'])->name('getEditCompoundDetail');
+    Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\organization\CompoundDetailsController::class, 'deleteFile'])->name('deleteFile');
 
     //disaster Information
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
@@ -850,6 +851,7 @@ Route::prefix('mess_manage')->group(function () {
     Route::post('/saveLocalProcure', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveLocalProcure'])->name('saveLocalProcure');
     Route::get('/loadLocalProcure', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadLocalProcure'])->name('loadLocalProcure');
     Route::get('/localProcureEditList/{locId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'localProcureEditList'])->name('localProcureEditList');
+    Route::post('/saveLocalProcureEdit', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveLocalProcureEdit'])->name('saveLocalProcureEdit');
 
     //STOCK RECEIVED
     Route::get('/stockReceivedListing/{type}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'stockReceivedListing'])->name('stockReceivedListing');
@@ -872,8 +874,9 @@ Route::prefix('mess_manage')->group(function () {
     Route::get('/StockIssueEditList/{lssId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'StockIssueEditList'])->name('StockIssueEditList');
     Route::get('/loadStockIssuedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockIssuedList'])->name('loadStockIssuedList');
     Route::get('/getquantity/{itemId}/{chekva}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getquantity'])->name('getquantity');
+    Route::post('/saveStockIssuedEdit', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssuedEdit'])->name('saveStockIssuedEdit');
 
-
+    
     Route::get('/getInventoryList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
     Route::get('/getInventoryListLocal', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryListLocal'])->name('getInventoryListLocal');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'deleteFile'])->name('deleteFile');

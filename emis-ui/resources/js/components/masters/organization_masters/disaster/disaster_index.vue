@@ -6,6 +6,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
+                                <label class="fa-pull-left">Disaster</label>
                                 <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('DisasterList')"><i class="fa fa-list"></i> List</button>
                                 <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('DisasterAdd')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
@@ -32,6 +33,10 @@ export default {
                 this.$router.push({name:type,params: {data:null}});
             }
         },
-    }
+    },
+    mounted() {
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+    },
 }
 </script>

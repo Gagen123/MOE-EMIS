@@ -6,11 +6,11 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Stock Issued:<span class="text-danger">*</span></label>
                         <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date"
-                        v-model="form.data.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
+                        v-model="form.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
                         <has-error :form="form" field="dateOfissue"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label class="required">Item Category:<br> {{form.data.category}}</label>
+                    <label class="required">Item Category:<br> {{form.category}}</label>
                 </div>
                 </div>
                 <div class="form-group row">
@@ -29,22 +29,22 @@
                            <tbody>
                                 <tr>
                                     <td>
-                                        {{itemList[form.data.item_id]}}
+                                        {{itemList[form.item_id]}}
                                     </td>
                                     <td>
-                                       {{unitArray[form.data.unit_id]}}
+                                        {{unitArray[form.unit_id]}}
                                     </td>
                                     <td>
-                                     {{form.data.availaleqty}}
+                                        {{form.availaleqty}}
                                     </td>
                                     <td>
-                                        <input type="number" name="quantity" class="form-control" v-model="form.data.quantity"/>
+                                        <input type="number" name="quantity" class="form-control" v-model="form.quantity"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="damagequantity" class="form-control" v-model="form.data.damagequantity"/>
+                                        <input type="number" name="damagequantity" class="form-control" v-model="form.damagequantity"/>
                                     </td>
                                     <td>
-                                      <input type="text" name="remarks" class="form-control" v-model="form.data.remarks"/>
+                                      <input type="text" name="remarks" class="form-control" v-model="form.remarks"/>
                                     </td>
                                 </tr>
                               <!-- <tr>
@@ -80,12 +80,12 @@ export default {
             unitArray:{},
           //  item:'',
             form: new form({
-                id: '', dateOfissue: '',
-                data:'',
-                item_issue:
-                [{
-                    item:'', quantity:'',measurement_unit:'', damagequantity:'',remarks:'',
-                }],
+                id: '', dateOfissue: '', item_id:'', category:'',unit_id:'', availaleqty:'', quantity:'', damagequantity:'', remarks:'',
+                // data:'',
+                // item_issue:
+                // [{
+                //     item:'', quantity:'',measurement_unit:'', damagequantity:'',remarks:'',
+                // }],
             })
         }
     },
@@ -110,7 +110,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                this.form.post('/mess_manage/saveStockIssued',this.form)
+                this.form.post('/mess_manage/saveStockIssuedEdit',this.form)
                 .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -191,13 +191,24 @@ export default {
             .catch(function (error){
                 console.log("Error:"+error)
             });
-        },
+        }, 
 
         StockIssueEditList(lssId){
-            this.form.item_issue=[];
+           // this.form.item_issue=[];
             axios.get('mess_manage/StockIssueEditList/' +lssId)
             .then((response) =>{
-                this.form.data=response.data.data;
+                let data=response.data.data;
+                this.form.dateOfissue           =    data.dateOfissue;
+                this.form.quarter               =    data.quarter_id;
+                this.form.category              =    data.category;
+                this.form.item_id               =    data.item_id;
+                this.form.unit_id               =    data.unit_id;
+                this.form.availaleqty           =    data.availaleqty;
+                this.form.quantity              =    data.quantity;
+                this.form.damagequantity        =    data.damagequantity;
+                this.form.remarks               =    data.remarks;
+                this.form.id                    =    data.id;
+
             //    // alert(data.length);
             //     // for(let i=0; i<data.length;i++){
             //         this.form.dateOfissue           = data[i].dateOfissue;

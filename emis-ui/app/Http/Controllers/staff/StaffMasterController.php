@@ -28,6 +28,8 @@ class StaffMasterController extends Controller{
         $request_data =[
             'id'                        =>  $request->id,
             'name'                      =>  $request->name,
+            'qualification_type'        =>  $request->qualification_type,
+            'qualification_level'       =>  $request->qualification_level,
             'description'               =>  $request->description,
             'code'                      =>  $request->code,
             'status'                    =>  $request->status,

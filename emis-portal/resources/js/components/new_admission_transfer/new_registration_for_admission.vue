@@ -619,10 +619,7 @@ export default {
             studentscholarshipList:[],
             studentbenefitList:[],
             sectionList:[],
-            ppdob:'',
-            eccddob:'',
-            ppmonth:'',
-            eccdmonth:'',
+
             student_form: new form({
                 student_id:'',
                 snationality:'',
@@ -910,44 +907,7 @@ export default {
                 dzoId=id;
             }
             this.s_schoolList = [];
-            let date2=new Date($('#dob').val());
-            let year2=date2.getFullYear();
-            let month2=date2.getMonth();
-            let numberOfMonths;
-            let isvalid=true;
-            let messages="";
-            if(type=="ECCD"){
-                let date1=new Date(this.eccddob);
-                let year1=date1.getFullYear();
-                let month1=date1.getMonth();
-                if(month1===0){ //Have to take into account
-                    month1++;
-                    month2++;
-                }
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
-                numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
-                if(this.eccdmonth>numberOfMonths){
-                    isvalid=false;
-                }
-                messages="From your DOB, you are just "+numberOfMonths+' months old. You are eligible to register only at the total month of '+this.eccdmonth;
-            }
-            else{
-                let date1=new Date(this.ppdob);
-                let year1=date1.getFullYear();
-                let month1=date1.getMonth();
-                if(month1===0){ //Have to take into account
-                    month1++;
-                    month2++;
-                }
-               // numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
-                numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
-                if(this.ppmonth> numberOfMonths){
-                    isvalid=false;
-                }
-                messages="From your DOB, you are just "+numberOfMonths+' months old. You are eligible to register only at the total month of '+this.ppmonth;
-            }
+
             if(isvalid==false){
                 Swal.fire(
                     'Sorry',
@@ -1464,20 +1424,7 @@ export default {
                 $('#gardain_section').show();
             }
         },
-        loadVlidation(){
-            let uri='masters/loadValidationcondition';
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.ppdob=data.date;
-                this.eccddob=data.date1;
-                this.ppmonth=data.no_months;
-                this.eccdmonth=data.no_months1;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
-        },
+
         getmeritalStatus(){
             let uri='masters/active_marital_list';
             axios.get(uri)
@@ -1525,7 +1472,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadVlidation();
+
         let cid=this.$route.query.cid;
         this.getdzongkhagList();
         this.getclassList();

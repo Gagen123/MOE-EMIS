@@ -24,24 +24,43 @@ class VisitorController extends Controller
 
     public function saveVisitorInformation(Request $request){
         $rules = [
-            'visitor_information'           =>  'required',
+            'visitorname'                   =>  'required',
+            'designation'                   =>  'required',
+            'contact'                       =>  'required',
+            'minitsryOrAgency'              =>  'required',
+            'noOfhours'                     =>  'required',
             'date'                          =>  'required',
-            'remarks'                       =>  'required',
+            'targetgroup'                   =>  'required',
+            'deptOrdivision'                =>  'required',
+            'purposeOfvisit'                =>  'required',
         ];
 
         $customMessages = [
-            'visitor_information.required'          => 'This is required',
-            'date.required'                         => 'Date is required',
-            'remarks.required'                      => 'Remarks is required',
+            'visitor_information.required'           => 'This is required',
+            'visitorname.required'                   =>  'This is required',
+            'designation.required'                   =>  'This is required',
+            'contact.required'                       =>  'This is required',
+            'minitsryOrAgency.required'              =>  'This is required',
+            'noOfhours.required'                     =>  'This is required',
+            'date.required'                          =>  'This is required',
+            'targetgroup.required'                   =>  'This is required',
+            'deptOrdivision.required'                =>  'This is required',
+            'purposeOfvisit.required'                =>  'This is required',
         ];
 
         $this->validate($request, $rules, $customMessages);
 
         $data =[
             'organizationId'            =>  $this->getWrkingAgencyId(),
-            'visitor_information'       =>  $request['visitor_information'],
+            'visitorname'               =>  $request['visitorname'],
+            'designation'               =>  $request['designation'],
+            'contact'                   =>  $request['contact'],
+            'minitsryOrAgency'          =>  $request['minitsryOrAgency'],
+            'noOfhours'                 =>  $request['noOfhours'],
+            'targetgroup'               =>  $request['targetgroup'],
+            'deptOrdivision'            =>  $request['deptOrdivision'],
+            'purposeOfvisit'            =>  $request['purposeOfvisit'],
             'date'                      =>  $request['date'],
-            'remarks'                   =>  $request['remarks'],
             'user_id'                   =>  $this->userId(),
             'id'                        =>  $request['id'],
         ];

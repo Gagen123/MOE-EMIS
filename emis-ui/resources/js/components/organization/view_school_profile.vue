@@ -194,16 +194,9 @@
                                                             <td></td>
                                                             <td></td>
                                                     </tr>
+                                                   
                                                     <tr>
-                                                            <td>Male Support Staff</td>
-                                                            <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                            <td>Female Support Staff</td>
-                                                            <td></td>
-                                                    </tr>
-                                                    <tr>
-                                                            <td><b>Total</b></td>
+                                                            <td><b>Total Support Staff(Both Male & Female)</b></td>
                                                             <td><b></b></td>
                                                     </tr>
                                                     <tr>

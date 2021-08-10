@@ -19,7 +19,7 @@
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Year of Establishment:<span class="text-danger">*</span></label>
+                    <label>Year of Establishment:</label>
                     <input class="form-control" v-model="student_form.year" :class="{ 'is-invalid': student_form.errors.has('year') }" id="year" @change="remove_err('year')" type="number">
                     <has-error :form="student_form" field="year"></has-error>
                 </div>

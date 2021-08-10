@@ -9,10 +9,10 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
-            <tbody id="tbody">
+            <tbody>
                 <tr v-for="(item, index) in subjectList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.subject_area.name}}</td>
@@ -28,13 +28,14 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             subjectList:[],
+            dt:'',
         }
     },
     methods:{
@@ -45,18 +46,25 @@ export default {
                 this.subjectList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                condole.log('error: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_subject',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
+    mounted(){
         this.loadsubjectList();
-    }, 
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        subjectList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable()
+            });
+        }
+    },
 }
 </script>

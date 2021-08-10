@@ -35,7 +35,7 @@ use Illuminate\Support\Facades\Route;
         
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
-        Route::get('/getseatdetailsbyOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getseatdetailsbyOrgId'])->name('getseatdetailsbyOrgId');
+
         Route::get('/loadValidationcondition', [App\Http\Controllers\AdminstratorController::class, 'loadValidationcondition'])->name('loadValidationcondition');
         Route::get('/active_marital_list', [App\Http\Controllers\AdminstratorController::class, 'active_marital_list'])->name('active_marital_list');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\AdminstratorController::class, 'getStudentDetails'])->name('getStudentDetails');
@@ -43,7 +43,11 @@ use Illuminate\Support\Facades\Route;
     });
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\NotenrolledController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
     Route::get('/loadSchoolList/{dzoId}/{type}', [App\Http\Controllers\NotenrolledController::class, 'loadSchoolList'])->name('loadSchoolList');
-
+    Route::get('/loadProjection/{classId}', [App\Http\Controllers\NotenrolledController::class, 'loadProjection'])->name('loadProjection');
+    Route::post('/saveorgclassDetails', [App\Http\Controllers\NotenrolledController::class, 'saveorgclassDetails'])->name('saveorgclassDetails');
+    Route::get('/getorgclassDetails/{id}', [App\Http\Controllers\NotenrolledController::class, 'getorgclassDetails'])->name('getorgclassDetails');
+    Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\NotenrolledController::class, 'deleteclassDetails'])->name('deleteclassDetails');
+    Route::post('/savefilanorgclassDetails', [App\Http\Controllers\NotenrolledController::class, 'savefilanorgclassDetails'])->name('savefilanorgclassDetails');
 
 
     Route::prefix('adminstratorController')->group(function () {

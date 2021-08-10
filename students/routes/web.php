@@ -80,6 +80,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
+            $router->post('/saveorgclassDetails', ['uses' => 'Students\StudentAdmissionController@saveorgclassDetails']);
+            $router->get('/deleteclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@deleteclassDetails']);
+            $router->get('/getorgclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@getorgclassDetails']);
+            $router->post('/savefilanorgclassDetails', ['uses' => 'Students\StudentAdmissionController@savefilanorgclassDetails']);
             $router->post('/studentAdmissionupdate', ['uses' => 'students\StudentAdmissionController@studentAdmissionupdate']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
 

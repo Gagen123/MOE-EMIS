@@ -172,6 +172,7 @@
             return{
                 is_student:false,
                 std_id:'',
+                std_cid:'',
                 std_name:'',
                 std_code:'',
                 std_dob:'',
@@ -240,13 +241,16 @@
                 axios.get('/masters/getStudentDetails/'+id)
                 .then(response =>{
                     let data = response.data.data;
-                    this.std_name=data['Name'];
-                    this.std_code=data['student_code'];
-                    this.std_cid=data['CidNo'];
-                    this.std_dob=data['DateOfBirth'];
-                    this.OrgOrganizationId = data['OrgOrganizationId'];
+                    // this.std_name=data['Name'];
+                    // this.std_code=data['student_code'];
+                    // this.std_cid=data['CidNo'];
+                    // this.std_dob=data['DateOfBirth'];
+                    // this.OrgOrganizationId = data['OrgOrganizationId'];
+
+                    //for testing
+                    let org_id = '21';
                     
-                    this.getOrganizationDetails(this.OrgOrganizationId);
+                    this.getOrganizationDetails(org_id);
                 })
             },
 
@@ -254,9 +258,10 @@
                 axios.get('/masters/getFullSchoolDetails/'+id)
                 .then(response =>{
                     let data = response.data;
-                    this.student_form.dzongkhag = data[0].dzongkhagId;
-                    $('#dzongkhag').prop('readonly',true);
-                    this.getHssSchoolList(data[0].dzongkhagId);
+                    // this.student_form.dzongkhag = data[0].dzongkhagId;
+                    // $('#dzongkhag').prop('readonly',true);
+                    // this.getHssSchoolList(data[0].dzongkhagId);
+                    this.getHssSchoolList('22');
                 })
             },
             getHssSchoolList(dzoId){

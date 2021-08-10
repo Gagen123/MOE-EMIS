@@ -14,6 +14,7 @@ class MaritalStatus extends Model
         'id',
         'name',
         'code',
+        'description',
         'status',
         'created_by',
         'created_at',

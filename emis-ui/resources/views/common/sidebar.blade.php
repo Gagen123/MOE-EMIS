@@ -22,7 +22,49 @@
                             Common Masters
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="org_master">
+                    <li class="nav-item has-treeview" id="organization_master">
+                        <a href="#" class="nav-link pt-1 pb-1">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p>
+                                Organization Master
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="approval">
+                                <router-link to="/org_approvalMaster_link" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    Approval Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="structure">
+                                <router-link to="/org_structureMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-building nav-icon"></i>
+                                    Structure Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="furniture&equiment">
+                                <router-link to="/org_furNequiMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-server nav-icon"></i>
+                                    Furniture & Equipment Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="facility">
+                                <router-link to="/org_facilityMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-gamepad nav-icon"></i>
+                                    Facility & other Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item has-treeview" id="otherOrg">
+                                <router-link to="/org_otherMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    other Master
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- <li class="nav-item has-treeview" id="org_master">
 
                         <router-link to="/OrganizationMasterIndex" class="nav-link">
                             <i class="nav-icon fas fa-database"></i>
@@ -30,7 +72,7 @@
                                 Organization Masters
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item has-treeview" id="staff_master">
                         <a href="#" class="nav-link pt-1 pb-1">
                             <i class="nav-icon fas fa-database"></i>
@@ -450,7 +492,7 @@
                         <router-link to="/projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Projection & Feeders School 
+                                Projection & Feeders School
                             </p>
                         </router-link>
                     </li>
@@ -506,14 +548,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="staff_self_update">
+                    {{-- <li class="nav-item has-treeview" id="staff_self_update">
                         <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
                                 Self Service
                             </p>
                         </router-link>
-                    </li>
+                    </li> --}}
                     <li class="nav-item" id="staff_services_index">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>
@@ -673,6 +715,92 @@
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="Projection&indicator">
+                <a href="#" class="nav-link pt-1 pb-1">
+                    <i class="fa fa-adjust fa-poll nav-icon"></i>
+                    <p>
+                        Projection and Indicator On
+                        <i class="fas fa-angle-left right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item" id="EducationCenter">
+                        <router-link to="/education_center_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Education Center
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="StudentProjection">
+                        <router-link to="/student_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Student/Children/Learner
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/teacher_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Teacher/Trainer/Facilitator
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/enrollment_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Enrollment
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/enrollment_byAge_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Enrollment By Age
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/growth_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Indicator on Growth
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/parity_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Gender Parity Index
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/transition_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                Transition Rate
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="messlink">
+                        <router-link to="/bcsea_Projection_index" class="nav-link">
+                            <p>
+                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                BCSEA Reports
+                            </p>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-header"></li>
             <li class="nav-item has-treeview" id="studentlink">
                 <a href="#" class="nav-link pt-1 pb-1">

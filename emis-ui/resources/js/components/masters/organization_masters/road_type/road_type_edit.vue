@@ -6,8 +6,8 @@
                     <input type="hidden" class="form-control" v-model="form.id"/>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Road Type:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.roadType" :class="{ 'is-invalid': form.errors.has('roadType') }" id="roadType" @change="remove_err('roadType')" type="text" tabindex="1" autofocus="true">
-                        <has-error :form="form" field="roadType"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
@@ -36,10 +36,11 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                roadType: '',
+                name: '',
                 description:'',
                 status: 1,
-                // action_type:'add',
+                action_type:'edit',
+                model:'RoadType'
             })
         }
     },
@@ -52,12 +53,12 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.roadType= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/saveRoadType',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -72,7 +73,7 @@ export default {
 		},
     },
     created() {
-        this.form.roadType=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;

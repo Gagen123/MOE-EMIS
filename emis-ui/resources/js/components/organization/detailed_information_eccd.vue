@@ -39,7 +39,7 @@
                                                     <has-error :form="form" field="distance_from_dzo"></has-error>
                                                 </div>
                                             </div>
-                                         </div>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="row">

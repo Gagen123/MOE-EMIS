@@ -696,7 +696,7 @@ class StudentMasterController extends Controller
          // dd($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    
+
     public function loadfoodSourceList(){
         $data = FoodSourceType::all();
         return $data;

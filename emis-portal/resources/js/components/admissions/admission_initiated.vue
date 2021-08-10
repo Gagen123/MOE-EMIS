@@ -53,24 +53,89 @@
                     </div>
                 </template>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none" id="dzo_Section">
-                        <label class="required">Dzongkhag/Thromde <span class="text-danger">*</span><span class="text-danger"></span></label>
-                        <select name="dzongkhag" v-model="student_form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dzongkhag') }" class="form-control select2" id="dzongkhag">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                        </select>
+                    <div class="callout callout-danger" style="display:none" id="validationmessages">
+                        <h5 class="bg-gradient-danger">Sorry!</h5>
+                        <div id="validation_message"></div>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none" id="school_Section">
-                        <label>School <span class="text-danger">*</span></label>
-                        <select v-model="student_form.school" :class="{ 'is-invalid select2 select2-hidden-accessible':student_form.errors.has('school') }" class="form-control select2" name="school" id="school">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
-                        </select>
+                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="selectschool">
+                       <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                          <thead>
+                              <tr>
+                                  <th>Dzongkhag/Thromde</th>
+                                  <th>School/ECCD Centres</th>
+                                  <th>Class/Age group</th>
+                                  <!-- <th>Stream</th> -->
+                                  <!-- <th>No of Seats</th> -->
+                                  <th>School Decision</th>
+                                  <th>Student Decision</th>
+                                  <th class="pr-4 pl-4">Action</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                                <tr id="record1" v-for='(item, index) in response_data' :key="index">
+                                    <td>
+                                        {{dzongkhagArray[item.Dzongkhagid]}}
+                                    </td>
+                                    <td>
+                                        {{item.organization.name}}
+                                    </td>
+                                    <td>
+                                        {{item.class.class}}
+                                    </td>
+                                    <td>{{item.school_decision}} </td>
+                                    <td>{{item.student_decision}} </td>
+                                    <td>
+                                        <template v-if="item.school_decision=='Accepted' && item.student_decision!='Accepted' && item.student_decision!='Rejected'">
+                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="remove"
+                                            @click="remove('Accepted',item.id)"><i class="fa fa-check"></i> Accept</button>
+                                            <button type="button" class="btn btn-flat btn-sm bg-success" id="remove"
+                                            @click="remove('Rejected',item.id)"><i class="fa fa-times pr-2"></i> Reject</button>
+                                        </template>
+                                        <template v-if="item.school_decision==''">
+                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                            @click="remove('Remove',item.id)"><i class="fa fa-trash"></i> Remove</button>
+                                        </template>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select name="dzongkhag" @change="getschoolList('dzongkhag'),removeerror('dzongkhag')" :class="{ 'is-invalid': student_form.errors.has('dzongkhag') }" v-model="student_form.dzongkhag" class="form-control" id="dzongkhag">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="dzongkhag"></has-error>
+                                    </td>
+                                    <td>
+                                        <select v-model="student_form.school" :class="{ 'is-invalid': student_form.errors.has('school') }" @change="getclassList('school'),removeerror('school')" class="form-control" name="school" id="school">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="school"></has-error>
+                                    </td>
+                                    <td>
+                                        <select v-model="student_form.class" :class="{ 'is-invalid': student_form.errors.has('class') }"  @change="getProjection(),removeerror('class')"  class="form-control" name="class" id="class">
+                                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
+                                        </select>
+                                        <has-error :form="student_form" field="class"></has-error>
+                                    </td>
+                                    <td>
+                                        <span>{{student_form.seats}}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan='5'>
+                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                        @click="addMore()"><i class="fa fa-plus"></i> Save & Add</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" style="display:none" id="">
-                        <label>Seats available </label>
-                        <input v-model="student_form.seats" id="seat" type="text" name="seats"
-                        class="form-control" :class="{ 'is-invalid': student_form.errors.has('remarks') }"  disabled="true" />
+                </div>
+                <hr>
+                <div class="row form-group fa-pull-right" id="finalbtn" style="display:none">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-flat btn-primary" @click="submitDetail()"> <i class="fa fa-save"></i> submit</button>
                     </div>
                 </div>
             </div>
@@ -92,18 +157,20 @@ export default {
             schoolList:[],
             classList:[],
             streamList:[],
-            getSeats:'',
             std_admission_details:'',
+            ppdob:'',
+            eccddob:'',
+            ppmonth:'',
+            eccdmonth:'',
+            response_data:[],
             student_form: new form({
                 id:'',
+                seats:0,
+                admission_type:'',
                 student_id:'',
-                student_type:'',
-                student_code:'',
-                orgId:'',
                 dzongkhag:'',
-                gewog:'',
+                school:'',
                 class:'',
-                stream:'',
                 dateOfapply:'',
                 remarks:'',
                 std_decission:'',
@@ -111,33 +178,92 @@ export default {
         }
     },
     methods:{
-        submitForm(){
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
+         /**
+         * method to add more fields
+         */
+        addMore: function(){
+            Swal.fire({
+                text: "Are you sure you wish to save this detials ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+            }).then((result) => {
+                if(result.isConfirmed){
+                    this.student_form.post('/saveorgclassDetails')
+                    .then((response) => {
+                        this.student_form.dzongkhag='';
+                        this.student_form.school='';
+                        this.student_form.class='';
+                        this.loadadmissions();
+                    })
+                    .catch((error) => {
+                        console.log("Error addMore:"+error);
+                    })
                 }
-            }
-            this.$Progress.start();
-            let formData = new FormData();
-            formData.append('student_id', this.student_form.student_id);
-            formData.append('student_type', this.student_form.student_type);
-            formData.append('OrgOrganizationId',this.$route.query.data.OrgOrganizationId);
-            formData.append('dzongkhag', this.student_form.dzongkhag);
-            formData.append('school', this.student_form.school);
-            formData.append('class', this.student_form.class);
-            formData.append('stream', this.student_form.stream);
-            formData.append('dateOfapply', this.student_form.dateOfapply);
-            formData.append('remarks', this.student_form.remarks);
-            formData.append('status', 'pending');
-            formData.append('std_decission', 'pending');
-            axios.post('/savedetailsEnrolledStd',formData,config)
-            .then(()=>{
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Data  saved successfully'
-                })
-            })
-            .catch(()=>{console.log("Error.....")})
+            });
+        },
+        loadadmissions(){
+            let std_id=this.student_form.student_id;
+            this.student_form.student_seats=[];
+            axios.get('getorgclassDetails/'+std_id)
+            .then(Response =>{
+                let data = Response.data;
+                this.response_data=data;
+                if(data.length>0){
+                    $('#finalbtn').show();
+                }
+            }).catch(error => console.log(error));
+        },
+
+        /**
+         * method to remove fields
+         */
+        remove(type,id){
+            Swal.fire({
+                text: "Are you sure you wish to delete this ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+            }).then((result) => {
+                if(result.isConfirmed){
+                    axios.get('/deleteclassDetails/'+id+'__'+type)
+                    .then((response) => {
+                        let data=response.data;
+                        this.student_form.dzongkhag='';
+                        this.student_form.school='';
+                        this.student_form.class='';
+                        this.loadadmissions();
+                    })
+                    .catch((error) => {
+                        console.log("Error remove:"+error);
+                    })
+                }
+            });
+        },
+        submitDetail(){
+            Swal.fire({
+                text: "Are you sure you wish to submit this detials for further acceptance ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+            }).then((result) => {
+                if(result.isConfirmed){
+                    this.student_form.post('/savefilanorgclassDetails')
+                    .then((response) => {
+                        let data=response.data;
+                        this.$router.push({name:'acknowledgement'});
+                    })
+                    .catch((error) => {
+                        console.log("Error addMore:"+error);
+                    })
+                }
+            });
         },
 
         getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
@@ -157,6 +283,11 @@ export default {
                 let data = response.data;
                 if(data != ""){
                     this.std_admission_details=data;
+                    this.student_form.student_id=data.id;
+                    this.loadadmissions();
+                    this.student_form.admission_type=data.AdmissionType;
+                    $("input[name=registrationType][value=" + data.AdmissionType + "]").prop('checked', true);
+                    this.showsection(data.AdmissionType)
                     this.getGewogList(data.CmnDzoId,data.CmnGewogId);
                     this.getvillagelist(data.CmnGewogId,data.CmnChiwogId);
                 }
@@ -167,15 +298,28 @@ export default {
                 }
             });
         },
+
         getclassList(id){
-            let orgId=$('#school').val();
-            if(id!=""){
-                orgId=id;
-            }
+            this.classList =[];
+            let orgId=$('#'+id).val();
+            this.student_form.school=orgId;
             axios.get('/masters/loadClassStreamSection/NA/' +orgId)
             .then(Response =>{
                 let data = Response.data;
-                this.classList = data;
+                let type=$('input[name="registrationType"]:checked').val();
+                this.student_form.admission_type=type;
+                if(type=="PP"){
+                    data.forEach(cls => {
+                        if(cls.class=='PP'){
+                            this.classList.push(cls);
+                        }
+                    });
+                }
+                else{
+                    this.classList = data;
+                }
+                $('#classsection').show();
+
             })
         },
         getstreamListByid(id){
@@ -189,22 +333,7 @@ export default {
                 this.classList = data;
             })
         },
-        getseatdetailsbyOrgId(){
-            let orgId=$('#school').val();
-            axios.get('/masters/getseatdetailsbyOrgId/' +orgId)
-            .then(Response =>{
-                let data = Response.data.data;
-                this.getSeats = data;data
-            })
-        },
-        // getstreamList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
-        //     axios.get(uri)
-        //     .then(Response =>{
-        //         let data = Response.data.data;
-        //         this.streamList = data;
-        //     })
 
-        // },
         getOrgDetails(id){
             axios.get('loadOrganizationDetailsbyOrgId/' +id)
             .then(response =>{
@@ -241,17 +370,17 @@ export default {
             });
         },
         applyselect(){
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-            $('#dzongkhag').addClass('select2-hidden-accessible');
+            if(!$('#dzongkhag').attr('class').includes('select2')){
+            $('#dzongkhag').addClass('select2');
             }
-            if(!$('#school').attr('class').includes('select2-hidden-accessible')){
-            $('#school').addClass('select2-hidden-accessible');
+            if(!$('#school').attr('class').includes('select2')){
+            $('#school').addClass('select2');
             }
-            if(!$('#class').attr('class').includes('select2-hidden-accessible')){
-            $('#class').addClass('select2-hidden-accessible');
+            if(!$('#class').attr('class').includes('select2')){
+            $('#class').addClass('select2');
             }
-            if(!$('#stream').attr('class').includes('select2-hidden-accessible')){
-            $('#stream').addClass('select2-hidden-accessible');
+            if(!$('#stream').attr('class').includes('select2')){
+            $('#stream').addClass('select2');
             }
         },
         loadGenderList(uri="masters/loadGlobalMasters/all_active_gender"){
@@ -270,39 +399,29 @@ export default {
         removeerror(fieldid){
             if($('#'+fieldid).val()!=""){
                 $('#'+fieldid).removeClass('is-invalid');
-                $('#'+errid).html('');
             }
         },
 
         async changefunction(id){
             if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id).removeClass('is-invalid');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="dzongkhag"){
-                this.student_form.dzongkhag=$('#dzongkhag').val();
-                let type=$('input[name="registrationType"]:checked').val();
-                this.getschoolList($('#dzongkhag').val(),type);
-            }
-            if(id=="school"){
-                this.student_form.school=$('#school').val();
-                this.getclassList($('#school').val());
-            }
             if(id=="class"){
                 this.student_form.class=$('#class').val();
-                // this.getstreamListByid($('#class').val());
 
             }
             if(id=="stream"){
                 this.student_form.stream=$('#stream').val();
                 // this.getstreamList($('#stream').val);
-
             }
         },
-        getschoolList(dzo_id,type){
+        getschoolList(dzo_id){
+            this.student_form.dzongkhag=$('#'+dzo_id).val();
+            let type=$('input[name="registrationType"]:checked').val();
             this.schoolList=[];
-            let uri = 'loadSchoolList/'+dzo_id+'/'+type;
+            let uri = 'loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
             try{
                 axios.get(uri).then(response => {
                     let data= response.data.data;
@@ -313,8 +432,85 @@ export default {
                 console.log('error loadactivedzongkhags '+e);
             }
         },
+        getProjection(){
+            if($('input[name="registrationType"]:checked').val()=="PP"){
+                let clasId=$('#class').val();
+                let orgId=$('#school').val();
+                let uri = 'loadProjection/'+clasId+'__'+orgId;
+                axios.get(uri).then(response => {
+                    let data= response.data;
+                    this.student_form.seats=data.ProjectionNo;
+                });
+            }
+            else{
+                $('#seatAvailable').hide();
+            }
+        },
+        loadVlidation(){
+            let uri='masters/loadValidationcondition';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.ppdob=data.date;
+                this.eccddob=data.date1;
+                this.ppmonth=data.no_months;
+                this.eccdmonth=data.no_months1;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
         showsection(type){
-            $('#dzo_Section').show();
+            let dob=new Date(this.std_admission_details.DateOfBirth);
+            // let year2=date2.getFullYear();
+            // let month2=date2.getMonth();
+            // let numberOfMonths;
+            let isvalid=true;
+            let messages="";
+            if(type=="ECCD"){
+                let date1=new Date(this.eccddob);
+                // let year1=date1.getFullYear();
+                // let month1=date1.getMonth();
+                // if(month1===0){ //Have to take into account
+                //     month1++;
+                //     month2++;
+                // }
+                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
+                // numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
+                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
+                // if(this.eccdmonth>numberOfMonths){
+                //     isvalid=false;
+                // }
+                if(date1<dob){
+                    isvalid=false;
+                }
+                messages="You need to attend atleast "+this.eccdmonth+' months old to get register. You will attend that month only at '+this.y;
+            }
+            else{
+                let date1=new Date(this.ppdob);
+                // let year1=date1.getFullYear();
+                // let month1=date1.getMonth();
+                // if(month1===0){ //Have to take into account
+                //     month1++;
+                //     month2++;
+                // }
+               // numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
+                // numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
+                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
+                if(dob< date1){
+                    isvalid=false;
+                }
+                messages="You need to attend atleast "+this.ppmonth+' months old to get register. You are eligible to register only at the total month of '+this.ppmonth;
+            }
+            if(isvalid){
+                $('#selectschool').show();
+                $('#validationmessages').hide();
+            }else{
+                $('#dzo_Section').hide();
+                $('#seatAvailable').hide();
+                $('#validation_message').html(messages);
+                $('#validationmessages').show();
+            }
         }
     },
     mounted() {
@@ -327,10 +523,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadVlidation();
         this.loadGenderList();
         this.getdzongkhagList();
-        this.getclassList();
-        this.getseatdetailsbyOrgId();
         axios.get('getSessionDetail')
         .then(response => {
             let data = response.data.data;
