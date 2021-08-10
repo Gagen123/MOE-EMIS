@@ -11,7 +11,8 @@ class SubjectMarks extends Migration
             $table->uuid('id')->primary();
             $table->varchar('streamId',36);
             $table->varchar('aca_sub_id',36)->nullable(true);
-            $table->varchar('marks',36)->nullable(true);
+            $table->varchar('marks',100)->nullable(true);
+            $table->varchar('grade',50)->nullable(true);
             $table->char('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

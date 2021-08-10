@@ -62,7 +62,8 @@ class ProjectionsController extends Controller
             'feederschool'              => $request->preference_school1,
             'class'                     => $request->class,
             'items_received'            =>  $request->items_received,
-            'user_id'                   =>  $this->userId()
+            'user_id'                   =>  $this->userId(),
+            'orgId'                     =>  $this->getWrkingAgencyId(),
         ];
         $response_data= $this->apiService->createData('emis/organization/feeder/saveFeeders', $loc);
         return $response_data;

@@ -19,9 +19,10 @@
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
-                                  <th >SL#</th>
+                                  <th>SL#</th>
                                   <th>Subject</th>
                                   <th>Marks<span class="text-danger">*</span></th>
+                                  <th>Grade<span class="text-danger">*</span></th>
                               </tr>
                            </thead>
                            <tbody id="tbody">
@@ -31,9 +32,11 @@
                                     {{SubjectDropdown[item.aca_sub_id]}} 
                                 </td>
                                  <td>                          
-                                        <input type="text" name="marks" class="form-control" v-model="item.marks" :class="{ 'is-invalid': form.errors.has('marks') }"/>
-                                  </td>
-                                
+                                    <input type="text" name="marks" class="form-control" v-model="item.marks" :class="{ 'is-invalid': form.errors.has('marks') }"/>
+                                 </td>
+                                 <td>                          
+                                    <input type="text" name="grade" class="form-control" v-model="item.grade" :class="{ 'is-invalid': form.errors.has('grade') }"/>
+                                 </td>
                             </tr>
                         </tbody>
                      </table>
@@ -74,7 +77,6 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.streamList =  data;
-                this.getSubjectlist(data[0].id);
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -82,7 +84,6 @@ export default {
                 }
             });
         },
-        
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
@@ -159,8 +160,8 @@ export default {
         },
     },
         mounted() {
-            this.loadsubjectList();
             this.loadStreamList();
+            this.loadsubjectList();
             $('[data-toggle="tooltip"]').tooltip();
             $('.select2').select2();
             $('.select2').select2({
@@ -169,7 +170,6 @@ export default {
             $('.select2').on('select2:select', function (el){
                 Fire.$emit('changefunction',$(this).attr('id'));
             });
-
             Fire.$on('changefunction',(id)=> {
                 this.changefunction(id);
             });

@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Brief description for seeking transfer</label>
+                                <label class="mb-0.5">Reason for appealing the transfer</label>
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                                 <select v-model="form.preference_dzongkhag2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_dzongkhag2') }" class="form-control select2" name="preference_dzongkhag2" id="preference_dzongkhag2">
                                                   <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>approvedDetails
+                                                </select>
                                                 <has-error :form="form" field="preference_dzongkhag2"></has-error>
                                                 <span class="text-danger" id="preference_dzongkhag2_err"></span>
                                             </td>
@@ -199,8 +199,15 @@
                                 <label class="mb-1">Withdraw: <input type="checkbox" name="withdraw" v-model="form.withdraw" id="withdraw" class="icheck-success d-inline"></label>
                             </div>
                         </div>
+                        <div class="form-group row" id="remarks">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks:<i class="text-danger">*</i></label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <hr>
-                        <div  class="row form-group fa-pull-right">
+                        <div  class="row form-group fa-pull-right" id="update">
                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="tbName">
                             <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Update </button>
                          </div>
@@ -311,8 +318,10 @@ export default {
                     $('#approvedDetails').hide();
                 }
                 
-                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
+                if(this.form.status =="Approved" || this.form.status =="withdrawn" || this.form.status == "Forwarded"){
                      $('#Withdraw').hide();
+                     $('#remarks').hide();
+                     $('#update').hide();
 
                 }
                 $(document).ready(function() {
@@ -437,7 +446,8 @@ export default {
                             let formData = new FormData();
                             formData.append('id', this.form.id);
                             formData.append('withdraw', this.form.withdraw);
-                             formData.append('reason_id', this.form.reason_id);
+                            formData.append('remarks', this.form.remarks);
+                            formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('application_number', this.form.application_number);
                             formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);

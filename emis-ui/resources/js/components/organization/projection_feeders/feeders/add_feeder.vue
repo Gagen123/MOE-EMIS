@@ -7,7 +7,7 @@
                      <select v-model="form.preference_school1" :class="{ 'is-invalid ': form.errors.has('preference_school1') }" class="form-control " name="preference_school1" id="preference_school1">
                         <option value=""> -- Select-- </option>
                         <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
+                     </select>
                     <has-error :form="form" field="preference_school1"></has-error>
                     <span class="text-danger" id="preference_school1_err"></span>
                 </div>
@@ -75,7 +75,6 @@ export default {
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -113,6 +112,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        //loading loadclassList
         loadClassList(uri="loadCommons/getOrgClassStream"){
             axios.get(uri)
             .then(response => {
@@ -123,10 +123,17 @@ export default {
                 console.log("Error......"+error)
             });
         },
-
-        /**
-         * method to get stream list
-         */
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                alert(JSON.stringify(data.data.data));
+                this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -157,8 +164,6 @@ export default {
         
     },
      mounted() {
-        var checkedValue = $('.messageCheckbox:checked').val();
-
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -172,6 +177,7 @@ export default {
         });
         this.loadClassList();
         this.loadOrgList();
+        this.loadClassList();
     },
     
 }

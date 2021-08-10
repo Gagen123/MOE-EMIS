@@ -663,6 +663,14 @@
                             </p>
                         </router-link>
                     </li>
+                    <li class="nav-item" id="clubs">
+                        <router-link to="/data_import_index" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                External Data Import
+                            </p>
+                        </router-link>
+                    </li>
                 </ul>
             </li>
             <li class="nav-header"></li>

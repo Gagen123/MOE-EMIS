@@ -26,9 +26,10 @@
                             <span><label><u>Applicant Detials</u></label></span>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Applicantion Number:</label><br>
-                                    <span class="text-blue text-bold">{{response_data.aplication_number}}</span>
+                                    <label class="mb-0">Applicant Name:</label><br>
+                                    <span class="text-blue text-bold">{{form.applicant_name}}</span>
                                 </div>
+
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Status:</label><br>
                                     <span class="text-blue text-bold">{{response_data.status}}</span>
@@ -40,21 +41,22 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Applicant Name:</label><br>
-                                    <span class="text-blue text-bold">{{form.applicant_name}}</span>
+                                    <label class="mb-0">Applicantion Number:</label><br>
+                                    <span class="text-blue text-bold">{{response_data.aplication_number}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                      <label class="mb-0">Transfer Reason:</label><br>
                                     <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
                                 </div>
-                                <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Brief description for seeking transfer</label><br>
-                                    <span class="text-blue text-bold">{{form.description}}</span>
-                                </div>
                             </div>
                         </div>
-                        </div>
+                         <div class="callout callout-success">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Reason for applying the transfer</label><br>
+                                <span class="text-blue text-bold">{{form.description}}</span>
+                            </div>
+                          </div>
+                         
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -73,7 +75,7 @@
                                             <th>SlNo</th>
                                             <th>Preferences</th>
                                             <th>Dzongkhag/Thromde</th>
-                                            <th id="school">School</th>
+                                            <th id="school" style="display:none">School</th>
                                             <th id="approveDzohead" style="display:none">Select Dzongkhag</th>
                                             <th v-if="approveSchool" style="display:none">Select School</th>
                                         </tr>
@@ -260,7 +262,6 @@ export default {
                 let data=response.data.data;
                 this.response_data=data;
                 this.gettransferconfig(data.transfer_window_id);
-                this.getStaffDetials(data.staff_id);
                 this.form.id=data.id;
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
@@ -273,7 +274,7 @@ export default {
                 if(this.form.status_id==9){
                     $('#reportId').show();
                 }
-                 if(this.form.status_id==10 ){
+                if(this.form.status_id==10 ){
                     $('#forwardId').show();
                     this.dzongkhagApproved=false;
                     this.schoolApproved=false;
@@ -283,9 +284,8 @@ export default {
                     this.dzongkhagApproved=true;
                     this.schoolApproved=true;
                 }
-
-                if(this.form.status_id == 1 || this.form.status_id == 2){
-                $('#verifyId').show();
+                if(this.form.status_id==1 || this.form.status_id==2){
+                    $('#verifyId').show();
                 }
                 if(this.form.status_id == 3  ){
                     $('#approveId').show();
@@ -349,18 +349,6 @@ export default {
             })
             .catch(function (error) {
                 console.log("Error:"+error)
-            });
-        },
-        getStaffDetials(staffId){
-            axios.get('loadCommons/viewStaffDetails/by_id/'+staffId)
-            .then(response =>{
-                let data = response.data.data;
-                if(data!=null){
-                    this.app_details=data;
-                }
-            })
-            .catch(errors =>{
-                console.log(errors)
             });
         },
         remove_error(field_id){
@@ -519,6 +507,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadactivedzongkhagList();
         this.form.application_no=this.$route.params.data.application_number;
         this.form.status_id=this.$route.params.data.status_id;
         this.form.userDzongkhag=this.$route.params.data.user_dzo_id;
@@ -527,7 +516,7 @@ export default {
         this.loadpositionTitleList();
         this.loadreasons();
         this.loadOrgList();
-        this.loadactivedzongkhagList();
+        
     }
 }
 </script>
