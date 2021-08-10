@@ -1,6 +1,15 @@
 const routes = [
-    { path: '/education_center_index', name:'education_center_index', component: require('./components/projection_indicator/education_center_index.vue').default },
+   // { path: '/education_center_index', name:'education_center_index', component: require('./components/projection_indicator/education_center_index.vue').default },
     // { path: '/student_Projection_index', name:'student_Projection_index', component: require('./components/projection_indicator/student_learner_index.vue').default },
+    { path: '/education_center_index',
+        component: require('./components/projection_indicator/education_center/education_center_index.vue').default,
+        children:[
+            { path: '/',name:'education_center_index', component: require('./components/projection_indicator/education_center/education_center_guidelines.vue').default },
+            { path: '/eccd_center_index',name:'eccd_center_index', component: require('./components/projection_indicator/education_center/eccds/eccd_center_index.vue').default },
+            { path: '/school_center_index',name:'school_center_index', component: require('./components/projection_indicator/education_center/eccds/school_center_index.vue').default },
+            { path: '/tertiary_center_index',name:'tertiary_center_index', component: require('./components/projection_indicator/education_center/eccds/tertiary_center_index.vue').default },
+        ],
+    },
     { path: '/student_Projection_index',
         component: require('./components/projection_indicator/student_learners/student_learner_index.vue').default,
         children:[
