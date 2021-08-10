@@ -429,7 +429,7 @@ const routes = [
                     { path: '/edit_gate_type', name:'edit_gate_type', component: require('./components/masters/organization_masters/gate_type/edit_gate_type.vue').default },
                     { path: '/list_gate_type', name:'list_gate_type', component: require('./components/masters/organization_masters/gate_type/list_gate_type.vue').default },
                 ]
-            },
+            }, 
         ]
     },
     //Organziation Routes (Establishment)
