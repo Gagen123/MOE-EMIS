@@ -688,7 +688,7 @@
                         <router-link to="/student_Projection_index" class="nav-link">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
-                                Student/Children/Trainer/Learner
+                                Student/Children/Learner
                             </p>
                         </router-link>
                     </li>
