@@ -132,6 +132,13 @@
                                 <label class="mb-1">Withdraw: <input type="checkbox" name="withdraw" v-model="form.withdraw" id="withdraw" class="icheck-success d-inline"></label>
                             </div>
                         </div>
+                         <div lass="form-group row" id="remarks">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks:<i class="text-danger">*</i></label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <div  class="row form-group fa-pull-right">
                          <div v-if="button" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Apply </button>
@@ -221,12 +228,14 @@ export default {
              axios.get('staff/transfer/loadAppealattachementDetails/'+appId)
             .then((response) =>{
                 let data = response.data.data;
+                alert(JSON.stringify(data));
                 this.draft_attachments=data.documents;
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
                 
                 if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
+                     $('#remarks').hide();
                 }
             })
             .catch(errors =>{

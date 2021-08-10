@@ -51,7 +51,6 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                // alert(JSON.stringify(data));
                  for(let i=0;i<data.length;i++){
                     this.SchoolList[data[i].id] =data[i].name;
                 }
