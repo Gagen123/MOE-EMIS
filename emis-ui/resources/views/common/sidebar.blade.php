@@ -22,7 +22,49 @@
                             Common Masters
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="org_master">
+                    <li class="nav-item has-treeview" id="organization_master">
+                        <a href="#" class="nav-link pt-1 pb-1">
+                            <i class="nav-icon fas fa-database"></i>
+                            <p>
+                                Organization Master
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item" id="approval">
+                                <router-link to="/org_approvalMaster_link" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    Approval Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="structure">
+                                <router-link to="/org_structureMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-building nav-icon"></i>
+                                    Structure Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="furniture&equiment">
+                                <router-link to="/org_furNequiMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-server nav-icon"></i>
+                                    Furniture & Equipment Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item" id="facility">
+                                <router-link to="/org_facilityMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-gamepad nav-icon"></i>
+                                    Facility & other Master
+                                </router-link>
+                            </li>
+                            <li class="nav-item has-treeview" id="otherOrg">
+                                <router-link to="/org_otherMaster_index" class="nav-link pt-1 pb-1">
+                                    <i class="fa fa-users nav-icon"></i>
+                                    other Master
+                                </router-link>
+                            </li>
+                        </ul>
+                    </li>
+                    
+                    <!-- <li class="nav-item has-treeview" id="org_master">
 
                         <router-link to="/OrganizationMasterIndex" class="nav-link">
                             <i class="nav-icon fas fa-database"></i>
@@ -30,7 +72,7 @@
                                 Organization Masters
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item has-treeview" id="staff_master">
                         <a href="#" class="nav-link pt-1 pb-1">
                             <i class="nav-icon fas fa-database"></i>
