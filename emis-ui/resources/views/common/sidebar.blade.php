@@ -63,7 +63,7 @@
                             </li>
                         </ul>
                     </li>
-                    
+
                     <!-- <li class="nav-item has-treeview" id="org_master">
 
                         <router-link to="/OrganizationMasterIndex" class="nav-link">
@@ -721,7 +721,7 @@
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="fa fa-adjust fa-poll nav-icon"></i>
                     <p>
-                        Projection and Indicator On
+                        Projection & Indicator
                         <i class="fas fa-angle-left right"></i>
                     </p>
                 </a>

@@ -18,12 +18,12 @@ class ProjectionController extends Controller{
 
     public function loadEccdChildren($type="",$dzo_id=""){
         $orgclassStream=[];
-        if($type=="ALL" && $dzo_id=="ALL"){
-            $orgclassStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/'.$type.'/'.$dzo_id);
-        }
+        $orgclassStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/'.$type.'/'.$dzo_id);
         $param = http_build_query(json_decode($orgclassStream)->data);
         // dd($param);
-        $orgclassStream= $this->apiService->getListData('emis/common_services/loadStudents/ECCD/'.$param);
+        if($param!=""){
+            $orgclassStream= $this->apiService->getListData('emis/common_services/loadStudents/ECCD/'.$param);
+        }
         return $orgclassStream;
     }
 }
