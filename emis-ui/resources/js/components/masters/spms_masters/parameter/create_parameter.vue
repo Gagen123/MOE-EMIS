@@ -4,6 +4,11 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Sequence No.:<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm text-right" v-model="form.sequence_no" :class="{ 'is-invalid': form.errors.has('sequence_no') }" id="sequence_no" @change="remove_err('sequence_no')" type="text">
+                        <has-error :form="form" field="sequence_no"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Domain :<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_domain_id" v-model="spm_domain_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_domain_id') }" @change="getAreas(); remove_err('spm_domain_id')">
                             <option value=""> ---Select---</option>
@@ -23,6 +28,8 @@
                         </select> 
                         <has-error :form="form" field="spm_area_id"></has-error>
                     </div>
+                </div>
+                <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Parameter:<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
@@ -53,7 +60,7 @@ export default {
             form: new form({
                 name: '',
                 spm_area_id:'',
-                // code:'',
+                sequence_no:'',
                 status:1,
                 record_type:'parameter',
                 action_type:'add',
@@ -90,7 +97,7 @@ export default {
             if(type=="reset"){
                 this.form.name= ''
                 this.form.spm_area_id = ''
-                // this.form.code = ''
+                this.form.sequence_no = ''
                 this.form.status= 1
             }
             if(type=="save"){

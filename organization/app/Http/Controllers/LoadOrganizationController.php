@@ -339,4 +339,13 @@ class LoadOrganizationController extends Controller{
 
         return $this->successResponse($response_data);
     }
+    // method by Chimi Thinley
+    public function getOrgWiseClassesForSpms(Request $request){
+        $response_data = DB::table('organization_class_streams')
+                ->select('organizationId AS org_id','classId AS org_class_id')
+                ->whereIn('organizationId',explode(",",$request['org_id']))
+                ->whereIn('classId',explode(",",$request['org_class_id']))->get();
+        return $response_data;
+    }
+
 }

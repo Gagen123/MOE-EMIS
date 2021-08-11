@@ -5,7 +5,7 @@
                 <table id="indicator-data-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>SL#</th>
+                            <th>SL No.</th>
                             <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
@@ -16,7 +16,7 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in indicators" :key="index">
-                            <td class="text-right">{{ index + 1 }}</td>
+                            <td class="text-right">{{ item.display_sequence_no }}</td>
                             <td>{{ item.domain }} </td>
                             <td>{{ item.area }} </td>
                             <td>{{ item.parameter }} </td>

@@ -63,7 +63,7 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get());
         }
 
-        if($type=="staffOrgwise"){
+        if($type=="staffOrgwise" || $type=="staffSchoolwise"){
             return $this->successResponse(PersonalDetails::where('status','Created')->where('working_agency_id',$parent_id)->get());
         }
         if($type=="staffDzongkhagwise"){
@@ -88,7 +88,7 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="orgwise" || $type=="userworkingagency"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id','comp_sub_id','elective_sub_id1','elective_sub_id2')->where('working_agency_id',$parent_id)->where('status','Created')->get());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','dzo_id','village_id','comp_sub_id','elective_sub_id1','elective_sub_id2')->where('working_agency_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="emptype"){
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());

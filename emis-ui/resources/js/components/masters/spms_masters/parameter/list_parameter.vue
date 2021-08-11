@@ -5,22 +5,20 @@
                 <table id="parameter-data-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>SL#</th>
+                            <th>SL No.</th>
                             <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
-                            <!-- <th>Code</th> -->
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in parameters" :key="index">
-                            <td class="text-right">{{ index + 1 }}</td>
+                            <td class="text-right">{{ item.display_sequence_no}}</td>
                             <td>{{ item.domain }} </td>
                             <td>{{ item.area }} </td>
                             <td>{{ item.name }} </td>
-                            <!-- <td>{{ item.code }}</td> -->
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
 
                             <td>

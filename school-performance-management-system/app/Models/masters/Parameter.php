@@ -14,7 +14,7 @@ class Parameter extends Model
         'id',
         'name',
         'spm_area_id',
-        'code',
+        'sequence_no',
         'status',
         'created_by'
     ];

@@ -8,26 +8,24 @@
                             <tr>
                                 <th>Sl#</th>
                                 <th>Dzongkhag</th>
-                                <th>EMO</th>
+                                <th>Assigned to EMO</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
-                            <tr  v-for="(item, index) in dzongkhags" :key="index">
+                            <tr  v-for="(item, index) in dzongkhagEMOs" :key="index">
                                  <td>{{ index+1}}</td>
                                 <td>
                                     {{item.name}}
                                 </td>
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <!-- <select v-model="classTeacherList[index].stf_staff_id" class="form-control select2">
-                                            <option selected="selected" value="">---Select---</option>
-                                            <option v-for="(item1, index1) in emos 
-                                            " :key="index1" :value="item1.stf_staff_id">
+                                        <select v-model="dzongkhagEMOs[index].staff_id" class="form-control select2">
+                                            <option value="">---Select---</option>
+                                            <option v-for="(item1, index1) in emdStaffs" :key="index1" :value="item1.id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span>
                                                 {{ item1.name }}, {{item1.position_title}}
                                             </option>
-                                        </select> -->
-                                        <!-- <has-error :form='form' field="aca_assmnt_frequency_id"></has-error> -->
+                                        </select>
                                     </div>
                                 </td>
                             </tr>
@@ -46,8 +44,8 @@
 export default {
     data() {
         return {
-            dzongkhags:[],
-            emos:[],
+            emdStaffs:[],
+            dzongkhagEMOs:[],
             dt:''
         }
     },
@@ -57,26 +55,38 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        getEMOs(data){
-            
-
+        getEMDStaffs(){
+            axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA')
+            .then(response => {
+                this.emdStaffs = response.data.data
+            }).catch(e =>{
+                console.log("Error"+e)
+            })
         },
-        getDzongkhagEMOs(){
-       
-            // let emo = await axios.get('spm/getDzoEMO').then(response => response.data.data);
-            // this.dzongkhags.forEach((item,index)=>{
-
-            // })
-
+        async getDzongkhagEMOs(){
+            let dzongkhags =  await this.loadactivedzongkhags()
+            let dzongkhagEMOs = await axios.get('masters/getDzoEMO').then(response => response.data.data)
+            
+            dzongkhags.forEach((item,index)=>{
+                dzongkhags[index].dzon_id = item.id
+                dzongkhags[index].staff_id = ""
+                dzongkhagEMOs.forEach(item1 => {
+                    if(item.id == item1.dzon_id){
+                        dzongkhags[index].staff_id = item1.staff_id
+                    }
+                })
+            })
+            this.dzongkhagEMOs = dzongkhags
         },
         save(){
-             axios.post('/academics/saveClassTeacher', {data:this.classTeacherList})
+            console.log(this.dzongkhagEMOs)
+             axios.post('/masters/saveDzoEMO', {data:this.dzongkhagEMOs})
                  .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    this.$router.push('/create-class-teacher');
+                    this.$router.push('/create-dzo-emo');
                 }).catch(function(errors){
                     if(errors.response.status === 422){
                         Swal.fire({
@@ -89,28 +99,13 @@ export default {
         },
 
     },
-    async mounted(){
-        this.dzongkhags = await this.loadactivedzongkhags()
-        axios.get('common/getSessionDetail')
-            .then(response => {
-                let data = response.data.data
-                let roleName="";
-                for(let i=0;i<data['roles'].length;i++){
-                    if(i==data['roles'].length-1){
-                        roleName+=data['roles'][i].roleName
-                    }
-                    else{
-                        roleName+=data['roles'][i].roleName+', '
-                    }
-                }
-        })
-        .catch(errors =>{
-            console.log(errors)
-        });
+    mounted(){
+        this.getDzongkhagEMOs()
+        this.getEMDStaffs()
         this.dt = $("#dzo-emo-table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
-                { width: 300, targets: 1},
+                { width: 200, targets: 1},
 
             ],
             drawCallback: function(dt) {
@@ -127,7 +122,7 @@ export default {
         })
     },
     watch: {
-        classTeacherList(val) {
+        dzongkhagEMOs(val) {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt = $("#dzo-emo-table").DataTable({
@@ -146,6 +141,5 @@ export default {
             });
         }
     }
-
 }
 </script>

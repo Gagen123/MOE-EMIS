@@ -5,20 +5,18 @@
                 <table id="rating-data-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>SL#</th>
                             <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
                             <th>Indicator</th>
                             <th>Score</th>
-                            <th>Description</th>
+                            <th>Description of Score</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in ratings" :key="index">
-                            <td class="text-right">{{ index + 1 }}</td>
                             <td>{{ item.domain }} </td>
                             <td>{{ item.area }} </td>
                             <td>{{ item.parameter }} </td>

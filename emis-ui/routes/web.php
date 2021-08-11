@@ -823,6 +823,16 @@ Route::prefix('academics')->group(function () {
     Route::post('/unlockForEditForConsolidated/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'unlockForEditForConsolidated'])->name('unlockForEditForConsolidated');
 
 });
+Route::prefix('spms')->group(function () {
+    Route::get('/getDeoDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getDeoDashboardData'])->name('getDeoDashboardData');
+    Route::get('/getSchoolDoeDetails/{spm_domain_subcat_id}/{status?}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDoeDetails'])->name('getSchoolDoeDetails');
+    Route::get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
+    Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
+    Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
+
+});
+
+
 
 
 Route::prefix('mess_manage')->group(function () {

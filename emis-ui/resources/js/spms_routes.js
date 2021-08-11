@@ -58,11 +58,37 @@ const routes = [
                     { path: '/create-school-deo', name: 'create_school_deo', component: require('./components/masters/spms_masters/school_deo_mapping/create_school_deo_mapping.vue').default },
                 ]
             },
-    
-            
-
         ]
     },
+      //spms Transaction Route
+      { path: '/spms', component: require('./components/spms/spms_index.vue').default,
+      children:
+      [
+            { path: '/',name:'spms', component: require('./components/spms/spms_list.vue').default},
+
+            { path: '/deo-evaluation', component: require('./components/spms/deo_evaluation/deo_evaluation_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/spms/deo_evaluation/deo_evaluation_dashboard.vue').default },
+                    { path: '/deo-evaluation-dashboard',name:'deo_evaluation_dashboard', component: require('./components/spms/deo_evaluation/deo_evaluation_dashboard.vue').default },
+                    { path: '/list-deo-evaluation', name: 'list_deo_evaluation', component: require('./components/spms/evaluation/list_evaluation.vue').default },
+                    { path: '/view-deo-evaluation', name: 'view_deo_evaluation', component: require('./components/spms/evaluation/view_evaluation.vue').default },
+                    { path: '/create-deo-evaluation', name: 'create_deo_evaluation', component: require('./components/spms/evaluation/create_evaluation.vue').default },
+                    { path: '/edit-deo-evaluation', name: 'edit_deo_evaluation', component: require('./components/spms/evaluation/edit_evaluation.vue').default },
+                ]
+            },
+
+            { path: '/school-evaluation', component: require('./components/spms/school_evaluation/school_evaluation_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/spms/school_evaluation/school_evaluation_dashboard.vue').default },
+                    { path: '/evaluation-dashboard',name:'school_evaluation_dashboard', component: require('./components/spms/school_evaluation/school_evaluation_dashboard.vue').default },
+                    { path: '/list-school-evaluation', name: 'list_school_evaluation', component: require('./components/spms/evaluation/list_evaluation.vue').default },
+                    { path: '/view-school-evaluation', name: 'view_school_evaluation', component: require('./components/spms/evaluation/view_evaluation.vue').default },
+                    { path: '/create-school-evaluation', name:'create_school_evaluation', component: require('./components/spms/evaluation/create_evaluation.vue').default },
+                    { path: '/edit-school-evaluation', name: 'edit_school_evaluation', component: require('./components/spms/evaluation/edit_evaluation.vue').default },
+                ]
+            },
+      ]
+  },
  
 
 

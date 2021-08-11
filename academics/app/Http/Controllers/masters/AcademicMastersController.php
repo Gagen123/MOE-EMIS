@@ -373,7 +373,7 @@ class AcademicMastersController extends Controller
             array_push($params,$request['org_stream_id']);
           } 
         DB::transaction(function() use($request, $query, $params) {
-            $this->updateClassSubject($request);
+            // $this->updateClassSubject($request);
             DB::delete($query, $params);
             if($request['data']){
                 foreach($request['data'] as $classSubject){

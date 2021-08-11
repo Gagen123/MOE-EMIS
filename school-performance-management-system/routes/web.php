@@ -17,7 +17,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
-
     //Masters routes
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveSpmMasters', ['uses' => 'masters\SpmsMasterController@saveSpmMasters']);
@@ -29,9 +28,13 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
 
     });
+    // Transaction Route
+    $router->group(['prefix' => 'spms'], function () use ($router) {
+        $router->get('/getDeoDashboardData/{dzon_id}/{staff_id}', ['uses' => 'spms\SpmsController@getDeoDashboardData']);
+        $router->get('/getSchoolDoeDetails/{dzon_id}/{staff_id}/{spm_domain_subcat_id}[/{status}]', ['uses' => 'spms\SpmsController@getSchoolDoeDetails']);
+        $router->get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', ['uses' => 'spms\SpmsController@getEvaluation']);
+        $router->post('/saveEvaluation', ['uses' => 'spms\SpmsController@saveEvaluation']);
+        $router->get('/getSchoolDashboardData/{org_id}', ['uses' => 'spms\SpmsController@getSchoolDashboardData']);
 
-    //Transaction Route
-    // $router->group(['prefix' => 'spms'], function () use ($router) {
-
-    // });
+    });
 });

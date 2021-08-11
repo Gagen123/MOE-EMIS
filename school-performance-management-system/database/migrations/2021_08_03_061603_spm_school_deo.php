@@ -17,6 +17,7 @@ class SpmSchoolDeo extends Migration
             $table->char('id',36)->primary();
             $table->char('org_id',36)->index();
             $table->char('staff_id',36)->index()->nullable();
+            $table->char('dzon_id',36);
             $table->char('created_by',36);
             $table->timestamps();
 

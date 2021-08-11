@@ -147,7 +147,7 @@
                     </li>
                     <li class="nav-item has-treeview" id="academicmaster">
                         <router-link to="/spms-master" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-book nav-icon"></i>
+                        <i class="nav-icon fas fa-chart-bar"></i>
                             SPMS Masters
                         </router-link>
                     </li>
@@ -259,6 +259,7 @@
                         Academics
                 </router-link>
             </li>
+            
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-save"></i>
@@ -465,6 +466,12 @@
                 </ul>
             </li>
             <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="spms">
+                <router-link to="/spms" class="nav-link pt-1 pb-1">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                    SPMS
+                </router-link>
+            </li>
             <li class="nav-item has-treeview" id="staff-transaction">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-users"></i>

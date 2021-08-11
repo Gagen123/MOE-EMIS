@@ -3,7 +3,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white"> 
                 <span class="card-title pt-2 mb-0">
-                    <b>Dzongkhag-EMO</b>
+                    <b>EMO-Dzongkhag</b>
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0">  

@@ -55,7 +55,7 @@
                 </div> 
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Description:<span class="text-danger">*</span></label> 
+                        <label>Description of Score:<span class="text-danger">*</span></label> 
                         <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')"></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
@@ -160,7 +160,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-parameter')
+                    this.$router.push('/list-rating')
                 })
                 .catch(() => {
                     console.log("Error.")

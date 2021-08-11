@@ -14,7 +14,7 @@ class Area extends Model
         'id',
         'name',
         'spm_domain_id',
-        'code',
+        'sequence_no',
         'status',
         'created_by'
     ];

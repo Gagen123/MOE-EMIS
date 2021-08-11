@@ -18,6 +18,7 @@ class SpmParameter extends Migration
             $table->char('spm_area_id',36)->index();
             $table->string('code',100)->nullable();
             $table->string('name',100)->unique();
+            $table->unsignedSmallInteger('sequence_no')->index();
             $table->unsignedTinyInteger('status')->index();
             $table->char('created_by',36);
             $table->timestamps();

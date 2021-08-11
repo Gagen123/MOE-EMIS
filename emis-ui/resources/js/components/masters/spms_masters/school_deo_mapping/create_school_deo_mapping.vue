@@ -3,33 +3,29 @@
         <form @submit.prevent="save" class="bootbox-form" id="classTeacher">
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="class-teacher-table" class="table table-sm table-bordered table-striped">
+                    <table id="school-deo-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>Sl#</th>
-                                <th>Class</th>
-                                <th>Class Teacher</th>
+                                <th>School</th>
+                                <th>Assigned to DEO/TEO</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
-                            <tr  v-for="(item, index) in classTeacherList" :key="index">
+                            <tr  v-for="(item, index) in schoolDEOs" :key="index">
                                  <td>{{ index+1}}</td>
                                 <td>
-                                    <input v-model="classTeacherList[index].org_class_id" class="form-control" type="hidden">
-                                    <input v-model="classTeacherList[index].org_stream_id" class="form-control" type="hidden">
-                                    <input v-model="classTeacherList[index].org_section_id" class="form-control" type="hidden">
-                                    {{ item.class_stream_section }}
+                                    {{ item.name }}
                                 </td>
                                 <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select v-model="classTeacherList[index].stf_staff_id" class="form-control select2">
-                                            <option selected="selected" value="">---Select---</option>
-                                            <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
+                                        <select v-model="schoolDEOs[index].staff_id" class="form-control select2">
+                                            <option value="">---Select---</option>
+                                            <option v-for="(item1, index1) in deos" :key="index1" :value="item1.id">
                                                 <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span>
                                                 {{ item1.name }}, {{item1.position_title}}
                                             </option>
                                         </select>
-                                        <!-- <has-error :form='form' field="aca_assmnt_frequency_id"></has-error> -->
                                     </div>
                                 </td>
                             </tr>
@@ -48,8 +44,9 @@
 export default {
     data() {
         return {
-            classTeacherList: [],
-            teacherList:[],
+            schoolDEOs:[],
+            deos: [],
+            dzo_id:[],
             dt:''
         }
     },
@@ -59,79 +56,37 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-       async getTeacher(){
-             let finalTeachers = []
-            try{
-                let teachers = await axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA').then(response => response.data.data)
-                let bb = []
-                teachers.forEach((item => {
-                    bb['cid_work_permit'] = item.cid_work_permit
-                    bb['emp_id'] = item.emp_id;
-                    bb['gender'] = item.gender;
-                    bb['name'] = item.name;
-                    bb['position_title'] = item.position_title;
-                    bb['position_title_id'] = item.position_title_id;
-                    bb['sex_id'] = item.sex_id;
-                    bb['stf_staff_id'] = item.id
-                    const obj = {...bb};
-                    finalTeachers.push(obj);
-                }))
-                this.teacherList = finalTeachers
-            }catch(e){
-                if(e.toString().includes("500")){
-                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-             }
+        getDEOs(){
+            axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA')
+            .then(response => {
+                this.deos = response.data.data
+            }).catch(e =>{
+                console.log("Error"+e)
+            })
         },
-        async classTeacher(){
-            try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let finalClassStreamsSection = [];
-                let renameId = []
-                classSections.forEach((item => {
-                    if(item.stream && item.section){
-                       renameId['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                    }else if(item.stream){
-                        renameId['class_stream_section'] = item.class+' '+item.stream
-                    }
-                    else if(item.section){
-                        renameId['class_stream_section'] = item.class+' '+item.section
-                    }else{
-                        renameId['class_stream_section'] = item.class
-                    }
-                    renameId['org_class_id'] = item.org_class_id;
-                    renameId['org_stream_id'] = item.org_stream_id;
-                    renameId['org_section_id'] = item.org_section_id;
-                    renameId['org_id'] = item.org_id;
-                    renameId['org_class_stream_id'] = item.OrgClassStreamId;
-                    renameId['stf_staff_id'] = "";
-                    const obj = {...renameId};
-                    finalClassStreamsSection.push(obj);
-                }))
-                let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
-                finalClassStreamsSection.forEach((classSection,index) => {
-                    classTeachers.forEach(item => {
-                        if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || ((classSection.org_stream_id == null || classSection.org_stream_id == "") && (item.org_stream_id == null || item.org_stream_id == ""))) && (classSection.org_section_id == item.org_section_id || ((classSection.org_section_id == null || classSection.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
-                            finalClassStreamsSection[index].stf_staff_id = item.stf_staff_id
-                        }
-                    })
-                })
-                this.classTeacherList = finalClassStreamsSection
+        async getSchoolDEOs(){
+          let schools = await this.schoolList(this.dzo_id);
+          let schoolDEOs = await axios.get('masters/getSchoolDEO').then(response => response.data.data)
 
-             }catch(e){
-                if(e.toString().includes("500")){
-                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-             }
+          schools.forEach((item,index) => {
+              schools[index].staff_id = ""
+              schools[index].school_id = item.id
+              schoolDEOs.forEach(item1 => {
+                  if(item.id == item1.org_id){
+                      schools[index].staff_id = item1.staff_id
+                  }
+              })
+          })
+          this.schoolDEOs = schools
         },
         save(){
-             axios.post('/academics/saveClassTeacher', {data:this.classTeacherList})
+             axios.post('/masters/saveSchoolDEO', {data:this.schoolDEOs,dzon_id:this.dzo_id})
                  .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    this.$router.push('/create-class-teacher');
+                    this.$router.push('/create-school-deo');
                 }).catch(function(errors){
                     if(errors.response.status === 422){
                         Swal.fire({
@@ -144,10 +99,11 @@ export default {
         },
 
     },
-    mounted(){
-        this.classTeacher();
-        this.getTeacher();
-        this.dt = $("#class-teacher-table").DataTable({
+    async mounted(){
+        this.dzo_id = await axios.get('common/getSessionDetail') .then(response => {return response.data.data.Dzo_Id})
+        this.getSchoolDEOs();
+        this.getDEOs();
+        this.dt = $("#school-deo-table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
             ],
@@ -165,10 +121,10 @@ export default {
         })
     },
     watch: {
-        classTeacherList(val) {
+        schoolDEOs(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#class-teacher-table").DataTable({
+                this.dt = $("#school-deo-table").DataTable({
                      drawCallback: function(dt) {
                         $('.select2').select2().
                         on("select2:select", e => {

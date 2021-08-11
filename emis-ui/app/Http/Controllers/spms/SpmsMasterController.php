@@ -21,21 +21,28 @@ class SpmsMasterController extends Controller
     public function saveSpmMasters(Request $request){
         if($request['record_type'] == 'domain') {
             $rules = [
-                'name'   =>  'required',
+                'spm_domain_category_id' =>'required',
+                'sequence_no' =>  'required',
+                'status' =>  'required',
+                'name' =>'required',
                 'status' =>  'required',
             ];
             $customMessages = [
-                'name.required'   => 'This field is required',
+                'spm_domain_category_id.required' => 'This field is required',
+                'name.required' => 'This field is required',
                 'status.required' => 'This field is required',
+                'sequence_no.required' => 'This field is required',
             ];
         }
         if($request['record_type'] == 'area') {
             $rules = [
+                'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'spm_domain_id'   =>  'required',
                 'status' =>  'required',
             ];
             $customMessages = [
+                'sequence_no.required'   => 'This field is required',
                 'name.required'   => 'This field is required',
                 'spm_domain_id.required'   => 'This field is required',
                 'status.required' => 'This field is required',
@@ -43,11 +50,13 @@ class SpmsMasterController extends Controller
         }
         if($request['record_type'] == 'parameter') {
             $rules = [
+                'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'spm_area_id' =>  'required',
                 'status' =>  'required',
             ];
             $customMessages = [
+                'sequence_no.required'   => 'This field is required',
                 'name.required'   => 'This field is required',
                 'spm_area_id.required'   => 'This field is required',
                 'status.required' => 'This field is required',
@@ -55,11 +64,13 @@ class SpmsMasterController extends Controller
         }
         if($request['record_type'] == 'parameter') {
             $rules = [
+                'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'spm_area_id' =>  'required',
                 'status' =>  'required',
             ];
             $customMessages = [
+                'sequence_no.required'   => 'This field is required',
                 'name.required'   => 'This field is required',
                 'spm_area_id.required'   => 'This field is required',
                 'status.required' => 'This field is required',
@@ -67,11 +78,13 @@ class SpmsMasterController extends Controller
         }
         if($request['record_type'] == 'indicator') {
             $rules = [
+                'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'spm_parameter_id' =>  'required',
                 'status' =>  'required',
             ];
             $customMessages = [
+                'sequence_no.required'   => 'This field is required',
                 'name.required'   => 'This field is required',
                 'spm_parameter_id.required'   => 'This field is required',
                 'status.required' => 'This field is required',
@@ -103,25 +116,54 @@ class SpmsMasterController extends Controller
         return $global_masters;
     }
     public function saveDzoEMO(Request $request){
-        // $this->validate($request, $rules, $customMessages);
-        // $request['user_id'] = $this->userId();
-        // $data = $request->all();
-        // $response_data = $this->apiService->createData('emis/masters/saveDzoEMO', $data);
-        // return $response_data;
+        $rules = [
+            'data.*.staff_id' => 'required',
+            'data.*.dzon_id' => 'required'
+
+        ];
+        $customMessages = [
+            'data.*.staff_id.required' => 'This field is required',
+            'data.*.dzon_id.required' => 'This field is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveDzoEMO', $data);
+        return $response_data;
     }
     public function getDzoEMO(){
         $global_masters = $this->apiService->listData('emis/masters/getDzoEMO');
         return $global_masters;
     }
     public function saveSchoolDEO(Request $request){
-        // $this->validate($request, $rules, $customMessages);
-        // $request['user_id'] = $this->userId();
-        // $data = $request->all();
-        // $response_data = $this->apiService->createData('emis/masters/saveSchoolDEO', $data);
-        // return $response_data;
+        $rules = [
+                'dzon_id' => 'required',
+                'data.*.staff_id' => 'required',
+                'data.*.school_id' => 'required'
+
+            ];
+            $customMessages = [
+                'data.*.staff_id.required' => 'This field is required',
+                'data.*.school_id.required' => 'This field is required',
+                'dzon_id.required' => 'This field is required',
+            ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveSchoolDEO', $data);
+        return $response_data;
     }
     public function getSchoolDEO(){
         $global_masters = $this->apiService->listData('emis/masters/getSchoolDEO');
         return $global_masters;
     }
+    // public function loadEmdUsers(){
+    //     $role_id=config('services.constant.emd_role_id');
+    //     $emd_user = $this->apiService->listData('system/getemdusers/'.$role_id);
+    //     return $emd_user;
+    // }
 }
+
