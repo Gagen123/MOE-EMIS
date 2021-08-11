@@ -74,10 +74,6 @@ export default {
                 { width: 300, targets: 6},
                 { width: 20, targets: 7},
                 { width: 20, targets: 8},
-
-
-
-
             ],
         })
     },

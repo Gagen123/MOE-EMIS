@@ -93,7 +93,7 @@ export default {
                 spm_indicator_id:'',
                 status:1,
                 record_type:'rating',
-                action_type:'add',
+                action_type:'edit',
             })
         }
     },

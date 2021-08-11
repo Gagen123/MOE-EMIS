@@ -49,7 +49,7 @@ export default {
     },
     methods:{
         async getEvaluation(){
-            let uri = 'spms/getEvaluation/'+this.org_id+'/'+this.spm_indicator_id
+            let uri = 'spms/getEvaluation/'+this.org_id+'/'+this.spm_domain_subcat_id
             let data = await axios.get(uri).then(response => {return response.data.data})
             this.evaluation = data.evaluation
             this.evalaution_details = data.evaluationDetails
@@ -57,7 +57,8 @@ export default {
     },
     created(){
         this.org_id =this.$route.params.data.org_id
-        this.spm_indicator_id =this.$route.params.data.spm_indicator_id
+        this.spm_domain_subcat_id =this.$route.params.data.spm_domain_subcat_id
+
     },
     mounted(){
         

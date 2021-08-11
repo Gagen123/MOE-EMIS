@@ -150,7 +150,9 @@ class SpmsMasterController extends Controller
                     'status'    =>  $request['status'],
                     'created_by' =>  $request['user_id'],
                 ];
-              $responsedata= Parameter::create($data);
+           try {  $responsedata= Parameter::create($data); }catch(Exception $e){
+               dd($e);
+           }
             }
             if($request['action_type']=="edit"){
                 $rules = [
