@@ -8,37 +8,13 @@
                 <li class="nav-item pr-1" @click="activatelink('student_trainings')">
                     <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Data Import For RUB
+                        Data Import For Institutes
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('student_trainings')">
-                    <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/Dahe_index" id="Molhr_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
-                        Data Import For MOLHR
-                    </router-link>
-                </li>
-                 <li class="nav-item pr-1" @click="activatelink('student_trainings')">
-                    <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Data Import For NFCED DAHE
-                    </router-link>
-                </li>
-                <li class="nav-item pr-1" @click="activatelink('student_trainings')">
-                    <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Data Import For NSB
-                    </router-link>
-                </li>
-                <li class="nav-item pr-1" @click="activatelink('student_trainings')">
-                    <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Data Import For DCRC
-                    </router-link>
-                </li>
-                <li class="nav-item pr-1" @click="activatelink('student_trainings')">
-                    <router-link to="/rub_data_import" id="rub_data_import" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-check"></span>
-                        Data Import For DCRC
+                         Data Import For DAHE
                     </router-link>
                 </li>
             </ul>

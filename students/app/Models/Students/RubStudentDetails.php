@@ -9,13 +9,15 @@ class RubStudentDetails extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="rub_student_details";
+    protected $table="import_student_details";
     protected $fillable = [
         'id',
-        'studentName',
+        'studentFemale',
         'institute_id',
-        'studentEmail',
-        'student_contactNo',
+        'studentMale',
+        'studentTotal',
+        'year',
+        'addAs',
         'created_at',
         'created_by',
         'updated_by',

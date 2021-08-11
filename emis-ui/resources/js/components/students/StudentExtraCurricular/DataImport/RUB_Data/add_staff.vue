@@ -22,51 +22,42 @@
                                     <has-error :form="form" field="institutes_id"></has-error>
                                 <span class="text-danger" id="institutes_id_err"></span>
                             </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Years:<span class="text-danger">*</span></label> 
+                                    <input class="form-control" v-model="form.year" :class="{ 'is-invalid': form.errors.has('year') }" id="year"  type="date">
+                                    <has-error :form="form" field="institutes_id"></has-error>
+                                <span class="text-danger" id="institutes_id_err"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-content">
-                 <label class="form-control-label"  for="input-file-import">Add Staff</label>
+                 <label class="form-control-label"  for="input-file-import">Staff Details</label>
                         <div class="form-group row">
                             <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Full Name<span class="text-danger">*</span></th>
-                                            <th>Email Address<span class="text-danger">*</span></th>
-                                            <th>Contact Number<span class="text-danger">*</span></th>
+                                            <th>Number of Male<span class="text-danger">*</span></th>
+                                            <th>Number of Female<span class="text-danger">*</span></th>
+                                            <th>Total Number<span class="text-danger">*</span></th>
                                             
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(item, index) in form.staff_form' :key="index">
+                                        <tr>
                                             <td>
-                                            <input type="text" name="staffName" class="form-control" v-model="item.staffName" :class="{ 'is-invalid': form.errors.has('staffName') }"/>    
+                                                <input type="number" name="male" id="male" value="0" class="form-control" v-model="form.staffMale"  :class="{ 'is-invalid': form.errors.has('male') }" @change="calculateTotal()"/>    
                                             </td>
                                             <td>                          
-                                                    <input type="text" name="staffEmail" class="form-control" v-model="item.staffEmail" :class="{ 'is-invalid': form.errors.has('staffEmail') }"/>
+                                                <input type="number" name="female" id="female" value="0" class="form-control" v-model="form.staffFemale" :class="{ 'is-invalid': form.errors.has('female') }" @change="calculateTotal()"/>
                                             </td>
                                             <td>
-                                                    <input type="number" name="staff_contactNo" class="form-control" v-model="item.staff_contactNo" :class="{ 'is-invalid': form.errors.has('staff_contactNo') }" />
+                                                 <input type="number" name="staffTotal"  id="staffTotal"   class="form-control" v-model="form.staffTotal" :class="{ 'is-invalid': form.errors.has('total') }" disabled />
                                             </td>
                                         </tr> 
-                                        <tr>
-                                            <td colspan=7> 
-                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="stafftAddMore" 
-                                                @click="stafftAddMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="staffremove" 
-                                                @click="staffremove()"><i class="fa fa-trash"></i> Remove</button>
-                                            </td>
-                                        </tr>                                    
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                <label class="mb-0.5">Remarks:<span class="text-danger">*</span></label>
-                                <textarea  class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                                <has-error :form="form" field="remarks"></has-error>
                             </div>
                         </div>
                 </div>
@@ -88,34 +79,14 @@ export default {
             form: new form({
                 collegeName:'',
                 institutes_id:'',
-                remarks:'',
+                year:'',
                 action_type:'add',
                 type:'staff',
-                staff_form:
-                    [{
-                        staffName:'',staffEmail:'',staff_contactNo:'',
-                    }], 
+                staffMale:'',staffFemale:'',staffTotal:'',
             })
         }
     },
     methods: {
-         //staff addmore
-        staffremove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).staffremoveClass('is-invalid');
-            }
-        },
-        stafftAddMore: function(){
-            this.count++;
-            this.form.staff_form.push({
-               staffName:'',staffEmail:'',staff_contactNo:'',})    
-        }, 
-        staffremove(index){    
-             if(this.form.staff_form.length>1){
-                this.count--;
-                this.form.staff_form.splice(index,1); 
-            }
-        },
         LoadInstitutesName(uri="students/ExternalDataImport/loadInstitues/all_institutes"){
             axios.get(uri)
             .then(response => {
@@ -126,6 +97,11 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        calculateTotal(){
+            let total= parseInt($('#male').val()) + parseInt($('#female').val());
+            $('#staffTotal').val(total);
+            this.form.staffTotal=total;
+        },
         onFileChange(e) {
            this.import_file = e.target.files[0];
        },
@@ -134,13 +110,13 @@ export default {
                 this.restForm();
             }
              if(type=="save"){
-                     this.form.post('students/ExternalDataImport/saveImported/',this.form)
-                    .then(() => {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/list_staff');
+                this.form.post('students/ExternalDataImport/saveImported/',this.form)
+                .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Details added successfully'
+                    })
+                    this.$router.push('/list_staff');
                 })
                 .catch(() => {
                     console.log("Error......")
