@@ -24,7 +24,7 @@
                 </router-link>
             </li>
         </ul>
-        <router-view></router-view>
+        <router-view class="mt-xl-n2"></router-view>
     </div>
 </div>
 

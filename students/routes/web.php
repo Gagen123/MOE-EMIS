@@ -272,6 +272,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadCounsellingProgram/{orgId}', ['uses' => 'Students\StudentCounsellingController@loadCounsellingProgram']);
         $router->get('/getCounsellingDetails/{couId}', ['uses' => 'Students\StudentCounsellingController@getCounsellingDetails']);
 
+        //Load Student Controller
+        $router->group(['prefix' => 'loadStudent'], function () use ($router) {
+            $router->get('/loadStudents/{type}/{param}', ['uses' => 'LoadStudent\LoadStudentController@loadStudents']);
+        });
     });
 
 });
