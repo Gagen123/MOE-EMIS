@@ -900,6 +900,7 @@ Route::prefix('diatery')->group(function (){
 Route::prefix('projections')->group(function (){
     Route::prefix('projectionController')->group(function (){
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
+        Route::get('/loadStudents/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadStudents'])->name('loadStudents');
     });
 
 });
