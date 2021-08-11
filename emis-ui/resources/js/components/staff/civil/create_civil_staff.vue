@@ -33,7 +33,7 @@
                                     <input type="radio" v-model="personal_form.emp_type" name="etype" value="4"> ESP/GSP
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5"><span id="empidcid">Emp Id/CID</span><i class="text-danger">*</i> </label>
+                                    <label class="mb-0.5"><span id="empidcid">Emp Id</span><i class="text-danger">*</i> </label>
                                     <input type="text" v-model="personal_form.cideid" @change="remove_error('cideid')" :class="{ 'is-invalid': personal_form.errors.has('cideid') }"  class="form-control" name="cideid" id="cideid">
                                     <has-error :form="personal_form" field="cideid"></has-error>
                                 </div>
@@ -110,28 +110,6 @@
                             </div>
                         </div>
                         <div class="callout callout-success">
-                            <span class="text-blue"><label><u>Contacts</u></label></span>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
-                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
-                                    <has-error :form="personal_form" field="contact_number"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
-                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
-                                    </label>
-                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
-                                    <has-error :form="personal_form" field="email"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Alternative Email:</label>
-                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
-                                    <has-error :form="personal_form" field="alternative_email"></has-error>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-success">
                             <span class="text-blue"><label><u>Permanent Address</u></label></span>
                             <div class="form-group row" id="bhutanese_address">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -161,6 +139,29 @@
                                     <label class="mb-0.5">Address:</label>
                                     <textarea class="form-control" id="address" v-model="personal_form.address"></textarea>
                                     <has-error :form="personal_form" field="address"></has-error>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-success">
+                            <span class="text-blue"><label><u>Contacts</u></label></span>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
+                                    <input type="number" @change="remove_error('contact_number')" v-model="personal_form.contact_number" :class="{ 'is-invalid': personal_form.errors.has('contact_number') }" class="form-control" name="contact_number" id="contact_number" >
+                                    <has-error :form="personal_form" field="contact_number"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Email:<i class="text-danger">*</i>
+                                        <img src="img/question.png" data-toggle="tooltip" title="System will use this email to send email notifications" class="brand-image img-circle elevation-3" style="width:25px">
+                                    </label>
+                                    <input type="text" @change="remove_error('email')" v-model="personal_form.email" :class="{ 'is-invalid': personal_form.errors.has('email') }" class="form-control" name="email" id="email" >
+                                    <has-error :form="personal_form" field="email"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Alternative Email:</label>
+                                    <input type="text" @change="remove_error('alternative_email')" v-model="personal_form.alternative_email" :class="{ 'is-invalid': personal_form.errors.has('alternative_email') }" class="form-control" name="alternative_email" id="alternative_email" >
+                                    <has-error :form="personal_form" field="alternative_email"></has-error>
                                 </div>
                             </div>
                         </div>
@@ -1209,25 +1210,36 @@ export default {
                 if(nextclass=="qualification-tab"){
                     this.personal_form.post('staff/savePersonalDetails')
                     .then((response) =>{
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved Successfully'
-                        });
-                        $('.select2').select2();
-                        $('.select2').select2({
-                            theme: 'bootstrap4'
-                        });
-                        if(response.data.data || (response.data.data!=undefined && response.data.data.id!=undefined)){
-                            if(response.data.data.id!=undefined && response.data.data.id!=null && response.data.data.id!=""){
-                                this.qualification_form.personal_id=response.data.data.id;
-                                this.nomination_form.personal_id=response.data.data.id;
+                        if(response.data.toString().includes('422')){
+                             Swal.fire({
+                                text: "Your CID or Email has been already registered. Please try with another one",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes!',
+                            });
+                        }else{
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data saved Successfully'
+                            });
+                            $('.select2').select2();
+                            $('.select2').select2({
+                                theme: 'bootstrap4'
+                            });
+                            if(response.data.data || (response.data.data!=undefined && response.data.data.id!=undefined)){
+                                if(response.data.data.id!=undefined && response.data.data.id!=null && response.data.data.id!=""){
+                                    this.qualification_form.personal_id=response.data.data.id;
+                                    this.nomination_form.personal_id=response.data.data.id;
+                                }
+                                this.change_tab(nextclass);
+                                this.loadqualificationdescription();
+                                this.loadqualification();
+                                this.loadcoursemode();
+                                this.loadqualication(this.personal_form.personal_id);
                             }
-                            this.change_tab(nextclass);
-                            this.loadqualificationdescription();
-                            this.loadqualification();
-                            this.loadcoursemode();
-                            this.loadqualication(this.personal_form.personal_id);
                         }
+
                     })
                     .catch((error) => {
                         if(!$('#working_agency_id').attr('class').includes('select2-hidden-accessible')){
@@ -1728,6 +1740,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        $('#bhutanese_address').show();
+        $('#foreign_address').hide();
         this.loadactivemaritalList();
         this.loaddraftpersonalDetails();
         this.loadactivesex_idList();

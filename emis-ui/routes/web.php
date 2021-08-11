@@ -162,7 +162,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadActiveFoodSourceMaster', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveFoodSourceMaster'])->name('loadActiveFoodSourceMaster');
 
 
-    // Academic Master 
+    // Academic Master
     Route::post('/saveAcademicMasters', [App\Http\Controllers\AdministrationController::class, 'saveAcademicMasters'])->name('saveAcademicMasters');
     Route::get('/loadAcademicMasters/{param}', [App\Http\Controllers\AdministrationController::class, 'loadAcademicMasters'])->name('loadAcademicMasters');
     Route::get('/subjectlist/{id}', [App\Http\Controllers\AdministrationController::class, 'subjectlist'])->name('subjectlist');
@@ -664,6 +664,12 @@ Route::prefix('students')->group(function () {
         Route::get('/getquestionnaire/{StudentId}', [App\Http\Controllers\student\SenQuestionnaireController::class, 'getQuestionnaire']);
         Route::post('/savequestionnaire', [App\Http\Controllers\student\SenQuestionnaireController::class, 'saveQuestionnaire']);
     });
+    //External Data import route
+    Route::prefix('ExternalDataImport')->group(function (){
+        Route::get('/getSenStudentList', [App\Http\Controllers\student\ExternalDataImputController::class, 'getSenStudentList']);
+        Route::get('/loadInstitues/{param}', [App\Http\Controllers\student\ExternalDataImputController::class, 'loadInstitues']);
+        Route::post('/saveImported', [App\Http\Controllers\student\ExternalDataImputController::class, 'saveImported']);
+    });
 
     Route::post('/reportStudents', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'reportStudents'])->name('reportStudents');
     Route::get('/loadUnreportedStudents/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadUnreportedStudents'])->name('loadUnreportedStudents');
@@ -870,7 +876,7 @@ Route::prefix('mess_manage')->group(function () {
     Route::get('/getquantity/{itemId}/{chekva}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getquantity'])->name('getquantity');
     Route::post('/saveStockIssuedEdit', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssuedEdit'])->name('saveStockIssuedEdit');
 
-    
+
     Route::get('/getInventoryList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryList'])->name('getInventoryList');
     Route::get('/getInventoryListLocal', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getInventoryListLocal'])->name('getInventoryListLocal');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'deleteFile'])->name('deleteFile');
@@ -887,6 +893,14 @@ Route::prefix('diatery')->group(function (){
     Route::get('/checkdata/{date}', [App\Http\Controllers\dietary\DietaryController::class, 'checkdata'])->name('checkdata');
 
     Route::post('/approvereject', [App\Http\Controllers\dietary\DietaryController::class, 'approvereject'])->name('approvereject');
+
+});
+
+//Projection links
+Route::prefix('projections')->group(function (){
+    Route::prefix('projectionController')->group(function (){
+        Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
+    });
 
 });
 

@@ -150,6 +150,7 @@ class TransferController extends Controller{
             'id'                                =>  $request->id,
             'reason_id'                         =>  $request->reason_id,
             'withdraw'                          =>  $request->withdraw,
+            'remarks'                           =>  $request->remarks,
             'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
             'description'                       =>  $request->description,

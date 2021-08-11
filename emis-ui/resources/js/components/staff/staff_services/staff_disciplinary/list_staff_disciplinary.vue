@@ -6,6 +6,7 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Name</th>
                             <th>Date of Offence</th>
                             <th>Offence Type</th>
                             <th>Severity</th>
@@ -15,6 +16,7 @@
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
+                            <td>{{ item.staff.emp_id}}:{{ item.staff.name}}</td>
                             <td>{{ item.offence_date}}</td>
                             <td>{{ item.offence_type}}</td>
                             <td>{{ item.offence_severity}}</td>
@@ -27,21 +29,21 @@
                 </table>
             </div>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             data_list:[],
-        } 
+        }
     },
     methods: {
         loadgenderList(uri = 'staff/staffServices/loadStaffdisaplinary'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                this.data_list = data; 
+                this.data_list = data;
             })
             .catch(function (error){
                console.log('Error: '+error);
@@ -60,25 +62,25 @@ export default {
         //             axios.get('staff/staffServices/deleteStaffServices/responsibility/'+id)
         //             .then((response) => {
         //                 if(response!=""){
-        //                     Toast.fire({  
+        //                     Toast.fire({
         //                         icon: 'success',
         //                         title: 'record has been deleted.'
         //                     });
         //                     this.loadgenderList();
-        //                 } 
+        //                 }
         //             })
         //             .catch((err) => {
         //                 Swal.fire(
         //                     'error!',
         //                     'Not able to delete. Please contact system administrator.Error: '+err,
         //                     'error',
-        //                 ); 
+        //                 );
         //                 console.log("Error:"+err)
         //             })
         //         }
         //     });
         // },
-        
+
         loadeditpage(itme){
             this.$router.push({name:"edit_staff_disciplinary",params:{data:itme}});
         }

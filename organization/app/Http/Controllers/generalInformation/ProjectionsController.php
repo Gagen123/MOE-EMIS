@@ -70,30 +70,26 @@ class ProjectionsController extends Controller
 
         if( $id != null){
             foreach ($request->items_received as $i=> $item){
-                $projection = array(
+                $feeder = array(
                     'feederschool'              => $request->feederschool,
-                    'classvii'                  => $request->classvii,
-                    'classix'                   => $request->classix,
-                    'classxi'                   => $request->classxi,
+                    'class'                     => $request->class,
                     'parentschool'              =>  $item['parentschool'],
                     'remarks'                   =>  $request['remarks'],
                     'created_by'                =>  $request->user_id,
                     'updated_at'                =>  date('Y-m-d h:i:s')
 
                 );
-                $spo = Feeder::where('id', $id)->update($projection);
-                return $this->successResponse($projection, Response::HTTP_CREATED);
+                $spo = Feeder::where('id', $id)->update($feeder);
+                return $this->successResponse($feeder, Response::HTTP_CREATED);
 
 
             }
 
             }else{
                 foreach ($request->items_received as $i=> $item){
-                    $projection = array(
+                    $feeder = array(
                         'feederschool'              => $request->feederschool,
-                        'classvii'                  => $request->classvii,
-                        'classix'                   => $request->classix,
-                        'classxi'                   => $request->classxi,
+                        'class'                     => $request->class,
                         'parentschool'              =>  $item['parentschool'],
                         'remarks'                   =>  $request['remarks'],
                         'created_by'                =>  $request->user_id,
@@ -102,7 +98,7 @@ class ProjectionsController extends Controller
                     );
                     // dd($projection);
                     try{
-                        $localpro = Feeder::create($projection);
+                        $localpro = Feeder::create($feeder);
 
                         } catch(\Illuminate\Database\QueryException $ex){
                             dd($ex->getMessage());

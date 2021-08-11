@@ -214,9 +214,17 @@ class TransferController extends Controller{
 
 
     public function UpdatedApplicantDetails(Request $request){
+        // if($request->remarks!="" ){
+        //     $remarks =[
+        //         'remarks'                         =>  $request->remarks,
+        //     ];
+        //     $response_data=TransferApplication::where('aplication_number', $request->application_number)->create($remarks);
+        // }
+
         $request_data1 =[
             'description'                         =>  $request->description,
             'transfer_reason_id'                  =>  $request->reason_id,
+            'withdrawn_remarks'                   =>  $request->remarks,
         ];
         TransferApplication::where('aplication_number', $request->application_number)->update($request_data1);
         $response_data = TransferApplication::where ('aplication_number', $request->application_number)->first();
@@ -562,7 +570,7 @@ class TransferController extends Controller{
                     'original_name'                    =>  $att['original_name'],
                     'user_defined_name'                =>  $att['user_defined_name'],
                 ];
-                $doc = DocumentDetails::create($doc_data);
+                $response_data = DocumentDetails::create($doc_data);
             }
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);

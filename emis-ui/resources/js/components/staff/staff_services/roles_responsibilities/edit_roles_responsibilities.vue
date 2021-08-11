@@ -3,19 +3,20 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
-                    <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
+                    <label class="mb-0.5">Staff:</label>
+                    <!-- <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
                         <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
                     </select>
-                    <has-error :form="resp_form" field="staff"></has-error>
-                </div> 
+                    <has-error :form="resp_form" field="staff"></has-error> -->
+                    {{staffdet}}
+                </div>
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Responsibility:<span class="text-danger">*</span></label> 
+                    <label>Responsibility:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="responsibility" v-model="resp_form.responsibility" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('responsibility') }">
                         <option v-for="(item, index) in responsibilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="resp_form" field="responsibility"></has-error>
                 </div>
             </div>
@@ -40,6 +41,7 @@ export default {
             screen_id:'',
             staffList:[],
             responsibilityList:[],
+            staffdet:'',
             id:'',
             resp_form: new form({
                 id:'',
@@ -110,9 +112,9 @@ export default {
             if(id=="responsibility"){
                 this.resp_form.responsibility=$('#responsibility').val();
             }
-            
+
         },
-        
+
     },
      mounted(){
         $('[data-toggle="tooltip"]').tooltip();
@@ -121,9 +123,9 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -132,6 +134,7 @@ export default {
         this.loadActiveResponList();
         this.resp_form.id=this.$route.params.data.id;
         this.resp_form.staff=this.$route.params.data.staff_id;
+        this.staffdet=this.$route.params.data.staff.name;
         this.resp_form.responsibility=this.$route.params.data.responsibility;
         this.resp_form.remarks=this.$route.params.data.remarks;
     },

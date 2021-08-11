@@ -481,6 +481,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadInactiveOrgList/{dzo_id}', ['uses' => 'LoadOrganizationController@loadInactiveOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
+        $router->get('/loadClassStreamSectionIds/{organizationType}/{category}/{dzoId}', ['uses' => 'LoadOrganizationController@loadClassStreamSectionIds']);
+
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
 
         $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);

@@ -6,6 +6,7 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
+                            <th>Name</th>
                             <th>Award Category</th>
                             <th>Award Type</th>
                             <th>Award By</th>
@@ -16,6 +17,7 @@
                     <tbody>
                         <tr v-for="(item, index) in staffaward_list" :key="index">
                             <td>{{ index+1}}</td>
+                            <td>{{ item.staff.emp_id}}:{{ item.staff.name}}</td>
                             <td>{{ item.award_category}}</td>
                             <td>{{ item.award_type}}</td>
                             <td>{{ item.award_given_by}}</td>
@@ -29,21 +31,21 @@
                 </table>
             </div>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
-        return{ 
+        return{
             staffaward_list:[],
-        } 
+        }
     },
     methods: {
         loadgenderList(uri = 'staff/staffServices/loadStaffAward'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
-                this.staffaward_list = data; 
+                this.staffaward_list = data;
             })
             .catch(function (error){
                console.log('Error: '+error);
@@ -62,25 +64,25 @@ export default {
                     axios.get('staff/staffServices/deleteStaffServices/award/'+id)
                     .then((response) => {
                         if(response!=""){
-                            Toast.fire({  
+                            Toast.fire({
                                 icon: 'success',
                                 title: 'record has been deleted.'
                             });
                             this.loadgenderList();
-                        } 
+                        }
                     })
                     .catch((err) => {
                         Swal.fire(
                             'error!',
                             'Not able to delete. Please contact system administrator.Error: '+err,
                             'error',
-                        ); 
+                        );
                         console.log("Error:"+err)
                     })
                 }
             });
         },
-        
+
         loadeditpage(itme){
             this.$router.push({name:"edit_staff_awards",params:{data:itme}});
         }
@@ -94,7 +96,7 @@ export default {
         // }
         this.dt =  $("#award-table").DataTable();
         this.loadgenderList();
-        
+
     },
     watch: {
         staffaward_list(val) {

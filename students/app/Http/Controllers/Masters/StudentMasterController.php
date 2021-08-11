@@ -76,6 +76,7 @@ class StudentMasterController extends Controller
                 'streamId'           =>  $request['streamId'],
                 'aca_sub_id'         =>  $request['aca_sub_id'],
                 'marks'              =>  $request['marks'],
+                'grade'              =>  $request['grade'],
                 'id'                 =>  $request['id'],
                 'updated_by'         =>  $request->user_id,
                 'created_at'         =>  date('Y-m-d h:i:s')
@@ -90,6 +91,10 @@ class StudentMasterController extends Controller
                    if(isset($classstream['marks'])){
                        $marks=$classstream['marks'];
                    }
+                   $grade="";
+                   if(isset($classstream['grade'])){
+                       $grade=$classstream['grade'];
+                   }
                    $aca_sub_id="";
                    if(isset($classstream['aca_sub_id'])){
                        $aca_sub_id=$classstream['aca_sub_id'];
@@ -98,6 +103,7 @@ class StudentMasterController extends Controller
                     'streamId'           =>  $request['streamId'],
                     'aca_sub_id'         =>  $aca_sub_id,
                     'marks'              =>  $marks,
+                    'grade'              =>  $grade,
                     'id'                 =>  $request['id'],
                     'created_by'         =>  $request->user_id,
                     'created_at'         =>  date('Y-m-d h:i:s')
