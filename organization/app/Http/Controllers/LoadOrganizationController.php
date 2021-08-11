@@ -79,6 +79,26 @@ class LoadOrganizationController extends Controller{
                 }
             }
         }
+
+        //added by Saru to get eccd list
+        if($type=="eccd"){
+            if($id=="ALL"){
+              
+             //   $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->get();
+             $response_data = DB::select(" SELECT 
+             COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
+             COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+             FROM organization_details");
+            }else{
+              //  $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
+              $response_data = DB::select(" SELECT 
+              COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
+              COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+              FROM organization_details
+              WHERE dzongkhagId = '".$id."'");
+            }
+        }
+      //  dd($response_data);
         return $this->successResponse($response_data);
     }
 
