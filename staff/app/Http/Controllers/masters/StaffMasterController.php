@@ -40,11 +40,22 @@ class StaffMasterController extends Controller{
                 'code'   =>  $request->code,
             ];
         }
+        if(isset($request->qualification_type)){
+            $master_data = $master_data+[
+                'q_type_id'   =>  $request->qualification_type,
+            ];
+        }
+        if(isset($request->qualification_level)){
+            $master_data = $master_data+[
+                'q_level_id'   =>  $request->qualification_level,
+            ];
+        }
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
+            // dd( $master_data);
             $response_data = $model::create($master_data);
         }
 
@@ -68,6 +79,10 @@ class StaffMasterController extends Controller{
         $model = new $modelName();
         if($type == 'all'){
             return $this->successResponse($model::get());
+        }
+        else if($type=="Qualification"){
+
+            return $this->successResponse($model::with('quialificationtype','quialificationlevel')->get());
         } else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }

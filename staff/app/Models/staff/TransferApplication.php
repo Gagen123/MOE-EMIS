@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models\staff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
@@ -17,6 +16,7 @@ class TransferApplication extends Model{
         'transfer_reason_id',
         'transferType',
         'description',
+        'withdrawn_remarks',
         'status',
         'preference_school',
         'dzongkhagApproved',

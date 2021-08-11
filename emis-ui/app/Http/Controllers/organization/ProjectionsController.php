@@ -48,4 +48,31 @@ class ProjectionsController extends Controller
         return $dis;
     }
 
+
+    public function saveFeeders(Request $request){
+        $rules = [
+            
+        ];
+        $customMessages = [
+            
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $loc =[
+            'id'                        => $request->id,
+            'feederschool'              => $request->preference_school1,
+            'class'                     => $request->class,
+            'items_received'            =>  $request->items_received,
+            'user_id'                   =>  $this->userId(),
+            'orgId'                     =>  $this->getWrkingAgencyId(),
+        ];
+        $response_data= $this->apiService->createData('emis/organization/feeder/saveFeeders', $loc);
+        return $response_data;
+    }
+    public function loadFeeders(){
+        $userId=$this->userId();
+        //dd( $orgId);
+        $dis = $this->apiService->listData('emis/organization/feeder/loadFeeders/'.$userId);
+        return $dis;
+    }
+
 }

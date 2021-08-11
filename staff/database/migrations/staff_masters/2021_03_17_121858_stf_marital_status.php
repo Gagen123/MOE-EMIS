@@ -10,6 +10,7 @@ class StfMaritalStatus extends Migration{
             $table->char('id',36)->unique()->primary();
             $table->string('name',150)->nullable(false);
             $table->char('code',4)->nullable(false);
+            $table->string('description',225)->nullable();
             $table->boolean('status')->default(1);
             $table->string('created_by',36)->nullable(true);
             $table->string('updated_by',36)->nullable(true);

@@ -900,6 +900,34 @@ class EstablishmentController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    /**
+     * get the dzongkhag id of the school
+     */
+
+    public function getSchoolDzongkhagId($id=""){
+        $response_data=OrganizationDetails::where('id',$id)->select('dzongkhagId')->get();
+        return $response_data;
+    }
+
+    /**
+     * get the list of HSS by dzongkhag
+     */
+
+    public function getHssSchoolList($dzo_id){
+        //this is for testing
+        $dzo_id = '21';
+        $response_data = DB::table('organization_details')
+                ->join('level','level.id','=','organization_details.levelId')
+                ->select('organization_details.id', 'organization_details.name', 'level.name as level')
+                ->where('organization_details.dzongkhagId', $dzo_id)
+                ->where('organization_details.category', 'public_school')
+                ->where('level.name','Higher Secondary School')
+                ->get();
+
+        return $response_data;
+
+    }
+
     public function loadorgs($type=""){
         $response_data="";
         if($type=="Org"){

@@ -13,6 +13,7 @@ class Qualification extends Model
     protected $fillable = [
         'id',
         'name',
+        'description',
         'q_type_id',
         'q_level_id',
         'code',

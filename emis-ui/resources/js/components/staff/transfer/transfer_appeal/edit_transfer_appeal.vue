@@ -69,14 +69,14 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
-                                <option v-for="(item, index) in transfertypeList" :key="index" v-bind:value="item.id">{{ item.type }}</option>
+                            <select v-model="form.aplication_number" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                                <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
                             </select>
-                        <has-error :form="form" field="transfer_type_id"></has-error>
+                        <has-error :form="form" field="aplication_number"></has-error>
                             </div>
                         </div>
                          <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-12 col-md-12 col-smSchoolList-12 col-xs-12">
                                 <label class="mb-0.5">Reason for seeking transfer appeal:<i class="text-danger">*</i></label>
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
@@ -132,6 +132,13 @@
                                 <label class="mb-1">Withdraw: <input type="checkbox" name="withdraw" v-model="form.withdraw" id="withdraw" class="icheck-success d-inline"></label>
                             </div>
                         </div>
+                         <div lass="form-group row" id="remarks">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks:<i class="text-danger">*</i></label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <div  class="row form-group fa-pull-right">
                          <div v-if="button" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Apply </button>
@@ -153,10 +160,11 @@ export default {
             t_warning:false,
             t_warning_message:'',
             reasonArray:{},
-            transferType:[],
+            
             draft_attachments:[],
             transfertypeList:[],
             intratransfer:[],
+            applicationNo:[],
             form: new form({
                 id: '',
                 t_year:'',
@@ -220,10 +228,14 @@ export default {
              axios.get('staff/transfer/loadAppealattachementDetails/'+appId)
             .then((response) =>{
                 let data = response.data.data;
+                alert(JSON.stringify(data));
                 this.draft_attachments=data.documents;
                 this.form.status=data.status;
+                this.form.transferType=data.transferType;
+                
                 if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
+                     $('#remarks').hide();
                 }
             })
             .catch(errors =>{
@@ -288,7 +300,7 @@ export default {
                             }
                         }
                         let formData = new FormData();
-                        formData.append('id', this.form.id);
+                        // formData.append('id', this.form.id);
                         formData.append('transfer_type_id', this.form.transfer_type_id);
                         formData.append('name', this.form.name);
                         formData.append('user_id', this.form.user_id);
@@ -365,16 +377,29 @@ export default {
             .then(response => {
                 this.form.name = response.data.data.Full_Name;
                 this.form.user_id = response.data.data.User_Id;
+                this.LoadApplicationDetailsByUserId(response.data.data.User_Id);
             })
             .catch(errors =>{
                 console.log(errors)
             });
         },
-         loadtransferType(uri = 'masters/loadGlobalMasters/all_transfer_type_list'){
+        LoadApplicationDetailsByUserId(user_id){
+              axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/Approved/' +user_id)
+                .then(response =>{
+                    let data = response.data;
+                     this.applicationNo =  data;
+                     this.form.aplication_number = data.aplication_number;
+                })
+                .catch(function (error){
+                console.log(error);
+            });
+
+        },
+        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.transfertypeList =  data.data.data;
+                this.form.type_id = response.data.data[0].id;
+
             })
             .catch(function (error){
                 console.log(error);
@@ -457,12 +482,13 @@ export default {
         this.changefunction(id);
         });
         this.profile_details();
-        this.loadtransferType();
+        this.LoadTransferType();
         this.loadtransferwindow();
         this.form.id=this.$route.params.data.id;
         this.form.transfer_type_id=this.$route.params.data.transferType;
         this.form.description=this.$route.params.data.description;
         this.form.aplication_number=this.$route.params.data.application_no;
+        this.form.transferType=this.$route.params.data.transferType;
         this.loadattachementDetails(this.$route.params.data.application_no);
     },
 }

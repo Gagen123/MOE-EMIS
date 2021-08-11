@@ -48,12 +48,14 @@
                                     <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
                                 </div>
                                 <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Brief description for seeking transfer</label><br>
-                                    <span class="text-blue text-bold">{{form.description}}</span>
-                                </div>
                             </div>
                         </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Reason for applying the transfer</label><br>
+                                <span class="text-blue text-bold">{{form.description}}</span>
+                            </div>
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">

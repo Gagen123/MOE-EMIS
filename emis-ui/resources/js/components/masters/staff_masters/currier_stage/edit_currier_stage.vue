@@ -4,12 +4,17 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Cureer Stage:<span class="text-danger">*</span></label> 
+                        <label>Cureer Stage:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_err('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Description:</label>
+                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <has-error :form="form" field="description"></has-error>
+                    </div>
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
+                        <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" readonly v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
@@ -19,14 +24,14 @@
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -36,9 +41,10 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                description:'',
                 code:'',
                 status:'',
-                record_type:'cureer_stage',
+                model:'CureerStage',
                 action_type:'edit',
             })
         }
@@ -56,7 +62,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStaffMasters',this.form)
+                this.form.post('staff/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -64,18 +70,19 @@ export default {
                     })
                     this.$router.push('/list_currier_stage');
                 })
-                .catch(() => { 
+                .catch(() => {
                     console.log("Error......")
                 })
             }
-		}, 
+		},
     },
     created() {
         this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
+        this.form.description=this.$route.params.data.description;
         this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
     },
-    
+
 }
 </script>

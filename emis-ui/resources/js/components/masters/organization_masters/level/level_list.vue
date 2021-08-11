@@ -20,7 +20,7 @@
                 <!-- <td>{{ item.Created_At }}</td> -->
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <a href="#" class="btn btn-info" @click="viewLevelList(item)"><i class="fas fa-edit"></i ></a>
+                        <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                     </div>
                 </td>
             </tr>
@@ -39,26 +39,40 @@ export default {
     },
 
     methods:{
-        loadLevelList(uri = 'masters/loadLevel'){
+        // loadLevelList(uri = 'masters/loadLevel'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.levelList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#level-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
+        // viewLevelList(data){
+        //     data.action='edit';
+        //     this.$router.push({name:'LevelEdit',params: {data:data}});
+        // },
+
+        loadLevelList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/Level'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.levelList =  data.data;
+                let data = response.data.data;
+                this.levelList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#level-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewLevelList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'LevelEdit',params: {data:data}});
         },
     },

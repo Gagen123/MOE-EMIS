@@ -7,8 +7,10 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponser;
 use App\Models\generalInformation\Projection;
+use App\Models\generalInformation\Feeder;
+
 use Illuminate\Support\Facades\DB;
-use App\Models\OrganizationClassStream;  
+use App\Models\OrganizationClassStream;
 use App\Models\Masters\Classes;
 
 class ProjectionsController extends Controller
@@ -43,16 +45,67 @@ class ProjectionsController extends Controller
             }else{
                 $organizationId  = $request['organizationId'];
                 foreach ($request->items_received as $i=> $item){
+                    $remarks="";
+                    if(isset($item['remarks'])){
+                        $remarks=$item['remarks'];
+                    }
                     $projection = array(
                         'organizationId'                        =>  $organizationId,
                         'academicYear'                          =>  $request['academicYear'],
                         'ProjectionNo'                          =>  $item['ProjectionNo'],
                         'class'                                 =>  $item['class'],
-                        'remarks'                               =>  $item['remarks'],
+                        'remarks'                               =>  $remarks,
                         'updated_by'                            =>  $request->user_id,
                         'created_at'                            =>  date('Y-m-d h:i:s')
                     );
                  $localpro = Projection::create($projection);
+                }
+                return $this->successResponse($localpro, Response::HTTP_CREATED);
+            }
+
+    }
+
+    public function saveFeeders(Request $request){
+        $id = $request->id;
+
+        if( $id != null){
+            foreach ($request->items_received as $i=> $item){
+                $feeder = array(
+                    'feederschool'              => $request->feederschool,
+                    'class'                     => $request->class,
+                    'parentschool'              =>  $item['parentschool'],
+                    'remarks'                   =>  $request['remarks'],
+                    'created_by'                =>  $request->user_id,
+                    'updated_at'                =>  date('Y-m-d h:i:s')
+
+                );
+                $spo = Feeder::where('id', $id)->update($feeder);
+                return $this->successResponse($feeder, Response::HTTP_CREATED);
+
+
+            }
+
+            }else{
+                foreach ($request->items_received as $i=> $item){
+                    $feeder = array(
+                        'feederschool'              => $request->feederschool,
+                        'class'                     => $request->class,
+                        'parentschool'              =>  $item['parentschool'],
+                        'remarks'                   =>  $request['remarks'],
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+
+                    );
+                    // dd($projection);
+                    try{
+                        $localpro = Feeder::create($feeder);
+
+                        } catch(\Illuminate\Database\QueryException $ex){
+                            dd($ex->getMessage());
+                            // Note any method of class PDOException can be called on $ex.
+                        }
+
+
                 }
                 return $this->successResponse($localpro, Response::HTTP_CREATED);
             }
@@ -67,8 +120,14 @@ class ProjectionsController extends Controller
     //    )->where('organizationId',$orgId)->get();
 
     //     return $equip;
-      
+
         $info = Projection::where('organizationId',$orgId)->get();
         return $info;
+    }
+
+    public function loadFeeders($userId=""){
+
+        $feeder = Feeder::where('created_by',$userId)->get();
+        return $feeder;
     }
 }

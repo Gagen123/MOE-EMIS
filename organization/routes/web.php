@@ -252,10 +252,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'compoundDetail'], function () use ($router) {
             $router->post('/saveSchoolCompundDetails', 'generalInformation\CompoundDetailController@saveSchoolCompundDetails');
-             $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
-             $router->get('/getEditCompoundDetail/{compId}', 'generalInformation\CompoundDetailController@getEditCompoundDetail');
+            $router->get('/loadcompoundareadetials/{orgId}', 'generalInformation\CompoundDetailController@loadcompoundareadetials');
+            $router->get('/getEditCompoundDetail/{compId}', 'generalInformation\CompoundDetailController@getEditCompoundDetail');
+            //$router->delete('/deleteFile/{id}', 'generalInformation\CompoundDetailController@deleteFile');
+            $router->delete('/deleteFile/{id}', ['uses' => 'generalInformation\CompoundDetailController@deleteFile']);
         });
-
         $router->group(['prefix' => 'disaster'], function () use ($router) {
             $router->post('/saveDisasterInformation', 'generalInformation\DisasterController@saveDisasterInformation');
             $router->get('/loadDisasterInformation/{orgId}', 'generalInformation\DisasterController@loadDisasterInformation');
@@ -276,6 +277,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
             $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        $router->group(['prefix' => 'feeder'], function () use ($router) {
+            $router->post('/saveFeeders', 'generalInformation\ProjectionsController@saveFeeders');
+            $router->get('/loadFeeders/{userId}', 'generalInformation\ProjectionsController@loadFeeders');
         });
 
         //newly added routs ends here
@@ -394,6 +400,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/registerOrganizationDetails', 'establishment\EstablishmentController@registerOrganizationDetails');
             $router->get('/getschoolDetials/{param}', ['uses' => 'establishment\EstablishmentController@getschoolDetials']);
             $router->get('/getFullSchoolDetials/{id}', ['uses' => 'establishment\EstablishmentController@getFullSchoolDetials']);
+            $router->get('/getSchoolDzongkhagId/{id}', ['uses' => 'establishment\EstablishmentController@getSchoolDzongkhagId']);
+            $router->get('/getHssSchoolList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getHssSchoolList']);
             $router->get('/getOrgDetailsById/{id}/{usertype}', 'establishment\EstablishmentController@getOrgDetailsById');
             $router->get('/loadorgbyId/{type}/{org_id}', 'establishment\EstablishmentController@loadorgbyId');
             $router->get('/loadorgbygewogId/{gewog_id}', 'establishment\EstablishmentController@loadorgbygewogId');
@@ -469,9 +477,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        $router->get('/loadProjection/{classid}', ['uses' => 'LoadOrganizationController@loadProjection']);
         $router->get('/loadInactiveOrgList/{dzo_id}', ['uses' => 'LoadOrganizationController@loadInactiveOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
+        $router->get('/loadClassStreamSectionIds/{organizationType}/{category}/{dzoId}', ['uses' => 'LoadOrganizationController@loadClassStreamSectionIds']);
+
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);
 
         $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);

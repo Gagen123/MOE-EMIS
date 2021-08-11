@@ -19,6 +19,7 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveAcademicMasters', ['uses' => 'masters\AcademicMastersController@saveAcademicMasters']);
+        $router->get('/subjectlist/{id}', ['uses' => 'masters\AcademicMastersController@subjectlist']);
         $router->get('/loadAcademicMasters/{param}','masters\AcademicMastersController@loadAcademicMasters');
         $router->get('/loadClassSubject/{class_id}[/{stream_id}]','masters\AcademicMastersController@loadClassSubject');
         $router->post('/saveClassSubject',['uses' => 'masters\AcademicMastersController@saveClassSubject']);

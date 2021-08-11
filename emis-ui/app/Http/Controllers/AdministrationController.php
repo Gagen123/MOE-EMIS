@@ -95,6 +95,11 @@ class AdministrationController extends Controller{
         $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
         return $global_masters;
     }
+    //written by gagen
+    public function subjectlist($id=""){
+        $global_masters = $this->apiService->listData('emis/masters/subjectlist/'.$id);
+        return $global_masters;
+    }
 
     public function getroles($param){
         // dd($this->getRoleIds('roleIds'));

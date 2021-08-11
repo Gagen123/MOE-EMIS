@@ -18,7 +18,7 @@
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewContactList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -37,28 +37,42 @@ export default {
     },
 
     methods:{
-        loadContactList(uri = 'masters/loadContactType'){
+
+        loadContactList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/ContactType'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.contactList =  data.data;
+                let data = response.data.data;
+                this.contactList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#contactType-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewContactList(data){
-            data.action='edit';
+        editmasters(data){ 
             this.$router.push({name:'ContactTypeEdit',params: {data:data}});
         },
+        // loadContactList(uri = 'masters/loadContactType'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.contactList =  data.data;
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        //     setTimeout(function(){
+        //         $("#contactType-table").DataTable({
+        //             "responsive": true,
+        //             "autoWidth": true,
+        //         }); 
+        //     }, 300);  
+        // },
+        // viewContactList(data){
+        //     data.action='edit';
+        //     this.$router.push({name:'ContactTypeEdit',params: {data:data}});
+        // },
     },
     mounted(){
         this.loadContactList();

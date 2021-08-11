@@ -15,6 +15,7 @@ class DisciplinaryActionTaken extends Model
     protected $fillable = [
         'id',
         'Name', 
+        'StdDisciplinarySeverity',
         'Description', 
         'Status'
     ];

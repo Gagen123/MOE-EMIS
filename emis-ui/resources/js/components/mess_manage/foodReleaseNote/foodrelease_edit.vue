@@ -50,7 +50,7 @@
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
                 </div> -->
-                 <div class="row">
+                <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="mb-0">Attach Food Release Note/Additional Documents<span class="text-danger">*</span></label>
                     </div>
@@ -65,7 +65,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr id="record1" v-for='(attach, count) in attachmentDetails' :key="count+1">
+                                <tr v-for='(attach, count) in attachmentDetails' :key="count+1" :id="'attachdel'+count">
                                 <template>
                                     <td>
                                         {{attach.user_defined_name}}
@@ -73,7 +73,7 @@
                                     <td>
                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                         <span>
-                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach)"> Delete </a>
+                                            <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
                                         </span>
                                     </td>
                                 </template>
@@ -94,7 +94,7 @@
                                             @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                             <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
                                             @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                        </td>
+                                        </td> 
                                     </tr>
                             </tbody>
                         </table>
@@ -283,7 +283,7 @@ export default {
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
+        deletefile(file,count){
             Swal.fire({
                 text: "Are you sure you wish to DELETE this selected file ?",
                 icon: 'info',
@@ -305,6 +305,7 @@ export default {
                                 'File has been deleted successfully.',
                                 'success',
                             );
+                            $('#attachdel'+count).remove();
                         }
                         else{
                         Swal.fire(
@@ -435,7 +436,7 @@ export default {
         //         this.form.items_released.splice(index,1);
         //     }
         // },
-         addMore: function(){
+        addMore: function(){
             this.count++;
             this.form.attachments.push({file_name:'', attachment:''});
         },

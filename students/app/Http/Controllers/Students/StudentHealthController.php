@@ -917,7 +917,7 @@ class StudentHealthController extends Controller
         $org_id =$param;
 
         $records = DB::table('std_health_vaccination')
-                    ->select('std_health_vaccination.id', 'std_health_vaccination.dose', 
+                    ->select('std_health_vaccination.id', 'std_health_vaccination.dose',
                                 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId',
                                 'std_vaccine_type.Name as vaccine_type')
                     ->leftjoin('std_student_vaccination', 'std_health_vaccination.id', '=', 'std_student_vaccination.StdHealthVaccinationId')
@@ -943,7 +943,7 @@ class StudentHealthController extends Controller
 
         $records = DB::table('std_health_vaccination')
                     ->select('std_health_vaccination.id as id', 'std_student.id AS StdStudentId', 'std_student.Name', 'std_student.student_code',
-                                'std_student_vaccination.id as vaccination_id', 'std_student_vaccination.status as given', 
+                                'std_student_vaccination.id as vaccination_id', 'std_student_vaccination.status as given',
                                 'std_student.DateOfBirth', 'std_student.CmnSexId', 'std_vaccine_type.Name as vaccination_type')
                     ->leftjoin('std_student_class_stream', 'std_health_vaccination.section', '=', 'std_student_class_stream.SectionDetailsId')
                     ->join('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
@@ -954,8 +954,7 @@ class StudentHealthController extends Controller
                     ->get();
 
         return $this->successResponse($records);
-        
-        return $response_data;
+
     }
 
     /**
@@ -964,9 +963,9 @@ class StudentHealthController extends Controller
      */
 
     public function getHealthVaccinationDetails($id=''){
-        
+
         $response_data = DB::table('std_vaccine_type')
-                    ->select('std_health_vaccination.id', 'std_health_vaccination.date', 'std_health_vaccination.class', 
+                    ->select('std_health_vaccination.id', 'std_health_vaccination.date', 'std_health_vaccination.class',
                                 'std_health_vaccination.section', 'std_health_vaccination.stream', 'std_vaccine_type.Name AS vaccine_type')
                     ->join('std_health_vaccination', 'std_health_vaccination.StdVaccineTypeId', '=', 'std_vaccine_type.id')
                     ->where('std_health_vaccination.id', $id)
@@ -979,7 +978,7 @@ class StudentHealthController extends Controller
 
         $response_data = DB::table('std_health_vaccination')
                             ->select('std_health_vaccination.*', 'std_student_vaccination.status as vaccinated','std_student.id AS StdStudentId',
-                                    'std_student_vaccination.id as vaccination_id', 
+                                    'std_student_vaccination.id as vaccination_id',
                                     'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId')
                             ->leftjoin('std_student_class_stream', 'std_health_vaccination.section', '=', 'std_student_class_stream.SectionDetailsId')
                             ->join('std_student', 'std_student_class_stream.StdStudentId', '=', 'std_student.id')
@@ -1015,7 +1014,7 @@ class StudentHealthController extends Controller
     }
 
     public function loadHealthSummary($org_id=''){
-        
+
     }
 
     public function loadScreeningEndorsement($org_id=''){
@@ -1050,14 +1049,14 @@ class StudentHealthController extends Controller
             //$records[$i]->total_student = $total_student[0]->total_student;
         }
         return $this->successResponse($records);
-        
+
     }
 
     public function loadVaccinationEndorsement($org_id=''){
-        
+
     }
 
     public function loadSupplementationEndorsement($org_id=''){
-        
+
     }
 }

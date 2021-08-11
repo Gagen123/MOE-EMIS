@@ -48,6 +48,13 @@ class StudentMasterController extends Controller{
             $data = $data + $additional_data;
         }
 
+        if($request->record_type == 'offence_type' || $request->record_type == 'disciplinary_action_taken'){
+            $additional_data = [
+                'offence_severity_id' => $request->offence_severity_id
+            ];
+            $data = $data + $additional_data;
+        }
+
         if($request->record_type == 'training'){
             $additional_data = [
                 'training_type_id' => $request->training_type_id,
@@ -96,7 +103,23 @@ class StudentMasterController extends Controller{
         return $response_data;
 
     }
-
+    public function saveStreamSubject(Request $request){
+        $rules = [
+            
+        ];
+        $customMessages = [
+            
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $data =[
+            'id'                        => $request->id,
+            'streamId'                  => $request->streamId,
+            'subjectlist'               =>  $request->subjectlist,
+            'user_id'                   =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/masters/students/saveStreamSubject', $data);
+        return $response_data;
+    }
     public function saveValidationcondition(Request $request){
         $rules = [
             'date'          =>  'required',
@@ -131,6 +154,11 @@ class StudentMasterController extends Controller{
     //get Scouts Section
     public function getScoutSection(){
         $scout_section = $this->apiService->listData('emis/masters/students/getScoutSection');
+        return $scout_section;
+    }
+    //by gagen
+    public function loadstreamMarks(){
+        $scout_section = $this->apiService->listData('emis/masters/students/loadstreamMarks');
         return $scout_section;
     }
     public function loadValidationcondition(){
@@ -207,6 +235,22 @@ class StudentMasterController extends Controller{
         $program_items = $this->apiService->listData('emis/masters/students/getProgramItems/'.$id);
         return $program_items;
     }
+
+    public function getStudentAwards($id=""){
+        $awards = $this->apiService->listData('emis/masters/students/getStudentAwards/'.$id);
+        return $awards;
+    }
+
+    public function getOffenceType($id=""){
+        $awards = $this->apiService->listData('emis/masters/students/getOffenceType/'.$id);
+        return $awards;
+    }
+
+    public function getActionTaken($id=""){
+        $awards = $this->apiService->listData('emis/masters/students/getActionTaken/'.$id);
+        return $awards;
+    }
+    
     
     public function saveFoodSourceType(Request $request){
         //dd($request);

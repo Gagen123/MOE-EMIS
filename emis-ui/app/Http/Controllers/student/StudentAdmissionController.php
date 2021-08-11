@@ -70,9 +70,10 @@ class StudentAdmissionController extends Controller{
             'type'                      =>  $request->type,
             'attachments'               =>  $path,
             'OrgOrganizationId'         =>  $this->getWrkingAgencyId(),
+            'Dzongkhagid'               =>  $this->getUserDzoId(),
             'user_id'                   =>  $this->userId()
         ];
-
+        // dd($data);
         //changed the route link to saveAdmissionStudentDetails from saveStudentDetails
         $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionStudentDetails', $data);
         return $response_data;
@@ -390,7 +391,7 @@ class StudentAdmissionController extends Controller{
         $student_list = $this->apiService->listData('emis/students/admission/getStudentDetails/'.$std_id);
         return $student_list;
     }
-    
+
     public function getstudentGuardainClassDetails($std_id="",$type=""){
         $student_list = $this->apiService->listData('emis/students/admission/getstudentGuardainClassDetails/'.$std_id.'/'.$type);
         return $student_list;
@@ -456,6 +457,7 @@ class StudentAdmissionController extends Controller{
     public function updateStudentAdmission(Request $request){
         $data =[
             'id'                        =>  $request->id,
+            'actionType'                =>  $request->actionType,
             'org_id'                    =>  $this->getWrkingAgencyId(),
             'dzo_id'                    =>  $this->getUserDzoId(),
             'user_id'                   =>  $this->userId()

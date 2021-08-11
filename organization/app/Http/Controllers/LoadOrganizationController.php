@@ -19,6 +19,7 @@ use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
 use App\Models\DepartmentModel;
+use App\Models\generalInformation\Projection;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -57,6 +58,14 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
             }
         }
+        if(strpos($type,'admission_dzongkhagwise')!==false){
+            $category=explode('__',$type)[1];
+            if($category=="ECCD"){
+                $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
+            }else{
+                $response_data=OrganizationDetails::wherein('category',['private_school','public_school'])->where('dzongkhagId',$id)->get();
+            }
+        }
         if($type=="private"){
             $response_data=OrganizationDetails::wherein('category',['private_school','private_eccd'])->where('dzongkhagId',$id)->get();
         }
@@ -70,6 +79,55 @@ class LoadOrganizationController extends Controller{
                 }
             }
         }
+
+        //added by Saru to get eccd list
+        if($type=="eccd"){
+            if($id=="ALL"){
+              
+             //   $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->get();
+             $response_data = DB::select(" SELECT 
+             COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
+             COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+             FROM organization_details");
+            }else{
+              //  $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
+              $response_data = DB::select(" SELECT 
+              COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
+              COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+              FROM organization_details
+              WHERE dzongkhagId = '".$id."'");
+            }
+        }
+        //to get both private and public School
+        if($type=="School"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_school' OR category = 'private_school'
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
+                GROUP BY a.category");
+               
+            }
+        }
+      //  dd($response_data);
         return $this->successResponse($response_data);
     }
 
@@ -77,6 +135,12 @@ class LoadOrganizationController extends Controller{
         $response_data=OrganizationDetails::where('status','0')->orwhere('status','Closed')
             ->where('dzongkhagId',$dzo_id)
             ->select( 'id','name','levelId','dzongkhagId')->get();
+        return $response_data;
+    }
+
+    public function loadProjection($classid){
+        $response_data=Projection::where('organizationId',explode('__',$classid)[1])->where('class',explode('__',$classid)[0])
+            ->select( 'id','ProjectionNo','academicYear')->first();
         return $response_data;
     }
 
@@ -177,6 +241,30 @@ class LoadOrganizationController extends Controller{
             JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id
             LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
             return $section;
+        }
+
+    }
+    //added by Tshewang to get organizaiton ids for projection and indicator
+    public function loadClassStreamSectionIds($organizationType="",$category="",$dzoId=""){
+        if($organizationType=='ECCD'){
+            $response_data = DB::table('organization_class_streams AS c')
+            ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
+            ->select('c.id')
+            ->wherein('o.category',['private_eccd','public_eccd']);
+            if($dzoId!="ALL"){
+                $response_data=$response_data->where('o.dzongkhagId',$dzoId);
+            }
+            if($category!="ALL"){
+                if($category=="Public"){
+                    $response_data=$response_data->where('o.category','public_eccd');
+                }
+                if($category=="Private"){
+                    $response_data=$response_data->where('o.category','private_eccd');
+                }
+                //need to do for other category
+            }
+            $response_data=$response_data->get();
+            return $this->successResponse($response_data);
         }
 
     }

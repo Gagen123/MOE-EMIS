@@ -2,20 +2,56 @@
     <div>
         <form>
             <div class="form-group row">
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label class="mb-0">Organization Type : <i class="text-danger">*</i></label>
+                    <select class="form-control select2" name="organization_type_id" id="organization_type_id">
+                        <option value=""> --Select--</option>
+                        <option value="Org">Organization/School </option>
+                        <option value="Dzongkhag">Dzongkhag</option>
+                        <option value="Ministry">Ministry </option>
+                    </select>
+                    <span class="text-danger" id="organization_type_id_err"></span>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="dzosection">
+                    <label class="mb-0">Dzongkhag: <i class="text-danger">*</i></label>
+                    <select class="form-control select2" id="dzongkhag_id">
+                        <option value=""> --Select--</option>
+                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <span class="text-danger" id="dzongkhag_id_err"></span>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="display:none" id="departmentdiv">
+                    <label class="mb-0">Department: <i class="text-danger">*</i></label>
+                    <select class="form-control select2" name="department_id" id="department_id">
+                        <option value="ALL"> --Select--</option>
+                        <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <span class="text-danger" id="department_id_err"></span>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <label class="mb-0">Organization: <i class="text-danger">*</i></label>
+                    <select class="form-control select2" id="org_id">
+                        <option value="ALL"> --Select--</option>
+                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <span class="text-danger" id="org_id_err"></span>
+                </div>
+            </div>
+            <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
                     <select v-model="award_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
                         <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
                     </select>
                     <has-error :form="award_form" field="staff"></has-error>
-                </div> 
+                </div>
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Award Category:<span class="text-danger">*</span></label> 
+                    <label>Award Category:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="award_category" v-model="award_form.award_category" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('award_category') }">
                         <option v-for="(item, index) in awardCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select> 
+                    </select>
                     <has-error :form="award_form" field="award_category"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -30,18 +66,18 @@
                         <label class="mb-1">Award Given By:<i class="text-danger">*</i></label>
                         <input type="text" @change="remove_error('award_given_by')" v-model="award_form.award_given_by" :class="{ 'is-invalid': award_form.errors.has('award_given_by') }" class="form-control" name="award_given_by" id="award_given_by" >
                         <has-error :form="award_form" field="award_given_by"></has-error>
-                    </div> 
+                    </div>
                 </div>
             </div>
-            
+
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Place:<span class="text-danger">*</span></label> 
+                    <label>Place:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_error('place')" type="text">
                     <has-error :form="award_form" field="place"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Date:<span class="text-danger">*</span></label> 
+                    <label>Date:<span class="text-danger">*</span></label>
                     <input class="form-control" v-model="award_form.date" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
@@ -64,6 +100,11 @@
 export default {
     data(){
         return {
+            dzongkhagList:[],
+            dzo_id:'',
+            departmentList:[],
+            orgList:[],
+
             screen_id:'',
             staffList:[],
             awardCategoryList:[],
@@ -152,6 +193,36 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
+            if(id=="dzongkhag_id"){
+                if($('#organization_type_id').val()==""){
+                    $('#organization_type_id_err').html('Please select Organization type');
+                }else{
+                    this.departmentList=[];
+                    this.orgList=[];
+                    $('#organization_type_id_err').html('');
+                    // alert($('#organization_type_id').val());
+                    if($('#organization_type_id').val()=="Org"){
+                        $('#departmentdiv').hide();
+                        this.orgList=await this.schoolList($('#dzongkhag_id').val());
+                    } else if($('#organization_type_id').val()=="Ministry"){
+                        $('#departmentdiv').show();
+                        this.departmentList=await this.getDepartmentListbydzo($('#organization_type_id').val(),$('#dzongkhag_id').val());
+                    } else{
+                        this.departmentList=[];
+                        $('#departmentdiv').show();
+                        this.departmentList=await this.getDepartmentListbydzo($('#organization_type_id').val(),$('#dzongkhag_id').val());
+                    }
+                }
+            }
+            if(id=="department_id"){
+                if($('#department_id').val()!=""){
+                    this.orgList=await this.getdivisionList($('#department_id').val());
+                }
+            }
+            if(id=="org_id"){
+                this.staffList = [];
+                this.staffList=await this.staffOrgwise($('#org_id').val());
+            }
             if(id=="award_category"){
                 this.award_form.award_category=$('#award_category').val();
                 this.loadAwardType($('#award_category').val());
@@ -163,19 +234,30 @@ export default {
                 this.award_form.staff=$('#staff').val();
             }
         },
-        
-        
+        loadstaff(){
+            let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.staffList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+
     },
-     mounted(){
+    async mounted(){
+        this.dzongkhagList= await this.loadactivedzongkhags();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -184,6 +266,6 @@ export default {
         this.loadActiveAwardList();
         this.screen_id=this.$route.query.data;
     },
-    
+
 }
 </script>

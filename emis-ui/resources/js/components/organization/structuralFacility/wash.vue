@@ -9,7 +9,7 @@
                 <ul class="nav nav-tabs" id="tabhead" role="tablist">
                     <li class="nav-item wash-tabs" @click="shownexttab('wash-tabs')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label> Wash </label>
+                            <label> Water </label>
                         </a>
                     </li>
                     <li class="nav-item sanitation-tab">

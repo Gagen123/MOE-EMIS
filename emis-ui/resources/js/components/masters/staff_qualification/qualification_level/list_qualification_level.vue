@@ -7,8 +7,9 @@
                     <th >Qualification Level</th>
                     <th >Status</th>
                     <th >Code</th>
+                    <th >description</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -17,6 +18,7 @@
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.description }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -24,7 +26,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -35,7 +37,8 @@ export default {
         }
     },
     methods:{
-        loadqualificationLevelList(uri = 'masters/loadStaffMasters/all_qualification_level_List'){
+        loadqualificationLevelList(uri = 'staff/loadStaffMasters/all/QualificationLevel'){
+        // loadqualificationLevelList(uri = 'masters/loadStaffMasters/all_qualification_level_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -50,9 +53,9 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_qualification_level',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
+    mounted(){
         this.loadqualificationLevelList();
         this.dt =  $("#working-agency-table").DataTable()
     },

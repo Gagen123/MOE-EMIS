@@ -16,7 +16,6 @@ class ClassXIController extends Controller
     }
     //
     public function savedetailsEnrolledStd(Request $request){
-        // dd($request);
         $rules = [
             // 'dzongkhag'                 => 'required',
             // 'school'                    => 'required',

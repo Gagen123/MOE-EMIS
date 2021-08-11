@@ -11,7 +11,7 @@
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label id="level_name"></label>
-                                                <input type="text" class="form-control" @change="removeerror('cid')" :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid" placeholder="Enter CID Number">
+                                                <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid" placeholder="Enter CID Number">
                                                 <has-error :form="form" field="cid"></has-error>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4">
@@ -47,20 +47,20 @@
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
                                             <label>Email Address:</label>
-                                            <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
                                             <has-error :form="form" field="email"></has-error>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <label>Contact Number:</label>
-                                            <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
+                                            <input type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
                                             <has-error :form="form" field="contact_number"></has-error>
                                         </div>
                                     </div>
                                      <div class="form-group row">
                                         <div class="col-lg-10 col-md-10 col-sm-10">
                                             <label>Present Address:</label>
-                                             <input type="text" class="form-control" @change="removeerror('paddress')" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
+                                             <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('paddress') }" id="paddress" v-model="form.paddress">
                                             <has-error :form="form" field="paddress"></has-error>
                                         </div>
                                     </div>

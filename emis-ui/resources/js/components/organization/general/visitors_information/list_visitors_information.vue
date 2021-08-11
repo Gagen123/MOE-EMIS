@@ -5,17 +5,24 @@
                 <tr>
                     <th >SL#</th>
                     <th >Visitor Name</th>
-                    <th >Date of Visit</th>
-                    <th >Remarks</th>
+                    <th> Designation</th>
+                    <th>Ministry/Agency</th>
+                    <th>Department/Division</th>
+                    <th>Date of Visit</th>
+                    <th >Purpose of Visit</th>
                     <th >Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.visitor}}</td>
+                    <td>{{ item.visitorname}}</td>
+                    <td>{{ item.designation}}</td>
+                    <td>{{ item.minitsryOrAgency}}</td>
+                    <td>{{ item.deptOrdivision}}</td>
                     <td>{{ item.dateOfVisit}}</td>
-                    <td>{{ item.remarks}}</td>
+                    <td>{{ item.purposeOfvisit}}</td>
+                   
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

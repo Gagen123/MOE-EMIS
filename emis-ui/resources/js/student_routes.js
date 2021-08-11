@@ -326,12 +326,29 @@ const routes = [
         { path: '/student_type_edit', name:'student_type_edit', component: require('./components/masters/student_masters/student_type/student_type_edit.vue').default },
       ]
     },
+    // stream class setting
+    { path: '/streamclass', component: require('./components/masters/student_masters/streamclass_setup/streamclass_index.vue').default ,
+    children: [
+      { path: '', name:'streamclass', component: require('./components/masters/student_masters/streamclass_setup/streamclass_list.vue').default },
+      { path: '/streamclass_list', name:'streamclass_list', component: require('./components/masters/student_masters/streamclass_setup/streamclass_list.vue').default },
+      { path: '/streamclass_add', name:'streamclass_add', component: require('./components/masters/student_masters/streamclass_setup/streamclass_add.vue').default },
+      { path: '/streamclass_edit', name:'streamclass_edit', component: require('./components/masters/student_masters/streamclass_setup/streamclass_edit.vue').default },
+    ]
+  },
     { path: '/scholar', component: require('./components/masters/student_masters/scholar/scholar_index.vue').default ,
       children: [
         { path: '', name:'scholar', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
         { path: '/scholar_list', name:'scholar_list', component: require('./components/masters/student_masters/scholar/scholar_list.vue').default },
         { path: '/scholar_add', name:'scholar_add', component: require('./components/masters/student_masters/scholar/scholar_add.vue').default },
         { path: '/scholar_edit', name:'scholar_edit', component: require('./components/masters/student_masters/scholar/scholar_edit.vue').default },
+      ]
+    },
+    { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
+      children: [
+        { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_list', name:'spbenefit_list', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+        { path: '/spbenefit_add', name:'spbenefit_add', component: require('./components/masters/student_masters/spbenefit/spbenefit_add.vue').default },
+        { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
       ]
     },
     { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
@@ -689,6 +706,37 @@ const routes = [
         },
     ]
     },
+      //External data import Routes
+      { path: '/data_import_index', component: require('./components/students/StudentExtraCurricular/DataImport/data_import.vue').default,
+      children: [
+          //RUB
+          { path: '/', component: require('./components/students/StudentExtraCurricular/DataImport/data_import_guideline.vue').default},
+          { path: '/rub_data_import', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/rub_data.vue').default,
+              children: [
+                  { path: '/', name:'rub_data_import', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
+                  { path: '/list_instittute', name:'list_instittute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
+                  { path: '/list_staff', name:'list_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_staff.vue').default },
+                  { path: '/list_student', name:'list_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_student.vue').default },
+                  { path: '/list_rub_data', name:'list_rub_data', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_rub_data.vue').default },
+                  { path: '/add_institute', name:'add_institute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_institute.vue').default },
+                  { path: '/add_staff', name:'add_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_staff.vue').default },
+                  { path: '/add_student', name:'add_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_student.vue').default },
+                  { path: '/edit_institute', name:'edit_institute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_institute.vue').default },
+                  { path: '/edit_staff', name:'edit_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_staff.vue').default },
+                  { path: '/edit_student', name:'edit_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_student.vue').default },
+              ]
+          },
+        //   DAHE
+          { path: '/Dahe_index', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/dahe.vue').default,
+              children: [
+                  { path: '/', name:'Dahe_index', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/list_outgoing_student.vue').default },
+                  { path: '/list_outgoing_student', name:'list_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/list_outgoing_student.vue').default },
+                  { path: '/add_outgoing_student', name:'add_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/add_outgoing_student.vue').default },
+                  { path: '/edit_outgoing_student', name:'edit_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/edit_outgoing_student.vue').default },
+              ]
+          },
+      ]
+      },
 
     //Student Health
     { path: '/student_health', component: require('./components/students/StudentHealth/index.vue').default,

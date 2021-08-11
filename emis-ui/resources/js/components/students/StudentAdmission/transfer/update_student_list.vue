@@ -9,39 +9,41 @@
                      <th >CID</th>
                      <th >Gender</th>
                      <th >Type of Admission</th>
-                     <th >Status</th>
+                     <th >School Decision</th>
+                     <th >Student Decision</th>
                      <th >Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(std, index) in stdList" :key="index">
+                <!-- <tr v-for="(std, index) in stdList" :key="index">
                     <td>{{ index + 1 }} </td>
                     <td>{{ std.student_code }}</td>
                     <td>{{ std.Name }}</td>
                     <td>{{ std.CidNo }}</td>
                     <td>{{ sex_idList[std.CmnSexId] }} </td>
                     <td>Transfer Student</td>
-                    <td>Transfer Student</td>
-                    <!-- <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
-                    </td> -->
+                    <td></td>
+                    <td></td>
+
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('transfer',std.id)"><span clas="fa fa-edit"></span>Admit</a>
                     </td>
-                </tr>
+                </tr> -->
                 <tr v-for="(std, count) in newAdmissionList" :key="count">
                     <td>{{ count + 1 }} </td>
                     <td>{{ }}</td>
-                    <td>{{ std.first_name }} {{ std.last_name }} </td>
-                    <td>{{ std.CidNo }}</td>
-                    <td>{{ sex_idList[std.CmnSexId] }} </td>
+                    <td>{{ std.admisiondet.FirstName }} {{ std.admisiondet.LastName }} </td>
+                    <td>{{ std.admisiondet.CidNo }}</td>
+                    <td>{{ sex_idList[std.admisiondet.CmnSexId] }} </td>
                     <td>New Admission</td>
-                    <td>{{ std.Status ==  'pending' ? "Applied" : std.Status}} </td>
+                    <td>{{ std.school_decision }} </td>
+                    <td>{{ std.student_decision }} </td>
                     <!-- <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Veiw/Update</a>
                     </td> -->
                     <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Admit</a>
+                        <a v-if="std.student_decision !=  'Accepted'" href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('Accepted',std.id)"><span clas="fa fa-edit"></span>Accept</a>
+                        <a v-else href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage('admission',std.id)"><span clas="fa fa-edit"></span>Admit</a>
                     </td>
                 </tr>
             </tbody>
@@ -61,6 +63,7 @@ export default {
 
             student_form: new form({
                 id:'',
+                actionType:'',
             }),
         }
     },
@@ -97,25 +100,38 @@ export default {
             if(type=="admission"){
                 // this.$router.push({name:'update_student_admission',params: {data:id}});
                 this.student_form.post('students/admission/updateStudentAdmission',this.student_form)
-                .then((response) => {  
+                .then((response) => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved Successfully'
                     });
                 })
-                .catch((error) => {  
+                .catch((error) => {
+                    console.log("Error:"+error)
+                });
+            }
+            else if(type=="Accepted"){
+                this.student_form.actionType=type;
+                this.student_form.post('students/admission/updateStudentAdmission',this.student_form)
+                .then((response) => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Data saved Successfully'
+                    });
+                })
+                .catch((error) => {
                     console.log("Error:"+error)
                 });
             }
             else{
                 this.student_form.post('students/admission/updateStudentTransfer',this.student_form)
-                .then((response) => {  
+                .then((response) => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved Successfully'
                     });
                 })
-                .catch((error) => {  
+                .catch((error) => {
                     console.log("Error:"+error)
                 });
 
@@ -176,7 +192,7 @@ export default {
         });
     },
     watch: {
-        stdList(val){
+        newAdmissionList(val){
             this.dt.destroy();
             this.$nextTick(()=>{
                 this.dt = $("#list-student-left").DataTable();
