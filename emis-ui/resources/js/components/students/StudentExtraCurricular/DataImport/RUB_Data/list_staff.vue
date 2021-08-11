@@ -5,7 +5,9 @@
                 <tr>
                      <th >No.</th>
                      <th >Institutes Name</th>
-                     <th >staff_name</th>
+                     <th >Male Staffs</th>
+                     <th >Female Staffs</th>
+                     <th >Total Staffs</th>
                      <th >Action</th>
                 </tr>
             </thead>
@@ -13,7 +15,9 @@
                 <tr v-for="(item, index) in staff" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ InstitutesName[item.institute_id]}}</td>
-                    <td>{{ item.staffName}}</td>
+                    <td>{{ item.staffMale}}</td>
+                    <td>{{ item.staffFemale}}</td>
+                    <td>{{ item.staffTotal}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -58,7 +62,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_student_programs',params: {data:data}});
+            this.$router.push({name:'edit_staff',params: {data:data}});
         },
     },
     mounted(){

@@ -22,55 +22,51 @@
                                     <has-error :form="form" field="institutes_id"></has-error>
                                 <span class="text-danger" id="institutes_id_err"></span>
                             </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Years:<span class="text-danger">*</span></label> 
+                                    <input class="form-control" v-model="form.year" :class="{ 'is-invalid': form.errors.has('year') }" id="year"  type="date">
+                                    <has-error :form="form" field="institutes_id"></has-error>
+                                <span class="text-danger" id="institutes_id_err"></span>
+                            </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Student Number is Added As?:<span class="text-danger">*</span></label> <br>
+                                        <label><input v-model="form.addAs"  type="radio" value="Add to Total" /> Add with Total Numbers</label> &nbsp;&nbsp;
+                                        <label><input v-model="form.addAs"  type="radio" value="new Enrollment" /> New Enrollment</label>
+                            </div>
+                         </div>
                     </div>
                 </div>
                 <div class="tab-content">
-                     <label class="form-control-label"  for="input-file-import">Add Student</label>
-                    <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                            <div class="form-group row">
-                                <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Full Name<span class="text-danger">*</span></th>
-                                                <th>Email Address<span class="text-danger">*</span></th>
-                                                <th>Contact Number<span class="text-danger">*</span></th>
-                                                
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for='(item, index) in form.student_form' :key="index">
-                                                <td>
-                                                <input type="text" name="studentName" class="form-control" v-model="item.studentName" :class="{ 'is-invalid': form.errors.has('studentName') }"/>    
-                                                </td>
-                                                <td>                          
-                                                        <input type="text"  name="studentEmail" class="form-control" v-model="item.studentEmail" :class="{ 'is-invalid': form.errors.has('studentEmail') }"/>
-                                                </td>
-                                                <td>
-                                                        <input type="number"  name="student_contactNo" class="form-control" v-model="item.student_contactNo" :class="{ 'is-invalid': form.errors.has('student_contactNo') }" />
-                                                </td>
-                                            </tr> 
-                                            <tr>
-                                                <td colspan=7> 
-                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="studentAddMore" 
-                                                    @click="studentAddMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="studentremove" 
-                                                    @click="studentremove()"><i class="fa fa-trash"></i> Remove</button>
-                                                </td>
-                                            </tr>                                    
-                                        </tbody>
-                                    </table>
-                                </div>
+                 <label class="form-control-label"  for="input-file-import">Student Details</label>
+                        <div class="form-group row">
+                            <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Number of Male<span class="text-danger">*</span></th>
+                                            <th>Number of Female<span class="text-danger">*</span></th>
+                                            <th>Total Number<span class="text-danger">*</span></th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                 <input type="number" name="male" id="male" value="0" class="form-control" v-model="form.studentMale"  :class="{ 'is-invalid': form.errors.has('male') }" @change="calculateTotal()"/>    
+                                            </td>
+                                            <td>                          
+                                                <input type="number" name="female" id="female" value="0" class="form-control" v-model="form.studentFemale" :class="{ 'is-invalid': form.errors.has('female') }" @change="calculateTotal()"/>
+                                            </td>
+                                            <td>
+                                                 <input type="number" name="Total"  id="Total"   class="form-control" v-model="form.studentTotal" :class="{ 'is-invalid': form.errors.has('total') }" disabled />
+                                            </td>
+                                        </tr> 
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label class="mb-0.5">Remarks:<span class="text-danger">*</span></label>
-                        <textarea  class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                        <has-error :form="form" field="remarks"></has-error>
-                    </div>
                 </div>
                 <div class="card-footer text-right">
                     <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -90,37 +86,16 @@ export default {
             form: new form({
                 collegeName:'',
                 institutes_id:'',
+                addAs:'',
                 remarks:'',
+                year:'',
                 action_type:'add',
                 type:'student',
-                student_form:
-                    [{
-                        studentName:'',studentEmail:'',student_contactNo:'',
-                    }], 
-               
+                studentMale:'',studentFemale:'',studentTotal:'',
             })
         }
     },
     methods: {
-        //student addmore
-        studentremove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).studentremoveClass('is-invalid');
-            }
-        },
-        studentAddMore: function(){
-            this.count++;
-            this.form.student_form.push({
-               studentName:'',studentEmail:'',student_contactNo:'',})    
-        }, 
-        
-        studentremove(index){    
-             if(this.form.student_form.length>1){
-                this.count--;
-                this.form.student_form.splice(index,1); 
-            }
-        },
-       
         LoadInstitutesName(uri="students/ExternalDataImport/loadInstitues/all_institutes"){
             axios.get(uri)
             .then(response => {
@@ -130,6 +105,12 @@ export default {
             .catch(function (error) {
                 console.log("Error:"+error)
             });
+        },
+        calculateTotal(){
+            let total= parseInt($('#male').val()) + parseInt($('#female').val());
+                $('#Total').val(total);
+                this.form.studentTotal=total;
+
         },
         onFileChange(e) {
            this.import_file = e.target.files[0];
