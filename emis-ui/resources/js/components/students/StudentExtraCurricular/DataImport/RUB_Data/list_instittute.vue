@@ -7,6 +7,8 @@
                      <th >Institutes Name</th>
                      <th >Dzongkhag/Thromde</th>
                      <th >Institutes Type</th>
+                     <th >Own By</th>
+                     <th >Status</th>
                      <th >Action</th>
                 </tr>
             </thead>
@@ -16,6 +18,8 @@
                     <td>{{ item.collegeName}}</td>
                     <td>{{ DzongkhagName[item.dzongkhag]}}</td>
                     <td>{{ item.institutes_type}}</td>
+                    <td>{{ item.own_by}}</td>
+                    <td>{{ item.status ==  1 ? "Active" : "Inactive"}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -47,7 +51,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_student_programs',params: {data:data}});
+            this.$router.push({name:'edit_institute',params: {data:data}});
         },
         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
             axios.get(uri)

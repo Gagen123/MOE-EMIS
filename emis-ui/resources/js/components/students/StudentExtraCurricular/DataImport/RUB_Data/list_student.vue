@@ -5,7 +5,9 @@
                 <tr>
                      <th >No.</th>
                      <th >Institutes Name</th>
-                     <th >Student Name</th>
+                     <th >Male Students</th>
+                     <th >Female Students</th>
+                     <th >Total Students</th>
                      <th >Action</th>
                 </tr>
             </thead>
@@ -13,7 +15,10 @@
                 <tr v-for="(item, index) in student" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ InstitutesName[item.institute_id]}}</td>
-                    <td>{{ item.studentName}}</td>
+                    <td>{{ item.studentMale}}</td>
+                    <td>{{ item.studentFemale}}</td>
+                    <td>{{ item.studentTotal}}</td>
+                    
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -58,7 +63,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_student_programs',params: {data:data}});
+            this.$router.push({name:'edit_student',params: {data:data}});
         },
     },
     mounted(){
