@@ -2,7 +2,7 @@
     <div>
         <div class="card card-primary card-outline">
             <div class="card-header pt-1 pb-1">
-                ECCD Children
+                School Students
             </div>
             <div class="card-body" >
                 <div class="form-group row">
@@ -20,8 +20,6 @@
                             <option value="ALL"> ALL</option>
                             <option value="Public"> Public</option>
                             <option value="Private"> Private</option>
-                            <option value="NGO"> NGO</option>
-                            <option value="Coorporate"> Coorporate</option>
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
                     </div> -->
@@ -30,11 +28,6 @@
                     </div>
                 </div>
                 <hr>
-                <!-- <div class="form-group row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label> Summary Report for: </label>
-                    </div>
-                </div> -->
                 <div class="form-group row">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -57,31 +50,97 @@
                                     <td>{{private_childrenList.femalecount}}</td>
                                     <td>{{private_childrenList.totalstd}}</td>
                                 </tr>
-                                <tr v-if="ngo_childrenList!={}">
-                                    <td>NGO</td>
-                                    <td>{{ngo_childrenList.malecount}}</td>
-                                    <td>{{ngo_childrenList.femalecount}}</td>
-                                    <td>{{ngo_childrenList.totalstd}}</td>
-                                </tr>
-                                <tr v-if="coor_childrenList!={}">
-                                    <td>Coorporate</td>
-                                    <td>{{coor_childrenList.malecount}}</td>
-                                    <td>{{coor_childrenList.femalecount}}</td>
-                                    <td>{{coor_childrenList.totalstd}}</td>
-                                </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td><b>Total </b></td>
                                     <td><b>{{totalmale}}</b></td>
                                     <td><b>{{totalfemale}}</b></td>
                                     <td><b>{{grandtotal}}</b></td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                        <div class="form-group row mb-0">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label> Total Number of Students in Public School: </label>
+                            </div>
+                        </div>
+                        <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <tbody>
+                                <tr>
+                                    <td><b>Level</b></td>
+                                    <td><b>Total Boys</b></td>
+                                    <td><b>Total Girls</b></td>
+                                    <td><b>Total</b></td>
                                 </tr>
+                                <tr v-if="public_higher_data!={}">
+                                    <td>HSS</td>
+                                    <td>{{public_higher_data.malecount}}</td>
+                                    <td>{{public_higher_data.femalecount}}</td>
+                                    <td>{{public_higher_data.totalstd}}</td>
+                                </tr>
+                                <tr v-if="public_middle_data!={}">
+                                    <td>MSS</td>
+                                    <td>{{public_middle_data.malecount}}</td>
+                                    <td>{{public_middle_data.femalecount}}</td>
+                                    <td>{{public_middle_data.totalstd}}</td>
+                                </tr>
+                                <tr v-if="public_lower_data!={}">
+                                    <td>LSS</td>
+                                    <td>{{public_lower_data.malecount}}</td>
+                                    <td>{{public_lower_data.femalecount}}</td>
+                                    <td>{{public_lower_data.totalstd}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <td><b>Total </b></td>
+                                    <td><b>{{totalmale}}</b></td>
+                                    <td><b>{{totalfemale}}</b></td>
+                                    <td><b>{{grandtotal}}</b></td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                        <div class="form-group row mb-0">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label> Total Number of Students in Private School: </label>
+                            </div>
+                        </div>
+                        <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <tbody>
+                                <tr>
+                                    <td><b>Level</b></td>
+                                    <td><b>Total Boys</b></td>
+                                    <td><b>Total Girls</b></td>
+                                    <td><b>Total</b></td>
+                                </tr>
+                                <tr v-if="private_higher_data!={}">
+                                    <td>HSS</td>
+                                    <td>{{private_higher_data.malecount}}</td>
+                                    <td>{{private_higher_data.femalecount}}</td>
+                                    <td>{{private_higher_data.totalstd}}</td>
+                                </tr>
+                                <tr v-if="private_middle_data!={}">
+                                    <td>MSS</td>
+                                    <td>{{private_middle_data.malecount}}</td>
+                                    <td>{{private_middle_data.femalecount}}</td>
+                                    <td>{{private_middle_data.totalstd}}</td>
+                                </tr>
+                                <tr v-if="private_lower_data!={}">
+                                    <td>LSS</td>
+                                    <td>{{private_lower_data.malecount}}</td>
+                                    <td>{{private_lower_data.femalecount}}</td>
+                                    <td>{{private_lower_data.totalstd}}</td>
+                                </tr>
+                                <!-- <tr>
+                                    <td><b>Total </b></td>
+                                    <td><b>{{totalmale}}</b></td>
+                                    <td><b>{{totalfemale}}</b></td>
+                                    <td><b>{{grandtotal}}</b></td>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <div class="card card-warning">
                             <div class="card-header pb-0 pt-2">
-                                <h3 class="card-title"><i class="fa fa-users"></i> ECCD Children</h3>
+                                <h3 class="card-title"><i class="fa fa-users"></i> Students</h3>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
                                     </button>
@@ -103,13 +162,17 @@ export default {
         return{
             dzongkhagList:[],
             orgList:[],
+            studentList:[],
             public_childrenList:[],
             private_childrenList:[],
-            ngo_childrenList:[],
-            coor_childrenList:[],
-            totalmale:0,
-            totalfemale:0,
-            grandtotal:0,
+
+            public_higher_data:[],
+            public_lower_data:[],
+            public_middle_data:[],
+
+            private_higher_data:[],
+            private_lower_data:[],
+            private_middle_data:[],
         }
     },
     methods:{
@@ -118,28 +181,27 @@ export default {
         },
         async generatesdetail(){
             let dzoId=$('#dzongkhag_id').val();
-            let category_id=$('#category_id').val();
-            let response_data= await this.loadEccdChildrens(category_id,dzoId);
+            let response_data=  await this.loadStudents(dzoId);
             this.public_childrenList=response_data.public_data[0];
             this.private_childrenList=response_data.private_data[0];
-            this.ngo_childrenList=response_data.ngo_data[0];
-            this.coor_childrenList=response_data.coorporate_data[0];
-            this.totalmale=this.public_childrenList.malecount+this.private_childrenList.malecount+this.ngo_childrenList.malecount+this.coor_childrenList.malecount;
-            this.totalfemale=this.public_childrenList.femalecount+this.private_childrenList.femalecount+this.ngo_childrenList.femalecount+this.coor_childrenList.femalecount;
-            this.grandtotal=this.public_childrenList.totalstd+this.private_childrenList.totalstd+this.ngo_childrenList.totalstd+this.coor_childrenList.totalstd;
+            this.public_higher_data=response_data.public_higher_data[0];
+            this.public_lower_data=response_data.public_lower_data[0];
+            this.public_middle_data=response_data.public_middle_data[0];
+
+            this.private_higher_data=response_data.private_higher_data[0];
+            this.private_lower_data=response_data.private_lower_data[0];
+            this.private_middle_data=response_data.private_middle_data[0];
             //Ploating Graph
             if(response_data!=""){
-                var peiData   = {
+                var peiData        = {
                     labels: [
                         'Public',
                         'Private',
-                        'Coorporate',
-                        'NGO',
                     ],
                     datasets: [
                         {
-                            data: [this.public_childrenList.totalstd,this.private_childrenList.totalstd,this.coor_childrenList.totalstd,this.ngo_childrenList.totalstd],
-                            backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#3c8dbc'],
+                            data: [this.public_childrenList.totalstd,this.private_childrenList.totalstd],
+                            backgroundColor : ['#f56954', '#00a65a'],
                         }
                     ]
                 }

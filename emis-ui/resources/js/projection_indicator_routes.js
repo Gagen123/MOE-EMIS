@@ -6,6 +6,8 @@ const routes = [
         children:[
             { path: '/',name:'student_Projection_index', component: require('./components/projection_indicator/student_learners/student_learner_guidelines.vue').default },
             { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/student_learners/eccds/eccd_index.vue').default },
+            { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/student_learners/school/school_index.vue').default },
+            { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/student_learners/tertiary/tertiary_index.vue').default },
         ],
     },
     { path: '/teacher_Projection_index', name:'teacher_Projection_index', component: require('./components/projection_indicator/teacher_facilitators_index.vue').default },
