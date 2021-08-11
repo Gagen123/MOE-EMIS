@@ -17,6 +17,7 @@ try {
                     console.log('error getdepartmentList '+e);
                 }
             },
+            
         },
     })
 

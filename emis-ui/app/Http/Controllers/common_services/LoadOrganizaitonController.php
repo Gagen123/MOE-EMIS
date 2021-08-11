@@ -53,7 +53,7 @@ class LoadOrganizaitonController extends Controller{
             $param=$id;
            
         }
-        if($type=="school"){
+        if($type=="School"){
             $param=$id;
         }
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);

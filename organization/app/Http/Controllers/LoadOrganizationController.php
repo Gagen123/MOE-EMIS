@@ -98,6 +98,35 @@ class LoadOrganizationController extends Controller{
               WHERE dzongkhagId = '".$id."'");
             }
         }
+        //to get both private and public School
+        if($type=="School"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_school' OR category = 'private_school'
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
+                GROUP BY a.category");
+               
+            }
+        }
       //  dd($response_data);
         return $this->successResponse($response_data);
     }
