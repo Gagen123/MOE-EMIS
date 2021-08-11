@@ -12,35 +12,47 @@
                 </div><br>
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
-                            <div class="row form-group">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Name of Tertiary Institutes:<span class="text-danger">*</span></label> 
-                                    <input class="form-control" v-model="form.collegeName" :class="{ 'is-invalid': form.errors.has('year') }" id="year"  type="text">
-                                    <has-error :form="form" field="year"></has-error>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Dzongkhag/Thromde:<span class="text-danger">*</span></label> 
+                        <div class="row form-group">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Name of Institute:<span class="text-danger">*</span></label> 
+                                <input class="form-control" v-model="form.collegeName" :class="{ 'is-invalid': form.errors.has('year') }" id="year"  type="text">
+                                <has-error :form="form" field="year"></has-error>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Dzongkhag/Thromde:<span class="text-danger">*</span></label> 
                                     <select v-model="form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
                                         <option value=""> -- Select-- </option>
                                         <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
-                                     <has-error :form="form" field="dzongkhag"></has-error>
-                                    <span class="text-danger" id="dzongkhag_err"></span>
-                                </div>
-                                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                    <label>Institutes Type:<span class="text-danger">*</span></label> 
-                                     <select class="form-control editable_fields" v-model="form.institutes_type">
-                                            <option  value="Teaching">Teaching</option>
-                                            <option value="General">General</option>
-                                            <option value="Technical">Technical</option>
-                                            <option  value="Zorig Chusum">Zorig Chusum</option>
-                                            <option value="Monastic">Monastic</option>
-                                            <option value="Technical">Vocational</option>
-                                     </select> 
-                                </div>
-                                
+                                    <has-error :form="form" field="dzongkhag"></has-error>
+                                <span class="text-danger" id="dzongkhag_err"></span>
                             </div>
                         </div>
+                        <div class="row form-group">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Institutes Type:<span class="text-danger">*</span></label> 
+                                    <select class="form-control editable_fields" v-model="form.institutes_type">
+                                        <option  value="Monastic Insitute">Monastic Insitutes</option>
+                                        <option value="Tertiary Institutes">Tertiary Institutes</option>
+                                        <option value="Technical/Vocational Institues">Technical/Vocational Institues</option>
+                                        <option  value="Zorig Chusum">Zorig Chusum</option>
+                                    </select> 
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Institutes own by:<span class="text-danger">*</span></label> <br>
+                                    <label><input v-model="form.own_by"  type="radio" value="Govt" /> Government</label> &nbsp;&nbsp;
+                                    <label><input v-model="form.own_by"  type="radio" value="Pvt" /> Private</label>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="required">Status:<span class="text-danger">*</span></label>
+                                <br>
+                                    <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                                    <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
+                            </div>
+                         </div>
+                    </div>
                 </div>
                     <div class="form-group row">
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -67,6 +79,8 @@ export default {
             form: new form({
                 collegeName:'',
                 dzongkhag:'',
+                own_by:'',
+                status:'',
                 remarks:'',
                 institutes_type:'',
                 action_type:'add',

@@ -9,12 +9,15 @@ class RubCollegeDetails extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="rub_college_details";
+    protected $table="import_institutes_details";
 
     protected $fillable = [
         'id',
         'collegeName',
         'dzongkhag',
+        'own_by',
+        'status',
+        'remarks',
         'institutes_type',
         'org_id',
         'created_at',

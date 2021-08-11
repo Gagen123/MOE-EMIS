@@ -195,16 +195,29 @@ class LoadOrganizationController extends Controller{
         }
 
     }
-
+    //added by Tshewang to get organizaiton ids for projection and indicator
     public function loadClassStreamSectionIds($organizationType="",$category="",$dzoId=""){
         if($organizationType=='ECCD'){
             $response_data = DB::table('organization_class_streams AS c')
             ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
             ->select('c.id')
-            ->wherein('o.category',['private_eccd','public_eccd'])
-            ->get();
+            ->wherein('o.category',['private_eccd','public_eccd']);
+            if($dzoId!="ALL"){
+                $response_data=$response_data->where('o.dzongkhagId',$dzoId);
+            }
+            if($category!="ALL"){
+                if($category=="Public"){
+                    $response_data=$response_data->where('o.category','public_eccd');
+                }
+                if($category=="Private"){
+                    $response_data=$response_data->where('o.category','private_eccd');
+                }
+                //need to do for other category
+            }
+            $response_data=$response_data->get();
             return $this->successResponse($response_data);
         }
+
     }
 
     public function getOrgProfile($id=""){

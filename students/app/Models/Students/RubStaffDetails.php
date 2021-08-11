@@ -11,13 +11,14 @@ class RubStaffDetails extends Model
     //
     //
     use HasFactory, Uuid;
-    protected $table="rub_staff_details";
+    protected $table="import_staff_details";
     protected $fillable = [
         'id',
-        'staffName',
+        'staffMale',
         'institute_id',
-        'staffEmail',
-        'staff_contactNo',
+        'staffFemale',
+        'staffTotal',
+        'year',
         'created_at',
         'created_by',
         'updated_by',
