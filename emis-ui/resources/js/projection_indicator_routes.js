@@ -79,7 +79,6 @@ const routes = [
             
         ],
     },
-<<<<<<< HEAD
     { path: '/enrollment_Projection_index',
         component: require('./components/projection_indicator/enrollment/enrollment_index.vue').default,
         children:[
@@ -90,15 +89,7 @@ const routes = [
         ],
     },
     { path: '/teacher_Projection_index', name:'teacher_Projection_index', component: require('./components/projection_indicator/teacher_facilitators_index.vue').default },
-  //  { path: '/enrollment_Projection_index', name:'enrollment_Projection_index', component: require('./components/projection_indicator/enrollment_index.vue').default },
-  //  { path: '/enrollment_byAge_index', name:'enrollment_byAge_index', component: require('./components/projection_indicator/enrollment_byAge_index.vue').default },
-=======
-    { path: '/enrollment_Projection_index', name:'enrollment_Projection_index', component: require('./components/projection_indicator/enrollment_index.vue').default },
-    { path: '/enrollment_byAge_index', name:'enrollment_byAge_index', component: require('./components/projection_indicator/enrollment_byAge_index.vue').default },
->>>>>>> 2ca82279960f2911274f13cf50e885ca33dc1cfd
-    { path: '/growth_Projection_index', name:'growth_Projection_index', component: require('./components/projection_indicator/indicator_byGrowth_index.vue').default },
-    { path: '/parity_Projection_index', name:'parity_Projection_index', component: require('./components/projection_indicator/gender_parity_index.vue').default },
-    { path: '/transition_Projection_index', name:'transition_Projection_index', component: require('./components/projection_indicator/tranisition_rate_index.vue').default },
+ 
     { path: '/bcsea_projection_index', name:'bcsea_projection_index', component: require('./components/projection_indicator/bcsea/bcsea_index.vue').default },
 
 ];
