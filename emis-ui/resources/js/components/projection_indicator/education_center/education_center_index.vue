@@ -8,19 +8,25 @@
             <li class="nav-item pr-1">
                 <router-link to="/eccd_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                   Eccd
+                   NO. of Education Center 
                 </router-link>
             </li>
             <li class="nav-item pr-1">
                 <router-link to="/school_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                    School
+                    Enrollemnt
                 </router-link>
             </li>
             <li class="nav-item pr-1">
                 <router-link to="/tertiary_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                    Tertiary
+                    Growth
+                </router-link>
+            </li>
+            <li class="nav-item pr-1">
+                <router-link to="/tertiary_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    
                 </router-link>
             </li>
         </ul>

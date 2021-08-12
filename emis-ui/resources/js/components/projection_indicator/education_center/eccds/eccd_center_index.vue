@@ -15,17 +15,18 @@
                         </select>
                         <span class="text-danger" id="dzongkhag_id_err"></span>
                     </div>
-                    <!-- <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="mb-0">Organization Category: <i class="text-danger">*</i></label>
-                        <select class="form-control select2" id="org_id">
-                            <option value="ALL"> --Select--</option>
-                            <option value="Public"> Public</option>
-                            <option value="Private"> Private</option>
-                            <option value="NGO"> NGO</option>
-                            <option value="Others"> Others</option>
+                        <select class="form-control select2" id="org_category">
+                            <!-- <option value="ALL"> --Select--</option> -->
+                            <option value="eccd">ECCD</option>
+                            <option value="School">School</option>
+                            <option value="Tertiary">Tertiary</option>
+                            <option value="ECR">ECR</option>
+                            <option value="SEN">School with SEN Programme</option>
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
-                    </div> -->
+                    </div>
                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 pt-3">
                         <button class="btn btn-primary btn-sm btn-lg mb-lg-n4" @click="generatesdetail()" type="button"> <span class="fa fa-download"></span> Load Details</button>
                     </div>
@@ -78,14 +79,15 @@ export default {
             eccdeducationCenter:[],
             dzongkhagList:[],
           //  orgList:[],
-        }
-    },
+        } 
+    }, 
     methods:{
         loadpage:function(type){
-            this.$router.push({name:type});
+            this.$router.push({name:type}); 
         },
         async generatesdetail(){
             let dzoId=$('#dzongkhag_id'). val();
+        //    let category_id=$('#org_category').val();
             this.eccdeducationCenter = await this.loadeducationCenter("eccd",dzoId);
             if(this.eccdeducationCenter!=""){
                 var peiData        = {

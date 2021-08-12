@@ -758,49 +758,6 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="messlink">
-<<<<<<< HEAD
-                        <router-link to="/enrollment_Projection_index" class="nav-link">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Enrollment
-                            </p>
-                        </router-link>
-                    </li>
-                    <!-- <li class="nav-item" id="messlink">
-                        <router-link to="/enrollment_byAge_index" class="nav-link">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Enrollment By Age
-                            </p>
-                        </router-link>
-                    </li> -->
-                    <li class="nav-item" id="messlink">
-                        <router-link to="/growth_Projection_index" class="nav-link">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Indicator on Growth
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="messlink">
-                        <router-link to="/parity_Projection_index" class="nav-link">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Gender Parity Index
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="messlink">
-                        <router-link to="/transition_Projection_index" class="nav-link">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Transition Rate
-                            </p>
-                        </router-link>
-                    </li>
-                    <li class="nav-item" id="messlink">
-=======
->>>>>>> 14e66480297be16c6edef7db100514b84bf39e27
                         <router-link to="/bcsea_Projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>

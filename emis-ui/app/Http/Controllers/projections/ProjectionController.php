@@ -26,7 +26,7 @@ class ProjectionController extends Controller{
         //     if($orgclassStream!=null && $orgclassStream!=""){
         //         $response_data['total_data']=json_decode($orgclassStream);
         //     }
-        // }
+        // } 
         $response_data=[];
         $publicOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/Public/'.$dzo_id);
         $public = http_build_query(json_decode($publicOrgStream)->data);

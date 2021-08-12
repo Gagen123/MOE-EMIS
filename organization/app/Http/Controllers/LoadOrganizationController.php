@@ -83,15 +83,15 @@ class LoadOrganizationController extends Controller{
         //added by Saru to get eccd list
         if($type=="eccd"){
             if($id=="ALL"){
-
+              
              //   $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->get();
-             $response_data = DB::select(" SELECT
+             $response_data = DB::select(" SELECT 
              COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
              COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
              FROM organization_details");
             }else{
               //  $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
-              $response_data = DB::select(" SELECT
+              $response_data = DB::select(" SELECT 
               COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
               COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
               FROM organization_details
@@ -124,9 +124,11 @@ class LoadOrganizationController extends Controller{
                 LEFT JOIN `level` l ON l.id = a.levelId
                 WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
                 GROUP BY a.category");
-
+               
             }
         }
+       
+
       //  dd($response_data);
         return $this->successResponse($response_data);
     }
@@ -250,7 +252,7 @@ class LoadOrganizationController extends Controller{
             $response_data = DB::table('organization_class_streams AS c')
             ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
             ->select('c.id')
-            ->wherein('o.category',['private_eccd','public_eccd','ngo_eccd','coorporate_eccd']);
+            ->wherein('o.category',['private_eccd','public_eccd']);
             if($dzoId!="ALL"){
                 $response_data=$response_data->where('o.dzongkhagId',$dzoId);
             }
@@ -261,69 +263,11 @@ class LoadOrganizationController extends Controller{
                 if($category=="Private"){
                     $response_data=$response_data->where('o.category','private_eccd');
                 }
-                if($category=="NGO"){
-                    $response_data=$response_data->where('o.category','ngo_eccd');
-                }
-                if($category=="Coorporate"){
-                    $response_data=$response_data->where('o.category','coorporate_eccd');
-                }
                 //need to do for other category
             }
             $response_data=$response_data->get();
             return $this->successResponse($response_data);
         }
-        if($organizationType=='School'){
-            $response_data = DB::table('organization_class_streams AS c')
-            ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
-            ->join('level AS l', 'l.id', '=', 'o.levelId')
-            ->select('c.id');
-            // ->wherein('o.category',['private_eccd','public_eccd','ngo_eccd','coorporate_eccd']);
-            if($dzoId!="ALL"){
-                $response_data=$response_data->where('o.dzongkhagId',$dzoId);
-            }
-            if($category!="ALL"){
-                if($category=="Public"){
-                    $response_data=$response_data->where('o.category','public_school');
-                }
-                if($category=="Public_HSS"){
-                    $response_data=$response_data->where('o.category','public_school')
-                    ->where('o.category','public_school')
-                    ->where('l.name','like','Higher%');
-                }
-                if($category=="Public_MSS"){
-                    $response_data=$response_data->where('o.category','public_school')
-                    ->where('o.category','public_school')
-                    ->where('l.name','like','Middle%');
-                }
-                if($category=="Public_LSS"){
-                    $response_data=$response_data->where('o.category','public_school')
-                    ->where('o.category','public_school')
-                    ->where('l.name','like','Lower%');
-                }
-                if($category=="Private"){
-                    $response_data=$response_data->where('o.category','private_school');
-                }
-                if($category=="Private_HSS"){
-                    $response_data=$response_data->where('o.category','private_school')
-                    ->where('o.category','private_school')
-                    ->where('l.name','like','Higher%');
-                }
-                if($category=="Private_MSS"){
-                    $response_data=$response_data->where('o.category','private_school')
-                    ->where('o.category','private_school')
-                    ->where('l.name','like','Middle%');
-                }
-                if($category=="Private_LSS"){
-                    $response_data=$response_data->where('o.category','private_school')
-                    ->where('o.category','private_school')
-                    ->where('l.name','like','Lower%');
-                }
-                //need to do for other category
-            }
-            $response_data=$response_data->get();
-            return $this->successResponse($response_data);
-        }
-
 
     }
 
@@ -485,13 +429,4 @@ class LoadOrganizationController extends Controller{
 
         return $this->successResponse($response_data);
     }
-    // method by Chimi Thinley
-    public function getOrgWiseClassesForSpms(Request $request){
-        $response_data = DB::table('organization_class_streams')
-                ->select('organizationId AS org_id','classId AS org_class_id')
-                ->whereIn('organizationId',explode(",",$request['org_id']))
-                ->whereIn('classId',explode(",",$request['org_class_id']))->get();
-        return $response_data;
-    }
-
 }
