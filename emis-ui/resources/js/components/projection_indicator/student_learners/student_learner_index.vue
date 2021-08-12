@@ -8,6 +8,37 @@
             <li class="nav-item pr-1">
                 <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
+                   Students
+                </router-link>
+            </li>
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                   Enrollment
+                </router-link>
+            </li>
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                   Growth Rate
+                </router-link>
+            </li>
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                   Gender Parity Index
+                </router-link>
+            </li>
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class=""></span>
+                    Transition Rate
+                </router-link>
+            </li>
+
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_children_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
                    Eccd
                 </router-link>
             </li>
