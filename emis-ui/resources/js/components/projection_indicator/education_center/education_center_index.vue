@@ -8,7 +8,7 @@
             <li class="nav-item pr-1">
                 <router-link to="/educationcenter_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                   NO. of Education Center 
+                   No. of Education Center 
                 </router-link>
             </li>
             <li class="nav-item pr-1">
@@ -17,16 +17,16 @@
                     Enrollemnt
                 </router-link>
             </li>
-            <li class="nav-item pr-1">
+            <!-- <li class="nav-item pr-1">
                 <router-link to="/tertiary_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Growth
                 </router-link>
-            </li>
+            </li> -->
             <li class="nav-item pr-1">
-                <router-link to="/tertiary_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link to="/class_Projection_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                    
+                    Class Size 
                 </router-link>
             </li>
         </ul>

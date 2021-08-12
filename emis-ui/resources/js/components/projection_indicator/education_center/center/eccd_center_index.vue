@@ -7,12 +7,17 @@
                         <tr>
                            <td><b>Total Public </b></td>
                             <td><b>Total Private</b></td>
+                            <td><b>Total NGO</b></td>
+                            <td><b>Total Corporate</b></td>
+
                             <!-- <td><b>Total</b></td> -->
                         </tr>
                        <tr v-for="(item, index) in eccdeducationCenter" :key="index">
                             <!-- <td>{{ index + 1 }}</td> -->
                             <td>{{ item.Public_ECCD}}</td>
                             <td>{{ item.Private_ECCD}}</td>
+                            <td>{{ item.NGO_ECCD}}</td>
+                            <td>{{ item.Corporate_ECCD}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -59,8 +64,9 @@ export default {
                     ],
                     datasets: [
                         {
-                            data: [this.eccdeducationCenter[0].Public_ECCD,this.eccdeducationCenter[0].Private_ECCD],
-                            backgroundColor : ['#f56954', '#00a65a'],
+                            data: [this.eccdeducationCenter[0].Public_ECCD,this.eccdeducationCenter[0].Private_ECCD,
+                            this.eccdeducationCenter[0].NGO_ECCD,this.eccdeducationCenter[0].Corporate_ECCD],
+                            backgroundColor : ['#f56954', '#00a65a','#f39c12', '#3c8dbc'],
                         }
                     ]
                 }

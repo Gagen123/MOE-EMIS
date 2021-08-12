@@ -15,8 +15,18 @@ const routes = [
        
                 ],
             },
+            { path: '/class_Projection_index',component: require('./components/projection_indicator/education_center/classSize/class_index.vue').default,
+            children:[
+                { path: '/class_size_index',name:'class_size_index', component: require('./components/projection_indicator/education_center/classSize/class_size_index.vue').default },
+                { path: '/mssClass_size_index',name:'mssClass_size_index', component: require('./components/projection_indicator/education_center/classSize/mss_classSize_index.vue').default },
+                { path: '/hssClass_size_index',name:'hssClass_size_index', component: require('./components/projection_indicator/education_center/classSize/hss_classSize_index.vue').default },
+                { path: '/lssClass_size_index',name:'lssClass_size_index', component: require('./components/projection_indicator/education_center/classSize/lss_classSize_index.vue').default },
+   
+            ],
+        },
         ],
     },
+ // { path: '/class_Projection_index', name:'class_Projection_index', component: require('./components/projection_indicator/education_center/indicator_byGrowth_index.vue').default },
     { path: '/student_Projection_index',
         component: require('./components/projection_indicator/student_learners/student_learner_index.vue').default,
         children:[

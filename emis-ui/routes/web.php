@@ -921,6 +921,7 @@ Route::prefix('projections')->group(function (){
     });
     Route::prefix('OrgProjectionController')->group(function (){
         Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
+        Route::get('/loadClassSize/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadClassSize'])->name('loadClassSize');
     });
 
 });

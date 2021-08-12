@@ -40,5 +40,24 @@ class OrgProjectionController extends Controller
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
 
+    public function loadClassSize($type="",$id=""){
+        $param="";
+        if($type=="ALL"){
+            $param=$id;
+        }
+        if($type=="MSS"){
+            $param=$id;
+        }
+        if($type=="LSS"){
+            $param=$id;
+        }
+        if($type=="HSS"){
+            $param=$id;
+        }
+       
+        // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/common_services/loadClassSize/'.$type.'/'.$param);
+    }
+
 
 }
