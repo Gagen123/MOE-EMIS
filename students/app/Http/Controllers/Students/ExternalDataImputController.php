@@ -248,5 +248,15 @@ class ExternalDataImputController extends Controller
         if($type == 'all'){
             return $this->successResponse($model::get());
         }
+        if(strpos($type,'nsbData')  !== false){
+            $response_data=$model::where('year',explode('_',$type)[1])->where('age_group',explode('_',$type)[2])->first();
+            return $this->successResponse($response_data);
+        }
+        if(strpos($type,'censusData_')  !== false){
+            $years=explode(',',explode('_',$type)[2]);
+            $response_data=$model::where('year',explode('_',$type)[1])->wherein('age',$years)->get();
+            return $this->successResponse($response_data);
+        }
+
     }
 }
