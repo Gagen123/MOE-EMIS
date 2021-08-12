@@ -23,13 +23,35 @@ class LoadStudentController extends Controller{
             $orgclas.="'".$cls['id']."', ";
         }
         //Need to change mcnsecid as master as and when change in master data
-        $query = "SELECT COUNT(CASE WHEN s.CmnSexId='".$male."' THEN 1 END) malecount,
-        COUNT(CASE WHEN s.CmnSexId='".$female."' THEN 1 END) femalecount,COUNT(*) totalstd
-        FROM std_student s JOIN std_student_class_stream c ON s.id=c.StdStudentId
+        $query = "SELECT COUNT(CASE WHEN s.CmnSexId='".$male."' THEN 1 END) malecount,COUNT(CASE WHEN s.CmnSexId='".$female."' THEN 1 END) femalecount,COUNT(*) totalstd,";
+        if($type=="ECCD"){
+            $query =$query ."
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<3) THEN 1 END) lessthen3,
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<3 AND s.CmnSexId='".$male."') THEN 1 END) lessthen3male,
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<3 AND s.CmnSexId='".$female."') THEN 1 END) lessthen3female,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=3 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=5) THEN 1 END)) rightage,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=3 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=5 AND s.CmnSexId='".$male."') THEN 1 END)) rightagemale,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=3 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=5 AND s.CmnSexId='".$female."') THEN 1 END)) rightagefemale,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>5 THEN 1 END) above,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>5 AND s.CmnSexId='".$male."' THEN 1 END) abovemale,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>5 AND s.CmnSexId='".$female."' THEN 1 END) abovefemale";
+        }
+        if($type=="School"){
+            $query =$query ."
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<5) THEN 1 END) lessthen3,
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<5 AND s.CmnSexId='".$male."') THEN 1 END) lessthenmale,
+            COUNT(CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<5 AND s.CmnSexId='".$female."') THEN 1 END) lessthenfemale,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=5 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=16) THEN 1 END)) rightage,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=5 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=16 AND s.CmnSexId='".$male."') THEN 1 END)) rightagemale,
+            COUNT((CASE WHEN(FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>=5 AND FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)<=16 AND s.CmnSexId='".$female."') THEN 1 END)) rightagefemale,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>16 THEN 1 END) above,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>16 AND s.CmnSexId='".$male."' THEN 1 END) abovemale,
+            COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>16 AND s.CmnSexId='".$female."' THEN 1 END) abovefemale";
+        }
+        $query =$query ." FROM std_student s JOIN std_student_class_stream c ON s.id=c.StdStudentId
         WHERE c.OrgClassStreamId IN (".rtrim($orgclas,', ').")";
         $records=DB::select($query);
         return $records;
-
     }
 
 }
