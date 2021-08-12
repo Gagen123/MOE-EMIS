@@ -201,7 +201,7 @@ class LoadOrganizationController extends Controller{
             $response_data = DB::table('organization_class_streams AS c')
             ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
             ->select('c.id')
-            ->wherein('o.category',['private_eccd','public_eccd']);
+            ->wherein('o.category',['private_eccd','public_eccd','ngo_eccd','coorporate_eccd']);
             if($dzoId!="ALL"){
                 $response_data=$response_data->where('o.dzongkhagId',$dzoId);
             }
@@ -212,11 +212,63 @@ class LoadOrganizationController extends Controller{
                 if($category=="Private"){
                     $response_data=$response_data->where('o.category','private_eccd');
                 }
+                if($category=="NGO"){
+                    $response_data=$response_data->where('o.category','ngo_eccd');
+                }
+                if($category=="Coorporate"){
+                    $response_data=$response_data->where('o.category','coorporate_eccd');
+                }
                 //need to do for other category
             }
             $response_data=$response_data->get();
             return $this->successResponse($response_data);
         }
+        if($organizationType=='School'){
+            $response_data = DB::table('organization_class_streams AS c')
+            ->join('organization_details AS o', 'o.id', '=', 'c.organizationId')
+            ->join('level AS l', 'l.id', '=', 'o.levelId')
+            ->select('c.id');
+            // ->wherein('o.category',['private_eccd','public_eccd','ngo_eccd','coorporate_eccd']);
+            if($dzoId!="ALL"){
+                $response_data=$response_data->where('o.dzongkhagId',$dzoId);
+            }
+            if($category!="ALL"){
+                if($category=="Public"){
+                    $response_data=$response_data->where('o.category','public_school');
+                }
+                if($category=="Public_HSS"){
+                    $response_data=$response_data->where('o.category','public_school')
+                    ->where('l.name','like','Higher%');
+                }
+                if($category=="Public_MSS"){
+                    $response_data=$response_data->where('o.category','public_school')
+                    ->where('l.name','like','Middle%');
+                }
+                if($category=="Public_LSS"){
+                    $response_data=$response_data->where('o.category','public_school')
+                    ->where('l.name','like','Lower%');
+                }
+                if($category=="Private"){
+                    $response_data=$response_data->where('o.category','private_school');
+                }
+                if($category=="Private_HSS"){
+                    $response_data=$response_data->where('o.category','private_school')
+                    ->where('l.name','like','Higher%');
+                }
+                if($category=="Private_MSS"){
+                    $response_data=$response_data->where('o.category','private_school')
+                    ->where('l.name','like','Middle%');
+                }
+                if($category=="Private_LSS"){
+                    $response_data=$response_data->where('o.category','private_school')
+                    ->where('l.name','like','Lower%');
+                }
+                //need to do for other category
+            }
+            $response_data=$response_data->get();
+            return $this->successResponse($response_data);
+        }
+
 
     }
 
