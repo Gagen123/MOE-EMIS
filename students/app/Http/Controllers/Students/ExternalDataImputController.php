@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use App\Models\Students\RubCollegeDetails;
 use App\Models\Students\RubStaffDetails;
 use App\Models\Students\AbroadStudentDetails;
@@ -187,7 +188,27 @@ class ExternalDataImputController extends Controller
             if($param=="Abroadstudent"){
                 return $this->successResponse(AbroadStudentDetails::all());
             }
-            
+        }
+        public function loadProjectionStaffList($type="",$dzo_id=""){
+            dd($dzo_id);
+            if($type!="ALL"){
+                $response_data = DB::table('import_institutes_details')
+                    ->join('import_staff_details', 'import_institutes_details.id', '=', 'import_staff_details.institute_id')
+                    ->sum('import_staff_details.staffMale')
+                    ->sum('import_staff_details.staffFemale')
+                    ->where('import_institutes_details.dzongkhag','='.$dzo_id)->get();
+            }
+            else
+            {
+                $response_data = DB::table('import_institutes_details')
+                ->join('import_staff_details', 'import_institutes_details.id', '=', 'import_staff_details.institute_id')
+                ->sum('import_staff_details.staffMale')
+                ->sum('import_staff_details.staffFemale')
+                ->get();
+               
+            }
+            return $response_data;
+
             
         }
 }

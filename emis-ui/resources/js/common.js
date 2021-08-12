@@ -80,6 +80,14 @@ try {
                     console.log('error staffDzongkhagwise '+e);
                 }
             },
+            loadTeacher(dzoId){
+                let uri = 'loadCommons/loadProjectionStaffList/ALL/'+dzoId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error staffDzongkhagwise '+e);
+                }
+            },
 
         },
     })

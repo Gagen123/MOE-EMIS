@@ -646,7 +646,10 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
-
+    
+    //projection controller for 
+    Route::get('/loadProjectionStaffList/{type}/{dzo_id}', [App\Http\Controllers\projections\TeacherProjectionController::class, 'loadProjectionStaffList'])->name('loadProjectionStaffList');
+    
 });
 
 Route::prefix('students')->group(function () {
