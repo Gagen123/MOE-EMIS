@@ -17,6 +17,7 @@ class ProjectionController extends Controller{
     }
 
     public function loadEccdChildren($type="",$dzo_id=""){
+<<<<<<< HEAD
         // $orgclassStream=[];
 
         // $orgclassStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/'.$type.'/'.$dzo_id);
@@ -27,6 +28,8 @@ class ProjectionController extends Controller{
         //         $response_data['total_data']=json_decode($orgclassStream);
         //     }
         // } 
+=======
+>>>>>>> 6b78337f6234cf76a82f15803c4f16e4ed15f352
         $response_data=[];
         $publicOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/Public/'.$dzo_id);
         $public = http_build_query(json_decode($publicOrgStream)->data);
@@ -36,10 +39,10 @@ class ProjectionController extends Controller{
                 $response_data['public_data']=json_decode($public_data);
             }
             else{
-                $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
 
         $privateOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/Private/'.$dzo_id);
@@ -50,10 +53,10 @@ class ProjectionController extends Controller{
                 $response_data['private_data']=json_decode($private_data);
             }
             else{
-                $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
 
         $ngoOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/NGO/'.$dzo_id);
@@ -64,10 +67,10 @@ class ProjectionController extends Controller{
                 $response_data['ngo_data']=json_decode($ngo_data);
             }
             else{
-                $response_data['ngo_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['ngo_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];
             }
         }else{
-            $response_data['ngo_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['ngo_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];
         }
 
         $coorporateOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/ECCD/Coorporate/'.$dzo_id);
@@ -78,10 +81,10 @@ class ProjectionController extends Controller{
                 $response_data['coorporate_data']=json_decode($coorporate_data);
             }
             else{
-                $response_data['coorporate_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['coorporate_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];
             }
         }else{
-            $response_data['coorporate_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['coorporate_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthen3female'=>0,'lessthen3male'=>0,'rightagefemale'=>0,'rightagemale'=>0];
         }
 
         return $response_data;
@@ -98,10 +101,10 @@ class ProjectionController extends Controller{
                 $response_data['public_data']=json_decode($public_data);
             }
             else{
-                $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];
             }
         }else{
-            $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['public_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
         //private school
         $privateOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Private/'.$dzo_id);
@@ -112,10 +115,10 @@ class ProjectionController extends Controller{
                 $response_data['private_data']=json_decode($private_data);
             }
             else{
-                $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['private_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
 
         //public higher secondaty
@@ -127,10 +130,10 @@ class ProjectionController extends Controller{
                 $response_data['public_higher_data']=json_decode($public_higher_data);
             }
             else{
-                $response_data['public_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['public_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['public_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['public_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
 
         //public Middle secondaty
@@ -142,10 +145,10 @@ class ProjectionController extends Controller{
                 $public_middle_data['public_middle_data']=json_decode($public_middle_data);
             }
             else{
-                $response_data['public_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['public_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['public_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['public_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
         //public Lower secondaty
          $public_lowerOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Public_LSS/'.$dzo_id);
@@ -156,10 +159,10 @@ class ProjectionController extends Controller{
                  $response_data['public_lower_data']=json_decode($public_lower_data);
              }
              else{
-                 $response_data['public_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                 $response_data['public_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
              }
          }else{
-             $response_data['public_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+             $response_data['public_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
          }
 
          //private higher secondaty
@@ -171,28 +174,28 @@ class ProjectionController extends Controller{
                 $response_data['private_higher_data']=json_decode($private_higher_data);
             }
             else{
-                $response_data['private_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['private_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['private_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['private_higher_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
 
         //public Middle secondaty
-        $public_middleOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Public_MSS/'.$dzo_id);
+        $public_middleOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Private_MSS/'.$dzo_id);
         $public_middle = http_build_query(json_decode($public_middleOrgStream)->data);
         if($public_middle!=""){
             $public_middle_data= $this->apiService->getListData('emis/common_services/loadStudents/School/'.$public_middle);
             if($public_middle_data!=null && $public_middle_data!=""){
-                $public_middle_data['private_middle_data']=json_decode($public_middle_data);
+                $response_data['private_middle_data']=json_decode($public_middle_data);
             }
             else{
-                $response_data['private_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                $response_data['private_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
             }
         }else{
-            $response_data['private_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+            $response_data['private_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
         }
         //private Lower secondaty
-         $private_lowerOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Public_LSS/'.$dzo_id);
+         $private_lowerOrgStream= $this->apiService->getListData('emis/common_services/loadClassStreamSectionIds/School/Private_LSS/'.$dzo_id);
          $private_lower = http_build_query(json_decode($private_lowerOrgStream)->data);
          if($private_lower!=""){
              $private_lower_data= $this->apiService->getListData('emis/common_services/loadStudents/School/'.$private_lower);
@@ -200,10 +203,10 @@ class ProjectionController extends Controller{
                  $response_data['private_lower_data']=json_decode($private_lower_data);
              }
              else{
-                 $response_data['private_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+                 $response_data['private_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
              }
          }else{
-             $response_data['private_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0];
+             $response_data['private_lower_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;
          }
 
         return $response_data;

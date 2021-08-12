@@ -30,12 +30,21 @@ const routes = [
             },
             { path: '/student_enrolment',component: require('./components/projection_indicator/student_learners/student_enrolment/student_enrolment_index.vue').default,
                 children:[
-                    { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/student_learners/student/eccd_index.vue').default },
-                    { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/student_learners/student/school_index.vue').default },
-                    { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/student_learners/student/tertiary_index.vue').default },
+                    // { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/student_learners/student/eccd_index.vue').default },
+                    // { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/student_learners/student/school_index.vue').default },
+                    // { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/student_learners/student/tertiary_index.vue').default },
                 ],
             },
-
+        ],
+    },
+    //Teacher/Trainer/Facilitator
+    { path: '/teacher_Projection_index',
+        component: require('./components/projection_indicator/teacher_Facilitator/teacher_facilitator_index.vue').default,
+        children:[
+            { path: '/',name:'student_Projection_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher_facilitator_guidelines.vue').default },
+            { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/teacher_Facilitator/eccds/eccd_index.vue').default },
+            { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/teacher_Facilitator/school/school_index.vue').default },
+            { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/teacher_Facilitator/tertiary/tertiary_index.vue').default },
         ],
     },
     { path: '/enrollment_Projection_index',
