@@ -16,8 +16,9 @@ class SpmIndicator extends Migration
         Schema::create('spm_indicator', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->char('spm_parameter_id',36)->index();
-            $table->string('code',100);
-            $table->string('name',100)->unique();
+            $table->string('code',100)->nullable();
+            $table->string('name',500)->unique();
+            $table->unsignedSmallInteger('sequence_no')->index();
             $table->unsignedTinyInteger('status')->index();
             $table->char('created_by',36);
             $table->timestamps();
