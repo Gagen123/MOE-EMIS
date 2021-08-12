@@ -758,7 +758,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="messlink">
-                        <router-link to="/bcsea_Projection_index" class="nav-link">
+                        <router-link to="/bcsea_projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
                                 BCSEA Reports
