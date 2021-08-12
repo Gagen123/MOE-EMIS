@@ -119,7 +119,7 @@
         </div>
         <div class="form-group row mb-0">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <label> Total Number of Student by Age group: </label>
+                <label> Total Number of Student by Age group in Public School: </label>
                 <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <tbody>
                     <tr>
@@ -168,6 +168,61 @@
                         <td>{{public_lower_data.abovemale}}</td>
                         <td>{{public_lower_data.abovefemale}}</td>
                         <td>{{public_lower_data.totalstd}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label> Total Number of Student by Age group in Private School: </label>
+                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <tbody>
+                    <tr>
+                        <td><b>Category</b></td>
+                        <td colspan="2"><b>Less than 5 Years</b></td>
+                        <td colspan="2"><b>5-16 Years</b></td>
+                        <td colspan="2"><b>Above 16 Years</b></td>
+                        <td><b>Grand Total</b></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><b>Boys</b></td>
+                        <td><b>Girls</b></td>
+                        <td><b>Boys</b></td>
+                        <td><b>Girls</b></td>
+                        <td><b>Boys</b></td>
+                        <td><b>Girls</b></td>
+                        <td></td>
+                    </tr>
+                    <tr v-if="private_higher_data!={}">
+                        <td>HSS</td>
+                        <td>{{private_higher_data.lessthenmale}}</td>
+                        <td>{{private_higher_data.lessthenfemale}}</td>
+                        <td>{{private_higher_data.rightagemale}}</td>
+                        <td>{{private_higher_data.rightagefemale}}</td>
+                        <td>{{private_higher_data.abovemale}}</td>
+                        <td>{{private_higher_data.abovefemale}}</td>
+                        <td>{{private_higher_data.totalstd}}</td>
+                    </tr>
+                    <tr v-if="private_middle_data!={}">
+                        <td>MSS</td>
+                        <td>{{private_middle_data.lessthenmale}}</td>
+                        <td>{{private_middle_data.lessthenfemale}}</td>
+                        <td>{{private_middle_data.rightagemale}}</td>
+                        <td>{{private_middle_data.rightagefemale}}</td>
+                        <td>{{private_middle_data.abovemale}}</td>
+                        <td>{{private_middle_data.abovefemale}}</td>
+                        <td>{{private_middle_data.totalstd}}</td>
+                    </tr>
+                    <tr v-if="private_lower_data!={}">
+                        <td>LSS</td>
+                        <td>{{private_lower_data.lessthenmale}}</td>
+                        <td>{{private_lower_data.lessthenfemale}}</td>
+                        <td>{{private_lower_data.rightagemale}}</td>
+                        <td>{{private_lower_data.rightagefemale}}</td>
+                        <td>{{private_lower_data.abovemale}}</td>
+                        <td>{{private_lower_data.abovefemale}}</td>
+                        <td>{{private_lower_data.totalstd}}</td>
                     </tr>
                 </tbody>
             </table>
