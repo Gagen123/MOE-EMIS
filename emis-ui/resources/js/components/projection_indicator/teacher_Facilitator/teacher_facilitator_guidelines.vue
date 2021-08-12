@@ -21,7 +21,7 @@ export default {
         }
     },
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/StudentLearnerEccd'){
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/TeacherProjection'){
             axios.get(uri)
             .then(response => {
                 let data = response;
