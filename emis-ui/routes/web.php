@@ -919,6 +919,9 @@ Route::prefix('projections')->group(function (){
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
         Route::get('/loadStudents/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadStudents'])->name('loadStudents');
     });
+    Route::prefix('OrgProjectionController')->group(function (){
+        Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
+    });
 
 });
 

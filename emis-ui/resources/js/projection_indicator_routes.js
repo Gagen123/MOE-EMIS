@@ -5,9 +5,16 @@ const routes = [
         component: require('./components/projection_indicator/education_center/education_center_index.vue').default,
         children:[
             { path: '/',name:'education_center_index', component: require('./components/projection_indicator/education_center/education_center_guidelines.vue').default },
-            { path: '/eccd_center_index',name:'eccd_center_index', component: require('./components/projection_indicator/education_center/eccds/eccd_center_index.vue').default },
-            { path: '/school_center_index',name:'school_center_index', component: require('./components/projection_indicator/education_center/eccds/school_center_index.vue').default },
-            { path: '/tertiary_center_index',name:'tertiary_center_index', component: require('./components/projection_indicator/education_center/eccds/tertiary_center_index.vue').default },
+            { path: '/educationcenter_index',component: require('./components/projection_indicator/education_center/center/educationcenter_index.vue').default,
+                children:[
+                    { path: '/eccd_center_index',name:'eccd_center_index', component: require('./components/projection_indicator/education_center/center/eccd_center_index.vue').default },
+                    { path: '/school_center_index',name:'school_center_index', component: require('./components/projection_indicator/education_center/center/school_center_index.vue').default },
+                    { path: '/tertiary_center_index',name:'tertiary_center_index', component: require('./components/projection_indicator/education_center/center/tertiary_center_index.vue').default },
+                    { path: '/ecr_center_index',name:'ecr_center_index', component: require('./components/projection_indicator/education_center/center/ecr_center_index.vue').default },
+                    { path: '/sen_center_index',name:'sen_center_index', component: require('./components/projection_indicator/education_center/center/sen_center_index.vue').default },
+       
+                ],
+            },
         ],
     },
     { path: '/student_Projection_index',

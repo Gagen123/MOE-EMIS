@@ -127,6 +127,62 @@ class LoadOrganizationController extends Controller{
                
             }
         }
+        if($type=="SEN"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND isSenSchool = 1
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND isSenSchool = 1 AND dzongkhagId = '".$id."'
+                GROUP BY a.category");
+               
+            }
+        }
+        if($type=="ECR"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'public_ecr'  THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_ecr' 
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'public_ecr'  THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_ecr'  AND dzongkhagId = '".$id."'
+                GROUP BY a.category");
+               
+            }
+        }
        
 
       //  dd($response_data);

@@ -18,21 +18,14 @@ try {
                 }
             },
             loadeducationCenter(type,dzoId){
-                let uri = 'loadCommons/loadOrgList/'+type+'/'+dzoId;
+                let uri = 'projections/OrgProjectionController/loadOrgListProjection/'+type+'/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
                     console.log('error getdepartmentList '+e);
                 }
             },
-            loadschooleducationCenter(type,dzoId){
-                let uri = 'loadCommons/loadOrgList/'+type+'/'+dzoId;
-                try{
-                    return  axios.get(uri).then(response => { return response.data.data});
-                }catch(e){
-                    console.log('error getdepartmentList '+e);
-                }
-            },
+           
             
         },
     })
