@@ -278,4 +278,10 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });
     });
 
+    $router->group(['prefix' => 'projections'], function () use ($router) {
+        $router->group(['prefix' => 'bcsea'], function () use ($router) {
+            $router->get('/loadIndicatorResult/{type}', ['uses' => 'Projections\BcseaController@loadIndicatorResult']);
+        });
+    });
+
 });
