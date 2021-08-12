@@ -25,7 +25,7 @@ const routes = [
     { path: '/growth_Projection_index', name:'growth_Projection_index', component: require('./components/projection_indicator/indicator_byGrowth_index.vue').default },
     { path: '/parity_Projection_index', name:'parity_Projection_index', component: require('./components/projection_indicator/gender_parity_index.vue').default },
     { path: '/transition_Projection_index', name:'transition_Projection_index', component: require('./components/projection_indicator/tranisition_rate_index.vue').default },
-    { path: '/bcsea_Projection_index', name:'bcsea_Projection_index', component: require('./components/projection_indicator/bcsea_report_index.vue').default },
+    { path: '/bcsea_projection_index', name:'bcsea_projection_index', component: require('./components/projection_indicator/bcsea/bcsea_index.vue').default },
 
 ];
 export default routes
