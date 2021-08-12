@@ -123,7 +123,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });
         //Data import route
         $router->group(['prefix' => 'ExternalDataImport'], function () use ($router) {
-            $router->get('/loadInstitues/{param}', ['uses' => 'Students\ExternalDataImputController@loadInstitues']);
+            $router->get('/loadInstitues/{type}/{model}', ['uses' => 'Students\ExternalDataImputController@loadInstitues']);
             $router->get('/getSenStudentList',['uses' => 'Students\ExternalDataImputController@getSenStudentList']);
             $router->post('/saveImported', ['uses' => 'Students\ExternalDataImputController@saveImported']);
         });
