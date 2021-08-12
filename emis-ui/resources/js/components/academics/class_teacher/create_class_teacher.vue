@@ -86,12 +86,13 @@ export default {
         async classTeacher(){
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                console.log(classSections);
                 let finalClassStreamsSection = [];
                 let renameId = []
                 classSections.forEach((item => {
                     if(item.stream && item.section){
                        renameId['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                    }else if(item.stream){
+                    }else if(item.stream){ 
                         renameId['class_stream_section'] = item.class+' '+item.stream
                     }
                     else if(item.section){
@@ -108,7 +109,7 @@ export default {
                     const obj = {...renameId};
                     finalClassStreamsSection.push(obj);
                 }))
-                let classTeachers = await axios.get('academics/getClassTeacher').then(response => response.data.data)
+                let classTeachers = await axios.get('academics/getClassTeacher').then(response => { return response.data.data})
                 finalClassStreamsSection.forEach((classSection,index) => {
                     classTeachers.forEach(item => {
                         if(classSection.org_class_id == item.org_class_id && (classSection.org_stream_id == item.org_stream_id || ((classSection.org_stream_id == null || classSection.org_stream_id == "") && (item.org_stream_id == null || item.org_stream_id == ""))) && (classSection.org_section_id == item.org_section_id || ((classSection.org_section_id == null || classSection.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
@@ -116,6 +117,7 @@ export default {
                         }
                     })
                 })
+                console.log(finalClassStreamsSection);
                 this.classTeacherList = finalClassStreamsSection
 
              }catch(e){

@@ -16,6 +16,36 @@
                        Domain
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1" @click="activatelink('area')">
+                    <router-link id="area" to="/area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Area
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('paramter')">
+                    <router-link id="paramter" to="/parameter-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Parameter
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('indicator')">
+                    <router-link id="indicator" to="/indicator-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Indicator
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1" @click="activatelink('rating')">
+                    <router-link id="rating" to="/rating-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Rating
+                    </router-link>
+                </li>
+                  <li class="nav-item active pr-1" @click="activatelink('dzo_emo')">
+                    <router-link id="dzo_emo" to="/dzo-emo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                      EMO-Dzongkhag Mapping
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('school_deo')">
+                    <router-link id="school_deo" to="/school-deo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       DEO/TEO-School Mapping
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>

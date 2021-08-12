@@ -5,18 +5,18 @@
                 <table id="domains-data-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>SL#</th>
-                            <th>Name</th>
-                            <th>Code</th>
+                            <th>SL No.</th>
+                            <th>Domain Category</th>
+                            <th>Domain</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in domains" :key="index">
-                            <td class="text-right">{{ index + 1 }}</td>
+                            <td class="text-right">{{ item.sequence_no}}</td>
+                            <td>{{ item.domain_category}}</td>
                             <td>{{ item.name }} </td>
-                            <td>{{ item.code }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
 
                             <td>
@@ -40,11 +40,11 @@ export default {
         }
     },
     methods:{
-        loadDomains(uri = 'masters/loadSpmMasters/all_domain'){
+        getDomains(uri = 'masters/loadSpmMasters/all_domains'){
             axios.get(uri)
             .then(response => {
                 let data = response 
-                this.domains =  data.data.data;
+                this.domains =  data.data.data
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -53,20 +53,22 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_domain',params: {data:data}});
+            this.$router.push({name:'edit_domain',params: {data:data}})
         },
     },
     mounted(){ 
-        this.loadDomains();
+        this.getDomains();
         this.dt =  $("#domains-data-table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
+                { width: 150, targets: 1},
+
             ],
         })
     },
     watch: {
         domains(val) {
-            this.dt.destroy();
+            this.dt.destroy()
             this.$nextTick(() => {
                 this.dt =  $("#domains-data-table").DataTable()
             });

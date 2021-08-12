@@ -12,8 +12,9 @@ class Domain extends Model
     protected $table="spm_domain";
     protected $fillable = [
         'id',
+        'spm_domain_category_id',
         'name',
-        'code',
+        'sequence_no',
         'status',
         'created_by'
     ];
