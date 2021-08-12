@@ -48,12 +48,12 @@
                                     <td><b>Total</b></td>
                                 </tr>
                                 <tr v-for="(item, index) in schooleducationCenter" :key="index">
-                                    <td><b>{{schooleducationCenter.category}}</b></td>
-                                    <td><b>{{schooleducationCenter.Lower_Secondary_School}}</b></td>
-                                    <td><b>{{schooleducationCenter.primary_School}}</b></td>
-                                    <td><b>{{schooleducationCenter.Middle_secondary_school}}</b></td>
-                                    <td><b>{{schooleducationCenter.Higher_Secondary_School}}</b></td> 
-                                    <td><b>{{schooleducationCenter.Total}}</b></td>
+                                    <td><b>{{item.category}}</b></td>
+                                    <td><b>{{item.Lower_Secondary_School}}</b></td>
+                                    <td><b>{{item.primary_School}}</b></td>
+                                    <td><b>{{item.Middle_secondary_school}}</b></td>
+                                    <td><b>{{item.Higher_Secondary_School}}</b></td> 
+                                    <td><b>{{item.Total}}</b></td>
                                 </tr>
                             </tbody> 
                         </table>
@@ -97,13 +97,16 @@ export default {
             if(this.schooleducationCenter!=""){
                 var peiData        = {
                     labels: [
-                        'Public',
-                        'Private',
+                        'Lower Secondary',
+                        'Primary',
+                        'Middle Secondary',
+                        'Higher Secondary',
                     ],
                     datasets: [
                         {
-                            data: [this.schooleducationCenter.Public_ECCD,this.schooleducationCenter.Private_ECCD],
-                            backgroundColor : ['#f56954', '#00a65a'],
+                            data: [this.schooleducationCenter[0].Lower_Secondary_School,this.schooleducationCenter[0].primary_School,
+                            this.schooleducationCenter[0].Middle_secondary_school, this.schooleducationCenter[0].Higher_Secondary_School],
+                            backgroundColor : ['#f56954', '#00a65a','#000066','#FFFF99'],
                         }
                     ]
                 }

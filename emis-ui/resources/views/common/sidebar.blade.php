@@ -758,14 +758,14 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="messlink">
+                    <!-- <li class="nav-item" id="messlink">
                         <router-link to="/enrollment_byAge_index" class="nav-link">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
                                 Enrollment By Age
                             </p>
                         </router-link>
-                    </li>
+                    </li> -->
                     <li class="nav-item" id="messlink">
                         <router-link to="/growth_Projection_index" class="nav-link">
                             <p>
