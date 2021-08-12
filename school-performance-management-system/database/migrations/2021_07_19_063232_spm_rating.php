@@ -17,7 +17,7 @@ class SpmRating extends Migration
             $table->char('id',36)->primary();
             $table->char('spm_indicator_id',36)->index();
             $table->tinyInteger('score');
-            $table->string('description',100);
+            $table->string('description',500);
             $table->unsignedTinyInteger('status')->index();
             $table->char('created_by',36);
             $table->timestamps();
