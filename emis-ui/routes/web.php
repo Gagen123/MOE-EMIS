@@ -417,7 +417,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
     Route::get('/loadDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'loadDisasterInformation'])->name('loadDisasterInformation');
 
-    //Projection Route   
+    //Projection Route
     Route::get('/loadeducationCenter/{type}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadeducationCenter'])->name('loadeducationCenter');
 
 });
@@ -646,7 +646,10 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
-
+    
+    //projection controller for 
+    Route::get('/loadProjectionStaffList/{type}/{dzo_id}', [App\Http\Controllers\projections\TeacherProjectionController::class, 'loadProjectionStaffList'])->name('loadProjectionStaffList');
+    
 });
 
 Route::prefix('students')->group(function () {
@@ -674,7 +677,7 @@ Route::prefix('students')->group(function () {
     //External Data import route
     Route::prefix('ExternalDataImport')->group(function (){
         Route::get('/getSenStudentList', [App\Http\Controllers\student\ExternalDataImputController::class, 'getSenStudentList']);
-        Route::get('/loadInstitues/{param}', [App\Http\Controllers\student\ExternalDataImputController::class, 'loadInstitues']);
+        Route::get('/loadInstitues/{param}/{model}', [App\Http\Controllers\student\ExternalDataImputController::class, 'loadInstitues']);
         Route::post('/saveImported', [App\Http\Controllers\student\ExternalDataImputController::class, 'saveImported']);
     });
 
@@ -922,6 +925,10 @@ Route::prefix('projections')->group(function (){
     Route::prefix('OrgProjectionController')->group(function (){
         Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
         Route::get('/loadClassSize/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadClassSize'])->name('loadClassSize');
+    });
+
+    Route::prefix('BcseaController')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
 });
