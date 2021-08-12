@@ -189,7 +189,7 @@
                     </li>
                     <li class="nav-item has-treeview" id="academicmaster">
                         <router-link to="/spms-master" class="nav-link pt-1 pb-1">
-                            <i class="fa fa-book nav-icon"></i>
+                        <i class="nav-icon fas fa-chart-bar"></i>
                             SPMS Masters
                         </router-link>
                     </li>
@@ -301,6 +301,7 @@
                         Academics
                 </router-link>
             </li>
+
             <li class="nav-item has-treeview" id="organization">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-save"></i>
@@ -499,6 +500,12 @@
                 </ul>
             </li>
             <li class="nav-header"></li>
+            <li class="nav-item has-treeview" id="spms">
+                <router-link to="/spms" class="nav-link pt-1 pb-1">
+                <i class="nav-icon fas fa-chart-bar"></i>
+                    SPMS
+                </router-link>
+            </li>
             <li class="nav-item has-treeview" id="staff-transaction">
                 <a href="#" class="nav-link pt-1 pb-1">
                     <i class="nav-icon fas fa-users"></i>
@@ -737,7 +744,7 @@
                     <li class="nav-item" id="StudentProjection">
                         <router-link to="/student_Projection_index" class="nav-link">
                             <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
                                 Student/Children/Learner
                             </p>
                         </router-link>
@@ -745,12 +752,13 @@
                     <li class="nav-item" id="messlink">
                         <router-link to="/teacher_Projection_index" class="nav-link">
                             <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
                                 Teacher/Trainer/Facilitator
                             </p>
                         </router-link>
                     </li>
                     <li class="nav-item" id="messlink">
+<<<<<<< HEAD
                         <router-link to="/enrollment_Projection_index" class="nav-link">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
@@ -791,9 +799,11 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="messlink">
+=======
+>>>>>>> 14e66480297be16c6edef7db100514b84bf39e27
                         <router-link to="/bcsea_Projection_index" class="nav-link">
                             <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
                                 BCSEA Reports
                             </p>
                         </router-link>

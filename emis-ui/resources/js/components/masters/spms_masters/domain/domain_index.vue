@@ -20,12 +20,12 @@
 export default {
     methods:{
          loadpage:function(type){
-            this.$router.push({name:type});
+            this.$router.push({name:type})
         },
     },
     mounted() {
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
+        let routeparam=this.$route.query.data
+        this.sub_mod_id=routeparam
     }
 }
 </script>

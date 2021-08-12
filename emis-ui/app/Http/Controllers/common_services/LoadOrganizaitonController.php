@@ -182,6 +182,7 @@ class LoadOrganizaitonController extends Controller{
         $org_id = $this->getWrkingAgencyId();
         return $this->apiService->getListData('emis/common_services/getSectionArray/'.$org_id);
     }
+  
 
     public function loadeducationCenter($type=""){
         return $this->apiService->getListData('emis/common_services/loadeducationCenter/'.$type);

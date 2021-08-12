@@ -46,6 +46,7 @@ class AcademicController extends Controller
         $customMessages = [
             'data.*.stf_staff_id.required' => 'This field is required'
         ];
+
         $this->validate($request, $rules, $customMessages);
         DB::transaction(function() use($request) {
             $this->updateClassTeacher($request);
