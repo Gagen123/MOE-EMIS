@@ -6,18 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ExternalData\AbroadStudentDetails;
 use App\Models\ExternalData\RubCollegeDetails;
 use App\Models\ExternalData\RubStaffDetails;
+use Illuminate\Support\Facades\DB;
 use App\Models\ExternalData\RubStudentDetails;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
-<<<<<<< HEAD
-use Illuminate\Support\Facades\DB;
-use App\Models\Students\RubCollegeDetails;
-use App\Models\Students\RubStaffDetails;
-use App\Models\Students\AbroadStudentDetails;
-use App\Models\Students\RubStudentDetails;
-=======
->>>>>>> ce35e2908cfc71db0e32bd352ff6aad92dacaa2d
 
 
 class ExternalDataImputController extends Controller
@@ -235,10 +228,9 @@ class ExternalDataImputController extends Controller
                 $response_data = $model::where('id',$request->id)->first();
                 return $this->successResponse($response_data, Response::HTTP_CREATED);
             }
-<<<<<<< HEAD
         }
+    }
         public function loadProjectionStaffList($type="",$dzo_id=""){
-            dd($dzo_id);
             if($type!="ALL"){
                 $response_data = DB::table('import_institutes_details')
                     ->join('import_staff_details', 'import_institutes_details.id', '=', 'import_staff_details.institute_id')
@@ -253,17 +245,11 @@ class ExternalDataImputController extends Controller
                 ->sum('import_staff_details.staffMale')
                 ->sum('import_staff_details.staffFemale')
                 ->get();
-               
             }
             return $response_data;
-
-            
-=======
->>>>>>> ce35e2908cfc71db0e32bd352ff6aad92dacaa2d
         }
-    }
 
-    public function loadInstitues($type="",$model=""){
+     public function loadInstitues($type="",$model=""){
         // if($param=="all_institutes"){
         //     return $this->successResponse(RubCollegeDetails::all());
         // }
