@@ -6,21 +6,27 @@
     <div class="container-fluid">
         <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
             <li class="nav-item pr-1">
-                <router-link to="/eccd_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                <router-link to="/educationcenter_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                   Eccd
+                   No. of Education Center 
                 </router-link>
             </li>
             <li class="nav-item pr-1">
                 <router-link to="/school_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                    School
+                    Enrollemnt
                 </router-link>
             </li>
-            <li class="nav-item pr-1">
+            <!-- <li class="nav-item pr-1">
                 <router-link to="/tertiary_center_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
-                    Tertiary
+                    Growth
+                </router-link>
+            </li> -->
+            <li class="nav-item pr-1">
+                <router-link to="/class_Projection_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Class Size 
                 </router-link>
             </li>
         </ul>

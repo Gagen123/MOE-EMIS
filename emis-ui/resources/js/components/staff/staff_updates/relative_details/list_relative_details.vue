@@ -50,7 +50,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(item, index) in substaffList" :key="index">
+                        <tr v-for="(item, index) in staffList" :key="index">
                             <td>{{ index+1}}</td>
                             <td>{{ item.emp_id}}</td>
                             <td>{{ item.name}}</td>
@@ -75,7 +75,7 @@ export default {
             dzo_id:'',
             orgList:[],
             showedit:false,
-            substaffList:[],
+            staffList:[],
             genderArray:{},
             cureerstageArray:{},
             positiontitleList:{},
@@ -89,7 +89,7 @@ export default {
         loadstff(type){
             axios.get('loadCommons/loadStaffList/'+type)
             .then((response) => {
-                this.substaffList =  response.data.data;
+                this.staffList =  response.data.data;
              })
             .catch((error) => {
                 console.log("Error."+error);
@@ -128,12 +128,14 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="dzongkhag_id"){
+                this.orgList=[];
                 this.dzo_id=$('#dzongkhag_id').val();
                 this.orgList=await this.schoolList($('#dzongkhag_id').val());
             }
         },
         async loaddata(){
             this.staffList=[];
+            alert($('#org_id').val());
             if($('#org_id').val()!="ALL"){
                 this.staffList=await this.staffSchoolwise($('#org_id').val());
             }
@@ -146,7 +148,7 @@ export default {
         this.dzongkhagList= await this.loadactivedzongkhags();
         this.loadactivecureerstageList();
         this.loadpositionTitleList();
-         
+
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -178,7 +180,7 @@ export default {
         this.dt =  $("#teaching_subject_table").DataTable()
     },
     watch: {
-        substaffList(){
+        staffList(){
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#career_stage_table").DataTable()

@@ -126,6 +126,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/loadInstitues/{type}/{model}', ['uses' => 'Students\ExternalDataImputController@loadInstitues']);
             $router->get('/getSenStudentList',['uses' => 'Students\ExternalDataImputController@getSenStudentList']);
             $router->post('/saveImported', ['uses' => 'Students\ExternalDataImputController@saveImported']);
+            //projection route for teacher
+            $router->get('/loadProjectionStaffList/{type}/{dzo_id}', ['uses' => 'Students\ExternalDataImputController@loadProjectionStaffList']);
         });
 
         //Validate student data

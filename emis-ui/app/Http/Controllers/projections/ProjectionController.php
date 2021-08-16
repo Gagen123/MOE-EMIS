@@ -129,7 +129,7 @@ class ProjectionController extends Controller{
         if($public_middle!=""){
             $public_middle_data= $this->apiService->getListData('emis/common_services/loadStudents/School/'.$public_middle);
             if($public_middle_data!=null && $public_middle_data!=""){
-                $public_middle_data['public_middle_data']=json_decode($public_middle_data);
+                $response_data['public_middle_data']=json_decode($public_middle_data);
             }
             else{
                 $response_data['public_middle_data'][0]=['malecount'=>0,'femalecount'=>0,'totalstd'=>0,'abovefemale'=>0,'abovemale'=>0,'lessthenfemale'=>0,'lessthenmale'=>0,'rightagefemale'=>0,'rightagemale'=>0];;

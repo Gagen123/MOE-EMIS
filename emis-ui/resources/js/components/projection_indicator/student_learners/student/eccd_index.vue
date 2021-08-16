@@ -2,7 +2,7 @@
     <div>
         <div class="form-group row mb-0">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <label> <u>Total Number of Childre by Gender in ECCD</u></label>
+                <label> <u>Total Number of Children by Gender in ECCD</u></label>
             </div>
         </div>
        <div class="form-group row">
@@ -34,7 +34,7 @@
                             <td>{{ngo_childrenList.totalstd}}</td>
                         </tr>
                         <tr v-if="coor_childrenList!={}">
-                            <td>Coorporate</td>
+                            <td>Corporate</td>
                             <td>{{coor_childrenList.malecount}}</td>
                             <td>{{coor_childrenList.femalecount}}</td>
                             <td>{{coor_childrenList.totalstd}}</td>
@@ -58,7 +58,7 @@
         </div>
         <div class="form-group row mb-0">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <label> <u>Total Number of Childre by Age group</u> </label>
+                <label> <u>Total Number of Children by Age group</u> </label>
                 <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <tbody>
                         <tr>
@@ -109,7 +109,7 @@
                             <td>{{ngo_childrenList.totalstd}}</td>
                         </tr>
                         <tr v-if="coor_childrenList!={}">
-                            <td>Coorporate</td>
+                            <td>Corporate</td>
                             <td>{{coor_childrenList.lessthen3male }}</td>
                             <td>{{coor_childrenList.lessthen3female}}</td>
                             <td>{{coor_childrenList.rightagemale}}</td>
@@ -170,7 +170,7 @@ export default {
                     labels: [
                         'Public',
                         'Private',
-                        'Coorporate',
+                        'Corporate',
                         'NGO',
                     ],
                     datasets: [
@@ -194,7 +194,7 @@ export default {
 
                 //ploating bar chart
                 var areaChartData = {
-                    labels  : ['Public', 'Private', 'NGO', 'Coorporate'],
+                    labels  : ['Public', 'Private', 'NGO', 'Corporate'],
                     datasets: [
                         {
                             label               : 'Less than 3 Years Male',

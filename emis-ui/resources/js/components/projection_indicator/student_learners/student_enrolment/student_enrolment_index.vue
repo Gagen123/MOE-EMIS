@@ -19,7 +19,7 @@
                         <select class="form-control select2" id="category_id">
                             <option value="ECCD"> ECCD</option>
                             <option value="School"> School</option>
-                            <option value="Tertiary"> Tertiary</option>
+                            <!-- <option value="Tertiary"> Tertiary</option> -->
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
                     </div>
@@ -43,14 +43,13 @@ export default {
         loadpage:function(){
             let dzo_id=$('#dzongkhag_id').val();
             let type=$('#category_id').val();
-            let route='eccd_children_index';
+            let route='eccd_enrollment_index';
             if(type=="School"){
-                route='school_student_index';
+                route='school_enrollment_index';
             }
             if(type=="Tertiary"){
-                route='tertiary_learners_index';
+                route='tertiary_enrollment_index';
             }
-            // this.$router.push({name:route,query: {dzo_id:dzo_id}});
             this.$router.push({path:route,query: {dzo_id:dzo_id}}).catch(()=>{});
         },
     },
