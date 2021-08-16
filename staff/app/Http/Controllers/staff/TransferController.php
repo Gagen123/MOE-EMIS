@@ -49,6 +49,7 @@ class TransferController extends Controller{
             'description'                       =>  $request->description,
             'status'                            =>  $request->status,
             'created_by'                        =>  $request->user_id,
+            'user_dzo_id'                       =>  $request->user_dzo_id,
             'created_at'                        =>  date('Y-m-d h:i:s'),
         ];
         if($request->id=="" || $request->id==null){
@@ -126,8 +127,8 @@ class TransferController extends Controller{
             'transferType'                  =>  $request->transferType,
             'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
             'preference'                    =>  1,
-            'created_by'                    =>$request->user_id,
-            'created_at'                    =>date('Y-m-d h:i:s'),
+            'created_by'                    =>  $request->user_id,
+            'created_at'                    =>  date('Y-m-d h:i:s'),
         ];
         TransPrefenreces::create($request_data);
     }
@@ -138,8 +139,8 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag2,
                 'preference'                    =>  2,
-                'created_by'                    =>$request->user_id,
-                'created_at'                    =>date('Y-m-d h:i:s'),
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
             ];
 
             TransPrefenreces::create($request_data);
@@ -151,8 +152,44 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag3,
                 'preference'                    =>  3,
-                'created_by'                    =>$request->user_id,
-                'created_at'                    =>date('Y-m-d h:i:s'),
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::create($request_data);
+        }
+        if($request->spSubject!=""){
+            $request_data =[
+                'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
+                'transferType'                  =>  $request->transferType,
+                'subject_id'                    =>  $request->spSubject,
+                'preference'                    =>  1,
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::create($request_data);
+        }
+        if($request->optional1sub!=""){
+            $request_data =[
+                'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
+                'transferType'                  =>  $request->transferType,
+                'subject_id'                    =>  $request->optional1sub,
+                'preference'                    =>  2,
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::create($request_data);
+        }
+        if($request->optional2sub!=""){
+            $request_data =[
+                'transfer_application_id'       =>  $request->id,
+                'transfer_type_id'              =>  $request->record_type_id,
+                'transferType'                  =>  $request->transferType,
+                'subject_id'                    =>  $request->optional2sub,
+                'preference'                    =>  3,
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
             ];
             TransPrefenreces::create($request_data);
         }
@@ -164,8 +201,8 @@ class TransferController extends Controller{
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school1,
                 'preference'                    =>  1,
-                'created_by'                    =>$request->user_id,
-                'created_at'                    =>date('Y-m-d h:i:s'),
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
             ];
             TransPrefenreces::create($request_data);
         }
@@ -177,8 +214,8 @@ class TransferController extends Controller{
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school2,
                 'preference'                    =>  2,
-                'created_by'                    =>$request->user_id,
-                'created_at'                    =>date('Y-m-d h:i:s'),
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
             ];
             TransPrefenreces::create($request_data);
         }
@@ -190,8 +227,8 @@ class TransferController extends Controller{
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school3,
                 'preference'                    =>  3,
-                'created_by'                    =>$request->user_id,
-                'created_at'                    =>date('Y-m-d h:i:s'),
+                'created_by'                    =>  $request->user_id,
+                'created_at'                    =>  date('Y-m-d h:i:s'),
             ];
             TransPrefenreces::create($request_data);
         }
@@ -469,9 +506,10 @@ class TransferController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-    public function loadtransferDetails($type= "",$userId=""){
+    public function loadtransferDetails($type= "",$userId="",$dzoId=""){
          $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
          $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
+         $response_data=TransferApplication::where ('user_dzo_id', $dzoId)->where('status',$type)->get();
          return$response_data;
     }
     public function loadApplicationDetails($id=""){

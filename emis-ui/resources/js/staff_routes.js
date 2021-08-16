@@ -537,6 +537,14 @@ const routes = [
                 ],
             },
 
+            { path: '/transfer_list',
+            component: require('./components/staff/transfer/transfer_lists/transfer_list_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_list', component: require('./components/staff/transfer/transfer_lists/list_transfer.vue').default },
+                    { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
+                ],
+            },
+
         ]
     },
 

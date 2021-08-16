@@ -42,7 +42,8 @@ class TransferController extends Controller{
             'reason_id'                         =>  $request->reason_id,
             'description'                       =>  $request->description,
             'status'                            =>  $request->status,
-            'user_id'                           =>  $this->userId()
+            'user_id'                           =>  $this->userId(),
+            'user_dzo_id'                       =>  $this->getUserDzoId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitIntialapplicantDetails', $request_data);
         return $response_data;
@@ -89,6 +90,9 @@ class TransferController extends Controller{
             'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
             'preference_dzongkhag3'             =>  $request->preference_dzongkhag3,
+            'spSubject'                         =>  $request->spSubject,
+            'optional1sub'                      =>  $request->optional1sub,
+            'optional2sub'                      =>  $request->optional2sub,
             'dzongkhag_id'                      =>  $this->getUserDzoId(),
             'preference_school1'                =>  $request->preference_school1,
             'preference_school2'                =>  $request->preference_school2,
@@ -334,7 +338,8 @@ class TransferController extends Controller{
     }
     public function loadtransferDetails($type=""){
         $userId=$this->userId();
-        $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$type.'/'.$userId);
+        $dzoId=$this->getUserDzoId();
+        $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$type.'/'.$userId.'/'.$dzoId);
         return $response_data;
     }
     
