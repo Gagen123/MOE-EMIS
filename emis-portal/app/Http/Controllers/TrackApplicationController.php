@@ -29,11 +29,12 @@ class TrackApplicationController extends Controller
     
     /**
      * Get the application details by id
-     * Checks the std_admissions table
+     * Checks the std_admissions table if type is new admission
+     * Checks std_student table if the type is student
      */
 
-    public function getApplicationDetails($id=""){
-        $application_data = $this->apiService->listData('emis/students/admission/getApplicationDetails/'.$id);
+    public function getApplicationDetails($type="", $id=""){
+        $application_data = $this->apiService->listData('emis/students/admission/getApplicationDetails/'.$type.'/'.$id);
         return $application_data;
     }
 

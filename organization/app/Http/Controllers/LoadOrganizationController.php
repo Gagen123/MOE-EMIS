@@ -360,7 +360,7 @@ class LoadOrganizationController extends Controller{
     }
 
      /**
-     * Get the Class Streams by org_class_strema_id
+     * Get the Class Streams by org_class_stream_id
      */
 
     public function getOrgClassStreambyId($id){

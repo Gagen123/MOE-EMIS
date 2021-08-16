@@ -61,7 +61,6 @@ export default {
     data(){
         return {
             SchoolList:[],
-            classList:[],
             form: new form({
                 preference_school1:'',
                 class:'',
@@ -112,28 +111,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        //loading loadclassList
-        loadClassList(uri="loadCommons/getOrgClassStream"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.classList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadClassList(uri="loadCommons/getOrgClassStream"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                alert(JSON.stringify(data.data.data));
-                this.classList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -175,9 +152,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadClassList();
         this.loadOrgList();
-        this.loadClassList();
     },
     
 }

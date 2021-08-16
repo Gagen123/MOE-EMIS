@@ -81,8 +81,6 @@ class ProjectionsController extends Controller
                 );
                 $spo = Feeder::where('id', $id)->update($feeder);
                 return $this->successResponse($feeder, Response::HTTP_CREATED);
-
-
             }
 
             }else{
@@ -96,7 +94,6 @@ class ProjectionsController extends Controller
                         'created_at'                =>  date('Y-m-d h:i:s')
 
                     );
-                    // dd($projection);
                     try{
                         $localpro = Feeder::create($feeder);
 
@@ -104,8 +101,6 @@ class ProjectionsController extends Controller
                             dd($ex->getMessage());
                             // Note any method of class PDOException can be called on $ex.
                         }
-
-
                 }
                 return $this->successResponse($localpro, Response::HTTP_CREATED);
             }
@@ -113,21 +108,23 @@ class ProjectionsController extends Controller
     }
 
     public function loadProjections($orgId=""){
-        //dd($orgId);
-    //     $equip = DB::table('organization_projections as a')
-    //     ->join('classes as b', 'a.class', '=', 'b.id')
-    //     ->select('a.id as id','a.organizationId as organizationId','b.class as class', 'a.academicYear as academicYear','a.ProjectionNo as ProjectionNo', 'a.remarks as remarks'
-    //    )->where('organizationId',$orgId)->get();
-
-    //     return $equip;
-
-        $info = Projection::where('organizationId',$orgId)->get();
-        return $info;
+        $projections = DB::table('organization_projections')
+                        ->join('organization_class_streams', 'organization_class_streams.id','=','organization_projections.class')
+                        ->join('classes', 'classes.id','=','organization_class_streams.classId')
+                        ->select('organization_projections.id', 'organization_projections.academicYear','organization_projections.ProjectionNo',
+                                    'classes.class as class')
+                        ->where('organization_projections.organizationId', $orgId)
+                        ->get();
+        return $projections;
     }
 
-    public function loadFeeders($userId=""){
-
-        $feeder = Feeder::where('created_by',$userId)->get();
+    public function loadFeeders($dzoId=""){
+        $feeder = DB::table('organization_feeder')
+                        ->join('organization_details as t1', 't1.id','=','organization_feeder.feederschool')
+                        ->join('organization_details as t2', 't2.id','=','organization_feeder.parentschool')
+                        ->select('organization_feeder.id', 'organization_feeder.class', 't1.name as feeder_name','t2.name as parent_name')
+                        ->where('t1.dzongkhagId', $dzoId)
+                        ->get();
         return $feeder;
     }
 }
