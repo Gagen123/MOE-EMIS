@@ -301,8 +301,8 @@ export default {
                     })
                     this.$router.push('/list_relative_details');
                 })
-                .catch(() => {
-                    console.log("Error:")
+                .catch((e) => {
+                    console.log("Error:"+e)
                 })
             }
 		},
@@ -454,20 +454,20 @@ export default {
                 });
             }
         },
-        loadpositionTitleList(positionid){
-            let uri = 'masters/loadStaffMasters/all_active_position_title';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
-                }
-                this.position_title=this.positiontitleList[positionid];
-            })
-            .catch(function (error){
-                console.log('Error: '+error);
-            });
-        },
+        // loadpositionTitleList(){
+        //     alert('dd');
+        //     let uri = 'masters/loadStaffMasters/all_active_position_title';
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         for(let i=0;i<data.data.data.length;i++){
+        //             this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
+        //         }
+        //     })
+        //     .catch(function (error){
+        //         console.log('Error: '+error);
+        //     });
+        // },
     },
      mounted(){
         $('.select2').select2();
@@ -482,10 +482,10 @@ export default {
             this.changefunction(id);
         });
 
-        
-        this.loadpositionTitleList(this.$route.query.data.position_title_id);
+
+        // this.loadpositionTitleList();
         this.loadrelationship();
-        
+
         this.name=this.$route.query.data.name;
         this.emp_id=this.$route.query.data.emp_id;
         this.form.personal_id=this.$route.query.data.id;

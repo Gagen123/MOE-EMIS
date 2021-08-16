@@ -87,13 +87,17 @@ class LoadOrganizationController extends Controller{
              //   $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->get();
              $response_data = DB::select(" SELECT
              COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
-             COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+             COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD,
+             COUNT(CASE WHEN category = 'NGO_eccd' THEN 1 END) AS NGO_ECCD,
+             COUNT(CASE WHEN category = 'Corporate_eccd' THEN 1 END) AS Corporate_ECCD
              FROM organization_details");
             }else{
               //  $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
               $response_data = DB::select(" SELECT
               COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
-              COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD
+              COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD,
+              COUNT(CASE WHEN category = 'NGO_eccd' THEN 1 END) AS NGO_ECCD,
+             COUNT(CASE WHEN category = 'Corporate_eccd' THEN 1 END) AS Corporate_ECCD
               FROM organization_details
               WHERE dzongkhagId = '".$id."'");
             }
@@ -124,6 +128,167 @@ class LoadOrganizationController extends Controller{
                 LEFT JOIN `level` l ON l.id = a.levelId
                 WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
                 GROUP BY a.category");
+
+            }
+        }
+        if($type=="SEN"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND isSenSchool = 1
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE (category = 'public_school' OR category = 'private_school') AND isSenSchool = 1 AND dzongkhagId = '".$id."'
+                GROUP BY a.category");
+
+            }
+        }
+        if($type=="ECR"){
+            if($id=="ALL"){
+                $response_data = DB::select(" SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'public_ecr'  THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_ecr'
+                GROUP BY a.category;");
+            } else {
+                $response_data = DB::select("SELECT a.category,
+                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
+                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
+                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
+                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
+                SUM(CASE WHEN a.category = 'public_ecr'  THEN 1
+                    ELSE 0 END) AS Total
+                FROM `organization_details` a
+                LEFT JOIN `level` l ON l.id = a.levelId
+                WHERE category = 'public_ecr'  AND dzongkhagId = '".$id."'
+                GROUP BY a.category;");
+
+            }
+        }
+        if($type=="ALL"){
+            if($id=="ALL"){
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                WHERE c.class NOT LIKE '%Age%'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+            } else {
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                WHERE c.class NOT LIKE '%Age%' AND dzongkhagId = '".$id."'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+
+            }
+        }
+
+
+      //  dd($response_data);
+        return $this->successResponse($response_data);
+    }
+
+    //added by saru
+    public function loadClassSize($type="", $id=""){
+        $response_data="";
+        if($type=="ALL"){
+            if($id=="ALL"){
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                WHERE c.class NOT LIKE '%Age%'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+            } else {
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                WHERE c.class NOT LIKE '%Age%' AND dzongkhagId = '".$id."'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+
+            }
+        }
+        if($type=="MSS"){
+            if($id=="ALL"){
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                left join `level` l on l.id=o.levelId
+                WHERE c.class NOT LIKE '%Age%'
+                And l.name= 'Middle Secondary School'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+            } else {
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                left join `level` l on l.id=o.levelId
+                WHERE c.class NOT LIKE '%Age%'
+                And l.name= 'Middle Secondary School' And dzongkhagId = '".$id."'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+
+            }
+        }
+        if($type=="HSS"){
+            if($id=="ALL"){
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                left join `level` l on l.id=o.levelId
+                WHERE c.class NOT LIKE '%Age%'
+                And l.name= 'Higher Secondary School'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
+            } else {
+                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                COUNT(class) AS No_of_Section
+                FROM `organization_class_streams` a
+                LEFT JOIN classes c ON c.id=a.classId
+                LEFT JOIN `organization_details` o ON o.id=a.organizationId
+                left join `level` l on l.id=o.levelId
+                WHERE c.class NOT LIKE '%Age%'
+                And l.name= 'Higher Secondary School' And dzongkhagId = '".$id."'
+                GROUP BY classId
+                ORDER BY c.displayOrder;");
 
             }
         }
@@ -324,7 +489,6 @@ class LoadOrganizationController extends Controller{
             return $this->successResponse($response_data);
         }
 
-
     }
 
     public function getOrgProfile($id=""){
@@ -485,13 +649,13 @@ class LoadOrganizationController extends Controller{
 
         return $this->successResponse($response_data);
     }
-    // method by Chimi Thinley
-    public function getOrgWiseClassesForSpms(Request $request){
+
+     // method by Chimi Thinley
+     public function getOrgWiseClassesForSpms(Request $request){
         $response_data = DB::table('organization_class_streams')
                 ->select('organizationId AS org_id','classId AS org_class_id')
                 ->whereIn('organizationId',explode(",",$request['org_id']))
                 ->whereIn('classId',explode(",",$request['org_class_id']))->get();
         return $response_data;
     }
-
 }

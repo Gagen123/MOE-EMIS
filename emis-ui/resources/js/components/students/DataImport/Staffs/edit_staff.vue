@@ -14,7 +14,7 @@
                      <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row form-group">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Name of Institutes:<span class="text-danger">*</span></label> 
+                                <label>Name of Institutes:<span class="text-danger">*</span></label>
                                     <select v-model="form.institutes_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('institutes_id') }" class="form-control select2" name="institutes_id" id="institutes_id">
                                         <option value=""> -- Select-- </option>
                                         <option v-for="(item, index) in collegeList" :key="index" v-bind:value="item.id">{{ item.collegeName }}</option>
@@ -23,7 +23,7 @@
                                 <span class="text-danger" id="institutes_id_err"></span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Years:<span class="text-danger">*</span></label> 
+                                <label>Years:<span class="text-danger">*</span></label>
                                     <input class="form-control" v-model="form.year" :class="{ 'is-invalid': form.errors.has('year') }" id="year"  type="date">
                                     <has-error :form="form" field="institutes_id"></has-error>
                                 <span class="text-danger" id="institutes_id_err"></span>
@@ -41,21 +41,21 @@
                                             <th>Number of Male<span class="text-danger">*</span></th>
                                             <th>Number of Female<span class="text-danger">*</span></th>
                                             <th>Total Number<span class="text-danger">*</span></th>
-                                            
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <input type="number" name="male" id="male" value="0" class="form-control" v-model="form.staffMale"  :class="{ 'is-invalid': form.errors.has('male') }" @change="calculateTotal()"/>    
+                                                <input type="number" name="male" id="male" value="0" class="form-control" v-model="form.staffMale"  :class="{ 'is-invalid': form.errors.has('male') }" @change="calculateTotal()"/>
                                             </td>
-                                            <td>                          
+                                            <td>
                                                 <input type="number" name="female" id="female" value="0" class="form-control" v-model="form.staffFemale" :class="{ 'is-invalid': form.errors.has('female') }" @change="calculateTotal()"/>
                                             </td>
                                             <td>
                                                  <input type="number" name="staffTotal"  id="staffTotal"   class="form-control" v-model="form.staffTotal" :class="{ 'is-invalid': form.errors.has('total') }" disabled />
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -63,8 +63,8 @@
                 </div>
                 <div class="card-footer text-right">
                     <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                               
-                </div> 
+                    <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -86,7 +86,7 @@ export default {
         }
     },
     methods: {
-        LoadInstitutesName(uri="students/ExternalDataImport/loadInstitues/all_institutes"){
+        LoadInstitutesName(uri="students/ExternalDataImport/loadInstitues/all/RubCollegeDetails"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -104,7 +104,7 @@ export default {
         onFileChange(e) {
            this.import_file = e.target.files[0];
        },
-       formaction: function(type){ 
+       formaction: function(type){
             if(type=="reset"){
                 this.restForm();
             }

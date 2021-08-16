@@ -50,15 +50,26 @@ class LoadOrganizaitonController extends Controller{
             $param=$id;
         }
         if($type=="eccd"){
+          
             $param=$id;
-           
         }
         if($type=="School"){
+            $param=$id;
+        }
+        if($type=="ECR"){
+            $param=$id;
+        }
+        if($type=="tertiary"){
+            $param=$id;
+        }
+        if($type=="SEN"){
             $param=$id;
         }
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
+
+
 
     public function loadInactiveOrgList(){
         $dzo_id = $this->getUserDzoId();
