@@ -13,6 +13,7 @@ class TransferApplication extends Model{
         'aplication_number',
         'transfer_window_id',
         'applicant_name',
+        'staff_id',
         'transfer_reason_id',
         'transferType',
         'description',

@@ -104,6 +104,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
             $router->post('/SaveTransferAppeal', ['uses' => 'staff\TransferController@SaveTransferAppeal']);
             $router->get('/loadtransferDetails/{type}/{userId}/{dzoId}', ['uses' => 'staff\TransferController@loadtransferDetails']);
+            $router->get('/reportingTransfer/{type}/{dzoId}', ['uses' => 'staff\TransferController@reportingTransfer']);
             $router->get('/loadApplicationDetails/{id}', ['uses' => 'staff\TransferController@loadApplicationDetails']);
             $router->get('/LoadTransferAppealDetails/{user_id}', ['uses' => 'staff\TransferController@LoadTransferAppealDetails']);
             $router->get('/getapplicatName/{id}', ['uses' => 'staff\TransferController@getapplicatName']);

@@ -74,6 +74,31 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="form-group row" id="approvedDetails">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Approved Organization Details</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Dzongkhag/Thromde</th>
+                                            <th>School</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>
+                                               <span class="text-blue text-bold">{{dzoArray[form.dzongkhagApproved]}}</span>
+                                            </td>
+                                            <td>
+                                               <span class="text-blue text-bold">{{orgArray[form.preference_school]}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Attachments Details:</label>
@@ -117,6 +142,7 @@ export default {
             t_warning_message:'',
             reasonArray:{},
             orgArray:{},
+            dzoArray:{},
             draft_attachments:[],
             transfertypeList:[],
             intratransfer:[],
@@ -135,6 +161,8 @@ export default {
                 status:'',
                 service_name:'transfer appeal',
                 status:'',
+                dzongkhagApproved:'',
+                preference_school:'',
                 attachments:
               
 
@@ -146,32 +174,18 @@ export default {
         }
     },
     methods: {
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
-        addMoreattachments: function(){
-            this.filecount++;
-            this.form.attachments.push({file_name:'',attachment:''})
-        },
-        removeattachments(index){
-            if(this.form.attachments.length>1){
-                this.filecount--;
-                this.form.attachments.pop();
-                this.form.ref_docs.pop();
-            }
-        },
-        onChangeFileUpload(e){
-            let currentcount=e.target.id.match(/\d+/g)[0];
-            if($('#file_name'+currentcount).val()!=""){
-                this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});
-                $('#file_name'+currentcount).prop('readonly',true);
-            }
-            else{
-                $('#file_name'+currentcount+'_err').html('Please mention file name');
-                $('#'+e.target.id).val('');
-            }
+         loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data
+                this.dzongkhagList =  data;
+                for(let i=0;i<data.length;i++){
+                 this.dzoArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
         },
         loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -210,16 +224,16 @@ export default {
                 console.log('error loadattachementDetails: '+errors)
             });
         },
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
+         loadApplicationDetails(id){
+            axios.get('staff/transfer/loadApplicationDetails/' +id)
+            .then((response) =>{
+                let data=response.data;
+                this.form.id=data.id;
+                this.form.transferType=data.transferType;
+                this.form.dzongkhagApproved=data.dzongkhagApproved;
+                this.form.preference_school=data.preference_school;
+          })
         },
-
         profile_details(){
             axios.get('common/getSessionDetail')
             .then(response => {
@@ -231,112 +245,39 @@ export default {
                 console.log(errors)
             });
         },
-        // LoadApplicationDetailsByUserId(user_id){
-        //       axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/Approved/' +user_id)
-        //         .then(response =>{
-        //             let data = response.data;
-        //              this.applicationNo =  data;
-        //              this.form.aplication_number = data.aplication_number;
-        //         })
-        //         .catch(function (error){
-        //         console.log(error);
-        //     });
-
-        // },
-        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
-            axios.get(uri)
-            .then(response =>{
-                this.form.type_id = response.data.data[0].id;
-
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-        deletefile(file){
-            Swal.fire({
-                text: "Are you sure you wish to DELETE this selected file ?",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes!',
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    let file_path=file.path+'/'+file.name;
-                    file_path=file_path.replaceAll('/', 'SSS');
-                    let uri = 'organization/deleteFile/'+file_path+'/'+file.id;
-                    axios.get(uri)
-                    .then(response => {
-                        let data = response;
-                        if(data.data){
-                            Swal.fire(
-                                'Success!',
-                                'File has been deleted successfully.',
-                                'success',
-                            );
-                        }
-                        else{
-                        Swal.fire(
-                                'error!',
-                                'Not able to delete this file. Please contact system adminstrator.',
-                                'error',
-                            );
-                        }
-                    })
-                    .catch(function (error) {
-                        console.log("Error:"+error);
-                    });
-                }
+    },
+        mounted() {
+            let currentdate = new Date();
+            this.form.year=currentdate.getFullYear();
+            this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
+            $('[data-toggle="tooltip"]').tooltip();
+            $('.select2').select2();
+            $('.select2').select2({
+                theme: 'bootstrap4'
             });
-        },
-         changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="transfer_type_id"){
-                this.form.transfer_type_id=$('#transfer_type_id').val();
-            }
-        },
-        applyselect2(){
-            if(!$('#transfer_type_id').attr('class').includes('select2-hidden-accessible')){
-                $('#transfer_type_id').addClass('select2-hidden-accessible');
-            }
-        }, 
-    },
-    mounted() {
-        let currentdate = new Date();
-        this.form.year=currentdate.getFullYear();
-        this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
-        });
+            $('.select2').on('select2:select', function (el){
+                Fire.$emit('changefunction',$(this).attr('id'));
+            });
 
-        Fire.$on('changefunction',(id)=> {
-        this.changefunction(id);
-        });
-        this.profile_details();
-        this.LoadTransferType();
-        this.loadOrgList();
-        this.form.id=this.$route.params.data.id;
-        this.form.transfer_type_id=this.$route.params.data.transferType;
-        this.form.description=this.$route.params.data.description;
-        this.form.aplication_number=this.$route.params.data.aplication_number;
-        this.form.transferType=this.$route.params.data.transferType;
-        this.loadattachementDetails(this.$route.params.data.aplication_number);
-    },
+            Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+            });
+            this.profile_details();
+            this.loadactivedzongkhagList();
+            this.loadOrgList();
+            this.loadApplicationDetails(this.$route.params.data.id)
+            this.form.id=this.$route.params.data.id;
+            this.form.transfer_type_id=this.$route.params.data.transferType;
+            this.form.description=this.$route.params.data.description;
+            this.form.aplication_number=this.$route.params.data.aplication_number;
+            this.form.transferType=this.$route.params.data.transferType;
+            this.loadattachementDetails(this.$route.params.data.aplication_number);
+        },
 }
 </script>

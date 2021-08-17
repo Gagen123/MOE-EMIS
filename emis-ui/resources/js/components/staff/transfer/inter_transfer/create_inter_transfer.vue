@@ -438,6 +438,7 @@ export default {
                             formData.append('type_id', this.form.type_id);
                             formData.append('transferwindow_id', this.form.transferwindow_id);
                             formData.append('name', this.form.name);
+                            formData.append('staff_id', this.form.staff_id);
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('transferType', this.form.transferType);

@@ -37,6 +37,7 @@ class TransferController extends Controller{
             'id'                                =>  $request->id,
             'record_type_id'                    =>  $request->type_id,
             'name'                              =>  $request->name,
+            'staff_id'                          =>  $request->staff_id,
             'transferType'                      =>  $request->transferType,
             'transferwindow_id'                 =>  $request->transferwindow_id,
             'reason_id'                         =>  $request->reason_id,
@@ -264,31 +265,6 @@ class TransferController extends Controller{
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         }
-
-        // $files = $request->attachments;
-        // $filenames = $request->attachmentname;
-        // $remarks = $request->remarks;
-        // $attachment_details=[];
-        // $file_store_path=config('services.constant.file_stored_base_path').'transferVerification';
-        // if($files!=null && $files!=""){
-        //     if(sizeof($files)>0 && !is_dir($file_store_path)){
-        //         mkdir($file_store_path,0777,TRUE);
-        //     }
-        //     if(sizeof($files)>0){insertWorkflow
-        //         foreach($files as $index => $file){
-        //             $file_name = time().'_' .$file->getClientOriginalName();
-        //             move_uploaded_file($file,$file_store_path.'/'.$file_name);
-        //             array_push($attachment_details,
-        //                 array(
-        //                     'path'                   =>  $file_store_path,
-        //                     'original_name'          =>  $file_name,
-        //                     'user_defined_name'      =>  $filenames[$index],
-        //                     'saveapplication_number' =>  $request->application_no,
-        //                 )
-        //             );
-        //         }
-        //     }
-        // }
         if($request->transferType=='intra_transfer'){
             $data =[
                 'id'                            =>  $request->id,
@@ -327,6 +303,18 @@ class TransferController extends Controller{
             ];
             $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         }
+        else if($request->transferType=='transferReporting'){
+            $data =[
+                'id'                            =>  $request->id,
+                'status'                        =>  $request->status,
+                'application_number'            =>  $request->aplication_number,
+                'preference_school'             =>  $request->preference_school,
+                'current_status'                =>  $request->actiontype,
+                'dzongkhagApproved'             =>  $request->dzongkhagApproved,
+                'user_id'                       =>   $this->userId()
+            ];
+            $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
+        }
         return $response_data;
     }
     public function LoadSchoolByDzoId($type="",$parent_id=""){
@@ -342,6 +330,12 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/loadtransferDetails/'.$type.'/'.$userId.'/'.$dzoId);
         return $response_data;
     }
+    public function reportingTransfer($type=""){
+        $dzoId=$this->getUserDzoId();
+        $response_data = $this->apiService->listData('emis/staff/transfer/reportingTransfer/'.$type.'/'.$dzoId);
+        return $response_data;
+    }
+    
     
     public function loadApplicationDetails($id=""){
         $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
