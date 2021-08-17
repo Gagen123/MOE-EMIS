@@ -469,6 +469,7 @@ export default {
                             })
                     }
                 }
+                
             else if(nextclass=="final-tab"){
                 if(this.validated_final_form()){
                     Swal.fire({

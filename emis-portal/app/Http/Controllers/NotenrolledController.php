@@ -12,11 +12,13 @@ class NotenrolledController extends Controller
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
+    
     // public $database="student_db";
     public function getStudentDetailsFromPortal($id=""){
         $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$this->userId());
         return $response_data;
     }
+
     public function saveStudentDetailsFromPortal(Request $request){
         // dd($request);
         $rules = [

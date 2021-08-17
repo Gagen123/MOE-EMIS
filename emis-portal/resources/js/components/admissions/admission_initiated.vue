@@ -107,7 +107,7 @@
                                     </td>
                                     <td>
                                         <select v-model="student_form.school" :class="{ 'is-invalid': student_form.errors.has('school') }" @change="getclassList('school'),removeerror('school')" class="form-control" name="school" id="school">
-                                            <option value="">--- Please Select ---</option>
+                                            <option value="">--- Please Select---</option>
                                             <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                                         </select>
                                         <has-error :form="student_form" field="school"></has-error>
@@ -191,7 +191,7 @@ export default {
                 confirmButtonText: 'Yes!',
             }).then((result) => {
                 if(result.isConfirmed){
-                    this.student_form.post('/saveorgclassDetails')
+                    this.student_form.post('/admissions/saveorgclassDetails')
                     .then((response) => {
                         this.student_form.dzongkhag='';
                         this.student_form.school='';
@@ -207,7 +207,7 @@ export default {
         loadadmissions(){
             let std_id=this.student_form.student_id;
             this.student_form.student_seats=[];
-            axios.get('getorgclassDetails/'+std_id)
+            axios.get('/admissions/getorgclassDetails/'+std_id)
             .then(Response =>{
                 let data = Response.data;
                 this.response_data=data;
@@ -230,7 +230,7 @@ export default {
                 confirmButtonText: 'Yes!',
             }).then((result) => {
                 if(result.isConfirmed){
-                    axios.get('/deleteclassDetails/'+id+'__'+type)
+                    axios.get('/admissions/deleteclassDetails/'+id+'__'+type)
                     .then((response) => {
                         let data=response.data;
                         this.student_form.dzongkhag='';
@@ -254,7 +254,7 @@ export default {
                 confirmButtonText: 'Yes!',
             }).then((result) => {
                 if(result.isConfirmed){
-                    this.student_form.post('/savefilanorgclassDetails')
+                    this.student_form.post('/admissions/savefilanorgclassDetails')
                     .then((response) => {
                         let data=response.data;
                         this.$router.push({name:'acknowledgement'});
@@ -278,7 +278,7 @@ export default {
 
         },
         getstudentPersonalDetails(){
-            axios.get('/getStudentDetailsFromPortal/NA')
+            axios.get('/admissions/getStudentDetailsFromPortal/NA')
                 .then(response => {
                 let data = response.data;
                 if(data != ""){
@@ -335,7 +335,7 @@ export default {
         },
 
         getOrgDetails(id){
-            axios.get('loadOrganizationDetailsbyOrgId/' +id)
+            axios.get('/organizations/loadOrganizationDetailsbyOrgId/' +id)
             .then(response =>{
                 let data = response.data.data;
                 this.OrgDetails=data;
@@ -421,7 +421,7 @@ export default {
             this.student_form.dzongkhag=$('#'+dzo_id).val();
             let type=$('input[name="registrationType"]:checked').val();
             this.schoolList=[];
-            let uri = 'loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
+            let uri = '/organizations/loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
             try{
                 axios.get(uri).then(response => {
                     let data= response.data.data;
@@ -436,7 +436,7 @@ export default {
             if($('input[name="registrationType"]:checked').val()=="PP"){
                 let clasId=$('#class').val();
                 let orgId=$('#school').val();
-                let uri = 'loadProjection/'+clasId+'__'+orgId;
+                let uri = '/organizations/loadProjection/'+clasId+'__'+orgId;
                 axios.get(uri).then(response => {
                     let data= response.data;
                     this.student_form.seats=data.ProjectionNo;
