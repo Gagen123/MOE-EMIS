@@ -127,6 +127,7 @@ class TransferController extends Controller{
             'transfer_type_id'              =>  $request->record_type_id,
             'transferType'                  =>  $request->transferType,
             'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
+            'subject_id'                    =>  $request->spSubject,
             'preference'                    =>  1,
             'created_by'                    =>  $request->user_id,
             'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -139,6 +140,7 @@ class TransferController extends Controller{
                 'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag2,
+                'subject_id'                    =>  $request->optional1sub,
                 'preference'                    =>  2,
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -152,41 +154,6 @@ class TransferController extends Controller{
                 'transfer_type_id'              =>  $request->record_type_id,
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag3,
-                'preference'                    =>  3,
-                'created_by'                    =>  $request->user_id,
-                'created_at'                    =>  date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::create($request_data);
-        }
-        if($request->spSubject!=""){
-            $request_data =[
-                'transfer_application_id'       =>  $request->id,
-                'transfer_type_id'              =>  $request->record_type_id,
-                'transferType'                  =>  $request->transferType,
-                'subject_id'                    =>  $request->spSubject,
-                'preference'                    =>  1,
-                'created_by'                    =>  $request->user_id,
-                'created_at'                    =>  date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::create($request_data);
-        }
-        if($request->optional1sub!=""){
-            $request_data =[
-                'transfer_application_id'       =>  $request->id,
-                'transfer_type_id'              =>  $request->record_type_id,
-                'transferType'                  =>  $request->transferType,
-                'subject_id'                    =>  $request->optional1sub,
-                'preference'                    =>  2,
-                'created_by'                    =>  $request->user_id,
-                'created_at'                    =>  date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::create($request_data);
-        }
-        if($request->optional2sub!=""){
-            $request_data =[
-                'transfer_application_id'       =>  $request->id,
-                'transfer_type_id'              =>  $request->record_type_id,
-                'transferType'                  =>  $request->transferType,
                 'subject_id'                    =>  $request->optional2sub,
                 'preference'                    =>  3,
                 'created_by'                    =>  $request->user_id,
@@ -201,6 +168,8 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school1,
+                'subject_id'                    =>  $request->spSubject,
+                'subject_id'                    =>  $request->optionalsub,
                 'preference'                    =>  1,
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -214,6 +183,7 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school2,
+                'subject_id'                    =>  $request->optional1sub,
                 'preference'                    =>  2,
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -227,6 +197,7 @@ class TransferController extends Controller{
                 'transferType'                  =>  $request->transferType,
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school3,
+                'subject_id'                    =>  $request->optional2sub,
                 'preference'                    =>  3,
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -355,16 +326,7 @@ class TransferController extends Controller{
         }
 
     public function updateTransferApplication(Request $request){
-        $extra_data =[
-            'id'                           =>  $request->id,
-            'status'                       =>  $request->status,
-            'dzongkhagApproved'            =>  $request->dzongkhagApproved,
-            'updated_by'                   =>  $request->user_id,
-            'updated_at'                   =>  date('Y-m-d h:i:s'),
-            'aplication_number'            =>  $request->application_number,
-            'preference_school'            =>  $request->preference_school,
 
-        ];
         if($request->status =="reporting"){
             $applicant_det  = TransferApplication::where('id',$request->id)->first();
             $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
@@ -390,20 +352,30 @@ class TransferController extends Controller{
                 'updated_at'                   =>  date('Y-m-d h:i:s'),
                 'preference_school'            =>  $request->preference_school,
                 'status'                       => 'Reported'
-    
             ];
+            $response_data=TransferApplication::where('id', $request->id)->update($final_data);
             $update_data=[
                 'dzo_id'                       =>$request->dzongkhagApproved,
                 'working_agency_id'            =>$request->preference_school,
             ];
             PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
-            $response_data=TransferApplication::where('id', $request->id)->update($final_data);
             return $this->successResponse($response_data, Response::HTTP_CREATED);
 
         }
-
+        else{
+            $extra_data =[
+                'id'                           =>  $request->id,
+                'status'                       =>  $request->status,
+                'status_id'                    =>  $request->status_id,
+                'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+                'preference_school'            =>  $request->preference_school,
+                'updated_by'                   =>  $request->user_id,
+                'updated_at'                   =>  date('Y-m-d h:i:s'),
+                'aplication_number'            =>  $request->application_number,
+            ];
+            $response_data=TransferApplication::where('id', $request->id)->update($extra_data);
+        }
     }
-
     public function getTransferConfigDetails($role_ids=""){
         $result_data="";
         if(strpos( $role_ids,',')){
@@ -428,6 +400,7 @@ class TransferController extends Controller{
     public function getAppVeriTransferConfigDetails($transfer_type_id="",$app_role_id="",$role_id=""){
         $response_data=TransferConfig::with('transferDetails')->where('transfer_type_id',$transfer_type_id)->where('submitter_role_id',$app_role_id)
         ->select('id','transfer_type_id')->first();
+
         if($response_data!=null && $response_data!=""){
             //done for single role onle
             if(strpos( $role_id,',')){
@@ -511,13 +484,16 @@ class TransferController extends Controller{
         }
     }
     public function loadtransferDetails($type= "",$userId="",$dzoId=""){
-        if($type=="Approved"){
-            $response_data=TransferApplication::where ('user_dzo_id', $dzoId)->where('status',$type)->get();
+        if($type=="Dzongkhag"){
+            $response_data=TransferApplication::where ('status_id','2')->get();
         }
-        else{
+        else if($type=="Ministry"){
+            $response_data=TransferApplication::where ('status_id','3')->get();
+        }
+        else {
             $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
         }
-         return$response_data;
+         return $response_data;
     }
     public function loadApplicationDetails($id=""){
         $response_data=TransferApplication::where ('id', $id)->first();
@@ -594,7 +570,7 @@ class TransferController extends Controller{
         ];
         $response_data=TransferApplication::where('created_by',$request->user_id)->first();
         if($response_data!=null || $response_data!=""){
-            if($response_data->status=="Transfer Approved" || $response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Forwarded"){
+            if($response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Verified"){
                 $response_data = StaffAppeal::create($request_data);
             }
             else{

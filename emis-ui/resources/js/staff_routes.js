@@ -491,6 +491,14 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
+            //Transfer reporting from staff transfer 
+            { path: '/report_transfer',
+            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
+                children:[
+                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
+                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
+                ],
+            },
 
             { path: '/transfer_window_index',
                 component: require('./components/staff/transfer_window/transfer_window_index.vue').default,
@@ -546,13 +554,7 @@ const routes = [
                     { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
                 ],
             },
-            { path: '/report_transfer',
-            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
-                children:[
-                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
-                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
-                ],
-            },
+           
 
         ]
     },
