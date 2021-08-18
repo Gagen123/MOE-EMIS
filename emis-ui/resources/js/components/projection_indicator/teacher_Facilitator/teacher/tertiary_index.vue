@@ -64,11 +64,11 @@ export default {
     methods:{
         async generatesdetail(dzo_id){
             let response_data= await this.loadTeacher('ALL',dzo_id);
-            alert(JSON.stringify(response_data));
-            this.public_childrenList=response_data.public_data[0];
-            this.private_childrenList=response_data.private_data[0];
-            this.ngo_childrenList=response_data.ngo_data[0];
-            this.coor_childrenList=response_data.coorporate_data[0];
+            // alert(JSON.stringify(response_data));
+            // this.public_childrenList=response_data.public_data[0];
+            // this.private_childrenList=response_data.private_data[0];
+            // this.ngo_childrenList=response_data.ngo_data[0];
+            // this.coor_childrenList=response_data.coorporate_data[0];
             this.totalmale=this.public_childrenList.malecount+this.private_childrenList.malecount+this.ngo_childrenList.malecount+this.coor_childrenList.malecount;
             this.totalfemale=this.public_childrenList.femalecount+this.private_childrenList.femalecount+this.ngo_childrenList.femalecount+this.coor_childrenList.femalecount;
             this.grandtotal=this.public_childrenList.totalstd+this.private_childrenList.totalstd+this.ngo_childrenList.totalstd+this.coor_childrenList.totalstd;
@@ -76,15 +76,13 @@ export default {
             if(response_data!=""){
                 var peiData   = {
                     labels: [
-                        'Public',
+                        'Government',
                         'Private',
-                        'Coorporate',
-                        'NGO',
                     ],
                     datasets: [
                         {
                             data: [this.public_childrenList.totalstd,this.private_childrenList.totalstd,this.coor_childrenList.totalstd,this.ngo_childrenList.totalstd],
-                            backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#3c8dbc'],
+                            backgroundColor : ['#f56954', '#00a65a'],
                         }
                     ]
                 }

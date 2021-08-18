@@ -30,7 +30,7 @@ const routes = [
         component: require('./components/projection_indicator/student_learners/student_learner_index.vue').default,
         children:[
             { path: '/',name:'student_Projection_index', component: require('./components/projection_indicator/student_learners/student_learner_guidelines.vue').default },
-            { path: '/student_index',component: require('./components/projection_indicator/student_learners/student/student_index.vue').default,
+            { path: '/student_children_index',component: require('./components/projection_indicator/student_learners/student/student_index.vue').default,
                 children:[
                     { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/student_learners/student/eccd_index.vue').default },
                     { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/student_learners/student/school_index.vue').default },
@@ -39,8 +39,16 @@ const routes = [
             },
             { path: '/student_enrolment',component: require('./components/projection_indicator/student_learners/student_enrolment/student_enrolment_index.vue').default,
                 children:[
-                    // { path: '/eccd_children_index',name:'eccd_children_index', component: require('./components/projection_indicator/student_learners/student/eccd_index.vue').default },
-                    // { path: '/school_student_index',name:'school_student_index', component: require('./components/projection_indicator/student_learners/student/school_index.vue').default },
+                    { path: '/eccd_enrollment_index',name:'eccd_enrollment_index', component: require('./components/projection_indicator/student_learners/student_enrolment/eccd_enrollment_index.vue').default },
+                    { path: '/school_enrollment_index',name:'school_enrollment_index', component: require('./components/projection_indicator/student_learners/student_enrolment/school_enrollment_index.vue').default },
+                    // { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/student_learners/student/tertiary_index.vue').default },
+                ],
+            },
+
+            { path: '/student_gender_index',component: require('./components/projection_indicator/student_learners/gender_parity/student_gender_parity_index.vue').default,
+                children:[
+                    { path: '/eccd_gender_parity_index',name:'eccd_gender_parity_index', component: require('./components/projection_indicator/student_learners/gender_parity/eccd_gender_parity_index.vue').default },
+                    { path: '/school_gender_parity_index',name:'school_gender_parity_index', component: require('./components/projection_indicator/student_learners/gender_parity/school_gender_parity_index.vue').default },
                     // { path: '/tertiary_learners_index',name:'tertiary_learners_index', component: require('./components/projection_indicator/student_learners/student/tertiary_index.vue').default },
                 ],
             },

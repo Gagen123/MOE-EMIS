@@ -825,8 +825,12 @@ class StudentAdmissionController extends Controller
      * For EMIS Portal
      */
 
-    public function getApplicationDetails($id=""){
-        $response_data = std_admission::where ('id', $id)->first();
+    public function getApplicationDetails($type="", $id=""){
+        if($type == 'student'){
+            $response_data = Student::where ('student_code', $id)->first();
+        } else{
+            $response_data = std_admission::where ('ApplicationId', $id)->first();
+        }
         return $this->successResponse($response_data);
     }
 

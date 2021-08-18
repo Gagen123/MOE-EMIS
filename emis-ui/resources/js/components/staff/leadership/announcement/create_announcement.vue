@@ -33,6 +33,45 @@
                     </div>
                 </div>
                 <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Action Type</th>
+                                    <th>Applicable ?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>270 Degree Feedback</td>
+                                    <td>
+                                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Shortlisting</td>
+                                    <td>
+                                        <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Interview</td>
+                                    <td>
+                                        <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.interview"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend pr-2">
@@ -72,7 +111,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Details:</label>
@@ -96,13 +135,41 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(app, index) in form.applicant_List' :key="index">
-                        <label>Applicable Applicant:<span class="text-danger">*</span></label>
-                        <select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                        </select>
-                        <span class="text-danger" id="applicant_err"></span>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Applicable Applicants: </label>
+                        <table class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Position Level</th>
+                                    <th>Popsition Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='(data, index) in form.applicant_List' :key="index">
+                                    <td>{{index+1}}</td>
+                                    <td>
+                                        <select class="form-control" @change="getpositionTitleList(index)" :id="'position_level_id'+index" v-model="data.position_level_id" :class="{ 'is-invalid': form.errors.has('position_level_id') }">
+                                            <option value="">--Select--</option>
+                                            <option v-for="(item, index) in positionLevelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="position_level_id"></has-error>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="position_title" v-model="data.position_title" :class="{ 'is-invalid': form.errors.has('position_title') }">
+                                            <option value="">--Select--</option>
+                                            <option v-for="(item, index) in positionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="position_title"></has-error>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!--<select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
+                                <option value="">--- Please Select ---</option>
+                                <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
+                            </select>
+                        <span class="text-danger" id="applicant_err"></span> -->
                     </div>
                 </div>
                 <div class="row form-group">
@@ -129,7 +196,8 @@ export default {
         return {
             selectionList:[],
             positionList:[],
-            roleList:[],
+            // roleList:[],
+            positionLevelList:[],
             form: new form({
                 id:'',
                 selection_type:'',
@@ -138,7 +206,7 @@ export default {
                 to_date:'',
                 details:'',
                 document_List:[{document:''}],
-                applicant_List:[{applicant:''}],
+                applicant_List:[{position_level:'',position_title:''}],
                 feedback:1,
                 interview:1,
                 shortlist:1,
@@ -204,7 +272,7 @@ export default {
                 this.form.document_List.push({document:''})
             }
             if(type=="applicant"){
-                this.form.applicant_List.push({applicant:''})
+                this.form.applicant_List.push({position_level:'',position_title:''})
             }
         },
         remove_err(field_id){
@@ -212,16 +280,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.positionList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
@@ -253,11 +312,42 @@ export default {
                 this.form.position_title=$('#position_title').val();
             }
         },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
+        // loadroleList(uri = 'masters/getroles/allActiveRoles'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         this.roleList =  data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
+        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
-                this.roleList =  data.data;
+                this.positionLevelList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
+        getpositionTitleList(index){
+            let uri = 'staff/loadStaffMasters/byparent__position_level_id__'+$('#position_level_id'+index).val()+'/PositionTitle';
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.positionList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
+        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.positionList =  data.data.data;
             })
             .catch(function (error){
                 console.log(error);
@@ -277,8 +367,12 @@ export default {
             this.changefunction(id);
         });
         this.getSelectionList();
-        this.loadroleList();
+        // this.loadroleList();
+        this.loadPositionLevelList();
         this.loadPositionTitleList();
     },
+    watch(){
+        
+    }
 }
 </script>

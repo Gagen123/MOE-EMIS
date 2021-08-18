@@ -281,7 +281,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'feeder'], function () use ($router) {
             $router->post('/saveFeeders', 'generalInformation\ProjectionsController@saveFeeders');
-            $router->get('/loadFeeders/{userId}', 'generalInformation\ProjectionsController@loadFeeders');
+            $router->get('/loadFeeders/{dzoId}', 'generalInformation\ProjectionsController@loadFeeders');
         });
 
         //newly added routs ends here

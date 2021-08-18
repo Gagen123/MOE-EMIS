@@ -16,11 +16,11 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                             <td>{{ item.name}}</td>
+                            <td>{{ item.name}}</td>
                             <td>{{ item.application_no}}</td>
                             <td>{{ item.created_at}}</td>
-                           <td><span class="badge badge-success">{{ item.status}}</span></td>
-                           <td>
+                            <td><span class="badge badge-success">{{ item.status}}</span></td>
+                            <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
                             </td>
                             

@@ -250,9 +250,13 @@ export default {
     methods:{
         async generatesdetail(dzo_id){
             let response_data=  await this.loadStudents(dzo_id);
-            this.public_childrenList=response_data.public_data[0];
+            if(response_data.public_data!=null && response_data.public_data!=""){
+                this.public_childrenList=response_data.public_data[0];
+            }
+            if(response_data.public_higher_data!=null && response_data.public_higher_data!=""){
+                this.public_higher_data=response_data.public_higher_data[0];
+            }
             this.private_childrenList=response_data.private_data[0];
-            this.public_higher_data=response_data.public_higher_data[0];
             this.public_lower_data=response_data.public_lower_data[0];
             this.public_middle_data=response_data.public_middle_data[0];
 

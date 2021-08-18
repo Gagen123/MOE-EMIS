@@ -6,10 +6,11 @@
                     <th >SL#</th>
                     <th >Major Group Name</th>
                     <th >Name</th>
+                    <th >Description</th>
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -17,6 +18,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.majorgroup.name}}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
@@ -28,7 +30,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -39,24 +41,23 @@ export default {
         }
     },
     methods:{
-       loadworkingagencyList(uri = 'masters/loadStaffMasters/all_sub_major_groupList'){
+        loadworkingagencyList(uri = 'staff/loadStaffMasters/StaffSubMajorGrop/StaffSubMajorGrop'){
+        // loadworkingagencyList(uri = 'masters/loadStaffMasters/all_sub_major_groupList'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.suggroupList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_sub_major_group_master',params: {data:data}});
         },
-        
+
     },
-    mounted(){ 
+    mounted(){
         this.loadworkingagencyList();
         this.dt =  $("#working-agency-table").DataTable()
     },

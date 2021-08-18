@@ -39,7 +39,7 @@ export default {
     data(){
         return{
             classSize:[],
-           
+
         }
     },
     methods:{
@@ -52,8 +52,9 @@ export default {
                 level=level+"'"+element.Class+"',";
                 data=data+element.No_of_Section+",";
             });
+
             var areaChartData = {
-                labels  : ['pp','pp','pp','pp','pp','pp','pp','pp','pp','pp','pp','pp','pp'],
+                labels  : [level.slice(0,-1)],
                 datasets: [
                     {
                         label               : 'Less than 3 Years Male',
@@ -64,16 +65,27 @@ export default {
                         pointStrokeColor    : 'rgba(60,141,188,1)',
                         pointHighlightFill  : '#fff',
                         pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data                : [1,2,2,3,4,2,3,3,2,1,2,3,4]
+                        data                : [JSON.stringify(data.slice(0,-1))]
+                    },
+                    {
+                        label               : 'Less than 3 Years Male',
+                        backgroundColor     : 'rgba(60,141,188,0.9)',
+                        borderColor         : 'rgba(60,141,188,0.8)',
+                        pointRadius          : false,
+                        pointColor          : '#3b8bba',
+                        pointStrokeColor    : 'rgba(60,141,188,1)',
+                        pointHighlightFill  : '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data                : [JSON.stringify(data.slice(0,-1))]
                     },
                 ]
-            } 
+            }
 
             var barChartCanvas = $('#barChart').get(0).getContext('2d')
             var barChartData = jQuery.extend(true, {}, areaChartData)
             var temp0 = areaChartData.datasets[0]
-            var temp1 = areaChartData.datasets[1]
-            barChartData.datasets[0] = temp1
+            // var temp1 = areaChartData.datasets[1]
+            // barChartData.datasets[0] = temp1
             barChartData.datasets[1] = temp0
 
             var barChartOptions = {
@@ -81,7 +93,6 @@ export default {
             maintainAspectRatio     : false,
             datasetFill             : false
             }
-
             var barChart = new Chart(barChartCanvas, {
                 type: 'bar',
                 data: barChartData,

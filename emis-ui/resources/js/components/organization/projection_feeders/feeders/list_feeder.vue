@@ -13,9 +13,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{SchoolList[item.feederschool]}}</td>
+                    <td>{{item.feeder_name}}</td>
                     <td>{{ item.class}}</td>
-                    <td>{{SchoolList[item.parentschool]}}</td>
+                    <td>{{item.parent_name}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -30,8 +30,7 @@
 export default {
     data(){
         return{
-            dataList:[], 
-            SchoolList:{},
+            dataList:[],
         }
     },
     methods:{
@@ -47,24 +46,11 @@ export default {
                 }
             });
         },
-        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                 for(let i=0;i<data.length;i++){
-                    this.SchoolList[data[i].id] =data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
         showedit(data){
             this.$router.push({name:'edit_feeder',params: {data:data}});
         },
     },
     mounted(){
-        this.loadOrgList();
         this.loadDataList();
         this.dt =  $("#award-list-table").DataTable()
     },
