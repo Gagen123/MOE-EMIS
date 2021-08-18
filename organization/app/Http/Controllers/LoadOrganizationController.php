@@ -38,7 +38,12 @@ class LoadOrganizationController extends Controller{
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_eccd','private_eccd'])->get();
         }
         if($type=="school" || $type=="ce"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
+            if($id!=null && $id!="" && $id!="NA"){
+                $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
+            }
+            else{
+                $response_data=OrganizationDetails::wherein('category',['public_school','private_school'])->get();
+            }
         }
         if($type=="ECR"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','public_ecr')->get();

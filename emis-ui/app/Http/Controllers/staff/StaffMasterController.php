@@ -27,6 +27,9 @@ class StaffMasterController extends Controller{
         $this->validate($request, $rules, $customMessages);
         $request_data =[
             'id'                        =>  $request->id,
+            'group_id'                  =>  $request->group_id,
+            'sub_group_id'              =>  $request->sub_group_id,
+            'position_level_id'         =>  $request->position_level_id,
             'name'                      =>  $request->name,
             'qualification_type'        =>  $request->qualification_type,
             'qualification_level'       =>  $request->qualification_level,

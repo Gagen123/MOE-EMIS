@@ -13,6 +13,7 @@ class StaffSubMajorGrop extends Model{
     protected $fillable = [
         'id',
         'group_id',
+        'description',
         'name',
         'code',
         'status',

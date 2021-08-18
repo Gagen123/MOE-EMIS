@@ -179,6 +179,35 @@ const routes = [
                 { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_position_directory/position_level/edit_position_level.vue').default },
                 ],
             },
+            { path: '/superstructure',
+                component: require('./components/masters/staff_position_directory/superstructure/superstructure_index.vue').default,
+                children:[
+                { path: '/',name:'superstructure', component: require('./components/masters/staff_position_directory/superstructure/list_superstructure.vue').default },
+                { path: '/list_superstructure',name:'list_superstructure', component: require('./components/masters/staff_position_directory/superstructure/list_superstructure.vue').default },
+                { path: '/create_superstructure',name:'create_superstructure', component: require('./components/masters/staff_position_directory/superstructure/create_superstructure.vue').default },
+                { path: '/edit_superstructure', name:'edit_superstructure', component: require('./components/masters/staff_position_directory/superstructure/edit_superstructure.vue').default },
+                ],
+            },
+            { path: '/childgroup',
+                component: require('./components/masters/staff_position_directory/childgroup/childgroup_index.vue').default,
+                children:[
+                { path: '/',name:'childgroup', component: require('./components/masters/staff_position_directory/childgroup/list_childgroup.vue').default },
+                { path: '/list_childgroup',name:'list_childgroup', component: require('./components/masters/staff_position_directory/childgroup/list_childgroup.vue').default },
+                { path: '/create_childgroup',name:'create_childgroup', component: require('./components/masters/staff_position_directory/childgroup/create_childgroup.vue').default },
+                { path: '/edit_childgroup', name:'edit_childgroup', component: require('./components/masters/staff_position_directory/childgroup/edit_childgroup.vue').default },
+                ],
+            },
+            { path: '/child_group_position',
+                component: require('./components/masters/staff_position_directory/child_group_position/child_group_position_index.vue').default,
+                children:[
+                { path: '/',name:'child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/list_child_group_position.vue').default },
+                { path: '/list_child_group_position',name:'list_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/list_child_group_position.vue').default },
+                { path: '/create_child_group_position',name:'create_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/create_child_group_position.vue').default },
+                { path: '/edit_child_group_position', name:'edit_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/edit_child_group_position.vue').default },
+                ],
+            },
+
+
         ]
     },
     //Staff Transfer Masters

@@ -4,25 +4,25 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Major Group:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="gr_parent_field" v-model="form.gr_parent_field" :class="{ 'is-invalid': form.errors.has('gr_parent_field') }">
+                        <label>Major Group:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="group_id" v-model="form.group_id" :class="{ 'is-invalid': form.errors.has('group_id') }">
                             <option v-for="(item, index) in groupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="gr_parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="group_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Sub Major Group Name:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="parent_field" v-model="form.parent_field" :class="{ 'is-invalid': form.errors.has('parent_field') }">
+                        <label>Sub Major Group Name:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="sub_group_id" v-model="form.sub_group_id" :class="{ 'is-invalid': form.errors.has('sub_group_id') }">
                             <option v-for="(item, index) in subgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="parent_field"></has-error>
+                        </select>
+                        <has-error :form="form" field="sub_group_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position Level:<span class="text-danger">*</span></label>
-                         <select class="form-control select2" id="position_level" v-model="form.position_level" :class="{ 'is-invalid': form.errors.has('position_level') }">
+                         <select class="form-control select2" id="position_level_id" v-model="form.position_level_id" :class="{ 'is-invalid': form.errors.has('position_level_id') }">
                             <option v-for="(item, index) in positionLevelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select> 
-                        <has-error :form="form" field="position_level"></has-error>
+                        </select>
+                        <has-error :form="form" field="position_level_id"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -31,8 +31,13 @@
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
+                        <has-error :form="form" field="description"></has-error>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
+                        <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.code" readonly :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
@@ -42,14 +47,14 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
-    </div>     
+    </div>
 </template>
 <script>
 export default {
@@ -60,13 +65,14 @@ export default {
             positionLevelList:[],
             form: new form({
                 id: '',
-                gr_parent_field:'',
-                parent_field:'',
-                position_level:'',
+                group_id:'',
+                sub_group_id:'',
+                position_level_id:'',
                 name: '',
                 code:'',
                 status: 1,
-                record_type:'position_title',
+                description:'',
+                model:'PositionTitle',
                 action_type:'edit',
             })
         }
@@ -77,20 +83,18 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadMajorGroupList(uri = 'masters/loadStaffMasters/all_active_staff_major_groupList'){
+        loadMajorGroupList(uri = 'staff/loadStaffMasters/all/StaffMajorGrop'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.groupList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
         },
         getSubGroup(id){
-            let uri="masters/loadStaffDropdownMasters/StaffSubMajorGrop/"+id;
+            let uri="staff/loadStaffMasters/byparent__group_id__"+id+"/StaffSubMajorGrop";
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -100,7 +104,7 @@ export default {
                 console.log("Error: ."+error)
             });
         },
-        loadPositionLevelList(uri = 'masters/loadStaffMasters/all_active_position_level_List'){
+        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -117,7 +121,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStaffMasters',this.form)
+                this.form.post('staff/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -125,28 +129,28 @@ export default {
                     })
                     this.$router.push('/list_position_title');
                 })
-                .catch(() => { 
+                .catch(() => {
                     console.log("Error......")
                 })
             }
-		}, 
+		},
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="gr_parent_field"){
-                this.form.gr_parent_field=$('#gr_parent_field').val();
-                this.getSubGroup($('#gr_parent_field').val());
+            if(id=="group_id"){
+                this.form.group_id=$('#group_id').val();
+                this.getSubGroup($('#group_id').val());
             }
-            if(id=="parent_field"){
-                this.form.parent_field=$('#parent_field').val();
+            if(id=="sub_group_id"){
+                this.form.sub_group_id=$('#sub_group_id').val();
             }
-            if(id=="position_level"){
-                this.form.position_level=$('#position_level').val();
+            if(id=="position_level_id"){
+                this.form.position_level_id=$('#position_level_id').val();
             }
-            
+
         },
     },
     created() {
@@ -158,24 +162,22 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.form.gr_parent_field=this.$route.params.data.submajorgroup.group_id;
-        this.form.parent_field=this.$route.params.data.submajorgroup.id;
+        this.form.group_id=this.$route.params.data.submajorgroup.group_id;
+        this.form.sub_group_id=this.$route.params.data.submajorgroup.id;
         this.getSubGroup(this.$route.params.data.submajorgroup.group_id);
-        if(this.$route.params.data.level){
-            this.form.position_level=this.$route.params.data.level.id;
-        }
+        this.form.position_level_id=this.$route.params.data.position_level_id;
         this.form.name=this.$route.params.data.name;
+        this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
-
     },
-    
+
 }
 </script>
