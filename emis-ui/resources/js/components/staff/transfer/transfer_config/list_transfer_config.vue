@@ -1,6 +1,6 @@
 <template>
     <div class="card-body">
-        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
+        <table id="transfer_config_list" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -77,15 +77,13 @@ export default {
         mounted(){
             this.LoadTransferType();
             this.loadroleList();
-
             this.TransferConfigurationList();
-
-
+            // this.dt =  $("#transfer_config_list").DataTable()
         },
        watch: {
-            transfer_list(){
+            transferConfigurationList(){
                 this.$nextTick(() => {
-                    this.dt =  $("#training-table").DataTable()
+                    this.dt =  $("#transfer_config_list").DataTable()
                 });
             }
         },

@@ -242,6 +242,16 @@ const routes = [
                 { path: '/edit_transfer_type', name:'edit_transfer_type', component: require('./components/masters/staff_transfer/transfer_type/edit_transfer_type.vue').default },
                 ],
             },
+            { path: '/transfer_config',
+                component: require('./components/staff/transfer/transfer_config/transfer_config_index.vue').default,
+                    children:[
+                        { path: '/',name:'transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                        { path: '/list_transfer_config',name:'list_transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                        { path: '/create_transfer_config',name:'create_transfer_config', component: require('./components/staff/transfer/transfer_config/create_transfer_config.vue').default },
+                        { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
+                    ],
+                },
+
         ]
     },
 
@@ -547,15 +557,7 @@ const routes = [
                     { path: '/inter_transfer_acknowledgement', name:'inter_transfer_acknowledgement', component: require('./components/staff/transfer/inter_transfer/acknowledgement.vue').default },
                 ],
             },
-            { path: '/transfer_config',
-            component: require('./components/staff/transfer/transfer_config/transfer_config_index.vue').default,
-                children:[
-                    { path: '/',name:'transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
-                    { path: '/list_transfer_config',name:'list_transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
-                    { path: '/create_transfer_config',name:'create_transfer_config', component: require('./components/staff/transfer/transfer_config/create_transfer_config.vue').default },
-                    { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
-                ],
-            },
+            
             { path: '/transfer_appeal',
             component: require('./components/staff/transfer/transfer_appeal/transfer_appeal_index.vue').default,
                 children:[
@@ -563,6 +565,21 @@ const routes = [
                     { path: '/list_transfer_appeal',name:'list_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/list_transfer_appeal.vue').default },
                     { path: '/create_transfer_appeal',name:'create_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/create_transfer_appeal.vue').default },
                     { path: '/edit_transfer_appeal', name:'edit_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/edit_transfer_appeal.vue').default },
+                ],
+            },
+
+            { path: '/transfer_list',
+            component: require('./components/staff/transfer/transfer_lists/transfer_list_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_list', component: require('./components/staff/transfer/transfer_lists/list_transfer.vue').default },
+                    { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
+                ],
+            },
+            { path: '/report_transfer',
+            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
+                children:[
+                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
+                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
                 ],
             },
 
