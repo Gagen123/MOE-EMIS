@@ -104,7 +104,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
             $router->get('/getEnrolledStudents/{std_id}',['uses' => 'Students\ClassXiAdmissionController@getEnrolledStudents']);
             //to get the application details
-            $router->get('/getApplicationDetails/{id}',['uses' => 'Students\StudentAdmissionController@getApplicationDetails']);
+            $router->get('/getApplicationDetails/{type}/{id}',['uses' => 'Students\StudentAdmissionController@getApplicationDetails']);
 
             $router->post('/updateStudentAdmission',['uses' => 'Students\StudentAdmissionController@updateStudentAdmission']);
             $router->post('/updateStudentTransfer',['uses' => 'Students\StudentAdmissionController@updateStudentTransfer']);
@@ -123,9 +123,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         });
         //Data import route
         $router->group(['prefix' => 'ExternalDataImport'], function () use ($router) {
-            $router->get('/loadInstitues/{param}', ['uses' => 'Students\ExternalDataImputController@loadInstitues']);
+            $router->get('/loadInstitues/{type}/{model}', ['uses' => 'Students\ExternalDataImputController@loadInstitues']);
             $router->get('/getSenStudentList',['uses' => 'Students\ExternalDataImputController@getSenStudentList']);
             $router->post('/saveImported', ['uses' => 'Students\ExternalDataImputController@saveImported']);
+            //projection route for teacher
+            $router->get('/loadProjectionStaffList/{type}/{dzo_id}', ['uses' => 'Students\ExternalDataImputController@loadProjectionStaffList']);
         });
 
         //Validate student data
@@ -275,6 +277,12 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         //Load Student Controller
         $router->group(['prefix' => 'loadStudent'], function () use ($router) {
             $router->get('/loadStudents/{type}/{param}', ['uses' => 'LoadStudent\LoadStudentController@loadStudents']);
+        });
+    });
+
+    $router->group(['prefix' => 'projections'], function () use ($router) {
+        $router->group(['prefix' => 'bcsea'], function () use ($router) {
+            $router->get('/loadIndicatorResult/{type}', ['uses' => 'Projections\BcseaController@loadIndicatorResult']);
         });
     });
 

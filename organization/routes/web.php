@@ -281,7 +281,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'feeder'], function () use ($router) {
             $router->post('/saveFeeders', 'generalInformation\ProjectionsController@saveFeeders');
-            $router->get('/loadFeeders/{userId}', 'generalInformation\ProjectionsController@loadFeeders');
+            $router->get('/loadFeeders/{dzoId}', 'generalInformation\ProjectionsController@loadFeeders');
         });
 
         //newly added routs ends here
@@ -477,6 +477,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        $router->get('/loadClassSize/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassSize']);
         $router->get('/loadProjection/{classid}', ['uses' => 'LoadOrganizationController@loadProjection']);
         $router->get('/loadInactiveOrgList/{dzo_id}', ['uses' => 'LoadOrganizationController@loadInactiveOrgList']);
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);

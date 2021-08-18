@@ -181,7 +181,7 @@
                                                 <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
                                         </tr>
-                                        <tr>
+                                        <tr id="addmore">
                                             <td colspan="3">
                                                 <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                 @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
@@ -314,6 +314,7 @@ export default {
                 this.loadattachementDetails(data.aplication_number);
                 if(this.form.status =="Approved"){
                      $('#approvedDetails').show();
+
                 }else{
                     $('#approvedDetails').hide();
                 }
@@ -322,7 +323,7 @@ export default {
                      $('#Withdraw').hide();
                      $('#remarks').hide();
                      $('#update').hide();
-
+                     $('#addmore').hide();
                 }
                 $(document).ready(function() {
                     $('#tbName').on('input change', function() {
@@ -430,7 +431,7 @@ export default {
             if(nextclass=="final-tab"){
                 if(this.form.t_to_date <=this.form.current_date || this.form.t_from_date >this.form.current_date){
                     Swal.fire({
-                        text: "Are you sure you wish to submit for further approval ?",
+                        text: "Are you sure you wish to update your application ?",
                         icon: 'info',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',

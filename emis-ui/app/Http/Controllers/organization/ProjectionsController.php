@@ -69,9 +69,9 @@ class ProjectionsController extends Controller
         return $response_data;
     }
     public function loadFeeders(){
-        $userId=$this->userId();
+        $dzoId=$this->getUserDzoId();
         //dd( $orgId);
-        $dis = $this->apiService->listData('emis/organization/feeder/loadFeeders/'.$userId);
+        $dis = $this->apiService->listData('emis/organization/feeder/loadFeeders/'.$dzoId);
         return $dis;
     }
 

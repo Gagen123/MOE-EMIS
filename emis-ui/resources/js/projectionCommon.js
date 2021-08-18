@@ -9,6 +9,15 @@ try {
                     console.log('error getdepartmentList '+e);
                 }
             },
+            loadTeacher(type,dzoId){
+                let uri = 'loadCommons/loadProjectionStaffList/'+type+'/'+dzoId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                    console.log('error staffDzongkhagwise '+e);
+                }
+            },
+
             loadStudents(dzoId){
                 let uri = 'projections/projectionController/loadStudents/'+dzoId;
                 try{
@@ -18,13 +27,22 @@ try {
                 }
             },
             loadeducationCenter(type,dzoId){
-                let uri = 'loadCommons/loadOrgList/'+type+'/'+dzoId;
+                let uri = 'projections/OrgProjectionController/loadOrgListProjection/'+type+'/'+dzoId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error getdepartmentList '+e);
+                }
+            }, 
+            loadClassSize(type,dzoId){
+                let uri = 'projections/OrgProjectionController/loadClassSize/'+type+'/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
                     console.log('error getdepartmentList '+e);
                 }
             },
+           
             
         },
     })

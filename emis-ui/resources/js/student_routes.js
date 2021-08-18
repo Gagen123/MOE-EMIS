@@ -83,7 +83,7 @@ const routes = [
                     { path: '/counselling_class_list', name:'counselling_class_list', component: require('./components/masters/student_masters/counselling_class_range/counselling_class_list.vue').default },
                 ]
             },
-            
+
         ]
     },
     //Students validation and others
@@ -706,38 +706,68 @@ const routes = [
         },
     ]
     },
-      //External data import Routes
-      { path: '/data_import_index', component: require('./components/students/StudentExtraCurricular/DataImport/data_import.vue').default,
-      children: [
-          //RUB
-          { path: '/', component: require('./components/students/StudentExtraCurricular/DataImport/data_import_guideline.vue').default},
-          { path: '/rub_data_import', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/rub_data.vue').default,
-              children: [
-                  { path: '/', name:'rub_data_import', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
-                  { path: '/list_instittute', name:'list_instittute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_instittute.vue').default },
-                  { path: '/list_staff', name:'list_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_staff.vue').default },
-                  { path: '/list_student', name:'list_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_student.vue').default },
-                  { path: '/list_rub_data', name:'list_rub_data', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/list_rub_data.vue').default },
-                  { path: '/add_institute', name:'add_institute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_institute.vue').default },
-                  { path: '/add_staff', name:'add_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_staff.vue').default },
-                  { path: '/add_student', name:'add_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/add_student.vue').default },
-                  { path: '/edit_institute', name:'edit_institute', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_institute.vue').default },
-                  { path: '/edit_staff', name:'edit_staff', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_staff.vue').default },
-                  { path: '/edit_student', name:'edit_student', component: require('./components/students/StudentExtraCurricular/DataImport/RUB_Data/edit_student.vue').default },
-              ]
-          },
-        //   DAHE
-          { path: '/Dahe_index', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/dahe.vue').default,
-              children: [
-                  { path: '/', name:'Dahe_index', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/list_outgoing_student.vue').default },
-                  { path: '/list_outgoing_student', name:'list_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/list_outgoing_student.vue').default },
-                  { path: '/add_outgoing_student', name:'add_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/add_outgoing_student.vue').default },
-                  { path: '/edit_outgoing_student', name:'edit_outgoing_student', component: require('./components/students/StudentExtraCurricular/DataImport/DAHE/edit_outgoing_student.vue').default },
-              ]
-          },
-      ]
-      },
+    //External data import Routes
+    { path: '/data_import_index', component: require('./components/students/DataImport/data_import.vue').default,
+    children: [
+        //Instuties data import
+        { path: '/', component: require('./components/students/DataImport/data_import_guideline.vue').default},
+        { path: '/institute_index', component: require('./components/students/DataImport/Institutes/institute_index.vue').default,
+            children: [
+                { path: '/', name:'rub_data_import', component: require('./components/students/DataImport/Institutes/list_instittute.vue').default },
+                { path: '/list_instittute', name:'list_instittute', component: require('./components/students/DataImport/Institutes/list_instittute.vue').default },
+                { path: '/edit_institute', name:'edit_institute', component: require('./components/students/DataImport/Institutes/edit_institute.vue').default },
+                { path: '/add_institute', name:'add_institute', component: require('./components/students/DataImport/Institutes/add_institute.vue').default },
+                { path: '/institute_index', name:'institute_index', component: require('./components/students/DataImport/Institutes/institute_index.vue').default },
+            ]
+        },
+            // staff data import
+        { path: '/staff_index', component: require('./components/students/DataImport/Staffs/staff_index.vue').default,
+        children: [
+            { path: '/', name:'staff_index', component: require('./components/students/DataImport/Staffs/list_staff.vue').default },
+            { path: '/list_staff', name:'list_staff', component: require('./components/students/DataImport/Staffs/list_staff.vue').default },
+            { path: '/add_staff', name:'add_staff', component: require('./components/students/DataImport/Staffs/add_staff.vue').default },
+            { path: '/edit_staff', name:'edit_staff', component: require('./components/students/DataImport/Staffs/edit_staff.vue').default },
+            ]
+        },
+        // student data import
+        { path: '/student_index', component: require('./components/students/DataImport/Students/student_index.vue').default,
+            children: [
+                { path: '/', name:'Dahe_index', component: require('./components/students/DataImport/Students/list_student.vue').default },
+                { path: '/list_student', name:'list_student', component: require('./components/students/DataImport/Students/list_student.vue').default },
+                { path: '/add_student', name:'add_student', component: require('./components/students/DataImport/Students/add_student.vue').default },
+                { path: '/edit_student', name:'edit_student', component: require('./components/students/DataImport/Students/edit_student.vue').default },
+            ]
+        },
+        //   DAHE data import
+        { path: '/Dahe_index', component: require('./components/students/DataImport/DAHE/dahe.vue').default,
+            children: [
+                { path: '/', name:'Dahe_index', component: require('./components/students/DataImport/DAHE/list_outgoing_student.vue').default },
+                { path: '/list_outgoing_student', name:'list_outgoing_student', component: require('./components/students/DataImport/DAHE/list_outgoing_student.vue').default },
+                { path: '/add_outgoing_student', name:'add_outgoing_student', component: require('./components/students/DataImport/DAHE/add_outgoing_student.vue').default },
+                { path: '/edit_outgoing_student', name:'edit_outgoing_student', component: require('./components/students/DataImport/DAHE/edit_outgoing_student.vue').default },
+            ]
+        },
 
+        //   nsb data import
+        { path: '/nsb_index', component: require('./components/students/DataImport/Nsb/nsb_index.vue').default,
+            children: [
+                { path: '/', name:'nsb_index', component: require('./components/students/DataImport/Nsb/list_nsb.vue').default },
+                { path: '/list_nsb', name:'list_nsb', component: require('./components/students/DataImport/Nsb/list_nsb.vue').default },
+                { path: '/add_nsb', name:'add_nsb', component: require('./components/students/DataImport/Nsb/add_nsb.vue').default },
+                { path: '/edit_nsb', name:'edit_nsb', component: require('./components/students/DataImport/Nsb/edit_nsb.vue').default },
+            ]
+        },
+         //   census data import
+        { path: '/census_index', component: require('./components/students/DataImport/Census/census_index.vue').default,
+        children: [
+             { path: '/', name:'census_index', component: require('./components/students/DataImport/Census/list_census.vue').default },
+             { path: '/list_census', name:'list_census', component: require('./components/students/DataImport/Census/list_census.vue').default },
+             { path: '/add_census', name:'add_census', component: require('./components/students/DataImport/Census/add_census.vue').default },
+             { path: '/edit_census', name:'edit_census', component: require('./components/students/DataImport/Census/edit_census.vue').default },
+         ]
+     },
+    ]
+    },
     //Student Health
     { path: '/student_health', component: require('./components/students/StudentHealth/index.vue').default,
     children: [

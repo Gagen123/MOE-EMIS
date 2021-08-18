@@ -14,8 +14,9 @@ class PositionTitle extends Model{
         'id',
         'sub_group_id',
         'name',
+        'description',
         'code',
-        'position_level_id',
+        ' ',
         'status',
         'created_by',
         'created_at',
@@ -28,5 +29,5 @@ class PositionTitle extends Model{
     public function level() {
         return $this->belongsTo(PositionLevel::class, 'position_level_id')->select('id','name');
     }
-    
+
 }

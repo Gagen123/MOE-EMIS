@@ -11,6 +11,7 @@ export default [
 
     { path: '/new_admission_page',name:'new_admission_page', component: require('./components/new_admission_transfer/new_registration_for_admission.vue').default },
     { path: '/admission_initiated',name:'admission_initiated', component: require('./components/admissions/admission_initiated.vue').default },
+    { path: '/new_application', name:'new_application', component: require('./components/admissions/new_application.vue').default },
     { path: '/acknowledgement',name:'acknowledgement', component: require('./components/admissions/acknowledgement.vue').default },
 
     { path: '/admission',  name:'admission',  component: require('./components/admissions/admission.vue').default ,
@@ -31,9 +32,8 @@ export default [
         ]
     },
     { path: '/track_application',  name:'track_application',  component: require('./components/admissions/track_application.vue').default ,
-
-    children:[
-              { path: '/applicationLists',name:'applicationLists', component: require('./components/admissions/applicationLists.vue').default },
-       ]
+        children:[
+                { path: '/applicationLists',name:'applicationLists', component: require('./components/admissions/applicationLists.vue').default },
+        ]
     }
 ];

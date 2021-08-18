@@ -218,7 +218,7 @@ class StaffController extends Controller{
             'nomi_desig.required'           => 'This field is required',
             'nomi_address.required'         => 'This field is required',
             'nomi_email.required'           => 'This field is required',
-            'nomi_relation.required'        => 'Country field is required',
+            'nomi_relation.required'        => 'Relationship field is required',
         ];
         $this->validate($request, $rules,$customMessages);
 

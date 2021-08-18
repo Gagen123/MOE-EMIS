@@ -5,16 +5,18 @@
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Code</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in positionLevelList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
@@ -26,7 +28,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -37,24 +39,22 @@ export default {
         }
     },
     methods:{
-        loadpositionLevelList(uri = 'masters/loadStaffMasters/all_position_level_List'){
+        loadpositionLevelList(uri = 'staff/loadStaffMasters/all/PositionLevel'){
+        // loadpositionLevelList(uri = 'masters/loadStaffMasters/all_position_level_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.positionLevelList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
         },
         showedit(data){
             this.$router.push({name:'edit_position_level_master',params: {data:data}});
         },
-        
     },
-    mounted(){ 
+    mounted(){
         this.loadpositionLevelList();
         this.dt =  $("#working-agency-table").DataTable()
     },

@@ -14,6 +14,7 @@ class TransPrefenreces extends Model{
         'transferType',
         'transfer_type_id',
         'dzongkhag_id',
+        'subject_id',
         'school_id',
         'preference',
         'created_by',

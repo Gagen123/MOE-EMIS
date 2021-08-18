@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\StaffMajorGrop;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -40,6 +42,21 @@ class StaffMasterController extends Controller{
                 'code'   =>  $request->code,
             ];
         }
+        if(isset($request->group_id)){
+            $master_data = $master_data+[
+                'group_id'   =>  $request->group_id,
+            ];
+        }
+        if(isset($request->sub_group_id)){
+            $master_data = $master_data+[
+                'sub_group_id'   =>  $request->sub_group_id,
+            ];
+        }
+        if(isset($request->position_level_id)){
+            $master_data = $master_data+[
+                'position_level_id'   =>  $request->position_level_id,
+            ];
+        }
         if(isset($request->qualification_type)){
             $master_data = $master_data+[
                 'q_type_id'   =>  $request->qualification_type,
@@ -60,6 +77,9 @@ class StaffMasterController extends Controller{
         }
 
         if($request->action_type=="edit"){
+            if($request->model=="PositionTitle" || $request->model=="ChildGroup"){
+                unset($master_data['group_id']);
+            }
             $master_data =$master_data+[
                 'updated_by'        =>  $request->user_id,
                 'updated_at'        =>  date('Y-m-d h:i:s'),
@@ -80,10 +100,48 @@ class StaffMasterController extends Controller{
         if($type == 'all'){
             return $this->successResponse($model::get());
         }
+        else if(strpos($type,'joinall')!==false){
+            $response_data=$model::get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $data){
+                    $submod=explode('__',$type)[1];
+                    $sub_det="App\\Models\\staff_masters\\"."$submod";
+                    $submodel = new $sub_det();
+                    $data->sub_det=$submodel::where('id',$data[explode('__',$type)[2]])->first();
+                }
+            }
+            return $this->successResponse($response_data);
+        }
+        else if($type == 'active'){
+            return $this->successResponse($model::where('status',1)->get());
+        }
+        else if(strpos($type,'byparent')!==false){
+            // dd(explode('__',$type)[1]);
+            return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
+        }
         else if($type=="Qualification"){
-
             return $this->successResponse($model::with('quialificationtype','quialificationlevel')->get());
-        } else if($type == 'active'){
+        }
+        else if($type=="StaffSubMajorGrop"){
+            return $this->successResponse($model::with('majorgroup')->get());
+        }
+        else if($type=="PositionTitle"){
+            $response_data=$model::with('submajorgroup')->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $data){
+                    $name=StaffMajorGrop::where('id',$data->submajorgroup->group_id)->first();
+                    if($name!=null && $name!=""){
+                        $data->majorgroup=$name->name;
+                    }
+                    $name=PositionLevel::where('id',$data->position_level_id)->first();
+                    if($name!=null && $name!=""){
+                        $data->p_level=$name->name;
+                    }
+                }
+            }
+            return $this->successResponse($response_data);
+        }
+         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }
     }
