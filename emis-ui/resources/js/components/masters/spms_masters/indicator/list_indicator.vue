@@ -9,7 +9,8 @@
                             <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
-                            <th>Indicator</th>
+                            <th>Output Indicator</th>
+                            <th>Means of Verification (MoV)</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -21,8 +22,8 @@
                             <td>{{ item.area }} </td>
                             <td>{{ item.parameter }} </td>
                             <td>{{ item.name }} </td>
+                            <td>{{ item.mov }} </td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
-
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
@@ -69,8 +70,8 @@ export default {
                 { width: 50, targets: 2},
                 { width: 150, targets: 3},
                 { width: 200, targets: 4},
-                { width: 50, targets: 5},
                 { width: 50, targets: 6},
+                { width: 50, targets: 7},
             ],
         })
     },

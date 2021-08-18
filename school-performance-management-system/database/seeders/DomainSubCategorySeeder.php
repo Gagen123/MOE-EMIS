@@ -32,17 +32,25 @@ class DomainSubCategorySeeder extends Seeder
             [
                 'id' => '3',
                 'spm_domain_category_id' => '1',
-                'org_class_id' => 'efc535b3-dda4-4dba-8f4f-6e0fc01556c1',
-                'name' => 'Academic (Class X)',
+                'org_class_id' => '1e4d1886-afeb-4161-bb8b-49cdca0e50a1',
+                'name' => 'Academic (Class VII)',
                 'created_by' => 'D'
             ],
             [
                 'id' => '4',
                 'spm_domain_category_id' => '1',
+                'org_class_id' => 'efc535b3-dda4-4dba-8f4f-6e0fc01556c1',
+                'name' => 'Academic (Class X)',
+                'created_by' => 'D'
+            ],
+            [
+                'id' => '5',
+                'spm_domain_category_id' => '1',
                 'org_class_id' => 'dbdc53f4-0185-4fdc-8092-43798cc1de70',
                 'name' => 'Academic (Class XII)',
                 'created_by' => 'D'
             ],
+         
           
         ]);
     }

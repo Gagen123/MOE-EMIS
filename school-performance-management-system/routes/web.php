@@ -17,7 +17,6 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 $router->group(['prefix' => 'api/v1'], function () use ($router) {
-    //Masters routes
     $router->group(['prefix' => 'masters'], function () use ($router) {
         $router->post('/saveSpmMasters', ['uses' => 'masters\SpmsMasterController@saveSpmMasters']);
         $router->get('/loadSpmMasters/{param}', ['uses' => 'masters\SpmsMasterController@loadSpmMasters']);
@@ -25,16 +24,18 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getDzoEMO', ['uses' => 'masters\SpmsMasterController@getDzoEMO']);
         $router->post('/saveSchoolDEO', ['uses' => 'masters\SpmsMasterController@saveSchoolDEO']);
         $router->get('/getSchoolDEO', ['uses' => 'masters\SpmsMasterController@getSchoolDEO']);
-
-
     });
-    // Transaction Route
     $router->group(['prefix' => 'spms'], function () use ($router) {
         $router->get('/getDeoDashboardData/{dzon_id}/{staff_id}', ['uses' => 'spms\SpmsController@getDeoDashboardData']);
         $router->get('/getSchoolDoeDetails/{dzon_id}/{staff_id}/{spm_domain_subcat_id}[/{status}]', ['uses' => 'spms\SpmsController@getSchoolDoeDetails']);
         $router->get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', ['uses' => 'spms\SpmsController@getEvaluation']);
         $router->post('/saveEvaluation', ['uses' => 'spms\SpmsController@saveEvaluation']);
         $router->get('/getSchoolDashboardData/{org_id}', ['uses' => 'spms\SpmsController@getSchoolDashboardData']);
-
+        $router->post('/saveSchoolPlan', ['uses' => 'spms\SpmsController@saveSchoolPlan']);
+        $router->get('/getSchoolPlan', ['uses' => 'spms\SpmsController@getSchoolPlan']);
+        $router->post('/saveImplementtationStatus', ['uses' => 'spms\SpmsController@saveImplementtationStatus']);
+        $router->get('/getSchoolPlanHistory', ['uses' => 'spms\SpmsController@getSchoolPlanHistory']);
+        $router->get('/getDzoEMO/{emo_id}', ['uses' => 'spms\SpmsController@getDzoEMO']);
+        $router->get('/getSchoolPlans', ['uses' => 'spms\SpmsController@getSchoolPlans']);
     });
 });

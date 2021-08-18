@@ -28,22 +28,17 @@
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('indicator')">
                     <router-link id="indicator" to="/indicator-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Indicator
+                       Output Indicator
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1" @click="activatelink('rating')">
-                    <router-link id="rating" to="/rating-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Rating
+                 <li class="nav-item active pr-1" @click="activatelink('rubrics')">
+                    <router-link id="rubrics" to="/rubrics-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Rubrics
                     </router-link>
                 </li>
                   <li class="nav-item active pr-1" @click="activatelink('dzo_emo')">
                     <router-link id="dzo_emo" to="/dzo-emo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                       EMO-Dzongkhag Mapping
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('school_deo')">
-                    <router-link id="school_deo" to="/school-deo-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       DEO/TEO-School Mapping
                     </router-link>
                 </li>
             </ul>

@@ -6,7 +6,7 @@
                     <table id="dzo-emo-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Sl#</th>
+                                <th>SL No.</th>
                                 <th>Dzongkhag</th>
                                 <th>Assigned to EMO</th>
                             </tr>
@@ -34,7 +34,6 @@
                 </div>
             </div>
             <div class="card-footer text-right">
-                <button type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
@@ -79,7 +78,6 @@ export default {
             this.dzongkhagEMOs = dzongkhags
         },
         save(){
-            console.log(this.dzongkhagEMOs)
              axios.post('/masters/saveDzoEMO', {data:this.dzongkhagEMOs})
                  .then(() => {
                     Toast.fire({

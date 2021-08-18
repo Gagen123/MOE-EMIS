@@ -646,6 +646,7 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
+    Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
 
 });
 
@@ -850,7 +851,12 @@ Route::prefix('spms')->group(function () {
     Route::get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
     Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
     Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
-
+    Route::post('/saveSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'saveSchoolPlan'])->name('saveSchoolPlan');
+    Route::get('/getSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlan'])->name('getSchoolPlan');
+    Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
+    Route::get('/getSchoolPlanHistory', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
+    Route::get('/loadOrgList', [App\Http\Controllers\spms\SpmsController::class, 'loadOrgList'])->name('loadOrgList');
+    
 });
 
 
