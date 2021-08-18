@@ -1,39 +1,37 @@
 <template>
     <div>
-        <form class="bootbox-form" id="equipmentItemId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Equipment Item:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.equipmentItem" :class="{ 'is-invalid': form.errors.has('sub_name') }" id="equipmentItem" @change="remove_err('equipmentItem')" type="text">
-
-                        <has-error :form="form" field="spo_name"></has-error>
-                    </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Equipment Type:<span class="text-danger">*</span></label> 
                         <select name="type" class="form-control" v-model="form.equipmentType" :class="{ 'is-invalid': form.errors.has('spo_name') }" id="equipmentType" @change="remove_err('equipmentType')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in equipmentTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="sub_name"></has-error>
+                        <has-error :form="form" field="equipmentType"></has-error>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Equipment Item:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
                     </div>
                 </div>          
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -47,11 +45,12 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                equipmentItem : '',
-                equipmentType: '',
-                description: '',
+                name: '',
+                description:'',
                 status: 1,
+                equipmentType:'',
                 action_type:'add',
+                model:'EquipmentItem'
             })
         }
     },
@@ -64,26 +63,25 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.equipmentItem= '';
-                this.form.equipmentType= '';
+                this.form.name= '';
                 this.form.description= '';
+                this.form.equipmentType= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveEquipmentItem',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Equipment Item is added successfully'
+                        title: 'Detail is added successfully'
                     })
                     this.$router.push('/equipment_item_list');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},
-
         getEquipmentType(uri = 'masters/getEquipmentTypeDropdown'){
             axios.get(uri)
             .then(response => {
@@ -92,8 +90,7 @@ export default {
             });
         },
     },
-
-    mounted(){
+    created(){
         this.getEquipmentType();
     }
 }

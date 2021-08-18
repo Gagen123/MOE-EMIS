@@ -1,17 +1,17 @@
 <template>
     <div>
-        <form class="bootbox-form" id="equipmentUsageId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
-                
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Equipment Usage Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.equipmentUsageName" :class="{ 'is-invalid': form.errors.has('equi_name') }" id="equipmentUsageName" @change="remove_err('equipmentUsageName')" type="text" tabindex="1" autofocus="true">
-                        <has-error :form="form" field="equ_name"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
@@ -36,13 +36,15 @@ export default {
             count:10,
             form: new form({
                 id: '',
-                equipmentUsageName: '',
+                name: '',
                 description:'',
                 status: 1,
                 action_type:'add',
+                model:'EquipmentUsage'
             })
         }
     },
+
     methods:{
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -51,21 +53,21 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.equipmentUsageName= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveEquipmentUsage',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Equipment usage is added successfully'
+                        title: 'Detail is added successfully'
                     })
                     this.$router.push('/equipment_usage_list');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},

@@ -51,29 +51,29 @@ const routes = [
     { path: '/teacher_Projection_index',
         component: require('./components/projection_indicator/teacher_Facilitator/teacher_facilitator_index.vue').default,
         children:[
-            { path: '/',name:'student_Projection_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher_facilitator_guidelines.vue').default },
+            { path: '/',name:'teacher_Projection_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher_facilitator_guidelines.vue').default },
             { path: '/teacher_index',component: require('./components/projection_indicator/teacher_Facilitator/teacher_index.vue').default,
                 children:[
                     { path: '/tertiary_teacher_index',name:'tertiary_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/tertiary_index.vue').default },
                     { path: '/school_teacher_index',name:'school_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/school_index.vue').default },
-                    { path: '/eccd_teacher_index',name:'eccd_ieccd_teacher_indexndex', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
+                    { path: '/eccd_teacher_index',name:'eccd_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
                     { path: '/ecr_teacher_index',name:'ecr_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
                 ],
             },
             { path: '/gender_parity_index',component: require('./components/projection_indicator/teacher_Facilitator/gender_parity_index.vue').default,
                 children:[
-                    { path: '/tertiary_teacher_gender_index',name:'tertiary_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/tertiary_index.vue').default },
-                    { path: '/school_teacher_gender_index',name:'school_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/school_index.vue').default },
-                    { path: '/eccd_teacher_gender_index',name:'eccd_ieccd_teacher_indexndex', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
-                    { path: '/ecr_teacher_gender_index',name:'ecr_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
+                    { path: '/tertiary_teacher_gender_index',name:'gender_parity_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/tertiary_index.vue').default },
+                    { path: '/school_teacher_gender_index',name:'school_teacher_gender_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/school_index.vue').default },
+                    { path: '/eccd_teacher_gender_index',name:'eccd_teacher_gender_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
+                    { path: '/ecr_teacher_gender_index',name:'ecr_teacher_gender_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
                 ],
             },
             { path: '/recruitment_index',component: require('./components/projection_indicator/teacher_Facilitator/recruitment_index.vue').default,
                 children:[
-                    { path: '/tertiary_teacher_recur_index',name:'tertiary_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/tertiary_index.vue').default },
-                    { path: '/school_teacher_recur_index',name:'school_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/school_index.vue').default },
-                    { path: '/eccd_teacher_recur_index',name:'eccd_ieccd_teacher_indexndex', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
-                    { path: '/ecr_teacher_recur_index',name:'ecr_teacher_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
+                    { path: '/tertiary_teacher_recur_index',name:'tertiary_teacher_recur_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/tertiary_index.vue').default },
+                    { path: '/school_teacher_recur_index',name:'school_teacher_recur_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/school_index.vue').default },
+                    { path: '/eccd_teacher_recur_index',name:'eccd_teacher_recur_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/eccd_index.vue').default },
+                    { path: '/ecr_teacher_recur_index',name:'ecr_teacher_recur_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
                 ],
             },
             
@@ -88,7 +88,7 @@ const routes = [
             { path: '/tertiary_enrollment_index',name:'tertiary_enrollment_index', component: require('./components/projection_indicator/enrollment/tertiary/tertiaryenrollment_index.vue').default },
         ],
     },
-    { path: '/teacher_Projection_index', name:'teacher_Projection_index', component: require('./components/projection_indicator/teacher_facilitators_index.vue').default },
+   // { path: '/teacher_Projection_index', name:'teacher_Projection_index', component: require('./components/projection_indicator/teacher_facilitators_index.vue').default },
  
     { path: '/bcsea_projection_index', name:'bcsea_projection_index', component: require('./components/projection_indicator/bcsea/bcsea_index.vue').default },
 

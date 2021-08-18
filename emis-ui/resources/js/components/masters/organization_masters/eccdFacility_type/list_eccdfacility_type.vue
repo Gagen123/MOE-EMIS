@@ -1,28 +1,26 @@
 <template>
-    <div>
-        <table id="eccdfacility-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body"> 
+        <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Facility Type</th>
                     <th>ECCD Structure Type</th>
+                    <th>Facility Type</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in eccdFacilityList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.faciltytype}}</td>
-                    <td>{{ item.structuretype}}</td>
+                    <td>{{ eccdStructureTypeList[item.structuretype]}}</td> 
+                    <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewEccdFacilityList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -35,47 +33,53 @@
 export default {
     data(){
         return{
-            eccdFacilityList:[],
+            data_list:[],
             dt:'',
+            eccdStructureTypeList:{}
         }
     },
 
     methods:{
-        loadEccdFacilityList(uri = 'masters/loadEccdFacilityList'){
+        loadEccdFacilityList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/ECCDFacilities'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.data_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        editmasters(data){
+            this.$router.push({name:'edit_eccdfacility_type',params: {data:data}});
+        },
+        
+        getEccdStructureType(uri = 'masters/getEccdStructureType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.eccdFacilityList =  data.data;
+                for(let i=0;i<data.data.length;i++){
+                    this.eccdStructureTypeList[data.data[i].id] = data.data[i].name;
+                }
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error......"+error)
             });
-            setTimeout(function(){
-                $("#equipmentItem-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewEccdFacilityList(data){
-            data.action='edit';
-            this.$router.push({name:'edit_eccdfacility_type',params: {data:data}});
-        },
-    },
 
+    },
     mounted(){
+        this.getEccdStructureType();
         this.loadEccdFacilityList();
-        this.dt =  $("#eccdfacility-table").DataTable();
+        this.dt =  $("#org-masters-table").DataTable();
     },
     watch: {
-        eccdFacilityList(){
+        data_list(){
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#eccdfacility-table").DataTable()
+                this.dt =  $("#org-masters-table").DataTable()
             });
         }
     },
 }
-</script>
+</script> 
