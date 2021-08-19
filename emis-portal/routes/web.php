@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
         Route::get('/getOrgList/{dzoId}/{orgType}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
         Route::get('/getHssSchoolList/{dzo_id}', [App\Http\Controllers\AdminstratorController::class, 'getHssSchoolList'])->name('getHssSchoolList');
-        
+
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
 
@@ -77,10 +77,10 @@ use Illuminate\Support\Facades\Route;
         Route::get('/something/{param}', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'something'])->name('something');
         Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });
-    
+
 
     //OLD ROUTES - Delete routes below this line
-    
+
     //Track Application Controller
     Route::prefix('TrackApplicationController')->group(function () {
         Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\TrackApplicationController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');

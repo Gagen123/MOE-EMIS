@@ -354,8 +354,31 @@ class StaffLeadershipSerivcesController extends Controller{
             'action_type'               =>  $request->action_type,
             'user_id'                   =>  $this->userId()
         ];
-        dd($nomi_data);
+        // dd($nomi_data);
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedbackProviderData', $nomi_data);
+        if($request->partifipant_from=="External"){
+            $create_data =[
+                'email'                     =>  $request->email,
+                'contact'                   =>  $request->contact,
+                'cid'                       =>  $request->cid,
+                'name'                      =>  $request->name,
+                'feedback_type'             =>  $request->feedback_type,
+                'user_id'                   =>  $this->userId()
+            ];
+            $create_user_details= $this->apiService->createData('saveFeedbackRegistration', $create_data);
+            $rwopass="";
+            if($create_user_details!=null && $create_user_details!=""){
+                $rwopass=json_decode($create_user_details)->row_pass;
+            }
+            $content="Dear ".$request->name.'<br> Ministry Of Education is requesting you to provide a feedback to '.$request->applicant.' for participating his/her in '.$request->selectionFor
+            .'<br> In order to provide his feedback, Please login from the EMIS PORTAL using your email ('.$request->email.') as user name with a password: '.$rwopass;
+            $notification_data=[
+                'email'                 =>  $request->email,
+                'subject'               =>  'Notification for Leadership Feedback',
+                'content'               =>  $content,
+            ];
+            $email=$this->apiService->createData('emis/common/sendemailNotification', $notification_data);
+        }
         return $response_data;
     }
 
