@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="bootbox-form" id="sportSupporterId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -11,28 +11,27 @@
                         </select>
                         <has-error :form="form" field="spo_name"></has-error>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Sub Category Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.subCategoryName" :class="{ 'is-invalid': form.errors.has('sub_name') }" id="subCategoryName" @change="remove_err('subCategoryName')" type="text">
-                        <has-error :form="form" field="sub_name"></has-error>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Structure Sub-Category Type:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
                     </div>
                 </div>          
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -42,18 +41,20 @@
 export default {
     data(){
         return{
-             structureCategoryList:[],
+            structureCategoryList:[],
             count:10,
             form: new form({
                 id: '',
-                structureCategory : '',
-                subCategoryName: '',
-                description: '',
+                name: '',
+                description:'',
                 status: 1,
+                structureCategory:'',
                 action_type:'add',
+                model:'StructureSubCategory'
             })
         }
     },
+
     methods:{
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -62,26 +63,24 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.structureCategory= '';
-                this.form.subCategoryName= '';
+                this.form.name= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStrSubCategory',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Structure sub category is added successfully'
+                        title: 'Detail is added successfully'
                     })
                     this.$router.push('/str_sub_category_list');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},
-
         getStructureCategory(uri = '/masters/getStrCategoryDropdown'){
             axios.get(uri)
             .then(response => {
@@ -90,7 +89,6 @@ export default {
             });
         },
     },
-
     created(){
         this.getStructureCategory();
     }

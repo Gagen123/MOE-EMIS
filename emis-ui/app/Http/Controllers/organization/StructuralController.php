@@ -99,6 +99,7 @@ class StructuralController extends Controller
     }
 
     public function getFacilityInDropdown(Request $request){
+        
         $facilityDropdown = $this->apiService->listData('emis/organization/sport/getFacilityInDropdown');
         return $facilityDropdown;
     }
@@ -156,6 +157,7 @@ class StructuralController extends Controller
         if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
         }
+        
         $list = $this->apiService->listData('emis/organization/infrastructure/loadInfrastructureList/'.$orgId);
         return $list;
     }

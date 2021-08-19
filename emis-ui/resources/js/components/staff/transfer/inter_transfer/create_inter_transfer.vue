@@ -611,7 +611,7 @@ export default {
             if(id=="optional1sub"){
                 this.form.optional1sub=$('#optional1sub').val();
             }
-             if(id=="optional2sub"){
+            if(id=="optional2sub"){
                 this.form.optional2sub=$('#optional2sub').val();
             }
             if(id=="preference_dzongkhag1"){

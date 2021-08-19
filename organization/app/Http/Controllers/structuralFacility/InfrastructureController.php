@@ -171,7 +171,7 @@ class InfrastructureController extends Controller
         $list = DB::table('infrastructures as a')
             ->join('structure_category as b', 'b.id', '=', 'a.categoryId')
             ->join('structure_sub_categories as c', 'c.id', '=', 'a.subCategoryId')
-            ->select('a.id AS id','b.name AS categorgName', 'c.subCategoryName AS subCategoryName',
+            ->select('a.id AS id','b.name AS categorgName', 'c.name AS subCategoryName',
             'a.structureNo AS structureNo','a.organizationId AS organizationId',
             'a.yearofconstructinNo AS yearofconstructinNo','a.plintchArea AS plintchArea',
             'a.noOfFloor AS noOfFloor','a.totalCapacity AS totalCapacity',

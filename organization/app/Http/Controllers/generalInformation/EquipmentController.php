@@ -34,7 +34,7 @@ class EquipmentController extends Controller
         $equip = DB::table('organization_equipment as a')
             ->join('equipment_type as b', 'a.type', '=', 'b.id')
             ->join('equipment_items as c', 'a.item', '=', 'c.id')
-            ->select('a.id as id','b.name as type', 'c.equipmentItem as item','a.usable as usable', 'a.notusable as notusable'
+            ->select('a.id as id','b.name as type', 'c.name as item','a.usable as usable', 'a.notusable as notusable'
            )->where('organizationId',$orgId)->get();
 
         return $equip;

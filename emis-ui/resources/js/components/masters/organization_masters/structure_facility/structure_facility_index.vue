@@ -6,6 +6,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
+                                <label class="fa-pull-left">Structure Facility Type</label>
                                 <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('StructureFacilityList')"><i class="fa fa-list"></i> List</button>
                                 <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('StructureFacilityAdd')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
@@ -17,21 +18,18 @@
         </section>
     </div>
 </template>
-
 <script>
 export default {
-    data(){
-        return{
-
-        }
-    },
-
     methods:{
-        loadpage:function(type){
-            if(type=="StructureFacilityAdd"|| type=="StructureFacilityList"){
-                this.$router.push({name:type,params: {data:null}});
-            }
+         loadpage:function(type){
+            this.$router.push({name:type});
         },
-    }
+    },
+    mounted() {
+        let routeparam=this.$route.query.data;
+        this.sub_mod_id=routeparam;
+    },
+   
 }
 </script>
+

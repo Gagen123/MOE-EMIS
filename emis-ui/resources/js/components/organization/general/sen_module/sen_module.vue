@@ -426,9 +426,11 @@
         },
         methods:{
             getCurrentSenDetials(org_id){
+               
                 axios.get('/organization/loadSeenDetailsByOrgId/'+ org_id)
                 .then(response => {
                     let response_data=response.data.data;
+                   // alert(JSON.stringify(response.data.data));
                     this.form.newConstruction=response_data.newConstruction;
                     this.form.adjustmentsAccomodatte=response_data.adjustmentsAccomodatte;
                     this.form.enrollment=response_data.enrollment;

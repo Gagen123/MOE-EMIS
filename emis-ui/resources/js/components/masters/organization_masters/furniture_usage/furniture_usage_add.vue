@@ -1,8 +1,7 @@
 <template>
     <div>
-        <form class="bootbox-form" id="equipmentUsageId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
-                
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Furniture Usage Area:<span class="text-danger">*</span></label> 
@@ -11,7 +10,8 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
@@ -40,9 +40,11 @@ export default {
                 description:'',
                 status: 1,
                 action_type:'add',
+                model:'FurnitureUsage'
             })
         }
     },
+
     methods:{
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -56,16 +58,16 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveFurnitureUsage',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Furniture usage is added successfully'
+                        title: 'Department is added successfully'
                     })
                     this.$router.push('/furniture_usage_list');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},

@@ -316,6 +316,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadOrgDetails($type="", $id=""){
+     
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
@@ -370,6 +371,7 @@ class LoadOrganizationController extends Controller{
             if($contact!=null && $contact!=""){
                 $response_data->contactDetails=$contact;
             }
+          
         }
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();

@@ -8,7 +8,10 @@
                             <th>Sl#</th>
                             <th>Applicant Name</th>
                             <th>Application Number</th>
-                            <th>Date of Apply</th>
+                            <th>Dzongkhag/Thromde</th>
+                            <th>School Name</th>
+                            <th>Qualification</th>
+                            <th>Competent Subject</th>
                             <th>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
@@ -18,7 +21,10 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.applicant_name}}</td>
                             <td>{{ item.aplication_number}}</td>
-                            <td>{{ item.created_at}}</td>
+                            <td>Thimphu Thromde</td>
+                            <td>Yangchenphu Higher Secondary School</td>
+                            <td>Master</td>
+                            <td>    </td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>
@@ -36,14 +42,18 @@ export default {
     data(){
         return{
             transfer_list:[],
+            form: new form({
+                id:'',
+                access_level:'',
+                })
         }
     },
     methods: {
         loadviewpage(item){
             this.$router.push({name:"view_transfer",params:{data:item}});
         },
-        loadtransferDetails(){
-            axios.get('staff/transfer/loadtransferDetails/Approved')
+        loadtransferDetails(access_level){
+            axios.get('staff/transfer/loadtransferDetails/'+access_level)
             .then((response) => {
                 let data = response.data
                 this.transfer_list = data;
@@ -53,12 +63,21 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-       
+        profile_details(){
+            axios.get('common/getSessionDetail')
+            .then(response => {
+                this.loadtransferDetails(response.data.data.acess_level)
+            })
+            .catch(errors =>{
+                console.log(errors)
+            });
+        },
         applyselect2(){
         },
     },
     mounted() {
-        this.loadtransferDetails();
+        this.profile_details();
+
         this.dt =  $("#training-table").DataTable()
     },
     watch: {

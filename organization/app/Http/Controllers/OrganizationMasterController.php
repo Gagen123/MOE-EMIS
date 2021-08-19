@@ -58,6 +58,31 @@ class OrganizationMasterController extends Controller{
                 'applicableTo'              =>  $request->addfield_1,
             ];
         }
+        if($request->model=="StructureSubCategory"){
+            $master_data =$master_data+[
+                'structureCategory'              =>  $request->structureCategory,
+            ];
+        }
+        if($request->model=="ECCDFacilities"){
+            $master_data =$master_data+[
+                'structuretype'              =>  $request->structuretype,
+            ];
+        }
+        if($request->model=="SportFacilitySubtype"){  
+            $master_data =$master_data+[
+                'sportFacilityId'              =>  $request->sportFacility,
+            ];
+        }
+        if($request->model=="FurnitureItem"){  
+            $master_data =$master_data+[
+                'furnitureType'              =>  $request->furnitureType,
+            ];
+        }
+        if($request->model=="EquipmentItem"){  
+            $master_data =$master_data+[
+                'equipmentType'              =>  $request->equipmentType,
+            ];
+        }
 
         if($request->action_type=="add"){
             $master_data =$master_data+[
@@ -65,6 +90,7 @@ class OrganizationMasterController extends Controller{
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
             $response_data = $model::create($master_data);
+           // dd($response_data);
         }
 
         if($request->action_type=="edit"){
@@ -72,13 +98,16 @@ class OrganizationMasterController extends Controller{
                 'updated_by'        =>  $request->user_id,
                 'updated_at'        =>  date('Y-m-d h:i:s'),
             ];
+         
             //Audit Trails
             $data = $model::find($request->id);
-            $msg_det='name:'.$data->name.'; Status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $msg_det='name:'.$data->name.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$request->model."','".$request->id."','".$msg_det."','".$request->user_id."','Edit')");
             $model::where('id',$request->id)->update($master_data);
             $response_data = $model::where('id',$request->id)->first();
         }
+       
+        
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
