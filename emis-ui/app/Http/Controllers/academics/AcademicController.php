@@ -626,5 +626,9 @@ class AcademicController extends Controller
         $response_data = $this->apiService->createData('emis/academics/unlockForEditForConsolidated/'.$Id,[]);
         return $response_data;
     }
+    public function getResult($std_student_id){
+        $response_data = $this->apiService->listData('emis/academics/getResult/'.$std_student_id);
+        return $response_data;
+    }
 
 }

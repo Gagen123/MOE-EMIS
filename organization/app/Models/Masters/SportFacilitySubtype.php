@@ -17,6 +17,6 @@ class SportFacilitySubtype extends Model
      * @var array
      */
     protected $fillable = [
-        'id','sportFacilityId','name','status','created_by','updated_by'
+        'id','sportFacilityId','name','description','status','created_by','updated_by'
     ];
 }

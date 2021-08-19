@@ -25,16 +25,6 @@ class DomainCategorySeeder extends Seeder
                 'name' => 'Academic',
                 'created_by' => 'D'
             ],
-            // [
-            //     'id' => '2',
-            //     'name' => 'Academic (Class X)',
-            //     'created_by' => 'D'
-            // ],
-            // [
-            //     'id' => '3',
-            //     'name' => 'Academic (Class XII)',
-            //     'created_by' => 'D'
-            // ],
         ]);
     }
 }

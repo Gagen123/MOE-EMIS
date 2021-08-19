@@ -11,18 +11,18 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('counselling_index')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('counselling_index')">
                     <router-link id="student_list_index" to="/student_list_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Regular Student 
                     </router-link>
-                </li>
-               <li class="nav-item active pr-1" @click="activatelink('counselling_index')">
+                </li> -->
+               <!-- <li class="nav-item active pr-1" @click="activatelink('counselling_index')">
                     <router-link id="ce_student_list" to="/ce_student_list" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Continuing Education (CE) Student 
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         <router-view></router-view>
         </div>

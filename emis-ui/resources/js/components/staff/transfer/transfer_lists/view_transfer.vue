@@ -11,7 +11,6 @@
                 </div>
             </div>
         </div>
-        <div class="card card-primary card-outline card-outline-tabs" id="t_form_details">
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content"><br>
                         <div class="form-group row">
@@ -32,9 +31,9 @@
                             </div>
                         </div>
                          <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-smSchoolList-12 col-xs-12">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 <label class="mb-0.5">Reason For Transfer:</label>
-                                <textarea class="form-control" v-model="form.description" id="description" disabled></textarea>
+                                <span class="text-blue text-bold">{{this.form.description}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -51,21 +50,21 @@
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Preferences 1</td>
+                                            <td>1</td>
                                             <td>
                                                 <span class="text-blue text-bold">{{orgArray[form.preference_school1]}}</span>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>Preferences 2</td>
+                                            <td>2</td>
                                             <td>
                                                <span class="text-blue text-bold">{{orgArray[form.preference_school2]}}</span>                                               
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
-                                            <td>Preferences 3</td>
+                                            <td>3</td>
                                             <td>
                                                 <span class="text-blue text-bold">{{orgArray[form.preference_school3]}}</span>                                               
                                             </td>
@@ -93,6 +92,44 @@
                                             </td>
                                             <td>
                                                <span class="text-blue text-bold">{{orgArray[form.preference_school]}}</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                         <!-- subject -->
+                         <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Subjects Specification:</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Preferences</th>
+                                            <th>Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>1</td>
+                                            <td>
+                                                <span class="text-blue text-bold">{{staffArray[form.preference_subject1]}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>2</td>
+                                            <td>
+                                               <span class="text-blue text-bold">{{staffArray[form.preference_subject2]}}</span>                                               
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>3</td>
+                                            <td>
+                                                <span class="text-blue text-bold">{{staffArray[form.preference_subject3]}}</span>                                               
                                             </td>
                                         </tr>
                                     </tbody>
@@ -130,7 +167,6 @@
                  </div>
                 </div>
             </div>
-        </div>
 </template>
 <script>
 export default {
@@ -143,29 +179,25 @@ export default {
             reasonArray:{},
             orgArray:{},
             dzoArray:{},
+            staffArray:{},
             draft_attachments:[],
             transfertypeList:[],
             intratransfer:[],
             applicationNo:[],
             form: new form({
-                transferwindow_id:'',
                 staff_id: '',
                 reason_id:'',
                 name:'',
                 transfer_type_id:'',
                 description:'',
-                current_date:'',
-                remarks:'',
-                withdraw:'',
                 aplication_number:'',
-                status:'',
-                service_name:'transfer appeal',
                 status:'',
                 dzongkhagApproved:'',
                 preference_school:'',
+                preference_subject1:'',
+                preference_subject2:'',
+                preference_subject3:'',
                 attachments:
-              
-
                 [{
                     file_name:'',attachment:''
                 }],
@@ -204,19 +236,35 @@ export default {
              axios.get('staff/transfer/loadattachementDetails/'+appId)
             .then((response) =>{
                 let data = response.data.data;
+                //school lists looping
                    for(let i=0;i<data.preferences.length;i++){
-                    if(i==0){
-                        this.form.preference_school1     =   data.preferences[i].school_id;
-                        $('#preference_school1').val(data.preferences[i].school_id).trigger('change');
-                    }
-                    if(i==1){
-                        this.form.preference_school2     =   data.preferences[i].school_id;
-                        $('#preference_school2').val(data.preferences[i].school_id).trigger('change');
-                    }
-                    if(i==2){
-                        this.form.preference_school3     =   data.preferences[i].school_id;
-                        $('#preference_school3').val(data.preferences[i].school_id).trigger('change');
-                    }
+                        if(i==0){
+                            this.form.preference_school1     =   data.preferences[i].school_id;
+                            $('#preference_school1').val(data.preferences[i].school_id).trigger('change');
+                        }
+                        if(i==1){
+                            this.form.preference_school2     =   data.preferences[i].school_id;
+                            $('#preference_school2').val(data.preferences[i].school_id).trigger('change');
+                        }
+                        if(i==2){
+                            this.form.preference_school3     =   data.preferences[i].school_id;
+                            $('#preference_school3').val(data.preferences[i].school_id).trigger('change');
+                        }
+                    //subject lists looping
+                     for(let i=0;i<data.preferences.length;i++){
+                         if(i==0){
+                            this.form.preference_subject1     =   data.preferences[i].subject_id;
+                            $('#preference_subject1').val(data.preferences[i].subject_id).trigger('change');
+                        }
+                        if(i==1){
+                            this.form.preference_subject2     =   data.preferences[i].subject_id;
+                            $('#preference_subject2').val(data.preferences[i].subject_id).trigger('change');
+                        }
+                        if(i==2){
+                            this.form.preference_subject3     =   data.preferences[i].subject_id;
+                            $('#preference_subject3').val(data.preferences[i].subject_id).trigger('change');
+                        }
+                     }
                 }
                 this.draft_attachments=data.documents;
             })
@@ -224,7 +272,7 @@ export default {
                 console.log('error loadattachementDetails: '+errors)
             });
         },
-         loadApplicationDetails(id){
+        loadApplicationDetails(id){
             axios.get('staff/transfer/loadApplicationDetails/' +id)
             .then((response) =>{
                 let data=response.data;
@@ -245,13 +293,25 @@ export default {
                 console.log(errors)
             });
         },
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                 this.staffArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
             window.location=uri;
         },
-    },
+        },
         mounted() {
             let currentdate = new Date();
             this.form.year=currentdate.getFullYear();
@@ -269,6 +329,7 @@ export default {
             this.changefunction(id);
             });
             this.profile_details();
+            this.loadAcademicMasters();
             this.loadactivedzongkhagList();
             this.loadOrgList();
             this.loadApplicationDetails(this.$route.params.data.id)

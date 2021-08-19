@@ -279,10 +279,12 @@ export default {
          * method to get sub category in dropdown
          */
         getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
+            
             axios.get(uri)
             .then(response => {
                 let data = response.data;
                 this.subCategortList = data;
+                alert(JSON.stringify(response.data));
             });
         },
 

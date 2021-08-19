@@ -24,7 +24,7 @@
                             <tbody>
                                 <tr v-for="(item, index) in data_list" :key="index">
                                     <td>{{ index+1}}</td>
-                                    <td>{{ item.org_name }}</td>
+                                    <td>{{ item.name }}</td>
                                     <td>{{ levelArray[item.levelId] }}</td>
                                     <td>{{ item.category }}</td>
                                     <td>{{ item.code }}</td>
@@ -57,8 +57,10 @@ export default {
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
-                let data = response.data.data;
+              
+                let data = response.data;
                 for(let i=0;i<data.length;i++){
+                   
                     this.levelArray[data[i].id] = data[i].name;
                 }
             });

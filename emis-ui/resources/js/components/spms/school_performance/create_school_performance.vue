@@ -2,7 +2,7 @@
     <div>
         <form class="bootbox-form" >
             <div class="form-group row">
-                <div class="ml-3">
+                 <div class="ml-3">
                     <strong>School: </strong> {{ school }} 
                 </div>
                 <div class="ml-3">
@@ -46,8 +46,8 @@
             </div>
             <div class="card-footer text-right">
                 <button type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button v-if="currentRoute == 'edit_deo_evaluation'" @click.prevent="save('draft_with_deo')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save</button>
-                <button v-if="currentRoute == 'edit_deo_evaluation'" @click.prevent="save('submit_to_school')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-paper-plane"></i> Submit to School</button>
+                <button @click.prevent="save('draft')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save</button>
+                <button @click.prevent="save('completed')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-paper-plane"></i> Completed</button>
             </div>
         </form>
     </div>  
@@ -79,22 +79,20 @@ export default {
         save(action=""){
            let validated=true;
             let evalaution_details = this.evalaution_details.filter(item => item.score) 
-            if(action == 'draft_with_deo'){
+            if(action == 'draft'){
                 this.status = 1 
-            }else if(action == 'submit_to_school'){
+            }else if(action == 'completed'){
                 validated=this.validateRadioButton();
                 this.status = 2
             }
             if(validated == true){
-                axios.post('spms/saveEvaluation',{data:evalaution_details,evaluation_id:this.evaluation_id,status:this.status})
+                axios.post('spms/saveEvaluation', {data:evalaution_details,org_id:this.org_id,status:this.status,spm_domain_subcat_id:this.spm_domain_subcat_id})
                  .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    if(this.currentRoute =='edit_deo_evaluation'){
-                         this.$router.push('/deo-evaluation-dashboard');
-                    }
+                    this.$router.push('/school-performance-dashboard');
                 }).catch(function(errors){
                     if(errors.response.status === 422){
                         Swal.fire({
@@ -128,10 +126,8 @@ export default {
     created(){
         this.org_id =this.$route.params.data.org_id
         this.spm_domain_subcat_id =this.$route.params.data.spm_domain_subcat_id
-        this.evaluation_id =this.$route.params.data.evaluation_id
         this.school =this.$route.params.data.school
         this.sub_category_name =this.$route.params.data.sub_category_name
-
     },
     mounted(){
         

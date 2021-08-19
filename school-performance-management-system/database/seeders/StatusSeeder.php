@@ -22,27 +22,12 @@ class StatusSeeder extends Seeder
             ],
             [
                 'id' => '1',
-                'name' => 'In draft with DEO/TEO',
+                'name' => 'Draft',
                 'created_by' => 'D'
             ],
             [
                 'id' => '2',
-                'name' => 'Submitted to School for feedback',
-                'created_by' => 'D'
-            ],
-            [
-                'id' => '3',
-                'name' => 'Submitted to DEO after review by School',
-                'created_by' => 'D'
-            ],
-            [
-                'id' => '4',
-                'name' => 'Submitted to EMD',
-                'created_by' => 'D'
-            ],
-            [
-                'id' => '5',
-                'name' => 'Finalized and Closed',
+                'name' => 'Completed',
                 'created_by' => 'D'
             ],
         ]);

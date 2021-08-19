@@ -1,25 +1,24 @@
 <template>
-    <div>
-        <table id="structureCategory-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body"> 
+        <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Structure</th>
-                    <th>Description</th> 
+                    <th>Structure Type</th>
+                    <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in structureCategoryList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewStructureCategoryList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -32,44 +31,35 @@
 export default {
     data(){
         return{
-            structureCategoryList:[],
-            cat:'',
+            data_list:[],
+            dt:'',
         }
     },
 
     methods:{
-       loadStructureCategoryList(uri = 'masters/loadStructureCategory'){
+        loadStructureCategoryList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/StructureCategory'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.structureCategoryList =  data.data;
+                let data = response.data.data;
+                this.data_list =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#structureCategory-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewStructureCategoryList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'StructureCategoryEdit',params: {data:data}});
-        }, 
+        },
     },
     mounted(){
         this.loadStructureCategoryList();
-        this.cat =  $("#structureCategory-table").DataTable();
+        this.dt =  $("#org-masters-table").DataTable();
     },
     watch: {
-        structureCategoryList(){
-            this.cat.destroy();
+        data_list(){
+            this.dt.destroy();
             this.$nextTick(() => {
-                this.cat =  $("#structureCategory-table").DataTable()
+                this.dt =  $("#org-masters-table").DataTable()
             });
         }
     },

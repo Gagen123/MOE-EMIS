@@ -520,6 +520,14 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
+            //Transfer reporting from staff transfer 
+            { path: '/report_transfer',
+            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
+                children:[
+                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
+                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
+                ],
+            },
 
             { path: '/transfer_window_index',
                 component: require('./components/staff/transfer_window/transfer_window_index.vue').default,
@@ -575,13 +583,7 @@ const routes = [
                     { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
                 ],
             },
-            { path: '/report_transfer',
-            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
-                children:[
-                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
-                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
-                ],
-            },
+           
 
         ]
     },
@@ -686,6 +688,7 @@ const routes = [
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,
                 children:[
+                    { path: '/', name:'management_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/', name:'list_management_body_for_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/open_meeting',name:'open_meeting', component: require('./components/staff/management/create_meeting/open_meeting.vue').default},
                     { path: '/create_management_meeting',name:'create_management_meeting', component: require('./components/staff/management/create_meeting/create_management_meeting.vue').default},
@@ -817,7 +820,7 @@ const routes = [
     { path:'/staff_second_seperation',
         component: require('./components/staff/second_seperation/second_seperation_index.vue').default,
         children:[
-            { path: '/', name:'staff_update_services', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
+            { path: '/', name:'staff_second_seperation', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
             { path: '/secondment_details',
                 component: require('./components/staff/second_seperation/secondment_details/secondment_index.vue').default,
                 children:[

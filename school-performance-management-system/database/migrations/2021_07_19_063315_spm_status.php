@@ -31,6 +31,6 @@ class SpmStatus extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('spm_evaluation_status');
+        Schema::dropIfExists('spm_status');
     }
 }

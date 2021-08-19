@@ -1,8 +1,8 @@
 const routes = [
     //Mess Masters
-    { path: '/dietary', component: require('./components/dietary/dietary_index.vue').default,
+    { path: '/dietary',  component: require('./components/dietary/dietary_index.vue').default,
         children:[
-            { path: '',name:'', component: require('./components/dietary/dietary_guidelines.vue').default },
+            { path: '',name:'dietary', component: require('./components/dietary/dietary_guidelines.vue').default },
             { path: '/dietary_records', component: require('./components/dietary/diets/dietary_index.vue').default,
                 children: [
                     { path:'', name:'dietary_records', component: require('./components/dietary/diets/dietary_list.vue').default },

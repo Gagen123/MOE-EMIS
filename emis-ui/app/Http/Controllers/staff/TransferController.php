@@ -288,7 +288,7 @@ class TransferController extends Controller{
         else if($request->transferType=='inter_transfer'){
             $data =[
                 'id'                            =>  $request->id,
-                'status'                        =>  $org_status,
+                'status_id'                     =>  $org_status,
                 'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,

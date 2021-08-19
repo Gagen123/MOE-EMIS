@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
+use Illuminate\Support\Facades\DB;
 
 class LoadStaffController extends Controller{
     use ApiResponser;
