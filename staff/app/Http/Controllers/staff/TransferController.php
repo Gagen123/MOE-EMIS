@@ -169,7 +169,6 @@ class TransferController extends Controller{
                 'dzongkhag_id'                  =>  $request->dzongkhag_id,
                 'school_id'                     =>  $request->preference_school1,
                 'subject_id'                    =>  $request->spSubject,
-                'subject_id'                    =>  $request->optionalsub,
                 'preference'                    =>  1,
                 'created_by'                    =>  $request->user_id,
                 'created_at'                    =>  date('Y-m-d h:i:s'),
@@ -233,6 +232,7 @@ class TransferController extends Controller{
         if($request->preference_school1!=""){
             $request_data =[
                 'school_id'                     =>$request->preference_school1,
+                'subject_id'                    =>  $request->spSubject,
                 'preference'                    =>  1,
                 'created_at'                    =>date('Y-m-d h:i:s'),
             ];
@@ -242,6 +242,7 @@ class TransferController extends Controller{
             $request_data =[
                 
                 'school_id'                     =>$request->preference_school2,
+                'subject_id'                    =>  $request->optional2sub,
                 'preference'                    =>  2,
                 'created_at'                    =>date('Y-m-d h:i:s'),
             ];
@@ -253,6 +254,7 @@ class TransferController extends Controller{
             $request_data =[
                 
                 'school_id'                     =>  $request->preference_school3,
+                'subject_id'                    =>  $request->optional2sub,
                 'preference'                    =>  3,
                 'created_at'                    =>date('Y-m-d h:i:s'),
             ];
@@ -262,27 +264,30 @@ class TransferController extends Controller{
         if($request->preference_dzongkhag1!=""){
             $request_data =[
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
+                'subject_id'                    =>  $request->spSubject,
                 'preference'                    =>  1,
                 'created_at'                    =>date('Y-m-d h:i:s'),
             ];
             TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',1)->update($request_data);
         }
-            if($request->preference_dzongkhag2!=""){
+        if($request->preference_dzongkhag2!=""){
                 $request_data =[
                     'dzongkhag_id'                  =>  $request->preference_dzongkhag2,
+                    'subject_id'                    =>  $request->optional1sub,
                     'preference'                    =>  2,
                     'created_at'                    =>date('Y-m-d h:i:s'),
                 ];
-                TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
-            }
-            if($request->preference_dzongkhag3!=""){
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
+        }
+        if($request->preference_dzongkhag3!=""){
                 $request_data =[
                     'dzongkhag_id'                  =>  $request->preference_dzongkhag3,
+                    'subject_id'                    =>  $request->optional2sub,
                     'preference'                    =>  3,
                     'created_at'                    =>date('Y-m-d h:i:s'),
                 ];
-                TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
-            }
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
+        }
        
          if($request->withdraw == "true"){
                 $status =[

@@ -163,6 +163,9 @@ class TransferController extends Controller{
             'preference_school1'                =>  $request->preference_school1,
             'preference_school2'                =>  $request->preference_school2,
             'preference_school3'                =>  $request->preference_school3,
+            'spSubject'                         =>  $request->spSubject,
+            'optional1sub'                      =>  $request->optional1sub,
+            'optional2sub'                      =>  $request->optional2sub,
             'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
             'preference_dzongkhag3'             =>  $request->preference_dzongkhag3,
@@ -249,6 +252,7 @@ class TransferController extends Controller{
         if($request->transferType == "inter_transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
+                'status'            =>  $org_status,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>"Inter Transfer",
                 'preference_school' =>$request->preference_school,
