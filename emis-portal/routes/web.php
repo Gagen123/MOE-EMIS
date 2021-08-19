@@ -78,6 +78,12 @@ use Illuminate\Support\Facades\Route;
         Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });
 
+    //Leadership selection and feedback routes
+
+    Route::prefix('recruitmentFeedbackController')->group(function () {
+        Route::get('/loadData/{param}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'loadData'])->name('loadData');
+        Route::get('/getapplicationDetailsForFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getapplicationDetailsForFeedback'])->name('getapplicationDetailsForFeedback');
+    });
 
     //OLD ROUTES - Delete routes below this line
 
