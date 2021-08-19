@@ -25,4 +25,9 @@ class StudentController extends Controller
         $response_data= $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
         return $response_data;
     }
+
+    public function getStudentClassId($std_id=""){
+        $response_data= $this->apiService->listData('emis/students/getStudentClassId/'.$std_id);
+        return $response_data;
+    }
 }

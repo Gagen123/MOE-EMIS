@@ -1104,7 +1104,7 @@ export default {
                 formData.append('type','new');
                 formData.append('attachments', this.student_form.attachments);
                 formData.append('Status', 'pending');
-                axios.post('/saveStudentDetailsFromPortal',formData, config)
+                axios.post('/admissions/saveStudentDetailsFromPortal',formData, config)
                 .then((response) => {
                     this.guardian_form.student_id=response.data.id;
                     Toast.fire({
@@ -1134,7 +1134,7 @@ export default {
                 }).then((result) => {
                     if(result.isConfirmed){
                         this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
-                        this.guardian_form.post('/saveStudentGardianDetails')
+                        this.guardian_form.post('/admissions/saveStudentGuardianDetails')
                         .then((response) => {
                             Swal.fire(
                                 'Submitted!',

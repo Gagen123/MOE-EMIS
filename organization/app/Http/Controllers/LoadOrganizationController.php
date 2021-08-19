@@ -60,12 +60,28 @@ class LoadOrganizationController extends Controller{
         }
         if(strpos($type,'admission_dzongkhagwise')!==false){
             $category=explode('__',$type)[1];
+            //If ECCD or PP, load all relevant schools
+            //Else load schools that do not have projections as zero
             if($category=="ECCD"){
                 $response_data=OrganizationDetails::wherein('category',['private_eccd','public_eccd'])->where('dzongkhagId',$id)->get();
-            }else{
+            }else if ($category == "PP"){
                 $response_data=OrganizationDetails::wherein('category',['private_school','public_school'])->where('dzongkhagId',$id)->get();
+            } else{
+                $class_name = $category;
+                $response_data = DB::table('organization_details')
+                                    ->join('organization_projections','organization_projections.organizationId', '=', 'organization_details.id')
+                                    ->join('organization_class_streams','organization_class_streams.id', '=', 'organization_projections.class')
+                                    ->join('classes','classes.id', '=', 'organization_class_streams.classId')
+                                    ->select('organization_details.id AS id','organization_details.name AS name', 'classes.class AS class')
+                                    ->whereIn('organization_details.category',['private_school','public_school'])
+                                    ->where('organization_projections.ProjectionNo','>', '0')
+                                    ->where('organization_details.dzongkhagId','=', $id)
+                                    ->where('classes.class','LIKE', $class_name)
+                                    ->get();
+                return $this->successResponse($response_data);
             }
         }
+
         if($type=="private"){
             $response_data=OrganizationDetails::wherein('category',['private_school','private_eccd'])->where('dzongkhagId',$id)->get();
         }
@@ -508,6 +524,21 @@ class LoadOrganizationController extends Controller{
     }
 
     /**
+     * Get a particular class given OrgClassStreamId
+     * param is the OrgClassStreamId
+     */
+
+    public function getClassById($id=""){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.id', 'classes.class AS class')
+                    ->where('organization_class_streams.id', $id)
+                    ->first();
+
+        return $this->successResponse($response_data);
+    }
+
+    /**
      * Get the Class Streams by Organization
      */
 
@@ -533,6 +564,23 @@ class LoadOrganizationController extends Controller{
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
                     ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
                     ->where('organization_class_streams.id', $id)
+                    ->first();
+
+        return $this->successResponse($response_data);
+    }
+
+     /**
+     * Get the Class Streams by Org Id and Class (e.g.PP)
+     */
+
+    public function getOrgClassStreamByOrg($org_id, $class_name){
+
+
+        $response_data = DB::table('organization_class_streams')
+                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+                    ->select('organization_class_streams.id')
+                    ->where('organization_class_streams.organizationId', $org_id)
+                    ->where('classes.class', $class_name)
                     ->first();
 
         return $this->successResponse($response_data);
@@ -610,6 +658,22 @@ class LoadOrganizationController extends Controller{
                     ->join('streams', 'organization_class_streams.streamId', '=', 'streams.id')
                     ->select('organization_class_streams.id AS id', 'streams.stream AS stream')
                     ->where('organization_class_streams.organizationId', $org_id)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
+    /**
+     * Function to load the feeder schools by Org Id
+     * Used in Admissions
+     */
+
+    public function loadParentSchoolList($orgId){
+
+        $response_data = DB::table('organization_feeder')
+                    ->join('organization_details', 'organization_details.id', '=', 'organization_feeder.parentschool')
+                    ->select('organization_details.id AS id', 'organization_details.name AS name')
+                    ->where('organization_feeder.feederschool', $orgId)
                     ->get();
 
         return $this->successResponse($response_data);

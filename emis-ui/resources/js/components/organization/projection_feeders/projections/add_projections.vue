@@ -15,7 +15,7 @@
                           <thead>
                               <tr>
                                   <th>Class<span class="text-danger">*</span></th>
-                                  <th>No of Projections<span class="text-danger">*</span></th>
+                                  <th>Total Projection<span class="text-danger">*</span></th>
                                   <th>Remarks</th>
                                  
                               </tr>
@@ -53,8 +53,6 @@
             </div> 
             
             </div>
-            
-            
         </form>
     </div>
 </template>

@@ -269,8 +269,17 @@ class AdmissionController extends Controller
         return $response_data;
     }
 
-    public function getStudentDetailsFromPortal($id=""){
-        $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$this->userId());
+    /**
+     * $type is either Student, Parent or NA
+     */
+
+    public function getStudentDetailsFromPortal($type=""){
+        if($type == 'Student'){
+            $id = $this->stdCid();
+        } else {
+            $id = $this->userId();
+        }
+        $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$id);
         return $response_data;
     }
 

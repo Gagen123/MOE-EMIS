@@ -66,44 +66,40 @@ class ProjectionsController extends Controller
     }
 
     public function saveFeeders(Request $request){
+
         $id = $request->id;
 
         if( $id != null){
-            foreach ($request->items_received as $i=> $item){
+            foreach ($request->feederschool as $i=> $school){
                 $feeder = array(
-                    'feederschool'              => $request->feederschool,
+                    'parentschool'              => $request->parent_school,
                     'class'                     => $request->class,
-                    'parentschool'              =>  $item['parentschool'],
+                    'feederschool'              =>  $school['feederschool'],
                     'remarks'                   =>  $request['remarks'],
                     'created_by'                =>  $request->user_id,
                     'updated_at'                =>  date('Y-m-d h:i:s')
 
                 );
                 $spo = Feeder::where('id', $id)->update($feeder);
-                return $this->successResponse($feeder, Response::HTTP_CREATED);
+                return $this->successResponse($spo, Response::HTTP_CREATED);
             }
 
-            }else{
-                foreach ($request->items_received as $i=> $item){
-                    $feeder = array(
-                        'feederschool'              => $request->feederschool,
-                        'class'                     => $request->class,
-                        'parentschool'              =>  $item['parentschool'],
-                        'remarks'                   =>  $request['remarks'],
-                        'created_by'                =>  $request->user_id,
-                        'created_at'                =>  date('Y-m-d h:i:s')
+        }else{
+            foreach ($request->feederschool as $i=> $school){
+                $feeder = array(
+                    'parentschool'              => $request->parent_school,
+                    'class'                     => $request->class,
+                    'feederschool'              =>  $school['feederschool'],
+                    'remarks'                   =>  $request['remarks'],
+                    'created_by'                =>  $request->user_id,
+                    'updated_at'                =>  date('Y-m-d h:i:s')
 
-                    );
-                    try{
-                        $localpro = Feeder::create($feeder);
+                );
 
-                        } catch(\Illuminate\Database\QueryException $ex){
-                            dd($ex->getMessage());
-                            // Note any method of class PDOException can be called on $ex.
-                        }
-                }
-                return $this->successResponse($localpro, Response::HTTP_CREATED);
+                $localpro = Feeder::create($feeder);
             }
+            return $this->successResponse($localpro, Response::HTTP_CREATED);
+        }
 
     }
 

@@ -231,11 +231,13 @@ class StudentAdmissionController extends Controller
             'class.required'              => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
         $data =[
             'StdAdmissionsId'               =>  $request->student_id,
             'Dzongkhagid'                   =>  $request->dzongkhag,
             'OrgOrganizationId'             =>  $request->school,
             'class_id'                      =>  $request->class,
+            'stream_id'                     =>  $request->stream,
             'dateOfapply'                   =>  date('Y-m-d'),
             'Status'                        =>  'Pending',
             'created_by'                    =>  $request->user_id,
@@ -366,6 +368,12 @@ class StudentAdmissionController extends Controller
     public function getstudentadmissiondetails($user_id=""){
         $response_data =std_admission::where('created_by',$user_id)->first();
         if($response_data!=null && $response_data!=""){
+            $gard=StudentGuardian::where('StdStudentId',$response_data->id)->get();
+            if($gard!=null && $gard!="" && sizeof($gard)>0){
+                $response_data->guardians =$gard;
+            }
+        } else {
+            $response_data =Student::where('student_code',$user_id)->first();
             $gard=StudentGuardian::where('StdStudentId',$response_data->id)->get();
             if($gard!=null && $gard!="" && sizeof($gard)>0){
                 $response_data->guardians =$gard;

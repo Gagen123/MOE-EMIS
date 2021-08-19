@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Route;
         
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
+        Route::get('/getStreamByOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByOrgId'])->name('getStreamByOrgId');
 
         Route::get('/loadValidationcondition', [App\Http\Controllers\AdminstratorController::class, 'loadValidationcondition'])->name('loadValidationcondition');
         Route::get('/active_marital_list', [App\Http\Controllers\AdminstratorController::class, 'active_marital_list'])->name('active_marital_list');
@@ -51,7 +52,7 @@ use Illuminate\Support\Facades\Route;
 
     Route::prefix('admissions')->group(function () {
         Route::post('/saveStudentDetailsFromPortal', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'saveStudentDetailsFromPortal'])->name('saveStudentDetailsFromPortal');
-        Route::get('/getStudentDetailsFromPortal/{id}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'getStudentDetailsFromPortal'])->name('getStudentDetailsFromPortal');
+        Route::get('/getStudentDetailsFromPortal/{type}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'getStudentDetailsFromPortal'])->name('getStudentDetailsFromPortal');
         Route::post('/saveStudentGuardianDetails', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'saveStudentGuardianDetails'])->name('saveStudentGuardianDetails');
         Route::post('/saveorgclassDetails', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'saveorgclassDetails'])->name('saveorgclassDetails');
         Route::get('/getorgclassDetails/{id}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'getorgclassDetails'])->name('getorgclassDetails');
@@ -63,11 +64,13 @@ use Illuminate\Support\Facades\Route;
         // Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\StudentPortal\StudentController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');
         // Route::post('/acceptApplication', [App\Http\Controllers\StudentPortal\StudentAdmissionControllerController::class, 'acceptApplication'])->name('acceptApplication');
         Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\StudentPortal\StudentController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
+        Route::get('/getStudentClassId/{std_id}', [App\Http\Controllers\StudentPortal\StudentController::class, 'getStudentClassId'])->name('getStudentClassId');
     });
 
     Route::prefix('organizations')->group(function () {
         Route::get('/loadOrganizationDetailsbyOrgId/{id}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadOrganizationDetailsbyOrgId'])->name('loadOrganizationDetailsbyOrgId');
         Route::get('/loadSchoolList/{dzoId}/{type}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadSchoolList'])->name('loadSchoolList');
+        Route::get('/loadParentSchoolList/{orgId}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadParentSchoolList'])->name('loadParentSchoolList');
         Route::get('/loadProjection/{classId}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadProjection'])->name('loadProjection');
     });
 
