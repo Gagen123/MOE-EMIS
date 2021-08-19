@@ -15,6 +15,7 @@ class SpmSchoolPlan extends Migration
     {
         Schema::create('spm_school_plan', function (Blueprint $table) {
             $table->char('id',36)->primary();
+            $table->tinyInteger('dzon_id')->index();
             $table->char('org_id',36);
             $table->char('spm_domain_id',36)->index()->nullable();
             $table->year('year');

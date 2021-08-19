@@ -4,7 +4,7 @@
             <div class="card-body">
                <div class="ml-0 row form-group">
                     <div class="mr-2">
-                        <label>School:</label> {{ orgDetails.name }} 
+                        <label>School:</label> {{ form.organization }} 
                     </div>
                     <div>
                         <label>Year:</label>{{ form.year }} 
@@ -107,6 +107,9 @@ export default {
                 person_responsible:'',
                 implementation_status_id:'',
                 remarks:'',
+                full_name:'',
+                roles:'',
+                organization:'',
                 school_plan_status:'',
                 action:'add'
             })
@@ -143,7 +146,7 @@ export default {
             axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
             .then(response => {
                 let data = response.data.data;
-                this.orgDetails=data;
+                this.form.organization=data['name'];
 
             })
             .catch(errors => {
@@ -162,6 +165,7 @@ export default {
             if(action=="submit"){
                 this.form.school_plan_status = 1
             }
+            console.log(this.form)
             this.form.post('/spms/saveSchoolPlan',this.form)
                 .then(() => {
                 Toast.fire({
@@ -193,6 +197,17 @@ export default {
         axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
+                  let roleName="";
+                for(let i=0;i<data['roles'].length;i++){
+                    if(i==data['roles'].length-1){
+                        roleName+=data['roles'][i].roleName;
+                    }
+                    else{
+                        roleName+=data['roles'][i].roleName+', ';
+                    }
+                }
+                this.form.full_name=data['Full_Name'];
+                this.form.roles=roleName;
                 this.getorgName(data['Agency_Code'],data['acess_level']);
             })
             .catch(errors => {

@@ -227,7 +227,8 @@ class SpmsController extends Controller
       
         DB::transaction(function() use($request) {
             if($request['action'] == 'add'){
-                $data = [
+                $parent_data = [
+                    'dzon_id' => $request['dzon_id'],
                     'org_id' => $request['org_id'],
                     'spm_domain_id' => $request['spm_domain_id'],
                     'year' => $request['year'],
@@ -243,7 +244,24 @@ class SpmsController extends Controller
                     'created_by' =>  $request['user_id'],
                     'created_at' =>   date('Y-m-d h:i:s'),
                 ];
-                $response = SchoolPlan::create($data);
+                try{
+                    $response = SchoolPlan::create($parent_data);
+
+                    $child_data = [
+                        'user_id' => $request['user_id'],
+                        'name' => $request['full_name'],
+                        'role' => $request['roles'],
+                        'status_id' =>$request['implementation_status_id'] ,
+                        'organization' =>$request['organization'] ,
+                        'status_date' => date('Y-m-d h:i:s'),
+                        'remarks' => $request['remarks'],
+                    ];
+                    $response = SchoolPlanHistory::create($child_data);
+                }catch(Exception $e){
+                    dd($e);
+                }
+              
+
             }
             if($request['action'] == 'edit'){
                 $data = SchoolPlan::find($request['id']);
@@ -267,10 +285,10 @@ class SpmsController extends Controller
         });
    
     }
-    public function getSchoolPlan(){
+    public function getSchoolPlan($school_id){
         $response = DB::select("SELECT t1.id,t1.org_id,t1.spm_domain_id,t1.implementation_status_id,t1.year,t2.name AS domain,t1.activity,t1.objective,t1.strategy,t1.start_date,t1.end_date,t1.person_responsible,t3.name AS implementation_status,t1.remarks,t1.school_plan_status FROM spm_school_plan t1 
             JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
-            JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id");
+            JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id WHERE t1.org_id = ?",[$school_id]);
         return $this->successResponse($response);
     }
     public function saveImplementtationStatus(Request $request){
@@ -292,21 +310,18 @@ class SpmsController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         try{
-            $parent_data = SchoolPlan::find($request['id']);
-        $remarks = $parent_data->remarks;
+        $parent_data = SchoolPlan::find($request['id']);
         $parent_data->implementation_status_id = $request['implementation_status_id'];
-        $parent_data->remarks = $request['comment'];
-
         $parent_data->update();
          
         $child_data = [
             'user_id' => $request['user_id'],
             'name' => $request['full_name'],
             'role' => $request['roles'],
-            'status' =>$request['implementation_status'] ,
+            'status_id' =>$request['implementation_status'] ,
             'organization' =>$request['organization'] ,
             'status_date' => date('Y-m-d h:i:s'),
-            'remarks' => $remarks,
+            'remarks' => $request['comment'],
         ];
         $response = SchoolPlanHistory::create($child_data);
         }catch(Exception $e){
@@ -324,11 +339,18 @@ class SpmsController extends Controller
         return $this->successResponse(DB::select('SELECT dzon_id,staff_id FROM spm_dzo_emo WHERE staff_id = ?',[$emo_id]));
     }
     public function getSchoolPlans(Request $request){
-       $response_data = DB::table('spm_school_plan')
-        ->select('org_id')
-        ->distinct()
-        ->whereIn('org_id',explode(",",$request['org_school_ids']))
-        ->get();
+        if($request->dzongkhag_ids !="" || $request->dzongkhag_ids != null){
+            $response_data = DB::table('spm_school_plan')
+            ->select('org_id','dzon_id')
+            ->distinct()
+            ->whereIn('dzon_id',explode(",",$request['dzongkhag_ids']))
+            ->get();
+        }else{
+            $response_data = DB::table('spm_school_plan')
+            ->select('org_id','dzon_id')
+            ->distinct()
+            ->get();
+        }
         return $response_data;
     }
 

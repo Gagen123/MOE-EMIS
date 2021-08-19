@@ -8,8 +8,9 @@
                             <div class="card-header bg-white pt-2 pb-1 text-right">
                                 <label class="fa-pull-left">Annual School Plan </label>
                                 <span class="fa-pull-right pt-1">
-                                    <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_annual_school_plan')"><i class="fa fa-list"></i> List</button>
                                     <button v-if="acess_level =='Org'" type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('create_annual_school_plan')"><i class="fa fa-plus"></i> Add New</button>
+                                    <button v-if="acess_level =='Org'"  type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_annual_school_plan')"><i class="fa fa-list"></i> List</button>
+                                    <button v-else type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('lists_annual_school_plan')"><i class="fa fa-list"></i> List</button>
                                 </span>
                             </div>
                             <div class="card-body pb-1 mb-0 pt-1 mt-0">  

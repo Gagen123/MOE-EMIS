@@ -13,6 +13,7 @@ class SchoolPlan extends Model
     protected $table="spm_school_plan";
     protected $fillable = [
         'id',
+        'dzon_id',
         'org_id',
         'spm_domain_id',
         'year',

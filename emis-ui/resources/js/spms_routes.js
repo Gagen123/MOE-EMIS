@@ -75,6 +75,7 @@ const routes = [
             { path: '/annual-school-plan', component: require('./components/spms/school_plan/school_plan_index.vue').default,
                 children: [
                     { path: '', component: require('./components/spms/school_plan/container.vue').default },
+                    { path: '/lists-annual-school-plan',name:'lists_annual_school_plan', component: require('./components/spms/school_plan/container.vue').default },
                     { path: '/list-annual-school-plan',name:'list_annual_school_plan', component: require('./components/spms/school_plan/list_school_plan.vue').default },
                     { path: '/view-annual-school-plan', name: 'view_annual_school_plan', component: require('./components/spms/school_plan/view_school_plan.vue').default },
                     { path: '/create-annual-school-plan', name:'create_annual_school_plan', component: require('./components/spms/school_plan/create_school_plan.vue').default },

@@ -13,16 +13,18 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in dzongkhagWithSchools" :key="index">
-                            <td>{{item.domain}}</td>
-                            <td>{{item.activity}}</td>
-                            <td>{{item.start_date}}</td>
-                            <td>{{item.end_date}}</td>
-                            <td>{{item.implementation_status}}</td>
+                            <td><strong>{{item.dzongkhag}} </strong></td>
+                            <td>{{item.school}}</td>
                             <td>
-                                <div v-if="item.school_plan_status==1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i > View</div>
-                                <!-- <div v-else class="ml-2 mt-1 btn-group  btn-flat btn-group-sm"> -->
-                                    <router-link v-else :to="{name:'edit_annual_school_plan', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-edit"></i > Edit</router-link>
-                                <!-- </div> -->
+                                <span v-if="item.hasPlan==1">
+                                    Prepared
+                                </span>
+                                <span v-else>
+                                     Not Prepared
+                                </span>
+                            </td>
+                            <td>
+                                <div v-if="item.hasPlan==1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i > View</div>
                             </td>
                             
                         </tr>
@@ -37,28 +39,14 @@ export default {
     data(){
         return {
             dzongkhagWithSchools:[],
-            acess_level:'',
-            dzon_id:'',
-            year:'',
             dt:'',
         }
     },
     methods:{
-        // getSchoolPlanStatus(id){
-        //     alert(id)
-        //     axios.get('spms/getSchoolPlanStatus/'+id)
-        //     .then(response => { 
-        //         return response.data.data
-        //     }).catch(function (error){
-        //         if(error.toString().includes("500")){
-        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-        //         }
-        //     });
-        // },
         getSchoolPlans(){
             axios.get('spms/loadOrgList')
             .then(response => { 
-                console.log(response.data.data)
+               this.dzongkhagWithSchools = response.data
             }).catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -66,28 +54,35 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'view_annual_school_plan',params: {data:data}});
+            this.$router.push({name:'list_annual_school_plan',params: {data:data}});
         },
     },
     mounted(){
         this.getSchoolPlans()
         this.dt = $("#deo-emo-school-plan-table").DataTable({
-            columnDefs: [
-                { width: 30, targets: 0},
-                { width: 100, targets: 2},
-                { width: 100, targets: 3},
-                { width: 100, targets: 4},
-            ],
-        })
+            rowGroup: {
+                    dataSrc: 0 
+            },
+            columnDefs: [{
+                targets:  0,
+                visible: false
+            }],
+            destroy: true,
+            })
     },
     watch: {
-        schoolPlans(val) {
+        dzongkhagWithSchools(val) {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt = $("#deo-emo-school-plan-table").DataTable({
-                    columnDefs: [
-                        { width: 100, targets: 0},
-                    ],
+                    rowGroup: {
+                        dataSrc: 0 
+                    },
+                    columnDefs: [{
+                        targets:  0,
+                        visible: false
+                    }],
+                    destroy: true,
                 })
             });
         }

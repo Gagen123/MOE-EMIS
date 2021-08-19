@@ -22,9 +22,7 @@
                             <td>{{item.implementation_status}}</td>
                             <td>
                                 <div v-if="item.school_plan_status==1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i > View</div>
-                                <!-- <div v-else class="ml-2 mt-1 btn-group  btn-flat btn-group-sm"> -->
-                                    <router-link v-else :to="{name:'edit_annual_school_plan', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-edit"></i > Edit</router-link>
-                                <!-- </div> -->
+                                <router-link v-else :to="{name:'edit_annual_school_plan', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-edit"></i > Edit</router-link>
                             </td>
                             
                         </tr>
@@ -39,13 +37,14 @@ export default {
     data(){
         return {
             schoolPlans:[],
+            school_id:'',
             year:'',
             dt:'',
         }
     },
     methods:{
-        getSchoolPlan(){
-            axios.get('spms/getSchoolPlan')
+        getSchoolPlan(school_id){
+            axios.get('spms/getSchoolPlan/'+school_id)
             .then(response => { 
                 this.schoolPlans = response.data.data
             }).catch(function (error){
@@ -59,6 +58,16 @@ export default {
         },
     },
     mounted(){
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                if(data['acess_level'] == 'Org'){
+                    this.getSchoolPlan(data['Agency_Code'])
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+        });
         this.dt = $("#school-plan-table").DataTable({
             columnDefs: [
                 { width: 30, targets: 0},
@@ -67,7 +76,10 @@ export default {
                 { width: 100, targets: 4},
             ],
         })
-        this.getSchoolPlan()
+        this.getResult()
+    },
+    created(){
+        // this.getSchoolPlan(this.$route.params.data.school_id)
     },
     watch: {
         schoolPlans(val) {

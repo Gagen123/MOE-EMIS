@@ -42,6 +42,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
             }
             else{
+                
                 $response_data=OrganizationDetails::wherein('category',['public_school','private_school'])->get();
             }
         }
