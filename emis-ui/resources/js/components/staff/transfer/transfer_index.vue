@@ -28,16 +28,16 @@
                         Transfer Appeal
                     </router-link>
                 </li>
-                 <!-- <li class="nav-item pr-1">
-                    <router-link to="/transfer_config" id="awards" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fa fa-user-clock"></span>
-                        Transfer Config
-                    </router-link>
-                </li> -->
+               
                  <li class="nav-item pr-1">
                     <router-link to="/transfer_list" id="awards" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Transfer Lists
+                    </router-link>
+                </li>
+                 <li class="nav-item active pr-1">
+                    <router-link id="service" to="/appealList" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Transfer Appeal Lists
                     </router-link>
                 </li>
                 

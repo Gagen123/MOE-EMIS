@@ -405,7 +405,6 @@ export default {
         loadtransferDetails(){
             axios.get('staff/transfer/loadtransferDetails/inter_transfer')
             .then((response) => {
-                // alert(JSON.stringify(response.data))
                 this.form.transfer_list =  response.data;
              })
             .catch((error) => {

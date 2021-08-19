@@ -12,6 +12,7 @@
                             <th>School Name</th>
                             <th>Qualification</th>
                             <th>Competent Subject</th>
+                            <th>Last Transfer Date</th>
                             <th>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
@@ -24,7 +25,8 @@
                             <td>Thimphu Thromde</td>
                             <td>Yangchenphu Higher Secondary School</td>
                             <td>Master</td>
-                            <td>    </td>
+                            <td>English</td>
+                            <td>2018</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>

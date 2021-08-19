@@ -583,6 +583,14 @@ const routes = [
                     { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
                 ],
             },
+            { path: '/appealList',
+                component: require('./components/staff/transfer/transferAppealLists/transferAppeal_index.vue').default,
+                children:[
+                    { path: '/',name:'appealList',  component: require('./components/staff/transfer/transferAppealLists/list_transferAppealLists.vue').default },
+                    { path: '/list_transferAppealLists',name:'list_transferAppealLists',  component: require('./components/staff/transfer/transferAppealLists/list_transferAppealLists.vue').default },
+                    { path: '/view_transferAppealDetails',name:'view_transferAppealDetails',  component: require('./components/staff/transfer/transferAppealLists/view_transferAppealDetails.vue').default },
+                ],
+            },
            
 
         ]
@@ -663,6 +671,7 @@ const routes = [
                     { path: '/acknowledgement_for_participant', name:'acknowledgement_for_participant', component: require('./components/staff/acknowledgement_for_errors.vue').default },
                 ],
             },
+            
 
 
         ]

@@ -69,7 +69,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.aplication_number" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
                                 <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
                             </select>
                         <has-error :form="form" field="aplication_number"></has-error>
@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Attachments:<i class="text-danger">*</i></label>
+                                <label class="mb-0.8">Attachments(If Any):</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -167,10 +167,9 @@ export default {
                 aplication_number:'',
                 status:'Submitted',
                 remarks:'',
+                transfer_appeal:'',
                 service_name:'transfer appeal',
                 attachments:
-              
-
                 [{
                     file_name:'',attachment:''
                 }],
@@ -210,19 +209,28 @@ export default {
               axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/Approved/' +user_id)
                 .then(response =>{
                     let data = response.data;
-                     this.applicationNo =  data;
-                     this.form.aplication_number = data.aplication_number;
+                    this.applicationNo =  data;
+                    this.form.aplication_number = data[0].aplication_number;
                 })
                 .catch(function (error){
                 console.log(error);
             });
+        },
+        loadTransferAppealDetails(){
+            axios.get('staff/transfer/LoadTransferAppealDetails')
+            .then((response) => {
+                let data = response.data
+                this.form.transfer_appeal = data;
 
+             })
+            .catch((error) => {
+                console.log("Error in retrieving ."+error);
+            });
         },
         LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
-
             })
             .catch(function (error){
                 console.log(error);
@@ -271,6 +279,7 @@ export default {
             });
         },
         shownexttab(nextclass){
+            if(this.form.transfer_appeal== ""|| this.form.transfer_appeal== null){
             if(nextclass=="submit"){
                 Swal.fire({
                     text: "Are you sure you wish to submit for transfer appeal ?",
@@ -292,6 +301,7 @@ export default {
                         formData.append('transfer_type_id', this.form.transfer_type_id);
                         formData.append('name', this.form.name);
                         formData.append('user_id', this.form.user_id);
+                        formData.append('aplication_number', this.form.aplication_number);
                         formData.append('status', this.form.status);
                         formData.append('service_name', this.form.service_name);
                         formData.append('description', this.form.description);
@@ -301,43 +311,31 @@ export default {
                         }
                         axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
                         .then((response) =>{
-                            if(response.data=="Not Approved"){
+                            if(response.data!=""){
                                Swal.fire({
-                                    html: "Your application is still under process ! ",
-                                    icon: 'error',
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'okay!',
-                            });
-                            }
-                            else if(response.data=="Not Contain"){
-                                Swal.fire({
-                                    html: "You are not eligible for applying transfer appeal since you have not applied any type transfer yet! ",
-                                    icon: 'error',
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'okay!',
-                                })
-                            }
-                            else{
-                                 Swal.fire({
-                                    html: "Your application for transfer appeal has been submitted successfully ",
+                                    html: "Your request for transfer appeal has been submitted successfully ",
                                     icon: 'success',
                                     confirmButtonColor: '#3085d6',
                                     cancelButtonColor: '#d33',
                                     confirmButtonText: 'okay!',
                             });
-                            this.applyselect2();
-                            this.$router.push('/list_transfer_appeal');
+                             this.$router.push('/list_transfer_appeal');
                             }
-                            
                         })
                         .catch((error) => {
                             console.log("Errors:"+error)
                         });
                     }
                 });
-                }
+            }
+          }else{
+                Swal.fire({
+                text: "Sorry! you have already submitted your transfer appeal for your application number "+this.form.aplication_number,
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'okay!',
+                })
+            } 
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -396,6 +394,7 @@ export default {
         this.loadtransferwindow();
         this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
+        this.loadTransferAppealDetails();
     },
 }
 </script>
