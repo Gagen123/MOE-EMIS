@@ -67,11 +67,11 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
-                             <br/>
-                            <select v-model="form.aplication_number" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
-                                <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
-                            </select>
+                                <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
+                                <br/>
+                                <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
+                                    <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
+                                </select>
                         <has-error :form="form" field="aplication_number"></has-error>
                             </div>
                         </div>
@@ -81,11 +81,10 @@
                                 <textarea class="form-control" v-model="form.description" id="description"></textarea>
                             </div>
                         </div>
-                       
                         <span class="text-danger" id="undertaking_err"></span>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Attachments:<i class="text-danger">*</i></label>
+                                <label class="mb-0.5">Addtional Attachments:(If Any)<i class="text-danger">*</i></label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -159,9 +158,6 @@ export default {
             button:true,
             t_warning:false,
             t_warning_message:'',
-            reasonArray:{},
-            
-            draft_attachments:[],
             transfertypeList:[],
             intratransfer:[],
             applicationNo:[],
@@ -183,12 +179,9 @@ export default {
                 remarks:'',
                 withdraw:'',
                 aplication_number:'',
-                status:'',
                 service_name:'transfer appeal',
                 status:'',
                 attachments:
-              
-
                 [{
                     file_name:'',attachment:''
                 }],
@@ -228,7 +221,6 @@ export default {
              axios.get('staff/transfer/loadAppealattachementDetails/'+appId)
             .then((response) =>{
                 let data = response.data.data;
-                alert(JSON.stringify(data));
                 this.draft_attachments=data.documents;
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
@@ -314,35 +306,7 @@ export default {
                         }
                         axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
                         .then((response) =>{
-                            if(response.data=="Not Approved"){
-                               Swal.fire({
-                                    html: "Your application is still under process ! ",
-                                    icon: 'error',
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'okay!',
-                            });
-                            }
-                            
-                            else if(response.data=="Not Contain"){
-                                Swal.fire({
-                                    html: "You are not eligible for applying transfer appeal since you have not applied any type transfer yet! ",
-                                    icon: 'error',
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'okay!',
-                                })
-                            }
-                             else if(response.data=="Approved or rejected"){
-                                Swal.fire({
-                                    html: "You are not eligible for applying transfer appeal since your application has been already verified or approved ",
-                                    icon: 'error',
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'okay!',
-                                })
-                            }
-                            else{
+                            if(response.data!=""){
                                  Swal.fire({
                                     html: "Your application for transfer appeal has been updated successfully ",
                                     icon: 'success',
@@ -353,6 +317,26 @@ export default {
                             this.applyselect2();
                             this.$router.push('/list_transfer_appeal');
                             }
+                            // }
+                            
+                            // else if(response.data=="Not Contain"){
+                            //     Swal.fire({
+                            //         html: "You are not eligible for applying transfer appeal since you have not applied any type transfer yet! ",
+                            //         icon: 'error',
+                            //         confirmButtonColor: '#3085d6',
+                            //         cancelButtonColor: '#d33',
+                            //         confirmButtonText: 'okay!',
+                            //     })
+                            // }
+                            //  else if(response.data=="Approved or rejected"){
+                            //     Swal.fire({
+                            //         html: "You are not eligible for applying transfer appeal since your application has been already verified or approved ",
+                            //         icon: 'error',
+                            //         confirmButtonColor: '#3085d6',
+                            //         cancelButtonColor: '#d33',
+                            //         confirmButtonText: 'okay!',
+                            //     })
+                            // }
                             
                         })
                         .catch((error) => {

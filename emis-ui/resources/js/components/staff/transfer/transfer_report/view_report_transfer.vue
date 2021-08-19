@@ -255,6 +255,7 @@ export default {
                             .catch((error) => {
                                 console.log("Errors:"+error)
                             });
+                            this.$router.push('/report_transfer');
                         }
                     });
                 }
