@@ -1,39 +1,36 @@
 <template>
     <div>
-        <form class="bootbox-form" id="eccdfacilityId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                        <label>Facility Type:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.faciltytype" :class="{ 'is-invalid': form.errors.has('faciltytype') }" id="faciltytype" @change="remove_err('faciltytype')" type="text">
-
-                        <has-error :form="form" field="faciltytype"></has-error>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>ECCD Structure Type:<span class="text-danger">*</span></label> 
-                        <select name="type" class="form-control" v-model="form.structuretype" :class="{ 'is-invalid': form.errors.has('structuretype') }" id="structuretype" @change="remove_err('structuretype')">
+                       <select name="type" class="form-control" v-model="form.structuretype" :class="{ 'is-invalid': form.errors.has('structuretype') }" id="structuretype" @change="remove_err('structuretype')">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in eccdStructureTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="structuretype"></has-error>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Facility Type:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
                     </div>
                 </div>          
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -43,15 +40,16 @@
 export default {
     data(){
         return{
-            eccdStructureTypeList:[],
             count:10,
+            eccdStructureTypeList:[],
             form: new form({
                 id: '',
-                faciltytype : '',
-                structuretype: '',
-                description: '',
+                name: '',
+                description:'',
                 status: 1,
-                action_type:'add',
+                structuretype:'',
+                action_type:'edit',
+                model:'ECCDFacilities'
             })
         }
     },
@@ -64,26 +62,25 @@ export default {
         },
         formaction: function(type){
             if(type=="reset"){
-                this.form.faciltytype= '';
-                this.form.structuretype= '';
+                this.form.name= '';
                 this.form.description= '';
+                this.form.structuretype= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveEccdFacility',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Eccd Facility is added successfully'
+                        title: 'Detail is edited successfully'
                     })
                     this.$router.push('/list_eccdfacility_type');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},
-
         getEccdStructureType(uri = 'masters/getEccdStructureType'){
             axios.get(uri)
             .then(response => {
@@ -92,17 +89,12 @@ export default {
             });
         },
     },
-
-    mounted(){
+    created() {
         this.getEccdStructureType();
-    },
-
-    created(){
-        this.form.faciltytype=this.$route.params.data.faciltytype;
-        this.form.structuretype=this.$route.params.data.structuretype;
-        this.getEccdStructureType();
+        this.form.name=this.$route.params.data.name;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
+        this.form.structuretype=this.$route.params.data.structuretype;
         this.form.id=this.$route.params.data.id;
     },
 }

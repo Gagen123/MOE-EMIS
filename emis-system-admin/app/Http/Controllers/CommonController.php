@@ -96,7 +96,7 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
             }
 
             //pulling application for the transfer

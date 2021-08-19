@@ -17,7 +17,6 @@
                                   <th>Class<span class="text-danger">*</span></th>
                                   <th>Total Projection<span class="text-danger">*</span></th>
                                   <th>Remarks</th>
-                                 
                               </tr>
                            </thead>
                            <tbody>

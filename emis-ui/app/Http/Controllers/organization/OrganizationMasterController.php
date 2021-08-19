@@ -37,9 +37,14 @@ class OrganizationMasterController extends Controller{
             'model'                     =>  $request->model,
             'dzo_id'                    =>  $request->dzo_id,
             'type'                      =>  $request->type,
+            'structureCategory'         =>  $request->structureCategory,
+            'structuretype'             =>  $request->structuretype,
+            'sportFacility'             =>  $request->sportFacility,
+            'furnitureType'             =>  $request->furnitureType,
+            'equipmentType'             =>  $request->equipmentType,
             'user_id'                   =>  $this->userId()
         ];
-    //    dd($request_data);
+        //dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/organizationMasterController/saveOrganizationMaster', $request_data);
         return $response_data;
     }

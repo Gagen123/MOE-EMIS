@@ -18,6 +18,7 @@ class SpmIndicator extends Migration
             $table->char('spm_parameter_id',36)->index();
             $table->string('code',100)->nullable();
             $table->string('name',500)->unique();
+            $table->string('mov',500)->nullable();
             $table->unsignedSmallInteger('sequence_no')->index();
             $table->unsignedTinyInteger('status')->index();
             $table->char('created_by',36);

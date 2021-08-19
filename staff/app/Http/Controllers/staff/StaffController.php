@@ -371,9 +371,10 @@ class StaffController extends Controller{
     public function load_staff_details_by_id($id=""){
         return $this->successResponse(PersonalDetails::where('id',$id)->first());
     }
-	public function getTeacher($orgId){
-        $teacher = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
-        return $this->successResponse($teacher);
+	public function getLoginUser($orgId){
+        $user = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
+        return $this->successResponse($user);
     }
+    
 
 }

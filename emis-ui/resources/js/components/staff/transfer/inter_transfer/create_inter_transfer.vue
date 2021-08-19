@@ -147,6 +147,59 @@
                                 </table>
                             </div>
                         </div>
+                        <!-- subject specification -->
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Subject specialization</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Specialization</th>
+                                            <th>Subjects</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td class="mb-0.5">Specialization Subject</td>
+                                            <td>
+                                                <select v-model="form.spSubject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spSubject') }" class="form-control select2" name="spSubject" id="spSubject">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="spSubject"></has-error>
+                                                <span class="text-danger" id="spSubject_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Optional Teaching Subject 1</td>
+                                            <td>
+                                                <select v-model="form.optional1sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional1sub') }" class="form-control select2" name="optional1sub" id="optional1sub">
+                                                  <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional1sub"></has-error>
+                                                <span class="text-danger" id="optional1sub_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Optional Teaching Subject 2</td>
+                                            <td>
+                                                <select v-model="form.optional2sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional2sub') }" class="form-control select2" name="optional2sub" id="optional2sub">
+                                                   <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional2sub"></has-error>
+                                               <span class="text-danger" id="optional2sub_err"></span>
+                                            </td> 
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Attachments</label>
@@ -231,6 +284,7 @@ export default {
             reasonList:'',
             undertakingList:[],
             dzongkhagList:[],
+            subjectList:[],
             working_history_list:[],
             training_details_list:[],
             draft_attachments:[],
@@ -254,6 +308,11 @@ export default {
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
+                spSubject:'',
+                optional1sub:'',
+                optional2sub:'',
+                user_id:'',
+                transfer_list:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -343,6 +402,16 @@ export default {
                 console.log(error);
             });
         },
+        loadtransferDetails(){
+            axios.get('staff/transfer/loadtransferDetails/inter_transfer')
+            .then((response) => {
+                // alert(JSON.stringify(response.data))
+                this.form.transfer_list =  response.data;
+             })
+            .catch((error) => {
+                console.log("Error in retrieving ."+error);
+            });
+        },
         validated_final_form(){
             let returntue=true;
             if($('#preference_dzongkhag1').val()==null){
@@ -362,44 +431,45 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
-            if(nextclass=="undertaking-tab"){
-                if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
-                    let formData = new FormData();
-                        formData.append('type_id', this.form.type_id);
-                        formData.append('transferwindow_id', this.form.transferwindow_id);
-                        formData.append('name', this.form.name);
-                        formData.append('reason_id', this.form.reason_id);
-                        formData.append('description', this.form.description);
-                        formData.append('transferType', this.form.transferType);
-                    
-                    axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
-                    .then((response) =>{
-                        if(response!="" && response!="No Screen"){
-                            this.form.id=response.data.data.id;
-                            this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Application for Transfer has been submitted for further action'
-                            });
+            if(this.form.transfer_list =="" || this.form.transfer_list == null){
+                if(nextclass=="undertaking-tab"){
+                    if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
+                        let formData = new FormData();
+                            formData.append('type_id', this.form.type_id);
+                            formData.append('transferwindow_id', this.form.transferwindow_id);
+                            formData.append('name', this.form.name);
+                            formData.append('staff_id', this.form.staff_id);
+                            formData.append('reason_id', this.form.reason_id);
+                            formData.append('description', this.form.description);
+                            formData.append('transferType', this.form.transferType);
+                        
+                        axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
+                        .then((response) =>{
+                            if(response!="" && response!="No Screen"){
+                                this.form.id=response.data.data.id;
+                                this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application for Transfer has been submitted for further action'
+                                });
+                            }
+                        })
+
+                        .catch((error) => {
+                            console.log("Errors:"+error)
+                        });
+                        this.change_tab(nextclass);
                         }
-                    })
-
-                    .catch((error) => {
-                        console.log("Errors:"+error)
-                    });
-                    this.change_tab(nextclass);
-                    }
-                    else{
-                          Swal.fire({
-                            text: "Time period for applying inter transfer is closed for the moment!",
-                            icon: 'error',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Okay!',
-                            })
-                    }
-            }
-
+                        else{
+                            Swal.fire({
+                                text: "Time period for applying inter transfer is closed for the moment!",
+                                icon: 'error',
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Okay!',
+                                })
+                        }
+                }
                 else if(nextclass=="final-tab"){
                     if(this.validated_final_form()){
                         Swal.fire({
@@ -423,6 +493,9 @@ export default {
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
                                 formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
+                                formData.append('spSubject', this.form.spSubject);
+                                formData.append('optional1sub', this.form.optional1sub);
+                                formData.append('optional2sub', this.form.optional2sub);
                                 formData.append('transferType', this.form.transferType);
                                 for(let i=0;i<this.form.ref_docs.length;i++){
                                     formData.append('attachments[]', this.form.ref_docs[i].attachment);
@@ -450,6 +523,14 @@ export default {
                         });
                     }
                 }
+            }else{
+                   Swal.fire({
+                    text: "Sorry! you have already submitted your transfer application and  you are not allowed to apply again ",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'okay!',
+                    })
+            } 
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -465,6 +546,7 @@ export default {
             axios.get('common/getSessionDetail')
             .then(response => {
                 this.form.name = response.data.data.Full_Name;
+                this.form.user_id = response.data.data.User_Id;
             })
             .catch(errors =>{
                 console.log(errors)
@@ -523,6 +605,15 @@ export default {
             if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
             }
+            if(id=="spSubject"){
+                this.form.spSubject=$('#spSubject').val();
+            }
+            if(id=="optional1sub"){
+                this.form.optional1sub=$('#optional1sub').val();
+            }
+            if(id=="optional2sub"){
+                this.form.optional2sub=$('#optional2sub').val();
+            }
             if(id=="preference_dzongkhag1"){
                 this.form.preference_dzongkhag1=$('#preference_dzongkhag1').val();
                 this.checkforselectedval(1);
@@ -565,7 +656,18 @@ export default {
             .catch(errors =>{
                 console.log(errors)
             });
-        }
+        },
+         loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.subjectList = data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+
     },
     mounted() {
         let currentdate = new Date();
@@ -583,14 +685,17 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadtransferDetails();
         this.getDraftDetails();
         this.profile_details();
         this.loadstaff();
         this.loadreasons();
         this.loadactivedzongkhagList();
+        this.loadAcademicMasters();
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
+       
     },
 }
 </script>

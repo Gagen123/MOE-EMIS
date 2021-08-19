@@ -583,7 +583,7 @@
                         <router-link to="/staff_leadership_selection_index" class="nav-link">
                             <p>
                             <i class="fa fa-angle-double-right nav-icon"></i>
-                                Leadership Selection
+                                Recruitment and Selection
                             </p>
                         </router-link>
                     </li>

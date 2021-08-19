@@ -3,13 +3,13 @@
         <form class="bootbox-form" autocomplete="off">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Sequence No.:<span class="text-danger">*</span></label>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Serial No.:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.sequence_no" :class="{ 'is-invalid': form.errors.has('sequence_no') }" id="sequence_no" @change="remove_err('sequence_no')" type="text">
                         <has-error :form="form" field="sequence_no"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Domain :<span class="text-danger">*</span></label> 
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Domain:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_domain_id" v-model="spm_domain_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_domain_id') }" @change="getAreas(); remove_err('spm_domain_id')">
                             <option value=""> ---Select---</option>
                             <option v-for="(item, index) in domains" :key="index" v-bind:value="item.id">
@@ -18,8 +18,8 @@
                         </select> 
                         <has-error :form="form" field="spm_domain_id"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Area :<span class="text-danger">*</span></label> 
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Area:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_area_id" v-model="spm_area_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_area_id') }" @change="getParameters(); remove_err('spm_area_id')">
                             <option value=""> ---Select---</option>
                             <option v-for="(item, index) in areas" :key="index" v-bind:value="item.id">
@@ -28,10 +28,8 @@
                         </select> 
                         <has-error :form="form" field="spm_area_id"></has-error>
                     </div>
-                </div>
-                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Parameter :<span class="text-danger">*</span></label> 
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        <label>Parameter:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="spm_parameter_id" v-model="form.spm_parameter_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spm_parameter_id') }" @change="remove_err('spm_parameter_id')">
                             <option value=""> ---Select---</option>
                             <option v-for="(item, index) in parameters" :key="index" v-bind:value="item.id">
@@ -40,12 +38,18 @@
                         </select> 
                         <has-error :form="form" field="spm_parameter_id"></has-error>
                     </div>
-                </div> 
+                </div>
                  <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Indicator:<span class="text-danger">*</span></label> 
+                        <label>Output Indicator:<span class="text-danger">*</span></label> 
                         <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')"></textarea>
                         <has-error :form="form" field="name"></has-error>
+                    </div>
+                </div> 
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Means of Verification (MoV):</label> 
+                        <textarea class="form-control form-control-sm" v-model="form.mov"></textarea>
                     </div>
                 </div> 
                 <div class="row form-group">
@@ -58,8 +62,7 @@
                 </div> 
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>     
@@ -75,6 +78,7 @@ export default {
             parameters:[],
             form: new form({
                 name: '',
+                mov:'',
                 sequence_no:'',
                 spm_parameter_id:'',
                 status:1,
@@ -119,26 +123,18 @@ export default {
                 $('#'+field_id).removeClass('is-invalid')
             }
         },
-		formaction: function(type){
-            if(type=="reset"){
-                this.form.name= ''
-                this.form.spm_parameter_id = ''
-                this.form.sequence_no = ''
-                this.form.status= 1
-            }
-            if(type=="save"){
-                this.form.post('/masters/saveSpmMasters',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/list-indicator')
+		save(){
+            this.form.post('/masters/saveSpmMasters',this.form)
+                .then(() => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Details added successfully'
                 })
-                .catch(() => {
-                    console.log("Error.")
-                })
-            }
+                this.$router.push('/list-indicator')
+            })
+            .catch(() => {
+                console.log("Error.")
+            })
 		}, 
     },
     mounted(){

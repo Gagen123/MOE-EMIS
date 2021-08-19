@@ -179,6 +179,35 @@ const routes = [
                 { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_position_directory/position_level/edit_position_level.vue').default },
                 ],
             },
+            { path: '/superstructure',
+                component: require('./components/masters/staff_position_directory/superstructure/superstructure_index.vue').default,
+                children:[
+                { path: '/',name:'superstructure', component: require('./components/masters/staff_position_directory/superstructure/list_superstructure.vue').default },
+                { path: '/list_superstructure',name:'list_superstructure', component: require('./components/masters/staff_position_directory/superstructure/list_superstructure.vue').default },
+                { path: '/create_superstructure',name:'create_superstructure', component: require('./components/masters/staff_position_directory/superstructure/create_superstructure.vue').default },
+                { path: '/edit_superstructure', name:'edit_superstructure', component: require('./components/masters/staff_position_directory/superstructure/edit_superstructure.vue').default },
+                ],
+            },
+            { path: '/childgroup',
+                component: require('./components/masters/staff_position_directory/childgroup/childgroup_index.vue').default,
+                children:[
+                { path: '/',name:'childgroup', component: require('./components/masters/staff_position_directory/childgroup/list_childgroup.vue').default },
+                { path: '/list_childgroup',name:'list_childgroup', component: require('./components/masters/staff_position_directory/childgroup/list_childgroup.vue').default },
+                { path: '/create_childgroup',name:'create_childgroup', component: require('./components/masters/staff_position_directory/childgroup/create_childgroup.vue').default },
+                { path: '/edit_childgroup', name:'edit_childgroup', component: require('./components/masters/staff_position_directory/childgroup/edit_childgroup.vue').default },
+                ],
+            },
+            { path: '/child_group_position',
+                component: require('./components/masters/staff_position_directory/child_group_position/child_group_position_index.vue').default,
+                children:[
+                { path: '/',name:'child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/list_child_group_position.vue').default },
+                { path: '/list_child_group_position',name:'list_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/list_child_group_position.vue').default },
+                { path: '/create_child_group_position',name:'create_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/create_child_group_position.vue').default },
+                { path: '/edit_child_group_position', name:'edit_child_group_position', component: require('./components/masters/staff_position_directory/child_group_position/edit_child_group_position.vue').default },
+                ],
+            },
+
+
         ]
     },
     //Staff Transfer Masters
@@ -213,6 +242,16 @@ const routes = [
                 { path: '/edit_transfer_type', name:'edit_transfer_type', component: require('./components/masters/staff_transfer/transfer_type/edit_transfer_type.vue').default },
                 ],
             },
+            { path: '/transfer_config',
+                component: require('./components/staff/transfer/transfer_config/transfer_config_index.vue').default,
+                    children:[
+                        { path: '/',name:'transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                        { path: '/list_transfer_config',name:'list_transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
+                        { path: '/create_transfer_config',name:'create_transfer_config', component: require('./components/staff/transfer/transfer_config/create_transfer_config.vue').default },
+                        { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
+                    ],
+                },
+
         ]
     },
 
@@ -481,6 +520,14 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
+            //Transfer reporting from staff transfer 
+            { path: '/report_transfer',
+            component: require('./components/staff/transfer/transfer_report/transfer_report_index.vue').default,
+                children:[
+                    { path: '/',name:'report_transfer', component: require('./components/staff/transfer/transfer_report/report_transfer.vue').default },
+                    { path: '/view_report_transfer',name:'view_report_transfer', component: require('./components/staff/transfer/transfer_report/view_report_transfer.vue').default },
+                ],
+            },
 
             { path: '/transfer_window_index',
                 component: require('./components/staff/transfer_window/transfer_window_index.vue').default,
@@ -518,15 +565,7 @@ const routes = [
                     { path: '/inter_transfer_acknowledgement', name:'inter_transfer_acknowledgement', component: require('./components/staff/transfer/inter_transfer/acknowledgement.vue').default },
                 ],
             },
-            { path: '/transfer_config',
-            component: require('./components/staff/transfer/transfer_config/transfer_config_index.vue').default,
-                children:[
-                    { path: '/',name:'transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
-                    { path: '/list_transfer_config',name:'list_transfer_config', component: require('./components/staff/transfer/transfer_config/list_transfer_config.vue').default },
-                    { path: '/create_transfer_config',name:'create_transfer_config', component: require('./components/staff/transfer/transfer_config/create_transfer_config.vue').default },
-                    { path: '/edit_transfer_config', name:'edit_transfer_config', component: require('./components/staff/transfer/transfer_config/edit_transfer_config.vue').default },
-                ],
-            },
+            
             { path: '/transfer_appeal',
             component: require('./components/staff/transfer/transfer_appeal/transfer_appeal_index.vue').default,
                 children:[
@@ -536,6 +575,15 @@ const routes = [
                     { path: '/edit_transfer_appeal', name:'edit_transfer_appeal', component: require('./components/staff/transfer/transfer_appeal/edit_transfer_appeal.vue').default },
                 ],
             },
+
+            { path: '/transfer_list',
+            component: require('./components/staff/transfer/transfer_lists/transfer_list_index.vue').default,
+                children:[
+                    { path: '/',name:'transfer_list', component: require('./components/staff/transfer/transfer_lists/list_transfer.vue').default },
+                    { path: '/view_transfer',name:'view_transfer', component: require('./components/staff/transfer/transfer_lists/view_transfer.vue').default },
+                ],
+            },
+           
 
         ]
     },
@@ -640,6 +688,7 @@ const routes = [
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,
                 children:[
+                    { path: '/', name:'management_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/', name:'list_management_body_for_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/open_meeting',name:'open_meeting', component: require('./components/staff/management/create_meeting/open_meeting.vue').default},
                     { path: '/create_management_meeting',name:'create_management_meeting', component: require('./components/staff/management/create_meeting/create_management_meeting.vue').default},
@@ -771,7 +820,7 @@ const routes = [
     { path:'/staff_second_seperation',
         component: require('./components/staff/second_seperation/second_seperation_index.vue').default,
         children:[
-            { path: '/', name:'staff_update_services', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
+            { path: '/', name:'staff_second_seperation', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
             { path: '/secondment_details',
                 component: require('./components/staff/second_seperation/secondment_details/secondment_index.vue').default,
                 children:[

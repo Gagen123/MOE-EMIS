@@ -187,20 +187,21 @@ class SpmsMasterController extends Controller
             if($request['action_type'] =="add"){
                 $rules = [
                     'sequence_no' =>  'required',
-                    'name' =>'required|unique:spm_indicator',
-                    'spm_parameter_id' =>'required',
+                    'name'   =>  'required|unique:spm_indicator',
+                    'spm_parameter_id' =>  'required',
                     'status' =>  'required',
                 ];
                 $customMessages = [
-                    'sequence_no.required' => 'This field is required',
+                    'sequence_no.required'   => 'This field is required',
+                    'name.required'   => 'This field is required',
                     'spm_parameter_id.required'   => 'This field is required',
-                    'name.required' => 'This field is required',
                     'status.required' => 'This field is required',
                 ];
                 $this->validate($request, $rules, $customMessages);
                 $data = [
                     'sequence_no' => $request['sequence_no'],
                     'name' => $request['name'],
+                    'mov' => $request['mov'],
                     'spm_parameter_id' => $request['spm_parameter_id'],
                     'status'    =>  $request['status'],
                     'created_by' =>  $request['user_id'],
@@ -210,23 +211,24 @@ class SpmsMasterController extends Controller
             if($request['action_type']=="edit"){
                 $rules = [
                     'sequence_no' =>  'required',
-                    'name' =>'required',
-                    'spm_parameter_id' =>'required',
+                    'name'   =>  'required',
+                    'spm_parameter_id' =>  'required',
                     'status' =>  'required',
                 ];
                 $customMessages = [
-                    'sequence_no.required' => 'This field is required',
+                    'sequence_no.required'   => 'This field is required',
+                    'name.required'   => 'This field is required',
                     'spm_parameter_id.required'   => 'This field is required',
-                    'name.required' => 'This field is required',
                     'status.required' => 'This field is required',
                 ];
                 
                $this->validate($request, $rules,  $customMessages);
                 $data = Indicator::find($request['id']);
-                $messs_det='sequence_no:'.$data->sequence_no.'name:'.$data->name.'; spm_parameter_id:'.$data->spm_parameter_id.'; status'.$data->status;
+                $messs_det='sequence_no:'.$data->sequence_no.'name:'.$data->name.'mov:'.$data->mov.'; spm_parameter_id:'.$data->spm_parameter_id.'; status'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','spm_indicator','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->sequence_no = $request['sequence_no'];
                 $data->name = $request['name'];
+                $data->mov = $request['mov'];
                 $data->spm_parameter_id = $request['spm_parameter_id'];
                 $data->status = $request['status'];
                 $data->update();
@@ -258,18 +260,20 @@ class SpmsMasterController extends Controller
               $responsedata= Rating::create($data);
             }
             if($request['action_type']=="edit"){
-                $rules = [
-                    'score' =>'required',
-                    'description' =>'required',
-                    'spm_indicator_id' =>'required',
-                    'status' =>  'required',
-                ];
-                $customMessages = [
-                    'spm_indicator_id.required'   => 'This field is required',
-                    'description.required'   => 'This field is required',
-                    'score.required' => 'This field is required',
-                    'status.required' => 'This field is required',
-                ];
+                   $rules = [
+                'sequence_no' =>  'required',
+                'name'   =>  'required',
+                'mov' => 'required',
+                'spm_parameter_id' =>  'required',
+                'status' =>  'required',
+            ];
+            $customMessages = [
+                'sequence_no.required'   => 'This field is required',
+                'name.required'   => 'This field is required',
+                'mov.required'   => 'This field is required',
+                'spm_parameter_id.required'   => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
                 
                 $this->validate($request, $rules,  $customMessages);
                 $data = Rating::find($request['id']);
@@ -325,7 +329,7 @@ class SpmsMasterController extends Controller
             return $this->successResponse($paramaters);
         }
         if($param == "all_indicators"){
-            $indicators = DB::select("SELECT t1.sequence_no,CONCAT(t4.sequence_no,'.',t3.sequence_no,'.',t2.sequence_no,'.',t1.sequence_no) AS display_sequence_no,t1.id,t3.spm_domain_id,t2.spm_area_id,t1.spm_parameter_id,t4.name AS domain,t3.name AS area,t2.name AS parameter,t1.name,t1.status FROM spm_indicator t1 
+            $indicators = DB::select("SELECT t1.sequence_no,CONCAT(t4.sequence_no,'.',t3.sequence_no,'.',t2.sequence_no,'.',t1.sequence_no) AS display_sequence_no,t1.id,t3.spm_domain_id,t2.spm_area_id,t1.spm_parameter_id,t4.name AS domain,t3.name AS area,t2.name AS parameter,t1.name,t1.mov,t1.status FROM spm_indicator t1 
                     JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
                     JOIN spm_area t3 ON t2.spm_area_id = t3.id JOIN spm_domain t4 ON t3.spm_domain_id= t4.id");
             return $this->successResponse($indicators);
@@ -354,6 +358,10 @@ class SpmsMasterController extends Controller
                     JOIN spm_area t4 ON t3.spm_area_id = t4.id JOIN spm_domain t5 ON t4.spm_domain_id = t5.id 
              WHERE t1.status = 1 ORDER BY t1.score');
             return $this->successResponse($ratings);
+        }
+        if($param =='all_school_plan_status'){
+            $school_paln_status = DB::select('SELECT id, name FROM spm_school_plan_status');
+            return $this->successResponse($school_paln_status);
         }
     }
     public function saveDzoEMO(Request $request){

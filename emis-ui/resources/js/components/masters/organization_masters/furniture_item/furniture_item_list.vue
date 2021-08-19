@@ -1,28 +1,26 @@
 <template>
-    <div>
-        <table id="equipmentItem-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body"> 
+        <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Furniture Item</th>
                     <th>Furniture Type</th>
+                    <th>Furniture Item</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in furnitureItemList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
+                    <td>{{ furnitureTypeList[item.furnitureType]}}</td> 
                     <td>{{ item.name}}</td>
-                    <td>{{ item.furnitureType}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewFurnitureItemList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -35,57 +33,53 @@
 export default {
     data(){
         return{
-            furnitureItemList:[],
+            data_list:[],
             dt:'',
-            furnitureTypeList:{},
+            furnitureTypeList:{}
         }
     },
 
     methods:{
-        loadFurnitureItemList(uri = 'masters/loadFurnitureItem'){
+        loadFurnitureItemList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/FurnitureItem'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.furnitureItemList =  data.data;
-
+                let data = response.data.data;
+                this.data_list =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#equipmentItem-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewFurnitureItemList(data){
-            data.action='edit';
+        editmasters(data){
             this.$router.push({name:'furniture_item_edit',params: {data:data}});
         },
-
+        
         getFurnitureType(uri = 'masters/getFurnitureTypeDropdown'){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
-                this.furnitureTypeList = data;
+                let data = response;
+                for(let i=0;i<data.data.length;i++){
+                    this.furnitureTypeList[data.data[i].id] = data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
             });
         },
-    },
 
+    },
     mounted(){
+        this.getFurnitureType();
         this.loadFurnitureItemList();
-        this.dt =  $("#equipmentItem-table").DataTable();
+        this.dt =  $("#org-masters-table").DataTable();
     },
     watch: {
-        furnitureItemList(){
+        data_list(){
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#equipmentItem-table").DataTable()
+                this.dt =  $("#org-masters-table").DataTable()
             });
         }
     },
 }
-</script>
+</script> 

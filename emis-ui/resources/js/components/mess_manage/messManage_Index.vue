@@ -1,14 +1,13 @@
 <template>
     <div class="">
-        <ol class="mb-1 ml-xl-n3 mr-xl-n2" style="background-color:#E5E5E5">
-            <li class="pl-2 form-inline "><h5>M</h5><h6 class="pt-1">ess Management</h6></li>
+        <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
+            <li class="form-inline "><h6>Mess Management</h6></li>
         </ol>
         <div class="container-fluid">
-            <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
+            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
-                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                        <span :class="item.screen_icon"></span>
-                        {{ item.screen_name}}
+                    <router-link :to="{name: item.route, query: {data: item.screen_id } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                        <span :class="item.screen_icon"></span> {{ item.screen_name}}
                     </router-link>
                 </li>
                 <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
@@ -29,7 +28,7 @@
                         Local Procurement
                     </router-link>
                 </li>
-                <li class="nav-item pr-1"  @click="activatelink('stockissued')">
+                 <li class="nav-item pr-1"  @click="activatelink('stockissued')">
                     <router-link id="stockissued" to="/stockissued_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fas fa-receipt"></span>
                         Stock Issue
@@ -41,12 +40,6 @@
                         School Inventory
                     </router-link>
                 </li>
-                <!-- <li class="nav-item pr-1" @click="activatelink('schoolInventory')">
-                    <router-link to ="/teststockreceived_index" id="teststockreceived" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        <span class="fas fa-shopping-cart"></span>
-                        Test Stock Received
-                    </router-link>
-                </li> -->
             </ul>
             <router-view></router-view>
         </div>
@@ -54,53 +47,35 @@
 </template>
 <script>
 export default {
-    data(){
-        return{
+    components: {
+    },
+    data() {
+        return {
             menubar:[],
+            menu_id:'',
         }
     },
-
-
-
     methods: {
         activatelink(btnid){
             $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
             $('#'+btnid).addClass('btn-primary text-white');
         },
-        getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
+        getmenus(){
+            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.menubar =  data.data;
             })
             .catch(function (error) {
-                console.log("Error:"+error)
+                console.log(error);
             });
         },
     },
-    mounted(){
+    mounted() {
         let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        this.menu_id=routeparam;
+        this.getmenus();
     },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

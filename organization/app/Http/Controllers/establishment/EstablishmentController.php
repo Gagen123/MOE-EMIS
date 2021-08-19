@@ -1258,6 +1258,7 @@ class EstablishmentController extends Controller{
     }
 
     public function getcurrentSenDetails($orgId=""){
+      //  dd($orgId);
         $response_data = OrganizaitonSenModule::where('org_id',$orgId)->first();
         return $this->successResponse($response_data);
     }

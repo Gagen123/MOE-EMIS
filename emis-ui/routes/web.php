@@ -523,6 +523,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/updateTransferApplication', [App\Http\Controllers\staff\TransferController::class, 'updateTransferApplication'])->name('updateTransferApplication');
         Route::get('/LoadSchoolByDzoId/{param}/{id}', [App\Http\Controllers\staff\TransferController::class, 'LoadSchoolByDzoId'])->name('LoadSchoolByDzoId');
         Route::get('/loadtransferDetails/{param}', [App\Http\Controllers\staff\TransferController::class, 'loadtransferDetails'])->name('loadtransferDetails');
+        Route::get('/reportingTransfer/{param}', [App\Http\Controllers\staff\TransferController::class, 'reportingTransfer'])->name('reportingTransfer');
         Route::get('/loadTransferAppealDetails}', [App\Http\Controllers\staff\TransferController::class, 'loadTransferAppealDetails'])->name('loadTransferAppealDetails');
         Route::get('/getapplicatName/{id}', [App\Http\Controllers\staff\TransferController::class, 'getapplicatName'])->name('getapplicatName');
         Route::get('/loadApplicationDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'loadApplicationDetails'])->name('loadApplicationDetails');
@@ -646,6 +647,8 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
+    Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
+
     
     //projection controller for 
     Route::get('/loadProjectionStaffList/{type}/{dzo_id}', [App\Http\Controllers\projections\TeacherProjectionController::class, 'loadProjectionStaffList'])->name('loadProjectionStaffList');
@@ -846,6 +849,7 @@ Route::prefix('academics')->group(function () {
     Route::get('/getInstrunctionalDays', [App\Http\Controllers\academics\AcademicController::class, 'getInstrunctionalDays'])->name('getInstrunctionalDays');
     Route::get('/getTermsByFrequency/{frequencyId}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByFrequency'])->name('getTermsByFrequency');
     Route::post('/unlockForEditForConsolidated/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'unlockForEditForConsolidated'])->name('unlockForEditForConsolidated');
+    Route::get('/getResult/{std_student_id}', [App\Http\Controllers\academics\AcademicController::class, 'getResult'])->name('getResult');
 
 });
 Route::prefix('spms')->group(function () {
@@ -854,7 +858,12 @@ Route::prefix('spms')->group(function () {
     Route::get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
     Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
     Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
-
+    Route::post('/saveSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'saveSchoolPlan'])->name('saveSchoolPlan');
+    Route::get('/getSchoolPlan/{school_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlan'])->name('getSchoolPlan');
+    Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
+    Route::get('/getSchoolPlanHistory', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
+    Route::get('/loadOrgList', [App\Http\Controllers\spms\SpmsController::class, 'loadOrgList'])->name('loadOrgList');
+    
 });
 
 

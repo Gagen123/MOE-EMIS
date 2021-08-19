@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ExternalData\AbroadStudentDetails;
 use App\Models\ExternalData\RubCollegeDetails;
 use App\Models\ExternalData\RubStaffDetails;
+use Illuminate\Support\Facades\DB;
 use App\Models\ExternalData\RubStudentDetails;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;
@@ -251,7 +252,7 @@ class ExternalDataImputController extends Controller
 
     }
 
-    public function loadInstitues($type="",$model=""){
+     public function loadInstitues($type="",$model=""){
         // if($param=="all_institutes"){
         //     return $this->successResponse(RubCollegeDetails::all());
         // }

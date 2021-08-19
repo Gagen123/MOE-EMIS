@@ -9,6 +9,15 @@ try {
                     console.log('error getdepartmentList '+e);
                 }
             },
+            loadTeacher(type,dzoId){
+                let uri = 'loadCommons/loadProjectionStaffList/'+type+'/'+dzoId;
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                    console.log('error staffDzongkhagwise '+e);
+                }
+            },
+
             loadStudents(dzoId){
                 let uri = 'projections/projectionController/loadStudents/'+dzoId;
                 try{

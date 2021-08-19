@@ -61,7 +61,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
 
 		  //Method by Chimi thinley
-        $router->get('/getTeacher/{orgId}', ['uses' => 'staff\StaffController@getTeacher']);
+        $router->get('/getLoginUser/{orgId}', ['uses' => 'staff\StaffController@getLoginUser']);
 
 
         // $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
@@ -103,7 +103,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadPreference/{id}', ['uses' => 'staff\TransferController@loadPreference']);
             $router->post('/updateTransferApplication', ['uses' => 'staff\TransferController@updateTransferApplication']);
             $router->post('/SaveTransferAppeal', ['uses' => 'staff\TransferController@SaveTransferAppeal']);
-            $router->get('/loadtransferDetails/{type}/{userId}', ['uses' => 'staff\TransferController@loadtransferDetails']);
+            $router->get('/loadtransferDetails/{type}/{userId}/{dzoId}', ['uses' => 'staff\TransferController@loadtransferDetails']);
+            $router->get('/reportingTransfer/{type}/{dzoId}', ['uses' => 'staff\TransferController@reportingTransfer']);
             $router->get('/loadApplicationDetails/{id}', ['uses' => 'staff\TransferController@loadApplicationDetails']);
             $router->get('/LoadTransferAppealDetails/{user_id}', ['uses' => 'staff\TransferController@LoadTransferAppealDetails']);
             $router->get('/getapplicatName/{id}', ['uses' => 'staff\TransferController@getapplicatName']);
@@ -210,9 +211,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadStaffList']);
         $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffList']);
 
-        // $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', function(){
-        //     return 'ddddddd';
-        // });
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
 
 

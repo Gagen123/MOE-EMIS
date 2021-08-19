@@ -351,14 +351,14 @@ const routes = [
         { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
       ]
     },
-    { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
-      children: [
-        { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
-        { path: '/spbenefit_list', name:'spbenefit_list', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
-        { path: '/spbenefit_add', name:'spbenefit_add', component: require('./components/masters/student_masters/spbenefit/spbenefit_add.vue').default },
-        { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
-      ]
-    },
+    // { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
+    //   children: [
+    //     { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+    //     { path: '/spbenefit_list', name:'spbenefit_list', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },
+    //     { path: '/spbenefit_add', name:'spbenefit_add', component: require('./components/masters/student_masters/spbenefit/spbenefit_add.vue').default },
+    //     { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
+    //   ]
+    // },
   ]
 },
 
@@ -373,7 +373,7 @@ const routes = [
     //Student List
     { path: '/student_list_index', component: require('./components/students/General/student_list_index.vue').default,
         children: [
-            { path: '/', name:'regular_student_list', component: require('./components/students/General/Regular/student_list.vue').default },
+            { path: '/', name:'student_list_index', component: require('./components/students/General/Regular/student_list.vue').default },
             { path: '/ce_student_list', name:'ce_student_list', component: require('./components/students/General/CE/ce_student_list.vue').default},
         ]
     },
@@ -457,7 +457,7 @@ const routes = [
                 component: require('./components/students/StudentAdmission/StudentAboard/student_aboard_index.vue').default ,
                 children:
                 [
-                    { path: '', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
+                    { path: '',name:'abroad_student', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
                     { path: '/studentaboard_add', name:'StudentAboardAdd', component: require('./components/students/StudentAdmission/StudentAboard/add_student_aboard.vue').default },
                     { path: '/studentaboard_edit', name:'StudentAboardEdit', component: require('./components/students/StudentAdmission/StudentAboard/edit_student_aboard.vue').default },
                     { path: '/studentaboard_list', name:'StudentAboardList', component: require('./components/students/StudentAdmission/StudentAboard/list_student_aboard.vue').default },
@@ -467,14 +467,14 @@ const routes = [
         ]
     },
     //Student => Class Section Allocation
-    { path: '/class_section', component: require('./components/students/ClassSection/index.vue').default,
+    { path: '/class_section',  component: require('./components/students/ClassSection/index.vue').default,
         children: [
-            { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/list_class_section_allocation.vue').default },
-            { path: '/list_class_section_allocation', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
+            { path: '/', name:'class_section', component: require('./components/students/ClassSection/list_class_section_allocation.vue').default },
+         //   { path: '/list_class_section_allocation', name:'list_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
             //Student => Class Section Allocation
             { path: '/class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/class_section_allocation.vue').default,
                 children: [
-                    { path: '/', name:'class_section_allocation', name:'class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
+                    { path: '/', name:'class_section_allocation',  component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
                     { path: '/list_class_section_allocation', name:'list_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/list_class_section_allocation.vue').default },
                     { path: '/allocate_class_section', name:'allocate_class_section', component: require('./components/students/ClassSection/ClassSectionAllocation/allocate_class_section.vue').default },
                     { path: '/edit_class_section_allocation', name:'edit_class_section_allocation', component: require('./components/students/ClassSection/ClassSectionAllocation/edit_class_section_allocation.vue').default },
@@ -491,7 +491,7 @@ const routes = [
     { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
     children: [
         { path: '/', name:'student_services', component: require('./components/students/StudentServices/student_houses_list.vue').default},
-        { path: '/student_houses', name:'student_services', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
+        { path: '/student_houses', name:'student_houses', component: require('./components/students/StudentServices/Houses/student_houses.vue').default,
             children: [
                 { path: '/', name:'student_houses', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
                 { path: '/student_houses_list', name:'student_houses_list', component: require('./components/students/StudentServices/Houses/student_houses_list.vue').default },
@@ -548,7 +548,7 @@ const routes = [
         { path: '/student_counselling_record',
             component: require('./components/students/Counselling/CounsellingRecords/index_counselling_records.vue').default,
             children: [
-                { path: '',name:'index_counselling_records', component: require('./components/students/Counselling/CounsellingRecords/list_counselling_records.vue').default },
+                { path: '',name:'student_counselling_record', component: require('./components/students/Counselling/CounsellingRecords/list_counselling_records.vue').default },
                 { path: '/add_counselling_records', name:'add_counselling_records', component: require('./components/students/Counselling/CounsellingRecords/add_counselling_records.vue').default },
                 { path: '/edit_counselling_records', name:'edit_counselling_records', component: require('./components/students/Counselling/CounsellingRecords/edit_counselling_records.vue').default },
                 { path: '/list_counselling_records', name:'list_counselling_records', component: require('./components/students/Counselling/CounsellingRecords/list_counselling_records.vue').default },
@@ -557,7 +557,7 @@ const routes = [
         { path: '/student_counselling_programs',
             component: require('./components/students/Counselling/CounsellingPrograms/index_counselling_programs.vue').default,
             children: [
-                { path: '',name:'index_counselling_programs', component: require('./components/students/Counselling/CounsellingPrograms/list_counselling_programs.vue').default },
+                { path: '',name:'student_counselling_programs', component: require('./components/students/Counselling/CounsellingPrograms/list_counselling_programs.vue').default },
                 { path: '/add_counselling_programs', name:'add_counselling_programs', component: require('./components/students/Counselling/CounsellingPrograms/add_counselling_programs.vue').default },
                 { path: '/edit_counselling_programs', name:'edit_counselling_programs', component: require('./components/students/Counselling/CounsellingPrograms/edit_counselling_programs.vue').default },
                 { path: '/list_counselling_programs', name:'list_counselling_programs', component: require('./components/students/Counselling/CounsellingPrograms/list_counselling_programs.vue').default },
@@ -571,7 +571,7 @@ const routes = [
     children: [
         //Student => Programs and Clubs
         { path: '/', name:'student_programs_clubs', component: require('./components/students/StudentExtraCurricular/student_programs_list.vue').default},
-        { path: '/student_programs', name:'student_programs_clubs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
+        { path: '/student_programs', name:'student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs.vue').default,
             children: [
                 { path: '/', name:'student_programs', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
                 { path: '/student_programs_list', name:'student_programs_list', component: require('./components/students/StudentExtraCurricular/Programs/student_programs_list.vue').default },
@@ -688,7 +688,7 @@ const routes = [
     children: [
         //Student => Training, Workshops, Seminars
         { path: '/', component: require('./components/students/StudentExtraCurricular/student_trainings_list.vue').default},
-        { path: '/student_trainings', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings.vue').default,
+        { path: '/student_trainings', name:'student_trainings_index', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings.vue').default,
             children: [
                 { path: '/', name:'student_trainings', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_list.vue').default },
                 { path: '/student_trainings_list', name:'student_trainings_list', component: require('./components/students/StudentExtraCurricular/Trainings/student_trainings_list.vue').default },
@@ -850,7 +850,7 @@ const routes = [
         { path: '/', name:'update_student_details', component: require('./components/students/UpdateDetails/CID/updated_cid_list.vue').default},
         { path: '/update_std_cid', name:'update_std_cid', component: require('./components/students/UpdateDetails/CID/updated_cid_index.vue').default,
             children: [
-                { path: '/', name:'updated_cid_index', component: require('./components/students/UpdateDetails/CID/updated_cid_list.vue').default },
+                { path: '/', name:'update_std_cid', component: require('./components/students/UpdateDetails/CID/updated_cid_list.vue').default },
                 { path: '/updated_cid_list', name:'updated_cid_list', component: require('./components/students/UpdateDetails/CID/updated_cid_list.vue').default },
                 { path: '/update_cid', name:'update_cid', component: require('./components/students/UpdateDetails/CID/update_cid.vue').default },
                 { path: '/edit_updated_cid', name:'edit_updated_cid', component: require('./components/students/UpdateDetails/CID/edit_updated_cid.vue').default },
@@ -858,7 +858,7 @@ const routes = [
         },
         { path: '/update_std_contact', name:'update_std_contact', component: require('./components/students/UpdateDetails/Contact/updated_contact_index.vue').default,
             children: [
-                { path: '/', name:'updated_contact_index', component: require('./components/students/UpdateDetails/Contact/updated_contact_list.vue').default },
+                { path: '/', name:'update_std_contact', component: require('./components/students/UpdateDetails/Contact/updated_contact_list.vue').default },
                 { path: '/updated_contact_list', name:'updated_contact_list', component: require('./components/students/UpdateDetails/Contact/updated_contact_list.vue').default },
                 { path: '/update_contact', name:'update_contact', component: require('./components/students/UpdateDetails/Contact/update_contact.vue').default },
                 { path: '/edit_updated_contact', name:'edit_updated_contact', component: require('./components/students/UpdateDetails/Contact/edit_updated_contact.vue').default },
@@ -866,7 +866,7 @@ const routes = [
         },
         { path: '/update_maritial_status', name:'update_maritial_status', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_index.vue').default,
             children: [
-                { path: '/', name:'updated_maritial_index', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_list.vue').default },
+                { path: '/', name:'update_maritial_status', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_list.vue').default },
                 { path: '/updated_maritial_list', name:'updated_maritial_list', component: require('./components/students/UpdateDetails/MaritialStatus/updated_maritial_list.vue').default },
                 { path: '/update_maritial', name:'update_maritial', component: require('./components/students/UpdateDetails/MaritialStatus/update_maritial.vue').default },
                 { path: '/edit_updated_maritial', name:'edit_updated_maritial', component: require('./components/students/UpdateDetails/MaritialStatus/edit_updated_maritial.vue').default },
@@ -874,7 +874,7 @@ const routes = [
         },
         { path: '/update_std_feeding', name:'update_std_feeding', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_index.vue').default,
             children: [
-                { path: '/', name:'updated_feeding_index', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_list.vue').default },
+                { path: '/', name:'update_std_feeding', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_list.vue').default },
                 { path: '/updated_feeding_list', name:'updated_feeding_list', component: require('./components/students/UpdateDetails/Feeding/updated_feeding_list.vue').default },
                 { path: '/update_feeding', name:'update_feeding', component: require('./components/students/UpdateDetails/Feeding/update_feeding.vue').default },
                 { path: '/edit_updated_feeding', name:'edit_updated_feeding', component: require('./components/students/UpdateDetails/Feeding/edit_updated_feeding.vue').default },
@@ -882,7 +882,7 @@ const routes = [
         },
         { path: '/update_std_dietary', name:'update_std_dietary', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_index.vue').default,
             children: [
-                { path: '/', name:'updated_dietary_index', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_list.vue').default },
+                { path: '/', name:'update_std_dietary', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_list.vue').default },
                 { path: '/updated_dietary_list', name:'updated_dietary_list', component: require('./components/students/UpdateDetails/Dietary/updated_dietary_list.vue').default },
                 { path: '/update_dietary', name:'update_dietary', component: require('./components/students/UpdateDetails/Dietary/update_dietary.vue').default },
                 { path: '/edit_updated_dietary', name:'edit_updated_dietary', component: require('./components/students/UpdateDetails/Dietary/edit_updated_dietary.vue').default },
@@ -890,7 +890,7 @@ const routes = [
         },
         { path: '/update_std_guardian', name:'update_std_guardian', component: require('./components/students/UpdateDetails/Guardian/updated_guardian_index.vue').default,
             children: [
-                { path: '/', name:'updated_guardian_index', component: require('./components/students/UpdateDetails/Guardian/updated_guardian_list.vue').default },
+                { path: '/', name:'update_std_guardian', component: require('./components/students/UpdateDetails/Guardian/updated_guardian_list.vue').default },
                 { path: '/updated_guardian_list', name:'updated_guardian_list', component: require('./components/students/UpdateDetails/Guardian/updated_guardian_list.vue').default },
                 { path: '/update_guardian', name:'update_guardian', component: require('./components/students/UpdateDetails/Guardian/update_guardian.vue').default },
                 { path: '/edit_updated_guardian', name:'edit_updated_guardian', component: require('./components/students/UpdateDetails/Guardian/edit_updated_guardian.vue').default },
@@ -898,7 +898,7 @@ const routes = [
         },
         { path: '/update_std_needy', name:'update_std_needy', component: require('./components/students/UpdateDetails/Needy/updated_needy_index.vue').default,
             children: [
-                { path: '/', name:'updated_needy_index', component: require('./components/students/UpdateDetails/Needy/updated_needy_list.vue').default },
+                { path: '/', name:'update_std_needy', component: require('./components/students/UpdateDetails/Needy/updated_needy_list.vue').default },
                 { path: '/updated_needy_list', name:'updated_needy_list', component: require('./components/students/UpdateDetails/Needy/updated_needy_list.vue').default },
                 { path: '/update_needy', name:'update_needy', component: require('./components/students/UpdateDetails/Needy/update_needy.vue').default },
                 { path: '/edit_updated_needy', name:'edit_updated_needy', component: require('./components/students/UpdateDetails/Needy/edit_updated_needy.vue').default },
@@ -906,7 +906,7 @@ const routes = [
         },
         { path: '/update_std_scholarship', name:'update_std_scholarship', component: require('./components/students/UpdateDetails/ScholarshipDetails/updated_scholarship_index.vue').default,
             children: [
-                { path: '/', name:'updated_scholarship_index', component: require('./components/students/UpdateDetails/ScholarshipDetails/updated_scholarship_list.vue').default },
+                { path: '/', name:'update_std_scholarship', component: require('./components/students/UpdateDetails/ScholarshipDetails/updated_scholarship_list.vue').default },
                 { path: '/updated_scholarship_list', name:'updated_scholarship_list', component: require('./components/students/UpdateDetails/ScholarshipDetails/updated_scholarship_list.vue').default },
                 { path: '/update_scholarship', name:'update_scholarship', component: require('./components/students/UpdateDetails/ScholarshipDetails/update_scholarship.vue').default },
                 { path: '/edit_updated_scholarship', name:'edit_updated_scholarship', component: require('./components/students/UpdateDetails/ScholarshipDetails/edit_updated_scholarship.vue').default },
@@ -914,7 +914,7 @@ const routes = [
         },
         { path: '/update_std_sen', name:'update_std_sen', component: require('./components/students/UpdateDetails/SEN/updated_sen_index.vue').default,
             children: [
-                { path: '/', name:'updated_sen_index', component: require('./components/students/UpdateDetails/SEN/updated_sen_list.vue').default },
+                { path: '/', name:'update_std_sen', component: require('./components/students/UpdateDetails/SEN/updated_sen_list.vue').default },
                 { path: '/updated_sen_list', name:'updated_sen_list', component: require('./components/students/UpdateDetails/SEN/updated_sen_list.vue').default },
                 { path: '/update_sen', name:'update_sen', component: require('./components/students/UpdateDetails/SEN/update_sen.vue').default },
                 { path: '/edit_updated_sen', name:'edit_updated_sen', component: require('./components/students/UpdateDetails/SEN/edit_updated_sen.vue').default },

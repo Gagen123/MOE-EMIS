@@ -404,7 +404,7 @@ class GeneralInfoController extends Controller
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
             'attachments'       =>  $path,
-            'user_id'           =>  $this->userId()
+            'user_id'           =>  $this->userId() 
         ];
         // dd($org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
@@ -783,11 +783,12 @@ class GeneralInfoController extends Controller
         $response_data= $this->apiService->createData('emis/organization/updateSenDetials', $org_details);
         return $response_data;
     }
-
+ 
     public function loadSeenDetailsByOrgId($orgId=""){
-        // dd($orgId);
+       //  dd($orgId);
         $response_data= $this->apiService->listData('emis/organization/getcurrentSenDetails/'.$orgId);
         return $response_data;
+        
     }
 
 }

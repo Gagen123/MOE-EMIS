@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Position Directory Masters</h6></li>
         </ol>
@@ -10,6 +10,22 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'superstructure'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Super Structure
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'childgroup'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Child Group
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'child_group_position'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Child Group Position
+                    </router-link>
+                </li>
+
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'major_group_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Staff Major Group
@@ -51,7 +67,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
         },
         populate_pate(data,action){
@@ -63,7 +79,7 @@ export default {
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
     },
-    
+
 }
 </script>
 
