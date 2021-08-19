@@ -67,7 +67,7 @@ export default {
                 console.log(error);
             });
         },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;

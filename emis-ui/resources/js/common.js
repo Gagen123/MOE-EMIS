@@ -89,6 +89,15 @@ try {
                 }
             },
 
+            loadpositionTitleList(){
+                let uri = 'staff/loadStaffMasters/active/PositionTitle';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadpositionTitleList '+e);
+                }
+            },
+
         },
     })
 

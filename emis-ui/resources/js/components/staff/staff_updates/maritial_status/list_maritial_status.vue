@@ -107,7 +107,7 @@ export default {
                 }
             });
         },
-        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadpositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -144,12 +144,12 @@ export default {
         this.dzongkhagList= await this.loadactivedzongkhags();
         this.loadactivecureerstageList();
         this.loadpositionTitleList();
-         
+
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
-        $('.select2').on('select2:select', function (el){
+        $('.select2').on('select2:se         lect', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
 

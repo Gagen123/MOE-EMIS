@@ -67,7 +67,14 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPostList(){
-        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPostList/'.$this->getRoleIds('roleIds'));
+        //load position title id
+        $position_title="";
+        $stf_response_data= $this->apiService->listData('emis/common_services/StaffDetails/by_id/'.$this->staffId());
+        // dd($stf_response_data);
+        if($stf_response_data!=null && $stf_response_data!=""){
+            $position_title=json_decode($stf_response_data)->data->position_title_id;
+        }
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPostList/'.$position_title);
         return $response_data;
     }
     public function loadPostDetials($id=""){
@@ -347,7 +354,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'action_type'               =>  $request->action_type,
             'user_id'                   =>  $this->userId()
         ];
-        // dd($nomi_data);
+        dd($nomi_data);
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedbackProviderData', $nomi_data);
         return $response_data;
     }

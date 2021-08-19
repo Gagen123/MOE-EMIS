@@ -61,10 +61,10 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log('err: '+error);
+                console.log('err getSelectionList: '+error);
             });
         },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -73,7 +73,7 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log(error);
+                console.log('loadPositionTitleList:'+error);
             });
         },
         loadeditpage(itme){
