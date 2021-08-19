@@ -82,7 +82,7 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($request->applicant_List as $app){
                 $app_data =[
                     'leadership_id'             =>  $response_data->id,
-                    'role_id'                   =>  $app['applicant']
+                    'role_id'                   =>  $app['position_title_id']
                 ];
                 ApplicableApplicant::create($app_data);
             }
@@ -111,7 +111,8 @@ class StaffLeadershipSerivcesController extends Controller{
                 foreach($request->applicant_List as $app){
                     $app_data =[
                         'leadership_id'             =>  $request->id,
-                        'role_id'                   =>  $app['applicant']
+                        // 'role_id'                   =>  $app['applicant']
+                        'role_id'                   =>  $app['position_title_id']
                     ];
                     ApplicableApplicant::create($app_data);
                 }
@@ -132,7 +133,13 @@ class StaffLeadershipSerivcesController extends Controller{
             if($attachments!=null && $attachments!=""){
                 $respomse_data->attachments=$attachments;
             }
-            $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
+            $app=DB::table('staff_applicable_applicant AS a')
+            ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
+            ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
+            ->select('p.id AS position_title_id','p.name AS position_title','l.id AS level_id','l.name AS position_level')
+            ->get();
+            $respomse_data->applicable_applicant=$app;
+            // $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
         }
         return $this->successResponse($respomse_data);
     }
@@ -251,7 +258,12 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllApplication($user_id=""){
-        $query="SELECT p.position_title,p.selection_type,p.details,a.id,a.application_number,a.created_at,a.status,a.staff_id,a.dzongkhag_id FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id where a.created_by= '".$user_id."'";
+        $query="SELECT p.position_title,po.name Positiontitle,l.name AS LeadershipType,p.selection_type,p.details,a.id,a.application_number,a.created_at,a.status,
+        a.staff_id,a.dzongkhag_id
+        FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id
+        join master_stf_position_title po on po.id=p.position_title
+        join master_staff_leadership_type l on l.id=p.selection_type
+        where a.created_by= '".$user_id."'";
         $posts=DB::select($query);
         return $this->successResponse($posts);
     }

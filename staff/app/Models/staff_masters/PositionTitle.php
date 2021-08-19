@@ -16,7 +16,7 @@ class PositionTitle extends Model{
         'name',
         'description',
         'code',
-        ' ',
+        'position_level_id',
         'status',
         'created_by',
         'created_at',

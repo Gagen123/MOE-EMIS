@@ -11,29 +11,17 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <!-- DEO/TEO -->
-                <li class="nav-item active pr-1" @click="activatelink('deo_evaluation')">
-                    <router-link id="deo_evaluation" to="/deo-evaluation" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       School Performance (DEO/TEO)
+                <li class="nav-item active pr-1" @click="activatelink('school_performance')">
+                    <router-link id="school_performance" to="/school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       School Performance
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1" @click="activatelink('school_evaluation')">
-                    <router-link id="school_evaluation" to="/school-evaluation" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       School Performance (Principal)
+                <li class="nav-item active pr-1" @click="activatelink('annual_school_plan')">
+                    <router-link id="annual_school_plan" to="/annual-school-plan" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Annual School Plan
                     </router-link>
                 </li>
-                <!-- EMD -->
-                 <li class="nav-item active pr-1" @click="activatelink('emd_evaluation')">
-                    <router-link id="emd_evaluation" to="/emd-evaluation" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       School Performance (EMD)
-                    </router-link>
-                </li>
-               <li class="nav-item active pr-1" @click="activatelink('school_plan_school')">
-                    <router-link id="school_plan_school" to="/school-plan-school" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Annual School Plan (Principal)
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1" @click="activatelink('school_plan_deo')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('school_plan_deo')">
                     <router-link id="school_plan_deo" to="/school-plan-deo" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Annual School Plan (DEO/TEO)
                     </router-link>
@@ -42,7 +30,7 @@
                     <router-link id="school_plan_emd" to="/school-plan-emd" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Annual School Plan (EMD)
                     </router-link>
-                </li>
+                </li> -->
             </ul>
             <router-view></router-view>
         </div>

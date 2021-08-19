@@ -17,15 +17,11 @@
                             <td>{{ item.sub_category}}</td>
                             <td>{{ item.status_name}}</td>
                             <td class="text-right pr-4"> 
-                                <router-link :to="{name:'list_deo_evaluation',params: {data:item}}">
+                                <router-link :to="{name:'list_school_performance',params: {data:item}}">
                                      {{item.no_of_schools}}
                                 </router-link>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <th colspan="2" class="text-right">Total</th>
-                            <td>{{calculateTotal}}</td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -48,7 +44,7 @@ export default {
                 })
         },
         showedit(data){
-            this.$router.push({name:'list_deo_evaluation',params: {data:data}})
+            this.$router.push({name:'list_school_performance',params: {data:data}})
         },
        
     },

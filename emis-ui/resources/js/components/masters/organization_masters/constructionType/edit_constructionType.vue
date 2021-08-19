@@ -39,7 +39,7 @@ export default {
                 description:'',
                 status: 1,
                 action_type:'edit',
-                model:'ClimateType'
+                model:'ConstructionType'
             })
         }
     },

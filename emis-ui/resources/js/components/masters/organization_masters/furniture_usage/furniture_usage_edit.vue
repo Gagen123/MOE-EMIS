@@ -1,8 +1,7 @@
 <template>
     <div>
-        <form class="bootbox-form" id="equipmentUsageId">
+        <form class="bootbox-form" id="contactTypeId">
             <div class="card-body">
-                
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Furniture Usage Area:<span class="text-danger">*</span></label> 
@@ -39,10 +38,12 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
-                action_type:'add',
+                action_type:'edit',
+                model:'FurnitureUsage'
             })
         }
     },
+
     methods:{
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -56,26 +57,25 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveFurnitureUsage',this.form)
+                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Furniture usage is added successfully'
+                        title: 'Department is edited successfully'
                     })
                     this.$router.push('/furniture_usage_list');
                 })
-                .catch(() => {
-                    console.log("Error......")
+                .catch((err) => {
+                    console.log("Error:"+err)
                 })
             }
 		},
-         created() {
+    },
+    created() {
         this.form.name=this.$route.params.data.name;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },
-
-    }
 }
 </script>

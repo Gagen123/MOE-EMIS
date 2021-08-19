@@ -127,4 +127,9 @@ class LoadStaffController extends Controller{
         $response_data= $this->apiService->listData('emis/common_services/StaffDetails/'.$type.'/'.$id);
         return $response_data;
     }
+    public function getLoginUser(){
+        $orgId = $this->getWrkingAgencyId();
+        $response_data= $this->apiService->listData('emis/staff/getLoginUser/'.$orgId);
+        return $response_data;
+    }
 }

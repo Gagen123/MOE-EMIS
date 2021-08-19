@@ -34,7 +34,44 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Action Type</th>
+                                    <th>Applicable ?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>270 Degree Feedback</td>
+                                    <td>
+                                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Shortlisting</td>
+                                    <td>
+                                        <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Interview</td>
+                                    <td>
+                                        <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.interview"  type="radio" value="0" /> No</label>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend pr-2">
                                 <span class="img-bordered bg-black">1</span>
@@ -72,7 +109,7 @@
                                 <has-error :form="form" field="shortlist"></has-error>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -97,14 +134,44 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(app, index) in form.applicant_List' :key="index">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Applicable Applicants: </label>
+                        <table class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>Position Level</th>
+                                    <th>Popsition Title</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='(data, index) in form.applicant_List' :key="index">
+                                    <td>{{index+1}}</td>
+                                    <td>
+                                        <select class="form-control" @change="getpositionTitleList('',index)" :id="'position_level_id'+index" v-model="data.position_level" :class="{ 'is-invalid': form.errors.has('position_level_id') }">
+                                            <option value="">--Select--</option>
+                                            <option v-for="(item, index) in positionLevelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="form" field="position_level_id"></has-error>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" :id="'position_title_id'+index" v-model="data.position_title_id" :class="{ 'is-invalid': form.errors.has('position_title_id') }">
+                                            <option value="">--Select--</option>
+                                        </select>
+                                        <has-error :form="form" field="position_title_id"></has-error>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(app, index) in form.applicant_List' :key="index">
                         <label>Applicable Applicant:<span class="text-danger">*</span></label>
                         <select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
                         </select>
                         <span class="text-danger" id="applicant_err"></span>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -128,7 +195,9 @@
 export default {
     data(){
         return {
+            applicantcount:1,
             selectionList:[],
+            positionLevelList:[],
             positionList:[],
             roleList:[],
             form: new form({
@@ -142,7 +211,8 @@ export default {
                 shortlist:1,
                 details:'',
                 document_List:[{document:''}],
-                applicant_List:[{applicant:''}],
+                // applicant_List:[{applicant:''}],
+                applicant_List:[{position_level:'',position_title_id:''}],
                 action_type:'edit'
             }),
         }
@@ -159,6 +229,7 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if(result.isConfirmed){
+                        console.log(this.form.applicant_List);
                         this.form.post('/staff/staffLeadershipSerivcesController/createPost')
                         .then((response) =>{
                             if(response!=""){
@@ -181,7 +252,7 @@ export default {
         validated(){
             let return_type=true;
             for(let i=0;i<this.form.applicant_List.length;i++){
-                if($('#applicant'+i).val()==""){
+                if($('#position_title_id'+i).val()==""){
                     Swal.fire({
                         icon: 'error',
                         title: 'Sorry! ',
@@ -197,7 +268,10 @@ export default {
                 this.form.document_List.pop();
             }
             if(type=="applicant"){
-                this.form.applicant_List.pop();
+                if(this.applicantcount>1){
+                    this.applicantcount--;
+                    this.form.applicant_List.pop();
+                }
             }
         },
         addMoreattahcments(type){
@@ -205,7 +279,8 @@ export default {
                 this.form.document_List.push({document:''})
             }
             if(type=="applicant"){
-                this.form.applicant_List.push({applicant:''})
+                this.applicantcount++;
+                this.form.applicant_List.push({position_level:'',position_title_id:''})
             }
         },
         remove_err(field_id){
@@ -213,7 +288,38 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.positionLevelList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
+        getpositionTitleList(levelid,index){
+            let p_levelId=$('#position_level_id'+index).val();
+            if(levelid!=""){
+                p_levelId=levelid;
+            }
+            let uri = 'staff/loadStaffMasters/byparent__position_level_id__'+p_levelId+'/PositionTitle';
+            axios.get(uri)
+            .then(response =>{
+                $('#position_title_id'+index).empty();
+                let data = response.data.data;
+                let option='<option value="">--Select--</option>';
+                data.forEach(itm => {
+                    option+='<option value="'+itm.id+'">'+itm.name+'</option>';
+                });
+                $('#position_title_id'+index).append(option);
+            })
+            .catch(function (error){
+                console.log('error in getpositionTitleList: '+error);
+            });
+        },
+
+        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -223,6 +329,7 @@ export default {
                 console.log(error);
             });
         },
+
         getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
@@ -254,16 +361,16 @@ export default {
                 this.form.position_title=$('#position_title').val();
             }
         },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.roleList =  data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+        // loadroleList(uri = 'masters/getroles/allActiveRoles'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         this.roleList =  data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
         loadDetials(){
             axios.get('/staff/staffLeadershipSerivcesController/loadDetials/'+this.form.id)
             .then((response) =>{
@@ -280,10 +387,12 @@ export default {
                 this.form.feedback=data.feedback;
 
                 this.form.selection_type=data.selection_type;
+                this.applicantcount=data.applicable_applicant.length;
                 if(data.applicable_applicant.length>0){
                     this.form.applicant_List=[];
                     for(let i=0;i<data.applicable_applicant.length;i++){
-                        this.form.applicant_List.push({applicant:data.applicable_applicant[i].role_id});
+                        this.getpositionTitleList(data.applicable_applicant[i].level_id,i);
+                        this.form.applicant_List.push({position_level:data.applicable_applicant[i].level_id,position_title_id:data.applicable_applicant[i].position_title_id});
                     }
                 }
                 if(data.attachments.length>0){
@@ -311,7 +420,8 @@ export default {
             this.changefunction(id);
         });
         this.getSelectionList();
-        this.loadroleList();
+        // this.loadroleList();
+        this.loadPositionLevelList();
         this.loadPositionTitleList();
         this.form.id=this.$route.params.id;
         this.loadDetials();

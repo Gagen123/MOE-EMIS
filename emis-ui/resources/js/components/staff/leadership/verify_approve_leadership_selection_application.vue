@@ -125,7 +125,7 @@
                     </div>
 
                     <!-- Feedback Section -->
-                    <div class="callout callout-info" v-if="form.current_status!='Submitted'">
+                    <div class="callout callout-info" v-if="form.current_status=='Submitted'">
                         <div class="row form-group" v-if="form.shortlisted_remarks!=''">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Shortlisted Remarks: </label>
@@ -133,7 +133,7 @@
                             </div>
                         </div>
                         <h4><u>Feedback Configuration Details</u></h4>
-                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date" v-model="form.feedback_start_date">
@@ -304,8 +304,8 @@
                     <!-- Action Buttons -->
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Submitted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
                             <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Submitted' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
-                            <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Shortlisted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
                             <button class="btn btn-primary" @click="shownexttab('interview')" v-if="form.current_status=='Notified for Feedback' && form.interview==1 && feedback_status=='Completed'"> <i class="fa fa-check"></i> Update Interview </button>
                             <button class="btn btn-primary" @click="shownexttab('select')" v-if="form.current_status=='Interviewed'"> <i class="fa fa-save"></i> Select </button>
                             <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
@@ -314,6 +314,8 @@
                 </div>
             </div>
         </div>
+
+
         <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -328,6 +330,8 @@
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Participating From:<span class="text-danger">*</span></label>
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('External')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from" :value="'External'">
+                                    <label class="pr-3"> External </label>
                                     <input type="radio" v-model="form.partifipant_from" @change="showSearch('Ministry')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from0" :value="'Ministry'">
                                     <label class="pr-3"> Ministry </label>
                                     <input type="radio" v-model="form.partifipant_from" @change="showSearch('Dzongkhag')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from1" :value="'Dzongkhag'">
@@ -401,18 +405,7 @@
                                     <span class="text-danger" id="participant_err"></span>
                                 </div>
                             </div>
-                            <div class="form-group row" style="display:none" id="outofministry_section">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>CID:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="selectstaff.cid" :class="{ 'is-invalid': selectstaff.errors.has('cid') }" name="cid" id="cid" class="form-control">
-                                    <has-error :form="selectstaff" field="cid"></has-error>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Name:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="selectstaff.name" :class="{ 'is-invalid': selectstaff.errors.has('name') }" name="name" id="name" class="form-control">
-                                    <has-error :form="selectstaff" field="name"></has-error>
-                                </div>
-                            </div>
+
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Feedback Category:<span class="text-danger">*</span></label>
@@ -421,6 +414,27 @@
                                         <option v-for="(item, index) in feedbackCategory" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
                                     </select>
                                     <span class="text-danger" id="feedback_type_err"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row" style="display:none" id="outofministry_section">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>CID:<span class="text-danger">*</span></label>
+                                    <input type="text" v-model="selectstaff.cid" :class="{ 'is-invalid': selectstaff.errors.has('cid') }" name="cid" id="cid" class="form-control">
+                                    <has-error :form="selectstaff" field="cid"></has-error>
+                                    <span class="text-danger" id="cid_err"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Name:<span class="text-danger">*</span></label>
+                                    <input type="text" v-model="selectstaff.name" :class="{ 'is-invalid': selectstaff.errors.has('name') }" name="name" id="name" class="form-control">
+                                    <has-error :form="selectstaff" field="name"></has-error>
+                                    <span class="text-danger" id="name_err"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Position Title:<span class="text-danger">*</span></label>
+                                    <input type="text" v-model="selectstaff.positiontitle" :class="{ 'is-invalid': selectstaff.errors.has('positiontitle') }" name="positiontitle" id="positiontitle" class="form-control">
+                                    <has-error :form="selectstaff" field="positiontitle"></has-error>
+                                    <span class="text-danger" id="positiontitle_err"></span>
                                 </div>
                             </div>
 
@@ -504,7 +518,6 @@
                                                         <td v-if="item.answer_type=='TextArea'">
                                                             <textarea class="form-control" disabled :name="'answer_textarea'+index" v-model="item.answered" :id="item.id" ></textarea>
                                                         </td>
-
                                                         <td v-if="item.answer_type=='Text'">
                                                             <input class="form-control" disabled :name="'answer_text'+index" type="text" v-model="item.answered" :id="item.id">
                                                         </td>
@@ -725,6 +738,8 @@ export default {
             $('#dzongkhag_section').hide();
             $('#school_section').hide();
             $('#department_section').hide();
+            $('#outofministry_section').hide();
+            $('#select_staff_section').hide();
             if(type=="School"){
                 $('#dzongkhag_section').show();
                 $('#school_section').show();
@@ -733,11 +748,16 @@ export default {
                  this.department_list=await this.getDepartmentListbydzo('DzongkhagHeadquarter','All');
                 // this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
                 $('#department_section').show();
+                $('#select_staff_section').show();
             }
             if(type=="Ministry"){
                 this.department_list=await this.getDepartmentListbydzo('Ministry',14);
                 // this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
                 $('#department_section').show();
+                $('#select_staff_section').show();
+            }
+            if(type=="External"){
+                $('#outofministry_section').show();
             }
         },
         getDzongkhagHeadQuarterList(type){
@@ -787,7 +807,7 @@ export default {
         //         console.log("Error:"+error);
         //     });
         // },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
@@ -914,12 +934,12 @@ export default {
         },
         validateaddform(){
             let retval=true;
-            if($("input[type='radio'][name='partifipant_from']:checked").val()!="outofministry" && $('#participant').val()==""){
-                $('#participant_err').html('Please select participant');
-                $('#participant').focus();
-                $('#participant').addClass('is-invalid');
-                retval=false;
-            }
+            // if($("input[type='radio'][name='partifipant_from']:checked").val()!="outofministry" && $('#participant').val()==""){
+            //     $('#participant_err').html('Please select participant');
+            //     $('#participant').focus();
+            //     $('#participant').addClass('is-invalid');
+            //     retval=false;
+            // }
 
             if($('#contact').val()==""){
                 $('#contact_err').html('mention contact number');
@@ -933,10 +953,32 @@ export default {
                 $('#email').addClass('is-invalid');
                 retval=false;
             }
+
             if($("input[type='radio'][name='partifipant_from']:checked").val()==undefined){
                 $('#nature_of_participant_err').html('this field is requred');
                 $('#partifipant_from').addClass('is-invalid');
                 retval=false;
+            }
+
+            if($("input[type='radio'][name='partifipant_from']:checked").val()=="External"){
+                if($('#positiontitle').val()==""){
+                    $('#positiontitle_err').html('mention position title');
+                    $('#positiontitle').focus();
+                    $('#positiontitle').addClass('is-invalid');
+                    retval=false;
+                }
+                if($('#name').val()==""){
+                    $('#name_err').html('mention name');
+                    $('#name').focus();
+                    $('#name').addClass('is-invalid');
+                    retval=false;
+                }
+                if($('#cid').val()==""){
+                    $('#cid_err').html('mention cid');
+                    $('#cid').focus();
+                    $('#cid').addClass('is-invalid');
+                    retval=false;
+                }
             }
             if($('#feedback_type').val()==""){
                 $('#feedback_type_err').html('mention email');

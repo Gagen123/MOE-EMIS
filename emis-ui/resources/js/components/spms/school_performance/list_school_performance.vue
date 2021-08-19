@@ -22,12 +22,12 @@
                             <td class="text-right">{{item.score}}</td>
                              <td>
                                 <div v-if="item.spm_indicator_id == null && item.status_id==0" class="ml-2 mt-1 btn-group  btn-flat btn-group-sm">
-                                    <router-link v-if="currentRoute =='list_deo_evaluation'" :to="{name:'create_deo_evaluation', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-plus"></i > Add</router-link>
+                                    <router-link :to="{name:'create_school_performance', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-plus"></i > Add</router-link>
                                 </div>
                                 <div v-else-if="item.status_id == 1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                                 
                                 <div v-else class="ml-2 mt-1 btn-group  btn-flat btn-group-sm">
-                                    <router-link v-if="currentRoute =='list_deo_evaluation'" :to="{name:'view_deo_evaluation', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-eye"></i > View</router-link>
+                                    <router-link :to="{name:'view_school_performance', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-eye"></i > View</router-link>
                                 </div>
                             </td>
                         </tr>
@@ -67,9 +67,7 @@ export default {
          this.schoolsScores = schools_deo
         },
         showedit(data){
-            if(this.currentRoute == 'list_deo_evaluation'){
-                this.$router.push({name:'edit_deo_evaluation',params: {data:data}});
-            }
+            this.$router.push({name:'edit_school_performance',params: {data:data}});
         },
     },
     mounted(){

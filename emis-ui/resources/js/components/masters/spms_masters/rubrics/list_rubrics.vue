@@ -8,7 +8,7 @@
                             <th>Domain</th>
                             <th>Area</th>
                             <th>Parameter</th>
-                            <th>Indicator</th>
+                            <th>Output Indicator</th>
                             <th>Score</th>
                             <th>Description of Score</th>
                             <th>Status</th>
@@ -59,7 +59,7 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_rating',params: {data:data}})
+            this.$router.push({name:'edit_rubrics',params: {data:data}})
         },
     },
     mounted(){ 
@@ -68,12 +68,11 @@ export default {
             columnDefs: [
                 { width: 10, targets: 0},
                 { width: 100, targets: 2},
-                { width: 500, targets: 4},
-                { width: 50, targets: 2},
-                { width: 10, targets: 5},
-                { width: 300, targets: 6},
-                { width: 20, targets: 7},
-                { width: 20, targets: 8},
+                { width: 200, targets: 3},
+                { width: 10, targets: 4},
+                { width: 300, targets: 5},
+                { width: 50, targets: 6},
+                { width: 50, targets: 7},
             ],
         })
     },

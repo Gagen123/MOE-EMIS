@@ -11,6 +11,7 @@ class OrganizaitonSenModule extends Model
     protected $table="organization_sen_detail";
 
     protected $fillable = [
+        'id',
         'org_id',
         'newConstruction',
         'adjustmentsAccomodatte',

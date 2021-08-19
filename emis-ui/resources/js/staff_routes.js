@@ -697,6 +697,7 @@ const routes = [
             { path:'/management_meeting',
                 component: require('./components/staff/management/create_meeting/meeting_body_index.vue').default,
                 children:[
+                    { path: '/', name:'management_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/', name:'list_management_body_for_meeting',  component: require('./components/staff/management/create_meeting/list_management_body_for_meeting.vue').default },
                     { path: '/open_meeting',name:'open_meeting', component: require('./components/staff/management/create_meeting/open_meeting.vue').default},
                     { path: '/create_management_meeting',name:'create_management_meeting', component: require('./components/staff/management/create_meeting/create_management_meeting.vue').default},
@@ -828,7 +829,7 @@ const routes = [
     { path:'/staff_second_seperation',
         component: require('./components/staff/second_seperation/second_seperation_index.vue').default,
         children:[
-            { path: '/', name:'staff_update_services', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
+            { path: '/', name:'staff_second_seperation', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
             { path: '/secondment_details',
                 component: require('./components/staff/second_seperation/secondment_details/secondment_index.vue').default,
                 children:[

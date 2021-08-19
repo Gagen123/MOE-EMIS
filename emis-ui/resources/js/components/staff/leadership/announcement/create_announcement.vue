@@ -156,11 +156,10 @@
                                         <has-error :form="form" field="position_level_id"></has-error>
                                     </td>
                                     <td>
-                                        <select class="form-control" id="position_title" v-model="data.position_title" :class="{ 'is-invalid': form.errors.has('position_title') }">
+                                        <select class="form-control" :id="'position_title_id'+index" v-model="data.position_title_id" :class="{ 'is-invalid': form.errors.has('position_title_id') }">
                                             <option value="">--Select--</option>
-                                            <option v-for="(item, index) in positionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
-                                        <has-error :form="form" field="position_title"></has-error>
+                                        <has-error :form="form" field="position_title_id"></has-error>
                                     </td>
                                 </tr>
                             </tbody>
@@ -194,6 +193,7 @@
 export default {
     data(){
         return {
+            applicantcount:1,
             selectionList:[],
             positionList:[],
             // roleList:[],
@@ -264,7 +264,10 @@ export default {
                 this.form.document_List.pop();
             }
             if(type=="applicant"){
-                this.form.applicant_List.pop();
+                if(this.applicantcount>1){
+                    this.applicantcount--;
+                    this.form.applicant_List.pop();
+                }
             }
         },
         addMoreattahcments(type){
@@ -272,6 +275,7 @@ export default {
                 this.form.document_List.push({document:''})
             }
             if(type=="applicant"){
+                this.applicantcount++;
                 this.form.applicant_List.push({position_level:'',position_title:''})
             }
         },
@@ -336,8 +340,13 @@ export default {
             let uri = 'staff/loadStaffMasters/byparent__position_level_id__'+$('#position_level_id'+index).val()+'/PositionTitle';
             axios.get(uri)
             .then(response =>{
-                let data = response;
-                this.positionList =  data.data.data;
+                 $('#position_title_id'+index).empty();
+                let data = response.data.data;
+                let option='<option value="">--Select--</option>';
+                data.forEach(itm => {
+                    option+='<option value="'+itm.id+'">'+itm.name+'</option>';
+                });
+                $('#position_title_id'+index).append(option);
             })
             .catch(function (error){
                 console.log(error);
@@ -371,8 +380,5 @@ export default {
         this.loadPositionLevelList();
         this.loadPositionTitleList();
     },
-    watch(){
-        
-    }
 }
 </script>

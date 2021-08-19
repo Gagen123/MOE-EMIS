@@ -1,29 +1,26 @@
 <template>
-    <div>
-        <table id="subCategory-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body"> 
+        <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Category</th>
                     <th>Sub Category</th>
+                    <th>Category</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
                     <th>Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in strSubCategoryList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.structureCategory}}</td>
-                    <td>{{ item.subCategoryName}}</td>
+                    <td>{{ item.name}}</td>
+                    <td>{{ structureCategoryList[item.structureCategory]}}</td> 
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <!-- <td>{{ item.Created_At }}</td> -->
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewStrSubCategoryList(item)"><i class="fas fa-edit"></i ></a>
-                            <!-- <a href="#" @click="deleteLeaveRequest(item.id)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a> -->
+                            <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
                         </div>
                     </td>
                 </tr>
@@ -36,48 +33,53 @@
 export default {
     data(){
         return{
-            strSubCategoryList:[],
-            subcat:'',
+            data_list:[],
+            dt:'',
+            structureCategoryList:{}
         }
     },
 
     methods:{
-        loadStrSubCategoryList(uri = 'masters/loadStrSubCategory'){
+        loadStrSubCategoryList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/StructureSubCategory'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.data_list =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        editmasters(data){
+            this.$router.push({name:'StrSubCategoryEdit',params: {data:data}});
+        },
+        
+        getStructureCategory(uri = 'masters/getStrCategoryDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.strSubCategoryList =  data.data;
+                for(let i=0;i<data.data.length;i++){
+                    this.structureCategoryList[data.data[i].id] = data.data[i].name;
+                }
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log("Error......"+error)
             });
-            setTimeout(function(){
-                $('#subCategory-table').DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
-        viewStrSubCategoryList(data){
-            data.action='edit';
-            this.$router.push({name:'StrSubCategoryEdit',params: {data:data}});
-        },
-    },
 
+    },
     mounted(){
+        this.getStructureCategory();
         this.loadStrSubCategoryList();
-        this.subcat =  $("#subCategory-table").DataTable();
-    
+        this.dt =  $("#org-masters-table").DataTable();
     },
     watch: {
-        strSubCategoryList(){
-            this.subcat.destroy();
+        data_list(){
+            this.dt.destroy();
             this.$nextTick(() => {
-                this.subcat =  $("#subCategory-table").DataTable()
+                this.dt =  $("#org-masters-table").DataTable()
             });
         }
     },
 }
-</script>
+</script> 
