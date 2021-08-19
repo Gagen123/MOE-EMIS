@@ -752,12 +752,7 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function getleadershipDetailsForFeedback($id=""){
-        if(strpos($id,'_')!==false){
-            //form portal
-            $response_data=FeedbackProviderDetails::where('application_number',$id)->first();
-        }else{
-            $response_data=FeedbackProviderDetails::where('id',$id)->first();
-        }
+        $response_data=FeedbackProviderDetails::where('id',$id)->first();
         if($response_data!=null && $response_data!=""){
             $app_details=LeadershipApplication::where('application_number',$response_data->application_number)->first();
             if($app_details!=null && $app_details!=""){

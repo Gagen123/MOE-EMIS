@@ -1,29 +1,16 @@
 <template>
     <div>
         <div class="card-body">
-            <div class="callout callout-success">
+            <!-- <div class="callout callout-success">
                 <span><label><u>Position and Feedback Detials</u></label></span>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Selection For:</label><br>
-                        <span class="text-blue text-bold">{{selectionList[feedback_form.selection_type_id]}}</span>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Position:</label><br>
-                        <span class="text-blue text-bold">{{positionList[feedback_form.position_title_id] }}</span>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Last Date for Feedback:</label><br>
-                        <span class="text-blue text-bold">{{ feedback_end_data }}</span>
-                    </div>
-                </div>
+
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Remarks:</label><br>
                         <span class="text-blue text-bold">{{ feedback_details }}</span>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="callout callout-success">
                 <span><label><u>Nominee Detials</u></label></span>
                 <div class="row form-group">
@@ -53,6 +40,20 @@
             </div>
             <div class="callout callout-success">
                 <span><label><u>Feedback</u></label></span>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Selection For:</label>
+                        <span class="text-blue text-bold">{{selectionList[feedback_form.selection_type_id]}}</span>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Position:</label><br>
+                        <span class="text-blue text-bold">{{positionList[feedback_form.position_title_id] }}</span>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Last Date for Feedback:</label><br>
+                        <span class="text-blue text-bold">{{ feedback_end_data }}</span>
+                    </div> -->
+                </div>
                 <div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                   You are providing <b>{{feedbackArray[feedback_category_id]}}</b> feedback to {{data_list.aplicant_name}}
@@ -148,7 +149,7 @@ export default {
     },
     methods: {
         //get position details to populate form
-        getSelectionList(uri = 'recruitmentFeedbackController/activeData_LeadershipType'){
+        getSelectionList(uri = 'recruitmentFeedbackController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -162,7 +163,7 @@ export default {
         },
 
         //get position title to populate form
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
+        loadPositionTitleList(uri = 'recruitmentFeedbackController/loadData/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -178,7 +179,7 @@ export default {
 
         //loadFeedback qeustion according to the type and position
         loadFeedbackQuestion(feedback_category_id,leadership_selection_id){
-            axios.get('staff/staffLeadershipSerivcesController/loadData/allQuestionUnderCat_Question_'+feedback_category_id+'_'+leadership_selection_id)
+            axios.get('recruitmentFeedbackController/loadData/allQuestionUnderCat_Question_'+feedback_category_id+'_'+leadership_selection_id)
             .then(response => {
                 let data = response.data.data;
                 this.feedback_form.questionList=data;
@@ -189,7 +190,7 @@ export default {
         },
 
         //load Feedback category
-        getFeedbackCategoryList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory'){
+        getFeedbackCategoryList(uri = 'recruitmentFeedbackController/loadData/activeData_FeedbackCategory'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -251,15 +252,16 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.feedback_form.post('staff/staffLeadershipSerivcesController/saveFeedback')
+                    if (result.isConfirmed){
+                        this.feedback_form.post('recruitmentFeedbackController/saveFeedback')
                         .then((response) => {
                             if(response.data!=""){
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Data saved Successfully'
                                 });
-                                this.$router.push({name:"list_feedback"});
+                                let message='You have submitted feedback successfully. Thank you for yoru contribution';
+                                this.$router.push({name:"feedback_acknowledgement",params: {data:message}});
                             }
                         })
                         .catch((error) => {
@@ -278,14 +280,19 @@ export default {
         .then((response) =>{
             let data=response.data.data;
             this.data_list=data;
-            this.feedback_form.feedback_id=data.id;
-            this.feedback_form.application_number=data.application_details.application_number;
-            this.feedback_end_data=data.application_details.feedback_end_date;
-            this.feedback_details=data.application_details.feedback_details;
-            this.feedback_form.selection_type_id=data.post_details.selection_type;
-            this.feedback_form.position_title_id=data.post_details.position_title;
-            this.feedback_category_id=data.feedback_type;
-            this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+            if(data.status=="Submitted"){
+                let message='You have already submitted feedback. Thank you for yoru contribution';
+                this.$router.push({name:"feedback_acknowledgement",params: {data:message}});
+            }else{
+                this.feedback_form.feedback_id=data.id;
+                this.feedback_form.application_number=data.application_details.application_number;
+                this.feedback_end_data=data.application_details.feedback_end_date;
+                this.feedback_details=data.application_details.feedback_details;
+                this.feedback_form.selection_type_id=data.post_details.selection_type;
+                this.feedback_form.position_title_id=data.post_details.position_title;
+                this.feedback_category_id=data.feedback_type;
+                this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+            }
         })
         .catch((error)=>{
             console.log("Error: "+error);

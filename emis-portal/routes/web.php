@@ -83,6 +83,8 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('recruitmentFeedbackController')->group(function () {
         Route::get('/loadData/{param}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'loadData'])->name('loadData');
         Route::get('/getapplicationDetailsForFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getapplicationDetailsForFeedback'])->name('getapplicationDetailsForFeedback');
+        Route::post('/saveFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'saveFeedback'])->name('saveFeedback');
+
     });
 
     //OLD ROUTES - Delete routes below this line

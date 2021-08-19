@@ -364,7 +364,9 @@ class StaffLeadershipSerivcesController extends Controller{
                 'appNo'                     =>  $request->application_number,
                 'name'                      =>  $request->name,
                 'feedback_type'             =>  $request->feedback_type,
-                'user_id'                   =>  $this->userId()
+                'user_id'                   =>  $this->userId(),
+                'id'                        =>  json_decode($response_data)->data->id,
+
             ];
             $create_user_details= $this->apiService->createData('saveFeedbackRegistration', $create_data);
             $rwopass="";
