@@ -36,7 +36,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMastersController@saveTransferConfigMasters']);
         $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
         $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
-        $router->get('/loadAllTransferConfigMasters/{user_id}','masters\StaffMastersController@loadAllTransferConfigMasters');
+        $router->get('/loadAllTransferConfigMasters','masters\StaffMastersController@loadAllTransferConfigMasters');
         $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
         $router->get('/loadTransferConfigDetails/{id}','masters\StaffMastersController@loadTransferConfigDetails');
     });

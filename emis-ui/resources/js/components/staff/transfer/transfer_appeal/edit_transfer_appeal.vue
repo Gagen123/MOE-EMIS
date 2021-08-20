@@ -181,10 +181,7 @@ export default {
                 aplication_number:'',
                 service_name:'transfer appeal',
                 status:'',
-                attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                attachments:[],
                 ref_docs:[],
             })
         }
@@ -225,7 +222,7 @@ export default {
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
                 
-                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
+                if(this.form.status =="Appealed" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
                      $('#remarks').hide();
                 }

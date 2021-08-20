@@ -131,7 +131,6 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-       
         loadattachementDetails(appId){
              axios.get('staff/transfer/loadAppealattachementDetails/'+appId)
             .then((response) =>{
@@ -140,9 +139,9 @@ export default {
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
                 
-                if(this.form.status =="Approved" || this.form.status =="withdrawn"){
-                     $('#Withdraw').hide();
+                if(this.form.status =="Appealed"){
                      $('#remarks').hide();
+                    $('#button').hide();
                 }
             })
             .catch(errors =>{

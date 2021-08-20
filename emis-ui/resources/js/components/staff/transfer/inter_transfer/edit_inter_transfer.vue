@@ -261,11 +261,7 @@ export default {
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
-              
-                attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                attachments:[],
                 ref_docs:[],
             })
         }
@@ -462,7 +458,7 @@ export default {
                              .then((response) =>{
                                 if(response.data!="" && response!="No Screen"){
                                     let message=" Your transfer application has been updated successfully for applicaiton number: "+ this.form.application_number;
-                                    this.$router.push({name:'intra_transfer_acknowledgement',params: {data:message}});
+                                    this.$router.push({name:'inter_transfer_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
                                         title: ' Your transfer application has been updated successfully'
@@ -485,7 +481,6 @@ export default {
                     })
                 }
             }
-        
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -503,8 +498,6 @@ export default {
                 this.form.name = response.data.data.Full_Name;
                 this.getDzongkhagName(response.data.data.Dzo_Id)
                 this.getOrgaName(response.data.data.Agency_Code);
-                
-
             })
             .catch(errors =>{
                 console.log(errors)
@@ -514,7 +507,6 @@ export default {
             axios.get('common/getDzoNameById/' +id)
             .then(response => {
                 this.form.dzoName = response.data.name;
-
             })
             .catch(errors =>{
                 console.log(errors)
@@ -525,7 +517,6 @@ export default {
             .then(response => {
                 this.form.schoolName = response.data.data.orgName;
                 this.form.level = response.data.data.level;
-
             })
             .catch(errors =>{
                 console.log(errors)
@@ -577,7 +568,6 @@ export default {
                 this.form.preference_dzongkhag3=$('#preference_dzongkhag3').val();
                 this.checkforselectedval(3);
             }
-
         },
         checkforselectedval(cout){
             if($('#preference_dzongkhag1').val()!="" && $('#preference_dzongkhag2').val()!="" && $('#preference_dzongkhag1').val()==$('#preference_dzongkhag2').val()){

@@ -99,6 +99,59 @@
                                 </table>
                             </div>
                         </div>
+                         <!-- subject specification -->
+                        <div class="form-group row" id="subjectoption">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Subject specialization</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>SlNo</th>
+                                            <th>Specialization</th>
+                                            <th>Subjects</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td class="mb-0.5">Preferences 1</td>
+                                            <td>
+                                                <select v-model="form.spSubject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spSubject') }" class="form-control select2" name="spSubject" id="spSubject">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="spSubject"></has-error>
+                                                <span class="text-danger" id="spSubject_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Preferences 2</td>
+                                            <td>
+                                                <select v-model="form.optional1sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional1sub') }" class="form-control select2" name="optional1sub" id="optional1sub">
+                                                  <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional1sub"></has-error>
+                                                <span class="text-danger" id="optional1sub_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Preferences 3</td>
+                                            <td>
+                                                <select v-model="form.optional2sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional2sub') }" class="form-control select2" name="optional2sub" id="optional2sub">
+                                                   <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional2sub"></has-error>
+                                               <span class="text-danger" id="optional2sub_err"></span>
+                                            </td> 
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Organization Details</label>
@@ -230,6 +283,7 @@ export default {
             undertakingList:[],
             dzongkhagList:[],
             SchoolList:[],
+            subjectList:[],
             dzoArray:{},
             orgArray:{},
             reasonArray:{},
@@ -258,14 +312,15 @@ export default {
                 preference_school1:'',
                 preference_school2:'',
                 preference_school3:'',
+                spSubject:'',
+                optional1sub:'',
+                optional2sub:'',
                 dzoName:'',
                 schoolName:'',
                 schoolLevel:'',
 
                 attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                [],
                 ref_docs:[],
             })
         }
@@ -316,9 +371,12 @@ export default {
                 if(this.form.status =="Approved"){
                      $('#approvedDetails').show();
                      $('#option').hide();
+                     $('#subjectoption').hide();
+                     
                 }else{
                     $('#approvedDetails').hide();
                     $('#option').show();
+                    $('#subjectoption').show();
                 }
                 if(this.form.status =="Approved" || this.form.status =="withdrawn"){
                      $('#Withdraw').hide();
@@ -337,6 +395,16 @@ export default {
             })
             .catch(function (error){
                 console.log("Error:"+error)
+            });
+        },
+         loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.subjectList = data;
+            })
+            .catch(function (error) {
+                console.log(error);
             });
         },
         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
@@ -418,6 +486,7 @@ export default {
                                     'content-type': 'multipart/form-data'
                                 }
                             }
+                       
                             let formData = new FormData();
                             formData.append('id', this.form.id);
                             formData.append('withdraw', this.form.withdraw);
@@ -428,6 +497,9 @@ export default {
                             formData.append('preference_school1', this.form.preference_school1);
                             formData.append('preference_school2', this.form.preference_school2);
                             formData.append('preference_school3', this.form.preference_school3);
+                            formData.append('spSubject', this.form.spSubject);
+                            formData.append('optional1sub', this.form.optional1sub);
+                            formData.append('optional2sub', this.form.optional2sub);
                             for(let i=0;i<this.form.ref_docs.length;i++){
                                 formData.append('attachments[]', this.form.ref_docs[i].attachment);
                                 formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
@@ -512,15 +584,21 @@ export default {
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
                         this.form.preference_school1     =   data.preferences[i].school_id;
+                        this.form.spSubject              =   data.preferences[i].subject_id;
                         $('#preference_school1').val(data.preferences[i].school_id).trigger('change');
+                        $('#spSubject').val(data.preferences[i].subject_id).trigger('change');
                     }
                     if(i==1){
                         this.form.preference_school2     =   data.preferences[i].school_id;
+                        this.form.optional1sub           =   data.preferences[i].subject_id;
                         $('#preference_school2').val(data.preferences[i].school_id).trigger('change');
+                        $('#optional1sub').val(data.preferences[i].subject_id).trigger('change');
                     }
                     if(i==2){
                         this.form.preference_school3     =   data.preferences[i].school_id;
+                        this.form.optional2sub           =   data.preferences[i].subject_id;
                         $('#preference_school3').val(data.preferences[i].school_id).trigger('change');
+                        $('#optional2sub').val(data.preferences[i].subject_id).trigger('change');
                     }
                 }
                 this.draft_attachments=data.documents;
@@ -537,6 +615,15 @@ export default {
             }
             if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
+            }
+            if(id=="spSubject"){
+                this.form.spSubject=$('#spSubject').val();
+            }
+            if(id=="optional1sub"){
+                this.form.optional1sub=$('#optional1sub').val();
+            }
+            if(id=="optional2sub"){
+                this.form.optional2sub=$('#optional2sub').val();
             }
             if(id=="preference_school1"){
                 this.form.preference_school1=$('#preference_school1').val();
@@ -650,6 +737,7 @@ export default {
         this.loadactivedzongkhagList();
         this.loadundertakingList();
         this.LoadTransferType();
+        this.loadAcademicMasters();
         this.loadApplicationDetails(this.$route.params.data.id)
         this.form.id=this.$route.params.data.id;
         this.form.staff_id=this.$route.params.data.staff_id;

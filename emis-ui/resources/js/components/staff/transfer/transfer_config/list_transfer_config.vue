@@ -12,7 +12,7 @@
             <tbody>
                 <tr v-for="(item, index) in transferConfigurationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{transfertypeList[item.transfer_type_id]}}</td>
+                    <td>{{item.name}}</td>
                     <td>{{ roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -35,27 +35,14 @@ export default {
         TransferConfigurationList(uri = 'masters/loadAllTransferConfigMasters/'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.transferConfigurationList = data.data.data;
+                let data = response.data;
+                this.transferConfigurationList = data;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
-        },
-        LoadTransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.transfertypeList[data[i].id] =data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-
         },
         loadroleList(uri = 'masters/getroles/allActiveRoles'){
             axios.get(uri)
@@ -75,10 +62,8 @@ export default {
         },
     },
         mounted(){
-            this.LoadTransferType();
             this.loadroleList();
             this.TransferConfigurationList();
-            // this.dt =  $("#transfer_config_list").DataTable()
         },
        watch: {
             transferConfigurationList(){

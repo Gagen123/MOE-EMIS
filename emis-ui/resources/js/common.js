@@ -97,6 +97,14 @@ try {
                     console.log('error loadpositionTitleList '+e);
                 }
             },
+            getRequiredDocument(type){
+                let uri = 'masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__'+type+'/DocumentType';
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                    console.log('error loadpositionTitleList '+e);
+                }
+            }
 
         },
     })

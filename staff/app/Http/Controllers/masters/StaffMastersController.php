@@ -843,8 +843,11 @@ class StaffMastersController extends Controller{
         return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
     }
 
-    public function loadAllTransferConfigMasters($user_id){
-        return $this->successResponse(TransferConfig::where('created_by',$user_id)->get());
+    public function loadAllTransferConfigMasters(){
+       $response_data=DB::table('master_transfer_type')->
+       select('master_transfer_type.name','master_transfer_type.id','master_staff_transfer_config.submitter_role_id','master_staff_transfer_config.id')
+       ->join('master_staff_transfer_config','master_staff_transfer_config.transfer_type_id','=','master_transfer_type.id')->get();
+        return $response_data;
     }
 
     public function loadAllLeaveConfigMasters(){
