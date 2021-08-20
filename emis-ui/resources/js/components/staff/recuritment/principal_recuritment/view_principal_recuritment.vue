@@ -31,7 +31,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Gewog:</label>
                                             <span class="text-blue text-bold">{{form.gewog}}</span>
@@ -113,7 +112,7 @@ export default {
                 email:'',
                 contact_number:'',
                 remarks:'',
-                applicationNo:'',
+                application_no:'',
                 screen_id:'',
                 sequence:'',
                 application_no:'',
@@ -140,9 +139,8 @@ export default {
             }
         },
         loadApplicationDetials(){
-            axios.get('staff/StaffApprovalController/loadPrincipalApplicationDetials/'+this.applicationNo)
+            axios.get('staff/StaffApprovalController/loadPrincipalApplicationDetials/'+this.form.application_no)
             .then((response) => {
-                // alert(JSON.stringify(response.data.data));
                 let data=response.data.data
                 this.form.name=data.name;
                 this.form.dob=data.DateOfBirth;
@@ -182,10 +180,10 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.applicationNo=this.$route.params.data.application_no;
+        this.form.application_no=this.$route.params.data.application_no;
         this.id=this.$route.params.data.id;
         this.loadApplicationDetials();
-        this.LoadAttachmentDetails();
+        // this.LoadAttachmentDetails();
     }
 }
 </script>

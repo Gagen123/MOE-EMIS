@@ -17,12 +17,12 @@
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                           <label>Full Name:</label>
-                                            <input type="text" class="form-control" @change="removeerror('name')" :class="{ 'is-invalid': form.errors.has('name') }" id="name" v-model="form.name">
+                                            <input type="text" class="form-control"  :class="{ 'is-invalid': form.errors.has('name') }" id="name" v-model="form.name">
                                             <has-error :form="form" field="name"></has-error>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                           <label>Date of Birth:</label>
-                                            <input type="date" class="form-control" @change="removeerror('dob')" :class="{ 'is-invalid': form.errors.has('dob') }" id="dob" v-model="form.dob">
+                                            <input type="date" class="form-control" :class="{ 'is-invalid': form.errors.has('dob') }" id="dob" v-model="form.dob">
                                             <has-error :form="form" field="dob"></has-error>
                                         </div>
                                     </div>
@@ -36,7 +36,7 @@
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
                                             <label>Address:</label>
-                                            <input type="text" class="form-control" @change="removeerror('address')" :class="{ 'is-invalid': form.errors.has('address') }" id="address" v-model="form.address">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address" v-model="form.address">
                                             <has-error :form="form" field="address"></has-error>
                                         </div>
                                     </div>
@@ -44,13 +44,13 @@
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
                                             <label>Email Address:</label>
-                                            <input type="text" class="form-control" @change="removeerror('email')" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
                                             <has-error :form="form" field="email"></has-error>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6">
                                             <label>Contact Number:</label>
-                                            <input type="number" class="form-control" @change="removeerror('contact_number')" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
+                                            <input type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
                                             <has-error :form="form" field="contact_number"></has-error>
                                         </div>
                                     </div>
@@ -58,33 +58,34 @@
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label class="mb-0">Upload the Required Documents</label>
                                         </div>
-                                    </div><br>
-                                    <div class="form-group row">
+                                    </div>
+                                     <div class="form-group row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                            <label class="mb-0.5">Attachments</label>
+                                            <table id="participant-table" class="table w-100 table-bordered table-striped">
                                                 <thead>
                                                     <tr>
-                                                        <th>File Name</th>
-                                                        <th>Upload File</th>
+                                                        <th>Fike Name</th>
+                                                        <th>File</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                                         <td>
-                                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                                            <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
+                                                            <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                         </td>
                                                         <td>
-                                                            <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                             <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                         </td>
                                                     </tr>
                                                     <tr>
-                                                        <td colspan="5">
+                                                        <td colspan="3">
                                                             <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                                            @click="addMoreattachments()"><i class="fa fa-plus"></i> Add More</button>
+                                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
+                                                            @click="removeattachments()"><i class="fa fa-trash"></i> Remove</button>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -122,15 +123,9 @@ export default {
                 application_for:'Expatriate Recruitment',
                 application_type:'Expatriate_Recruitment',
                 action_type:'add', 
-                application_type:'Expatriate_Recuritment',
-                action_type:'add',
                 status:'Submitted',
                 organization_type:'',
-                status:'Submitted',
-                attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                attachments: [],
                 ref_docs:[],
             }),
         }
@@ -147,10 +142,10 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
-        addMore: function(){
+        addMoreattachments: function(){
             this.form.attachments.push({file_name:'', file_upload:''})
         },
-        remove(index){
+        removeattachments(index){
             if(this.form.attachments.length>1){
                 this.form.attachments.pop();
             }
@@ -175,12 +170,20 @@ export default {
         },
 
         applyforrecuritment(){
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
-            }
-
+              Swal.fire({
+                text: "Are you sure you want to submit Expatriate recuritment application for further further approval ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
             let formData = new FormData();
             formData.append('id', this.form.id);
             formData.append('ref_docs[]', this.form.ref_docs);
@@ -218,16 +221,10 @@ export default {
                         });
                     }
                 }
-            })
-            .catch((err) => {
-                if(!$('#country').attr('class').includes('select2-hidden-accessible')){
-                    $('#country').addClass('select2-hidden-accessible');
-                }
-                console.log("Error:"+err);
-                this.form.errors.errors = err.response.data.errors;
+                 })
+            }
             })
         },
-
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -255,7 +252,7 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
         this.getAttachmentType('ForTransaction__Application_for_Principal_Recruitment');
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -265,7 +262,6 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
-
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
@@ -283,6 +279,11 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
+
+        let data = await this.getRequiredDocument("Attachment_For_Expatriate_Recruitment");
+        data.forEach((item => {
+            this.form.attachments.push({file_name:item.name, file_upload:''})
+        }));
     },
      created() {
          this.loadcountryList();

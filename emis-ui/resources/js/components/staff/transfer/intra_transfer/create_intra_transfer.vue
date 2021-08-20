@@ -295,7 +295,7 @@ export default {
                 type_id:'',
                 staff_id:'',
                 preference_dzongkhag:[],
-                transferType:"intra_transfer",
+                transferType:"Intra Transfer",
                 service_name:"Intra Transfer",
                 preference_school1:'',
                 preference_school2:'',

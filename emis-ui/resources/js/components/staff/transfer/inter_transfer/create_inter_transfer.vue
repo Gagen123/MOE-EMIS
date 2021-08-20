@@ -293,7 +293,7 @@ export default {
                 name:'',
                 preference_dzongkhag:[],
                 status: 'pending',
-                transferType:"inter_transfer",
+                transferType:"Inter Transfer",
                 service_name:"Inter Transfer",
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',

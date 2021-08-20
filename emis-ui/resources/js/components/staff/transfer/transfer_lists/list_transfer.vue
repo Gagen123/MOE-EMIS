@@ -6,10 +6,10 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Applicant Name</th>
-                            <th>Application Number</th>
                             <th>Dzongkhag/Thromde</th>
                             <th>School Name</th>
+                            <th>Applicant Name</th>
+                            <th>Transfer Type</th>
                             <th>Qualification</th>
                             <th>Competent Subject</th>
                             <th>Last Transfer Date</th>
@@ -20,10 +20,10 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>{{ item.applicant_name}}</td>
-                            <td>{{ item.aplication_number}}</td>
                             <td>Thimphu Thromde</td>
                             <td>Yangchenphu Higher Secondary School</td>
+                            <td>{{ item.applicant_name}}</td>
+                            <td>{{ item.transferType}}</td>
                             <td>Master</td>
                             <td>English</td>
                             <td>2018</td>

@@ -165,7 +165,6 @@ export default {
                 action_type:'add', 
                 status:'Submitted',
                 organization_type:'',
-                status:'Submitted',
                 applicationNo:'',
                 screen_id:'',
                 sequence:'',

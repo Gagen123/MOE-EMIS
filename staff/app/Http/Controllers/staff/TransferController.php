@@ -491,16 +491,23 @@ class TransferController extends Controller{
     }
     public function loadtransferDetails($type= "",$userId="",$dzoId=""){
         if($type=="Dzongkhag"){
-            $response_data=TransferApplication::where ('status_id','2')->get();
+            $response_data=TransferApplication::where ('user_dzo_id',$dzoId)->whereIn('status',['Approved','Rejected'])->get();
         }
         else if($type=="Ministry"){
-            $response_data=TransferApplication::where ('status_id','3')->get();
+            $response_data=TransferApplication::whereIn('status',['Approved','Rejected'])->get();
         }
-        else {
-            $response_data=TransferApplication::where ('created_by', $userId)->where('transferType',$type)->get();
+        else if($type=="intra_transfer") {
+            $response_data=TransferApplication::where('transferType','Intra Transfer')->get(); 
+        }
+        else if($type=="inter_transfer") {
+            $response_data=TransferApplication::where('transferType','Inter Transfer')->get(); 
+        }
+        else{
+            $response_data=TransferApplication::where('created_by',$userId)->get(); 
         }
          return $response_data;
     }
+    
     public function loadApplicationDetails($id=""){
         $response_data=TransferApplication::where ('id', $id)->first();
         return$response_data;
