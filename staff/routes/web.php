@@ -193,6 +193,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadAllLeadershipSelection', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllLeadershipSelection']);
             $router->get('/checkforfeedbackLink/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@checkforfeedbackLink']);
             $router->get('/getleadershipDetailsForFeedback/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getleadershipDetailsForFeedback']);
+            $router->get('/getleadershipDetailsByPosition/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getleadershipDetailsByPosition']);
             $router->get('/loadapplicaitontDetialsforVerification/{app_no}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadapplicaitontDetialsforVerification']);
             $router->get('/loadData/{param}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadData']);
             $router->post('/saveData', ['uses' => 'staff\StaffLeadershipSerivcesController@saveData']);

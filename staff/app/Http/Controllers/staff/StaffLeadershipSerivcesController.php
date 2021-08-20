@@ -5,6 +5,7 @@ use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\FeedbackModel;
+use App\Models\LeadershipType;
 use App\Models\Question;
 use App\Models\staff\DocumentDetails;
 use App\Models\staff_leadership\ApplicableApplicant;
@@ -20,6 +21,7 @@ use App\Models\staff\PersonalDetails;
 use App\Models\staff\StaffHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
+use App\Models\staff_masters\PositionTitle;
 
 class StaffLeadershipSerivcesController extends Controller{
     use ApiResponser;
@@ -122,8 +124,20 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPosts($user_id=""){
-        $respomse_data=LeadershipDetails::where('created_by',$user_id)->get();
-        return $this->successResponse($respomse_data);
+        $response_data=LeadershipDetails::where('created_by',$user_id)->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $data){
+                $positiontitle=PositionTitle::where('id',$data->position_title)->first();
+                if($positiontitle!=null && $positiontitle!=""){
+                    $data->position_title_name=$positiontitle->name;
+                }
+                $post=LeadershipType::where('id',$data->selection_type)->first();
+                if($post!=null && $post!=""){
+                    $data->leadership_for=$post->name;
+                }
+            }
+        }
+        return $this->successResponse($response_data);
     }
 
     public function loadDetials($id=""){
@@ -137,6 +151,7 @@ class StaffLeadershipSerivcesController extends Controller{
             ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
             ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
             ->select('p.id AS position_title_id','p.name AS position_title','l.id AS level_id','l.name AS position_level')
+            ->where('a.leadership_id',$respomse_data->id)
             ->get();
             $respomse_data->applicable_applicant=$app;
             // $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
@@ -155,6 +170,14 @@ class StaffLeadershipSerivcesController extends Controller{
     public function loadPostDetials($id=""){
         $post=LeadershipDetails::where('id',$id)->first();
         if($post!=null && $post!=""){
+            $positiontitle=PositionTitle::where('id',$post->position_title)->first();
+            if($positiontitle!=null && $positiontitle!=""){
+                $post->position_title=$positiontitle->name;
+            }
+            $leadership=LeadershipType::where('id',$post->selection_type)->first();
+            if($leadership!=null && $leadership!=""){
+                $post->leadership_for=$leadership->name;
+            }
             $post->attachments=RequiredAttachment::where('leadership_id',$id)->get();
         }
         return $this->successResponse($post);
@@ -744,7 +767,17 @@ class StaffLeadershipSerivcesController extends Controller{
                 if($app_details!=null && $app_details!=""){
                     $data->application_details=$app_details;
                     $leadership_detials=LeadershipDetails::where('id',$app_details->leadership_id)->first();
-                    $data->post_details=$leadership_detials;
+                    if($leadership_detials!=null && $leadership_detials!=""){
+                        $data->post_details=$leadership_detials;
+                        $positiontitle=PositionTitle::where('id',$leadership_detials->position_title)->first();
+                        if($positiontitle!=null && $positiontitle!=""){
+                            $data->post_details->position_title=$positiontitle->name;
+                        }
+                        $post=LeadershipType::where('id',$leadership_detials->selection_type)->first();
+                        if($post!=null && $post!=""){
+                            $data->leadership_for=$post->name;
+                        }
+                    }
                 }
             }
         }
@@ -762,6 +795,17 @@ class StaffLeadershipSerivcesController extends Controller{
             }
         }
         return $this->successResponse($response_data);
+    }
+    public function getleadershipDetailsByPosition($id=""){
+        $respomse_data=DB::table('staff_leadership_detials as l')
+        ->join('master_staff_leadership_type as t', 'l.selection_type', '=', 't.id')
+        ->join('staff_applicable_applicant as a', 'a.leadership_id', '=', 'l.id')
+        ->join('master_stf_position_title as p', 'a.role_id', '=', 'p.id')
+        ->select('l.id','l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type','t.name as selection_for')
+        ->where('p.name','like', '%'.str_replace("%20"," ",$id))
+        ->where('l.to_date','>=',date('Y-m-d'))
+        ->where('l.status', 'created')->get();
+        return $respomse_data;
     }
 
     public function saveFeedback(Request $request){

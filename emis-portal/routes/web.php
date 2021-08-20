@@ -84,7 +84,10 @@ use Illuminate\Support\Facades\Route;
         Route::get('/loadData/{param}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'loadData'])->name('loadData');
         Route::get('/getapplicationDetailsForFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getapplicationDetailsForFeedback'])->name('getapplicationDetailsForFeedback');
         Route::post('/saveFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'saveFeedback'])->name('saveFeedback');
-
+        Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
+        Route::get('/getleadershipDetailsByPosition/{position}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getleadershipDetailsByPosition'])->name('getleadershipDetailsByPosition');
+        Route::get('/getpostDetails', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getpostDetails'])->name('getpostDetails');
+        Route::post('/submitApplication', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'submitApplication'])->name('submitApplication');
     });
 
     //OLD ROUTES - Delete routes below this line

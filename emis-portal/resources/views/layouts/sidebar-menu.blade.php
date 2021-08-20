@@ -43,7 +43,16 @@
                 </router-link>
             </li>
         @endif
-        @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent' && session('User_details')->user_type!='Feedback')
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Leadership')
+            <li class="nav-item">
+                <router-link to="/create_application" class="nav-link">
+                    <i class="fa fa-edit nav-icon"></i>
+                    <p>Apply For Post</p>
+                </router-link>
+            </li>
+        @endif
+
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent' && session('User_details')->user_type!='Feedback' && session('User_details')->user_type!='Leadership')
             <li class="nav-item">
                 <router-link to="/admissionRequest" class="nav-link">
                     <i class="fa fa-users nav-icon"></i>

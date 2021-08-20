@@ -53,6 +53,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'action_type'                   =>  $request->action_type,
             'user_id'                       =>  $this->userId()
         ];
+        // dd($staff_data);
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createPost', $staff_data);
         return $response_data;
     }
@@ -427,14 +428,11 @@ class StaffLeadershipSerivcesController extends Controller{
         if($request->action_type=="feedback" && $response_data!=null && $response_data!="" && sizeof(json_decode($response_data))>0){
             $feedback_provider=json_decode($response_data);
             $user_id="";
+
             // dd($feedback_provider);
             foreach($feedback_provider as $feed){
-                if($feed->partifipant_from=="outofministry"){
-                    //$feed['email'] send email notification
-                }
-                else{
+                if($feed->partifipant_from!="External"){
                     $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$feed->participant));
-                    // dd($feed->participant,$appRole_id,$feed->partifipant_from);
                     $user_id=$user_id.$appRole_id[0]->user_id.',';
                 }
             }
