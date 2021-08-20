@@ -21,21 +21,29 @@
             </router-link>
         </li> -->
         @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Parent')
-        <li class="nav-item">
-            <router-link to="/new_admission_page" class="nav-link">
-                {{--  admission_transfer_index --}}
-                <i class="fa fa-users nav-icon"></i>
-                <p>Registration Details</p>
-            </router-link>
-        </li>
-        <li class="nav-item">
-            <router-link to="/admission_initiated" class="nav-link">
-            <i class="fa fa-save nav-icon"></i>
-            <p> Apply to Schools</p>
-            </router-link>
-        </li>
+            <li class="nav-item">
+                <router-link to="/new_admission_page" class="nav-link">
+                    {{--  admission_transfer_index --}}
+                    <i class="fa fa-users nav-icon"></i>
+                    <p>Registration Details</p>
+                </router-link>
+            </li>
+            <li class="nav-item">
+                <router-link to="/admission_initiated" class="nav-link">
+                <i class="fa fa-save nav-icon"></i>
+                <p> Apply to Schools</p>
+                </router-link>
+            </li>
         @endif
-        @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent')
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type=='Feedback')
+            <li class="nav-item">
+                <router-link to="/feedback" class="nav-link">
+                    <i class="fa fa-edit nav-icon"></i>
+                    <p>Feedback</p>
+                </router-link>
+            </li>
+        @endif
+        @if(session('User_details')->user_type!=null && session('User_details')->user_type!='Parent' && session('User_details')->user_type!='Feedback')
             <li class="nav-item">
                 <router-link to="/admissionRequest" class="nav-link">
                     <i class="fa fa-users nav-icon"></i>
@@ -62,8 +70,8 @@
             </li>
         @endif
         <li class="nav-item">
-            <a href="#" onclick="logout()" class="dropdown-item">
-                <i class="fa fa-sign-out-alt pr-4"></i>Sign out
+            <a href="#" onclick="logout()" class="nav-link">
+                <i class="fa fa-sign-out-alt nav-icon"></i>Sign out
             </a>
         </li>
     </ul>

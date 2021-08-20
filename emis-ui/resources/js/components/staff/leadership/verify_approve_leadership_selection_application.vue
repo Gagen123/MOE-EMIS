@@ -13,6 +13,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Leadership Selection For:</label>
+                                    <input type="hidden" id="selectionfor" :value="selectionListArray[post_detail.selection_type]">
                                     <span class="text-blue text-bold">{{selectionListArray[post_detail.selection_type]}}</span>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -65,6 +66,7 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Applicant:</label>
+                                <input type="hidden" id="applicant" :value="form.applicant">
                                 <span class="text-blue text-bold">{{form.applicant}}</span>
                             </div>
                         </div>
@@ -416,25 +418,24 @@
                                     <span class="text-danger" id="feedback_type_err"></span>
                                 </div>
                             </div>
-
                             <div class="form-group row" style="display:none" id="outofministry_section">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>CID:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="selectstaff.cid" :class="{ 'is-invalid': selectstaff.errors.has('cid') }" name="cid" id="cid" class="form-control">
+                                    <input type="text" @change="remove_error('cid')" v-model="selectstaff.cid" :class="{ 'is-invalid': selectstaff.errors.has('cid') }" name="cid" id="cid" class="form-control">
                                     <has-error :form="selectstaff" field="cid"></has-error>
                                     <span class="text-danger" id="cid_err"></span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="selectstaff.name" :class="{ 'is-invalid': selectstaff.errors.has('name') }" name="name" id="name" class="form-control">
+                                    <input type="text" @change="remove_error('name')" v-model="selectstaff.name" :class="{ 'is-invalid': selectstaff.errors.has('name') }" name="name" id="name" class="form-control">
                                     <has-error :form="selectstaff" field="name"></has-error>
                                     <span class="text-danger" id="name_err"></span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Position Title:<span class="text-danger">*</span></label>
-                                    <input type="text" v-model="selectstaff.positiontitle" :class="{ 'is-invalid': selectstaff.errors.has('positiontitle') }" name="positiontitle" id="positiontitle" class="form-control">
+                                    <input type="text" @change="remove_error('positiontitle_err')" v-model="selectstaff.positiontitle" :class="{ 'is-invalid': selectstaff.errors.has('positiontitle') }" name="positiontitle" id="positiontitle" class="form-control">
                                     <has-error :form="selectstaff" field="positiontitle"></has-error>
-                                    <span class="text-danger" id="positiontitle_err"></span>
+                                    <span class="text-danger" id="positiontitle"></span>
                                 </div>
                             </div>
 
@@ -557,7 +558,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -608,7 +608,6 @@ export default {
                 dzongkhag:'',
                 feedback_type:'',
                 action_type:'',
-
             }),
             form: new form({
                 id:'',
@@ -990,6 +989,9 @@ export default {
         },
         addrecords(){
             if(this.validateaddform()){
+                this.selectstaff.partifipant_from=$("input[type='radio'][name='partifipant_from']:checked").val();
+                this.selectstaff.selectionFor=$("#selectionfor").val();
+                this.selectstaff.applicant=$("#applicant").val();
                 this.selectstaff.post('/staff/staffLeadershipSerivcesController/saveFeedbackProviderData',this.selectstaff)
                 .then((response) =>{
                     this.form.id=response.data.data.id;
@@ -1176,7 +1178,6 @@ export default {
                     }
                 });
             }
-
         },
 
         //loadFeedback qeustion according to the type and position

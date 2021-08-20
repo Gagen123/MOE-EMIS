@@ -142,7 +142,7 @@ export default {
             this.email=data['email'];
             this.name=data['full_name'];
             this.contact=data['phone_number'];
-            if(data['user_type']!="Parent"){
+            if(data['user_type']!="Parent" && data['user_type']!="Feedback"){
                 this.is_student=true;
             }
         })

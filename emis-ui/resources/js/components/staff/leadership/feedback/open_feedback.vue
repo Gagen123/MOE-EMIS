@@ -167,7 +167,7 @@ export default {
             .then(response =>{
                 let data = response;
                 // this.positionList =  data.data.data;
-                 for(let i=0;i<data.data.data.length;i++){
+                for(let i=0;i<data.data.data.length;i++){
                     this.positionList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
