@@ -320,9 +320,7 @@ export default {
                 schoolLevel:'',
 
                 attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                [],
                 ref_docs:[],
             })
         }

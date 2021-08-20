@@ -229,38 +229,7 @@ class TransferController extends Controller{
         TransferApplication::where('aplication_number', $request->application_number)->update($request_data1);
         $response_data = TransferApplication::where ('aplication_number', $request->application_number)->first();
 
-        if($request->preference_school1!=""){
-            $request_data =[
-                'school_id'                     =>$request->preference_school1,
-                'subject_id'                    =>  $request->spSubject,
-                'preference'                    =>  1,
-                'created_at'                    =>date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',1)->update($request_data);
-        }
-        if($request->preference_school2!=""){
-            $request_data =[
-                
-                'school_id'                     =>$request->preference_school2,
-                'subject_id'                    =>  $request->optional2sub,
-                'preference'                    =>  2,
-                'created_at'                    =>date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
-            
-        }
-
-        if($request->preference_school3!=""){
-            $request_data =[
-                
-                'school_id'                     =>  $request->preference_school3,
-                'subject_id'                    =>  $request->optional2sub,
-                'preference'                    =>  3,
-                'created_at'                    =>date('Y-m-d h:i:s'),
-            ];
-            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
-
-        }
+        //updating the dzongkhag
         if($request->preference_dzongkhag1!=""){
             $request_data =[
                 'dzongkhag_id'                  =>  $request->preference_dzongkhag1,
@@ -288,7 +257,39 @@ class TransferController extends Controller{
                 ];
             TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
         }
-       
+        //updating the school details
+        if($request->preference_school1!=""){
+            $request_data =[
+                'school_id'                     =>$request->preference_school1,
+                'subject_id'                    =>  $request->spSubject,
+                'preference'                    =>  1,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',1)->update($request_data);
+        }
+        if($request->preference_school2!=""){
+            $request_data =[
+                
+                'school_id'                     =>$request->preference_school2,
+                'subject_id'                    =>  $request->optional2sub,
+                'preference'                    =>  2,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',2)->update($request_data);
+            
+        }
+        if($request->preference_school3!=""){
+            $request_data =[
+                
+                'school_id'                     =>  $request->preference_school3,
+                'subject_id'                    =>  $request->optional2sub,
+                'preference'                    =>  3,
+                'created_at'                    =>date('Y-m-d h:i:s'),
+            ];
+            TransPrefenreces::where('transfer_application_id', $response_data->id)->where('preference',3)->update($request_data);
+
+        }
+      //This is for the updating the withdraw status 
          if($request->withdraw == "true"){
                 $status =[
                     'status'        =>  'withdrawn'
@@ -296,7 +297,8 @@ class TransferController extends Controller{
                 TransferApplication::where('aplication_number', $request->application_number)->update($status);
                 
             }
-        if($request->attachment_details!=null && $request->attachment_details!=""){
+            //updating the attachment
+         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){
                 $doc_data =[
                     'parent_id'                        =>  $request->id,

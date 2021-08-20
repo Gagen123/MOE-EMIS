@@ -158,7 +158,7 @@
                                         <tr>
                                             <th>SlNo</th>
                                             <th>Specialization</th>
-                                            <th>Subjects</th>
+                                            <th>Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -204,7 +204,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Attachments</label>
+                                <label class="mb-0.5">Attachments Details<i class="text-danger">*</i></label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -213,16 +213,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td>
-                                                <input type="text" class="form-control" readonly :value="attach.user_defined_name">
-                                            </td>
-                                            <td>
-                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
-                                            </td>
-                                        </tr>
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                             <td>
                                                 <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -314,10 +304,7 @@ export default {
                 optional1sub:'',
                 optional2sub:'',
                 transfer_list:'',
-                attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                attachments:[],
                 ref_docs:[],
             })
         }
@@ -660,7 +647,7 @@ export default {
             }
         }
     },
-    mounted() {
+    async mounted() {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
@@ -685,6 +672,11 @@ export default {
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
+        
+        let data = await this.getRequiredDocument("Staff_Transfer");
+        data.forEach((item => {
+            this.form.attachments.push({file_name:item.name, file_upload:''})
+        }));
     },
 }
 </script>

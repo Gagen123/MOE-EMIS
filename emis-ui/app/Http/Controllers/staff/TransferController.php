@@ -282,7 +282,7 @@ class TransferController extends Controller{
                 'service_name'                  =>  "Intra Transfer",
                 'preference_school'             =>$request->schoolApproved,
                 'dzongkhagApproved'             =>$request->userDzongkhag,
-                // 'schoolApproved'                =>$request->schoolApproved,
+                'schoolApproved'                =>$request->schoolApproved,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>  $this->userId()
             ];
