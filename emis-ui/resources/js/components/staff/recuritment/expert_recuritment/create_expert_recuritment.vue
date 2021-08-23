@@ -96,7 +96,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="applyforrecuritment()">Submit </button>
+                                    <button class="btn btn-primary" @click="applyforrecuritment()">Apply </button>
                                 </div>
                             </div>
                         </div>
@@ -168,7 +168,6 @@ export default {
                 console.log('error: '+error);
             });
         },
-
         applyforrecuritment(){
               Swal.fire({
                 text: "Are you sure you want to submit Expatriate recuritment application for further further approval ?",
@@ -191,7 +190,6 @@ export default {
                 formData.append('attachments[]', this.form.ref_docs[i].attach);
                 formData.append('attachmentname[]', this.form.ref_docs[i].name);
             }
-            formData.append('organizationId', this.form.organizationId);
             formData.append('passport', this.form.passport);
             formData.append('name', this.form.name);
             formData.append('dob', this.form.dob);
@@ -217,7 +215,7 @@ export default {
                         this.$router.push({name:'expert_recuritment_acknowledgement',params: {data:message}});
                         Toast.fire({
                             icon: 'success',
-                            title: 'Application is saved successfully'
+                            title: 'Application for Expariate Recruitment has sumbmitted successfully'
                         });
                     }
                 }
@@ -265,21 +263,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-        axios.get('common/getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            if(data['acess_level']=="Org"){
-                this.form.organizationId=data['Agency_Code'];
-                this.getorgdetials(data['Agency_Code']);
-                $('#organizationId').val(data['Agency_Code']).trigger('change');
-                $('#organizationId').prop('disabled',true);
-            }
-        })
-        .catch(errors => {
-            console.log(errors)
-        });
-
         let data = await this.getRequiredDocument("Attachment_For_Expatriate_Recruitment");
         data.forEach((item => {
             this.form.attachments.push({file_name:item.name, file_upload:''})

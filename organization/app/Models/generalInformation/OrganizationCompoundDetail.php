@@ -31,6 +31,7 @@ class OrganizationCompoundDetail extends Model
         'programType',
         'agricultureArea',
         'agricultureAreaUsed',
+        'ownership',                  
         'created_by',
         'updated_by',
         'created_at',

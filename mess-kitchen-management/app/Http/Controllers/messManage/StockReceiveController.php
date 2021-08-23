@@ -102,30 +102,30 @@ class StockReceiveController extends Controller{
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
                // dd( $receiveditem);
-               StockReceivedItem::create($receiveditem);
+                StockReceivedItem::create($receiveditem);
 
-                //    $checkitem=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
-                //    ->where('organizationId',$request['organizationId'])->first();
-                //     if($checkitem!=null && $checkitem!=""){
-                //         $qty=$quantity-$facility['damagequantity']+$checkitem->available_qty;
-                //         $update_data=[
-                //             'available_qty' => $qty,
-                //             'updated_by'    =>$request->user_id,
-                //             'updated_at'    =>  date('Y-m-d h:i:s'),
-                //         ];
-                //         TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')->update($update_data);
-                //     }
-                //     else{
-                //         $create_data=[
-                //             'procured_type'  =>'Central',
-                //             'organizationId' =>$request['organizationId'],
-                //             'item_id'        =>$facility['id'],
-                //             'available_qty'  =>$quantity,
-                //             'created_by'     =>$request->user_id,
-                //             'created_at'     =>  date('Y-m-d h:i:s'),
-                //         ];
-                //         TransactionTable::create($create_data);
-                //     }
+                $checkitem=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
+                ->where('organizationId',$request['organizationId'])->first();
+                if($checkitem!=null && $checkitem!=""){
+                    $qty=$quantity-$facility['damagequantity']+$checkitem->available_qty;
+                    $update_data=[
+                        'available_qty' => $qty,
+                        'updated_by'    =>$request->user_id,
+                        'updated_at'    =>  date('Y-m-d h:i:s'),
+                    ];
+                    TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')->update($update_data);
+                }
+                else{
+                    $create_data=[
+                        'procured_type'  =>'Central',
+                        'organizationId' =>$request['organizationId'],
+                        'item_id'        =>$facility['id'],
+                        'available_qty'  =>$quantity,
+                        'created_by'     =>$request->user_id,
+                        'created_at'     =>  date('Y-m-d h:i:s'),
+                    ];
+                    TransactionTable::create($create_data);
+                }
 
             }
             return $this->successResponse($stcrcv, Response::HTTP_CREATED);
