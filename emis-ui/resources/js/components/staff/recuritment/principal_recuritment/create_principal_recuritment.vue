@@ -121,7 +121,7 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="applyforrecuritment()">Submit </button>
+                                    <button class="btn btn-primary" @click="applyforrecuritment()">Apply </button>
                                 </div>
                             </div>
                         </div>
@@ -136,8 +136,10 @@
 export default {
     data(){
         return{
+
             form: new form({
                 cid:'',
+                passport:'',
                 name:'',
                 dob:'',
                 dzongkhag:'',
@@ -224,6 +226,16 @@ export default {
                 });
             }
         },
+        loadDataList(uri='staff/StaffApprovalController/loadPrincipalApprovalApplication/principal_recruitment'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.form.passport=  data.data.data.passport;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
         applyforrecuritment(){
              Swal.fire({
                 text: "Are you sure you want to submit principal recuritment application for further further approval ?",
@@ -286,12 +298,22 @@ export default {
             })
             }
          });
+        // else{
+        //     Swal.fire({
+        //         text: "You have already submitted the application for principal recuritment for cid number: " +this.form.cid,
+        //         icon: 'warning',
+        //         confirmButtonText: 'okay!',
+        //     })
+        // }
         },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="cid"){
+                this.form.cid=$('#cid').val();
             }
         },
         getAttachmentType(type){
@@ -339,6 +361,7 @@ export default {
             data.forEach((item => {
                 this.form.attachments.push({file_name:item.name, file_upload:''})
             }));
+        this.loadDataList();
     }
     
 }
