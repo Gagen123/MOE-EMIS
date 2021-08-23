@@ -100,18 +100,23 @@ class HomeController extends Controller
             ];
             $this->validate($request, $rules,$customMessages);
         }
-        $request_data=[
-            'registrationType'=>$request->registrationType,
-            'dob'        =>$request->dob,
-            'contact'      =>$request->contact,
-            'name'        =>$request->name,
-            'student_code'      =>$request->student_code,
-            'email'   =>$request->email,
-            'password'      =>$request->password,
-        ];
-        // dd($request_data);
-        $response_data=$this->apiService->createData('save_new_registration', $request_data);
-        return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);
+        if($request->registrationType==3){
+            $rules = [
+                'vacancyId'          =>  'required',
+            ];
+            $customMessages = [
+                'vacancyId.required' => 'Please check Registering for',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
+        $response_data=$this->apiService->createData('save_new_registration', $request->all());
+        if(json_decode($response_data)->id!=null && json_decode($response_data)->id!=""){
+            return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);
+        }
+        else{
+            return view('userlogin',['Invalid'=>'Not able to register with us. Please contact system administrator for further assistant.']);
+        }
+
     }
     function change_password_portal(Request $request){
         if(Session::get('User_details')!=""){

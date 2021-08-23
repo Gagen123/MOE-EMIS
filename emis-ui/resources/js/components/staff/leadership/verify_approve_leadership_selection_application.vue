@@ -127,7 +127,7 @@
                     </div>
 
                     <!-- Feedback Section -->
-                    <div class="callout callout-info" v-if="form.current_status=='Submitted'">
+                    <div class="callout callout-info">
                         <div class="row form-group" v-if="form.shortlisted_remarks!=''">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Shortlisted Remarks: </label>
@@ -169,9 +169,12 @@
                                 <label>Remarks:</label>
                                 <span class="text-blue text-bold">{{form.feedback_remarks}}</span>
                             </div>
-
                         </div>
                         <span><label><u>Feedback Providers</u></label></span>
+                        <div class="alert alert-warning alert-dismissible" v-if="feedback_status=='Under Process'">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            In order to take further action for this applicaiton, you need to make sure that you have visited all feedbacks and click visited button from popup. Once you update, the status will chage to visited
+                        </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <table id="feedback_provider-table" class="table table-sm table-bordered table-striped">
@@ -204,8 +207,8 @@
                                                     <span v-if="stf.status=='Visited'" class="right badge badge-primary">{{stf.status}}</span>
                                                 </td>
                                                 <td >
-                                                    <button v-if="form.current_status=='Shortlisted' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
-                                                        @click="deleteNomination(stf.id)"> Delete</button>
+                                                    <!-- <button v-if="form.current_status=='Notified for Feedback' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
+                                                        @click="deleteNomination(stf.id)"> Delete</button> -->
                                                     <button v-if="stf.status!='Pending'" type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
                                                         @click="checkfeedback(stf.id)"> Open</button>
                                                 </td>
@@ -270,6 +273,10 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="alert alert-danger alert-dismissible" v-if="feedback_pending">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            Note: Some of the Feedback Provider did not submitted thier feedback.
+                        </div>
                         <div class="row" v-if="feedback_status=='Completed' && form.current_status!='Interviewed'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Interview Date:<span class="text-danger">*</span></label>
@@ -303,12 +310,13 @@
                         </div>
                     </div>
                     <hr>
+
                     <!-- Action Buttons -->
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Submitted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
-                            <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Submitted' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
-                            <button class="btn btn-primary" @click="shownexttab('interview')" v-if="form.current_status=='Notified for Feedback' && form.interview==1 && feedback_status=='Completed'"> <i class="fa fa-check"></i> Update Interview </button>
+                            <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Notified for Feedback' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
+                            <button class="btn btn-primary" @click="shownexttab('interview')" v-if="form.current_status=='Shortlisted' && form.interview==1 && feedback_status=='Completed'"> <i class="fa fa-check"></i> Update Interview </button>
                             <button class="btn btn-primary" @click="shownexttab('select')" v-if="form.current_status=='Interviewed'"> <i class="fa fa-save"></i> Select </button>
                             <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                         </div>
@@ -316,8 +324,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -575,6 +581,7 @@ export default {
     data(){
         return {
             feedback_status:'Completed',
+            feedback_pending:false,
             count:0,
             positionList:{},
             roleList:{},
@@ -1017,8 +1024,12 @@ export default {
                 this.feedbackNomineesList=data;
                 this.form.feedbackNomineesList=data;
                 data.forEach(itm => {
-                    if(itm.status!='Visited'){
-                        this.feedback_status='UnderProcess';
+                    if(itm.status!='Visited' && itm.status=="Submitted"){
+                        this.feedback_status='Under Process';
+                    }
+                    if(itm.status=="Pending" && this.form.status!="Submitted"){
+                        this.feedback_pending=true;
+                        this.feedback_status='Under Process';
                     }
                 });
                 if(data.length<1){
@@ -1026,7 +1037,7 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log(error);
+                console.log('error loadexistingfeedbackprovider: '+error);
             });
         },
         deleteNomination(id){
