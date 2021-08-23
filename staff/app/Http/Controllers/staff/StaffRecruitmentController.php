@@ -17,6 +17,7 @@ class StaffRecruitmentController extends Controller
     
     public function savePrincipalApproval(Request $request){
         $application_details_data =[
+            'passport'             =>  $request['cid'],
             'application_no'       =>  $this->generateApplicationNo(),
             'organizationId'       =>  $request['organizationId'],
             'name'                 =>  $request['name'],
@@ -52,7 +53,6 @@ class StaffRecruitmentController extends Controller
     public function saveExpatriateRecuritment(Request $request){
         $application_details_data =[
             'application_no'       =>  $this->generateApplicationNoForExpatriate(),
-            'organizationId'       =>  $request['organizationId'],
             'passport/emigration'  =>  $request['passport'],
             'name'                 =>  $request['name'],
             'DateOfBirth'          =>  $request['dob'],

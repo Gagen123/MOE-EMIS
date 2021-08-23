@@ -1,6 +1,6 @@
 <template>
     <div class="card-body">
-        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
+        <table id="transfer_type" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in undertakingList" :key="index">
+                <tr v-for="(item, index) in transferList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
@@ -28,7 +28,7 @@
 export default {
     data(){
         return{
-            undertakingList:[], 
+            transferList:[], 
             dt:'',
         }
     },
@@ -37,12 +37,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.undertakingList =  data.data.data;
+                this.transferList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
             });
         },
         showedit(data){
@@ -51,14 +48,14 @@ export default {
     },
     mounted(){ 
         this.loadtransferTypeList();
-        this.dt =  $("#working-agency-table").DataTable()
+        this.dt =  $("#transfer_type").DataTable()
 
     },
     watch: {
         transferList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
+                this.dt =  $("#transfer_type").DataTable()
             });
         }
     },

@@ -97,7 +97,107 @@ class SpmsController extends Controller
         $response_data = $this->apiService->listData('emis/spms/getSchoolDashboardData/'.$org_id);
         return $response_data;
     }
-    
+    public function saveSchoolPlan(Request $request){
+        $rules = [
+            'spm_domain_id' => 'required',
+            'activity' => 'required',
+            'objective' => 'required',
+            'strategy' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'person_responsible' => 'required',
+            'implementation_status_id' => 'required',
+        ];
+        $customMessages = [
+            'spm_domain_id.required' => 'This field is required',
+            'activity.required' => 'This field is required',
+            'objective.required' => 'This field is required',
+            'strategy.required' => 'This field is required',
+            'start_date.required' => 'This field is required',
+            'end_date.required' => 'This field is required',
+            'person_responsible.required' => 'This field is required',
+            'statuimplementation_status_ids_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['dzon_id'] = $this->getUserDzoId();
+        $request['user_id'] = $this->userId();
+        $request['org_id'] = $this->getWrkingAgencyId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveSchoolPlan',$data);
+        return $response_data;
+    }
+    public function getSchoolPlan($school_id){
+        $response_data =$this->apiService->listData('emis/spms/getSchoolPlan/'.$school_id);
+        return $response_data;
+    }
+   
+    public function saveImplementtationStatus(Request $request){
+        $rules = [
+            'comment' => 'required',
+            'implementation_status_id' => 'required',
+            'full_name' => 'required',
+            'organization' => 'required',
+            'roles' => 'required',
+            'id' => 'required',
+        ];
+        $customMessages = [
+            'comment.required' => 'This field is required',
+            'implementation_status_id.required' => 'This field is required',
+            'full_name.required' => 'This field is required',
+            'organization.required' => 'This field is required',
+            'roles.required' => 'This field is required',
+            'id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveImplementtationStatus',$data);
+        return $response_data;
+    }
+    public function getSchoolPlanHistory(){
+        $response_data = $this->apiService->listData('emis/spms/getSchoolPlanHistory');
+        return $response_data;
+    }
+    public function loadOrgList(){
+        $type="school";
+         if($this->getAccessLevel() =='Dzongkhag'){
+            $dzon_id = $this->getUserDzoId();
+            $schools = json_decode($this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$dzon_id),true)["data"];
+            $dzongkhags = [['dzon_id' => $dzon_id]];
+        }else {
+            $emo_id = $this->staffId();
+            $dzongkhags = json_decode($this->apiService->listData('emis/spms/getDzoEMO/'.$emo_id),true)['data'];
+            $schools = [];
+            if(count($dzongkhags) > 0){
+                foreach($dzongkhags as $dzongkhag){
+                    $schoolsUnderDzo= json_decode($this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$dzongkhag['dzon_id']),true);
+                    $schools = array_merge($schools,$schoolsUnderDzo['data']);
+                }
+            }else {
+                $schools = json_decode($this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/NA'),true)['data'];
+            }
+        }
+
+        $dzongkhag_ids = implode(",",array_column($dzongkhags,'dzon_id'));
+        $schoolPlans = json_decode($this->apiService->listData('emis/spms/getSchoolPlans?dzongkhag_ids='.$dzongkhag_ids),true);
+        $all_dzongkhags = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_active_dzongkhag'),true)['data'];
+        $filteredData = [];
+        foreach($schools as $school){
+            $hasPlan = 0;
+            foreach($schoolPlans as $schoolPlan){
+                if($school['id'] == $schoolPlan['org_id']){
+                    $hasPlan = 1;
+                }
+            }
+            foreach($all_dzongkhags as $dzong){
+                if($school['dzongkhagId'] == $dzong['id']){
+                    $dzongkhag = $dzong['name'];
+                }
+            }
+            array_push($filteredData,['school_id'=>$school['id'],'school'=>$school['name'],'dzo_id'=>$school['dzongkhagId'],'dzongkhag'=>$dzongkhag,'hasPlan'=>$hasPlan]);
+        }
+        return $filteredData;
+    }
 
 }
 

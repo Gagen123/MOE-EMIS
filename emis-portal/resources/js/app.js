@@ -53,10 +53,13 @@ Vue.component(AlertError.name, AlertError)
  */
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
-import routes from './routes';
+import recruitment_route from './recruitment_feedback';
+import std_route from './routes';
 
+var allRoutes = [];
+allRoutes = allRoutes.concat(recruitment_route,std_route);
+const routes = allRoutes;
 const router = new VueRouter({
-    mode: 'history',
     routes
 });
 // Routes End

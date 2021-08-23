@@ -13,6 +13,7 @@ class Indicator extends Model
     protected $fillable = [
         'id',
         'name',
+        'mov',
         'spm_parameter_id',
         'sequence_no',
         'status',

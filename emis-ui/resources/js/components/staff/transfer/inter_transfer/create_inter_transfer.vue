@@ -156,7 +156,7 @@
                                         <tr>
                                             <th>SlNo</th>
                                             <th>Specialization</th>
-                                            <th>Subjects</th>
+                                            <th>Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -211,16 +211,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td>
-                                                <input type="text" class="form-control" readonly :value="attach.user_defined_name">
-                                            </td>
-                                            <td>
-                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
-                                            </td>
-                                        </tr>
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                             <td>
                                                 <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -303,7 +293,7 @@ export default {
                 name:'',
                 preference_dzongkhag:[],
                 status: 'pending',
-                transferType:"inter_transfer",
+                transferType:"Inter Transfer",
                 service_name:"Inter Transfer",
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
@@ -314,9 +304,7 @@ export default {
                 user_id:'',
                 transfer_list:'',
                 attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                [],
                 ref_docs:[],
             })
         }
@@ -405,7 +393,6 @@ export default {
         loadtransferDetails(){
             axios.get('staff/transfer/loadtransferDetails/inter_transfer')
             .then((response) => {
-                // alert(JSON.stringify(response.data))
                 this.form.transfer_list =  response.data;
              })
             .catch((error) => {
@@ -669,7 +656,7 @@ export default {
         },
 
     },
-    mounted() {
+    async mounted() {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
@@ -695,6 +682,11 @@ export default {
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
+        
+        let data = await this.getRequiredDocument("Inter_Transfer_attachment");
+        data.forEach((item => {
+            this.form.attachments.push({file_name:item.name, file_upload:''})
+        }));
        
     },
 }

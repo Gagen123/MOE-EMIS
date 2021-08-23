@@ -38,24 +38,18 @@ const routes = [
                     { path: '/edit-indicator', name: 'edit_indicator', component: require('./components/masters/spms_masters/indicator/edit_indicator.vue').default },
                 ]
             },
-            { path: '/rating-master', component: require('./components/masters/spms_masters/rating/rating_index.vue').default,
+            { path: '/rubrics-master', component: require('./components/masters/spms_masters/rubrics/rubrics_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/masters/spms_masters/rating/list_rating.vue').default },
-                    { path: '/list-rating', name: 'list_rating', component: require('./components/masters/spms_masters/rating/list_rating.vue').default },
-                    { path: '/create-rating', name: 'create_rating', component: require('./components/masters/spms_masters/rating/create_rating.vue').default },
-                    { path: '/edit-rating', name: 'edit_rating', component: require('./components/masters/spms_masters/rating/edit_rating.vue').default },
+                    { path: '', component: require('./components/masters/spms_masters/rubrics/list_rubrics.vue').default },
+                    { path: '/list-rubrics', name: 'list_rubrics', component: require('./components/masters/spms_masters/rubrics/list_rubrics.vue').default },
+                    { path: '/create-rubrics', name: 'create_rubrics', component: require('./components/masters/spms_masters/rubrics/create_rubrics.vue').default },
+                    { path: '/edit-rubrics', name: 'edit_rubrics', component: require('./components/masters/spms_masters/rubrics/edit_rubrics.vue').default },
                 ]
             },
             { path: '/dzo-emo-master', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/dzongkhag_emo_mapping_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/create_dzongkhag_emo_mapping.vue').default },
                     { path: '/create-dzo-emo', name: 'create_dzo_emo', component: require('./components/masters/spms_masters/dzongkhag_emo_mapping/create_dzongkhag_emo_mapping.vue').default },
-                ]
-            },
-            { path: '/school-deo-master', component: require('./components/masters/spms_masters/school_deo_mapping/school_deo_mapping_index.vue').default,
-                children: [
-                    { path: '', component: require('./components/masters/spms_masters/school_deo_mapping/create_school_deo_mapping.vue').default },
-                    { path: '/create-school-deo', name: 'create_school_deo', component: require('./components/masters/spms_masters/school_deo_mapping/create_school_deo_mapping.vue').default },
                 ]
             },
         ]
@@ -66,30 +60,32 @@ const routes = [
       [
             { path: '/',name:'spms', component: require('./components/spms/spms_list.vue').default},
 
-            { path: '/deo-evaluation', component: require('./components/spms/deo_evaluation/deo_evaluation_index.vue').default,
+            { path: '/school-performance', component: require('./components/spms/school_performance/school_performance_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/deo_evaluation/deo_evaluation_dashboard.vue').default },
-                    { path: '/deo-evaluation-dashboard',name:'deo_evaluation_dashboard', component: require('./components/spms/deo_evaluation/deo_evaluation_dashboard.vue').default },
-                    { path: '/list-deo-evaluation', name: 'list_deo_evaluation', component: require('./components/spms/evaluation/list_evaluation.vue').default },
-                    { path: '/view-deo-evaluation', name: 'view_deo_evaluation', component: require('./components/spms/evaluation/view_evaluation.vue').default },
-                    { path: '/create-deo-evaluation', name: 'create_deo_evaluation', component: require('./components/spms/evaluation/create_evaluation.vue').default },
-                    { path: '/edit-deo-evaluation', name: 'edit_deo_evaluation', component: require('./components/spms/evaluation/edit_evaluation.vue').default },
+                    { path: '', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
+                    { path: '/school-performance-dashboard',name:'school_performance_dashboard', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
+                    { path: '/list-school-performance', name: 'list_school_performance', component: require('./components/spms/school_performance/list_school_performance.vue').default },
+                    { path: '/view-school-performance', name: 'view_school_performance', component: require('./components/spms/school_performance/view_school_performance.vue').default },
+                    { path: '/create-school-performance', name: 'create_school_performance', component: require('./components/spms/school_performance/create_school_performance.vue').default },
+                    { path: '/edit-school-performance', name: 'edit_school_performance', component: require('./components/spms/school_performance/edit_school_performance.vue').default },
                 ]
+                
             },
 
-            { path: '/school-evaluation', component: require('./components/spms/school_evaluation/school_evaluation_index.vue').default,
+            { path: '/annual-school-plan', component: require('./components/spms/school_plan/school_plan_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/school_evaluation/school_evaluation_dashboard.vue').default },
-                    { path: '/evaluation-dashboard',name:'school_evaluation_dashboard', component: require('./components/spms/school_evaluation/school_evaluation_dashboard.vue').default },
-                    { path: '/list-school-evaluation', name: 'list_school_evaluation', component: require('./components/spms/evaluation/list_evaluation.vue').default },
-                    { path: '/view-school-evaluation', name: 'view_school_evaluation', component: require('./components/spms/evaluation/view_evaluation.vue').default },
-                    { path: '/create-school-evaluation', name:'create_school_evaluation', component: require('./components/spms/evaluation/create_evaluation.vue').default },
-                    { path: '/edit-school-evaluation', name: 'edit_school_evaluation', component: require('./components/spms/evaluation/edit_evaluation.vue').default },
+                    { path: '', component: require('./components/spms/school_plan/container.vue').default },
+                    { path: '/lists-annual-school-plan',name:'lists_annual_school_plan', component: require('./components/spms/school_plan/container.vue').default },
+                    { path: '/list-annual-school-plan',name:'list_annual_school_plan', component: require('./components/spms/school_plan/list_school_plan.vue').default },
+                    { path: '/view-annual-school-plan', name: 'view_annual_school_plan', component: require('./components/spms/school_plan/view_school_plan.vue').default },
+                    { path: '/create-annual-school-plan', name:'create_annual_school_plan', component: require('./components/spms/school_plan/create_school_plan.vue').default },
+                    { path: '/annual-school-plan-list',name:'annual_school_plan_list', component: require('./components/spms/school_plan/deo_emo_list_school_plan.vue').default },
+                    { path: '/edit-annual-school-plan', name: 'edit_annual_school_plan', component: require('./components/spms/school_plan/edit_school_plan.vue').default },
                 ]
             },
       ]
   },
- 
+
 
 
 

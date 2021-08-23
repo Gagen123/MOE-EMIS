@@ -24,6 +24,11 @@
                                     <b>CID</b> <a class="float-right">{{ cid }}</a>
                                 </li>
                             </template>
+                            <template v-else>
+                                <li class="list-group-item">
+                                    <b>User Type</b> <a class="float-right">{{ type }}</a>
+                                </li>
+                            </template>
                         </ul>
                     </div>
                 </div>
@@ -142,7 +147,7 @@ export default {
             this.email=data['email'];
             this.name=data['full_name'];
             this.contact=data['phone_number'];
-            if(data['user_type']!="Parent"){
+            if(data['user_type']!="Parent" && data['user_type']!="Feedback" && data['user_type']!="Leadership"){
                 this.is_student=true;
             }
         })

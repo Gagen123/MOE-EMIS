@@ -16,8 +16,8 @@
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ selectionList[item.selection_type] }}</td>
-                            <td>{{ positionarray[item.position_title] }}</td>
+                            <td>{{ item.leadership_for }}</td>
+                            <td>{{ item.position_title_name }}</td>
                             <td>{{ item.from_date }}</td>
                             <td>{{ item.to_date }}</td>
                             <td>
@@ -35,10 +35,7 @@
 export default {
     data(){
         return{
-            selectionList:{},
-            positionarray:{},
             data_list:[],
-
         }
     },
     methods: {
@@ -50,30 +47,6 @@ export default {
             })
             .catch((error) =>{
                 console.log("Error: "+error);
-            });
-        },
-        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.selectionList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('err: '+error);
-            });
-        },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positionarray[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
             });
         },
         loadeditpage(itme){
@@ -89,8 +62,6 @@ export default {
         $('.select2').select2({
             theme: 'bootstrap4'
         });
-        this.getSelectionList();
-        this.loadPositionTitleList();
 
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));

@@ -13,8 +13,6 @@ class SpmEvaluationStatus extends Migration
      */
     public function up()
     {
-        
-
             Schema::create('spm_evaluation_status', function (Blueprint $table) {
                 $table->char('id',36)->primary();
                 $table->unsignedTinyInteger('status')->index();

@@ -18,8 +18,8 @@
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
                             <td>{{ item.application_number }}</td>
-                            <td>{{ item.selection_type=='Others' ? item.selection_type:selectionList[item.selection_type] }}</td>
-                            <td>{{ positionarray[item.position_title] }}</td>
+                            <td>{{ item.LeadershipType }}</td>
+                            <td>{{ item.Positiontitle }}</td>
                             <td>{{ item.created_at }}</td>
                             <td>{{ item.status }}</td>
                             <td>
@@ -38,7 +38,6 @@ export default {
     data(){
         return{
             selectionList:{},
-            positionarray:{},
             data_list:[],
         }
     },
@@ -50,10 +49,10 @@ export default {
                 this.data_list=data;
             })
             .catch((error) =>{
-                console.log("Error: "+error);
+                console.log("Error loadDataList: "+error);
             });
         },
-        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
+        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/allData_LeadershipType'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -62,21 +61,10 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log('err: '+error);
+                console.log('err getSelectionList: '+error);
             });
         },
-        loadPositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positionarray[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         loadeditpage(itme){
             this.$router.push({name:"edit_application",params:{id:itme.id}});
         },
@@ -91,7 +79,7 @@ export default {
             theme: 'bootstrap4'
         });
         this.getSelectionList();
-        this.loadPositionTitleList();
+        this.loadpositionTitleList();
 
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));

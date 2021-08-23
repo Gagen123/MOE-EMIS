@@ -1037,6 +1037,10 @@ class AcademicController extends Controller
             return $instructional_days_1;
         }
     }
+    public function getResult($std_student_id){
+        $result = DB::select('SELECT id, result,remarks  FROM aca_result_consolidated_detail WHERE std_student_id = ?',[$std_student_id]);
+        return $this->successResponse($result);
+    }
    
     
 
