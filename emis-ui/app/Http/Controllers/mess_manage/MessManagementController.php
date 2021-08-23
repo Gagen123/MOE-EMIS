@@ -223,24 +223,24 @@ class MessManagementController extends Controller
     }
 
     public function saveStockIssued(Request $request){
-     //return $request
-     $rules = [
+     //return $request;
+        $rules = [
          'dateOfissue'         =>  'required',
-       ];
-      $customMessages = [
+        ];
+        $customMessages = [
          'dateOfissue.required'            => 'dateOfissue is required',
-         ];
-         $this->validate($request, $rules, $customMessages);
-       $stockissue =[
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $stockissue =[
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
             'itemList'                 =>  $request['itemList'],
             'category'                 =>  $request['category'],
             'id'                       =>  $request['id'],
-            'item_issue'               =>  $request->item_issue,
+            'item_issue'               =>  $request['item_issue'],
             'user_id'                  =>  $this->userId()
         ];
-        dd($stockissue);
+        //dd($stockissue);
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssued', $stockissue);
         //dd($response_data);
         return $response_data;
@@ -320,18 +320,18 @@ class MessManagementController extends Controller
         $stockissue =[
             'organizationId'           =>  $this->getWrkingAgencyId(),
             'dateOfissue'              =>  $request['dateOfissue'],
-          //  'itemList'                 =>  $request['itemList'],
+        //   //  'itemList'                 =>  $request['itemList'],
             'category'                 =>  $request['category'],
             'id'                       =>  $request['id'],
-            'item_id'                  =>  $request['item_id'],
-            'unit_id'                  =>  $request['unit_id'],
-            'availaleqty'              =>  $request['availaleqty'],
+            // 'item_id'                  =>  $request['item_id'],
+            // 'unit_id'                  =>  $request['unit_id'],
+            // 'availaleqty'              =>  $request['availaleqty'],
             'quantity'                 =>  $request['quantity'],
             'damagequantity'           =>  $request['damagequantity'],
             'remarks'                  =>  $request['remarks'],
             'user_id'                  =>  $this->userId()
         ];
-       //  dd($stockissue);
+      //   dd($stockissue);
         $response_data= $this->apiService->createData('emis/messManagement/saveStockIssuedEdit', $stockissue);
         //dd($response_data);
         return $response_data;

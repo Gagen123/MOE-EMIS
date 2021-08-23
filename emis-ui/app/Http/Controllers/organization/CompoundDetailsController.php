@@ -77,6 +77,7 @@ class CompoundDetailsController extends Controller
             'agriculturalarea'              =>  $request['agriculturalarea'],
             'areaused'                      =>  $request['areaused'],
             'programType'                   =>  $request['programType'],
+            'ownership'                     =>  $request['ownership'],
             'id'                            =>  $request['id'],
             'user_id'                       =>  $this->userId()
         ];

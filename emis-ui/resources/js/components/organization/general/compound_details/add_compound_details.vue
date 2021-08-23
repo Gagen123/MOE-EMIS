@@ -61,6 +61,14 @@
                 <!-- </div> -->
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Land Ownership Type<span class="text-danger">*</span></label>
+                        <br>
+                        <label><input v-model="form.ownership"  type="radio" value="government">Government</label>
+                        <label><input v-model="form.ownership"  type="radio" value="private">Private</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Does the School/ECCD/ECR have Playground area?<span class="text-danger">*</span></label>
                         <br>
                         <label><input v-model="form.statusofplay"  type="radio" value="0" @click="showtextboxPlay('No')" />No</label>
@@ -140,6 +148,7 @@ export default {
                 statusofplay: '',
                 agriculturalarea: '',
                 areaused:'',
+                ownership:'',
                 programType:[],
                 attachments:
                 [{
@@ -165,6 +174,7 @@ export default {
             this.form.status= '';
             this.form.statusofplay= '';
             this.form.agriculturalarea='';
+            this.form.ownership='';
             this.form.areaused = '';
         },
         showtextbox:function(type){
@@ -210,6 +220,7 @@ export default {
                 formData.append('statusofplay', this.form.statusofplay);
                 formData.append('agriculturalarea', this.form.agriculturalarea);
                 formData.append('areaused', this.form.areaused);
+                formData.append('ownership',this.form.ownership);
                 formData.append('programType', this.form.programType);
                 for(let i=0;i<this.form.ref_docs.length;i++){
                         formData.append('attachments[]', this.form.ref_docs[i].attach);
