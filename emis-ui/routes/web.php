@@ -191,6 +191,16 @@ Route::prefix('masters')->group(function () {
 Route::post('/saveQuater', [App\Http\Controllers\AdministrationController::class, 'saveQuater'])->name('saveQuater');
 Route::get('/loadQuater', [App\Http\Controllers\AdministrationController::class, 'loadQuater'])->name('loadQuater');
 
+Route::prefix('organizationApproval')->group(function () {
+    Route::get('/getScreenId/{serviceName}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'getScreenId'])->name('getScreenId');
+    Route::post('/saveEstablishment', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveEstablishment'])->name('saveEstablishment');
+    Route::post('/saveClassStream', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveClassStream'])->name('saveClassStream');
+    Route::post('/saveUploadedFiles', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveUploadedFiles'])->name('saveUploadedFiles');
+    Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
+    Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
+    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+});
+
 Route::prefix('organization')->group(function () {
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
@@ -329,7 +339,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
     Route::get('/getClassMappingDetails/{mapping_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getClassMappingDetails'])->name('getClassMappingDetails');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
-    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
 
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');

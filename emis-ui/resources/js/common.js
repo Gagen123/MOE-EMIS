@@ -48,6 +48,15 @@ try {
                 }
             },
 
+            schoolListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
             getdivisionList(departmentId){
                 let uri = 'loadCommons/loadHeaquarterList/all_division/'+departmentId;
                 try{
