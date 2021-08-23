@@ -82,7 +82,7 @@ class RecruitmentFeedbackController extends Controller{
             if(sizeof($files)>0){
                 foreach($files as $index => $file){
                     $file_name = time().'_' .$file->getClientOriginalName();
-                    // move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
                     array_push($attachment_details,
                         array(
                             'path'                   =>  $file_store_path,
@@ -123,6 +123,7 @@ class RecruitmentFeedbackController extends Controller{
             'staff_id'                      =>  $this->userId(),
             'dzo_id'                        =>  $dzoId,
             'org_id'                        =>  'External Application',
+            'name'                          =>  $request->applicant_name,
             'accessLevel'                   =>  $request->accessLevel,
             'remarks'                       =>  $request->remarks,
             'attachment_details'            =>  $attachment_details,
@@ -142,6 +143,7 @@ class RecruitmentFeedbackController extends Controller{
                 'status_id'         =>  1,
                 'remarks'           =>  $request->remarks,
                 'user_dzo_id'       =>  $dzoId,
+                'name'              =>  $request->applicant_name,
                 'access_level'      =>  'NA',
                 'working_agency_id' =>  'External Application',
                 'action_by'         =>  $this->userId(),

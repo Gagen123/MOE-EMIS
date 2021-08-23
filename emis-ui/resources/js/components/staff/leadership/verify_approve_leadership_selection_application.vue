@@ -277,7 +277,6 @@
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                             Note: Some of the Feedback Provider did not submitted thier feedback.
                         </div>
-
                         <div class="row" v-if="feedback_status=='Completed' && form.current_status!='Interviewed'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Interview Date:<span class="text-danger">*</span></label>
@@ -312,7 +311,6 @@
                     </div>
                     <hr>
 
-
                     <!-- Action Buttons -->
                     <div class="row form-group fa-pull-right">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -326,8 +324,6 @@
                 </div>
             </div>
         </div>
-
-
         <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -1031,8 +1027,9 @@ export default {
                     if(itm.status!='Visited' && itm.status=="Submitted"){
                         this.feedback_status='Under Process';
                     }
-                    if(itm.status=="Pending"){
+                    if(itm.status=="Pending" && this.form.status!="Submitted"){
                         this.feedback_pending=true;
+                        this.feedback_status='Under Process';
                     }
                 });
                 if(data.length<1){
@@ -1040,7 +1037,7 @@ export default {
                 }
             })
             .catch(function (error){
-                console.log(error);
+                console.log('error loadexistingfeedbackprovider: '+error);
             });
         },
         deleteNomination(id){

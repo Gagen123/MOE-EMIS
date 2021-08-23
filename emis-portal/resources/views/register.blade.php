@@ -98,6 +98,7 @@
                                 <input type="hidden" name="emp_positionTitle" id="emp_positionTitle">
                                 <input type="hidden" name="emp_positionLevel" id="emp_positionLevel">
                                 <input type="hidden" name="emp_dzongkhag" id="emp_dzongkhag">
+                                <input type="hidden" name="working_address" id="working_address">
                                 <label>CID: </label> <span id="emp_cid_display"></span><br>
                                 <label>Name: </label> <span id="emp_name_display"></span><br>
                                 <label>Position: </label> <span id="emp_positionTitle_display"></span><br>
@@ -211,6 +212,7 @@
                         $('#emp_positionTitle').val(detail.positionTitle);
                         $('#emp_positionTitle_display').html(detail.positionTitle+' ('+detail.positionLevel+')');
                         $('#emp_dzongkhag').val(detail.OrganogramLevel1);
+                        $('#working_address').val(detail.OrganogramLevel3);
 
                         axios.get('recruitmentFeedbackController/getleadershipDetailsByPosition/'+ detail.positionTitle)
                         .then(response => {

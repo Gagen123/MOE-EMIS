@@ -130,6 +130,7 @@ class StaffLeadershipSerivcesController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/submitApplication', $app_data);
         $appNo=json_decode($response_data)->data->application_number;
+        $personal_data= $this->apiService->listData('emis/common_services/StaffDetails/by_id/'.$request->staff_id);
         if($request->id==""){
             $workflow_data=[
                 'db_name'           =>  'staff_database',
@@ -139,6 +140,8 @@ class StaffLeadershipSerivcesController extends Controller{
                 'screen_id'         =>  $appNo,
                 'status_id'         =>  1,
                 'remarks'           =>  $request->remarks,
+                'name'              =>  json_decode($personal_data)->data->name,
+                'app_role_id'       =>  rtrim($this->getRoleIds('roleIds'),','),
                 'user_dzo_id'       =>  $this->getUserDzoId(),
                 'access_level'      =>  $this->getAccessLevel(),
                 'working_agency_id' =>  $this->getWrkingAgencyId(),
@@ -166,6 +169,11 @@ class StaffLeadershipSerivcesController extends Controller{
 
     public function loadAllApplication(){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllApplication/'.$this->userId());
+        return $response_data;
+    }
+
+    public function loadApprovedApplication(){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadApprovedApplication');
         return $response_data;
     }
 
@@ -501,24 +509,25 @@ class StaffLeadershipSerivcesController extends Controller{
          //Notification to applicant
         $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
         // dd($feed->participant,$appRole_id,$feed->partifipant_from);
-        $staff_user_id=$staff_user_id[0]->user_id.',';
-        $notification_data=[
-            'notification_for'              =>  'Updates on Leadership Selection',
-            'notification_access_type'      =>  'all',
-            'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
-            'notification_type'             =>  'user',
-            'call_back_link'                =>  'view_notification_message',
-            'action'                        =>  'delete_on_view',
-            'user_role_id'                  =>  $staff_user_id,
-            'notification_appNo'            =>  $request->application_number,
-            'dzo_id'                        =>  $this->getUserDzoId(),
-            'working_agency_id'             =>  $this->getWrkingAgencyId(),
-            'access_level'                  =>  $this->getAccessLevel(),
-            'action_by'                     =>  $this->userId(),
-        ];
-        $this->apiService->createData('emis/common/insertNotification', $notification_data);
-        $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
-
+        if($staff_user_id!=null && $staff_user_id!=[]){
+            $staff_user_id=$staff_user_id[0]->user_id.',';
+            $notification_data=[
+                'notification_for'              =>  'Updates on Leadership Selection',
+                'notification_access_type'      =>  'all',
+                'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'view_notification_message',
+                'action'                        =>  'delete_on_view',
+                'user_role_id'                  =>  $staff_user_id,
+                'notification_appNo'            =>  $request->application_number,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        }
         $nomi_data =[
             'id'                        =>  $request->id,
             'application_number'        =>  $request->application_number,

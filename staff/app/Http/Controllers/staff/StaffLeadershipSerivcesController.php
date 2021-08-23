@@ -164,7 +164,7 @@ class StaffLeadershipSerivcesController extends Controller{
         if(strpos($role_ids,',')){
             $role_ids=str_replace(",","','",$role_ids);
         }
-        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE BETWEEN s.from_date AND s.to_date GROUP BY p.leadership_id");
+        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id");
         return $this->successResponse($posts);
     }
     public function loadPostDetials($id=""){
@@ -291,6 +291,18 @@ class StaffLeadershipSerivcesController extends Controller{
         return $this->successResponse($posts);
     }
 
+    public function loadApprovedApplication(){
+        $query="SELECT s.name AS applicant_name,p.position_title,po.name Positiontitle,l.name AS LeadershipType,p.selection_type,p.details,a.id,a.application_number AS aplication_number,a.created_at,a.status,
+        a.staff_id,a.dzongkhag_id
+        FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id
+        JOIN stf_staff s ON a.staff_id =s.id
+        JOIN master_stf_position_title po on po.id=p.position_title
+        JOIN master_staff_leadership_type l on l.id=p.selection_type
+        where a.status= 'Selected'";
+        $posts=DB::select($query);
+        return $posts;
+    }
+
     public function loadapplicaitontDetials($id=""){
         $query="SELECT p.details,p.from_date,p.id post_id,p.position_title,p.selection_type,p.to_date,a.id,a.application_number,a.interniew_score,a.interniew_date,a.feedback_details,a.feedback_end_date,a.feedback_start_date,a.feedback_remarks,a.remarks,a.staff_id,a.status FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id=p.id WHERE a.id='".$id."'";
         $posts=DB::select($query);
@@ -305,8 +317,17 @@ class StaffLeadershipSerivcesController extends Controller{
     public function loadapplicaitontDetialsforVerification($app_no=""){
         $app_details=LeadershipApplication::where('application_number',$app_no)->first();
         if($app_details!=null && $app_details!=""){
-            $app_details->Post_details=LeadershipDetails::where('id',$app_details->leadership_id)->first();
+            $post_det=LeadershipDetails::where('id',$app_details->leadership_id)->first();
+            $app_details->Post_details=$post_det;
             $app_details->attachments=DocumentDetails::where('parent_id',$app_details->id)->get();
+            $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
+            if($positiontitle!=null && $positiontitle!=""){
+                $app_details->position_title=$positiontitle->name;
+            }
+            $post=LeadershipType::where('id',$post_det->selection_type)->first();
+            if($post!=null && $post!=""){
+                $app_details->leadership_for=$post->name;
+            }
         }
         return $this->successResponse($app_details);
     }
@@ -716,24 +737,25 @@ class StaffLeadershipSerivcesController extends Controller{
             ];
         }
         if($request->current_status=="Selected"){
-            $applicant_det   = LeadershipApplication::where('id',$request->id)->first();
-            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
-            $history_data=[
-                'id'                           =>$staff_detials->id,
-                'name'                         =>$staff_detials->name,
-                'cid_work_permit'              =>$staff_detials->cid_work_permit,
-                'position_title_id'            =>$staff_detials->position_title_id,
-                'inserted_at'                  =>date('Y-m-d h:i:s'),
-                'inserted_by'                  =>$request->user_id,
-                'inserted_for'                 =>'Leadership Selection/ Promotion',
-                'inserted_application_no'      =>$request->application_number,
-            ];
-            StaffHistory::create($history_data);
-            $post_details=LeadershipDetails::where('id',$applicant_det->leadership_id)->first();
-            $update_data=[
-                'position_title_id'            =>$post_details->position_title,
-            ];
-            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
+            //should be updated during the reporting time
+            //$applicant_det   = LeadershipApplication::where('id',$request->id)->first();
+            // $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            // $history_data=[
+            //     'id'                           =>$staff_detials->id,
+            //     'name'                         =>$staff_detials->name,
+            //     'cid_work_permit'              =>$staff_detials->cid_work_permit,
+            //     'position_title_id'            =>$staff_detials->position_title_id,
+            //     'inserted_at'                  =>date('Y-m-d h:i:s'),
+            //     'inserted_by'                  =>$request->user_id,
+            //     'inserted_for'                 =>'Leadership Selection/ Promotion',
+            //     'inserted_application_no'      =>$request->application_number,
+            // ];
+            // StaffHistory::create($history_data);
+            // $post_details=LeadershipDetails::where('id',$applicant_det->leadership_id)->first();
+            // $update_data=[
+            //     'position_title_id'            =>$post_details->position_title,
+            // ];
+            // PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
 
             $data =[
                 'status'                        =>  $request->current_status,

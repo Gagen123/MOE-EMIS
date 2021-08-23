@@ -25,7 +25,8 @@
                             <div class="text-center">
                                 <img class="profile-user-img img-fluid img-circle" src="img/user.png" alt="User profile picture">
                             </div>
-                            <h3 class="profile-username text-center">{{full_name}}</h3>
+                            <h3 class="profile-username text-center">{{full_name}} </h3>
+                            <p class="text-center">({{position_title !="" ? position_title : ''}})</p>
                             <p class="text-muted text-center">
                                 Loged In AS:
                                 {{roles}}
@@ -114,6 +115,8 @@
     export default {
         data(){
             return{
+                staff_id:'',
+                position_title:'',
                 userDetails: '',
                 user_name:'',full_name:'',role:'',
                 email:'',contact:'',cid:'',
@@ -171,21 +174,31 @@
                         roleName+=data['roles'][i].roleName+', ';
                     }
                 }
-                this.user_name=data['Email'];
-                this.full_name=data['Full_Name'];
-                this.role=data['Full_Name'];
-                this.email=data['Email'];
-                this.contact=data['Contact_Number'];
-                this.cid=data['Passport_CID'];
                 this.roles=roleName;
+                this.staff_id=data['staff_id'];
                 this.getdzongkhag(data['Dzo_Id']);
                 this.getgewog(data['Geo_Id']);
                 this.getorgName(data['Agency_Code'],data['acess_level']);
                 this.accessLevel=data['acess_level'];
+
+                let uri = 'loadCommons/viewStaffDetails/by_id/'+this.staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response.data.data;
+                    this.position_title=data.position_title_name;
+                    this.user_name=data.email;
+                    this.full_name=data.name;
+                    this.email=data.email;
+                    this.contact=data.contact_no;
+                    this.cid=data.cid_work_permit;
+
+                })
             })
             .catch(errors => {
                 console.log(errors)
             });
+
+
         }
     }
 </script>

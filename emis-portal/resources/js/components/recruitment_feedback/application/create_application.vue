@@ -8,6 +8,11 @@
                             <label>Selection For:</label>
                             <span class="text-blue text-bold">{{post_detail.leadership_for}}</span>
                         </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label>Application Date:</label>
+                            <span class="text-blue text-bold">{{curr_date}}</span>
+                        </div>
+
                     </div>
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -31,58 +36,79 @@
                             <span class="text-blue text-bold">{{post_detail.details}}</span>
                         </div>
                     </div>
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label>Applicant:</label>
+                            <span class="text-blue text-bold">{{form.applicant_name}}</span>
+                        </div>
+                    </div>
                 </template>
                 <hr/>
-                <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0">Remarks</label>
-                        <textarea class="form-control" v-model="form.remarks" id="remarks" name="remarks"></textarea>
-                        <span class="text-danger" id="remarks_err"></span>
+                <div id="contentDetails">
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Remarks</label>
+                            <textarea class="form-control" v-model="form.remarks" id="remarks" name="remarks"></textarea>
+                            <span class="text-danger" id="remarks_err"></span>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                        </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="form-group row">
-                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>File Name</th>
-                                        <th>Upload File</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
-                                        <td>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
-                                            <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
-                                        </td>
-                                        <td>
-                                            <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
-                                            <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="5">
-                                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
-                                            @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                            <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
-                                            @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="card">
+                        <div class="form-group row">
+                            <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name</th>
+                                            <th>Upload File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
+                                            <td>
+                                                <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                            </td>
+                                            <td>
+                                                <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <button class="btn btn-primary fa-pull-right" @click="submitApplication()"><i class="fa fa-save"></i> Submit </button>
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-primary fa-pull-right" @click="submitApplication()"><i class="fa fa-save"></i> Submit </button>
+                <div id="expiredDetails" style="display:none">
+                    <div class="row form-group">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="callout callout-danger">
+                                <div>
+                                    We are sorry to inform that the last date of application for this post is on <b>{{post_detail.to_date}}.</b>
+                                    The system has stop receiving further application<br>
+                                    Thank you!
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -96,6 +122,7 @@ export default {
             require_count:0,
             count:0,
             post_detail:'',
+            curr_date:'',
             form: new form({
                 id:'',
                 post_id:'',
@@ -110,6 +137,7 @@ export default {
                 }],
                 ref_docs:[],
                 applicant:'',
+                applicant_name:'',
                 action_type:'add'
             }),
         }
@@ -167,6 +195,7 @@ export default {
                     formData.append('org_id', this.form.org_id);
                     formData.append('accessLevel', this.form.accessLevel);
                     formData.append('remarks', this.form.remarks);
+                    formData.append('applicant_name',this.form.applicant_name);
                     for(let i=0;i<this.form.ref_docs.length;i++){
                         formData.append('attachments[]', this.form.ref_docs[i].attach);
                         formData.append('attachmentname[]', this.form.ref_docs[i].name);
@@ -227,6 +256,26 @@ export default {
             for(let i=1;i<=(data.attachments.length+1);i++){
                 $('#file_name'+i).prop('readonly',true);
             }
+            let today = new Date();
+			let dd = String(today.getDate()).padStart(2, '0');
+			let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+			let yyyy = today.getFullYear();
+			today =   yyyy+'-'+mm+'-'+dd;
+
+            if(data.to_date<today){
+                $('#contentDetails').hide();
+                $('#expiredDetails').show();
+            }
+            this.curr_date=today;
+
+            axios.get('getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                this.form.applicant_name=data['full_name'];
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
         })
         .catch((error)=>{
             console.log("Error: "+error);
