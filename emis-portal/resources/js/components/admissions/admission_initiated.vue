@@ -503,7 +503,7 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.leg(error);
+                console.log(error);
             });
         },
         removeerror(fieldid){

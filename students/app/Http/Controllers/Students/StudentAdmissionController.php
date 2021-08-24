@@ -12,7 +12,8 @@ use App\Models\Students\Student;
 use App\Models\Students\StudentClassAllocation;
 use App\Models\std_admission_org;
 use App\Models\std_admission;
-use App\Models\requestForAdmission;
+use App\Models\AdmissionRequest;
+use App\Models\AdmissionAttachments;
 use App\Models\StudentAdmissionSchool;
 use App\Models\StudentGuardian;
 use App\Models\Students\StudentClassDetails;
@@ -801,29 +802,41 @@ class StudentAdmissionController extends Controller
 
     }
 
-    public function savedrequestadmission(Request $request){
-        // dd($request);
+    public function saveAdmissionRequest(Request $request){
+        
         $rules = [
-            'dateOfapply'               => 'required',
+            'dzongkhag'               => 'required',
 
         ];
         $customMessages = [
-            'dateOfapply.required'      => 'This field is required',
+            'dzongkhag.required'      => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'dzongkhag'                  =>  $request->dzongkhag,
-            'school'                     =>  $request->school,
-            'class'                      =>  $request->class,
-            'stream'                     =>  $request->stream,
-            'dateOfapply'                =>  $request->dateOfapply,
-            'reasons'                    =>  $request->reasons,
-            'snationality'               =>  $request->snationality,
+            'StdStudentId'              =>  $request->student_id,
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'dateOfapply'               =>  $request->dateOfapply,
+            'reasons'                   =>  $request->reasons,
+            'status'                    =>  $request->status,
+            'created_by'                 =>  $request->action_by,
         ];
-        // dd($data);
-         $response_data = requestForAdmission::create($data);
-         return $this->successResponse($response_data, Response::HTTP_CREATED);
+        
+         $application = AdmissionRequest::create($data);
+         $lastInsertId = $application->id;
+
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'AdmissionRequestId'        =>  $lastInsertId,
+                    'fileName'                  =>  $att['user_defined_name'],
+                    'filePath'                  =>  $att['path'],
+                ];
+                AdmissionAttachments::create($attach);
+            }
+        }
+
+        return $this->successResponse($application, Response::HTTP_CREATED);
 
     }
 
@@ -839,6 +852,82 @@ class StudentAdmissionController extends Controller
         } else{
             $response_data = std_admission::where ('ApplicationId', $id)->first();
         }
+        return $this->successResponse($response_data);
+    }
+
+    /**
+     * load the application requests for admissions
+     *
+     * For EMIS Portal
+     */
+
+    public function loadAdmissionRequest($std_id=""){
+        if($std_id == 0){
+            $response_data = DB::table('request_for_admissions')
+                                ->join('admission_request_files','request_for_admissions.id','=', 'admission_request_files.AdmissionRequestId')
+                                ->join('std_student','std_student.student_code','=', 'request_for_admissions.StdStudentId')
+                                ->join('std_student_class_stream','std_student_class_stream.StdStudentId','=', 'std_student.id')
+                                ->select('request_for_admissions.*', 'admission_request_files.*', 'std_student_class_stream.OrgClassStreamId',
+                                            'std_student.name', 'std_student.student_code', 'std_student.OrgOrganizationId')
+                                ->get();
+        } else{
+            $response_data = DB::table('request_for_admissions')
+                                ->join('admission_request_files','request_for_admissions.id','=', 'admission_request_files.AdmissionRequestId')
+                                ->join('std_student','std_student.student_code','=', 'request_for_admissions.StdStudentId')
+                                ->join('std_student_class_stream','std_student_class_stream.StdStudentId','=', 'std_student.id')
+                                ->select('request_for_admissions.*', 'admission_request_files.*', 'std_student_class_stream.OrgClassStreamId',
+                                            'std_student.name', 'std_student.student_code', 'std_student.OrgOrganizationId',
+                                            'std_student.CmnSexId', 'std_student.DateOfBirth')
+                                ->where('request_for_admissions.StdStudentId', $std_id)
+                                ->get();
+        }
+        
+
+        return $this->successResponse($response_data);
+    }
+
+    /**
+     * Load the Position of the student of the Class X Results for Admission
+     */
+
+    public function loadResultPosition($std_code){
+
+        $orgs_applied = DB::table('std_admissions_schools')
+                                ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
+                                ->join('bcsea_bcse','std_student.student_code','=', 'bcsea_bcse.std_regno')
+                                ->select('std_admissions_schools.OrgOrganizationId', 'rank')
+                                ->where('std_student.student_code', $std_code)
+                                ->groupBy('std_admissions_schools.OrgOrganizationId')
+                                ->get();
+        
+        $streams_applied = DB::table('std_admissions_schools')
+                                ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
+                                ->join('bcsea_bcse','std_student.student_code','=', 'bcsea_bcse.std_regno')
+                                ->select('stream_id')
+                                ->where('std_student.student_code', $std_code)
+                                ->groupBy('stream_id')
+                                ->get();
+
+        $response_data = (object)[];
+        
+        foreach($orgs_applied as $key => $value){
+            foreach($streams_applied as $k=>$stream){
+                $temp = (object)[];
+                $temp->strm = $stream->stream_id;
+                $temp->rank = DB::table('std_admissions_schools')
+                                ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
+                                ->join('bcsea_bcse','std_student.student_code','=', 'bcsea_bcse.std_regno')
+                                ->where('std_admissions_schools.stream_id',$stream->stream_id)
+                                ->where('std_admissions_schools.OrgOrganizationId',$value->OrgOrganizationId)
+                                ->where('bcsea_bcse.rank','<=', $value->rank)
+                                ->count();
+                $orgs_applied[$key]->data[$k] =$temp;
+            }
+            // $orgs_applied[$key]->data = $streams_applied;
+        }
+        
+        $response_data = $orgs_applied;
+
         return $this->successResponse($response_data);
     }
 
@@ -921,6 +1010,34 @@ class StudentAdmissionController extends Controller
         $response_data = Student::where('id',$request->id)->update($data);
         return $this->successResponse($response_data);
 
+    }
+
+    /**
+     * Get the Qualification Marks for each stream (XI Admission)
+     */
+
+    public function loadQualificationMarks(){
+        $response_data = DB::table('subject_marks')
+                                ->select('streamId', 'marks', 'grade')
+                                ->get();
+
+        return $this->successResponse($response_data);
+
+    }
+
+    /**
+     * Get the marks obtained by student in class X
+     * 
+     * Academic Year could be used as another where parameter (for future)
+     */
+
+    public function loadStudentMarks($std_code){
+        $response_data = DB::table('bcsea_bcse')
+                                ->select('std_admissions_schools.OrgOrganizationId', 'rank')
+                                ->where('bcsea_bcse.std_regno', $std_code)
+                                ->get();
+                                
+        return $this->successResponse($response_data);
     }
 
 }

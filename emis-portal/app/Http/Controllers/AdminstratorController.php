@@ -137,7 +137,4 @@ class AdminstratorController extends Controller
 
     // }
 
-
-
-
 }

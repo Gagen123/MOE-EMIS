@@ -275,10 +275,19 @@ class AcademicMastersController extends Controller
     }
     //written by gagen
     public function subjectlist($id=""){
-        if($id!="" && $id!=null){
-            $loadclass_dropdown = DB::select('SELECT org_class_id,aca_sub_id FROM aca_class_subject WHERE (org_stream_id = "'.$id.'")');
-            return $this->successResponse($loadclass_dropdown);
-        }
+        // if($id!="" && $id!=null){
+        //     $loadclass_dropdown = DB::select('SELECT org_class_id,aca_sub_id,  FROM aca_class_subject WHERE (class_stream = "'.$id.'")');
+        //     return $this->successResponse($loadclass_dropdown);
+        // }
+		
+        
+        $response_data = DB::table('aca_class_subject')
+                                ->join('aca_subject', 'aca_subject.id', '=', 'aca_class_subject.aca_sub_id')
+                                ->select('aca_class_subject.org_class_id','aca_class_subject.aca_sub_id', 'aca_subject.name')
+                                ->where('class_stream', $id)
+                                ->get();
+                                
+        return $this->successResponse($response_data);
     }
     public function loadAcademicMasters($param=""){
         

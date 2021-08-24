@@ -155,14 +155,13 @@ class StudentAdmissionRelatedController extends Controller
     }
     /**
      * load the list of admission requests
+     * 
+     * std_id = 0 to get all requests
      */
 
-    public function loadAdmissionRequest($orgId=""){
-        if($orgId=="null" || $orgId==""){
-            $orgId=$this->getWrkingAgencyId();
-        }
-        $loadlist = $this->apiService->listData('emis/students/loadAdmissionRequest/'.$orgId);
-        return $loadlist;
+    public function loadAdmissionRequest($std_id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id);
+        return $response_data;
     }
 
     ///Student Residing Aboard

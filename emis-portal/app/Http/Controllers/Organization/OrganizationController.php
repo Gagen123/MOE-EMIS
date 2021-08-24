@@ -36,5 +36,10 @@ class OrganizationController extends Controller
         $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/fullOrgDetbyid/'.$id );
         return $loadOrganizationDetails;
     }
+
+    public function loadStreamList(){
+        $response_data = $this->apiService->listData('emis/masters/stream/loadStream');
+        return $response_data;
+    }
     
 }

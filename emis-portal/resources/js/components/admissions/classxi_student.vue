@@ -71,15 +71,17 @@
                                                 <th>Arts</th>
                                                 <th>Commerce</th>
                                                 <th>Science</th>
-                                                <th>Rigzhung</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
+                                            <tr id="record2" v-for='(item, index) in positionResult' :key="index">
+                                                <td>{{item.organization.name}}</td>
+                                                <td v-for='(item2, index) in item.data' :key="index">
+                                                        {{StreamName[item2.strm]==  'Arts' ? item2.rank : ""}}
+                                                        {{StreamName[item2.strm]==  'Commerce' ? item2.rank : ""}}
+                                                        {{StreamName[item2.strm]==  'Science' ? item2.rank : ""}}
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -90,17 +92,32 @@
                                     <table class="table table-bordered table-striped" id="OrgDetails">
                                         <thead>
                                             <tr>
-                                                <th>School Code</th>
                                                 <th>Name of School</th>
+                                                <th>Stream</th>
                                                 <th>School Decision</th>
                                                 <th>Student Decision</th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
-                                            <td class="text-primary"></td>
+                                            <tr id="record1" v-for='(item, index) in response_data' :key="index">
+                                                <td>{{item.organization.name}}</td>
+                                                <td>{{StreamName[item.stream_id]}}</td>
+                                                <td>{{item.school_decision}}</td>
+                                                <td>{{item.student_decision}}</td>
+                                                <td>
+                                                    <template v-if="item.school_decision!='Accepted' && item.school_decision!='Rejected' && item.student_decision!='Accepted' && item.student_decision!='Rejected'">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="remove"
+                                                        @click="remove('Accepted',item.id)"><i class="fa fa-check"></i> Accept</button>
+                                                        <button type="button" class="btn btn-flat btn-sm bg-success" id="remove"
+                                                        @click="remove('Rejected',item.id)"><i class="fa fa-times pr-2"></i> Reject</button>
+                                                    </template>
+                                                    <template v-if="item.school_decision==''">
+                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                        @click="remove('Remove',item.id)"><i class="fa fa-trash"></i> Remove</button>
+                                                    </template>
+                                                </td>
+                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -123,22 +140,14 @@
                                         <th>School</th>
                                         <th>Class</th>
                                         <th>Stream</th>
-                                        <th class="pr-4 pl-4">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr id="record1" v-for='(item, index) in response_data' :key="index">
-                                        <td>
-                                            {{dzongkhagArray[item.Dzongkhagid]}}
-                                        </td>
-                                        <td>
-                                            {{item.organization.name}}
-                                        </td>
-                                        <td>
-                                            XI
-                                        </td>
-                                        <td>
-                                        </td>
+                                        <td>{{dzongkhagArray[item.Dzongkhagid]}}</td>
+                                        <td>{{item.organization.name}}</td>
+                                        <td>XI</td>
+                                        <td>{{StreamName[item.stream_id]}}</td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -159,14 +168,11 @@
                                             <span>{{this.std_class}}</span>
                                         </td>
                                         <td>
-                                            <select v-model="student_form.stream" :class="{ 'is-invalid': student_form.errors.has('stream') }"  class="form-control" name="stream" id="stream">
+                                            <select v-model="student_form.stream" :class="{ 'is-invalid': student_form.errors.has('stream') }"   @change="checkStream(),removeerror()" class="form-control" name="stream" id="stream">
                                                 <option value="">--- Please Select---</option>
                                                 <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{item.stream}}</option>
                                             </select>
                                             <has-error :form="student_form" field="stream"></has-error>
-                                        </td>
-                                        <td>
-                                            
                                         </td>
                                     </tr>
                                     <tr>
@@ -199,6 +205,7 @@ export default {
             std_class:'',
             org_id:'',
             parent_school_dzongkhag:'',
+            StreamName:{},
             genderArray:{},
             dzongkhagArray:{},
             gewogArray:{},
@@ -208,12 +215,16 @@ export default {
             schoolList:[],
             classList:[],
             streamList:[],
+            scienceQualification:[],
+            artsQualification:[],
+            commerceQualification:[],
             std_admission_details:'',
             ppdob:'',
             eccddob:'',
             ppmonth:'',
             eccdmonth:'',
             response_data:[],
+            positionResult:[],
             student_form: new form({
                 id:'',
                 seats:0,
@@ -249,11 +260,26 @@ export default {
                         this.student_form.dzongkhag=this.parent_school_dzongkhag;
                         this.student_form.school='';
                         this.student_form.class='';
+                        this.student_form.stream='';
                         this.loadadmissions();
                     })
                     .catch((error) => {
                         console.log("Error addMore:"+error);
                     })
+                }
+            });
+        },
+        loadStreamList(uri = 'organizations/loadStreamList'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                for(let i=0;i<data.length;i++){
+                    this.StreamName[data[i].id] =data[i].stream;
+                }
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
         },
@@ -466,6 +492,24 @@ export default {
             })
         },
 
+        checkStream(){
+            let orgId=$('#school').val();
+            let stream=$('#stream').val();
+            for(let i=0;i<this.response_data.length;i++){
+                if(this.response_data[i].OrgOrganizationId == orgId && this.response_data[i].stream_id == stream){
+                    Swal.fire({
+                    text: "This selection has already been added",
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok!',
+                    })
+                    this.student_form.stream = '';
+                }
+            }
+        },
+
         getOrgDetails(id){
             axios.get('/organizations/loadOrganizationDetailsbyOrgId/' +id)
             .then(response =>{
@@ -525,7 +569,7 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.leg(error);
+                console.log(error);
             });
         },
         removeerror(fieldid){
@@ -599,6 +643,49 @@ export default {
                 console.log('error: '+error);
             });
         },
+
+        loadQualificationMarks(){
+            let uri='admissions/loadQualificationMarks';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.ppdob=data.date;
+                this.eccddob=data.date1;
+                this.ppmonth=data.no_months;
+                this.eccdmonth=data.no_months1;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+
+        loadStudentMarks(std_code){
+            let uri='students/loadStudentMarks/'+std_code;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.ppdob=data.date;
+                this.eccddob=data.date1;
+                this.ppmonth=data.no_months;
+                this.eccdmonth=data.no_months1;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+
+        loadResultPosition(std_code){
+            let uri='admissions/loadResultPosition/'+std_code;
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                this.positionResult = data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+
         showsection(type){
             let dob=new Date(this.std_admission_details.DateOfBirth);
             // let year2=date2.getFullYear();
@@ -653,6 +740,8 @@ export default {
         }
     },
     mounted() {
+        this.loadStreamList();
+
         axios.get('getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -663,6 +752,7 @@ export default {
             }
             this.getstudentPersonalDetails(user_type);
             this.getdzongkhagList(user_type);
+            this.loadResultPosition(data['std_id']);
         })
         .catch(errors => {
             console.log(errors)
@@ -679,6 +769,7 @@ export default {
         });
         this.loadVlidation();
         this.loadGenderList();
+        this.loadQualificationMarks();
     },
 }
 </script>

@@ -69,12 +69,18 @@ class StudentMasterController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
+
+    /**
+     * Qualification marks for class XI
+     */
+
     public function saveStreamSubject(Request $request){
         $id = $request->id;
         if($id != null){
             $subjectlist = [
                 'streamId'           =>  $request['streamId'],
                 'aca_sub_id'         =>  $request['aca_sub_id'],
+                'subject_name'       =>  $request['name'],
                 'marks'              =>  $request['marks'],
                 'grade'              =>  $request['grade'],
                 'id'                 =>  $request['id'],
@@ -95,6 +101,10 @@ class StudentMasterController extends Controller
                    if(isset($classstream['grade'])){
                        $grade=$classstream['grade'];
                    }
+                   $subject_name="";
+                   if(isset($classstream['name'])){
+                        $subject_name=$classstream['name'];
+                    }
                    $aca_sub_id="";
                    if(isset($classstream['aca_sub_id'])){
                        $aca_sub_id=$classstream['aca_sub_id'];
@@ -102,6 +112,7 @@ class StudentMasterController extends Controller
                    $data = array(
                     'streamId'           =>  $request['streamId'],
                     'aca_sub_id'         =>  $aca_sub_id,
+                    'subject_name'       =>  $subject_name,
                     'marks'              =>  $marks,
                     'grade'              =>  $grade,
                     'id'                 =>  $request['id'],

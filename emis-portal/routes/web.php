@@ -57,12 +57,17 @@ use Illuminate\Support\Facades\Route;
         Route::post('/saveorgclassDetails', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'saveorgclassDetails'])->name('saveorgclassDetails');
         Route::get('/getorgclassDetails/{id}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'getorgclassDetails'])->name('getorgclassDetails');
         Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'deleteclassDetails'])->name('deleteclassDetails');
+        Route::get('/loadResultPosition/{std_code}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'loadResultPosition'])->name('loadResultPosition');
+        Route::get('/loadQualificationMarks', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'loadQualificationMarks'])->name('loadQualificationMarks');
         Route::post('/savefilanorgclassDetails', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'savefilanorgclassDetails'])->name('savefilanorgclassDetails');
+        Route::post('/saveAdmissionRequest', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'saveAdmissionRequest'])->name('saveAdmissionRequest');
+        Route::get('/loadAdmissionRequest/{std_id}', [App\Http\Controllers\StudentPortal\AdmissionController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
     });
 
     Route::prefix('students')->group(function () {
         // Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\StudentPortal\StudentController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');
         // Route::post('/acceptApplication', [App\Http\Controllers\StudentPortal\StudentAdmissionControllerController::class, 'acceptApplication'])->name('acceptApplication');
+        Route::get('/loadStudentMarks/{std_code}', [App\Http\Controllers\StudentPortal\StudentController::class, 'loadStudentMarks'])->name('loadStudentMarks');
         Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\StudentPortal\StudentController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
         Route::get('/getStudentClassId/{std_id}', [App\Http\Controllers\StudentPortal\StudentController::class, 'getStudentClassId'])->name('getStudentClassId');
     });
@@ -72,6 +77,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/loadSchoolList/{dzoId}/{type}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadSchoolList'])->name('loadSchoolList');
         Route::get('/loadParentSchoolList/{orgId}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadParentSchoolList'])->name('loadParentSchoolList');
         Route::get('/loadProjection/{classId}', [App\Http\Controllers\Organization\OrganizationController::class, 'loadProjection'])->name('loadProjection');
+        Route::get('/loadStreamList', [App\Http\Controllers\Organization\OrganizationController::class, 'loadStreamList'])->name('loadStreamList');
     });
 
     //Academic Routes are yet to be created
