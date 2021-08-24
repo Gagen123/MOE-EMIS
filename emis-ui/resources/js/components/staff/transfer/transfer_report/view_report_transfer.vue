@@ -127,6 +127,18 @@
                                 </table>
                             </div>
                         </div>
+                         <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" id="reportDate">
+                                <label class="mb-0">Reporting Date<i class="text-danger">*</i></label>
+                                <input type="date" class="form-control"  v-model="form.effective_date" id="effective_date"/>
+                            </div>
+                        </div><br>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="remarks">
+                                <label class="mb-0">Remarks<i class="text-danger">*</i></label>
+                                <textarea class="form-control"  v-model="form.remarks" id="remarks"></textarea>
+                            </div>
+                        </div><br>
                         <div class="row form-group fa-pull-right" >
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
                                 <button id="reported" class="btn btn-success text-white" @click="shownexttab('report')"> <i class="fa fa-check"></i>Reported </button>
@@ -164,6 +176,9 @@ export default {
                 status:'',
                 dzongkhagApproved:'',
                 preference_school:'',
+                effective_date:'',
+                remarks:'',
+                action_type:'TransferReport Update',
             })
         }
     },
@@ -240,9 +255,13 @@ export default {
                             formData.append('application_number', this.form.aplication_number);
                             formData.append('dzongkhagApproved', this.form.dzongkhagApproved);
                             formData.append('preference_school', this.form.preference_school);
+                            formData.append('effective_date', this.form.effective_date);
+                            formData.append('remarks', this.form.remarks);
                             formData.append('status', 'reporting');
+                            formData.append('action_type', 'TransferReport Update');
                             formData.append('transferType', 'transferReporting');
-                            axios.post('/staff/transfer/updateTransferApplication', formData, config)
+
+                            axios.post('/staff/updateStaffDetails', formData, config)
                              .then((response) =>{
                                 if(response.data!=""){
                                     let message=" Applicant has been reported successfully in the organization:";
@@ -255,7 +274,7 @@ export default {
                             .catch((error) => {
                                 console.log("Errors:"+error)
                             });
-                            this.$router.push('/report_transfer');
+                            this.$router.push('/reporting_list');
                         }
                     });
                 }
@@ -270,6 +289,9 @@ export default {
                 this.form.preference_school=data.preference_school;
                 if(data.status =="Reported"){
                      $('#reported').hide();
+                     $('#reportDate').hide();
+                     $('#reportDate').hide();
+                     
                 }
           })
         },
