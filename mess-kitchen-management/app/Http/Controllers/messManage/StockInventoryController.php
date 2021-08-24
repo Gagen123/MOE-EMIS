@@ -62,7 +62,7 @@ class StockInventoryController extends Controller
              GROUP BY c.item_id, c.organizationId, c.unit_id) aa
              LEFT JOIN
              (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
-           FROM stock_issueds  GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+           FROM stock_issueds  WHERE category='Central' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
            LEFT JOIN 
            (SELECT organizationId, item_id, procured_type, SUM(available_qty) AS Available_Qty FROM mess_transaction_table
            WHERE procured_type = 'Central'
@@ -84,7 +84,7 @@ class StockInventoryController extends Controller
         GROUP BY item_id, organizationId, unit_id) aa
         LEFT JOIN
         (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
-      FROM stock_issueds  GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+      FROM stock_issueds WHERE category='Local' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
       LEFT JOIN 
       (SELECT organizationId, item_id,procured_type, SUM(available_qty) AS Available_Qty FROM `mess_transaction_table` 
       WHERE`procured_type` = 'Local'
