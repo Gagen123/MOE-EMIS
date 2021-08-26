@@ -10,7 +10,7 @@ class ApplicationDetails extends Model
 {
     use HasFactory, Uuid;
     protected $table="application_details";
-
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -29,10 +29,13 @@ class ApplicationDetails extends Model
         'status',
         'remarks',
         'applicant_remarks',
+        'approval_in_principal_remarks',
+        'document_update_remarks',
+        'approval_in_principal_confirm',
+        'remarks',
         'created_by',
         'updated_by',
         'created_at',
         'updated_at'
-
     ];
 }

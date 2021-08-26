@@ -370,7 +370,17 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getEccdInfrastructureDetails/{eccdinfraId}', 'structuralFacility\EccdInfrastructureController@getEccdInfrastructureDetails');
 
         });
+        $router->group(['prefix' => 'organizationApproval'], function () use ($router) {
+            $router->post('/saveEstablishment', 'organizationApproval\OrganizationApprovalController@saveEstablishment');
+            $router->post('/saveClassStream', 'organizationApproval\OrganizationApprovalController@saveClassStream');
+            $router->post('/saveUploadedFiles', 'organizationApproval\OrganizationApprovalController@saveUploadedFiles');
+            $router->get('/loadOrgApplications/{user_id}/{type}', ['uses' => 'organizationApproval\OrganizationApprovalController@loadOrgApplications']);
+            $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'organizationApproval\OrganizationApprovalController@loadEstbDetailsForVerification']);
+            $router->post('/updateNewEstablishmentApplication', 'organizationApproval\OrganizationApprovalController@updateNewEstablishmentApplication');
+            $router->post('/updateTeamVerification', 'organizationApproval\OrganizationApprovalController@updateTeamVerification');
+            $router->get('/loadTeamVerificationList/{id}', ['uses' => 'organizationApproval\OrganizationApprovalController@loadTeamVerificationList']);
 
+        });
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
             $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');

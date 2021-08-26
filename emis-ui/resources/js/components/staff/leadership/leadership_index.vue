@@ -67,15 +67,17 @@ export default {
     },
     methods: {
 		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+            if(sub_mod_id!=undefined){
+                let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
+                axios.get(uri)
+                .then(response => {
+                    let data = response;
+                    this.menubar =  data.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         },
 
         checkfeedbackMenu(){

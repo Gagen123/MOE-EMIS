@@ -12,23 +12,16 @@ class StaffApprovalController extends Controller
     public $apiService;
     use AuthUser;
     use ServiceHelper;
-
     public $database_name="staff_db";
     public $table_name="application_details";
-    // public $bif_table_name="bifurcations";
-
     public $service_name="Principal Recuritment";
     public $service_name_expa="Expatriate Recuritment";
-
-    // public $service_name_closure="Closure";
-    // public $merge_service_name="Merger";
-    // public $bif_service_name="Bifurcation";
-
     public function __construct(EmisService $apiService)
-    {
-        $this->apiService = $apiService;
-    }
+        {
+            $this->apiService = $apiService;
+        }
 
+    //Method to pull user information from census through cid number
     public function getpersonbycid($cid){
         $person = json_decode($this->apiService->listData('getCensusdata/'. $cid));
         if ($person->citizenDetailsResponse){
@@ -120,11 +113,12 @@ class StaffApprovalController extends Controller
                     'working_agency_id' =>$this->getWrkingAgencyId(),
                     'action_by'         =>$this->userId(),
                 ];
-                // dd($workflow_data);
                  $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             }
                  return $response_data;
     }
+
+    //Loading the principal recuritment application details
     public function loadPrincipalRecuritmentApplication($appNo="",$type=""){
         $update_data=[
             'applicationNo'     =>  $appNo,
@@ -163,6 +157,8 @@ class StaffApprovalController extends Controller
         // $PrincipalApprovalDetails->app_stage=$workflowstatus;
         return json_encode($PrincipalApprovalDetails);
     }
+
+    //updating the principal application during the approval process
     public function updatePrincipalApproval(Request $request){
         $org_status='Verified';
         $work_status=$request->sequence;
@@ -222,6 +218,8 @@ class StaffApprovalController extends Controller
         $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/updatePrincipalApproval', $data);
         return ($response_data);
     }
+
+    //updating the expatriate recuritment during the approval process
     public function UpdateExpatriateRecuritment(Request $request){
         $org_status='Verified';
         $work_status=$request->sequence;
@@ -306,6 +304,7 @@ class StaffApprovalController extends Controller
     }
     private function setPrincipalRecuritmentApprovalFields($request){
         $data =[
+            'cid'                       =>  $request['cid'],
             'organizationId'            =>  $request['organizationId'],
             'name'                      =>  $request['name'],
             'dob'                       =>  $request['dob'],
@@ -326,6 +325,7 @@ class StaffApprovalController extends Controller
         return $data;
     }
 
+    //Method to save the Expatriate recuritment
     public function saveExpatriateRecuritment(Request $request){
         $this->service_name = $request['application_for'];
         //File Upload
@@ -352,29 +352,46 @@ class StaffApprovalController extends Controller
                 }
             }
         }
-
         $request['attachment_details'] = $attachment_details;
-        $Expatriate_data="";
-        $validation="";
-            switch($request['application_type']){
-                case "principal_recruitment" : {
-                        $validation = $this->validatePrincipalRecuritmentApprovalFields($request);
-                        $Expatriate_data = $this->setExpatriateRecuritmentFields($request);
-                        break;
-                    }
-                    default : {
-                        break;
-                    }
-                }
-                $rules = $validation['rules'];
-                $customMessages = $validation['messages'];
+        $rules = [
+            'passport'                   =>  'required',
+            'name'                       =>  'required',
+            'dob'                        =>  'required',
+            'country'                    =>  'required',
+            'address'                    =>  'required',
+            'email'                      =>  'required',
+            'contact_number'             =>  'required'
+        ];
+        $customMessages = [
+            'passport.required'          => 'Passport/Emigration is required',
+            'name.required'              => 'Name is required',
+            'dob.required'               => 'Date of Birth is required',
+            'country.required'           => 'Country is required',
+            'address.required'           => 'Your Address is required',
+            'email.required'             => 'Email Address is required',
+            'contact_number.required'    => 'Contact Number is required',
+        ];
 
-                $this->validate($request, $rules, $customMessages);
-                $Expatriate_data=$Expatriate_data+[
+        $Expatriate_data =[
+            'passport'                  =>  $request['passport'],
+            'name'                      =>  $request['name'],
+            'dob'                       =>  $request['dob'],
+            'country'                   =>  $request['country'],
+            'address'                   =>  $request['address'],
+            'email'                     =>  $request['email'],
+            'contact_number'            =>  $request['contact_number'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
+        ];
+           $this->validate($request, $rules, $customMessages);
+           $Expatriate_data=$Expatriate_data+[
                     'attachment_details'            =>   $attachment_details,
                 ];
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            //  dd($workflowdet,$request->application_for);
             $screen_id="";
             $status="";
             $app_role="";
@@ -391,6 +408,7 @@ class StaffApprovalController extends Controller
                 return 'No Screen';
             }
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $Expatriate_data);
+
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
@@ -411,9 +429,9 @@ class StaffApprovalController extends Controller
             }
                  return $response_data;
     }
+
     private function setExpatriateRecuritmentFields($request){
         $data =[
-            'organizationId'            =>  $request['organizationId'],
             'passport'                  =>  $request['passport'],
             'name'                      =>  $request['name'],
             'dob'                       =>  $request['dob'],
@@ -431,6 +449,7 @@ class StaffApprovalController extends Controller
 
         return $data;
     }
+
     private function validateExpatriateRecuritmentFields($request){
         $rules = [
             'passport'                   =>  'required',
@@ -458,6 +477,7 @@ class StaffApprovalController extends Controller
 
         return ($validation);
     }
+
     public function loadPrincipalApprovalApplication($type=""){
         $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );
         return $loadPrincipalApprovalApplication;

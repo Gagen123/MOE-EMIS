@@ -56,7 +56,7 @@
                                 <span class="text-blue text-bold">{{form.description}}</span>
                             </div>
                           </div>
-                         
+
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -442,7 +442,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadpositionTitleList(uri = 'masters/loadStaffMasters/all_active_position_title'){
+        loadpositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -516,7 +516,7 @@ export default {
         this.loadpositionTitleList();
         this.loadreasons();
         this.loadOrgList();
-        
+
     }
 }
 </script>

@@ -9,6 +9,7 @@
                             <th>Applicant Name</th>
                             <th>Application Number</th>
                             <th>Date of Apply</th>
+                            <th>Remark From HRCD</th>
                             <th>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
@@ -19,9 +20,10 @@
                             <td>{{ item.name}}</td>
                             <td>{{ item.application_no}}</td>
                             <td>{{ item.created_at}}</td>
+                             <td>{{ item.remarks}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View/Edit</a>
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> Open</a>
                             </td>
                             
                         </tr>

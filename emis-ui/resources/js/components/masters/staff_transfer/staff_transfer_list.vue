@@ -1,18 +1,39 @@
 <template>
     <div>
-        <table id="dzongkhag-table" class="table table-bordered text-sm table-striped">
-            <thead>
-                <tr>
-                    <th >SL#</th>
-                    <th >Name</th>
-                    <th >Code</th>
-                    <th >Status</th>
-                    <th >Action Date</th>
-                    <th >Action</th> 
+        <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <tbody>
+                <tr class="bg-cyan">
+                    <td colspan="2"><b>Guidelines</b></td>
                 </tr>
-            </thead>
-            <tbody id="tbody">
+                <tr v-for="(item, index) in dataList" :key="index">
+                    <td>{{ index+1}})  </td>
+                    <td>{{ item.guideline}}</td>
+                </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
+<script>
+export default {
+    data(){
+        return{
+            dataList:[],
+        }
+    },
+    methods:{
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/master_transfer'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+    },
+    mounted(){
+        this.loadguidelieList();
+    },
+}
+</script>

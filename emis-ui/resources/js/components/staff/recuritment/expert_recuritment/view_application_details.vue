@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Country:</label>
-                                             <span class="text-blue text-bold">{{form.country}}</span>
+                                             <span class="text-blue text-bold">{{countryList[this.form.country]}}</span>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -89,9 +89,12 @@
 
 export default {
     data(){
+       
         return{
+            countryList:{},
             attachments:'',
             form: new form({
+                id:'',
                 name:'', 
                 dob:'',
                 country:'',
@@ -124,6 +127,18 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
+        },
+        loadcountryList(uri ='masters/loadGlobalMasters/all_country'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<=data.length;i++){
+                    this.countryList[data[i].id]=data[i].country_name
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
         },
         loadApplicationDetials(){
             axios.get('staff/StaffApprovalController/loadPrincipalApplicationDetials/'+this.applicationNo)
@@ -166,10 +181,10 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // alert("reached")
         this.applicationNo=this.$route.params.data.application_no;
-        
+        this.loadcountryList();
         this.loadApplicationDetials();
+       
     }
 }
 </script>

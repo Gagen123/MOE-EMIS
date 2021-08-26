@@ -41,6 +41,8 @@ class StaffLeadershipApplication extends Migration
             $table->char('updated_by',36)->nullable(true);
             $table->timestamp('created_at')->nullable(true);
             $table->timestamp('updated_at')->nullable(true);
+            $table->date('effective_data')->nullable(true);
+
         });
     }
 

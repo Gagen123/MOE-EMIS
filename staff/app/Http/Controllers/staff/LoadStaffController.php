@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff_masters\PositionTitle;
 use Illuminate\Support\Facades\DB;
 
 class LoadStaffController extends Controller{
@@ -97,7 +98,14 @@ class LoadStaffController extends Controller{
     }
     public function viewStaffDetails($type="",$id=""){
         if($type=="by_id"){
-            return $this->successResponse(PersonalDetails::where('id',$id)->first());
+            $staff_det=PersonalDetails::where('id',$id)->first();
+            if($staff_det!=null && $staff_det!=""){
+                $position=PositionTitle::where('id',$staff_det->position_title_id)->first();
+                if($position!=null && $position!=""){
+                    $staff_det->position_title_name=$position->name;
+                }
+            }
+            return $this->successResponse($staff_det);
         }
         if($type=="cid"){
             return $this->successResponse(PersonalDetails::where('cid_work_permit',$id)->first());

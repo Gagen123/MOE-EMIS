@@ -5,6 +5,7 @@ use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
 use App\Models\FeedbackModel;
+use App\Models\LeadershipType;
 use App\Models\Question;
 use App\Models\staff\DocumentDetails;
 use App\Models\staff_leadership\ApplicableApplicant;
@@ -20,6 +21,7 @@ use App\Models\staff\PersonalDetails;
 use App\Models\staff\StaffHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
+use App\Models\staff_masters\PositionTitle;
 
 class StaffLeadershipSerivcesController extends Controller{
     use ApiResponser;
@@ -82,7 +84,7 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($request->applicant_List as $app){
                 $app_data =[
                     'leadership_id'             =>  $response_data->id,
-                    'role_id'                   =>  $app['applicant']
+                    'role_id'                   =>  $app['position_title_id']
                 ];
                 ApplicableApplicant::create($app_data);
             }
@@ -111,7 +113,8 @@ class StaffLeadershipSerivcesController extends Controller{
                 foreach($request->applicant_List as $app){
                     $app_data =[
                         'leadership_id'             =>  $request->id,
-                        'role_id'                   =>  $app['applicant']
+                        // 'role_id'                   =>  $app['applicant']
+                        'role_id'                   =>  $app['position_title_id']
                     ];
                     ApplicableApplicant::create($app_data);
                 }
@@ -121,8 +124,20 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPosts($user_id=""){
-        $respomse_data=LeadershipDetails::where('created_by',$user_id)->get();
-        return $this->successResponse($respomse_data);
+        $response_data=LeadershipDetails::where('created_by',$user_id)->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $data){
+                $positiontitle=PositionTitle::where('id',$data->position_title)->first();
+                if($positiontitle!=null && $positiontitle!=""){
+                    $data->position_title_name=$positiontitle->name;
+                }
+                $post=LeadershipType::where('id',$data->selection_type)->first();
+                if($post!=null && $post!=""){
+                    $data->leadership_for=$post->name;
+                }
+            }
+        }
+        return $this->successResponse($response_data);
     }
 
     public function loadDetials($id=""){
@@ -132,7 +147,14 @@ class StaffLeadershipSerivcesController extends Controller{
             if($attachments!=null && $attachments!=""){
                 $respomse_data->attachments=$attachments;
             }
-            $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
+            $app=DB::table('staff_applicable_applicant AS a')
+            ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
+            ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
+            ->select('p.id AS position_title_id','p.name AS position_title','l.id AS level_id','l.name AS position_level')
+            ->where('a.leadership_id',$respomse_data->id)
+            ->get();
+            $respomse_data->applicable_applicant=$app;
+            // $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
         }
         return $this->successResponse($respomse_data);
     }
@@ -142,12 +164,20 @@ class StaffLeadershipSerivcesController extends Controller{
         if(strpos($role_ids,',')){
             $role_ids=str_replace(",","','",$role_ids);
         }
-        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE BETWEEN s.from_date AND s.to_date GROUP BY p.leadership_id");
+        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id");
         return $this->successResponse($posts);
     }
     public function loadPostDetials($id=""){
         $post=LeadershipDetails::where('id',$id)->first();
         if($post!=null && $post!=""){
+            $positiontitle=PositionTitle::where('id',$post->position_title)->first();
+            if($positiontitle!=null && $positiontitle!=""){
+                $post->position_title=$positiontitle->name;
+            }
+            $leadership=LeadershipType::where('id',$post->selection_type)->first();
+            if($leadership!=null && $leadership!=""){
+                $post->leadership_for=$leadership->name;
+            }
             $post->attachments=RequiredAttachment::where('leadership_id',$id)->get();
         }
         return $this->successResponse($post);
@@ -251,9 +281,26 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllApplication($user_id=""){
-        $query="SELECT p.position_title,p.selection_type,p.details,a.id,a.application_number,a.created_at,a.status,a.staff_id,a.dzongkhag_id FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id where a.created_by= '".$user_id."'";
+        $query="SELECT p.position_title,po.name Positiontitle,l.name AS LeadershipType,p.selection_type,p.details,a.id,a.application_number,a.created_at,a.status,
+        a.staff_id,a.dzongkhag_id
+        FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id
+        join master_stf_position_title po on po.id=p.position_title
+        join master_staff_leadership_type l on l.id=p.selection_type
+        where a.created_by= '".$user_id."'";
         $posts=DB::select($query);
         return $this->successResponse($posts);
+    }
+
+    public function loadApprovedApplication(){
+        $query="SELECT s.name AS applicant_name,p.position_title,po.name Positiontitle,l.name AS LeadershipType,p.selection_type,p.details,a.id,a.application_number AS aplication_number,a.created_at,a.status,
+        a.staff_id,a.dzongkhag_id
+        FROM staff_leadership_application a JOIN staff_leadership_detials p ON a.leadership_id =p.id
+        JOIN stf_staff s ON a.staff_id =s.id
+        JOIN master_stf_position_title po on po.id=p.position_title
+        JOIN master_staff_leadership_type l on l.id=p.selection_type
+        where a.status= 'Selected'";
+        $posts=DB::select($query);
+        return $posts;
     }
 
     public function loadapplicaitontDetials($id=""){
@@ -270,8 +317,17 @@ class StaffLeadershipSerivcesController extends Controller{
     public function loadapplicaitontDetialsforVerification($app_no=""){
         $app_details=LeadershipApplication::where('application_number',$app_no)->first();
         if($app_details!=null && $app_details!=""){
-            $app_details->Post_details=LeadershipDetails::where('id',$app_details->leadership_id)->first();
+            $post_det=LeadershipDetails::where('id',$app_details->leadership_id)->first();
+            $app_details->Post_details=$post_det;
             $app_details->attachments=DocumentDetails::where('parent_id',$app_details->id)->get();
+            $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
+            if($positiontitle!=null && $positiontitle!=""){
+                $app_details->position_title=$positiontitle->name;
+            }
+            $post=LeadershipType::where('id',$post_det->selection_type)->first();
+            if($post!=null && $post!=""){
+                $app_details->leadership_for=$post->name;
+            }
         }
         return $this->successResponse($app_details);
     }
@@ -681,24 +737,25 @@ class StaffLeadershipSerivcesController extends Controller{
             ];
         }
         if($request->current_status=="Selected"){
-            $applicant_det   = LeadershipApplication::where('id',$request->id)->first();
-            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
-            $history_data=[
-                'id'                           =>$staff_detials->id,
-                'name'                         =>$staff_detials->name,
-                'cid_work_permit'              =>$staff_detials->cid_work_permit,
-                'position_title_id'            =>$staff_detials->position_title_id,
-                'inserted_at'                  =>date('Y-m-d h:i:s'),
-                'inserted_by'                  =>$request->user_id,
-                'inserted_for'                 =>'Leadership Selection/ Promotion',
-                'inserted_application_no'      =>$request->application_number,
-            ];
-            StaffHistory::create($history_data);
-            $post_details=LeadershipDetails::where('id',$applicant_det->leadership_id)->first();
-            $update_data=[
-                'position_title_id'            =>$post_details->position_title,
-            ];
-            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
+            //should be updated during the reporting time
+            //$applicant_det   = LeadershipApplication::where('id',$request->id)->first();
+            // $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            // $history_data=[
+            //     'id'                           =>$staff_detials->id,
+            //     'name'                         =>$staff_detials->name,
+            //     'cid_work_permit'              =>$staff_detials->cid_work_permit,
+            //     'position_title_id'            =>$staff_detials->position_title_id,
+            //     'inserted_at'                  =>date('Y-m-d h:i:s'),
+            //     'inserted_by'                  =>$request->user_id,
+            //     'inserted_for'                 =>'Leadership Selection/ Promotion',
+            //     'inserted_application_no'      =>$request->application_number,
+            // ];
+            // StaffHistory::create($history_data);
+            // $post_details=LeadershipDetails::where('id',$applicant_det->leadership_id)->first();
+            // $update_data=[
+            //     'position_title_id'            =>$post_details->position_title,
+            // ];
+            // PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
 
             $data =[
                 'status'                        =>  $request->current_status,
@@ -732,7 +789,17 @@ class StaffLeadershipSerivcesController extends Controller{
                 if($app_details!=null && $app_details!=""){
                     $data->application_details=$app_details;
                     $leadership_detials=LeadershipDetails::where('id',$app_details->leadership_id)->first();
-                    $data->post_details=$leadership_detials;
+                    if($leadership_detials!=null && $leadership_detials!=""){
+                        $data->post_details=$leadership_detials;
+                        $positiontitle=PositionTitle::where('id',$leadership_detials->position_title)->first();
+                        if($positiontitle!=null && $positiontitle!=""){
+                            $data->post_details->position_title=$positiontitle->name;
+                        }
+                        $post=LeadershipType::where('id',$leadership_detials->selection_type)->first();
+                        if($post!=null && $post!=""){
+                            $data->leadership_for=$post->name;
+                        }
+                    }
                 }
             }
         }
@@ -750,6 +817,17 @@ class StaffLeadershipSerivcesController extends Controller{
             }
         }
         return $this->successResponse($response_data);
+    }
+    public function getleadershipDetailsByPosition($id=""){
+        $respomse_data=DB::table('staff_leadership_detials as l')
+        ->join('master_staff_leadership_type as t', 'l.selection_type', '=', 't.id')
+        ->join('staff_applicable_applicant as a', 'a.leadership_id', '=', 'l.id')
+        ->join('master_stf_position_title as p', 'a.role_id', '=', 'p.id')
+        ->select('l.id','l.from_date','l.to_date','l.details','p.name AS position_title','l.selection_type','t.name as selection_for')
+        ->where('p.name','like', '%'.str_replace("%20"," ",$id))
+        ->where('l.to_date','>=',date('Y-m-d'))
+        ->where('l.status', 'created')->get();
+        return $respomse_data;
     }
 
     public function saveFeedback(Request $request){

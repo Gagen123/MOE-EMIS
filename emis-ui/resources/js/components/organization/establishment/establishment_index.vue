@@ -17,7 +17,7 @@
                     Private School
                 </router-link>
             </li>
-            <li class="nav-item pr-1">
+            <!-- <li class="nav-item pr-1">
                 <router-link to="/public_eccd_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Public ECCD
@@ -28,13 +28,19 @@
                    <span class=""></span>
                     Private ECCD
                 </router-link>
+            </li> -->
+            <li class="nav-item pr-1">
+                <router-link to="/eccd_approval_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    ECCD
+                </router-link>
             </li>
             <li class="nav-item pr-1">
                 <router-link to="/ecr_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
                     Public ECR
                 </router-link>
-         
+            </li>
             <li class="nav-item pr-1">
                 <router-link to ="/register" id="register" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class=""></span>

@@ -583,7 +583,7 @@ export default {
                 }
             });
         },
-        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title"){
+        loadpositiontitleList(uri="staff/loadStaffMasters/active/PositionTitle"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -17,16 +17,12 @@
                         Programme
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1">
-                    <router-link id="service" to="/nomination_selection" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Selection & Nomination
-                    </router-link>
-                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link id="service" to="/participant" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Update Participant
                     </router-link>
                 </li>
+                
             </ul>
             <router-view></router-view>
         </div>

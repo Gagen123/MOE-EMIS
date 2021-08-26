@@ -10,8 +10,12 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\QualificationDetails;
+use App\Models\staff\TransferApplication;
 use App\Models\staff\Nomination;
+use App\Models\staff\StaffHistory;
 use App\Models\staff\TransferWindow;
+use App\Models\staff_leadership\LeadershipApplication;
+use App\Models\staff_leadership\LeadershipDetails;
 use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller{
@@ -276,6 +280,75 @@ class StaffController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
+    public function updateStaffDetails(Request $request){
+        $response_data="";
+        if($request->action_type=="Leadership Update"){
+            $applicant_det   = LeadershipApplication::where('id',$request->id)->first();
+            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            $history_data=[
+                'record_id'                    =>$staff_detials->id,
+                'position_title_id'            =>$staff_detials->position_title_id,
+                'inserted_at'                  =>date('Y-m-d h:i:s'),
+                'remarks'                      =>$request->record_remarks,
+                'inserted_by'                  =>$request->user_id,
+                'inserted_for'                 =>'Leadership Selection',
+                'inserted_application_no'      =>$applicant_det->application_number,
+            ];
+            StaffHistory::create($history_data);
+            $post_details=LeadershipDetails::where('id',$applicant_det->leadership_id)->first();
+            $update_data=[
+                'position_title_id'            =>$post_details->position_title,
+            ];
+            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
+            $app_update_data=[
+                'effective_date'            =>$post_details->effective_date,
+                'reported_date'             =>date('Y-m-d'),
+                'status'                    =>  'Reported',
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $response_data=LeadershipApplication::where('id',$request->id)->update($app_update_data);
+        }
+        //updating and doing backup for staff transfer
+        if($request->action_type=="TransferReport Update"){
+            $applicant_det  = TransferApplication::where('id',$request->id)->first();
+            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            $history_data=[
+                'id'                           =>$staff_detials->id,
+                'name'                         =>$staff_detials->name,
+                'cid_work_permit'              =>$staff_detials->cid_work_permit,
+                'dzo_id'                       =>$staff_detials->dzo_id,
+                'geowg_id'                     =>$staff_detials->geowg_id,
+                'village_id'                   =>$staff_detials->village_id,
+                'position_title_id'            =>$staff_detials->position_title_id,
+                'working_agency_id'            =>$staff_detials->working_agency_id,
+                'inserted_at'                  =>date('Y-m-d h:i:s'),
+                'inserted_by'                  =>$request->user_id,
+                'inserted_for'                 =>'Transfer Application',
+                'inserted_application_no'      =>$request->application_number,
+            ];
+            StaffHistory::create($history_data);
+            $final_data =[
+                'id'                           =>  $request->id,
+                'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+                'effective_date'               =>  $request->effective_date,
+                'remarks'                      =>  $request->remarks,
+                'updated_by'                   =>  $request->user_id,
+                'updated_at'                   =>  date('Y-m-d h:i:s'),
+                'preference_school'            =>  $request->preference_school,
+                'status'                       => 'Reported'
+            ];
+            $response_data=TransferApplication::where('id', $request->id)->update($final_data);
+            $update_data=[
+                'dzo_id'                       =>$request->dzongkhagApproved,
+                'working_agency_id'            =>$request->preference_school,
+            ];
+            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
     public function loadNominations($staff_id="",$user_id=""){
         $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
@@ -375,6 +448,6 @@ class StaffController extends Controller{
         $user = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
         return $this->successResponse($user);
     }
-    
+
 
 }

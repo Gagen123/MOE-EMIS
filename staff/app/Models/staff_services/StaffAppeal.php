@@ -21,6 +21,7 @@ class StaffAppeal extends Model
         'user_id',
         'org_id',
         'status',
+        'remarks',
         'created_by',
         'updated_by',
         'created_at',

@@ -39,28 +39,30 @@ export default {
                 let data = response;
                 this.privileges =  data.data;
                 for(let i=0;i<data.data.length;i++){
-                    if(data.data[i].action_name.toLowerCase().includes('add') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
-                        $('#addnewbtn').show();
-                    }
-                    if(data.data[i].action_name.toLowerCase().includes('list') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
-                        $('#listnewbtn').show();
-                        if(data.data[i].Organization==1){
-                            this.listAt='Org';
+                    if(data.data[i].action_name!=undefined){
+                        if(data.data[i].action_name.toLowerCase().includes('add') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
+                            $('#addnewbtn').show();
                         }
-                        if(data.data[i].Dzongkhag==1){
-                            this.listAt='Dzongkhag';
+                        if(data.data[i].action_name.toLowerCase().includes('list') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
+                            $('#listnewbtn').show();
+                            if(data.data[i].Organization==1){
+                                this.listAt='Org';
+                            }
+                            if(data.data[i].Dzongkhag==1){
+                                this.listAt='Dzongkhag';
+                            }
+                            if(data.data[i].National==1){
+                                this.listAt='National';
+                            }
                         }
-                        if(data.data[i].National==1){
-                            this.listAt='National';
+                        if(data.data[i].action_name.toLowerCase().includes('delete') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
+                            this.deleteopt=1;
+                            $('.deletebtn').show();
                         }
-                    }
-                    if(data.data[i].action_name.toLowerCase().includes('delete') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
-                        this.deleteopt=1;
-                        $('.deletebtn').show();
-                    }
-                    if(data.data[i].action_name.toLowerCase().includes('edit') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
-                        this.editopt=1;
-                        $('.editbtn').show();
+                        if(data.data[i].action_name.toLowerCase().includes('edit') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
+                            this.editopt=1;
+                            $('.editbtn').show();
+                        }
                     }
                 }
             })

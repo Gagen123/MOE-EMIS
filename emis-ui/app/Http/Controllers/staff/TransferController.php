@@ -163,6 +163,9 @@ class TransferController extends Controller{
             'preference_school1'                =>  $request->preference_school1,
             'preference_school2'                =>  $request->preference_school2,
             'preference_school3'                =>  $request->preference_school3,
+            'spSubject'                         =>  $request->spSubject,
+            'optional1sub'                      =>  $request->optional1sub,
+            'optional2sub'                      =>  $request->optional2sub,
             'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
             'preference_dzongkhag3'             =>  $request->preference_dzongkhag3,
@@ -249,6 +252,7 @@ class TransferController extends Controller{
         if($request->transferType == "inter_transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
+                'status'            =>  $org_status,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>"Inter Transfer",
                 'preference_school' =>$request->preference_school,
@@ -278,7 +282,7 @@ class TransferController extends Controller{
                 'service_name'                  =>  "Intra Transfer",
                 'preference_school'             =>$request->schoolApproved,
                 'dzongkhagApproved'             =>$request->userDzongkhag,
-                // 'schoolApproved'                =>$request->schoolApproved,
+                'schoolApproved'                =>$request->schoolApproved,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>  $this->userId()
             ];
@@ -353,7 +357,6 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
-     if($request->id == ""){
          $rules = [
             'description'              =>  'required  ',
         ];
@@ -388,76 +391,33 @@ class TransferController extends Controller{
             'record_type_id'                    =>  $request->type_id,
             'transferType'                      =>  $request->transfer_type_id,
             'name'                              =>  $request->name,
-            'description'                       =>  $request->description,
-            'attachment_details'                =>  $attachment_details,
-            'user_id'                           =>  $request->user_id,
-            'status'                            =>  $request->status,
-            'working_agency_id'                 =>  $this->getWrkingAgencyId(),
-        ];
-        $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
-        if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
-            $workflow_data=[
-                'db_name'           =>$this->database_name,
-                'table_name'        =>$this->table_name,
-                'service_name'      =>$request->service_name,
-                'application_number'=>  json_decode($response_data)->application_no,
-                'screen_id'         =>  json_decode($response_data)->application_no,
-                'status_id'         =>  1,
-                'app_role_id'       => $this->getRoleIds('roleIds'),
-                'record_type_id'    => json_decode($response_data)->transferType,
-                'user_dzo_id'       =>$this->getUserDzoId(),
-                'access_level'      =>$this->getAccessLevel(),
-                'working_agency_id' =>$this->getWrkingAgencyId(),
-                'action_by'         =>$this->userId(),
-            ];
-            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        }
-    }
-    else{
-        $rules = [
-            'description'              =>  'required  ',
-        ];
-        $customMessages = [
-            'description.required'     => 'Please mention the reasons for transfer appeal ',
-        ];
-        $this->validate($request, $rules,$customMessages);
-        $files = $request->attachments;
-        $filenames = $request->attachmentname;
-        $attachment_details=[];
-        $file_store_path=config('services.constant.file_stored_base_path').'TransferAppeal';
-        if($files!=null && $files!=""){
-            if(sizeof($files)>0 && !is_dir($file_store_path)){
-                mkdir($file_store_path,0777,TRUE);
-            }
-            if(sizeof($files)>0){
-                foreach($files as $index => $file){
-                    $file_name = time().'_' .$file->getClientOriginalName();
-                   move_uploaded_file($file,$file_store_path.'/'.$file_name);
-                    array_push($attachment_details,
-                        array(
-                            'path'              =>  $file_store_path,
-                            'original_name'     =>  $file_name,
-                            'user_defined_name' =>  $filenames[$index],
-                        )
-                    );
-                }
-            }
-        }
-        $request_data =[
-            'id'                                =>  $request->id,
-            'transferType'                      =>  $request->transfer_type_id,
-            'name'                              =>  $request->name,
-            'withdraw'                          =>  $request->withdraw,
             'aplication_number'                 =>  $request->aplication_number,
             'description'                       =>  $request->description,
             'attachment_details'                =>  $attachment_details,
             'user_id'                           =>  $request->user_id,
             'status'                            =>  $request->status,
             'working_agency_id'                 =>  $this->getWrkingAgencyId(),
+            'remarks'                           =>  $request->remarks,
+            
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
-
-    }
+        // if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
+        //     $workflow_data=[
+        //         'db_name'           =>$this->database_name,
+        //         'table_name'        =>$this->table_name,
+        //         'service_name'      =>$request->service_name,
+        //         'application_number'=>  json_decode($response_data)->application_no,
+        //         'screen_id'         =>  json_decode($response_data)->application_no,
+        //         'status_id'         =>  1,
+        //         'app_role_id'       => $this->getRoleIds('roleIds'),
+        //         'record_type_id'    => json_decode($response_data)->transferType,
+        //         'user_dzo_id'       =>$this->getUserDzoId(),
+        //         'access_level'      =>$this->getAccessLevel(),
+        //         'working_agency_id' =>$this->getWrkingAgencyId(),
+        //         'action_by'         =>$this->userId(),
+        //     ];
+        //     $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        // }
         return  $response_data;
     }
     public function LoadTransferAppealDetails($user_id=""){

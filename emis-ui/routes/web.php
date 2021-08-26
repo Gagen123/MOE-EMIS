@@ -191,6 +191,20 @@ Route::prefix('masters')->group(function () {
 Route::post('/saveQuater', [App\Http\Controllers\AdministrationController::class, 'saveQuater'])->name('saveQuater');
 Route::get('/loadQuater', [App\Http\Controllers\AdministrationController::class, 'loadQuater'])->name('loadQuater');
 
+Route::prefix('organizationApproval')->group(function () {
+    Route::get('/getScreenId/{serviceName}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'getScreenId'])->name('getScreenId');
+    Route::post('/saveEstablishment', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveEstablishment'])->name('saveEstablishment');
+    Route::post('/saveClassStream', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveClassStream'])->name('saveClassStream');
+    Route::post('/saveUploadedFiles', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveUploadedFiles'])->name('saveUploadedFiles');
+    Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
+    Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
+    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+    Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
+    Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
+    Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
+
+});
+
 Route::prefix('organization')->group(function () {
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
@@ -329,7 +343,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
     Route::get('/getClassMappingDetails/{mapping_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getClassMappingDetails'])->name('getClassMappingDetails');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
-    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
 
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
@@ -488,6 +502,7 @@ Route::prefix('staff')->group(function () {
     // Route::get('/loadAllStaff/{type}', [App\Http\Controllers\staff\StaffController::class, 'loadAllStaff'])->name('loadAllStaff');
 
     // Route::get('/loadStaff/{type}', [App\Http\Controllers\staff\StaffController::class, 'loadStaff'])->name('loadStaff');
+    Route::post('/updateStaffDetails', [App\Http\Controllers\staff\StaffController::class, 'updateStaffDetails'])->name('updateStaffDetails');
 
     Route::post('/saveTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'saveTransferWindow'])->name('saveTransferWindow');
     Route::get('/loadTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'loadTransferWindow'])->name('loadTransferWindow');
@@ -578,6 +593,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'submitApplication'])->name('submitApplication');
         Route::get('/loadapplicaitontDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetials'])->name('loadapplicaitontDetials');
         Route::get('/loadAllApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllApplication'])->name('loadAllApplication');
+        Route::get('/loadApprovedApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadApprovedApplication'])->name('loadApprovedApplication');
         Route::post('/createLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createLeadershipSelection'])->name('createLeadershipSelection');
         Route::get('/loadLeadershipSelection/{type}/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadLeadershipSelection'])->name('loadLeadershipSelection');
         Route::post('/createNominationForLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createNominationForLeadershipSelection'])->name('createNominationForLeadershipSelection');
@@ -649,10 +665,10 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
 
-    
-    //projection controller for 
+
+    //projection controller for
     Route::get('/loadProjectionStaffList/{type}/{dzo_id}', [App\Http\Controllers\projections\TeacherProjectionController::class, 'loadProjectionStaffList'])->name('loadProjectionStaffList');
-    
+
 });
 
 Route::prefix('students')->group(function () {

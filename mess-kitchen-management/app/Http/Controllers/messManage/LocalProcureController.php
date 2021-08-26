@@ -19,10 +19,14 @@ class LocalProcureController extends Controller
     }
 
     public function saveLocalProcure(Request $request){
-      //  dd($request);
+       // dd($request);
         $orgId = $request['organizationId'];
         $date = $request['dateOfprocure'];
         foreach ($request->local_item as $i=> $item){
+            // if($i==1){
+            //     dd($item);
+            // }
+            
             $itm_id=explode('_',$item['item'])[0];
             $unitid=explode('_',$item['item'])[1];
             $remarks='NA';
@@ -50,38 +54,39 @@ class LocalProcureController extends Controller
              'updated_by'                 =>  $request->user_id,
              'created_at'                 =>  date('Y-m-d h:i:s')
             );
-           // dd( $localprocure);
-         $localpro = LocalProcure::create($localprocure);
-         $checkitem=TransactionTable::where('item_id',$itm_id)->where('procured_type','Local')->first();
-         if($checkitem!=null && $checkitem!=""){
-                $qty=$item['item']+$checkitem->available_qty;
-
+         //    dd( $localprocure);
+            $localpro = LocalProcure::create($localprocure);
+            $checkitem=TransactionTable::where('item_id',$itm_id)->where('procured_type','Local')
+            ->where('organizationId',$orgId)->first();
+            if($checkitem!=null && $checkitem!=""){
+                $qty=$quantity+$checkitem->available_qty;
                 $update_data=[
                     'available_qty' =>  $qty,
                     'updated_by'    =>  $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
-                 ];
+                ];
+
                 TransactionTable::where('item_id',$itm_id)->where('procured_type','Local')
-                ->where('organizationId',$request->organizationId)->update($update_data);
+                ->where('organizationId',$orgId)->update($update_data);
             }
             else{
-             $create_data=[
+                $create_data=[
                     'procured_type'        =>  'Local',
-                    'organizationId'       =>  $request->organizationId,
+                    'organizationId'       =>  $orgId,
                     'item_id'              =>  $itm_id,
-                    'available_qty'        =>  $item['quantity'],
+                    'available_qty'        =>  $quantity,
                     'created_by'           =>  $request->user_id,
                     'created_at'           =>  date('Y-m-d h:i:s'),
                 ];
-               // dd( $create_data);
-              TransactionTable::create($create_data);
+             //    dd( $create_data);
+                TransactionTable::create($create_data);
             }
-        
-      //  dd('m here');
-      //   dd('localprocure');
+        }
+        //  dd('m here');
+        //   dd('localprocure');
         return $this->successResponse($localpro, Response::HTTP_CREATED);
     }
-}
+
     public function loadLocalProcure($orgId=""){
         //   return 'from service of mine';
         $list = DB::table('local_procures')
@@ -97,53 +102,69 @@ class LocalProcureController extends Controller
        
     }
     public function saveLocalProcureEdit(Request $request){
-        $id = $request->id;
-        $orgId = $request['organizationId'];
-        $date =  $request['dateOfprocure'];
-        $localprocure = array(
-            'organizationId'             =>  $orgId,
-            'dateOfprocure'              =>  $date,
-            'id'                         =>  $id,
-            'item_id'                    =>  $request['item_id'],
-            'quantity'                   =>  $request['quantity'],
-            'unit_id'                    =>  $request['unit_id'],
-            'amount'                     =>  $request['amount'],
-            'food_source'                =>  $request['source'],
-            'remark'                     =>  $request['remark'],
-            'updated_by'                 =>  $request->user_id,
-            'created_at'                 =>  date('Y-m-d h:i:s')
-        );
-      
-        $localpro = LocalProcure::where('id'.$id)->update($localprocure);
-        dd($localpro);
-        $checkitem=TransactionTable::where('item_id',$request['item_id'])->where('procured_type','Local')->first();
-        if($checkitem!=null && $checkitem!=""){
-            $qty=$request['item_id']+$checkitem->available_qty;
-            $update_data=[
-                'available_qty' =>  $qty,
-                'updated_by'    =>  $request->user_id,
-                'updated_at'    =>  date('Y-m-d h:i:s'),
-            ];
-            dd($update_data);
-            TransactionTable::where('item_id',$request['item_id'])->where('procured_type','Local')
-            ->where('organizationId',$orgId)->update($update_data);
+       // dd($request);
+        $current_stock_data=LocalProcure::where('id', $request->id)->where('organizationId',$request->organizationId)->first();
+       // dd($current_stock_data);
+        if($current_stock_data!=null && $current_stock_data!=""){
+            $current_stock_qty=   $current_stock_data->quantity;
+            $request_qty=  $request->quantity;
+            if($request_qty > $current_stock_qty){
+                $qty_diff = $request_qty-$current_stock_qty;
+                $qty_to_update_stock=  $current_stock_qty+ $qty_diff;
+                $stock_data=[
+                //    'organizationId'     => $request->organizationId,
+                    'quantity'           => $qty_to_update_stock,
+                   // 'damagequantity' => $request->damagequantity,
+                    'dateOfprocure'      => $request->dateOfprocure,
+                    'food_source'        => $request->source,
+                    // 'item_id'            => $request->item_id, 
+                    // 'unit_id'            => $request->unit_id,
+                    'amount'             => $request->amount,
+                    'remark'             => $request->remark,
+                   // 'user_id'            =>  $this->userId()
+                ];
+              // dd($stock_data);
+                $update_Issue= LocalProcure::where('item_id', $request->item_id)->update($stock_data);
+                $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
+                ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
+                $stock_qty= $curr_tr_data->available_qty;
+                $update_tr_qty=  $stock_qty+ $qty_diff;
+                $tr_data=[
+                    'available_qty'  => $update_tr_qty,
+                    'updated_by'     => $request->user_id,
+                    'updated_at'     =>  date('Y-m-d h:i:s'),
+                ];
+             //   dd($tr_data);
+                $update_Issue= TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
+               
+            }else{
+                $qty_diff = $current_stock_qty -$request_qty;
+                $qty_to_update_stock= $current_stock_qty-$qty_diff;
+               // dd( $qty_to_update_stock);
+                $stock_data=[
+                    'quantity'           => $qty_to_update_stock,
+                    'food_source'        => $request->source,
+                    'dateOfprocure'      => $request->dateOfprocure,
+                    'amount'             => $request->amount,
+                    'remark'             => $request->remark
+                ];
+               // dd($stock_data);
+                $update_Issue= LocalProcure::where('item_id', $current_stock_data->item_id)->where('organizationId',$current_stock_data->organizationId)->update($stock_data);
+                $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
+                ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
+                $stock_qty= $curr_tr_data->available_qty;
+                $update_tr_qty=  $stock_qty-$qty_diff;
+                $tr_data=[
+                    'available_qty' => $update_tr_qty,
+                    'updated_by'    => $request->user_id,
+                    'updated_at'    =>  date('Y-m-d h:i:s'),
+                ];
+              // dd( $tr_data);
+                $update_Issue=TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
+            }
+            
         }
-        else{
-            $create_data=[
-                'procured_type'        =>  'Local',
-                'organizationId'       =>  $request['organizationId'],
-                'item_id'              =>  $request['item_id'],
-                'available_qty'        =>  $request['quantity'],
-                'created_by'           =>  $request->user_id,
-                'created_at'           =>  date('Y-m-d h:i:s'),
-            ];
-                // dd( $create_data);
-            TransactionTable::create($create_data);
-        }
-        
-     //  dd('m here');
-     //   dd('localprocure');
-        return $this->successResponse($localpro, Response::HTTP_CREATED);
+        return $this->successResponse($update_Issue);
     }
   
 }

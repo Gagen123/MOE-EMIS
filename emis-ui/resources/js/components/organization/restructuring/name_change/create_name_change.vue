@@ -25,8 +25,9 @@
                                         </select>
                                         <has-error :form="form" field="organizationId"></has-error>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Organization Type{{category}}</label>
+                                     <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
+                                        <label>Organization Type:</label>
+                                        <input type="text" readonly :value="form.category"  class="form-control" id="category"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -163,7 +164,6 @@ export default {
     data(){
         return{
             organization_details:'',
-            category:'',
             proposed_by_list:[],
             levelArray:{},
             dzongkhagArray:{},
@@ -177,7 +177,7 @@ export default {
             streamList:[],
             form: new form({
                 organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change',
-                application_for:'Change in Name', action_type:'add', status:'Submitted',organization_type:'',
+                application_for:'Change in Name', action_type:'add', status:'Submitted',organization_type:'',category:'',
                 // service_name:'Change in Name',
                 // remarks:'',
                 status:'Submitted',
@@ -190,6 +190,7 @@ export default {
         }
     },
     methods: {
+        
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
@@ -225,9 +226,10 @@ export default {
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
+                 $('#orgType').hide();
             });
         },
-
+        
         /**
          * method to show next and previous tab
          */
@@ -255,6 +257,7 @@ export default {
                             formData.append('attachmentname[]', this.form.ref_docs[i].name);
                         }
                         formData.append('organizationId', this.form.organizationId);
+                        formData.append('category', this.form.category);
                         formData.append('proposedName', this.form.proposedName);
                         formData.append('initiatedBy', this.form.initiatedBy);
                         formData.append('application_type', this.form.application_type);
@@ -262,7 +265,6 @@ export default {
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
                         formData.append('organization_type', this.form.organization_type);
-
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
@@ -321,7 +323,7 @@ export default {
             .then(response => {
                 this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.organization_details=response.data.data;
-                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
+                this.form.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
             });
