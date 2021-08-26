@@ -65,13 +65,13 @@
                 <div class="row form-group ">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Implementation Status:<span class="text-danger">*</span></label> 
-                        <select class="form-control select2" id="status_id" v-model="form.implementation_status_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('status_id') }" @change="remove_err('status_id')">
+                        <select class="form-control select2" id="implementation_status_id" v-model="form.implementation_status_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('implementation_status_id') }" @change="remove_err('implementation_status_id')">
                             <option value=""> ---Select---</option>
                             <option v-for="(item1, index1) in status" :key="index1" v-bind:value="item1.id">
                                 {{ item1.name }}
                             </option>
                         </select> 
-                        <has-error :form="form" field="status_id"></has-error>
+                        <has-error :form="form" field="implementation_status_id"></has-error>
                     </div>
                 </div>
                 <div class="row form-group ">
@@ -165,7 +165,6 @@ export default {
             if(action=="submit"){
                 this.form.school_plan_status = 1
             }
-            console.log(this.form)
             this.form.post('/spms/saveSchoolPlan',this.form)
                 .then(() => {
                 Toast.fire({

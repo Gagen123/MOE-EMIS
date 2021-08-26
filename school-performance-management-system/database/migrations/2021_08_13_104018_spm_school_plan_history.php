@@ -16,6 +16,7 @@ class SpmSchoolPlanHistory extends Migration
         Schema::create('spm_school_plan_history', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->char('user_id',36)->index();
+            $table->char('spm_school_plan_id',36)->index();
             $table->string('name',255);
             $table->string('role',100);
             $table->string('organization',255);
@@ -24,7 +25,9 @@ class SpmSchoolPlanHistory extends Migration
             $table->string('remarks',500);
             $table->timestamps();
 
+            $table->foreign('spm_school_plan_id')->references('id')->on('spm_school_plan');
             $table->foreign('status_id')->references('id')->on('spm_school_plan_status');
+
         });
     }
 

@@ -12,13 +12,12 @@ class Evaluation extends Model
     protected $table="spm_evaluation";
     protected $fillable = [
         'id',
+        'dzon_id',
+        'evaluation_year',
         'org_id',
         'spm_domain_subcat_id',
         'status',
-        'deo_remarks',
-        'school_remarks',
-        'deo_review_remarks',
-        'emd_remarks',
+        'remarks',
         'created_by'
     ];
 }

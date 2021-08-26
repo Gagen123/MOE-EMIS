@@ -97,7 +97,7 @@
                                         <label for="inputSkills" class="col-lg-4 col-md-4 col-sm-4 col-xs-12 col-form-label">Working Agency</label>
                                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                             <input v-if="accessLevel=='Org'" type="text" class="form-control" v-model="orgDetails.name" id="orgDetails" placeholder="School Name">
-                                            <input v-else type="text" class="form-control" v-model="orgDetails.agencyName" id="orgDetails1" placeholder="Working Agency">
+                                            <input v-else type="text" class="form-control" v-model="orgDetails.name" id="orgDetails1" placeholder="Working Agency">
                                         </div>
                                     </div>
                                 </form>
@@ -150,6 +150,7 @@
                 axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
+                    console.log(data);
                     this.orgDetails=data;
 
                 })

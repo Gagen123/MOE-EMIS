@@ -495,7 +495,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getStreamArray/{org_id}', ['uses' => 'LoadOrganizationController@getStreamArray']);
         $router->get('/getSectionArray/{org_id}', ['uses' => 'LoadOrganizationController@getSectionArray']);
         $router->get('/getOrgWiseClassesForSpms', ['uses' => 'LoadOrganizationController@getOrgWiseClassesForSpms']);
-
+        $router->get('/getDzoWiseNoOfSchools', ['uses' => 'LoadOrganizationController@getDzoWiseNoOfSchools']);
+        
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
