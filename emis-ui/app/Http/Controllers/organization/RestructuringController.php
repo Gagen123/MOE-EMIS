@@ -51,7 +51,7 @@ class RestructuringController extends Controller
                             'path'                   =>  $file_store_path,
                             'original_name'          =>  $file_name,
                             'user_defined_name'      =>  $filenames[$index],
-                            'saveapplication_number'     =>  $request->applicationNo,
+                            'saveapplication_number' =>  $request->applicationNo,
                         )
                     );
                 }
@@ -158,7 +158,6 @@ class RestructuringController extends Controller
             return 'No Screen';
         }
         // dd($establishment_data);
-
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         // dd($response_data,$workflowdet,$request->application_for);
         $appNo=json_decode($response_data)->data->application_no;
@@ -172,13 +171,12 @@ class RestructuringController extends Controller
                 'screen_id'         =>$screen_id,
                 'status_id'         =>$status,
                 'remarks'           =>null,
-                'app_role_id'       => $app_role,
+                'app_role_id'       =>$app_role,
                 'user_dzo_id'       =>$this->getUserDzoId(),
                 'access_level'      =>$this->getAccessLevel(),
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
-            // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             $type="";
             if($screen_name=="Change in Name"){
