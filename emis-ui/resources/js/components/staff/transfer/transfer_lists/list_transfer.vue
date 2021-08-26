@@ -6,9 +6,11 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Dzongkhag/Thromde</th>
-                            <th>School Name</th>
                             <th>Applicant Name</th>
+                            <th>From Dzongkhag/Thromde</th>
+                            <th>From School</th>
+                            <th>To Dzongkhag/Thromde</th>
+                            <th>To School</th>
                             <th>Transfer Type</th>
                             <th>Qualification</th>
                             <th>Competent Subject</th>
@@ -20,18 +22,19 @@
                     <tbody>
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
-                            <td>Thimphu Thromde</td>
-                            <td>Yangchenphu Higher Secondary School</td>
                             <td>{{ item.applicant_name}}</td>
+                            <td>{{ dzoArray[item.user_dzo_id]}}</td>
+                            <td>Yangchenphu Higher Secondary School</td>
+                            <td>{{ dzoArray[item.dzongkhagApproved]}}</td>
+                            <td>Khangkhu Middle Secondary School</td>
                             <td>{{ item.transferType}}</td>
                             <td>Master</td>
                             <td>English</td>
-                            <td>2018</td>
+                            <td>{{ item.effective_date}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>
                             </td>
-                            
                         </tr>
                     </tbody>
                 </table>
@@ -44,6 +47,7 @@ export default {
     data(){
         return{
             transfer_list:[],
+            dzoArray:{},
             form: new form({
                 id:'',
                 access_level:'',
@@ -65,6 +69,18 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
+        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data
+                for(let i=0;i<data.length;i++){
+                 this.dzoArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
         profile_details(){
             axios.get('common/getSessionDetail')
             .then(response => {
@@ -78,6 +94,7 @@ export default {
         },
     },
     mounted() {
+        this.loadactivedzongkhagList();
         this.profile_details();
 
         this.dt =  $("#training-table").DataTable()

@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\QualificationDetails;
+use App\Models\staff\TransferApplication;
 use App\Models\staff\Nomination;
 use App\Models\staff\StaffHistory;
 use App\Models\staff\TransferWindow;
@@ -307,6 +308,43 @@ class StaffController extends Controller{
                 'updated_at'                =>  date('Y-m-d h:i:s')
             ];
             $response_data=LeadershipApplication::where('id',$request->id)->update($app_update_data);
+        }
+        //updating and doing backup for staff transfer
+        if($request->action_type=="TransferReport Update"){
+            $applicant_det  = TransferApplication::where('id',$request->id)->first();
+            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
+            $history_data=[
+                'id'                           =>$staff_detials->id,
+                'name'                         =>$staff_detials->name,
+                'cid_work_permit'              =>$staff_detials->cid_work_permit,
+                'dzo_id'                       =>$staff_detials->dzo_id,
+                'geowg_id'                     =>$staff_detials->geowg_id,
+                'village_id'                   =>$staff_detials->village_id,
+                'position_title_id'            =>$staff_detials->position_title_id,
+                'working_agency_id'            =>$staff_detials->working_agency_id,
+                'inserted_at'                  =>date('Y-m-d h:i:s'),
+                'inserted_by'                  =>$request->user_id,
+                'inserted_for'                 =>'Transfer Application',
+                'inserted_application_no'      =>$request->application_number,
+            ];
+            StaffHistory::create($history_data);
+            $final_data =[
+                'id'                           =>  $request->id,
+                'dzongkhagApproved'            =>  $request->dzongkhagApproved,
+                'effective_date'               =>  $request->effective_date,
+                'remarks'                      =>  $request->remarks,
+                'updated_by'                   =>  $request->user_id,
+                'updated_at'                   =>  date('Y-m-d h:i:s'),
+                'preference_school'            =>  $request->preference_school,
+                'status'                       => 'Reported'
+            ];
+            $response_data=TransferApplication::where('id', $request->id)->update($final_data);
+            $update_data=[
+                'dzo_id'                       =>$request->dzongkhagApproved,
+                'working_agency_id'            =>$request->preference_school,
+            ];
+            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
+            return $this->successResponse($response_data, Response::HTTP_CREATED);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }

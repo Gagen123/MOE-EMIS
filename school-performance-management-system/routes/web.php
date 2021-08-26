@@ -26,16 +26,23 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getSchoolDEO', ['uses' => 'masters\SpmsMasterController@getSchoolDEO']);
     });
     $router->group(['prefix' => 'spms'], function () use ($router) {
-        $router->get('/getDeoDashboardData/{dzon_id}/{staff_id}', ['uses' => 'spms\SpmsController@getDeoDashboardData']);
-        $router->get('/getSchoolDoeDetails/{dzon_id}/{staff_id}/{spm_domain_subcat_id}[/{status}]', ['uses' => 'spms\SpmsController@getSchoolDoeDetails']);
-        $router->get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', ['uses' => 'spms\SpmsController@getEvaluation']);
+        $router->get('/schoolPerformaceDashboard', ['uses' => 'spms\SpmsController@schoolPerformaceDashboard']);
+        $router->get('/getSchoolPerformaceList/{year}/{dzon_id}/{status}', ['uses' => 'spms\SpmsController@getSchoolPerformaceList']);
+        $router->get('/getEvaluation/{org_id}/{year}', ['uses' => 'spms\SpmsController@getEvaluation']);
         $router->post('/saveEvaluation', ['uses' => 'spms\SpmsController@saveEvaluation']);
         $router->get('/getSchoolDashboardData/{org_id}', ['uses' => 'spms\SpmsController@getSchoolDashboardData']);
         $router->post('/saveSchoolPlan', ['uses' => 'spms\SpmsController@saveSchoolPlan']);
         $router->get('/getSchoolPlan/{school_id}', ['uses' => 'spms\SpmsController@getSchoolPlan']);
         $router->post('/saveImplementtationStatus', ['uses' => 'spms\SpmsController@saveImplementtationStatus']);
-        $router->get('/getSchoolPlanHistory', ['uses' => 'spms\SpmsController@getSchoolPlanHistory']);
+        $router->get('/getSchoolPlanDetails/{spm_school_plan_id}', ['uses' => 'spms\SpmsController@getSchoolPlanDetails']);
+        $router->get('/getSchoolPlanHistory/{spm_school_plan_id}', ['uses' => 'spms\SpmsController@getSchoolPlanHistory']);
         $router->get('/getDzoEMO/{emo_id}', ['uses' => 'spms\SpmsController@getDzoEMO']);
         $router->get('/getSchoolPlans', ['uses' => 'spms\SpmsController@getSchoolPlans']);
+        $router->post('/saveAgencyInputForm', ['uses' => 'spms\SpmsController@saveAgencyInputForm']);
+        $router->get('/getAgencyInputForm/{orgId}', ['uses' => 'spms\SpmsController@getAgencyInputForm']);
+        $router->get('/getAgencyInputFormDetail/{agencyInputFormId}/{orgId}', ['uses' => 'spms\SpmsController@getAgencyInputFormDetail']);
+        $router->post('/saveObservationAgencyInputForm', ['uses' => 'spms\SpmsController@saveObservationAgencyInputForm']);
+        $router->post('/saveActionAgencyInputForm', ['uses' => 'spms\SpmsController@saveActionAgencyInputForm']);
+        $router->post('/saveAcknowlegeAgencyInputForm', ['uses' => 'spms\SpmsController@saveAcknowlegeAgencyInputForm']);
     });
 });

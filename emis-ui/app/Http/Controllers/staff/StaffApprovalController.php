@@ -353,23 +353,42 @@ class StaffApprovalController extends Controller
             }
         }
         $request['attachment_details'] = $attachment_details;
-        $Expatriate_data="";
-        $validation="";
-            switch($request['application_type']){
-                case "principal_recruitment" : {
-                        $validation = $this->validatePrincipalRecuritmentApprovalFields($request);
-                        $Expatriate_data = $this->setExpatriateRecuritmentFields($request);
-                        break;
-                    }
-                    default : {
-                        break;
-                    }
-                }
-                $rules = $validation['rules'];
-                $customMessages = $validation['messages'];
+        $rules = [
+            'passport'                   =>  'required',
+            'name'                       =>  'required',
+            'dob'                        =>  'required',
+            'country'                    =>  'required',
+            'address'                    =>  'required',
+            'email'                      =>  'required',
+            'contact_number'             =>  'required'
+        ];
+        $customMessages = [
+            'passport.required'          => 'Passport/Emigration is required',
+            'name.required'              => 'Name is required',
+            'dob.required'               => 'Date of Birth is required',
+            'country.required'           => 'Country is required',
+            'address.required'           => 'Your Address is required',
+            'email.required'             => 'Email Address is required',
+            'contact_number.required'    => 'Contact Number is required',
+        ];
 
-                $this->validate($request, $rules, $customMessages);
-                $Expatriate_data=$Expatriate_data+[
+        $Expatriate_data =[
+            'passport'                  =>  $request['passport'],
+            'name'                      =>  $request['name'],
+            'dob'                       =>  $request['dob'],
+            'country'                   =>  $request['country'],
+            'address'                   =>  $request['address'],
+            'email'                     =>  $request['email'],
+            'contact_number'            =>  $request['contact_number'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
+        ];
+           $this->validate($request, $rules, $customMessages);
+           $Expatriate_data=$Expatriate_data+[
                     'attachment_details'            =>   $attachment_details,
                 ];
             $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));

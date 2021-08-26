@@ -6,6 +6,7 @@ use App\Helper\EmisService;
 use App\Http\Controllers\Controller;
 use App\Traits\AuthUser;
 use App\Traits\ServiceHelper;
+use DateTime;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -18,63 +19,109 @@ class SpmsController extends Controller
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
+    public function schoolPerformaceDashboard($year){
+        $can_add_edit_performance = false;
+        $dzoWiseNoOfSchools = json_decode($this->apiService->listData('emis/common_services/getDzoWiseNoOfSchools'),true);
+        if($this->getAccessLevel() =='Org'){
+            return [];
+        }
+        if($this->getAccessLevel() =='Dzongkhag'){
+            $dzon_id = $this->getUserDzoId();
+            $dzongkhags = [['dzon_id' => $dzon_id]];
+            $can_add_edit_performance = true;
+        }else {
+            $emo_id = $this->staffId();
+            $dzongkhags = json_decode($this->apiService->listData('emis/spms/getDzoEMO/'.$emo_id),true)['data'];
+        }
 
-    public function getDeoDashboardData(){
-        $staff_id = $this->staffId();
-        $dzon_id = $this->getUserDzoId();
-        $uri ='emis/spms/getDeoDashboardData/'.$dzon_id.'/'.$staff_id;
-        $spms = json_decode($this->apiService->listData($uri),true);
-        $evaluated_performances = $spms['data']['evaluated_school_performances'];
-        $org_ids = implode(",",array_column($spms['data']['assigned_org_ids'],'org_id'));
-        $org_class_ids = implode(",",array_column($spms['data']['sub_category_class_ids'],'org_class_id'));
-        $classes = json_decode($this->getOrgWiseClassesForSpms($org_ids,$org_class_ids),true);
-        $category_schools = [];
-        foreach($spms['data']['sub_category_class_ids'] as $category_class){
-            foreach($classes as $class){
-                if($category_class["org_class_id"] == $class["org_class_id"] || $category_class["org_class_id"] === null){
-                    if(array_key_exists($category_class["spm_doamin_subcat_id"],$category_schools)){
-                        $category_schools[$category_class["spm_doamin_subcat_id"]]["no_of_schools"]++;
-                    }else{
-                        $category_schools[$category_class["spm_doamin_subcat_id"]]["name"] = $category_class["name"];
-                        $category_schools[$category_class["spm_doamin_subcat_id"]]["no_of_schools"] = 1;
+        if(count($dzongkhags) > 0){
+            $dzongkhag_ids = implode(",",array_column($dzongkhags,'dzon_id'));
+        }else{
+            $dzongkhag_ids = "ALL";
+        }
+        $schoolPerformaces = json_decode($this->apiService->listData('emis/spms/schoolPerformaceDashboard?dzongkhag_ids='.$dzongkhag_ids.'&year='.$year),true)['data'];
+        $all_dzongkhags = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_active_dzongkhag'),true)['data'];
+        $performances = [];
+        if(count($dzongkhags) > 0){
+            foreach($dzongkhags as $key => $dzongkhag){
+                if($schoolPerformaces && count($schoolPerformaces)>0){
+                    foreach($schoolPerformaces as $schoolPerformace){
+                        if($schoolPerformace['dzon_id'] == $dzongkhag['dzon_id']){
+                            $dzongkhags[$key]["under_process"] = $schoolPerformace['under_process'];
+                            $dzongkhags[$key]["completed"] = $schoolPerformace['completed'];
+                            $dzongkhags[$key]["year"] = $schoolPerformace['year'];
+                        }
+                    }
+                }else{
+                    $dzongkhags[$key]["under_process"] = 0;
+                    $dzongkhags[$key]["completed"] = 0;
+                    $dzongkhags[$key]["year"] = $year;
+                }
+                foreach($all_dzongkhags as $dzong){
+                    if($dzongkhag['dzon_id'] == $dzong['id']){
+                        $dzongkhags[$key]["dzongkhag"] = $dzong['name'];
+                    }
+                }
+                foreach($dzoWiseNoOfSchools as $dzoWiseNoOfSchool){
+                    if($dzongkhag['dzon_id'] == $dzoWiseNoOfSchool['dzongkhagId']){
+                        $noOfUderProcess = array_key_exists('under_process',$dzongkhags[$key]) ? $dzongkhags[$key]['under_process'] : 0;
+                        $noOfCompleted = array_key_exists('completed',$dzongkhags[$key]) ? $dzongkhags[$key]['completed'] : 0;
+                        $dzongkhags[$key]["not_assessed"] = $dzoWiseNoOfSchool['no_of_schools'] - ($noOfUderProcess + $noOfCompleted);
                     }
                 }
             }
-        }
-        foreach($category_schools as $key => $value){
-            foreach($evaluated_performances as $evaluated_performance){
-                if($key == $evaluated_performance['spm_domain_subcat_id']){
-                    $category_schools[$key]["no_of_schools"] = $category_schools[$key]["no_of_schools"] - $evaluated_performance["no_of_schools"];
+            $performances = $dzongkhags;
+        }else{
+            foreach($all_dzongkhags as $key => $dzongkhag){
+                if($schoolPerformaces && count($schoolPerformaces)>0){
+                    foreach($schoolPerformaces as $schoolPerformace){
+                        if($schoolPerformace['dzon_id'] == $dzongkhag['id']){
+                            $all_dzongkhags[$key]["under_process"] = $schoolPerformace['under_process'];
+                            $all_dzongkhags[$key]["completed"] = $schoolPerformace['completed'];
+                        }
+                    }
+                }else{
+                    $all_dzongkhags[$key]["under_process"] = 0;
+                    $all_dzongkhags[$key]["completed"] = 0;
+                }
+                foreach($dzoWiseNoOfSchools as $dzoWiseNoOfSchool){
+                    if($dzongkhag['id'] == $dzoWiseNoOfSchool['dzongkhagId']){
+                        $all_dzongkhags[$key]["not_assessed"] = $dzoWiseNoOfSchool['no_of_schools'] - ($all_dzongkhags[$key]['under_process'] + $all_dzongkhags[$key]['completed']);
+                    }
                 }
             }
-            if($category_schools[$key]["no_of_schools"]>0){
-                array_push($evaluated_performances,["spm_domain_subcat_id"=>$key, "sub_category"=>$value["name"], "status"=>0, "status_name" => "Not Assessed", "no_of_schools"=>$category_schools[$key]["no_of_schools"]]);
+            $performances = $all_dzongkhags;
+        }
+        return ['performances'=>$performances,'can_add_edit_performance'=>$can_add_edit_performance];
+    }
+    public function getSchoolPerformaceList($year,$dzon_id,$status){
+        $type="school";
+        $schools = json_decode($this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$dzon_id),true)["data"];
+
+       //$assessedSchools: Status 0 -> all assessed schools under the Dz; Status 1/2 - schools with assessment  status 1/2
+       $assessedSchools = json_decode($this->apiService->listData('emis/spms/getSchoolPerformaceList/'.$year.'/'.$dzon_id.'/'.$status),true)['data'];
+        $filteredData = [];
+        foreach($schools as $school){
+            $assessed = false;
+            $evaluationId = '';
+            if(count($assessedSchools) > 0){
+                foreach($assessedSchools as $assessedSchool){
+                    if($school['id'] == $assessedSchool['org_id']){
+                        $assessed = true;
+                        $evaluationId = $assessedSchool['id'];
+                    }
+                }
+            }
+            if($status == 0 && !$assessed){
+                array_push($filteredData,['evaluation_id'=>$evaluationId,'school_id'=>$school['id'],'school'=>$school['name'],'dzon_id'=> $school['dzongkhagId']]);
+            }elseif($status != 0 && $assessed){
+                array_push($filteredData,['evaluation_id'=>$evaluationId,'school_id'=>$school['id'],'school'=>$school['name'],'dzon_id'=> $school['dzongkhagId']]);
             }
         }
-        return $evaluated_performances;
+        return $filteredData;
     }
-    private function getOrgWiseClassesForSpms($org_ids,$org_class_ids){
-        return $this->apiService->listData('emis/common_services/getOrgWiseClassesForSpms?org_id='.$org_ids.'&org_class_id='.$org_class_ids);
-    }
-    public function getSchoolDoeDetails($spm_domain_subcat_id,$status=0){
-        $staff_id = $this->staffId();
-        $dzon_id = $this->getUserDzoId();
-        $uri = "emis/spms/getSchoolDoeDetails/".$dzon_id.'/'.$staff_id.'/'.$spm_domain_subcat_id;
-        if($status > 0){
-            $uri .='/'.$status;
-        }
-        $data = json_decode($this->apiService->listData($uri),true);
-        if(count($data['data']['school_performances']) > 0){
-            return $data['data']['school_performances'];
-        }
-        
-        // $org_ids = implode(",",array_column($spms['data']['assigned_org_ids'],'org_id'));
-        // $org_class_ids = implode(",",array_column($spms['data']['sub_category_class_ids'],'org_class_id'));
-        // $classes = json_decode($this->getOrgWiseClassesForSpms($org_ids,$org_class_ids),true);
-        // return $response_data;
-    }
-    public function getEvaluation($org_id,$spm_domain_subcat_id){
-        $response_data = $this->apiService->listData('emis/spms/getEvaluation/'.$org_id.'/'.$spm_domain_subcat_id);
+    public function getEvaluation($org_id,$year){
+        $response_data = $this->apiService->listData('emis/spms/getEvaluation/'.$org_id.'/'.$year);
         return $response_data;
     }
     public function saveEvaluation(Request $request){
@@ -104,9 +151,10 @@ class SpmsController extends Controller
             'objective' => 'required',
             'strategy' => 'required',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'required|after:start_date',
             'person_responsible' => 'required',
             'implementation_status_id' => 'required',
+            'remarks' => 'required',
         ];
         $customMessages = [
             'spm_domain_id.required' => 'This field is required',
@@ -116,7 +164,8 @@ class SpmsController extends Controller
             'start_date.required' => 'This field is required',
             'end_date.required' => 'This field is required',
             'person_responsible.required' => 'This field is required',
-            'statuimplementation_status_ids_id.required' => 'This field is required',
+            'implementation_status_id.required' => 'This field is required',
+            'remarks.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $request['dzon_id'] = $this->getUserDzoId();
@@ -138,7 +187,7 @@ class SpmsController extends Controller
             'full_name' => 'required',
             'organization' => 'required',
             'roles' => 'required',
-            'id' => 'required',
+            'spm_school_plan_id' => 'required',
         ];
         $customMessages = [
             'comment.required' => 'This field is required',
@@ -146,7 +195,7 @@ class SpmsController extends Controller
             'full_name.required' => 'This field is required',
             'organization.required' => 'This field is required',
             'roles.required' => 'This field is required',
-            'id.required' => 'This field is required',
+            'spm_school_plan_id.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $request['user_id'] = $this->userId();
@@ -154,8 +203,12 @@ class SpmsController extends Controller
         $response_data = $this->apiService->createData('emis/spms/saveImplementtationStatus',$data);
         return $response_data;
     }
-    public function getSchoolPlanHistory(){
-        $response_data = $this->apiService->listData('emis/spms/getSchoolPlanHistory');
+    public function getSchoolPlanDetails($spm_school_plan_id){
+        $response_data = $this->apiService->listData('emis/spms/getSchoolPlanDetails/'.$spm_school_plan_id);
+        return $response_data;
+    }
+    public function getSchoolPlanHistory($spm_school_plan_id){
+        $response_data = $this->apiService->listData('emis/spms/getSchoolPlanHistory/'.$spm_school_plan_id);
         return $response_data;
     }
     public function loadOrgList(){
@@ -197,6 +250,98 @@ class SpmsController extends Controller
             array_push($filteredData,['school_id'=>$school['id'],'school'=>$school['name'],'dzo_id'=>$school['dzongkhagId'],'dzongkhag'=>$dzongkhag,'hasPlan'=>$hasPlan]);
         }
         return $filteredData;
+    }
+    public function saveAgencyInputForm(Request $request){
+        $rules = [
+            'name' => 'required',
+            'org_division_id' => 'required',
+            'year' => 'required',
+            'input' => 'required',
+            'activity' => 'required',
+            'output' => 'required',
+        ];
+        $customMessages = [
+            'name.required' => 'This field is required',
+            'org_division_id.required' => 'This field is required',
+            'year.required' => 'This field is required',
+            'input.required' => 'This field is required',
+            'activity.required' => 'This field is required',
+            'output.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveAgencyInputForm',$data);
+        return $response_data;
+    }
+    public function getAgencyInputForm(){
+        $orgId = $this->getWrkingAgencyId();
+        $global_masters = $this->apiService->listData('emis/spms/getAgencyInputForm/'.$orgId);
+        return $global_masters;
+    }
+    public function getAgencyInputFormDetail($agencyInputFormId){
+        $orgId = $this->getWrkingAgencyId();
+        $global_masters = $this->apiService->listData('emis/spms/getAgencyInputFormDetail/'.$agencyInputFormId.'/'.$orgId);
+        return $global_masters;
+    }
+    public function saveObservationAgencyInputForm(Request $request){
+        $rules = [
+            'dzon_id' => 'required',
+            'school_id' => 'required',
+            'agency_input_id' => 'required',
+            'observation' => 'required',
+            'recommendation' => 'required',
+            'recommendation_date' => 'required'
+        ];
+        $customMessages = [
+            'dzon_id.required' => 'This field is required',
+            'school_id.required' => 'This field is required',
+            'agency_input_id.required' => 'This field is required',
+            'observation.required' => 'This field is required',
+            'recommendation.required' => 'This field is required',
+            'recommendation_date.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveObservationAgencyInputForm',$data);
+        return $response_data;
+    }
+    public function saveActionAgencyInputForm(Request $request){
+        $rules = [
+            'agency_input_id' => 'required',
+            'agency_input_obs_id' => 'required',
+            'action' => 'required',
+            'action_date' => 'required',
+        ];
+        $customMessages = [
+            'agency_input_id.required' => 'This field is required',
+            'agency_input_obs_id.required' => 'This field is required',
+            'action.required' => 'This field is required',
+            'action_date.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveActionAgencyInputForm',$data);
+        return $response_data;
+    }
+    public function saveAcknowlegeAgencyInputForm(Request $request){
+        $rules = [
+            'agency_input_id' => 'required',
+            'school_id' => 'required',
+            'acknowledgement' => 'required',
+        ];
+        $customMessages = [
+            'agency_input_id.required' => 'This field is required',
+            'school_id.required' => 'This field is required',
+            'acknowledgement.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/spms/saveAcknowlegeAgencyInputForm',$data);
+        return $response_data;
     }
 
 }
