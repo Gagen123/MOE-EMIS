@@ -408,7 +408,7 @@ class StaffApprovalController extends Controller
                 return 'No Screen';
             }
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $Expatriate_data);
-           
+
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
@@ -429,6 +429,55 @@ class StaffApprovalController extends Controller
             }
                  return $response_data;
     }
+
+    private function setExpatriateRecuritmentFields($request){
+        $data =[
+            'passport'                  =>  $request['passport'],
+            'name'                      =>  $request['name'],
+            'dob'                       =>  $request['dob'],
+            'country'                   =>  $request['country'],
+            'address'                   =>  $request['address'],
+            'email'                     =>  $request['email'],
+            'contact_number'            =>  $request['contact_number'],
+            'application_type'          =>  $request['application_type'],
+            'application_for'           =>  $request['application_for'],
+            'action_type'               =>  $request['action_type'],
+            'status'                    =>  $request['status'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
+        ];
+
+        return $data;
+    }
+
+    private function validateExpatriateRecuritmentFields($request){
+        $rules = [
+            'passport'                   =>  'required',
+            'name'                       =>  'required',
+            'dob'                        =>  'required',
+            'country'                    =>  'required',
+            'address'                    =>  'required',
+            'email'                      =>  'required',
+            'contact_number'             =>  'required'
+        ];
+        $customMessages = [
+            'passport.required'          => 'Passport/Emigration is required',
+            'name.required'              => 'Name is required',
+            'dob.required'               => 'Date of Birth is required',
+            'country.required'           => 'Country is required',
+            'address.required'           => 'Your Address is required',
+            'email.required'             => 'Email Address is required',
+            'contact_number.required'    => 'Contact Number is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+
     public function loadPrincipalApprovalApplication($type=""){
         $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );
         return $loadPrincipalApprovalApplication;

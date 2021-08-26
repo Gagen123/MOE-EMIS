@@ -199,6 +199,10 @@ Route::prefix('organizationApproval')->group(function () {
     Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
     Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+    Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
+    Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
+    Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
+
 });
 
 Route::prefix('organization')->group(function () {

@@ -8,14 +8,14 @@
                             <label class="mb-0.5">Organization Details </label>
                         </a>
                     </li>
+                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Age Group </label>
+                        </a>
+                    </li>
                     <li class="nav-item attachments-tab" @click="shownexttab('attachments-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Attachments & Verification </label>
-                        </a>
-                    </li>
-                    <li class="nav-item class-tab" @click="shownexttab('class-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Classes and Stream </label>
                         </a>
                     </li>
                 </ul>
@@ -39,13 +39,47 @@
                                     <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
                                 </div>
                             </div>
+                            <div class="form-group row" v-if="applicationdetails.applicant_remarks!=null">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0">Remarks:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.applicant_remarks}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="callout callout-success" v-if="applicationdetails.category=='PRIVATE'">
+                            <h5><u>Proprietor Details</u></h5>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Name:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorName}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">CID:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorCid}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Mobile No:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorMobile}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Phone No:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorPhone}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Email:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorEmail}}</span>
+                                </div>
+                            </div>
                         </div>
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
                             <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.proposed_initiated!=null">
                                     <label class="mb-0">Proposal Initiated By:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.initiated_by}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.proposed_initiated}}</span>
                                 </div>
                                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
@@ -100,6 +134,27 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
+                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="callout callout-success">
+                            <h4><u>Age Group</u></h4>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                    <span v-for="(item, index) in  class_section" :key="index">
+                                        <br>
+                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                                 <button class="btn btn-primary" @click="shownexttab('attachments-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
@@ -246,27 +301,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
-                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-primary" @click="shownexttab('class-tab')">Next <i class="fa fa-arrow-right"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <h4><u>Select classes and streams</u></h4>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <br>
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-success" @click="shownexttab('attachments-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
                             </div>
                         </div>
                     </div>
