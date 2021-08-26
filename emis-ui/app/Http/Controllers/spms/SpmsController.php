@@ -64,7 +64,9 @@ class SpmsController extends Controller
                 }
                 foreach($dzoWiseNoOfSchools as $dzoWiseNoOfSchool){
                     if($dzongkhag['dzon_id'] == $dzoWiseNoOfSchool['dzongkhagId']){
-                        $dzongkhags[$key]["not_assessed"] = $dzoWiseNoOfSchool['no_of_schools'] - ($dzongkhags[$key]['under_process'] + $dzongkhags[$key]['completed']);
+                        $noOfUderProcess = array_key_exists('under_process',$dzongkhags[$key]) ? $dzongkhags[$key]['under_process'] : 0;
+                        $noOfCompleted = array_key_exists('completed',$dzongkhags[$key]) ? $dzongkhags[$key]['completed'] : 0;
+                        $dzongkhags[$key]["not_assessed"] = $dzoWiseNoOfSchool['no_of_schools'] - ($noOfUderProcess + $noOfCompleted);
                     }
                 }
             }

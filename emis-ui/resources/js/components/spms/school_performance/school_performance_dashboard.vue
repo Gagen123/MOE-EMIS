@@ -53,7 +53,7 @@
                                     </router-link>
                                 </span>
                             </td>
-                            <td class="text-right">{{  item.not_assessed + item.under_process+item.completed }}</td>
+                            <td class="text-right">{{ (isNaN(item.not_assessed) ? 0 : item.not_assessed) + (isNaN(item.under_process) ? 0 : item.under_process) + (isNaN(item.completed) ? 0 : item.completed) }}</td>
 
                             <!-- <td class="text-right pr-4"> 
                                 <router-link :to="{name:'list_school_performance',params: {data:item}}">
