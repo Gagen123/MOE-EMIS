@@ -389,7 +389,7 @@ class StaffApprovalController extends Controller
                 return 'No Screen';
             }
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $Expatriate_data);
-           
+
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
@@ -458,7 +458,7 @@ class StaffApprovalController extends Controller
 
         return ($validation);
     }
-    
+
     public function loadPrincipalApprovalApplication($type=""){
         $loadPrincipalApprovalApplication = $this->apiService->listData('emis/staff/staffRecruitmentController/loadPrincipalApprovalApplication/'.$this->userId().'/'.$type );
         return $loadPrincipalApprovalApplication;

@@ -36,6 +36,7 @@ class WorkflowController extends Controller{
             'application_number'    =>$request->application_number,
             'screen_id'             =>$request->screen_id,
             'status_id'             =>$request->status_id,
+            'w_config_status'       =>$request->w_config_status,
             'remarks'               =>$request->remarks,
             'action_by'             =>$request->action_by,
             'action_date'           =>date('Y-m-d h:i:s'),
@@ -55,6 +56,7 @@ class WorkflowController extends Controller{
                 'application_number'    =>$request->application_number,
                 'status_id'             =>$status,
                 'remarks'               =>$request->remarks,
+                'w_config_status'       =>$request->w_config_status,
                 'access_level'          =>$request->access_level,
                 'user_dzo_id'           =>$request->user_dzo_id,
                 'working_agency_id'     =>$request->working_agency_id,
@@ -77,6 +79,7 @@ class WorkflowController extends Controller{
         else{
             $task_data=[
                 'status_id'             =>$request->status_id,
+                'w_config_status'       =>$request->w_config_status,
                 'remarks'               =>$request->remarks,
                 'last_action_by'        =>$request->action_by,
                 'last_action_date'      =>date('Y-m-d h:i:s'),
@@ -93,6 +96,7 @@ class WorkflowController extends Controller{
                     'service_name'          =>$request->service_name,
                     'name'                  =>$request->name,
                     'screen_id'             =>$request->screen_id,
+                    'w_config_status'       =>$request->w_config_status,
                     'application_number'    =>$request->application_number,
                     'status_id'             =>$request->status_id,
                     'remarks'               =>$request->remarks,
@@ -105,6 +109,8 @@ class WorkflowController extends Controller{
                     'last_action_date'      =>date('Y-m-d h:i:s'),
                     'app_role_id'           => $request->app_role_id,
                     'record_type_id'        => $request->record_type_id,
+                    'claimed_by'            =>null,
+                    'claimed_date'          =>null,
                 ];
                 TaskDetails::where('application_number', $request->application_number)->update($task_data);
             }

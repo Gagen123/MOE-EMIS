@@ -84,11 +84,21 @@ class CommonController extends Controller{
             $approved_transfer_data="Invalid";
         }
 
-        if(config('services.constant.hrd_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.hrd_role_id'))!==false){
-            $leadership_data="Valid";//pull leadership application only for HRD role
+        $leadership_data="Invalid";
+        $hrd_roles=config('services.constant.hrd_role_id');
+        if(strpos($hrd_roles,',')){
+            $hrd_roles=explode(',',$hrd_roles);
         }
-        else{
-            $leadership_data="Invalid";
+        if(sizeof($hrd_roles)>1){
+            foreach($hrd_roles as $role){
+                if($role!=null && strpos($this->getRoleIds('roleIds'),$role)!==false){
+                    $leadership_data="Valid";
+                }
+            }
+        }else{
+            if($hrd_roles!=null && strpos($this->getRoleIds('roleIds'),$hrd_roles)!==false){
+                $leadership_data="Valid";//pull leadership application only for HRD role
+            }
         }
         $task_data=$data+[
             'work_status'               =>  $approval_response_data,
