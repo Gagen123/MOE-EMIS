@@ -21,8 +21,6 @@ use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\generalInformation\Connectivity;
 use App\Models\generalInformation\Locations;
-use App\Models\generalInformation\Section;
-use App\Models\generalInformation\SectionDetails;
 use App\Models\generalInformation\LocationDisasterRisk;
 use App\Models\ApplicationSequence;
 use App\Models\OrganizationDetails;
@@ -89,23 +87,12 @@ class EstablishmentController extends Controller{
                         $dataModel = 'ApplicationEstPrivate';
                         break;
                     }
-                case "public_eccd" : {
-                        $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
-                        $dataModel = 'ApplicationEstPublic';
-                        break;
-                    }
-                case "private_eccd" : {
-                        $establishment_data = $this->extractPrivateEstDetailsData($request, $application_details_data->id);
-                        $dataModel = 'ApplicationEstPrivate';
-                        break;
-                    }
                 case "public_ecr" : {
                         $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
                         $dataModel = 'ApplicationEstPublic';
                         break;
                     }
                 default : {
-
                     break;
                 }
             }
@@ -141,7 +128,6 @@ class EstablishmentController extends Controller{
     /**
      * Extract the Basic Application Details
      */
-
     private function extractApplicationDetailsData($request){
         $data =[
             'establishment_type'   =>  $request['proposed_establishment'],
@@ -187,7 +173,7 @@ class EstablishmentController extends Controller{
         ApplicationDetails::where('application_no',$request['application_number'])->update($data);
         $response_data=ApplicationDetails::where('application_no',$request['application_number'])->first();
 
-        if($request['establishment_type']=="public_school" || $request['establishment_type']=="public_eccd" || $request['establishment_type']=="public_ecr"){
+        if($request['establishment_type']=="public_school" || $request['establishment_type']=="public_ecr"){
             $org_data=[
                 'proposedName'                  =>  $request['proposedName'],
                 'initiated_by'                  =>  $request['initiatedBy'],
@@ -219,7 +205,7 @@ class EstablishmentController extends Controller{
                 }
             }
         }
-        if($request['establishment_type']=="private_school" || $request['establishment_type']=="private_eccd"){
+        if($request['establishment_type']=="private_school"){
             $data =[
                 'proposedName'                 =>  $request['proposedName'],
                 'proprietorName'               =>  $request['proprietorName'],
@@ -227,9 +213,6 @@ class EstablishmentController extends Controller{
                 'proprietorPhone'              =>  $request['proprietorPhone'],
                 'proprietorMobile'             =>  $request['proprietorMobile'],
                 'proprietorEmail'              =>  $request['proprietorEmail'],
-                // 'totalLand'                    =>  $request['totalLand'],
-                // 'enrollmentBoys'               =>  $request['enrollmentBoys'],
-                // 'enrollmentGirls'              =>  $request['enrollmentGirls'],
                 'proposedLocation'             =>  $request['proposedLocation'],
                 'typeOfSchool'                 =>  $request['typeOfSchool'],
                 'proposedInfrastructure'       =>  $request['proposedInfrastructure'],
@@ -237,7 +220,6 @@ class EstablishmentController extends Controller{
                 'parentSchool'                 =>  $request['parentSchool'],
                 'levelId'                      =>  $request['level'],
             ];
-            // dd($data);
             ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->update($data);
             $app_det=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
@@ -269,7 +251,6 @@ class EstablishmentController extends Controller{
     /**
      * Extract Application Details for private establishments
      */
-
     private function extractPrivateEstDetailsData($request, $applicationDetailsId){
         $data =[
             'ApplicationDetailsId'         =>  $applicationDetailsId,
@@ -279,9 +260,6 @@ class EstablishmentController extends Controller{
             'proprietorPhone'              =>  $request['proprietorPhone'],
             'proprietorMobile'             =>  $request['proprietorMobile'],
             'proprietorEmail'              =>  $request['proprietorEmail'],
-            // 'totalLand'                    =>  $request['totalLand'],
-            // 'enrollmentBoys'               =>  $request['enrollmentBoys'],
-            // 'enrollmentGirls'              =>  $request['enrollmentGirls'],
             'proposedLocation'             =>  $request['proposedLocation'],
             'typeOfSchool'                 =>  $request['typeOfSchool'],
             'levelId'                      =>  $request['level'],
@@ -295,26 +273,12 @@ class EstablishmentController extends Controller{
     }
 
     /**
-     * Extract Application Details for no of meals
-     */
-
-    private function extractNoMealsData($request){
-        $data =[
-            //enter data
-        ];
-
-        return $data;
-    }
-
-    /**
      * Function to insert data into the respective tables
      */
 
     private function insertData($data, $databaseModel){
-
         $modelName = "App\\Models\\establishment\\"."$databaseModel";
         $model = new $modelName();
-
         $response_data = $model::create($data);
 
         return $response_data;
@@ -324,10 +288,8 @@ class EstablishmentController extends Controller{
     /**
      * Generate the application no
      */
-
     private function generateApplicationNo(){
         $last_seq=ApplicationSequence::where('service_name','New Establishment')->first();
-
         if($last_seq==null || $last_seq==""){
             $last_seq=1;
             $app_details = [
@@ -356,12 +318,8 @@ class EstablishmentController extends Controller{
         else if(strlen($last_seq)==4){
             $application_no= $application_no.date('Y').date('m').'-'.$last_seq;
         }
-
         return $application_no;
     }
-
-
-
 
     /**
      * method to save class and stream
@@ -370,11 +328,8 @@ class EstablishmentController extends Controller{
         $classStream='';
         $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
         ApplicationClassStream::where('ApplicationDetailsId', $application_details->id)->delete();
-        // return $request->class;
         if($request->class){
             foreach($request->class as $key => $classId){
-                // $stream_exists = $this->checkStreamExists($classId);
-                // if(empty($stream_exists)){
                 $classStream = [
                     'ApplicationDetailsId'  => $application_details->id,
                     'classId'               => $classId,
@@ -383,14 +338,12 @@ class EstablishmentController extends Controller{
                     'created_at'            => date('Y-m-d h:i:s'),
                 ];
                 $class = ApplicationClassStream::create($classStream);
-                // }
             }
         }
 
         if($request->stream!=null && $request->stream!=""){
             foreach($request->stream as $key2 => $classStreamId){
                 $class_stream_data = $this->getClassStreamId($classStreamId);
-            //    return $class_stream_data;
                 foreach($class_stream_data as $v){
                     $classStream = [
                         'ApplicationDetailsId'  => $application_details->id,
@@ -399,7 +352,6 @@ class EstablishmentController extends Controller{
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];
-                    // return $classStream;
                     $class = ApplicationClassStream::create($classStream);
                 }
             }
@@ -442,7 +394,6 @@ class EstablishmentController extends Controller{
         }
         return $doc;
     }
-
     /**
      * Check whether a class has streams or not
      */
@@ -517,26 +468,18 @@ class EstablishmentController extends Controller{
 
     public function loadBifurcationApplications($user_id="",$dzo_id=""){
         return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Bif%')->get());
-        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
     }
 
     public function loadMergerApplications($user_id="",$dzo_id=""){
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Mer%')->get());
-        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
     }
 
     public function loadClosureApplications($user_id="",$dzo_id=""){
         return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Cls%')->get());
-        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
     }
 
     public function loadReopeningApplications($user_id="",$dzo_id=""){
         return $this->successResponse(ApplicationDetails::where('dzongkhagId',$dzo_id)->where('application_no', 'like', 'Reop%')->get());
-        //return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->where('establishment_type',str_replace('_',' ',$type))->get());
-        // return $this->successResponse(ApplicationDetails::where('created_by',$user_id)->where('application_no', 'like', 'Ch-%')->get());
     }
 
     /**
@@ -566,22 +509,12 @@ class EstablishmentController extends Controller{
                 ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
                 ->orderBy('classes.displayOrder')
                 ->get();
-        //ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->get();
         $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
         $response_data->app_verification=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
         if($response_data!=null && $response_data!=""){
             $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$response_data->id)->get();
         }
 
-        // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
-        // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
-        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        // $classSection=ApplicationClassStream::where('applicationNo',$appNo)->groupBy('classId')->get();
-        // $sections=ApplicationClassStream::where('applicationNo',$appNo)->where('streamId','!=',null)->get();
-        // foreach($classSection as $cls){
-        //     $cls->class_name=ApplicationClassStream::where('id',$cls->classId)->first()->class;
-        // }
-        // $response_data->class_section=$classSection;
         return $this->successResponse($response_data);
     }
 
@@ -618,20 +551,6 @@ class EstablishmentController extends Controller{
 
         }
         else if($request->update_type=="team_verification" || $request->update_type=="final_verification"){
-            // if(sizeof($request->nomi_staffList)>0 ){
-            //     foreach($request->nomi_staffList as $nomi){
-            //         $verification =[
-            //             'ApplicationVerificationId'     =>   $request->id,
-            //             'agency'                        =>   $nomi['org_id'],
-            //             'teamMember'                    =>   $nomi['staff_id'],
-            //             'verificationDate'              =>   date('Y-m-d h:i:s'),
-            //             'remarks'                       =>   $request->remarks,
-            //             'created_by'                    =>   $request->user_id,
-            //             'created_by'                    =>   date('Y-m-d h:i:s'),
-            //         ];
-            //         $establishment=ApplicationVerificationTeam::create($verification);
-            //     }
-            // }
             if($request->status!="Rejected" && $request->status!="Approved"){
                 $status="Notified For Team Verification";
             }
@@ -700,19 +619,6 @@ class EstablishmentController extends Controller{
             $response_data->org_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
         }
         $response_data->org_class_stream=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->get();
-        // $response_data->level=Level::where('id',$response_data->levelId)->first()->name;
-        // $response_data->locationType=Location::where('id',$response_data->locationId)->first()->name;
-        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        // $classSection=ApplicationClassStream::where('applicationNo',$response_data->applicationNo)->groupBy('classId')->get();
-        // $sections=ApplicationClassStream::where('applicationNo',$response_data->applicationNo)->where('streamId','!=',null)->get();
-        // foreach($classSection as $cls){
-        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        // }
-        // foreach($sections as $sec){
-        //     $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        // }
-        // $response_data->class_section=$classSection;
-        // $response_data->sections=$sections;
         return $this->successResponse($response_data);
     }
 

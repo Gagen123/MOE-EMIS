@@ -7,9 +7,10 @@ const routes = [
           component: require('./components/organization/establishment/eccd/eccd_index.vue').default,
           children: [
             { path: '/', name:'eccd_approval_index', component: require('./components/organization/establishment/eccd/list_eccd.vue').default },
+            { path: '/create_eccd',name:"create_eccd", component: require('./components/organization/establishment/eccd/create_private_eccd.vue').default },
 
             { path: '/create_public_eccd',name:"create_public_eccd", component: require('./components/organization/establishment/eccd/create_public_eccd.vue').default },
-            { path: '/create_private_eccd',name:"create_private_eccd", component: require('./components/organization/establishment/eccd/create_private_eccd.vue').default },
+
             { path: '/create_ngo_eccd',name:"create_ngo_eccd", component: require('./components/organization/establishment/eccd/create_ngo_eccd.vue').default },
             { path: '/create_coorporate_eccd',name:"create_coorporate_eccd", component: require('./components/organization/establishment/eccd/create_coorporate_eccd.vue').default },
 

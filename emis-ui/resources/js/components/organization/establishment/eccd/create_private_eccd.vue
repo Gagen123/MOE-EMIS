@@ -272,7 +272,7 @@ export default {
                 application_number:'',
                 status:'Submitted',
                 remarks:'',
-                service_name:'New Establishment of Private ECCD',
+                service_name:'New Establishment of ECCD Centre',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -400,7 +400,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_eccd',params: {data:message+res}});
                                             Toast.fire({
                                                 icon: 'success',
@@ -577,7 +577,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+        alert(this.$route.query.type);
         this.classStreamList =await this.getClassStreamMappings('eccd');
     },
 }

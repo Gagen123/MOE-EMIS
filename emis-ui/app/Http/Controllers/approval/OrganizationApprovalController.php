@@ -24,20 +24,17 @@ class OrganizationApprovalController extends Controller{
             'proposedName'          =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
+            'parentSchool'          =>  'required',
+            'locationType'         =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
+            'parentSchool.required'         => 'Parent school is required',
+            'locationType.required'        => 'locationType is required',
         ];
-        if(strpos($request->establishment_type,'ECCD')!==false){
-            $rules =$rules+ [
-                'parentSchool'          =>  'required',
-            ];
-            $customMessages = $customMessages+[
-                'parentSchool.required'         => 'Parent school is required',
-            ];
-        }
+
         if($request->establishment_type=="Coorporate ECCD"){
             $rules =$rules+ [
                 'parentAgency'          =>  'required',
@@ -46,31 +43,26 @@ class OrganizationApprovalController extends Controller{
                 'parentAgency.required'         => 'Parent agency is required',
             ];
         }
-        if($request->establishment_type=="Public ECCD"){
+        if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
             $rules =$rules+ [
                 'initiatedBy'          =>  'required',
-                'locationType'         =>  'required',
             ];
             $customMessages = $customMessages+[
                 'initiatedBy.required'         => 'Proposed initiated by is required',
-                'locationType.required'        => 'locationType is required',
             ];
         }
         if($request->establishment_type=="Private ECCD"){
             $rules =$rules+ [
-                'locationType'         =>  'required',
                 'proprietorCid'         =>  'required',
                 'proprietorName'         =>  'required',
                 'proprietorMobile'         =>  'required',
             ];
             $customMessages = $customMessages+[
-                'locationType.required'        => 'locationType is required',
                 'proprietorCid.required'        => 'CID is required',
                 'proprietorName.required'        => 'Name is required',
                 'proprietorMobile.required'        => 'Mobile number is required',
             ];
         }
-
         $this->validate($request, $rules, $customMessages);
         $request['user_id']=$this->userId();
         $response_data= $this->apiService->createData('emis/organization/organizationApproval/saveEstablishment', $request->all());

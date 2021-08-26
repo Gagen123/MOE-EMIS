@@ -11,10 +11,10 @@
                 </span>
                 <span class="fa-pull-right pr-2 py-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_eccd')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_private_eccd')"><i class="fa fa-plus"></i>New Private</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_public_eccd')"><i class="fa fa-plus"></i>New Public</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_ngo_eccd')"><i class="fa fa-plus"></i>New NGO</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_coorporate_eccd')"><i class="fa fa-plus"></i>New Coorporate</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Private')"><i class="fa fa-plus"></i>New Private</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Public')"><i class="fa fa-plus"></i>New Public</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','NGO')"><i class="fa fa-plus"></i>New NGO</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Coorporate')"><i class="fa fa-plus"></i>New Coorporate</button>
                     <!-- <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button> -->
                 </span>
             </div>
@@ -27,8 +27,8 @@
 <script>
 export default {
     methods: {
-        showadprocess(type){
-            this.$router.push({name:type});
+        showadprocess(uri,type){
+            this.$router.push({name:uri,query: {type:type}});
 		},
     },
     mounted() {

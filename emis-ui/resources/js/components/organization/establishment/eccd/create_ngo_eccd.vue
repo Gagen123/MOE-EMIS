@@ -35,26 +35,31 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control select2" @change="remove_error('initiatedBy')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="initiatedBy"></has-error>
+                                </div>
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
                                     <has-error :form="form" field="proposedName"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="form" field="gewog"></has-error>
                                 </div>
-
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Chiwog:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -64,19 +69,27 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Co-located with Parent School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                     <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                                 </div>
-                            </div>
-                            <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <select v-model="form.parentSchool" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parentSchool') }" class="form-control select2" name="parentSchool" id="parentSchool">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="form" field="parentSchool"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Location Type:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="locationType"></has-error>
                                 </div>
                             </div>
                         </form>
@@ -189,10 +202,12 @@
 export default {
     data(){
         return{
+            proposed_by_list:[],
             gewog_list:[],
             villageList:[],
             orgList:[],
             classStreamList:[],
+            locationList:[],
 
             screenId:'',
             SysRoleId:'',
@@ -201,9 +216,11 @@ export default {
 
             form: new form({
                 id: '',
+                initiatedBy:'',
                 coLocatedParent:'1',
                 parentSchool:'',
                 proposedName:'',
+                locationType:'',
                 application_number:'',
                 category:'NGO',
                 dzongkhag:'',
@@ -308,6 +325,12 @@ export default {
             if(id=="parentSchool"){
                 this.form.parentSchool=$('#parentSchool').val();
             }
+            if(id=="initiatedBy"){
+                this.form.initiatedBy=$('#initiatedBy').val();
+            }
+            if(id=="locationType"){
+                this.form.locationType=$('#locationType').val();
+            }
         },
 
         /**
@@ -382,7 +405,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_eccd',params: {data:message+res }});
                                             Toast.fire({
                                                 icon: 'success',
@@ -446,6 +469,8 @@ export default {
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
             this.applyselect2field('parentSchool');
+            this.applyselect2field('initiatedBy');
+            this.applyselect2field('locationType');
         },
 
     },
@@ -494,6 +519,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.proposed_by_list =  await this.loadproposedByList();
+        this.locationList =await this.loadlocationList();
 
         this.classStreamList =await this.getClassStreamMappings('eccd');
         this.orgList= await this.schoolListUnderUserDzongkhag();
