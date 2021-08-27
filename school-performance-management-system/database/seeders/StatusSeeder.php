@@ -16,11 +16,6 @@ class StatusSeeder extends Seeder
     {
         DB::table('spm_status')->insert([
             [
-                'id' => '0',
-                'name' => 'Not Assessed',
-                'created_by' => 'D'
-            ],
-            [
                 'id' => '1',
                 'name' => 'Draft',
                 'created_by' => 'D'

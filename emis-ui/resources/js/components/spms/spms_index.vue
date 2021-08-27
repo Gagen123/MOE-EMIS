@@ -11,26 +11,27 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('school_performance')">
-                    <router-link id="school_performance" to="/school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       School Performance
-                    </router-link>
-                </li>
+             
                 <li class="nav-item active pr-1" @click="activatelink('annual_school_plan')">
                     <router-link id="annual_school_plan" to="/annual-school-plan" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Annual School Plan
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" @click="activatelink('school_plan_deo')">
-                    <router-link id="school_plan_deo" to="/school-plan-deo" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Annual School Plan (DEO/TEO)
+               <li class="nav-item active pr-1" @click="activatelink('agency_input_form')">
+                    <router-link id="agency_input_form" to="/agency-input-form" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       Agency Input
+                    </router-link>
+               </li>
+                <li class="nav-item active pr-1" @click="activatelink('school_performance')">
+                    <router-link id="school_performance" to="/school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       School Performance (Non-Academic)
                     </router-link>
                 </li>
-                 <li class="nav-item active pr-1" @click="activatelink('school_plan_emd')">
-                    <router-link id="school_plan_emd" to="/school-plan-emd" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Annual School Plan (EMD)
+                <li class="nav-item active pr-1" @click="activatelink('school_performance_academic')">
+                    <router-link id="school_performance_academic" to="/school-performance-academic" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                       School Performance (Academic)
                     </router-link>
-                </li> -->
+                </li>
             </ul>
             <router-view></router-view>
         </div>

@@ -22,7 +22,7 @@ class SchoolPlanStatusSeeder extends Seeder
             ],
             [
                 'id' => '2',
-                'name' => 'Progress',
+                'name' => 'In Progress',
                 'created_by' => 'D'
             ],
         ]);

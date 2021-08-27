@@ -19,15 +19,15 @@ class SpmSchoolPlan extends Migration
             $table->char('org_id',36);
             $table->char('spm_domain_id',36)->index()->nullable();
             $table->year('year');
-            $table->string('activity',255);
-            $table->string('objective',255);
-            $table->string('strategy',255);
+            $table->string('activity',1000)->unique();
+            $table->string('objective',1000)->unique();
+            $table->string('strategy',1000)->unique();
             $table->date('start_date')->index();
             $table->date('end_date')->index();
             $table->string('person_responsible',255);
             $table->integer('implementation_status_id')->index();
             $table->unsignedTinyInteger('school_plan_status')->nullable();
-            $table->string('remarks',500);
+            $table->string('remarks',500)->unique();
             $table->char('created_by',36);
             $table->timestamps();
 

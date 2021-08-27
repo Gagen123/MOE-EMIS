@@ -18,10 +18,7 @@ class SpmEvaluationDetail extends Migration
             $table->char('spm_indicator_id',36)->index();
             $table->char('spm_evaluation_id',36)->index();
             $table->tinyInteger('score')->nullable();
-            $table->string('deo_remarks',500)->nullable();
-            $table->string('school_remarks',500)->nullable();
-            $table->string('deo_review_remarks',500)->nullable();
-            $table->string('emd_remarks',500)->nullable();
+            $table->string('remarks',500)->nullable();
             $table->char('created_by',36);
             $table->timestamps();
             
