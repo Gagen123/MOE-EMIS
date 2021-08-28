@@ -92,16 +92,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for='(attach,count) in draft_attachments' :key="count+1">
-                                            <td>
-                                                <input type="text" class="form-control" readonly :value="attach.user_defined_name">
-                                            </td>
-                                            <td>
-                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <a href="#" @click="deletefile(attach)" class="fa fa-times text-danger"> Delete </a>
-                                            </td>
-                                        </tr>
                                         <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                             <td>
                                                 <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
@@ -170,9 +160,7 @@ export default {
                 transfer_appeal:'',
                 service_name:'transfer appeal',
                 attachments:
-                [{
-                    file_name:'',attachment:''
-                }],
+                [],
                 ref_docs:[],
             })
         }
@@ -374,7 +362,7 @@ export default {
             }
         }, 
     },
-    mounted() {
+    async mounted() {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
@@ -395,6 +383,11 @@ export default {
         this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
         this.loadTransferAppealDetails();
+
+        let data = await this.getRequiredDocument("Attachment_for_transfer_appeal");
+        data.forEach((item => {
+            this.form.attachments.push({file_name:item.name, file_upload:''})
+        }));
     },
 }
 </script>

@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
         Route::get('/getOrgList/{dzoId}/{orgType}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
         Route::get('/getHssSchoolList/{dzo_id}', [App\Http\Controllers\AdminstratorController::class, 'getHssSchoolList'])->name('getHssSchoolList');
-        
+
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
         Route::get('/getStreamByOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByOrgId'])->name('getStreamByOrgId');
@@ -86,10 +86,21 @@ use Illuminate\Support\Facades\Route;
         Route::get('/something/{param}', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'something'])->name('something');
         Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });
-    
+
+    //Leadership selection and feedback routes
+
+    Route::prefix('recruitmentFeedbackController')->group(function () {
+        Route::get('/loadData/{param}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'loadData'])->name('loadData');
+        Route::get('/getapplicationDetailsForFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getapplicationDetailsForFeedback'])->name('getapplicationDetailsForFeedback');
+        Route::post('/saveFeedback', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'saveFeedback'])->name('saveFeedback');
+        Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
+        Route::get('/getleadershipDetailsByPosition/{position}', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getleadershipDetailsByPosition'])->name('getleadershipDetailsByPosition');
+        Route::get('/getpostDetails', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'getpostDetails'])->name('getpostDetails');
+        Route::post('/submitApplication', [App\Http\Controllers\recruitmentFeedbackController\RecruitmentFeedbackController::class, 'submitApplication'])->name('submitApplication');
+    });
 
     //OLD ROUTES - Delete routes below this line
-    
+
     //Track Application Controller
     Route::prefix('TrackApplicationController')->group(function () {
         Route::get('/applicationListsbyCid/{cid}', [App\Http\Controllers\TrackApplicationController::class, 'applicationListsbyCid'])->name('applicationListsbyCid');

@@ -86,7 +86,7 @@
                                                 <span class="text-blue text-bold">{{SchoolList[form.preference_school1]}}</span>
                                             </td>
                                             <td id="approveSchool1" style="display:none">
-                                                <input type="radio" name="schoolApproved" :value="form.preference_school1" v-model="form.schoolApproved" id="approvedSchool1">
+                                                <input type="radio" name="schoolApproved"  v-model="form.schoolApproved" :value="form.preference_school1" id="approvedSchool1">
                                             </td>
                                         </tr>
                                         <tr>
@@ -209,6 +209,7 @@ export default {
                 preference_school2:'',
                 preference_school3:'',
                 preference_school:'',
+                schoolApproved:'',
                 app_seq_no:'',
                 userDzongkhag:'',
                 attachments:

@@ -13,11 +13,11 @@
                             <label>Student Guardian Details</label>
                         </a>
                     </li>
-                    <li class="nav-item details-tab"  @click="shownexttab('details-tab')">
+                    <!-- <li class="nav-item details-tab"  @click="shownexttab('details-tab')">
                         <a class="nav-link"  id="details-tab-head" data-toggle="pill" href="#details-tab" role="tab" aria-controls="custom-tabs-four-details" aria-selected="false">
                             <label>Other Details</label>
                         </a>
-                    </li>
+                    </li>   -->
                 </ul>
             </div>
             <div class="card-body">
@@ -38,7 +38,7 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label id="level_name"></label>
-                                                    <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @blur="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': personal_form.errors.has('cid_passport') }" id="cid_passport" v-model="personal_form.cid_passport" placeholder="Identification No">
+                                                    <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': personal_form.errors.has('cid_passport') }" id="cid_passport" v-model="personal_form.cid_passport" placeholder="Identification No">
                                                     <has-error :form="personal_form" field="cid_passport"></has-error>
                                                 </div>
                                             </div>
@@ -100,7 +100,7 @@
                                                     <has-error :form="personal_form" field="village_id"></has-error>
                                                 </div>
                                             </div>
-                                            <div class="row form-group">
+                                            <div class="row form-group" id="std_permanent_address">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <label >Permanent Address: </label>
                                                     <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': personal_form.errors.has('fulladdress') }" id="fulladdress" v-model="personal_form.fulladdress" placeholder="Permanent Address"></textarea>
@@ -109,6 +109,15 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <label>Please Select the Class for Admission:<span class="text-danger">*</span></label>
+                                    <select v-model="personal_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('std_class') }"  class="form-control select2" name="std_class" id="std_class">
+                                        <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="std_class"></has-error>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -134,7 +143,6 @@
                             </div>
                         </form>
                     </div>
-
                     <!--Student Guardain Info-->
                     <div class="tab-pane fade tab-content-details" id="guardians-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row form-group">
@@ -142,8 +150,8 @@
                                 <label>Parent's Marital Status:</label>
                                 <select v-model="guardian_form.merital_status" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('merital_status') }" class="form-control select2" name="merital_status" id="merital_status">
                                     <option value=""> --Select--</option>
-                                    <option value="Divorse">Divorse</option>
-                                    <option value="Single">Single</option>
+                                    <option value="Divorce">Married</option>
+                                    <option value="Divorce">Divorce</option>
                                 </select>
                                 <has-error :form="guardian_form" field="merital_status"></has-error>
                             </div>
@@ -155,402 +163,381 @@
                                 <has-error :form="guardian_form" field="primary_contact"></has-error>
                             </div>
                         </div>
-
+                        <hr>
                         <div class="row form-group">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <div class="card card-primary">
-                                    <div class="card-body">
-                                        <dt>Father's Details</dt>
-                                        <hr>
-                                        <div class="row form-group">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>  Nationality:</label><br>
-                                                <input type="radio" v-model="guardian_form.father_nationality" value="Bhutanese" @click="showfathersidentity('bhutanese')" name="father_nationality" id="father_nationality" checked> Bhutanese
-                                                <input type="radio" v-model="guardian_form.father_nationality" value="Foreign" @click="showfathersidentity('foreign')" name="father_nationality" id="father_nationality1"> Non-Bhutanese
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Father's CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.father_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('father_cid_passport','father')" @blur="getDetailsbyCID('father_cid_passport','father')" @change="removeerror('father_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('father_cid_passport') }" id="father_cid_passport" placeholder="Identification No">
-                                                <has-error :form="guardian_form" field="father_cid_passport"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label >Name:<span class="text-danger">*</span> </label>
-                                                <input type="text" v-model="guardian_form.father_first_name" class="form-control" @change="removeerror('father_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('father_first_name') }" id="father_first_name" placeholder="Name">
-                                                <has-error :form="guardian_form" field="father_first_name"></has-error>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="row form-group" id="father_type" style="display:none">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label >Please Specify Type:</label>
-                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
-                                                <has-error :form="guardian_form" field="type"></has-error>
-                                            </div>
-                                        </div> -->
-                                        <div class="row form-group" id="father_dzo_gewog_village">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.father_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_dzongkhag') }" class="form-control select2" name="father_dzongkhag" id="father_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.father_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_gewog') }" class="form-control select2" name="father_gewog" id="father_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.father_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_village_id') }" class="form-control select2" name="father_village_id" id="father_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label >Permanent Address: </label>
-                                                <textarea class="form-control" @change="removeerror('father_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('father_fulladdress') }" id="father_fulladdress" v-model="guardian_form.father_fulladdress" placeholder="Permanent Address"></textarea>
-                                                <has-error :form="guardian_form" field="father_fulladdress"></has-error>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <label><u> Present Address:</u></label>
-                                        <div class="row form-group">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.father_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_dzongkhag') }" class="form-control select2" name="father_present_dzongkhag" id="father_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_present_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.father_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_gewog') }" class="form-control select2" name="father_present_gewog" id="father_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_present_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.father_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_village_id') }" class="form-control select2" name="father_present_village_id" id="father_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_present_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Work Address: </label>
-                                                <textarea class="form-control" @change="removeerror('father_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('father_work_address') }" id="father_work_address" v-model="guardian_form.father_work_address" placeholder="Working Address"></textarea>
-                                                <has-error :form="guardian_form" field="father_work_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Residence Address: </label>
-                                                <textarea class="form-control" @change="removeerror('father_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('father_residence_address') }" id="father_residence_address" v-model="guardian_form.father_residence_address" placeholder="Residence Address"></textarea>
-                                                <has-error :form="guardian_form" field="father_residence_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Occupation: </label>
-                                                <select v-model="guardian_form.father_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_occupation') }" class="form-control select2" name="father_occupation" id="father_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="father_occupation"></has-error>
-                                            </div>
-
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Email Address:</label>
-                                                <input type="text" class="form-control" @change="removeerror('father_email')" :class="{ 'is-invalid': guardian_form.errors.has('father_email') }" id="father_email" v-model="guardian_form.father_email" placeholder="Email Address">
-                                                <has-error :form="guardian_form" field="father_email"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Contact No:</label>
-                                                <input type="number" class="form-control" @change="removeerror('father_conact_no')" :class="{ 'is-invalid': guardian_form.errors.has('father_cntct_no') }" id="father_conact_no" v-model="guardian_form.father_cntct_no" placeholder="Contact No">
-                                                <has-error :form="guardian_form" field="father_conact_no"></has-error>
-                                            </div>
-                                        </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <dt><u>Father's Details</u></dt>
+                                <div class="row form-group">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>  Nationality:</label><br>
+                                        <input type="radio" v-model="guardian_form.father_nationality" value="Bhutanese" @click="showfathersidentity('bhutanese')" name="father_nationality" id="father_nationality" checked> Bhutanese
+                                        <input type="radio" v-model="guardian_form.father_nationality" value="Foreign" @click="showfathersidentity('foreign')" name="father_nationality" id="father_nationality1"> Non-Bhutanese
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label >Name:<span class="text-danger">*</span> </label>
+                                        <input type="text" v-model="guardian_form.father_first_name" class="form-control" @change="removeerror('father_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('father_first_name') }" id="father_first_name" placeholder="Name">
+                                        <has-error :form="guardian_form" field="father_first_name"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Father's CID, Immigration ID/Other Document ID  </label>
+                                        <input type="text" v-model="guardian_form.father_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('father_cid_passport','father')" @blur="getDetailsbyCID('father_cid_passport','father')" @change="removeerror('father_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('father_cid_passport') }" id="father_cid_passport" placeholder="Identification No">
+                                        <has-error :form="guardian_form" field="father_cid_passport"></has-error>
+                                    </div>
+                                </div>
+                                <!-- <div class="row form-group" id="father_type" style="display:none">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label >Please Specify Type:</label>
+                                        <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
+                                        <has-error :form="guardian_form" field="type"></has-error>
+                                    </div>
+                                </div> -->
+                                <div class="row form-group" id="father_dzo_gewog_village">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.father_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_dzongkhag') }" class="form-control select2" name="father_dzongkhag" id="father_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.father_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_gewog') }" class="form-control select2" name="father_gewog" id="father_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.father_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_village_id') }" class="form-control select2" name="father_village_id" id="father_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group" id="father_permanent_address">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label >Permanent Address: </label>
+                                        <textarea class="form-control" @change="removeerror('father_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('father_fulladdress') }" id="father_fulladdress" v-model="guardian_form.father_fulladdress" placeholder="Permanent Address"></textarea>
+                                        <has-error :form="guardian_form" field="father_fulladdress"></has-error>
+                                    </div>
+                                </div>
+                                <label><u> Present Address</u></label>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.father_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_dzongkhag') }" class="form-control select2" name="father_present_dzongkhag" id="father_present_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_present_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.father_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_gewog') }" class="form-control select2" name="father_present_gewog" id="father_present_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in father_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_present_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.father_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_present_village_id') }" class="form-control select2" name="father_present_village_id" id="father_present_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in father_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_present_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Work Address: </label>
+                                        <textarea class="form-control" @change="removeerror('father_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('father_work_address') }" id="father_work_address" v-model="guardian_form.father_work_address" placeholder="Working Address"></textarea>
+                                        <has-error :form="guardian_form" field="father_work_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Residence Address: </label>
+                                        <textarea class="form-control" @change="removeerror('father_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('father_residence_address') }" id="father_residence_address" v-model="guardian_form.father_residence_address" placeholder="Residence Address"></textarea>
+                                        <has-error :form="guardian_form" field="father_residence_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Occupation: </label>
+                                        <select v-model="guardian_form.father_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('father_occupation') }" class="form-control select2" name="father_occupation" id="father_occupation">
+                                            <option value=""> --Select--</option>
+                                            <option value="Civil Servant"> Civil Servant</option>
+                                            <option value="Private Employee"> Private Employee</option>
+                                            <option value="Business"> Business</option>
+                                            <option value="Farmer"> Farmer</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="father_occupation"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Email Address:</label>
+                                        <input type="text" class="form-control" @change="removeerror('father_email')" :class="{ 'is-invalid': guardian_form.errors.has('father_email') }" id="father_email" v-model="guardian_form.father_email" placeholder="Email Address">
+                                        <has-error :form="guardian_form" field="father_email"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Contact No:</label>
+                                        <input type="number" class="form-control" @change="removeerror('father_conact_no')" :class="{ 'is-invalid': guardian_form.errors.has('father_cntct_no') }" id="father_conact_no" v-model="guardian_form.father_cntct_no" placeholder="Contact No">
+                                        <has-error :form="guardian_form" field="father_conact_no"></has-error>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <div class="card card-primary">
-                                    <div class="card-body">
-                                        <dt>Mother's Details</dt>
-                                        <hr>
-                                        <div class="row form-group">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>  Nationality:</label><br>
-                                                <input type="radio" value="Bhutanese" v-model="guardian_form.mother_nationality" @click="showmothersidentity('bhutanese')" name="mother_nationality" id="mother_nationality" checked> Bhutanese
-                                                <input type="radio" value="Foreign" v-model="guardian_form.mother_nationality" @click="showmothersidentity('foreign')" name="mother_nationality" id="mother_nationality1"> Non-Bhutanese
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Mother's CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.mother_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('mother_cid_passport','mother')" @blur="getDetailsbyCID('mother_cid_passport','mother')" @change="removeerror('mother_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cid_passport') }" id="mother_cid_passport" placeholder="Identification No">
-                                                <has-error :form="guardian_form" field="mother_cid_passport"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label >Name:<span class="text-danger">*</span> </label>
-                                                <input type="text" class="form-control" @change="removeerror('mother_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('mother_first_name') }" id="mother_first_name" v-model="guardian_form.mother_first_name" placeholder="Name">
-                                                <has-error :form="guardian_form" field="mother_first_name"></has-error>
-                                            </div>
-                                        </div>
-                                        <!-- <div class="row form-group" id="father_type" style="display:none">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label >Please Specify Type:</label>
-                                                <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
-                                                <has-error :form="guardian_form" field="type"></has-error>
-                                            </div>
-                                        </div> -->
-                                        <div class="row form-group" id="mothers_dzo_gewog_village">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.mother_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_dzongkhag') }" class="form-control select2" name="mother_dzongkhag" id="mother_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.mother_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_gewog') }" class="form-control select2" name="mother_gewog" id="mother_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.mother_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_village_id') }" class="form-control select2" name="mother_village_id" id="mother_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Permanent Address: </label>
-                                                <textarea class="form-control" @change="removeerror('mother_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('mother_fulladdress') }" id="mother_fulladdress" v-model="guardian_form.mother_fulladdress" placeholder="Permanent Address"></textarea>
-                                                <has-error :form="guardian_form" field="mother_fulladdress"></has-error>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <label><u> Present Address</u></label>
-                                        <div class="row form-group">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.mother_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_dzongkhag') }" class="form-control select2" name="mother_present_dzongkhag" id="mother_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_present_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.mother_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_gewog') }" class="form-control select2" name="mother_present_gewog" id="mother_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_present_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.mother_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_village_id') }" class="form-control select2" name="mother_present_village_id" id="mother_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_present_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Work Address: </label>
-                                                <textarea class="form-control" @change="removeerror('mother_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('mother_work_address') }" id="mother_work_address" v-model="guardian_form.mother_work_address" placeholder="Working Address"></textarea>
-                                                <has-error :form="guardian_form" field="mother_work_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Residence Address: </label>
-                                                <textarea class="form-control" @change="removeerror('mother_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('mother_residence_address') }" id="mother_residence_address" v-model="guardian_form.mother_residence_address" placeholder="Residence Address"></textarea>
-                                                <has-error :form="guardian_form" field="mother_residence_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Occupation: </label>
-                                                <select v-model="guardian_form.mother_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_occupation') }" class="form-control select2" name="mother_occupation" id="mother_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="mother_occupation"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Email Address:</label>
-                                                <input type="text" class="form-control" @change="removeerror('mother_email')" :class="{ 'is-invalid': guardian_form.errors.has('mother_email') }" id="mother_email" v-model="guardian_form.mother_email" placeholder="Email Address">
-                                                <has-error :form="guardian_form" field="mother_email"></has-error>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>Contact No:</label>
-                                                <input type="number" class="form-control" @change="removeerror('mother_cntct_no')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cntct_no') }" id="mother_cntct_no" v-model="guardian_form.mother_cntct_no" placeholder="Contact No">
-                                                <has-error :form="guardian_form" field="mother_cntct_no"></has-error>
-                                            </div>
-                                        </div>
+                            <hr>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <dt><u>Mother's Details</u></dt>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>  Nationality:</label><br>
+                                        <input type="radio" value="Bhutanese" v-model="guardian_form.mother_nationality" @click="showmothersidentity('bhutanese')" name="mother_nationality" id="mother_nationality" checked> Bhutanese
+                                        <input type="radio" value="Foreign" v-model="guardian_form.mother_nationality" @click="showmothersidentity('foreign')" name="mother_nationality" id="mother_nationality1"> Non-Bhutanese
+                                    </div>
+                                    
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label >Name:<span class="text-danger">*</span> </label>
+                                        <input type="text" class="form-control" @change="removeerror('mother_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('mother_first_name') }" id="mother_first_name" v-model="guardian_form.mother_first_name" placeholder="Name">
+                                        <has-error :form="guardian_form" field="mother_first_name"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Mother's CID, Immigration ID/Other Document  </label>
+                                        <input type="text" v-model="guardian_form.mother_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('mother_cid_passport','mother')" @blur="getDetailsbyCID('mother_cid_passport','mother')" @change="removeerror('mother_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cid_passport') }" id="mother_cid_passport" placeholder="Identification No">
+                                        <has-error :form="guardian_form" field="mother_cid_passport"></has-error>
+                                    </div>
+                                </div>
+                                <!-- <div class="row form-group" id="father_type" style="display:none">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label >Please Specify Type:</label>
+                                        <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': guardian_form.errors.has('type') }" id="type" v-model="guardian_form.parent_details.type" placeholder="Country Diplomat, Expriate etc">
+                                        <has-error :form="guardian_form" field="type"></has-error>
+                                    </div>
+                                </div> -->
+                                <div class="row form-group" id="mothers_dzo_gewog_village">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.mother_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_dzongkhag') }" class="form-control select2" name="mother_dzongkhag" id="mother_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.mother_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_gewog') }" class="form-control select2" name="mother_gewog" id="mother_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.mother_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_village_id') }" class="form-control select2" name="mother_village_id" id="mother_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group" id="mothers_permanent_address">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Permanent Address: </label>
+                                        <textarea class="form-control" @change="removeerror('mother_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('mother_fulladdress') }" id="mother_fulladdress" v-model="guardian_form.mother_fulladdress" placeholder="Permanent Address"></textarea>
+                                        <has-error :form="guardian_form" field="mother_fulladdress"></has-error>
+                                    </div>
+                                </div>
+                                <label><u> Present Address</u></label>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.mother_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_dzongkhag') }" class="form-control select2" name="mother_present_dzongkhag" id="mother_present_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_present_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.mother_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_gewog') }" class="form-control select2" name="mother_present_gewog" id="mother_present_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in mother_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_present_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.mother_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_present_village_id') }" class="form-control select2" name="mother_present_village_id" id="mother_present_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in mother_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_present_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Work Address: </label>
+                                        <textarea class="form-control" @change="removeerror('mother_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('mother_work_address') }" id="mother_work_address" v-model="guardian_form.mother_work_address" placeholder="Working Address"></textarea>
+                                        <has-error :form="guardian_form" field="mother_work_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Residence Address: </label>
+                                        <textarea class="form-control" @change="removeerror('mother_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('mother_residence_address') }" id="mother_residence_address" v-model="guardian_form.mother_residence_address" placeholder="Residence Address"></textarea>
+                                        <has-error :form="guardian_form" field="mother_residence_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Occupation: </label>
+                                        <select v-model="guardian_form.mother_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('mother_occupation') }" class="form-control select2" name="mother_occupation" id="mother_occupation">
+                                            <option value=""> --Select--</option>
+                                            <option value="Civil Servant"> Civil Servant</option>
+                                            <option value="Private Employee"> Private Employee</option>
+                                            <option value="Business"> Business</option>
+                                            <option value="Farmer"> Farmer</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="mother_occupation"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Email Address:</label>
+                                        <input type="text" class="form-control" @change="removeerror('mother_email')" :class="{ 'is-invalid': guardian_form.errors.has('mother_email') }" id="mother_email" v-model="guardian_form.mother_email" placeholder="Email Address">
+                                        <has-error :form="guardian_form" field="mother_email"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Contact No:</label>
+                                        <input type="number" class="form-control" @change="removeerror('mother_cntct_no')" :class="{ 'is-invalid': guardian_form.errors.has('mother_cntct_no') }" id="mother_cntct_no" v-model="guardian_form.mother_cntct_no" placeholder="Contact No">
+                                        <has-error :form="guardian_form" field="mother_cntct_no"></has-error>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <hr>
                         <div class="row form-group" style="display:none" id="gardain_section">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="card card-primary">
-                                    <div class="card-body">
-                                        <dt>Guardian's Details</dt>
-                                        <hr>
-                                        <div class="row form-group">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Nationality:</label><br>
-                                                <input type="radio" value="Bhutanese" v-model="guardian_form.gardain_nationality" @click="showgardainsidentity('bhutanese')" name="gardain_nationality" id="gardain_nationality" checked> Bhutanese
-                                                <input type="radio" value="Foreign" v-model="guardian_form.gardain_nationality" @click="showgardainsidentity('foreign')" name="gardain_nationality" id="gardain_nationality1"> Non-Bhutanese
-                                            </div>
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                <label>CID, Immigration ID/Other Document ID  </label>
-                                                <input type="text" v-model="guardian_form.gardain_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('gardain_cid_passport','gardain')" @blur="getDetailsbyCID('gardain_cid_passport','gardain')" @change="removeerror('gardain_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cid_passport') }" id="gardain_cid_passport" placeholder="Identification No">
-                                                <has-error :form="guardian_form" field="gardain_cid_passport"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label >Name:<span class="text-danger">*</span> </label>
-                                                <input type="text" class="form-control" @change="removeerror('gardain_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_first_name') }" id="gardain_first_name" v-model="guardian_form.gardain_first_name" placeholder="Name">
-                                                <has-error :form="guardian_form" field="gardain_first_name"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group" id="gardain_dzo_gewog_village">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.gardain_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_dzongkhag') }" class="form-control select2" name="gardain_dzongkhag" id="gardain_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.gardain_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_gewog') }" class="form-control select2" name="gardain_gewog" id="gardain_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.gardain_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_village_id') }" class="form-control select2" name="gardain_village_id" id="gardain_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in p_gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label >Permanent Address: </label>
-                                                <textarea class="form-control" @change="removeerror('gardain_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_fulladdress') }" id="gardain_fulladdress" v-model="guardian_form.gardain_fulladdress" placeholder="Permanent Address"></textarea>
-                                                <has-error :form="guardian_form" field="gardain_fulladdress"></has-error>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <label> Present Address:</label>
-                                         <hr>
-                                        <div class="row form-group">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Dzongkhag/Thromde: </label>
-                                                <select v-model="guardian_form.gardain_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_dzongkhag') }" class="form-control select2" name="gardain_present_dzongkhag" id="gardain_present_dzongkhag">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_present_dzongkhag"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label> Gewog:</label>
-                                                <select v-model="guardian_form.gardain_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_gewog') }" class="form-control select2" name="gardain_present_gewog" id="gardain_present_gewog">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_present_gewog"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Village: </label>
-                                                <select v-model="guardian_form.gardain_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_village_id') }" class="form-control select2" name="gardain_present_village_id" id="gardain_present_village_id">
-                                                    <option value=""> --Select--</option>
-                                                    <option v-for="(item, index) in gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_present_village_id"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Work Address: </label>
-                                                <textarea class="form-control" @change="removeerror('gardain_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_work_address') }" id="gardain_work_address" v-model="guardian_form.gardain_work_address" placeholder="Working Address"></textarea>
-                                                <has-error :form="guardian_form" field="gardain_work_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                                <label>Residence Address: </label>
-                                                <textarea class="form-control" @change="removeerror('gardain_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_residence_address') }" id="gardain_residence_address" v-model="guardian_form.gardain_residence_address" placeholder="Residence Address"></textarea>
-                                                <has-error :form="guardian_form" field="gardain_residence_address"></has-error>
-                                            </div>
-                                        </div>
-                                        <div class="row form-group">
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Occupation: </label>
-                                                <select v-model="guardian_form.gardain_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_occupation') }" class="form-control select2" name="occupation" id="gardain_occupation">
-                                                    <option value=""> --Select--</option>
-                                                    <option value="Civil Servant"> Civil Servant</option>
-                                                    <option value="Private Employee"> Private Employee</option>
-                                                    <option value="Business"> Business</option>
-                                                    <option value="Farmer"> Farmer</option>
-                                                </select>
-                                                <has-error :form="guardian_form" field="gardain_occupation"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Email Address:</label>
-                                                <input type="text" class="form-control" @change="removeerror('gardain_email')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_email') }" id="gardain_email" v-model="guardian_form.gardain_email" placeholder="Email Address">
-                                                <has-error :form="guardian_form" field="gardain_email"></has-error>
-                                            </div>
-                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                                <label>Contact No:</label>
-                                                <input type="number" class="form-control" @change="removeerror('gardain_cntct_no')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cntct_no') }" id="gardain_cntct_no" v-model="guardian_form.gardain_cntct_no" placeholder="Contact No">
-                                                <has-error :form="guardian_form" field="gardain_cntct_no"></has-error>
-                                            </div>
-                                        </div>
+                            <div class="card-body">
+                                <dt>Guardian's Details</dt>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Nationality:</label><br>
+                                        <input type="radio" value="Bhutanese" v-model="guardian_form.gardain_nationality" @click="showgardainsidentity('bhutanese')" name="gardain_nationality" id="gardain_nationality" checked> Bhutanese
+                                        <input type="radio" value="Foreign" v-model="guardian_form.gardain_nationality" @click="showgardainsidentity('foreign')" name="gardain_nationality" id="gardain_nationality1"> Non-Bhutanese
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label >Name:<span class="text-danger">*</span> </label>
+                                        <input type="text" class="form-control" @change="removeerror('gardain_first_name')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_first_name') }" id="gardain_first_name" v-model="guardian_form.gardain_first_name" placeholder="Name">
+                                        <has-error :form="guardian_form" field="gardain_first_name"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>CID, Immigration ID/Other Document ID  </label>
+                                        <input type="text" v-model="guardian_form.gardain_cid_passport" class="form-control" @keyup.enter="getDetailsbyCID('gardain_cid_passport','gardain')" @blur="getDetailsbyCID('gardain_cid_passport','gardain')" @change="removeerror('gardain_cid_passport')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cid_passport') }" id="gardain_cid_passport" placeholder="Identification No">
+                                        <has-error :form="guardian_form" field="gardain_cid_passport"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group" id="gardain_dzo_gewog_village">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.gardain_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_dzongkhag') }" class="form-control select2" name="gardain_dzongkhag" id="gardain_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.gardain_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_gewog') }" class="form-control select2" name="gardain_gewog" id="gardain_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.gardain_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_village_id') }" class="form-control select2" name="gardain_village_id" id="gardain_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in p_gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group" id="gardain_permanent_address">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label >Permanent Address: </label>
+                                        <textarea class="form-control" @change="removeerror('gardain_fulladdress')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_fulladdress') }" id="gardain_fulladdress" v-model="guardian_form.gardain_fulladdress" placeholder="Permanent Address"></textarea>
+                                        <has-error :form="guardian_form" field="gardain_fulladdress"></has-error>
+                                    </div>
+                                </div>
+                                <label><u> Present Address</u></label>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde: </label>
+                                        <select v-model="guardian_form.gardain_present_dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_dzongkhag') }" class="form-control select2" name="gardain_present_dzongkhag" id="gardain_present_dzongkhag">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_present_dzongkhag"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label> Gewog:</label>
+                                        <select v-model="guardian_form.gardain_present_gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_gewog') }" class="form-control select2" name="gardain_present_gewog" id="gardain_present_gewog">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in gardain_gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_present_gewog"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Village: </label>
+                                        <select v-model="guardian_form.gardain_present_village_id" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_present_village_id') }" class="form-control select2" name="gardain_present_village_id" id="gardain_present_village_id">
+                                            <option value=""> --Select--</option>
+                                            <option v-for="(item, index) in gardain_villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_present_village_id"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Work Address: </label>
+                                        <textarea class="form-control" @change="removeerror('gardain_work_address')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_work_address') }" id="gardain_work_address" v-model="guardian_form.gardain_work_address" placeholder="Working Address"></textarea>
+                                        <has-error :form="guardian_form" field="gardain_work_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Residence Address: </label>
+                                        <textarea class="form-control" @change="removeerror('gardain_residence_address')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_residence_address') }" id="gardain_residence_address" v-model="guardian_form.gardain_residence_address" placeholder="Residence Address"></textarea>
+                                        <has-error :form="guardian_form" field="gardain_residence_address"></has-error>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Occupation: </label>
+                                        <select v-model="guardian_form.gardain_occupation" :class="{ 'is-invalid select2 select2-hidden-accessible': guardian_form.errors.has('gardain_occupation') }" class="form-control select2" name="occupation" id="gardain_occupation">
+                                            <option value=""> --Select--</option>
+                                            <option value="Civil Servant"> Civil Servant</option>
+                                            <option value="Private Employee"> Private Employee</option>
+                                            <option value="Business"> Business</option>
+                                            <option value="Farmer"> Farmer</option>
+                                        </select>
+                                        <has-error :form="guardian_form" field="gardain_occupation"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Email Address:</label>
+                                        <input type="text" class="form-control" @change="removeerror('gardain_email')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_email') }" id="gardain_email" v-model="guardian_form.gardain_email" placeholder="Email Address">
+                                        <has-error :form="guardian_form" field="gardain_email"></has-error>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Contact No:</label>
+                                        <input type="number" class="form-control" @change="removeerror('gardain_cntct_no')" :class="{ 'is-invalid': guardian_form.errors.has('gardain_cntct_no') }" id="gardain_cntct_no" v-model="guardian_form.gardain_cntct_no" placeholder="Contact No">
+                                        <has-error :form="guardian_form" field="gardain_cntct_no"></has-error>
                                     </div>
                                 </div>
                             </div>
@@ -559,11 +546,11 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-flat btn-success"  @click="shownexttab('basic-tabs')"><i class="fa fa-arrow-left"></i> Previous </button>
-                                <button class="btn btn-flat btn-primary" @click="shownexttab('details-tab')"> Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-flat btn-primary" @click="submitfinalform('details-tab')"> Submit <i class="fa fa-arrow-save"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="details-tab" role="tabpanel" aria-labelledby="custom-tabs-four-details">
+                    <!-- <div class="tab-pane fade tab-content-details" id="details-tab" role="tabpanel" aria-labelledby="custom-tabs-four-details">
                         <div id="schoolsections">
                             <dt>Class Details</dt>
                             <hr>
@@ -662,7 +649,7 @@
                                 <button class="btn btn-flat btn-primary" @click="submitfinalform('')"> Submit <i class="fa fa-arrow-save"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -691,6 +678,7 @@ export default {
             p_gardain_villageList:[],
             gardain_villageList:[],
             motherTongueList:[],
+            classList:[],
             clasList:[],
             streamList:[],
             streamListSelected:[],
@@ -700,6 +688,7 @@ export default {
             sectionList:[],
             personal_form: new form({
                 student_id:'',
+                std_class:'',
                 snationality:'',
                 cid_passport:'',
                 first_name:'',
@@ -776,213 +765,216 @@ export default {
                 gardain_cntct_no:'',
 
             }),
-            class_form: new form({
-                student_id:'',
-                type:'transfer_update',
-                class:'',
-                stream:'',
-                class_stream_id:'',
-                section:'',
-                student_type:'',
-                no_meals:'',
-                scholarship:[],
-                special_benifit:[],
-                disability:'',
-                meal_type:'',
-                feeding_type:'',
-            }),
         }
     },
     methods: {
         onChangeFileUpload(e){
             this.personal_form.attachments = e.target.files[0];
         },
-        getDetailsbyCID(fieldId,type){
+        getDetailsbyCID(cid,type){
             let selectedVal="";
             let selected ="";
             if(type=="std"){
                 selected = $("input[type='radio'][name='snationality']:checked");
-            }
-
-            if(type=="father"){
-                selected = $("input[type='radio'][name='father_nationality']:checked");
-            }
-            if(type=="mother"){
-                selected = $("input[type='radio'][name='mother_nationality']:checked");
-            }
-            if(type=="gardain"){
-                selected = $("input[type='radio'][name='gardain_nationality']:checked");
-            }
-            if(selected.length > 0) {
-                selectedVal=selected.val();
-            }
-            else{
-                Swal.fire({
-                    html: "Please select nationality",
-                    icon: 'error'
-                });
+                if(selected.length > 0) {
+                    selectedVal=selected.val();
+                }
+                else{
+                    Swal.fire({
+                        html: "Please select nationality",
+                        icon: 'error'
+                    });
+                }
             }
             if(selectedVal.includes('Bhutan')){
-                if ($('#'+fieldId).val().length != 11){
+                if ($('#'+cid).val().length != 11){
                     Swal.fire({
-                        html: "Please ender 11 digit CID",
+                        html: "Please enter 11 digit CID",
                         icon: 'error'
                     });
                 }
                 else{
-                    axios.get('getpersonbycid/'+ $('#'+fieldId).val())
-                    .then(response => {
-                        if (JSON.stringify(response.data)!='{}'){
-                            let personal_detail = response.data.citizenDetail[0];
-                            if(type=="std"){
-                                this.personal_form.first_name = personal_detail.firstName;
-                                $('#first_name').prop('readonly',true);
-                                this.personal_form.middle_name=personal_detail.middleName;
-                                $('#middle_name').prop('readonly',true);
-                                this.personal_form.last_name=personal_detail.lastName;
-                                $('#last_name').prop('readonly',true);
-                                let date_of_birth = new Date(personal_detail.dob);
-                                let month =(date_of_birth .getMonth() + 1);
-                                let day = date_of_birth .getDate();
-                                if(day<10){
-                                    day='0'+day;
-                                }
-                                if(month<10){
-                                    month='0'+month;
-                                }
-                                let year =date_of_birth .getFullYear();
-                                this.personal_form.dob = year+ "-"+month + "-" + day;
-                                $('#dob').val(year+ "-"+month + "-" + day);
-                                $('#dob').prop('readonly',true);
-                                if(personal_detail.gender=="M"){
-                                    personal_detail.gender="male";
-                                }
-                                else if(personal_detail.gender=="F"){
-                                    personal_detail.gender="female";
-                                }
-                                else{
-                                    personal_detail.gender="others";
-                                }
-                                for(let i=0; i<this.sex_idList.length;i++){
-                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                        $('#sex_id').val(this.sex_idList[i].id).trigger('change');
-                                        this.personal_form.sex_id =  this.sex_idList[i].id;
-                                        $('#sex_id').prop('disabled',true);
-                                    }
-                                }
-                                this.personal_form.dzongkhag =personal_detail.dzongkhagId;
-                                $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                $('#dzongkhag').prop('disabled',true);
-                                this.getgewoglist(personal_detail.dzongkhagId,'std');
-                                this.personal_form.gewog = personal_detail.gewogId;
-                                $('#gewog').prop('disabled',true);
-                                this.getvillagelist(personal_detail.gewogId,'std');
-                                $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                this.personal_form.village_id = personal_detail.villageSerialNo;
-                                $('#village_id').prop('disabled',true);
-                            }
-
-                            if(type=="father"){
-                                if(personal_detail.gender=="F"){
-                                    Swal.fire({
-                                        html: "Gender of this person Female. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.father_first_name = "";
-                                    this.guardian_form.father_dzongkhag ="";
-                                    this.guardian_form.father_gewog = "";
-                                    this.guardian_form.father_village_id = "";
-                                }
-                                else{
-                                    let full_anme=personal_detail.firstName;
-                                    if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                        full_anme+=' '+personal_detail.middleName;
-                                    }
-                                    full_anme+=' '+personal_detail.lastName;
-                                    this.guardian_form.father_first_name = full_anme;
-                                    $('#father_first_name').prop('readonly',true);
-                                    this.guardian_form.father_dzongkhag =personal_detail.dzongkhagId;
-                                    $('#father_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                    $('#father_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(personal_detail.dzongkhagId,'p_father');
-                                    this.guardian_form.father_gewog = personal_detail.gewogId;
-                                    $('#father_gewog').val(personal_detail.gewogId).trigger('change');
-                                    $('#father_gewog').prop('disabled',true);
-                                    this.getvillagelist(personal_detail.gewogId,'p_father');
-                                    this.guardian_form.father_village_id = personal_detail.villageSerialNo;
-                                    $('#father_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                    $('#father_village_id').prop('disabled',true);
-                                }
-                            }
-                            if(type=="mother"){
-                                if(personal_detail.gender=="M"){
-                                    Swal.fire({
-                                        html: "Gender of this person is Male. Please provide correct CID",
-                                        icon: 'error'
-                                    });
-                                    this.guardian_form.mother_first_name = "";
-                                    this.guardian_form.mother_dzongkhag ="";
-                                    this.guardian_form.mother_gewog = "";
-                                    this.guardian_form.mother_village_id = "";
-                                }
-                                else{
-                                    let full_anme=personal_detail.firstName;
-                                    if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                        full_anme+=' '+personal_detail.middleName;
-                                    }
-                                    full_anme+=' '+personal_detail.lastName;
-                                    this.guardian_form.mother_first_name = full_anme;
-                                    $('#mother_first_name').prop('readonly',true);
-                                    this.guardian_form.mother_dzongkhag =personal_detail.dzongkhagId;
-                                    $('#mother_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                    $('#mother_dzongkhag').prop('disabled',true);
-                                    this.getgewoglist(personal_detail.dzongkhagId,'p_mother');
-                                    this.guardian_form.mother_gewog = personal_detail.gewogId;
-                                    $('#mother_gewog').val(personal_detail.gewogId).trigger('change');
-                                    $('#mother_gewog').prop('disabled',true);
-                                    this.getvillagelist(personal_detail.gewogId,'p_mother');
-                                    this.guardian_form.mother_village_id = personal_detail.villageSerialNo;
-                                    $('#mother_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                    $('#mother_village_id').prop('disabled',true);
-                                }
-
-                            }
-                            if(type=="gardain"){
-                                let full_anme=personal_detail.firstName;
-                                if(personal_detail.middleName!="" && personal_detail.middleName!=null){
-                                    full_anme+=' '+personal_detail.middleName;
-                                }
-                                full_anme+=' '+personal_detail.lastName;
-                                this.guardian_form.gardain_first_name = full_anme;
-                                $('#gardain_first_name').prop('readonly',true);
-                                this.guardian_form.gardain_dzongkhag =personal_detail.dzongkhagId;
-                                $('#gardain_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                                $('#gardain_dzongkhag').prop('disabled',true);
-                                this.getgewoglist(personal_detail.dzongkhagId,'p_gardain');
-                                this.guardian_form.gardain_gewog = personal_detail.gewogId;
-                                $('#gardain_gewog').val(personal_detail.gewogId).trigger('change');
-                                $('#gardain_gewog').prop('disabled',true);
-                                this.getvillagelist(personal_detail.gewogId,'p_gardain');
-                                this.guardian_form.gardain_village_id = personal_detail.villageSerialNo;
-                                $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
-                                $('#gardain_village_id').prop('disabled',true);
-                            }
-
-                        }else{
-                            Swal.fire({
-                                html: "No data found for this CID",
-                                icon: 'error'
-                            });
-                        }
-                    })
-                    .catch((exception) => {
-                        Swal.fire({
-                            html: "No data found for matching CID/service down"+exception,
-                            icon: 'error'
+                    this.getPersonalDetailsbyCID($('#'+cid).val(),type);
+                    let fatherCid="";
+                    let motherCid="";
+                    if(type=='std'){
+                        axios.get('getchildDetailsOncid/'+ $('#'+cid).val())
+                        .then(response => {
+                            let data=response.data.data;
+                            fatherCid=data.parentDetail[0].fatherCID;
+                            motherCid=data.parentDetail[0].motherCID;
+                            this.getPersonalDetailsbyCID(fatherCid,'father');
+                            this.getPersonalDetailsbyCID(motherCid,'mother');
                         });
+                    }
+                }
+            }            
+        },
+        getPersonalDetailsbyCID(cidNo,type){
+            // if(type=="father"){
+            //     selected = $("input[type='radio'][name='father_nationality']:checked");
+            // }
+            // if(type=="mother"){
+            //     selected = $("input[type='radio'][name='mother_nationality']:checked");
+            // }
+            // if(type=="gardain"){
+            //     selected = $("input[type='radio'][name='gardain_nationality']:checked");
+            // }
+            
+            axios.get('getpersonbycid/'+ cidNo)
+            .then(response => {
+                if (response.data) {
+                    let personal_detail = response.data;
+                    if(type=="std"){
+                        this.personal_form.first_name = personal_detail.firstName;
+                        $('#first_name').prop('readonly',true);
+                        this.personal_form.middle_name=personal_detail.middleName;
+                        $('#middle_name').prop('readonly',true);
+                        this.personal_form.last_name=personal_detail.lastName;
+                        $('#last_name').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.personal_form.dob = dob;
+
+                        $('#dob').prop('readonly',true);
+                        if(personal_detail.gender=="M"){
+                            personal_detail.gender="male";
+                        }
+                        else if(personal_detail.gender=="F"){
+                            personal_detail.gender="female";
+                        }
+                        else{
+                            personal_detail.gender="others";
+                        }
+                        for(let i=0; i<this.sex_idList.length;i++){
+                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
+                                $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                                this.personal_form.sex_id =  this.sex_idList[i].id;
+                                $('#sex_id').prop('disabled',true);
+                            }
+                        }
+                        this.personal_form.dzongkhag =personal_detail.dzongkhagId;
+                        $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                        $('#dzongkhag').prop('disabled',true);
+                        this.getgewoglist(personal_detail.dzongkhagId,'std');
+                        this.personal_form.gewog = personal_detail.gewogId;
+                        $('#gewog').prop('disabled',true);
+                        this.getvillagelist(personal_detail.gewogId,'std');
+                        $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
+                        this.personal_form.village_id = personal_detail.villageSerialNo;
+                        $('#village_id').prop('disabled',true);
+                    }
+                    if(type=="father"){
+                        let father_detail = response.data;
+                        let full_name=father_detail.firstName;
+                        if(father_detail.middleName!="" && father_detail.middleName!=null){
+                            full_name+=' '+father_detail.middleName;
+                        }
+                        full_name+=' '+father_detail.lastName;
+                        this.guardian_form.father_first_name = full_name;
+                        $('#father_first_name').prop('readonly',true);
+                        this.guardian_form.father_cid_passport = father_detail.cid;
+                        $('#father_cid_passport').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.guardian_form.father_dob = dob;
+                        $('#father_dob').prop('readonly',true);
+
+                        this.guardian_form.father_dzongkhag =father_detail.dzongkhagId;
+                        $('#father_dzongkhag').val(father_detail.dzongkhagId).trigger('change');
+                        $('#father_dzongkhag').prop('disabled',true);
+
+                        this.getgewoglist(father_detail.dzongkhagId,'father');
+                        this.guardian_form.father_gewog = father_detail.gewogId;
+                        $('#father_gewog').prop('disabled',true);
+
+                        this.getvillagelist(father_detail.gewogId,'father');
+                        $('#father_village_id').val(father_detail.villageSerialNo).trigger('change');
+                        this.guardian_form.father_village_id = father_detail.villageSerialNo;
+                        $('#father_village_id').prop('disabled',true);
+                        $('#father_permanent_address').hide();
+                    }
+                    if(type=="mother"){
+                        let mother_detail = response.data;
+                        let full_name=mother_detail.firstName;
+                        if(mother_detail.middleName!="" && mother_detail.middleName!=null){
+                            full_name+=' '+mother_detail.middleName;
+                        }
+                        full_name+=' '+mother_detail.lastName;
+                        this.guardian_form.mother_first_name = full_name;
+                        $('#mother_first_name').prop('readonly',true);
+                        this.guardian_form.mother_cid_passport = mother_detail.cid;
+                        $('#mother_cid_passport').prop('readonly',true);
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        this.guardian_form.mother_dob = dob;
+                        $('#mother_dob').prop('readonly',true);
+
+                        this.guardian_form.mother_dzongkhag =mother_detail.dzongkhagId;
+                        $('#mother_dzongkhag').val(mother_detail.dzongkhagId).trigger('change');
+                        $('#mother_dzongkhag').prop('disabled',true);
+
+                        this.getgewoglist(mother_detail.dzongkhagId,'father');
+                        this.guardian_form.mother_gewog = mother_detail.gewogId;
+                        $('#mother_gewog').prop('disabled',true);
+
+                        this.getvillagelist(mother_detail.gewogId,'father');
+                        $('#mother_village_id').val(mother_detail.villageSerialNo).trigger('change');
+                        this.guardian_form.mother_village_id = mother_detail.villageSerialNo;
+                        $('#mother_village_id').prop('disabled',true);
+                        $('#mothers_permanent_address').hide();
+                    }
+                    if(type=="gardain"){
+                        let full_anme=personal_detail.firstName;
+                        if(personal_detail.middleName!="" && personal_detail.middleName!=null){
+                            full_anme+=' '+personal_detail.middleName;
+                        }
+                        full_anme+=' '+personal_detail.lastName;
+                        this.guardian_form.gardain_first_name = full_anme;
+                        $('#gardain_first_name').prop('readonly',true);
+                        this.guardian_form.gardain_dzongkhag =personal_detail.dzongkhagId;
+                        $('#gardain_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                        $('#gardain_dzongkhag').prop('disabled',true);
+                        this.getgewoglist(personal_detail.dzongkhagId,'p_gardain');
+                        this.guardian_form.gardain_gewog = personal_detail.gewogId;
+                        $('#gardain_gewog').val(personal_detail.gewogId).trigger('change');
+                        $('#gardain_gewog').prop('disabled',true);
+                        this.getvillagelist(personal_detail.gewogId,'p_gardain');
+                        this.guardian_form.gardain_village_id = personal_detail.villageSerialNo;
+                        $('#gardain_village_id').val(personal_detail.villageSerialNo).trigger('change');
+                        $('#gardain_village_id').prop('disabled',true);
+                        $('#gardain_permanent_address').hide();
+                    }
+                }else{
+                    this.ciderror = 'Invalid CID.';
+                    Swal.fire({
+                        html: "No data found for matching CID",
+                        icon: 'info'
                     });
                 }
-            }
+
+            })
+            .catch((exception) => {
+                Swal.fire({
+                    html: "No data found for matching CID/service down"+exception,
+                    icon: 'error'
+                });
+            });
         },
 
         loadAllActiveMasters(type){
@@ -1146,6 +1138,19 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        /**
+         * to load the class list
+         */
+        loadClassList(uri="loadCommons/getOrgClassStream"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.classList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
 
         shownexttab(nextclass){
             if(nextclass=="basic-tabs"){
@@ -1168,16 +1173,17 @@ export default {
                 formData.append('dzongkhag', this.personal_form.dzongkhag);
                 formData.append('gewog', this.personal_form.gewog);
                 formData.append('village_id', this.personal_form.village_id);
+                formData.append('std_class', this.personal_form.std_class);
                 formData.append('mother_tongue', this.personal_form.mother_tongue);
                 formData.append('fulladdress', this.personal_form.fulladdress);
                 formData.append('attachments', this.personal_form.attachments);
-                formData.append('type','update_transfer');
+                formData.append('type','add');
                 formData.append('student_id', this.personal_form.student_id);
                 //this.personal_form.post('students/admission/saveStudentDetials',formData.serialize(), config)
                 axios.post('students/admission/saveStudentDetails',formData, config)
                 .then((response) => {
                     this.guardian_form.student_id=response.data.data.id;
-                    this.class_form.student_id=response.data.data.id;
+                    // this.class_form.student_id=response.data.data.id;
                     Toast.fire({
                         icon: 'success',
                         title: 'Student Personal Details has been saved successfully'
@@ -1198,7 +1204,7 @@ export default {
             if(nextclass=="details-tab"){
                 this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
                 this.guardian_form.post('students/admission/saveStudentGardianDetails')
-                .then((response) => {
+                .then((response) =>{
                     Toast.fire({
                         icon: 'success',
                         title: 'Instructor Registration  successful'
@@ -1228,23 +1234,42 @@ export default {
                 confirmButtonText: 'Yes!',
                 }).then((result) =>{
                 if (result.isConfirmed){
-                    this.class_form.post('students/admission/saveStudentClassDetails')
-                    .then((response) => {
+                    this.guardian_form.primary_contact=$("input[type='radio'][name='primary_contact']:checked").val();
+                    this.guardian_form.post('students/admission/saveStudentGardianDetails')
+                    .then((response) =>{
                         Swal.fire(
                             'Submitted!',
                             'Student details has been updated successfully.',
                             'success',
-                            this.$router.push('/student_updates')
+                            this.$router.push('/student_admission_list')
                         );
                     })
-                    .catch((error) =>{
+                    .catch((error) => {
                         Toast.fire({
                             icon: 'error',
                             title: 'Unexpected error occured. Try again.'
                         });
-                        this.applyselect('class');
+                        this.changetab('guardians-tab');
+                        this.applyselect('guardian');
                         console.log("Error:"+error);
-                    });
+                    })
+                    // this.guardian_form.post('students/admission/saveStudentClassDetails')
+                    // .then((response) => {
+                    //     Swal.fire(
+                    //         'Submitted!',
+                    //         'Student details has been updated successfully.',
+                    //         'success',
+                    //         this.$router.push('/student_updates')
+                    //     );
+                    // })
+                    // .catch((error) =>{
+                    //     Toast.fire({
+                    //         icon: 'error',
+                    //         title: 'Unexpected error occured. Try again.'
+                    //     });
+                    //     this.applyselect('class');
+                    //     console.log("Error:"+error);
+                    // });
                 }
             })
         },
@@ -1388,6 +1413,9 @@ export default {
             if(id=="village_id"){
                 this.personal_form.village_id=$('#village_id').val();
             }
+            if(id=="std_class"){
+                this.personal_form.std_class=$('#std_class').val();
+            }
             if(id=="mother_tongue"){
                 this.personal_form.mother_tongue=$('#mother_tongue').val();
             }
@@ -1518,32 +1546,38 @@ export default {
             $('#dzo_gewog_village').hide();
             if(type=="Student-Non-Bhutanese"){
                 $('#level_name').html('Immigration/Passport/Other Identification No: *');
+                $('#std_permanent_address').show();
             }
             if(type=="Student-Bhutanese"){
                 $('#level_name').html('CID No: *');
                 $('#dzo_gewog_village').show();
+                $('#std_permanent_address').hide();
             }
             if(type=="Student-Bhutanese-underprocess"){
                 $('#level_name').html('Identification No: *');
                 $('#dzo_gewog_village').show();
+                $('#std_permanent_address').hide();
             }
         },
         showfathersidentity(type){
             $('#father_dzo_gewog_village').hide();
             if(type=="bhutanese"){
                 $('#father_dzo_gewog_village').show();
+                $('#father_permanent_address').hide();
             }
         },
         showmothersidentity(type){
             $('#mothers_dzo_gewog_village').hide();
             if(type=="bhutanese"){
                 $('#mothers_dzo_gewog_village').show();
+                $('#mothers_permanent_address').hide();
             }
         },
         showgardainsidentity(type){
             $('#gardain_dzo_gewog_village').hide();
             if(type=="bhutanese"){
                 $('#gardain_dzo_gewog_village').show();
+                $('#gardain_permanent_address').hide();
             }
         },
         showidentity:function(type){
@@ -1672,6 +1706,7 @@ export default {
             this.changefunction(id);
         });
         this.getstudentPersonalDetails(this.$route.params.data);
+        this.loadClassList();
 
     },
 }

@@ -233,7 +233,7 @@ class AdministrationController extends Controller{
         return $response_data;
     }
     public function loadAllTransferConfigMasters(){
-        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters/'.$this->userId());
+        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters');
         return $response_data;
     }
 

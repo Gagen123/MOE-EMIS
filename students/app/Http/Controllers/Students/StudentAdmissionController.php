@@ -19,7 +19,7 @@ use App\Models\StudentGuardian;
 use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
 use App\Models\Students\StudentAboard;
-use App\Models\Students\StudentGuardainDetails;
+use App\Models\Students\StudentGuardianDetails;
 use Exception;
 use PDO;
 
@@ -105,6 +105,10 @@ class StudentAdmissionController extends Controller
             $data = std_admission::where('CidNo',$request->cid_passport)->where('status','pending')->where('created_by',$request->user_id)->first();
             // dd($data);
             if($data=="" || $data==NULL){
+                //taking care of "null" in middle name
+                if($request->middle_name == 'null' || $request->middle_name == 'NULL' || $request->middle_name == 'Null'){
+                    $request->middle_name = NULL;
+                }
                 $data =[
                     'OrgOrganizationId'         =>  $request->OrgOrganizationId,
                     'CmnCountryId'              =>  $request->snationality,
@@ -184,6 +188,12 @@ class StudentAdmissionController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $currDetails=std_admission::where('created_by',$request->user_id)->first();
+        
+        //taking care of "null" in middle name
+        if($request->middle_name == 'null' || $request->middle_name == 'NULL' || $request->middle_name == 'Null'){
+            $request->middle_name = NULL;
+        }
+
         $data =[
             'CmnCountryId'              =>  $request->snationality,
             'CidNo'                     =>  $request->cid_passport,
@@ -195,7 +205,6 @@ class StudentAdmissionController extends Controller
             'CmnDzoId'                  =>  $request->dzongkhag,
             'CmnGewogId'                =>  $request->gewog,
             'CmnChiwogId'               =>  $request->village_id,
-
             'Address'                   =>  $request->fulladdress,
             'PhotoPath'                 =>  $request->file_path,
             'DateOfApply'               =>  date('Y-m-d'),
@@ -694,7 +703,11 @@ class StudentAdmissionController extends Controller
                 $response_data = StudentAdmissionSchool::where('OrgOrganizationId',explode('__',$param)[1])->get();
                 if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
                     foreach($response_data as $data){
-                        $data->admisiondet=std_admission::where('id',$data['StdAdmissionsId'])->first();
+                        $admission_details =std_admission::where('id',$data['StdAdmissionsId'])->first();
+                        if($admission_details==null && $admission_details==""){
+                            $admission_details =Student::where('id',$data['StdAdmissionsId'])->first();
+                        }
+                        $data->admisiondet = $admission_details;
                     }
                 }
                 // DB::table('std_admissions as s')
@@ -743,14 +756,25 @@ class StudentAdmissionController extends Controller
     }
 
     public function getStudentDetails($std_id=""){
-        if(strpos($std_id,'_')){
+        if(strpos($std_id,'-')){
+            $response_data=Std_Students::where('student_code',explode('-',$std_id)[1])->first();
+            if(empty($response_data)){
+                $response_data=Std_Students::where('CidNo',explode('-',$std_id)[1])->first();
+            }
+            if($response_data!="" && $response_data!=null){
+                $response_data->parents=StudentGuardianDetails::where('StdStudentId',$response_data->id)->get();
+            }
+        } else if(strpos($std_id,'_')){
             $response_data=std_admission::where('id',explode('_',$std_id)[1])->first();
-            if($response_data!=""){
-                $response_data->parents=StudentGuardian::where('student_id',$response_data->id)->get();
+            if($response_data!="" && $response_data!=null){
+                $response_data->parents=StudentGuardian::where('StdStudentId',$response_data->id)->get();
             }
         }
         else{
             $response_data=Std_Students::where('id',$std_id)->first();
+            if($response_data!="" && $response_data!=null){
+                $response_data->parents=StudentGuardianDetails::where('StdStudentId',$response_data->id)->get();
+            }
         }
         if($response_data!=null && $response_data!="" && $response_data->id!=""){
             $response_data->classDetails= StudentClassDetails::where('StdStudentId',$response_data->id)->first();
@@ -829,7 +853,7 @@ class StudentAdmissionController extends Controller
             foreach($request->attachment_details as $att){
                 $attach =[
                     'AdmissionRequestId'        =>  $lastInsertId,
-                    'fileName'                  =>  $att['user_defined_name'],
+                    'fileName'                  =>  $att['original_name'],
                     'filePath'                  =>  $att['path'],
                 ];
                 AdmissionAttachments::create($attach);
@@ -838,6 +862,14 @@ class StudentAdmissionController extends Controller
 
         return $this->successResponse($application, Response::HTTP_CREATED);
 
+    }
+
+    /**
+     * Update Admission Request
+     */
+
+    public function updateAdmissionRequest(Request $request){
+        //
     }
 
     /**

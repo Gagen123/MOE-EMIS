@@ -191,6 +191,16 @@ Route::prefix('masters')->group(function () {
 Route::post('/saveQuater', [App\Http\Controllers\AdministrationController::class, 'saveQuater'])->name('saveQuater');
 Route::get('/loadQuater', [App\Http\Controllers\AdministrationController::class, 'loadQuater'])->name('loadQuater');
 
+Route::prefix('organizationApproval')->group(function () {
+    Route::get('/getScreenId/{serviceName}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'getScreenId'])->name('getScreenId');
+    Route::post('/saveEstablishment', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveEstablishment'])->name('saveEstablishment');
+    Route::post('/saveClassStream', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveClassStream'])->name('saveClassStream');
+    Route::post('/saveUploadedFiles', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveUploadedFiles'])->name('saveUploadedFiles');
+    Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
+    Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
+    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+});
+
 Route::prefix('organization')->group(function () {
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
@@ -329,7 +339,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
     Route::get('/getClassMappingDetails/{mapping_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getClassMappingDetails'])->name('getClassMappingDetails');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
-    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
 
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
@@ -488,6 +498,7 @@ Route::prefix('staff')->group(function () {
     // Route::get('/loadAllStaff/{type}', [App\Http\Controllers\staff\StaffController::class, 'loadAllStaff'])->name('loadAllStaff');
 
     // Route::get('/loadStaff/{type}', [App\Http\Controllers\staff\StaffController::class, 'loadStaff'])->name('loadStaff');
+    Route::post('/updateStaffDetails', [App\Http\Controllers\staff\StaffController::class, 'updateStaffDetails'])->name('updateStaffDetails');
 
     Route::post('/saveTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'saveTransferWindow'])->name('saveTransferWindow');
     Route::get('/loadTransferWindow', [App\Http\Controllers\staff\StaffController::class, 'loadTransferWindow'])->name('loadTransferWindow');
@@ -578,6 +589,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'submitApplication'])->name('submitApplication');
         Route::get('/loadapplicaitontDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetials'])->name('loadapplicaitontDetials');
         Route::get('/loadAllApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllApplication'])->name('loadAllApplication');
+        Route::get('/loadApprovedApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadApprovedApplication'])->name('loadApprovedApplication');
         Route::post('/createLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createLeadershipSelection'])->name('createLeadershipSelection');
         Route::get('/loadLeadershipSelection/{type}/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadLeadershipSelection'])->name('loadLeadershipSelection');
         Route::post('/createNominationForLeadershipSelection', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createNominationForLeadershipSelection'])->name('createNominationForLeadershipSelection');
@@ -649,10 +661,10 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
 
-    
-    //projection controller for 
+
+    //projection controller for
     Route::get('/loadProjectionStaffList/{type}/{dzo_id}', [App\Http\Controllers\projections\TeacherProjectionController::class, 'loadProjectionStaffList'])->name('loadProjectionStaffList');
-    
+
 });
 
 Route::prefix('students')->group(function () {
@@ -666,6 +678,7 @@ Route::prefix('students')->group(function () {
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
+        Route::post('/saveNewTransferStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveNewTransferStudent'])->name('saveNewTransferStudent');
         Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
@@ -691,6 +704,7 @@ Route::prefix('students')->group(function () {
     Route::post('/saveStudentWhereabouts', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentWhereabouts'])->name('saveStudentWhereabouts');
     Route::get('/loadStudentWhereabouts/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadStudentWhereabouts'])->name('loadStudentWhereabouts');
     Route::get('/loadAboardList/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAboardList'])->name('loadAboardList');
+    Route::post('/updateAdmissionRequest', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'updateAdmissionRequest'])->name('updateAdmissionRequest');
     Route::get('/loadAdmissionRequest/{std_id}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
     Route::post('/saveStudentAboard', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentAboard'])->name('saveStudentAboard');
 
@@ -863,7 +877,7 @@ Route::prefix('spms')->group(function () {
     Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
     Route::get('/getSchoolPlanHistory', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
     Route::get('/loadOrgList', [App\Http\Controllers\spms\SpmsController::class, 'loadOrgList'])->name('loadOrgList');
-    
+
 });
 
 
@@ -928,17 +942,31 @@ Route::prefix('diatery')->group(function (){
 
 //Projection links
 Route::prefix('projections')->group(function (){
-    Route::prefix('projectionController')->group(function (){
+    //Data Import
+    Route::prefix('data')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+
+    //Education Indicators
+    Route::prefix('education')->group(function (){
+        Route::get('/loadEnrollment/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollment'])->name('loadEnrollment');
+
+        //old routes - delete after copying functions
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
         Route::get('/loadStudents/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadStudents'])->name('loadStudents');
     });
-    Route::prefix('OrgProjectionController')->group(function (){
+    //Quality Indicators
+    Route::prefix('quality')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Efficiency Indicators
+    Route::prefix('efficiency')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Educational Institutes
+    Route::prefix('institutes')->group(function (){
         Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
         Route::get('/loadClassSize/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadClassSize'])->name('loadClassSize');
-    });
-
-    Route::prefix('BcseaController')->group(function (){
-        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
 });

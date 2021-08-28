@@ -119,7 +119,7 @@ class LoadOrganizationController extends Controller{
               COUNT(CASE WHEN category = 'public_eccd' THEN 1 END) AS Public_ECCD,
               COUNT(CASE WHEN category = 'private_eccd' THEN 1 END) AS Private_ECCD,
               COUNT(CASE WHEN category = 'NGO_eccd' THEN 1 END) AS NGO_ECCD,
-             COUNT(CASE WHEN category = 'Corporate_eccd' THEN 1 END) AS Corporate_ECCD
+              COUNT(CASE WHEN category = 'Corporate_eccd' THEN 1 END) AS Corporate_ECCD
               FROM organization_details
               WHERE dzongkhagId = '".$id."'");
             }
@@ -127,29 +127,53 @@ class LoadOrganizationController extends Controller{
         //to get both private and public School
         if($type=="School"){
             if($id=="ALL"){
-                $response_data = DB::select(" SELECT a.category,
-                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
-                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
-                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
-                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
-                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
-                    ELSE 0 END) AS Total
-                FROM `organization_details` a
-                LEFT JOIN `level` l ON l.id = a.levelId
-                WHERE category = 'public_school' OR category = 'private_school'
-                GROUP BY a.category;");
+                // $response_data = DB::select(" SELECT a.category,
+                // COUNT(CASE WHEN l.name LIKE 'Primary%' THEN 1 END) AS Primary_School,
+                // COUNT(CASE WHEN l.name LIKE 'Lower Secondary%' THEN 2 END) AS Lower_Secondary_School,
+                // COUNT(CASE WHEN l.name LIKE 'Middle Secondary%' THEN 3 END) AS Middle_secondary_school,
+                // COUNT(CASE WHEN l.name LIKE 'Higher Secondary%' THEN 4 END) AS Higher_Secondary_School,
+                // SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                //     ELSE 0 END) AS Total
+                // FROM `organization_details` a
+                // LEFT JOIN `level` l ON l.id = a.levelId
+                // WHERE category = 'public_school' OR category = 'private_school'
+                // GROUP BY a.category;");
+
+                //The following is the transpose of the above query                
+                $response_data = DB::select(" SELECT l.name,
+                        COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
+                        COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
+                        SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                            ELSE 0 END) AS Total
+                        FROM `organization_details` a
+                        LEFT JOIN `level` l ON l.id = a.levelId
+                        WHERE category = 'public_school' OR category = 'private_school'
+                        GROUP BY l.name;");
+
+
             } else {
-                $response_data = DB::select("SELECT a.category,
-                COUNT(CASE WHEN l.name = 'Lower Secondary School' THEN 1 END) AS Lower_Secondary_School,
-                COUNT(CASE WHEN l.name = 'Primary' THEN 2 END) AS primary_School,
-                COUNT(CASE WHEN l.name = 'Middle Secondary School' THEN 3 END) AS Middle_secondary_school,
-                COUNT(CASE WHEN l.name = 'Higher Secondary School' THEN 4 END) AS Higher_Secondary_School,
-                SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
-                    ELSE 0 END) AS Total
-                FROM `organization_details` a
-                LEFT JOIN `level` l ON l.id = a.levelId
-                WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
-                GROUP BY a.category");
+                // $response_data = DB::select("SELECT a.category,
+                // COUNT(CASE WHEN l.name LIKE 'Primary%' THEN 1 END) AS Primary_School,
+                // COUNT(CASE WHEN l.name LIKE 'Lower Secondary%' THEN 2 END) AS Lower_Secondary_School,
+                // COUNT(CASE WHEN l.name LIKE 'Middle Secondary%' THEN 3 END) AS Middle_secondary_school,
+                // COUNT(CASE WHEN l.name LIKE 'Higher Secondary%' THEN 4 END) AS Higher_Secondary_School,
+                // SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                //     ELSE 0 END) AS Total
+                // FROM `organization_details` a
+                // LEFT JOIN `level` l ON l.id = a.levelId
+                // WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
+                // GROUP BY a.category");
+
+                //The following is the transpose of the above query                
+                $response_data = DB::select(" SELECT l.name,
+                        COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
+                        COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
+                        SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                            ELSE 0 END) AS Total
+                        FROM `organization_details` a
+                        LEFT JOIN `level` l ON l.id = a.levelId
+                        WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
+                        GROUP BY l.name;");
 
             }
         }

@@ -236,6 +236,19 @@ class StaffController extends Controller{
         return $response_data;
     }
 
+    public function updateStaffDetails(Request $request){
+        $rules = [
+            'effective_date'     =>  'required',
+        ];
+        $customMessages = [
+            'effective_date.required'        => 'Effective Date is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $request->user_id=$this->userId();
+        $response_data= $this->apiService->createData('emis/staff/updateStaffDetails', $request->all());
+        return $response_data;
+    }
+
     public function loadNominations($staff_id=""){
         $response_data= $this->apiService->listData('emis/staff/loadNominations/'.$staff_id.'/'.$this->userId());
         return $response_data;

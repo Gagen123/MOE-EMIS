@@ -39,6 +39,8 @@ class LeadershipApplication extends Model
         'selected_by',
         'created_by',
         'updated_by',
+        'effective_date',
+        'reported_date',
         'created_at',
         'updated_at'
     ];

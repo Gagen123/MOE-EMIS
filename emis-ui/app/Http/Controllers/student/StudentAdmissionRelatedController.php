@@ -153,6 +153,17 @@ class StudentAdmissionRelatedController extends Controller
         $students = $this->apiService->listData('emis/students/loadStudentWhereabouts/'.$param);
         return $students;
     }
+
+    /**
+     * Update the admission request
+     */
+
+    public function updateAdmissionRequest(Request $request){
+        $data = $request->all();
+        $response_data= $this->apiService->createData('emis/students/admission/updateAdmissionRequest', $data);
+        return $response_data;
+    }
+
     /**
      * load the list of admission requests
      * 

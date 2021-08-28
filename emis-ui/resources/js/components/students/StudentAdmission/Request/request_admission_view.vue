@@ -26,11 +26,11 @@
                     </div>
                     <label>Present School Details: </label>
                     <div class="row form-group">
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                             <label class="required" >Class : </label>
                             <label class="text-primary">{{ }}</label>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                             <label class="required" >School : </label>
                             <label class="text-primary"><span id="gewogid"></span>{{std_admission_details.organization_name}}</label>
                         </div>
@@ -64,17 +64,23 @@
                     <h6><u>Supporting Documents</u></h6><br>
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                            <label class="required" >Dzongkhag For Admission Request: </label>
+                            <label class="required" >Supporting Documents: </label>
                             <a href="#" @click="openfile(std_admission_details.fileName, std_admission_details.filePath)" class="fa fa-eye"> View</a>
                         </div>
                     </div>
                 </div>
                 <hr>
-                <div class="row md-12">
-                    <div class="form-group col-md-12" >
-                        <label>Remarks From SPCD: <span class="text-danger">*</span><span class="text-danger"></span></label>
-                            <textarea v-model="form.remarks" id="remarks" type="text" name="remarks" class="form-control" :class="{ 'is-invalid': form.errors.has('remarks') }"   />
-                        <has-error :form="form" field="remarks"></has-error>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Remarks:</label>
+                        <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                        <span class="text-danger" id="remarks_err"></span>
+                    </div>
+                </div>
+                <div class="row form-group fa-pull-right">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-success" @click="saveForm('approve')" id="approveId" type="button"> <i class="fa fa-check"></i>Approve Request</button>
+                        <button class="btn btn-danger" @click="saveForm('reject')" id="rejectId" type="button"> <i class="fa fa-times"></i> Reject Request</button>
                     </div>
                 </div>
             </form>
@@ -116,46 +122,59 @@ export default {
 				$('#'+errid).html(''); 
 			}
 		},
-
+        
         /**
-         * method to reset form
+         * method to show next tab and update application accordingly
          */
-        restForm(){
-            this.form.cid_passport= '';
-            this.form.first_name = '';
-            this.form.middle_name = '';
-            this.form.last_name= '';
-            this.form.dob= '';
-            this.form.sex_id= '';
-            this.form.mother_tongue= '';
-            this.form.status= '';
-            this.form.fulladdress='';
-            this.form.country = '';
-            this.form.city = '';
+        saveForm(nextclass){
+            let action=true;
+            if(this.form.remarks==""){
+                $('#remarks_err').html('Please enter the remarks');
+                $('#remarks').addClass('is-invalid');
+                action=false;
+            }
+            if(action){
+                Swal.fire({
+                    text: "Are you sure you wish to "+nextclass+" this Application ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('actiontype', nextclass);
+                        formData.append('remarks', this.form.remarks);
+                        axios.post('organization/updateBifurcationApplication', formData, config)
+                        .then((response) => {
+                            if(response!=""){
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application details has been updated.'
+                                });
+                                this.$router.push({path:'/tasklist'});
+                            }
+                        })
+                        .catch((err) => {
+                            Swal.fire(
+                                'error!',
+                                'Not able to update this application details. Please contact system administrator.Error: '+err,
+                                'error',
+                            );
+                            console.log("Error:"+err)
+                        })
+                    }
+                });
+            }
         },
 
-        /**
-         * method to save data
-         */
-        formaction: function(type){
-            if(type=="reset"){
-                this.restForm();
-            }
-            if(type=="save"){
-                    this.form.post('/students/saveStudentAboard',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: ' Detail is added successfully'
-                    })
-                    this.$router.push('/studentaboard_list');
-                })
-                .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
-                })
-            }
-		},
         loadAllActiveMasters(type){
             axios.get('masters/loadGlobalMasters/'+type)
             .then(response =>{
@@ -188,6 +207,19 @@ export default {
             }).catch(error => console.log(error));
 
 		},
+        loadGenderList(uri="masters/loadGlobalMasters/all_active_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.sex_idList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
         applyselect(type){
             if(type=="std"){
                 if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
@@ -235,6 +267,7 @@ export default {
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
         this.getdzongkhagList();
+        this.loadGenderList();
       
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){

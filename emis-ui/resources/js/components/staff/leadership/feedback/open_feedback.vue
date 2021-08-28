@@ -45,10 +45,10 @@
                         <label>Dzongkhag:</label><br>
                         <span class="text-blue text-bold">{{data_list.aplicant_working_dzo}}</span>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Gewog:</label><br>
                         <span class="text-blue text-bold">{{data_list.aplicant_working_gewog}}</span>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="callout callout-success">
@@ -167,7 +167,7 @@ export default {
             .then(response =>{
                 let data = response;
                 // this.positionList =  data.data.data;
-                 for(let i=0;i<data.data.data.length;i++){
+                for(let i=0;i<data.data.data.length;i++){
                     this.positionList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })

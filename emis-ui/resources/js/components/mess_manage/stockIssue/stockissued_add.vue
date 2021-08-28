@@ -66,20 +66,20 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <!-- <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
-                                            <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
-                                        </select>  -->
                                         <span :id="'measurement_unit'+index"></span>
                                     </td>
-                                   <td :id="'loadavailableqty'+index">
+                                    
+                                    <td :id="'loadavailableqty'+index">
                                      {{item.available_qty}}
                                   </td>
-                                   <td>
-                                     <input type="number" name="issue_qty" id="issue_qty" class="form-control"  v-model="item.issue_qty" />
-                                 </td>
-                                  <td>
-                                     <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity"/>
-                                 </td>
+                                    <td>
+                                        <input type="number" :id="'available_qty'+index" class="form-control" v-model="item.issue_qty" @change="checkqty(index,'available_qty')"/>
+                                        <span class="text-danger" :id="'available_qty_err'+index"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" :id="'damagequantity'+index" class="form-control" v-model="item.damagequantity" @change="checkqty(index,'damagequantity')"/>
+                                        <span class="text-danger" :id="'damagequantity_err'+index"></span>
+                                    </td>
                                   <td>
                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks"/>
                                   </td>
@@ -312,7 +312,7 @@ export default {
         },
         checkqty(index,id){
             if(parseFloat($('#avqtyinput'+index).val())<parseFloat($('#'+id+index).val())){
-                $('#'+id+'_err'+index).html('Cannot be > available quantity');
+                $('#'+id+'_err'+index).html('Cannot be greater available quantity');
                 $('#savebtn').hide();
             }else{
                 $('#'+id+'_err'+index).html('');

@@ -237,6 +237,7 @@ export default {
                 dateOfapply:'',
                 remarks:'',
                 std_decission:'',
+                actiontype:'portal'
             })
         }
     },
