@@ -28,7 +28,7 @@
 export default {
     methods: {
         showadprocess(uri,type){
-            this.$router.push({name:uri,query: {type:type}});
+            this.$router.push({name:uri,query: {type:type}}).catch(()=>{});
 		},
     },
     mounted() {

@@ -106,8 +106,8 @@ class CommonController extends Controller{
             'tr_config_data'            =>  $tr_data,
             'leadership_config_data'    =>  $leadership_data,
             'approved_transfer_data'    =>  $approved_transfer_data,
+            'access_level'              =>  $this->getAccessLevel(),
         ];
-        // dd( $task_data);
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
         // dd($response_data);
         return $response_data;

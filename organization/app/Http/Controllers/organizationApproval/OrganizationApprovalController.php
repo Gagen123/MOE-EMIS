@@ -354,7 +354,7 @@ class OrganizationApprovalController extends Controller{
                 ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
                 ->orderBy('classes.displayOrder')
                 ->get();
-        $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        $response_data->attachments=ApplicationAttachments::orderBy('created_at','ASC')->where('ApplicationDetailsId',$response_data->id)->get();
         $ver=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->get();
         if($ver!=null && $ver!="" && sizeof($ver)>0){
             foreach($ver as $v){
@@ -386,6 +386,8 @@ class OrganizationApprovalController extends Controller{
                         'path'                      =>  $att['path'],
                         'user_defined_file_name'    =>  $att['user_defined_name'],
                         'name'                      =>  $att['original_name'],
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s'),
                         'upload_type'               =>  $request->update_type,
                     ];
                     $doc = ApplicationAttachments::create($attach);
@@ -393,14 +395,33 @@ class OrganizationApprovalController extends Controller{
             }
         }
         $status=$request->status;
-        if($request->update_type=="tentative"){
+        if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study"){
             if($request->verifying_agency_list!=null && $request->verifying_agency_list!="" && sizeof($request->verifying_agency_list)>0){
                 foreach($request->verifying_agency_list as $dept){
                     $verification =[
+                        'type'                        =>   'Initial_Assessment',
                         'ApplicationDetailsId'        =>   $request->id,
                         'department_id'               =>   $dept['department'],
                         'verifyingAgency'             =>   $dept['division'],
                         'tentativeDate'               =>   $request->tentative_date,
+                        'remarks'                     =>   $request->remarks,
+                        'created_by'                  =>   $request->user_id,
+                        'created_by'                  =>   date('Y-m-d h:i:s'),
+                    ];
+                    $establishment=ApplicationVerification::create($verification);
+                }
+            }
+        }
+
+        if($request->update_type=="Notify_for_Tentative_Date_of_Final_Feasibility_Study"){
+            if($request->final_verifying_agency_list!=null && $request->final_verifying_agency_list!="" && sizeof($request->final_verifying_agency_list)>0){
+                foreach($request->final_verifying_agency_list as $dept){
+                    $verification =[
+                        'type'                        =>   'Final_Assessment',
+                        'ApplicationDetailsId'        =>   $request->id,
+                        'department_id'               =>   $dept['department'],
+                        'verifyingAgency'             =>   $dept['division'],
+                        'tentativeDate'               =>   $request->final_tentative_date,
                         'remarks'                     =>   $request->remarks,
                         'created_by'                  =>   $request->user_id,
                         'created_by'                  =>   date('Y-m-d h:i:s'),
@@ -415,7 +436,7 @@ class OrganizationApprovalController extends Controller{
             'updated_by'                   =>   $request->user_id,
             'updated_at'                   =>   date('Y-m-d h:i:s'),
         ];
-        if($request->update_type=="tentative"){
+        if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study"){
             $estd =$estd+[
                 'remarks'                      =>   $request->remarks,
             ];
@@ -444,9 +465,9 @@ class OrganizationApprovalController extends Controller{
     public function updateTeamVerification(Request $request){
         $verification =[
             'ApplicationVerificationId'     => $request->id,
+            'type'                          => $request->type,
             'agency'                        => $request['org_id'],
             'teamMember'                    => $request['staff_id'],
-            'type'                          => $request['staff_type'],
             'name'                          => $request['name'],
             'cid'                           => $request['cid'],
             'email'                         => $request['email'],

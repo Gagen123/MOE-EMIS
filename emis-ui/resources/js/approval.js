@@ -7,19 +7,13 @@ const routes = [
           component: require('./components/organization/establishment/eccd/eccd_index.vue').default,
           children: [
             { path: '/', name:'eccd_approval_index', component: require('./components/organization/establishment/eccd/list_eccd.vue').default },
-            { path: '/create_eccd',name:"create_eccd", component: require('./components/organization/establishment/eccd/create_private_eccd.vue').default },
-
-            { path: '/create_public_eccd',name:"create_public_eccd", component: require('./components/organization/establishment/eccd/create_public_eccd.vue').default },
-
-            { path: '/create_ngo_eccd',name:"create_ngo_eccd", component: require('./components/organization/establishment/eccd/create_ngo_eccd.vue').default },
-            { path: '/create_coorporate_eccd',name:"create_coorporate_eccd", component: require('./components/organization/establishment/eccd/create_coorporate_eccd.vue').default },
+            { path: '/create_eccd',name:"create_eccd", component: require('./components/organization/establishment/eccd/create_eccd.vue').default },
 
             { path: '/list_eccd', name:'list_eccd', component: require('./components/organization/establishment/eccd/list_eccd.vue').default },
             { path: '/show_eccd',  name:'show_eccd',component: require('./components/organization/establishment/eccd/show_eccd.vue').default },
             { path: '/acknowledgement_eccd',  name:'acknowledgement_eccd',component: require('./components/organization/establishment/eccd/acknowledgement.vue').default },
           ]
         },
-
 
         { path: '/public_school_index',
           component: require('./components/organization/establishment/public_school/public_school_index.vue').default,

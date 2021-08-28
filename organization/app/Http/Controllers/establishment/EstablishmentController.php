@@ -588,16 +588,16 @@ class EstablishmentController extends Controller{
     }
 
     public function loadApprovedOrgs($type=""){
-        $response_data= ApplicationDetails::where('status','Approved')->where('establishment_type','like','%'.$type.'%')->get();
+        $response_data= ApplicationDetails::where('status','like','Approved%')->where('establishment_type','like','%'.$type.'%')->get();
         if($response_data!=null && $response_data!=""){
             foreach($response_data as $data){
-                if($data->establishment_type=="Private School" || $data->establishment_type=="Private ECCD"){
+                if(strpos($data->establishment_type,'Private')!==false){
                     $data->proposedName=ApplicationEstPrivate::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
                 else if($data->establishment_type=="Bifurcation"){
                     $data->proposedName=Bifurcation::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
-                else if($data->establishment_type=="Public School" || $data->establishment_type=="Public ECCD" || $data->establishment_type=="Public ECR"){
+                else if(strpos($data->establishment_type,'Public')!==false || strpos($data->establishment_type,'NGO')!==false || strpos($data->establishment_type,'Coorporate')!==false){
                     //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
@@ -608,7 +608,7 @@ class EstablishmentController extends Controller{
 
 
     public function getApprovedOrgDetails($type="",$key=""){
-        $response_data= ApplicationDetails::where('status','Approved')->where('id',$key)->first();
+        $response_data= ApplicationDetails::where('status','like','Approved%')->where('id',$key)->first();
         if($response_data->establishment_type=="Private School" ||$response_data->establishment_type=="Private ECCD"){
             $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
         }
@@ -657,7 +657,6 @@ class EstablishmentController extends Controller{
 
         $org_details=$request->Applicationdetails['org_details'];
         // dd($request->Applicationdetails);
-        //
 
         $org_data = [
             'category'                  =>$caegory,
@@ -685,11 +684,25 @@ class EstablishmentController extends Controller{
                 'isFeedingSchool'           =>$application_data->isFeedingSchool,
             ];
         }
+        if($caegory=="public_eccd" || $caegory=="ngo_eccd" || $caegory=="coorporate_eccd"){
+            $application_data= ApplicationEstPublic::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
+            $org_data = $org_data+[
+                'locationId'                =>$application_data->locationId,
+                'parentSchoolId'            =>$application_data->parentSchool,
+            ];
+        }
         if($caegory=="private_school"){
             $org_data = $org_data+[
                 'levelId'                   =>$org_details['levelId'],
                 'locationId'                =>$org_details['proposedLocation'],
                 'typeOfSchool'              =>$org_details['typeOfSchool'],
+            ];
+        }
+        if($caegory=="private_eccd"){
+            $application_data= ApplicationEstPrivate::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
+            $org_data = $org_data+[
+                'locationId'                =>$application_data->proposedLocation,
+                'parentSchoolId'            =>$application_data->parentSchool,
             ];
         }
         if($caegory=="Bifurcation"){

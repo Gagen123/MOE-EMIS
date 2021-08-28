@@ -43,7 +43,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
             }
             else{
-                
+
                 $response_data=OrganizationDetails::wherein('category',['public_school','private_school'])->get();
             }
         }
@@ -54,7 +54,7 @@ class LoadOrganizationController extends Controller{
             $response_data=OrganizationDetails::where('gewogId',$id)->wherein('category',['public_school','public_eccd','public_ecr'])->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','public_eccd','public_ecr'])->get();
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','public_eccd','coorporate_eccd','ngo_eccd','public_ecr'])->get();
         }
 
         if($type=="allorganizationList"){
@@ -317,7 +317,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadOrgDetails($type="", $id=""){
-     
+
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
            $response_data=OrganizationDetails::where('id',$id)->first();
@@ -344,7 +344,7 @@ class LoadOrganizationController extends Controller{
                     }
                 }
             }
-        
+
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
@@ -373,7 +373,7 @@ class LoadOrganizationController extends Controller{
             if($contact!=null && $contact!=""){
                 $response_data->contactDetails=$contact;
             }
-          
+
         }
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();

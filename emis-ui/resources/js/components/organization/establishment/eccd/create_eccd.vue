@@ -34,28 +34,30 @@
                                 <span id="screenName"></span>
                             </div>
                         </div>
+
+                        <label class="mb-0"><i><u>Establishment Details</u></i></label>
                         <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label id="proposed_initiated_by_id" class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
+                            <div id="proposed_initiated_by_id1" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <select name="initiatedBy" id="initiatedBy" v-model="form.initiatedBy" :class="{ 'is-invalid': form.errors.has('initiatedBy') }" class="form-control select2" @change="remove_error('initiatedBy')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in proposed_by_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="initiatedBy"></has-error>
                             </div>
+
+                            <label id="parent_agency_id" class="col-lg-2 col-md-2 col-sm-2 col-form-label">Parent Agency:<span class="text-danger">*</span></label>
+                            <div id="parent_agency_id1" class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <input type="text" v-model="form.parentAgency" :class="{ 'is-invalid': form.errors.has('parentAgency') }" @change="remove_error('parentAgency')" class="form-control" id="parentAgency" placeholder="Parent Agency Name"/>
+                                <has-error :form="form" field="parentAgency"></has-error>
+                            </div>
+
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name" />
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" @change="remove_error('proposedLocation')" class="form-control" id="proposedLocation" placeholder="Proposed Location"/>
-                                <has-error :form="form" field="proposedLocation"></has-error>
-                            </div>
-                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -81,7 +83,7 @@
                                 <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                                 <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                             </div>
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Parent School</label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Parent School: <span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <select v-model="form.parentSchool" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parentSchool') }" class="form-control select2" name="parentSchool" id="parentSchool">
                                     <option value="">--- Please Select ---</option>
@@ -100,6 +102,39 @@
                                 <has-error :form="form" field="locationType"></has-error>
                             </div>
                         </div>
+                        <span id="private_section" style="display: none">
+                            <hr>
+                            <label class="mb-0"><i><u>Proprietor Details</u></i></label>
+                            <p>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                    <has-error :form="form" field="proprietorCid"></has-error>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
+                                    <has-error :form="form" field="proprietorName"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Contact Information:</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="number" v-model="form.proprietorMobile" :class="{ 'is-invalid': form.errors.has('proprietorMobile') }" @change="remove_error('proprietorMobile')" class="form-control" id="proprietorMobile" placeholder="Mobile No *"/>
+                                    <has-error :form="form" field="proprietorMobile"></has-error>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <input type="number" v-model="form.proprietorPhone" :class="{ 'is-invalid': form.errors.has('proprietorPhone') }" @change="remove_error('proprietorPhone')" class="form-control" id="proprietorPhone" placeholder="Phone No" />
+                                    <has-error :form="form" field="proprietorPhone"></has-error>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <input type="text" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email"/>
+                                    <has-error :form="form" field="proprietorEmail"></has-error>
+                                </div>
+                            </div>
+                            <hr>
+                        </span>
                         </form>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -225,23 +260,28 @@ export default {
 
             form: new form({
                 id: '',
-                initiatedBy:'',
+                proprietorCid:'',
+                proprietorName:'',
+                proprietorPhone:'',
+                proprietorMobile:'',
+                proprietorEmail:'',
+
                 proposedName:'',
-                category:'PUBLIC',
+                initiatedBy:'',
+                category:'',
                 dzongkhag:'',
                 gewog:'',
                 chiwog:'0',
                 locationType:'',
                 coLocatedParent:'1',
                 parentSchool:'',
-                establishment_type:'Public ECCD',
+                establishment_type:'',
                 status:'pending'
             }),
             classForm: new form({
                 id: '',
                 class:[],
                 proposedName:'',
-                proposed_establishment:'Public ECCD',
                 application_number:'',
             }),
 
@@ -253,13 +293,12 @@ export default {
                 application_number:'',
                 status:'Submitted',
                 remarks:'',
-                service_name:'New Establishment of Public ECCD',
+                service_name:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
                 }],
                 ref_docs:[],
-
             }),
         }
     },
@@ -458,9 +497,9 @@ export default {
         applyselect2(){
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
-            this.applyselect2field('initiatedBy');
             this.applyselect2field('locationType');
             this.applyselect2field('parentSchool');
+            this.applyselect2field('initiatedBy');
         },
 
         /**
@@ -471,9 +510,6 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
-            }
-            if(id=="initiatedBy"){
-                this.form.initiatedBy=$('#initiatedBy').val();
             }
 
             if(id=="gewog"){
@@ -489,46 +525,88 @@ export default {
             if(id=="parentSchool"){
                 this.form.parentSchool=$('#parentSchool').val();
             }
+            if(id=="initiatedBy"){
+                this.form.initiatedBy=$('#initiatedBy').val();
+            }
         },
-
+        getDetailsbyCID(fieldId){
+            axios.get('getpersonbycid/'+ $('#'+fieldId).val())
+            .then(response => {
+                if (JSON.stringify(response.data)!='{}'){
+                    let personal_detail = response.data;
+                    this.form.proprietorName = personal_detail.firstName + " " + personal_detail.lastName;
+                    $('#proprietorName').prop('readonly',true);
+                }else{
+                    Swal.fire({
+                        html: "No data found for this CID",
+                        icon: 'error'
+                    });
+                }
+            })
+            .catch((exception) => {
+                console.log(exception);
+            });
+        },
+        async loadattachments(type){
+            let data = await this.getRequiredDocument(type);
+            if(data!=""){
+                data.forEach((item => {
+                    this.count++;
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
+                }));
+            }
+        },
+        loadScreenDetails(type){
+            $('#private_section').hide();
+            $('#proposed_initiated_by_id').hide();
+            $('#proposed_initiated_by_id1').hide();
+            $('#parent_agency_id').hide();
+            $('#parent_agency_id1').hide();
+            this.form.establishment_type=type+' ECCD';
+            this.form.category=type;
+            axios.get('organizationApproval/getScreenId/'+'ECCD Centre__'+1)
+            .then(response => {
+                let data = response.data[0];
+                if(data!=undefined){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+' ('+this.form.category+')</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.file_form.service_name=data.screenName;
+                }else{
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+                }
+                if(type=="Private"){
+                    $('#private_section').show();
+                }
+                if(type=="NGO" || type=="Public"){
+                    $('#proposed_initiated_by_id').show();
+                    $('#proposed_initiated_by_id1').show();
+                }
+                if(type=="Coorporate"){
+                    $('#parent_agency_id').show();
+                    $('#parent_agency_id1').show();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        }
     },
 
     async mounted() {
         this.proposed_by_list =  await this.loadproposedByList();
         this.locationList =await this.loadlocationList();
         this.orgList= await this.schoolListUnderUserDzongkhag();
-        let data = await this.getRequiredDocument('Public_ECCD');
-        if(data!=""){
-            data.forEach((item => {
-                this.count++;
-                this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
-            }));
-        }
-
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.dzongkhag=data['Dzo_Id'];
             this.form.dzongkhag=data['Dzo_Id'];
             this.getGewogList(data['Dzo_Id']);
-        })
-        .catch(errors => {
-            console.log(errors)
-        });
-        axios.get('organizationApproval/getScreenId/'+this.file_form.service_name+'__'+1)
-        .then(response => {
-            let data = response.data[0];
-            if(data!=undefined){
-                $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
-                this.screenId=data.screen;
-                this.SysRoleId=data.SysRoleId;
-                this.Sequence=data.Sequence;
-                this.Status_Name=data.Status_Name;
-            }else{
-                $('#screenPermission').show();
-                $('#mainform').hide();
-                $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
-            }
         })
         .catch(errors => {
             console.log(errors)
@@ -546,8 +624,20 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
         this.classStreamList =await this.getClassStreamMappings('eccd');
+        this.form.category=this.$route.query.type;
+        this.loadScreenDetails(this.$route.query.type);
+    },
+
+    watch: {
+        '$route.query.type': {
+            handler: function(type) {
+                this.form.category=type;
+                this.form.establishment_type=type+' ECCD';
+                this.loadattachments('Public_ECCD');
+                this.loadScreenDetails(type);
+            },
+        }
     },
 }
 </script>
