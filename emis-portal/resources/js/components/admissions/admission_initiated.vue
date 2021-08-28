@@ -12,10 +12,18 @@
                         <label class="required" >CID No/Reference  : </label>
                         <label class="text-primary">{{std_admission_details.CidNo}}</label>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >Name of Student :</label>
-                        <label class="text-primary">{{ std_admission_details.FirstName}} {{ std_admission_details.MiddleName=='null' ? '': std_admission_details.MiddleName}} {{ std_admission_details.LastName=='null' ? '': std_admission_details.LastName}}</label>
-                    </div>
+                    <template v-if="!is_student">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Name of Student :</label>
+                            <label class="text-primary">{{ std_admission_details.FirstName}} {{ std_admission_details.MiddleName=='null' ? '': std_admission_details.MiddleName}} {{ std_admission_details.LastName=='null' ? '': std_admission_details.LastName}}</label>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Name of Student :</label>
+                            <label class="text-primary">{{ std_admission_details.Name}} </label>
+                        </div>
+                    </template>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
@@ -41,14 +49,31 @@
                         <label class="text-primary"><span id="vilageId"></span> {{villageArray[std_admission_details.CmnChiwogId]}}</label>
                     </div>
                 </div>
-                <hr>
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <div class="card-body">
+            <div class="form-group">
+            <h5>Apply for Admission</h5>
+            <hr>
                 <template v-if="!is_student">
                     <div class="row form-group">
                         <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                             <label class="required" >Admission For:<span class="text-danger">*</span></label>
                             <input type="radio" name="registrationType" @click="showsection('ECCD')" value="ECCD" id="new"> ECCD
                             <input type="radio" name="registrationType" @click="showsection('PP')" value="PP" id="existing" class="ml-4"> Class PP
-                            <input type="radio" name="registrationType" @click="showsection('Abroad')" value="Abroad" id="existing" class="ml-4"> Any class from Abroad
+                            <input type="radio" name="registrationType" @click="showsection('Abroad')" value="Abroad" id="existing" class="ml-4"> Non-Registered Students (No Student Id)
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="row form-group">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                            <label class="required" >Admission For:<span class="text-danger">*</span></label>
+                            <input type="radio" name="registrationType" @change="getParentSchoolDzo()" @click="showsection('ParentSchool')" value="ParentSchool" id="existing" class="ml-4"> Transfer to Parent School
+                            <input type="radio" name="registrationType" @change="getdzongkhagList('Student')" @click="showsection('NonParentSchool')" value="NonParentSchool" id="existing" class="ml-4"> Transfer to Non-Parent School <br>
+                             <small><i>(*Note: If present school is registered as a feeder school, then Parent School guarantees admission)</i></small>
                         </div>
                     </div>
                 </template>
@@ -113,13 +138,13 @@
                                         <has-error :form="student_form" field="school"></has-error>
                                     </td>
                                     <td>
-                                        <select v-model="student_form.class" :class="{ 'is-invalid': student_form.errors.has('class') }"  @change="getProjection(),removeerror('class')"  class="form-control" name="class" id="class">
-                                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.OrgClassStreamId">{{ item.class }}</option>
-                                        </select>
-                                        <has-error :form="student_form" field="class"></has-error>
+                                        <span>{{this.std_class}}</span>
                                     </td>
                                     <td>
-                                        <span>{{student_form.seats}}</span>
+                                        <!-- <span>{{student_form.seats}}</span> -->
+                                    </td>
+                                    <td>
+                                        
                                     </td>
                                 </tr>
                                 <tr>
@@ -138,7 +163,7 @@
                         <button class="btn btn-flat btn-primary" @click="submitDetail()"> <i class="fa fa-save"></i> submit</button>
                     </div>
                 </div>
-            </div>
+            </div>  
         </div>
     </div>
 </div>
@@ -148,6 +173,10 @@ export default {
     data(){
         return{
             is_student:false,
+            std_id:'',
+            std_class:'',
+            org_id:'',
+            parent_school_dzongkhag:'',
             genderArray:{},
             dzongkhagArray:{},
             gewogArray:{},
@@ -174,6 +203,7 @@ export default {
                 dateOfapply:'',
                 remarks:'',
                 std_decission:'',
+                actiontype:'portal'
             })
         }
     },
@@ -183,7 +213,7 @@ export default {
          */
         addMore: function(){
             Swal.fire({
-                text: "Are you sure you wish to save this detials ?",
+                text: "Are you sure you wish to save this details ?",
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -191,6 +221,7 @@ export default {
                 confirmButtonText: 'Yes!',
             }).then((result) => {
                 if(result.isConfirmed){
+                    this.student_form.class = this.std_class;
                     this.student_form.post('/admissions/saveorgclassDetails')
                     .then((response) => {
                         this.student_form.dzongkhag='';
@@ -266,7 +297,8 @@ export default {
             });
         },
 
-        getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
+        getdzongkhagList(type){
+            let uri ='masters/loadGlobalMasters/all_active_dzongkhag';
             axios.get(uri)
             .then(Response =>{
                 let data = Response.data.data;
@@ -274,19 +306,48 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.dzongkhagArray[data[i].id] = data[i].name;
                 }
+                $('#dzongkhag').prop('disabled',false);  
             }).catch(error => console.log(error));
-
         },
-        getstudentPersonalDetails(){
-            axios.get('/admissions/getStudentDetailsFromPortal/NA')
+
+        getParentSchoolDzo(){
+            this.student_form.dzongkhag = this.parent_school_dzongkhag;
+            $('#dzongkhag').prop('disabled',true);                
+            this.getParentSchoolList(this.org_id); 
+        },
+
+        getstudentPersonalDetails(type){
+            axios.get('/admissions/getStudentDetailsFromPortal/'+type)
                 .then(response => {
                 let data = response.data;
                 if(data != ""){
                     this.std_admission_details=data;
-                    this.student_form.student_id=data.id;
-                    this.loadadmissions();
-                    this.student_form.admission_type=data.AdmissionType;
-                    $("input[name=registrationType][value=" + data.AdmissionType + "]").prop('checked', true);
+                    this.org_id = this.std_admission_details.OrgOrganizationId;
+                    
+                    //Function to load the school list as per feeders
+                    if(type == 'Student'){
+                        let uri2 ='organizations/loadOrganizationDetailsbyOrgId/'+this.org_id;
+                        axios.get(uri2)
+                        .then(Response =>{
+                            let dzongkhag_data = Response.data.data;
+                            this.parent_school_dzongkhag = dzongkhag_data.dzongkhagId;
+                            this.student_form.dzongkhag = this.parent_school_dzongkhag;
+                            $('#dzongkhag').prop('disabled',true);
+                            this.getStudentClass(data.id);
+                            this.getParentSchoolList(this.org_id);
+                        }).catch(error => console.log(error));
+                        
+                        this.student_form.student_id=data.id;
+                        this.loadadmissions();
+                        let AdmissionType='ParentSchool';
+                        this.student_form.admission_type=AdmissionType;
+                        $("input[name=registrationType][value=" + AdmissionType + "]").prop('checked', true);
+                    } else {
+                        this.student_form.student_id=data.id;
+                        this.loadadmissions();
+                        this.student_form.admission_type=data.AdmissionType;
+                        $("input[name=registrationType][value=" + data.AdmissionType + "]").prop('checked', true);
+                    }
                     this.showsection(data.AdmissionType)
                     this.getGewogList(data.CmnDzoId,data.CmnGewogId);
                     this.getvillagelist(data.CmnGewogId,data.CmnChiwogId);
@@ -299,29 +360,79 @@ export default {
             });
         },
 
+        getStudentClass(std_id){
+            let uri = '/students/getStudentClassId/'+ std_id;
+            try{
+                axios.get(uri).then(response => {
+                    let data= response.data.data;
+                    this.std_class=data.class;
+                    this.classList.push(this.std_class);
+                    $('#classsection').show();
+                });
+            }catch(e){
+                console.log('error loadactivedzongkhags '+e);
+            }
+        },
+
+        getParentSchoolList(org_id){
+            this.schoolList=[];
+            let uri = '/organizations/loadParentSchoolList/'+ org_id;
+            try{
+                axios.get(uri).then(response => {
+                    let data= response.data.data;
+                    this.schoolList=data;
+                });
+            }catch(e){
+                console.log('error loadactivedzongkhags '+e);
+            }
+        },
+
         getclassList(id){
             this.classList =[];
             let orgId=$('#'+id).val();
-            this.student_form.school=orgId;
-            axios.get('/masters/loadClassStreamSection/NA/' +orgId)
-            .then(Response =>{
-                let data = Response.data;
-                let type=$('input[name="registrationType"]:checked').val();
-                this.student_form.admission_type=type;
-                if(type=="PP"){
-                    data.forEach(cls => {
-                        if(cls.class=='PP'){
-                            this.classList.push(cls);
-                        }
-                    });
-                }
-                else{
-                    this.classList = data;
-                }
-                $('#classsection').show();
+            let schoolValue = this.checkSchoolList(orgId);
+            if(schoolValue){
+                this.student_form.school=orgId;
+                axios.get('/masters/loadClassStreamSection/NA/' +orgId)
+                .then(Response =>{
+                    let data = Response.data;
+                    let type=$('input[name="registrationType"]:checked').val();
+                    this.student_form.admission_type=type;
+                    if(type=="PP"){
+                        data.forEach(cls => {
+                            if(cls.class=='PP'){
+                                this.classList.push(cls);
+                            }
+                        });
+                    }
+                    else{
+                        this.classList = data;
+                    }
+                    $('#classsection').show();
 
-            })
+                })
+            } else {
+                Swal.fire({
+                    text: "This selection has already been added",
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ok!',
+                })
+                this.student_form.school = '';
+            }
         },
+
+        checkSchoolList(orgId){
+            for(let i=0;i<this.response_data.length;i++){
+                if(this.response_data[i].organization.id == orgId){
+                    return false;
+                }
+            }
+            return true;
+        },
+
         getstreamListByid(id){
             let classId=$('#class').val();
             if(id!=""){
@@ -393,7 +504,7 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.leg(error);
+                console.log(error);
             });
         },
         removeerror(fieldid){
@@ -417,9 +528,16 @@ export default {
                 // this.getstreamList($('#stream').val);
             }
         },
+
         getschoolList(dzo_id){
             this.student_form.dzongkhag=$('#'+dzo_id).val();
-            let type=$('input[name="registrationType"]:checked').val();
+            var type;
+            if(this.is_student){
+                type = 'VI';
+            } else{
+                type=$('input[name="registrationType"]:checked').val();
+            }
+            
             this.schoolList=[];
             let uri = '/organizations/loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
             try{
@@ -514,6 +632,21 @@ export default {
         }
     },
     mounted() {
+        axios.get('getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.std_id=data['std_id'];
+            let user_type=data['user_type'];
+            if(data['user_type']!="Parent"){
+                this.is_student=true;
+            }
+            this.getstudentPersonalDetails(user_type);
+            this.getdzongkhagList(user_type);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
         $('.select2').select2({
         theme: 'bootstrap4'
         });
@@ -525,18 +658,6 @@ export default {
         });
         this.loadVlidation();
         this.loadGenderList();
-        this.getdzongkhagList();
-        axios.get('getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            if(data['user_type']!="Parent"){
-                this.is_student=true;
-            }
-        })
-        .catch(errors => {
-            console.log(errors)
-        });
-        this.getstudentPersonalDetails();
     },
 }
 </script>

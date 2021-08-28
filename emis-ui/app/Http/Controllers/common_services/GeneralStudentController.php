@@ -53,6 +53,11 @@ class GeneralStudentController extends Controller{
         return $student_list;
     }
 
+    public function getStudentClassId($std_id){
+        $class = $this->apiService->listData('emis/students/getStudentClassId/'.$std_id);
+        return $class;
+    }
+
     /**
      * Get the student list by class
      *

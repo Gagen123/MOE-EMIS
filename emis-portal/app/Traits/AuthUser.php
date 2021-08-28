@@ -24,8 +24,9 @@ trait AuthUser
     public function userId(){
         return $this->currentUser()->id;
     }
+
     public function stdCid(){
-        return $this->currentUser()->std_cid;
+        return $this->currentUser()->std_id;
     }
 
 }

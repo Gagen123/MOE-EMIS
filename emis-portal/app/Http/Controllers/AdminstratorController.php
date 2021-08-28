@@ -110,17 +110,25 @@ class AdminstratorController extends Controller
         $response_data= $this->apiService->listData('emis/masters/load_gewog_details_by_id/'.$id);
          return $response_data;
     }
+
     public function load_dzongkhag_details_by_id($id=""){
         $response_data= $this->apiService->listData('emis/masters/load_dzongkhag_details_by_id/'.$id);
          return $response_data;
     }
+
     public function loadValidationcondition(){
         $student_masters = $this->apiService->listData('emis/masters/students/loadValidationcondition/');
         return $student_masters;
     }
+
     public function active_marital_list(){
         $student_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/active/MaritalStatus');
         return $student_masters;
+    }
+
+    public function getStreamByOrgId($orgId){
+        $streamsList = $this->apiService->listData('emis/organization/section/getStreamByOrgId/'.$orgId);
+        return $streamsList;
     }
 
     // public function getseatdetailsbyOrgId($orgId){
@@ -128,8 +136,5 @@ class AdminstratorController extends Controller
     //     return $itemList;
 
     // }
-
-
-
 
 }

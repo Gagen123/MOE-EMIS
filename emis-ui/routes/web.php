@@ -682,6 +682,7 @@ Route::prefix('students')->group(function () {
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
+        Route::post('/saveNewTransferStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveNewTransferStudent'])->name('saveNewTransferStudent');
         Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
@@ -707,7 +708,8 @@ Route::prefix('students')->group(function () {
     Route::post('/saveStudentWhereabouts', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentWhereabouts'])->name('saveStudentWhereabouts');
     Route::get('/loadStudentWhereabouts/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadStudentWhereabouts'])->name('loadStudentWhereabouts');
     Route::get('/loadAboardList/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAboardList'])->name('loadAboardList');
-    Route::get('/loadAdmissionRequest/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
+    Route::post('/updateAdmissionRequest', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'updateAdmissionRequest'])->name('updateAdmissionRequest');
+    Route::get('/loadAdmissionRequest/{std_id}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
     Route::post('/saveStudentAboard', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentAboard'])->name('saveStudentAboard');
 
     Route::get('/loadStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
@@ -716,6 +718,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
     Route::get('/loadStudentByType/{type}/{class_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByType'])->name('loadStudentByType');
     Route::get('/studentListByGender/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'studentListByGender'])->name('studentListByGender');
+    Route::get('/getStudentClassId/{std_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentClassId'])->name('getStudentClassId');
     Route::get('/loadStudentInformation/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentInformation'])->name('loadStudentInformation');
     //for profile
     Route::get('/getStudentDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentDetails'])->name('getStudentDetails');
@@ -952,17 +955,31 @@ Route::prefix('diatery')->group(function (){
 
 //Projection links
 Route::prefix('projections')->group(function (){
-    Route::prefix('projectionController')->group(function (){
+    //Data Import
+    Route::prefix('data')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+
+    //Education Indicators
+    Route::prefix('education')->group(function (){
+        Route::get('/loadEnrollment/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollment'])->name('loadEnrollment');
+
+        //old routes - delete after copying functions
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
         Route::get('/loadStudents/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadStudents'])->name('loadStudents');
     });
-    Route::prefix('OrgProjectionController')->group(function (){
+    //Quality Indicators
+    Route::prefix('quality')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Efficiency Indicators
+    Route::prefix('efficiency')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Educational Institutes
+    Route::prefix('institutes')->group(function (){
         Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
         Route::get('/loadClassSize/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadClassSize'])->name('loadClassSize');
-    });
-
-    Route::prefix('BcseaController')->group(function (){
-        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
 });

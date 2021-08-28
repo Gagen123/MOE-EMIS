@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         restForm(){
-            this.form. this.subjectlist= '';
+            this.form.subjectlist= '';
         },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -113,14 +113,10 @@ export default {
             }
             if(id=="streamId"){
                 this.form.streamId=$('#streamId').val();
-                this.getSubjectlist('');
             }
          }, 
-        getSubjectlist(id){
-            let streamid=$('#streamId').val();
-            if(id!="" && streamid==null){
-                streamid=id;
-            }
+        getSubjectList(){
+            let streamid = 'X';
             let uri = 'masters/subjectlist/'+streamid;
             axios.get(uri)
             .then(response =>{
@@ -162,6 +158,8 @@ export default {
         mounted() {
             this.loadStreamList();
             this.loadsubjectList();
+            this.getSubjectList();
+
             $('[data-toggle="tooltip"]').tooltip();
             $('.select2').select2();
             $('.select2').select2({

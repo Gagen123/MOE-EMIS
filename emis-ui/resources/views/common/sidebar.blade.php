@@ -733,11 +733,35 @@
                             </p>
                         </router-link>
                     </li>
-                    <li class="nav-item" id="EducationCenter">
+                    <li class="nav-item" id="EducationalCenter">
                         <router-link to="/education_center_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                Education Center
+                                Educational Institutes
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="EducationIndicator">
+                        <router-link to="/education_indicators" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Education Indicators
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="EducationCenter">
+                        <router-link to="/quality_indicators" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Quality Indicators
+                            </p>
+                        </router-link>
+                    </li>
+                    <li class="nav-item" id="EfficiencyIndicators">
+                        <router-link to="/efficiency_indicators" class="nav-link">
+                            <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                Efficiency Indicators
                             </p>
                         </router-link>
                     </li>

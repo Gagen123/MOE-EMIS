@@ -14,7 +14,7 @@
                 <li class="nav-item active pr-1">
                     <router-link to="/student_new_registration" id="student_new_registration" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
-                        Registration
+                        New Registration/New Transfer Student
                     </router-link>
                 </li>
                 <!-- The name of the admission route changed to Registration -->
@@ -26,7 +26,7 @@
                 </li> -->
                 <!-- The tranfer route will take care of transfes and new admissions -->
                 <li class="nav-item pr-1">
-                    <router-link to="/student_transfers" id="student_transfers" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/new_student_admission" id="new_student_admission" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                         Admissions
                     </router-link>
