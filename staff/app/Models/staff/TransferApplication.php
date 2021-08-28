@@ -19,6 +19,8 @@ class TransferApplication extends Model{
         'description',
         'user_dzo_id',
         'withdrawn_remarks',
+        'effective_date',
+        'remarks',
         'status_id',
         'status',
         'preference_school',

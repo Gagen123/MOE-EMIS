@@ -6,8 +6,8 @@
                     <b>Rubrics</b>
                 </span>
                 <span class="fa-pull-right pt-1">
-                    <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_rating')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('create_rating')"><i class="fa fa-plus"></i> Add New</button>
+                    <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_rubrics')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('create_rubrics')"><i class="fa fa-plus"></i> Add New</button>
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0">  

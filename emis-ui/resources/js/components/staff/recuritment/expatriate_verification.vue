@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4">
                                             <label>Country:</label>
-                                            <span class="text-blue text-bold">{{form.country}}</span>
+                                            <span class="text-blue text-bold">{{countryList[this.form.country]}}</span>
                                         </div>
                                        
                                     </div>
@@ -142,7 +142,9 @@
 
 export default {
     data(){
+       
         return{
+            countryList:{},
             attachments:'',
             form: new form({
                 passport:'',
@@ -156,7 +158,6 @@ export default {
                 application_for:'Principal Recruitment',
                 application_type:'principal_recruitment',
                 action_type:'add', 
-                status:'Submitted',
                 organization_type:'',
                 status:'Submitted',
                 applicationNo:'',
@@ -202,6 +203,18 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
+        },
+        loadcountryList(uri ='masters/loadGlobalMasters/all_country'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.countryList[[i].id]=data[i].country_name
+                }
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
         },
         loadExpatriateRecuritmentApplication(appId,type){
             axios.get('staff/StaffApprovalController/loadPrincipalRecuritmentApplication/'+appId+'/'+type)
@@ -323,7 +336,10 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadcountryList();
         this.loadExpatriateRecuritmentApplication(this.$route.params.data.application_number,this.$route.params.type);
+      
+
     }
 }
 </script>

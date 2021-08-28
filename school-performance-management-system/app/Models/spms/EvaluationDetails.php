@@ -15,10 +15,7 @@ class EvaluationDetails extends Model
         'spm_indicator_id',
         'spm_evaluation_id',
         'score',
-        'deo_remarks',
-        'school_remarks',
-        'deo_review_remarks',
-        'emd_remarks',
+        'remarks',
         'created_by'
     ];
   

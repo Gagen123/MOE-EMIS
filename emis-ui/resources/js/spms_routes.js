@@ -71,7 +71,12 @@ const routes = [
                 ]
                 
             },
-
+            { path: '/school-performance-academic', component: require('./components/spms/school_performance_academic/school_performance_academic_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/spms/school_performance_academic/school_performance_academic.vue').default },
+                    { path: '/school-performance-academic',name:'school_performance_academic', component: require('./components/spms/school_performance_academic/school_performance_academic.vue').default },
+                ]
+            },
             { path: '/annual-school-plan', component: require('./components/spms/school_plan/school_plan_index.vue').default,
                 children: [
                     { path: '', component: require('./components/spms/school_plan/container.vue').default },
@@ -81,6 +86,20 @@ const routes = [
                     { path: '/create-annual-school-plan', name:'create_annual_school_plan', component: require('./components/spms/school_plan/create_school_plan.vue').default },
                     { path: '/annual-school-plan-list',name:'annual_school_plan_list', component: require('./components/spms/school_plan/deo_emo_list_school_plan.vue').default },
                     { path: '/edit-annual-school-plan', name: 'edit_annual_school_plan', component: require('./components/spms/school_plan/edit_school_plan.vue').default },
+                ]
+            },
+            { path: '/agency-input-form', component: require('./components/spms/agency_input_form/agency_input_form_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/spms/agency_input_form/list_agency_input_form.vue').default },
+                    { path: '/list-agency-input-form',name:'list_agency_input_form', component: require('./components/spms/agency_input_form/list_agency_input_form.vue').default },
+                    { path: '/create-agency-input-form', name: 'create_agency_input_form', component: require('./components/spms/agency_input_form/create_agency_input_form.vue').default },
+                    { path: '/edit-agency-input-form', name: 'edit_agency_input_form', component: require('./components/spms/agency_input_form/edit_agency_input_form.vue').default },
+                    { path: '/create_observation-agency-input-form', name:'create_observation_agency_input_form', component: require('./components/spms/agency_input_form/create_observation_agency_input_form.vue').default },
+                    { path: '/edit_observation-agency-input-form', name:'edit_observation_agency_input_form', component: require('./components/spms/agency_input_form/edit_observation_agency_input_form.vue').default },
+                    { path: '/create-action-agency-input-form',name:'create_action_agency_input_form', component: require('./components/spms/agency_input_form/create_action_agency_input_form.vue').default },
+                    { path: '/edit-action-agency-input-form',name:'edit_action_agency_input_form', component: require('./components/spms/agency_input_form/edit_action_agency_input_form.vue').default },
+                    { path: '/create-acknowledgement-agency-input-form', name: 'create_acknowledgement_agency_input_form', component: require('./components/spms/agency_input_form/create_acknowledgement_agency_input_form.vue').default },
+                    { path: '/view-agency-input-form', name: 'view_agency_input_form', component: require('./components/spms/agency_input_form/view_agency_input_form.vue').default },
                 ]
             },
       ]

@@ -15,13 +15,11 @@ class SpmEvaluation extends Migration
     {
         Schema::create('spm_evaluation', function (Blueprint $table) {
             $table->char('id',36)->primary();
+            $table->year('evaluation_year');
             $table->char('org_id',36)->index();
-            $table->unsignedTinyInteger('spm_domain_subcat_id')->index();
+            $table->unsignedTinyInteger('spm_domain_subcat_id')->nullable()->index();
             $table->unsignedTinyInteger('status')->index();
-            $table->string('deo_remarks',500)->nullable();
-            $table->string('school_remarks',500)->nullable();
-            $table->string('deo_review_remarks',500)->nullable();
-            $table->string('emd_remarks',500)->nullable();
+            $table->string('remarks',500)->nullable();
             $table->char('created_by',36);
             $table->timestamps();
 

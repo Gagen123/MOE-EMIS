@@ -14,6 +14,7 @@ class SchoolPlanHistory extends Model
     protected $fillable = [
         'id',
         'user_id',
+        'spm_school_plan_id',
         'name',
         'role',
         'organization',

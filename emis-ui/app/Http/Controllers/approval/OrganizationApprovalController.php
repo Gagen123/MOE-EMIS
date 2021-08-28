@@ -30,7 +30,7 @@ class OrganizationApprovalController extends Controller{
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
         ];
-        if($request->establishment_type=="ngo_eccd" || $request->establishment_type=="coorporate_eccd"){
+        if(strpos($request->establishment_type,'ECCD')!==false){
             $rules =$rules+ [
                 'parentSchool'          =>  'required',
             ];
@@ -38,12 +38,36 @@ class OrganizationApprovalController extends Controller{
                 'parentSchool.required'         => 'Parent school is required',
             ];
         }
-        if($request->establishment_type=="coorporate_eccd"){
+        if($request->establishment_type=="Coorporate ECCD"){
             $rules =$rules+ [
                 'parentAgency'          =>  'required',
             ];
             $customMessages = $customMessages+[
                 'parentAgency.required'         => 'Parent agency is required',
+            ];
+        }
+        if($request->establishment_type=="Public ECCD"){
+            $rules =$rules+ [
+                'initiatedBy'          =>  'required',
+                'locationType'         =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'initiatedBy.required'         => 'Proposed initiated by is required',
+                'locationType.required'        => 'locationType is required',
+            ];
+        }
+        if($request->establishment_type=="Private ECCD"){
+            $rules =$rules+ [
+                'locationType'         =>  'required',
+                'proprietorCid'         =>  'required',
+                'proprietorName'         =>  'required',
+                'proprietorMobile'         =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'locationType.required'        => 'locationType is required',
+                'proprietorCid.required'        => 'CID is required',
+                'proprietorName.required'        => 'Name is required',
+                'proprietorMobile.required'        => 'Mobile number is required',
             ];
         }
 
@@ -109,47 +133,62 @@ class OrganizationApprovalController extends Controller{
         $response_data= $this->apiService->createData('emis/organization/organizationApproval/saveUploadedFiles', $request_data);
 
         if($request['action_type']!="edit"){
-            $status=$request->Sequence;
-            if($request->submit_type=="reject"){
-                $status='0__submitterRejects';
-            }
-            $workflow_data=[
-                'db_name'           =>$this->database_name,
-                'table_name'        =>$this->table_name,
-                'service_name'      =>$request->service_name,
-                'name'              =>$request['proposedName'],
-                'application_number'=>$application_number,
-                'screen_id'         =>$request->screenId,
-                'status_id'         =>$status,
-                'app_role_id'       =>$request->SysRoleId,
-                'remarks'           =>$request['remarks'],
-                'user_dzo_id'       =>$this->getUserDzoId(),
-                'access_level'      =>$this->getAccessLevel(),
-                'working_agency_id' =>$this->getWrkingAgencyId(),
-                'action_by'         =>$this->userId(),
-            ];
-            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
-            //Notification preparation
-            $seq=((int) $request->Sequence +1);
-            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
-            $role_id=$next_roleId[0]->SysRoleId;
-            $notification_data=[
-                'notification_for'              =>  $request->service_name,
-                'notification_appNo'            =>  $application_number,
-                'notification_message'          =>  '',
-                'notification_type'             =>  'role',
-                'notification_access_type'      =>  'all',
-                'call_back_link'                =>  'tasklist',
-                'user_role_id'                  =>  $role_id,
-                'dzo_id'                        =>  $this->getUserDzoId(),
-                'working_agency_id'             =>  $this->getWrkingAgencyId(),
-                'access_level'                  =>  $this->getAccessLevel(),
-                'action_by'                     =>  $this->userId(),
-            ];
-            $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            $workflow=$this->insertworkflow($request,$application_number);
+            $notification=$this->insertnotification($request,$application_number);
         }
         return $response_data;
+    }
+
+    private function insertworkflow($request,$application_number=""){
+        $status=$request->Sequence;
+        $w_status=$request->Status_Name;
+        if(isset($request->submit_type) && $request->submit_type=="reject"){
+            $status='0__submitterRejects';
+        }
+        if(isset($request->actiontype) && $request->actiontype=="reject"){
+            $status=0;
+        }
+        if(isset($request->update_type) && $request->update_type=="approve"){
+            $status=10;
+            $w_status="Approved";
+        }
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->service_name,
+            'name'              =>$request->proposedName,
+            'application_number'=>$application_number,
+            'screen_id'         =>$request->screenId,
+            'w_config_status'   =>$w_status,
+            'status_id'         =>$status,
+            'app_role_id'       =>$request->SysRoleId,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        // dd($workflow_data);
+        return $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+    }
+    private function insertnotification($request,$application_number=""){
+        $seq=((int) $request->Sequence +1);
+        $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+        $role_id=$next_roleId[0]->SysRoleId;
+        $notification_data=[
+            'notification_for'              =>  $request->service_name,
+            'notification_appNo'            =>  $application_number,
+            'notification_message'          =>  '',
+            'notification_type'             =>  'role',
+            'notification_access_type'      =>  'all',
+            'call_back_link'                =>  'tasklist',
+            'user_role_id'                  =>  $role_id,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        return $this->apiService->createData('emis/common/insertNotification', $notification_data);
     }
 
 
@@ -166,9 +205,9 @@ class OrganizationApprovalController extends Controller{
     public function loadEstbDetailsForView($appNo=""){
         // dd($this->apiService->listData('emis/organization/organizationApproval/loadEstbDetailsForVerification/'.$appNo));
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/organizationApproval/loadEstbDetailsForVerification/'.$appNo));
+        $current_status=$this->apiService->listData('emis/common/getTaskDetials/'.$appNo);
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
             foreach($loadOrganizationDetails->data->app_verification_team as $vteam){
-                // dd($vteam->teamMember);
                 if($vteam->teamMember=="Internal"){
                     $response_data= json_decode($this->apiService->listData('emis/common_services/viewStaffDetails/by_id/'.$vteam->teamMember))->data;
                     if($response_data!=null && $response_data!=""){
@@ -181,15 +220,17 @@ class OrganizationApprovalController extends Controller{
         }
         return json_encode($loadOrganizationDetails);
     }
+
     public function loadEstbDetailsForVerification($appNo="",$type=""){
         $update_data=[
             'applicationNo'     =>  $appNo,
             'type'              =>  $type,
             'user_id'           =>  $this->userId(),
         ];
-        $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
-        $workflowstatus="";
-        $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
+        $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+        $taskDetails=json_decode($this->apiService->listData('emis/common/getTaskDetials/'.$appNo));
+        // $workflowstatus="";
+        // $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
 
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/organizationApproval/loadEstbDetailsForVerification/'.$appNo));
         if(isset($loadOrganizationDetails->data->app_verification_team) && sizeof($loadOrganizationDetails->data->app_verification_team)>0){
@@ -203,15 +244,15 @@ class OrganizationApprovalController extends Controller{
                 }
             }
         }
-        foreach($workflowdet as $work){
-            if(strpos(strtolower($work->Status_Name),'establishment')===false ){
-                $workflowstatus=$work->Status_Name;
-            }
-        }
-        // dd($workflowdet);
-        if($loadOrganizationDetails!=null){
-            $loadOrganizationDetails->app_stage=$workflowstatus;
-        }
+        // foreach($workflowdet as $work){
+        //     if(strpos(strtolower($work->Status_Name),'establishment')===false ){
+        //         $workflowstatus=$work->Status_Name;
+        //     }
+        // }
+        // // dd($workflowdet);
+        // if($loadOrganizationDetails!=null){
+            $loadOrganizationDetails->app_stage=$taskDetails;
+        // }
 
         //update notification
         $notification_data=[
@@ -223,5 +264,116 @@ class OrganizationApprovalController extends Controller{
         ];
         $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
+    }
+
+    public function updateNewEstablishmentApplication(Request $request){
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'OrganizationVerification';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'application_number'     =>  $request->applicationNo,
+                        )
+                    );
+                }
+            }
+        }
+
+        $org_status=$request->Status_Name;
+        if($request->actiontype=="reject"){
+            $org_status="Rejected";
+        }
+        if($request->actiontype=="approve"){
+            $org_status="Approved";
+        }
+
+        $estd =[
+            'status'                       =>   $org_status,
+            'application_number'           =>   $request->applicationNo,
+            'id'                           =>   $request->id,
+            'remarks'                      =>   $request->remarks,
+            'verifying_agency'             =>   $request->verifying_agency,
+            'verifying_agency_list'        =>   json_decode($request->verifying_agency_list),
+            'tentative_date'               =>   $request->tentative_date,
+            'update_type'                  =>   $request->update_type,
+            'nomi_staffList'               =>   json_decode($request->nomi_staffList),
+            'attachment_details'           =>   $attachment_details,
+            'user_id'                      =>   $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/organizationApproval/updateNewEstablishmentApplication', $estd);
+        $workflow=$this->insertworkflow($request,$request->applicationNo);
+        if($request->update_type=="tentative" || $request->update_type=="approval_in_principal" || $request->update_type=="approve"){
+            $message='Notification for tentative date';
+            $messat_to='creater';
+            $message_type='user';
+            $link='tasklist';
+            $user_role_id=$request->created_by;
+        }
+        if($request->update_type=="document_update" || $request->update_type=="approval_in_principal_confirm"){
+            $seq=((int) $request->Sequence +1);
+            if($request->update_type=="approve"){
+                $seq=((int) $request->Sequence -1);
+            }
+            // dd($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            $message='';
+            $messat_to='role';
+            $message_type='all';
+            $link='tasklist';
+            $user_role_id=$next_roleId[0]->SysRoleId;
+        }
+        $notification_data=[
+            'notification_for'              =>  $request->service_name,
+            'notification_appNo'            =>  $request->applicationNo,
+            'notification_message'          =>  $message,
+            'notification_type'             =>  $messat_to,
+            'notification_access_type'      =>  $message_type,
+            'call_back_link'                =>  $link,
+            'user_role_id'                  =>  $user_role_id,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        // dd($notification_data);
+        $this->apiService->createData('emis/common/insertNotification', $notification_data);
+        return $response_data;
+    }
+
+    public function updateTeamVerification(Request $request){
+        $response_data= json_decode($this->apiService->listData('emis/common_services/StaffDetails/by_id/'.$request->staff_id));
+        if($response_data!=null && $response_data!=""){
+            $response_data=$response_data->data;
+            $udpate_data =[
+                'email'                         =>   $response_data->email,
+                'org_id'                        =>   $response_data->working_agency_id,
+                'id'                            =>   $request->id,
+                'name'                          =>   $response_data->name,
+                'cid'                           =>   $response_data->cid_work_permit,
+                'staff_type'                    =>   'Internal',
+                'staff_id'                      =>   $request->staff_id,
+                'applicationNo'                 =>   $request->applicationNo,
+                'user_id'                       =>   $this->userId()
+            ];
+            $response_data= $this->apiService->createData('emis/organization/organizationApproval/updateTeamVerification', $udpate_data);
+            return $response_data;
+        }
+    }
+
+    public function loadTeamVerificationList($id=""){
+        $response_data = $this->apiService->listData('emis/organization/organizationApproval/loadTeamVerificationList/'.$id);
+        return $response_data;
     }
 }

@@ -15,7 +15,7 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_public_eccd')"><i class="fa fa-plus"></i>New Public</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_ngo_eccd')"><i class="fa fa-plus"></i>New NGO</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_coorporate_eccd')"><i class="fa fa-plus"></i>New Coorporate</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button>
+                    <!-- <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button> -->
                 </span>
             </div>
             <div class="card-body pt-1 pb-0">

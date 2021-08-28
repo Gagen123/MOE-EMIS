@@ -2,9 +2,11 @@
     <div>
         <form class="bootbox-form">
             <div class="card-body">
-                <div class="ml-0 row form-group">
-                    <div class="mr-2">
-                        <label>School:</label> {{ school }} 
+                <div class="ml-2 row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>School:</label>
+                        <br>
+                        {{ school }} 
                     </div>
                 </div> 
                 <div class="row form-group ml-2">
@@ -62,17 +64,18 @@
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>Implementation Status</th> 
                                 <th>Remarks</th> 
                                 <th>Remarks By</th>
-                                <th>Implementation Status</th> 
+                                
                             </tr>
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item,index) in statusHistory" :key="index">
                                 <td>{{item.status_date}}</td>
-                                <td>{{item.remarks}}</td>
-                                <td>{{item.name}},{{item.role}},{{ item.organization}}</td>
                                 <td>{{item.status}}</td>
+                                <td>{{item.remarks}}</td>
+                                <td>{{item.role}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -91,9 +94,9 @@
                 </div>
                  <div class="row form-group ml-2">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Your Comments: <span class="text-danger">*</span></label> 
-                        <textarea class="form-control" v-model="form.comment" :class="{ 'is-invalid': form.errors.has('remarks') }" id="remarks" @change="remove_err('remarks')"></textarea>
-                        <has-error :form="form" field="remarks"></has-error>
+                        <label>Your Remarks: <span class="text-danger">*</span></label> 
+                        <textarea class="form-control" v-model="form.comment" :class="{ 'is-invalid': form.errors.has('comment') }" id="comment" @change="remove_err('comment')"></textarea>
+                        <has-error :form="form" field="comment"></has-error>
                     </div>
                 </div>
             </div>
@@ -121,7 +124,7 @@ export default {
             person_responsible:'',
             user:[],
             form: new form({
-               id:'',
+               spm_school_plan_id:'',
                implementation_status_id:'',
                implementation_status:'',
                comment:'',
@@ -138,16 +141,31 @@ export default {
                 $('#'+field_id).removeClass('is-invalid')
             }
         },
-        getSchoolPlanStatusHistory(){
-             axios.get('spms/getSchoolPlanHistory')
+        getSchoolPlanDetails(){
+            axios.get('spms/getSchoolPlanDetails/'+this.form.spm_school_plan_id)
             .then(response => {
                 let data = response.data.data
-                this.statusHistory =  data
-                
                 for(let i=0; data.length > i; i++){
-                    this.school = data[i]['organization']
+                    this.domain = data[i]['domain']
+                    this.activity = data[i]['activity']
+                    this.objective = data[i]['objective']
+                    this.strategy = data[i]['strategy']
+                    this.start_date = data[i]['start_date']
+                    this.end_date = data[i]['end_date']
+                    this.remarks = data[i]['remarks']
+                    this.person_responsible = data[i]['person_responsible']
+                    this.form.implementation_status = data[i]['implementation_status']
                 }
-                
+            })
+            .catch(function (error){
+              console.log("Error"+error)
+            });
+        },
+        getSchoolPlanHistory(){
+            axios.get('spms/getSchoolPlanHistory/'+this.form.spm_school_plan_id)
+            .then(response => {
+                let data = response.data.data
+                this.statusHistory = data
             })
             .catch(function (error){
               console.log("Error"+error)
@@ -163,12 +181,12 @@ export default {
               console.log("Error"+error)
             });
         },
-        getorgName(rogId,accessLevel){
+        getorgName(orgId,accessLevel){
             let type="Headquarterbyid";
             if(accessLevel=="Org"){
                 type="Orgbyid";
             }
-            axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
+            axios.get('loadCommons/loadOrgDetails/'+type+'/'+orgId)
             .then(response => {
                 let data = response.data.data;
                 this.form.organization=data['name'];
@@ -177,8 +195,40 @@ export default {
                 console.log(errors)
             });
         },
-        getLoginUser(){
-             axios.get('common/getSessionDetail')
+		save(){
+            this.form.post('/spms/saveImplementtationStatus',this.form)
+                .then(() => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Details added successfully'
+                    })
+                    this.form.comment = ''
+                    this.getSchoolPlanHistory()
+                })
+                .catch(() => {
+                    console.log("Error.")
+                })
+		}, 
+    },
+    created(){
+        this.form.spm_school_plan_id = this.$route.params.data.id
+        this.form.implementation_status_id = this.$route.params.data.implementation_status_id
+        this.school = this.$route.params.school_name
+    },
+    mounted(){
+        this.dt = $("#school-plan-view-detail-table").DataTable({
+            columnDefs: [
+                { width: 70    , targets: 0},
+                { width: 150    , targets: 1},
+                { width: 80, targets: 3},
+            ],
+            "lengthChange": false,
+            "searching": false,
+        })
+        this.getSchoolPlanStatus()
+        this.getSchoolPlanDetails()
+        this.getSchoolPlanHistory()
+        axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
                 let roleName="";
@@ -190,58 +240,13 @@ export default {
                         roleName+=data['roles'][i].roleName+', ';
                     }
                 }
+                console.log(data['Agency_Code'],data['acess_level'])
                 this.form.full_name=data['Full_Name'];
                 this.form.roles=roleName;
                 this.getorgName(data['Agency_Code'],data['acess_level']);
-            })
-            .catch(errors => {
+            }).catch(errors => {
                 console.log(errors)
             });
-   
-        },
-		save(){
-            console.log(this.form);
-            this.form.post('/spms/saveImplementtationStatus',this.form)
-                .then(() => {
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Details added successfully'
-                })
-                this.$router.push('/list-area')
-            })
-            .catch(() => {
-                console.log("Error.")
-            })
-		}, 
-    },
-    created(){
-        this.domain =this.$route.params.data.domain
-        this.activity =this.$route.params.data.activity
-        this.objective =this.$route.params.data.objective
-        this.strategy =this.$route.params.data.strategy
-        this.start_date =this.$route.params.data.start_date
-        this.end_date =this.$route.params.data.end_date
-        this.person_responsible = this.$route.params.data.person_responsible
-        this.form.implementation_status = this.$route.params.data.implementation_status
-        this.form.implementation_status_id = this.$route.params.data.implementation_status_id
-        this.remarks = this.$route.params.data.remarks
-        this.form.id = this.$route.params.data.id
-    },
-    mounted(){
-        this.dt = $("#school-plan-view-detail-table").DataTable({
-            columnDefs: [
-                { width: 100    , targets: 0},
-                { width: 100    , targets: 3},
-
-            ],
-            "lengthChange": false,
-            "searching": false,
-        })
-        this.getSchoolPlanStatus()
-        this.getorgName()
-        this.getLoginUser()
-        this.getSchoolPlanStatusHistory()
-
     },
      watch: {
         statusHistory(val) {
@@ -249,9 +254,9 @@ export default {
             this.$nextTick(() => {
                 this.dt = $("#school-plan-view-detail-table").DataTable({
                     columnDefs: [
-                        { width: 100, targets: 0},
-                        { width: 100    , targets: 3},
-
+                        { width: 70, targets: 0},
+                        { width: 150, targets: 1},
+                        { width: 80, targets: 3},
                     ],
                     "lengthChange": false,
                     "searching": false,

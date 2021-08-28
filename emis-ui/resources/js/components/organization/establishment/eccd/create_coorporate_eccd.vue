@@ -29,7 +29,7 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <form class="form-horizontal">
-                            <div class="form-group row bg-gray-light">
+                            <div class="form-group row bg-gray-light mt-xl-n3">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
                                     <span id="screenName"></span>
                                 </div>
@@ -171,6 +171,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0">Remarks</label>
+                                <textarea class="form-control" @change="remove_error('remarks')" v-model="file_form.remarks" id="remarks"></textarea>
+                                <span class="text-danger" id="remarks_err"></span>
+                            </div>
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -197,6 +204,7 @@ export default {
             screenId:'',
             SysRoleId:'',
             Sequence:'',
+            Status_Name:'',
 
             form: new form({
                 id: '',
@@ -205,7 +213,7 @@ export default {
                 proposedName:'',
                 parentAgency:'',
                 application_number:'',
-                category:'Coorporate',
+                category:'COORPORATE',
                 dzongkhag:'',
                 gewog:'',
                 chiwog:'',
@@ -234,26 +242,10 @@ export default {
     },
     methods: {
         /**
-         * method to remove error
-         */
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
-
-
-        /**
          * method to get Gewog in dropdown
          */
-        getGewogList(dzongkhag){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.gewog_list = data.data;
-            });
+        async getGewogList(dzongkhag){
+            this.gewog_list =await this.loadgewogList(dzongkhag);
         },
 
         /**
@@ -264,15 +256,7 @@ export default {
             if(id!="" && (gewogId==null || gewogId=="")){
                 gewogId=id;
             }
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
+            this.villageList =await this.loadvillageList(gewogId);
         },
 
         /**
@@ -330,16 +314,6 @@ export default {
             if(id=="parentSchool"){
                 this.form.parentSchool=$('#parentSchool').val();
             }
-        },
-
-        /**
-         * method to get class stream in checkbox
-         */
-        getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping/eccd')
-              .then(response => {
-                this.classStreamList = response.data.data;
-            });
         },
 
         /**
@@ -401,6 +375,8 @@ export default {
                                 formData.append('screenId', this.screenId);
                                 formData.append('SysRoleId', this.SysRoleId);
                                 formData.append('Sequence', this.Sequence);
+                                formData.append('Status_Name', this.Status_Name);
+
                                 formData.append('submit_type', nextclass);
                                 axios.post('organizationApproval/saveUploadedFiles', formData, config)
                                 .then((response) => {
@@ -473,26 +449,9 @@ export default {
         },
 
         applyselect2(){
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-        },
-
-        /**
-         * method to change tabs
-         */
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-            this.applyselect2();
+            this.applyselect2field('gewog');
+            this.applyselect2field('chiwog');
+            this.applyselect2field('parentSchool');
         },
 
     },
@@ -509,7 +468,7 @@ export default {
             console.log(errors)
         });
 
-        axios.get('organizationApproval/getScreenId/'+this.file_form.service_name)
+        axios.get('organizationApproval/getScreenId/'+this.file_form.service_name+'__'+1)
         .then(response => {
             let data = response.data[0];
             if(data!=undefined){
@@ -517,6 +476,7 @@ export default {
                 this.screenId=data.screen;
                 this.SysRoleId=data.SysRoleId;
                 this.Sequence=data.Sequence;
+                this.Status_Name=data.Status_Name;
             }else{
                 $('#screenPermission').show();
                 $('#mainform').hide();
@@ -541,7 +501,7 @@ export default {
             this.changefunction(id);
         });
 
-        this.getClassStream();
+        this.classStreamList =await this.getClassStreamMappings('eccd');
         this.orgList= await this.schoolListUnderUserDzongkhag();
 
         let data = await this.getRequiredDocument('Coorporate_ECCD');

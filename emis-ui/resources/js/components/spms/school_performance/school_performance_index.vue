@@ -6,7 +6,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
-                                <label class="fa-pull-left">School Performance</label>
+                                <label class="fa-pull-left">School Performance (Non-Academic)</label>
                                 <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('school_performance_dashboard')"><i class="fa fa-tachometer-alt" aria-hidden="true"></i> Dashboard</button>
                             </div>
                             <div class="card-body pb-1 mb-0 pt-1 mt-0">  

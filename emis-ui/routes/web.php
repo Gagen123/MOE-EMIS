@@ -199,6 +199,10 @@ Route::prefix('organizationApproval')->group(function () {
     Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
     Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+    Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
+    Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
+    Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
+
 });
 
 Route::prefix('organization')->group(function () {
@@ -867,16 +871,25 @@ Route::prefix('academics')->group(function () {
 
 });
 Route::prefix('spms')->group(function () {
-    Route::get('/getDeoDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getDeoDashboardData'])->name('getDeoDashboardData');
-    Route::get('/getSchoolDoeDetails/{spm_domain_subcat_id}/{status?}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDoeDetails'])->name('getSchoolDoeDetails');
-    Route::get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
+    Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');
+    Route::get('/getSchoolPerformaceList/{year}/{dzon_id}/{status}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPerformaceList'])->name('getSchoolPerformaceList');
+    Route::get('/getEvaluation/{org_id}/{year}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
     Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
     Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
     Route::post('/saveSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'saveSchoolPlan'])->name('saveSchoolPlan');
     Route::get('/getSchoolPlan/{school_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlan'])->name('getSchoolPlan');
     Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
-    Route::get('/getSchoolPlanHistory', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
+    Route::get('/getSchoolPlanDetails/{spm_school_plan_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanDetails'])->name('getSchoolPlanDetails');
+    Route::get('/getSchoolPlanHistory/{spm_school_plan_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
     Route::get('/loadOrgList', [App\Http\Controllers\spms\SpmsController::class, 'loadOrgList'])->name('loadOrgList');
+    Route::post('/saveAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveAgencyInputForm'])->name('saveAgencyInputForm');
+    Route::get('/getAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'getAgencyInputForm'])->name('getAgencyInputForm');
+    Route::get('/getAgencyInputFormDetail/{agencyInputFormId}', [App\Http\Controllers\spms\SpmsController::class, 'getAgencyInputFormDetail'])->name('getAgencyInputFormDetail');
+    Route::post('/saveObservationAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveObservationAgencyInputForm'])->name('saveObservationAgencyInputForm');
+    Route::post('/saveActionAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveActionAgencyInputForm'])->name('saveActionAgencyInputForm');
+    Route::post('/saveAcknowlegeAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveAcknowlegeAgencyInputForm'])->name('saveAcknowlegeAgencyInputForm');
+
+
 
 });
 

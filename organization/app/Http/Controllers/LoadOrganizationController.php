@@ -20,6 +20,7 @@ use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
 use App\Models\DepartmentModel;
 use App\Models\generalInformation\Projection;
+use Exception;
 
 class LoadOrganizationController extends Controller{
     use ApiResponser;
@@ -359,7 +360,7 @@ class LoadOrganizationController extends Controller{
      
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
-            $response_data=OrganizationDetails::where('id',$id)->first();
+           $response_data=OrganizationDetails::where('id',$id)->first();
             if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!=""){
                 $level=Level::where('id',$response_data->levelId)->first();
                 // $response_data->level=$level;
@@ -383,6 +384,7 @@ class LoadOrganizationController extends Controller{
                     }
                 }
             }
+        
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
             $response_data=OrganizationDetails::where('id',$id)->first();
@@ -747,11 +749,15 @@ class LoadOrganizationController extends Controller{
     }
 
      // method by Chimi Thinley
-     public function getOrgWiseClassesForSpms(Request $request){
+    public function getOrgWiseClassesForSpms(Request $request){
         $response_data = DB::table('organization_class_streams')
-                ->select('organizationId AS org_id','classId AS org_class_id')
-                ->whereIn('organizationId',explode(",",$request['org_id']))
-                ->whereIn('classId',explode(",",$request['org_class_id']))->get();
+            ->select('organizationId AS org_id','classId AS org_class_id')
+            ->whereIn('organizationId',$request['org_id'])
+            ->whereIn('classId',explode(",",$request['org_class_id']))->get();
+        return $response_data;
+    }
+    public function getDzoWiseNoOfSchools(){
+        $response_data = DB::select("SELECT t1.dzongkhagId,COUNT(t1.id) AS no_of_schools FROM organization_details t1 JOIN level t2 ON t1.levelId = t2.id GROUP BY t1.dzongkhagId");
         return $response_data;
     }
 }
