@@ -140,7 +140,7 @@ class OrganizationApprovalController extends Controller{
         if(isset($request->actiontype) && $request->actiontype=="reject"){
             $status=0;
         }
-        if(isset($request->update_type) && strpos(strtolower($request->update_type),'approv')!==false){
+        if(isset($request->update_type) && strpos(strtolower($request->update_type),'approved')!==false){
             $status=10;
             $w_status="Approved";
         }
@@ -311,7 +311,7 @@ class OrganizationApprovalController extends Controller{
             $request->Status_Name=$org_status;
         }
         if($request->update_type=="final_update_document"){
-            $org_status="Updated Final Feasibility Study Report";
+            $org_status="Updated Final Assessment Report";
             $request->Status_Name=$org_status;
         }
 
@@ -335,7 +335,7 @@ class OrganizationApprovalController extends Controller{
         $workflow=$this->insertworkflow($request,$request->applicationNo);
         if($request->update_type!="update_document" && $request->update_type!="final_update_document"){
             if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study" || $request->update_type=="Update_Feasibility_Study_Report" || $request->update_type=="Notify_for_Approval_in_Principle"
-            || $request->update_type=="Notify_for_Tentative_Date_of_Final_Feasibility_Study" || $request->update_type=="Update_Final_Feasibility_Study_Report" || $request->update_type=="Approve_for_the_Centre_Operation_(Final_Approval)"){
+            || $request->update_type=="Notify_for_Tentative_Date_of_Final_Assessment" || $request->update_type=="Update_Final_Assessment_Report" || $request->update_type=="Approve_for_the_Centre_Operation_(Final_Approval)"){
                 $message='Notification for tentative date';
                 $messat_to='creater';
                 $message_type='user';

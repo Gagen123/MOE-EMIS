@@ -34,6 +34,7 @@ export default {
         showedit(data){
             this.$router.push({name:'student_type_edit',params: {data:data}});
         },
+
     },
     mounted(){
         this.loadguidelieList();

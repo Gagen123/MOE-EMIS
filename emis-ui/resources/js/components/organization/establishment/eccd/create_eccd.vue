@@ -550,7 +550,7 @@ export default {
         async loadattachments(type){
             let data = await this.getRequiredDocument(type);
             if(data!=""){
-                data.forEach((item => {
+                data.forEach((item =>{
                     this.count++;
                     this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
                 }));
@@ -626,6 +626,8 @@ export default {
         });
         this.classStreamList =await this.getClassStreamMappings('eccd');
         this.form.category=this.$route.query.type;
+        this.form.establishment_type=this.$route.query.type+' ECCD';
+        this.loadattachments('Application_for_'+this.$route.query.type+'_ECCD');
         this.loadScreenDetails(this.$route.query.type);
     },
 
@@ -634,7 +636,7 @@ export default {
             handler: function(type) {
                 this.form.category=type;
                 this.form.establishment_type=type+' ECCD';
-                this.loadattachments('Public_ECCD');
+                this.loadattachments('Application_for_'+type+'_ECCD');
                 this.loadScreenDetails(type);
             },
         }

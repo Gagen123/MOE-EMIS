@@ -90,16 +90,17 @@ class OrganizationApprovalController extends Controller{
                     'proposedName'                 =>  $request['proposedName'],
                     'coLocatedParent'              =>  $request['coLocatedParent'],
                     'parentSchool'                 =>  $request['parentSchool'],
-                    'locationId'                 =>  $request['locationType'],
                 ];
                 if($request->establishment_type=="Coorporate ECCD"){
                     $_udpate = $_udpate+[
                         'parentAgency'                 =>  $request['parentAgency'],
+                        'locationId'                 =>  $request['locationType'],
                     ];
                 }
                 if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
                     $_udpate = $_udpate+[
                         'initiated_by'               =>  $request['initiatedBy'],
+                        'locationId'                 =>  $request['locationType'],
                     ];
                 }
                 if($request->establishment_type=="Private ECCD"){
@@ -123,18 +124,19 @@ class OrganizationApprovalController extends Controller{
                     'proposedName'                 =>  $request['proposedName'],
                     'coLocatedParent'              =>  $request['coLocatedParent'],
                     'parentSchool'                 =>  $request['parentSchool'],
-                    'locationId'                 =>  $request['locationType'],
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 ];
                 if($request->establishment_type=="Coorporate ECCD"){
                     $data = $data+[
                         'parentAgency'                 =>  $request['parentAgency'],
+                        'locationId'                   =>  $request['locationType'],
                     ];
                 }
                 if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
                     $data = $data+[
                         'initiated_by'               =>  $request['initiatedBy'],
+                        'locationId'                   =>  $request['locationType'],
                     ];
                 }
 
@@ -274,7 +276,7 @@ class OrganizationApprovalController extends Controller{
     public function saveUploadedFiles(Request $request){
         $doc="";
         if($request->attachment_details!=null && $request->attachment_details!=""){
-            $application_details=  ApplicationDetails::where('application_no',$request['application_number'],)->first();
+            $application_details=  ApplicationDetails::where('application_no',$request['application_number'])->first();
             foreach($request->attachment_details as $att){
                 $attach =[
                     'ApplicationDetailsId'      =>  $application_details->id,
@@ -294,6 +296,7 @@ class OrganizationApprovalController extends Controller{
                 'updated_at'                   =>   date('Y-m-d h:i:s'),
             ];
             ApplicationDetails::where('application_no', $request->application_number)->update($array);
+            $application_details=  ApplicationDetails::where('application_no',$request['application_number'])->first();
         }
         else{
             $array =[
@@ -301,6 +304,7 @@ class OrganizationApprovalController extends Controller{
                 'applicant_remarks'            =>   $request->remarks,
             ];
             DB::table('application_details')->where('application_no',$request->application_number)->update($array);
+            $application_details=  ApplicationDetails::where('application_no',$request['application_number'])->first();
         }
         return $application_details;
     }
