@@ -771,7 +771,7 @@ export default {
         onChangeFileUpload(e){
             this.personal_form.attachments = e.target.files[0];
         },
-        getDetailsbyCID(cid,type){
+        async getDetailsbyCID(cid,type){
             let selectedVal="";
             let selected ="";
             if(type=="std"){
@@ -794,18 +794,30 @@ export default {
                     });
                 }
                 else{
-                    this.getPersonalDetailsbyCID($('#'+cid).val(),type);
-                    let fatherCid="";
-                    let motherCid="";
-                    if(type=='std'){
-                        axios.get('getchildDetailsOncid/'+ $('#'+cid).val())
-                        .then(response => {
-                            let data=response.data.data;
-                            fatherCid=data.parentDetail[0].fatherCID;
-                            motherCid=data.parentDetail[0].motherCID;
-                            this.getPersonalDetailsbyCID(fatherCid,'father');
-                            this.getPersonalDetailsbyCID(motherCid,'mother');
-                        });
+                    let check = await this.validateCID($('#'+cid).val());
+                    if(check){
+                        let age = this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
+                        if(this.validateAge(age)){
+                            this.getPersonalDetailsbyCID($('#'+cid).val(),type);
+                            let fatherCid="";
+                            let motherCid="";
+                            if(type=='std'){
+                                axios.get('getchildDetailsOncid/'+ $('#'+cid).val())
+                                .then(response => {
+                                    let data=response.data.data;
+                                    fatherCid=data.parentDetail[0].fatherCID;
+                                    motherCid=data.parentDetail[0].motherCID;
+                                    this.getPersonalDetailsbyCID(fatherCid,'father');
+                                    this.getPersonalDetailsbyCID(motherCid,'mother');
+                                });
+                            }
+                        } else {
+                            let text = 'Child does not meet the Minimum age requirement for Admission';
+                            this.showErrorMsg(text);
+                        }
+                    } else {
+                        let text = 'CID has already been registered in the system';
+                        this.showErrorMsg(text);
                     }
                 }
             }            
@@ -825,6 +837,16 @@ export default {
             .then(response => {
                 if (response.data) {
                     let personal_detail = response.data;
+                    if(type=="AgeValidation"){
+                        let dob=personal_detail.dob;
+                        if(dob.includes('-')){
+                            dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                        }
+                        if(dob.includes('/')){
+                            dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                        }
+                        return dob;
+                    }
                     if(type=="std"){
                         this.personal_form.first_name = personal_detail.firstName;
                         $('#first_name').prop('readonly',true);
@@ -1687,8 +1709,52 @@ export default {
                     this.class_form.disability=data.disability;
                 }
             });
-        }
+        },
 
+        async validateCID(cid){
+            let returntype=true;
+            await axios.get('students/getstudentdetailsbyCid/'+cid)
+            .then(response => {
+                let data = response.data.data;
+                if(data != null){
+                    returntype=false;
+                } 
+            });
+            return returntype;
+        },
+
+        validateAge(dob){
+            const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            let date1 = new Date(dob);
+            let date2 = new Date('2022-05-02');
+            let date3 = new Date();
+
+            // Discard the time and time-zone information.
+            const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+            const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+            const present_date = Date.UTC(date3.getFullYear(), date3.getMonth(), date3.getDate());
+
+            let age = Math.floor(((admission_date+present_date) - (present_date+dob_date)) / _MS_PER_DAY);
+            
+            if(age <=1825){
+                return false;
+            } 
+            return true;
+        },
+
+        showErrorMsg(text){
+            Swal.fire({
+                html: text,
+                icon: 'error'
+            });
+            $('#first_name').prop('readonly',true);
+            $('#middle_name').prop('readonly',true);
+            $('#last_name').prop('readonly',true);
+            $('#dob').prop('readonly',true);
+            $('#dzongkhag').prop('disabled',true);
+            $('#gewog').prop('disabled',true);
+            $('#village_id').prop('disabled',true);
+        }
     },
     mounted() {
         this.loadAllActiveMasters('all_active_gender');

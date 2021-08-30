@@ -6,9 +6,9 @@
                      <th >No.</th>
                      <th >Student CID</th>
                      <th >Student Name</th>
-                     <th >Created At</th>
-                     <!-- <th >Class</th>
-                     <th >Section</th> -->
+                     <th >Class</th>
+                     <th >Date of Application</th>
+                     <th >Decision On Behalf of Student</th>
                      <th >Action</th>
                 </tr>
             </thead>
@@ -17,7 +17,16 @@
                     <td>{{ index + 1 }} </td>
                     <td>{{ std.CidNo }}</td>
                     <td>{{ std.FirstName }} {{ std.MiddleName }} {{ std.LastName }}</td>
+                    <td>{{  }}</td>
                     <td>{{ std.dateOfapply }}</td>
+                    <td>
+                        <template v-if="std.school_decision=='Accepted' && std.student_decision!='Accepted' && std.student_decision!='Rejected'">
+                            <button type="button" class="btn btn-flat btn-sm btn-primary" id="remove"
+                            @click="remove('Accepted',std.StdAdmissionsSchoolsId)"><i class="fa fa-check"></i> Accept</button>
+                            <button type="button" class="btn btn-flat btn-sm bg-success" id="remove"
+                            @click="remove('Rejected',std.StdAdmissionsSchoolsId)"><i class="fa fa-times pr-2"></i> Reject</button>
+                        </template>
+                    </td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Edit</a>
                     </td>
@@ -32,13 +41,7 @@ export default {
     },
     data() {
         return {
-            dzongkhagList:[],
-            orgList:[],
             stdList:[],
-            clasList:[],
-            streamList:[],
-            streamListSelected:[],
-            sectionList:[],
             dt:'',
             class_form: new form({
                 dzongkhag:'',
@@ -80,6 +83,33 @@ export default {
                 });
             }
         },
+        /**
+         * method to remove fields
+         */
+        remove(type,id){
+            Swal.fire({
+                text: "Please confirm your decision",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+            }).then((result) => {
+                if(result.isConfirmed){
+                    axios.get('/students/admission/deleteclassDetails/'+id+'__'+type)
+                    .then((response) => {
+                        let data=response.data;
+                        this.student_form.dzongkhag='';
+                        this.student_form.school='';
+                        this.student_form.class='';
+                        this.loadadmissions();
+                    })
+                    .catch((error) => {
+                        console.log("Error remove:"+error);
+                    })
+                }
+            });
+        },
         applyselect(){
             if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
                 $('#dzongkhag').addClass('select2-hidden-accessible');
@@ -97,98 +127,9 @@ export default {
                 $('#section').addClass('select2-hidden-accessible');
             }
         },
-        loadclasses(id){
-            let uri = "";
-            if(id=="session"){
-                uri = 'organization/getClassByOrg/sessionDet';
-            }
-            else{
-                uri = 'organization/getClassByOrg/'+id;
-            }
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.clasList=data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        changefunction(id){
-            if(id=="class"){
-                this.class_form.class=$('#class').val();
-                $('#stream_section').hide();
-                if($('#class option:selected').text()=="XI" || $('#class option:selected').text()=="XII"){
-                    $('#stream_section').show();
-                    this.showstream($('#class').val());
-                }
-                else{
-                    this.getExistingSection($('#class').val());
-                }
-            }
-            if(id=="dzongkhag"){
-                this.class_form.dzongkhag=$('#dzongkhag').val();
-                this.getschoolList($('#dzongkhag').val());
-            }
-            if(id=="org"){
-                this.class_form.org=$('#org').val();
-                this.loadclasses($('#org').val());
-            }
-            if(id=="class"){
-                this.class_form.class=$('#class').val();
-            }
-            if(id=="stream"){
-                this.class_form.stream=$('#stream').val();
-                this.getExistingSection($('#stream').val());
-            }
-            if(id=="section"){
-                this.class_form.section=$('#section').val();
-            }
-        },
-        getschoolList(dzo_id){
-            let uri="organization/loadOrganizationByDzoId/"+dzo_id;
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.orgList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dzongkhagList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        showstream(valu){
-            this.streamListSelected=[];
-            axios.get('/organization/getStreamByClassId/'+valu)
-            .then(response => {
-                let data = response.data;
-                this.streamListSelected = data;
-            });
-        },
-        getExistingSection(classId){
-            this.class_form.class_stream_id=classId;
-            this.sectionList=[];
-            axios.get('/organization/getExistingSectionByClass/'+classId)
-            .then(response => {
-                let data = response.data;
-                if(data != ""){
-                    this.sectionList=data;
-                }
-            });
-        },
     },
     mounted(){
         this.loadStudentList('session');
-        this.loadactivedzongkhagList();
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
@@ -201,20 +142,7 @@ export default {
             "responsive": true,
             "autoWidth": false,
         });
-        this.loadclasses('session');
-        axios.get('common/getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            this.class_form.dzongkhag=data['Dzo_Id'];
-            $('#dzongkhag').val(data['Dzo_Id']).trigger('change');
-            this.getschoolList(data['Dzo_Id']);
-            this.class_form.org=data['Agency_Code'];
-            $('#org').val(data['Agency_Code']).trigger('change');
-            this.loadclasses(data['Agency_Code']);
-        })
-        .catch(errors => {
-            console.log(errors)
-        });
+        
         this.dt =  $("#list-student-table").DataTable();
     },
 

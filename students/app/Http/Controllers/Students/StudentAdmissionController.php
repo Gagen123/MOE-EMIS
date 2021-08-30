@@ -717,7 +717,12 @@ class StudentAdmissionController extends Controller
                 return $response_data;
             }
             else  if(explode('__',$param)[0] == "created"){
-                $response_data = DB::table('std_admissions')->where('created_by',explode('__',$param)[1])->get();
+                $response_data = DB::table('std_admissions')
+                                    ->join('std_admissions_schools', 'std_admissions.id','=', 'std_admissions_schools.StdAdmissionsId')
+                                    ->select('std_admissions.*', 'std_admissions_schools.school_decision', 'std_admissions_schools.student_decision',
+                                                'std_admissions_schools.id AS StdAdmissionsSchoolsId')
+                                    ->where('std_admissions.created_by',explode('__',$param)[1])
+                                    ->get();
                 return $response_data;
             }else{
                 $response_data="";
@@ -946,21 +951,48 @@ class StudentAdmissionController extends Controller
             foreach($streams_applied as $k=>$stream){
                 $temp = (object)[];
                 $temp->strm = $stream->stream_id;
-                $temp->rank = DB::table('std_admissions_schools')
+                $stream_check = $this->checkOrgStreamApplication($value->OrgOrganizationId, $stream->stream_id, $std_code);
+                if($stream_check){
+                    $temp->rank = DB::table('std_admissions_schools')
                                 ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
                                 ->join('bcsea_bcse','std_student.student_code','=', 'bcsea_bcse.std_regno')
                                 ->where('std_admissions_schools.stream_id',$stream->stream_id)
                                 ->where('std_admissions_schools.OrgOrganizationId',$value->OrgOrganizationId)
                                 ->where('bcsea_bcse.rank','<=', $value->rank)
                                 ->count();
+                    
+                } else {
+                    $temp->rank = 'NA';
+                }
                 $orgs_applied[$key]->data[$k] =$temp;
             }
             // $orgs_applied[$key]->data = $streams_applied;
         }
-        
+
         $response_data = $orgs_applied;
 
         return $this->successResponse($response_data);
+    }
+
+    /**
+     * Private function to check whether the student has applied for 
+     * a stream in a particular organization
+     */
+
+    private function checkOrgStreamApplication($orgId, $streamId, $std_code){
+        $response_data = DB::table('std_admissions_schools')
+                                ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
+                                ->select('stream_id')
+                                ->where('std_student.student_code', $std_code)
+                                ->where('std_admissions_schools.OrgOrganizationId', $orgId)
+                                ->where('std_admissions_schools.stream_id', $streamId)
+                                ->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data) >0){
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**

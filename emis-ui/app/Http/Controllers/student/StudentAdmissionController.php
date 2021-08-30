@@ -354,6 +354,16 @@ class StudentAdmissionController extends Controller{
         return $student_list;
     }
 
+    /**
+     * Update Student Decision by  the school admin
+     * the function name used is the same as the one used in portal
+    */
+
+    public function deleteclassDetails($id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/deleteclassDetails/'.$id);
+        return $response_data;
+    }
+
     public function loadStudentListwithsearch(Request $request){
         $rules = [
             'dzongkhag'                 => 'required',
@@ -416,6 +426,15 @@ class StudentAdmissionController extends Controller{
         
         $response_data= $this->apiService->createData('emis/students/admission/saveorgclassDetails', $data);
         return $response_data;
+    }
+    
+    /**
+     * Validate the CID of a student to ensure that duplicate CID is not being entered
+     */
+
+    public function getstudentdetailsbyCid($cid){
+        $response = $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
+        return $response;
     }
 
     public function getStudentDetails($std_id=""){

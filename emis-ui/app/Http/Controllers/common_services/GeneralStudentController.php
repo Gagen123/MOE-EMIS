@@ -59,6 +59,15 @@ class GeneralStudentController extends Controller{
     }
 
     /**
+     * Get student details by CID
+     */
+
+    public function getstudentdetailsbyCid($cid=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
+        return $response_data;
+    }
+
+    /**
      * Get the student list by class
      *
      * This function gets all the basic details such as feeding, scholarship etc.
