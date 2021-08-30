@@ -982,7 +982,6 @@ class StudentAdmissionController extends Controller
     private function checkOrgStreamApplication($orgId, $streamId, $std_code){
         $response_data = DB::table('std_admissions_schools')
                                 ->join('std_student','std_student.id','=', 'std_admissions_schools.StdAdmissionsId')
-                                ->join('bcsea_bcse','std_student.student_code','=', 'bcsea_bcse.std_regno')
                                 ->select('stream_id')
                                 ->where('std_student.student_code', $std_code)
                                 ->where('std_admissions_schools.OrgOrganizationId', $orgId)

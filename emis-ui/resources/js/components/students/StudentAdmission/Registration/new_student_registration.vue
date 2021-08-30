@@ -771,7 +771,7 @@ export default {
         onChangeFileUpload(e){
             this.personal_form.attachments = e.target.files[0];
         },
-        getDetailsbyCID(cid,type){
+        async getDetailsbyCID(cid,type){
             let selectedVal="";
             let selected ="";
             if(type=="std"){
@@ -794,8 +794,9 @@ export default {
                     });
                 }
                 else{
-                    let age = this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
-                    if(this.validateCID($('#'+cid).val())){
+                    let check = await this.validateCID($('#'+cid).val());
+                    if(check){
+                        let age = this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
                         if(this.validateAge(age)){
                             this.getPersonalDetailsbyCID($('#'+cid).val(),type);
                             let fatherCid="";
@@ -818,7 +819,6 @@ export default {
                         let text = 'CID has already been registered in the system';
                         this.showErrorMsg(text);
                     }
-                    
                 }
             }            
         },
@@ -1711,15 +1711,16 @@ export default {
             });
         },
 
-        validateCID(cid){
-            axios.get('students/admission/getstudentGuardainClassDetails/'+cid)
+        async validateCID(cid){
+            let returntype=true;
+            await axios.get('students/getstudentdetailsbyCid/'+cid)
             .then(response => {
                 let data = response.data.data;
-                if(data != ""){
-                    return false;
-                }
-                return true;
+                if(data != null){
+                    returntype=false;
+                } 
             });
+            return returntype;
         },
 
         validateAge(dob){
