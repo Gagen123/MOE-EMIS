@@ -5,9 +5,9 @@
                 <tr>
                     <th style="width:5%">SL#</th>
                     <th style="width:20%">Application No.</th>
-                    <th style="width:20%">ECCD Type</th>
-                    <th style="width:20%">Date of Application</th>
-                    <th style="width:15%">Status</th>
+                    <th style="width:15%">ECCD Type</th>
+                    <th style="width:15%">Date of Application</th>
+                    <th style="width:25%">Status</th>
                     <th style="width:20%">Action</th>
                 </tr>
             </thead>
@@ -56,7 +56,7 @@ export default {
             this.$router.push({name:'edit_eccd',params: {id:data.id}});
         },
         showview(data){
-            this.$router.push({name:'show_eccd',query: {id:data.application_no}});
+            this.$router.push({name:'show_eccd',params: {data:data}});
         },
     },
     mounted(){

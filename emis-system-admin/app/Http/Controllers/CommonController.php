@@ -17,7 +17,7 @@ class CommonController extends Controller{
         date_default_timezone_set('Asia/Dhaka');
     }
     public function getApplicationDetials($applicationId=""){
-        return Workflow::where('application_number',$applicationId)->get();
+        return Workflow::orderBy('action_date', 'ASC')->where('application_number',$applicationId)->get();
     }
     public function getTaskDetials($applicationId=""){
         return TaskDetails::where('application_number',$applicationId)->first();
@@ -73,6 +73,10 @@ class CommonController extends Controller{
                     else{
                         $result_data.=' OR ';
                     }
+                }
+                //show to deo for notification, once updates at eccd
+                if(strtolower($access_level)=="dzongkhag"){
+                    $result_data.='OR ( t.service_name = "Establishment of New ECCD Centre" AND t.status_id NOT IN(1,5) AND t.claimed_by <> "'.$user_id.'") ';
                 }
             }
             //pulling leave application

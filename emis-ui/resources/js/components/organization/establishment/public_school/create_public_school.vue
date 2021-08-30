@@ -239,9 +239,6 @@ export default {
             dzongkhagList:[],
             gewog_list:[],
             villageList:[],
-            orgList:[],
-            classList:[],
-            streamList:[],
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
@@ -297,35 +294,12 @@ export default {
                 }
             });
         },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'Organization Type/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
-
-        /**
-         * method to get location in dropdown
-         */
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
-        },
 
         /**
          * method to get Gewog in dropdown
          */
-        getGewogList(dzongkhag){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.gewog_list = data.data;
-            });
+        async getGewogList(dzongkhag){
+            this.gewog_list =await this.loadgewogList(dzongkhag);
         },
 
 
@@ -390,13 +364,6 @@ export default {
                 $('#'+e.target.id).val('');
             }
         },
-        /**
-         * to load the respective pages depending on the type of establishment
-         */
-
-        loadRespectivePage(val){
-            this.$router.push({name:''+val,query: {data:id}});
-        },
 
         /**
          * method to populate dropdown
@@ -410,10 +377,6 @@ export default {
 
             if(id=="initiatedBy"){
                 this.form.initiatedBy=$('#initiatedBy').val();
-            }
-            if(id=="establishment_type"){
-                this.form.establishment_type=$('#establishment_type').val();
-                this.loadRespectivePage($('#establishment_type').val());
             }
             if(id=="level"){
                 this.form.level=$('#level').val();
@@ -433,26 +396,6 @@ export default {
             if(id=="locationType"){
                 this.form.locationType=$('#locationType').val();
             }
-        },
-
-        /**
-         * method to get class in checkbox
-         */
-        getClass:function(){
-            axios.get('/organization/getClass')
-              .then(response => {
-                this.classList = response.data;
-            });
-        },
-
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
         },
 
         /**
@@ -561,7 +504,6 @@ export default {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
                             this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -590,6 +532,7 @@ export default {
                 }
             }
         },
+
         loadpendingdetails(type){
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {
@@ -728,23 +671,15 @@ export default {
                 console.log('error: '+error);
             });
         },
-        getAttachmentType(){
-            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Application_for_Public_School/DocumentType')
-            .then(response => {
-                let data = response.data;
+        async getAttachmentType(){
+            let data = await this.getRequiredDocument('Application_for_Public_School');
+            if(data!=""){
                 data.forEach((item => {
                     this.count++;
-                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''});
+                    this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
                 }));
-                $('.application_attachment').prop('readonly',true);
-
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
+            }
         },
-
-
     },
 
     created(){
@@ -761,17 +696,8 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        this.getLocation();
     },
-    mounted() {
-        // this.count++;
-        // this.file_form.fileUpload.push({file_name:'Forwarding letter', file_upload:''});
-        // this.count++;
-        // this.file_form.fileUpload.push({file_name:'Minutes/resolution of GT', file_upload:''});
-        // this.count++;
-        // this.file_form.fileUpload.push({file_name:'Student enrolment Projection Report', file_upload:''});
-        // this.count++;
-        // this.file_form.fileUpload.push({file_name:'Form for Establishment of School', file_upload:''});
+     async mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -784,13 +710,10 @@ export default {
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
-        this.getClass();
-        this.getStream();
         this.getAttachmentType();
-        this.getLocation();
-        this.getOrgList();
-        this.loadpendingdetails('Public_School');
+        this.locationList =await this.loadlocationList();
 
+        this.loadpendingdetails('Public_School');
     },
 }
 </script>

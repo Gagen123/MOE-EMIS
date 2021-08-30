@@ -35,20 +35,17 @@ class OrganizationApprovalController extends Controller{
             'proposedName'          =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
+            'parentSchool'          =>  'required',
+            'locationType'         =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
+            'parentSchool.required'         => 'Parent school is required',
+            'locationType.required'        => 'locationType is required',
         ];
-        if(strpos($request->establishment_type,'ECCD')!==false){
-            $rules =$rules+ [
-                'parentSchool'          =>  'required',
-            ];
-            $customMessages = $customMessages+[
-                'parentSchool.required'         => 'Parent school is required',
-            ];
-        }
+
         if($request->establishment_type=="Coorporate ECCD"){
             $rules =$rules+ [
                 'parentAgency'          =>  'required',
@@ -57,25 +54,21 @@ class OrganizationApprovalController extends Controller{
                 'parentAgency.required'         => 'Parent agency is required',
             ];
         }
-        if($request->establishment_type=="Public ECCD"){
+        if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
             $rules =$rules+ [
                 'initiatedBy'          =>  'required',
-                'locationType'         =>  'required',
             ];
             $customMessages = $customMessages+[
                 'initiatedBy.required'         => 'Proposed initiated by is required',
-                'locationType.required'        => 'locationType is required',
             ];
         }
         if($request->establishment_type=="Private ECCD"){
             $rules =$rules+ [
-                'locationType'         =>  'required',
                 'proprietorCid'         =>  'required',
                 'proprietorName'         =>  'required',
                 'proprietorMobile'         =>  'required',
             ];
             $customMessages = $customMessages+[
-                'locationType.required'        => 'locationType is required',
                 'proprietorCid.required'        => 'CID is required',
                 'proprietorName.required'        => 'Name is required',
                 'proprietorMobile.required'        => 'Mobile number is required',
@@ -97,16 +90,16 @@ class OrganizationApprovalController extends Controller{
                     'proposedName'                 =>  $request['proposedName'],
                     'coLocatedParent'              =>  $request['coLocatedParent'],
                     'parentSchool'                 =>  $request['parentSchool'],
+                    'locationId'                 =>  $request['locationType'],
                 ];
                 if($request->establishment_type=="Coorporate ECCD"){
                     $_udpate = $_udpate+[
                         'parentAgency'                 =>  $request['parentAgency'],
                     ];
                 }
-                if($request->establishment_type=="Public ECCD"){
+                if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
                     $_udpate = $_udpate+[
                         'initiated_by'               =>  $request['initiatedBy'],
-                        'locationId'                 =>  $request['locationType'],
                     ];
                 }
                 if($request->establishment_type=="Private ECCD"){
@@ -130,6 +123,7 @@ class OrganizationApprovalController extends Controller{
                     'proposedName'                 =>  $request['proposedName'],
                     'coLocatedParent'              =>  $request['coLocatedParent'],
                     'parentSchool'                 =>  $request['parentSchool'],
+                    'locationId'                 =>  $request['locationType'],
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 ];
@@ -138,10 +132,9 @@ class OrganizationApprovalController extends Controller{
                         'parentAgency'                 =>  $request['parentAgency'],
                     ];
                 }
-                if($request->establishment_type=="Public ECCD"){
+                if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
                     $data = $data+[
                         'initiated_by'               =>  $request['initiatedBy'],
-                        'locationId'                 =>  $request['locationType'],
                     ];
                 }
 
@@ -309,7 +302,7 @@ class OrganizationApprovalController extends Controller{
             ];
             DB::table('application_details')->where('application_no',$request->application_number)->update($array);
         }
-        return $doc;
+        return $application_details;
     }
 
     public function loadOrgApplications($user_id="",$type=""){
@@ -361,7 +354,7 @@ class OrganizationApprovalController extends Controller{
                 ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
                 ->orderBy('classes.displayOrder')
                 ->get();
-        $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
+        $response_data->attachments=ApplicationAttachments::orderBy('created_at','ASC')->where('ApplicationDetailsId',$response_data->id)->get();
         $ver=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->get();
         if($ver!=null && $ver!="" && sizeof($ver)>0){
             foreach($ver as $v){
@@ -393,6 +386,8 @@ class OrganizationApprovalController extends Controller{
                         'path'                      =>  $att['path'],
                         'user_defined_file_name'    =>  $att['user_defined_name'],
                         'name'                      =>  $att['original_name'],
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s'),
                         'upload_type'               =>  $request->update_type,
                     ];
                     $doc = ApplicationAttachments::create($attach);
@@ -400,14 +395,33 @@ class OrganizationApprovalController extends Controller{
             }
         }
         $status=$request->status;
-        if($request->update_type=="tentative"){
+        if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study"){
             if($request->verifying_agency_list!=null && $request->verifying_agency_list!="" && sizeof($request->verifying_agency_list)>0){
                 foreach($request->verifying_agency_list as $dept){
                     $verification =[
+                        'type'                        =>   'Initial_Assessment',
                         'ApplicationDetailsId'        =>   $request->id,
                         'department_id'               =>   $dept['department'],
                         'verifyingAgency'             =>   $dept['division'],
                         'tentativeDate'               =>   $request->tentative_date,
+                        'remarks'                     =>   $request->remarks,
+                        'created_by'                  =>   $request->user_id,
+                        'created_by'                  =>   date('Y-m-d h:i:s'),
+                    ];
+                    $establishment=ApplicationVerification::create($verification);
+                }
+            }
+        }
+
+        if($request->update_type=="Notify_for_Tentative_Date_of_Final_Feasibility_Study"){
+            if($request->final_verifying_agency_list!=null && $request->final_verifying_agency_list!="" && sizeof($request->final_verifying_agency_list)>0){
+                foreach($request->final_verifying_agency_list as $dept){
+                    $verification =[
+                        'type'                        =>   'Final_Assessment',
+                        'ApplicationDetailsId'        =>   $request->id,
+                        'department_id'               =>   $dept['department'],
+                        'verifyingAgency'             =>   $dept['division'],
+                        'tentativeDate'               =>   $request->final_tentative_date,
                         'remarks'                     =>   $request->remarks,
                         'created_by'                  =>   $request->user_id,
                         'created_by'                  =>   date('Y-m-d h:i:s'),
@@ -422,7 +436,7 @@ class OrganizationApprovalController extends Controller{
             'updated_by'                   =>   $request->user_id,
             'updated_at'                   =>   date('Y-m-d h:i:s'),
         ];
-        if($request->update_type=="tentative"){
+        if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study"){
             $estd =$estd+[
                 'remarks'                      =>   $request->remarks,
             ];
@@ -451,9 +465,9 @@ class OrganizationApprovalController extends Controller{
     public function updateTeamVerification(Request $request){
         $verification =[
             'ApplicationVerificationId'     => $request->id,
+            'type'                          => $request->type,
             'agency'                        => $request['org_id'],
             'teamMember'                    => $request['staff_id'],
-            'type'                          => $request['staff_type'],
             'name'                          => $request['name'],
             'cid'                           => $request['cid'],
             'email'                         => $request['email'],
