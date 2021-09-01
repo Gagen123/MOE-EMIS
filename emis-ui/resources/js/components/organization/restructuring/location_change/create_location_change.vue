@@ -7,10 +7,10 @@
                     <div class="form-group row bg-gray-light">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <span id="screenName"></span>
-                            {{screenId}}
-                            {{SysRoleId}}
-                            {{Sequence}}
-                            {{Status_Name}}
+                            <!-- {{screenId}}<br>
+                            {{SysRoleId}}<br>
+                            {{Sequence}}<br>
+                            {{Status_Name}} -->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -21,18 +21,20 @@
                                 <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="organizationId"></has-error>
+                            <span class="text-danger" id="organizationId_err"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Current Name:</label>
-                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName" @click="remove_error('proposedName')"/>
+                            <span class="text-danger" id="proposedname_err"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Dzongkhag:</label>
-                            <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="dzongkhagId"/>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Gewog:</label>
@@ -46,7 +48,7 @@
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Location:</label>
-                            <input type="text" readonly :value="organization_details.location_type_name"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="organization_details.location_type_name"  class="form-control" id="location_type_name"/>
                         </div>
                     </div>
                     <label class="mb-0"><i><u>Proposed Location Details</u></i></label>
@@ -58,6 +60,7 @@
                                 <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="gewog"></has-error>
+                            <span class="text-danger" id="gewog_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Chiwog: <span class="text-danger">*</span></label>
@@ -66,6 +69,7 @@
                                 <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="chiwog"></has-error>
+                            <span class="text-danger" id="chiwog_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Location Type: <span class="text-danger">*</span></label>
@@ -73,6 +77,7 @@
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
+                            <span class="text-danger" id="locationType_err"></span>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -112,7 +117,7 @@
                 <hr>
                 <div class="row form-group fa-pull-right">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
+                        <button class="btn btn-primary" @click="shownexttab()">Submit </button>
                     </div>
                 </div>
             </div>
@@ -144,14 +149,11 @@ export default {
 
             form: new form({
                 organizationId:'',
+                dzongkhag:'',
                 gewog:'',
                 chiwog:'0',
                 locationType:'',
-                service_name:'',
-                application_type:'location_type_change',
-                application_for:'Change in Location Type',
                 status:'Submitted',
-                organization_type:'',
                 fileUpload: [],
                 attachments:
                 [{
@@ -187,6 +189,21 @@ export default {
             .then(response => {
                 this.orgList = response.data.data;
             });
+        },
+
+        async loadactivedzongkhagList(){
+            let data= await this.loadactivedzongkhags();
+            for(let i=0;i<data.length;i++){
+                this.dzongkhagArray[data[i].id] = data[i].name;
+            }
+        },
+
+        async getvillagelist(gewogId,vil_id){
+            let data = await this.loadvillageList(gewogId);
+            for(let i=0;i<data.length;i++){
+                this.villageArray[data[i].id] = data[i].name;
+            }
+            $('#vilageId').val(this.villageArray[vil_id])
         },
 
         async getproposedvillagelist(id){
@@ -227,10 +244,10 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){
-            if(nextclass=="final-tab"){
+        shownexttab(){
+            if(this.validateForm()){
                 Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
+                    text: "Are you sure you wish to submit this application details for further action ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -238,7 +255,33 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('dzongkhag', this.form.dzongkhag);
+                        formData.append('gewog', this.form.gewog);
+                        formData.append('chiwog', this.form.chiwog);
+                        formData.append('locationType', this.form.locationType);
+                        formData.append('status', this.form.status);
+
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+
+                        axios.post('organizationApproval/saveUploadedFiles', formData, config)
+                        // this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -286,6 +329,31 @@ export default {
                 this.form.locationType=$('#locationType').val();
             }
         },
+        validateForm(){
+            let returntype=true;
+            if($('#organizationId').val()=="" || $('#organizationId').val()==undefined){
+                $('#organizationId_err').html('Please select Organization for location change');
+                returntype=false;
+            }
+            if($('#proposedName').val()==""){
+                $('#proposedname_err').html('This name is not able to populate. Please contact with system administrator');
+                returntype=false;
+            }
+            if($('#gewog').val()==""){
+                $('#gewog_err').html('Please select new gewog');
+                returntype=false;
+            }
+            if($('#chewog').val()==""){
+                $('#chewog_err').html('Please select new chewog');
+                returntype=false;
+            }
+            if($('#locationType').val()==""){
+                $('#locationType_err').html('Please select new location type');
+                returntype=false;
+            }
+
+            return returntype;
+        },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
@@ -302,34 +370,6 @@ export default {
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
             this.applyselect2field('locationType');
-        },
-
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        getvillagelist(gewogId,vil_id){
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name;
-                }
-                $('#vilageId').val(this.villageArray[vil_id])
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
         },
 
         loadScreenDetails(){
@@ -392,7 +432,6 @@ export default {
             this.getorgdetials(data['Agency_Code']);
             $('#organizationId').val(data['Agency_Code']).trigger('change');
 
-            this.dzongkhag=data['Dzo_Id'];
             this.form.dzongkhag=data['Dzo_Id'];
             this.getGewogList(data['Dzo_Id']);
         })

@@ -328,7 +328,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Feasibility_Study'">
+                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
@@ -355,7 +355,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Feasibility_Study_Report'">
+                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
