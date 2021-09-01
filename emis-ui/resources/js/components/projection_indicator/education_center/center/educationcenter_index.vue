@@ -2,7 +2,7 @@
     <div>
         <div class="card card-primary card-outline">
             <div class="card-header pt-1 pb-1">
-                Education Center Count
+                Educational Schools and Institutes
             </div>
             <div class="card-body" >
                 <div class="form-group row mt-xl-n2">
@@ -29,6 +29,7 @@
                         <button class="btn btn-primary btn-sm btn-lg mb-lg-n4" @click="loadpage()" type="button"> <span class="fa fa-download"></span> Load Details</button>
                     </div>
                 </div>
+                <hr>
                 <router-view></router-view>
             </div>
         </div>

@@ -117,6 +117,7 @@ class StudentMasterController extends Controller{
             'subjectlist'               =>  $request->subjectlist,
             'user_id'                   =>  $this->userId()
         ];
+
         $response_data= $this->apiService->createData('emis/masters/students/saveStreamSubject', $data);
         return $response_data;
     }

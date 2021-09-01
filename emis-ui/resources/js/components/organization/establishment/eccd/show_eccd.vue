@@ -38,42 +38,14 @@
                                     <label class="mb-0">Service Name:</label>
                                     <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
                                 </div>
-                            </div>
-                            <div class="form-group row" v-if="applicationdetails.applicant_remarks!=null">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <label class="mb-0">Remarks:</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.applicant_remarks!=null">
+                                     <label class="mb-0">Remarks:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.applicant_remarks}}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="callout callout-success" v-if="applicationdetails.category=='PRIVATE'">
-                            <h5><u>Proprietor Details</u></h5>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Name:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorName}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">CID:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorCid}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Mobile No:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorMobile}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Phone No:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorPhone}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0">Email:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorEmail}}</span>
-                                </div>
-                            </div>
-                        </div>
+
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
                             <div class="form-group row">
@@ -130,6 +102,39 @@
                                     </span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="callout callout-success" v-if="applicationdetails.category=='Private'">
+                            <hr>
+                            <h5><u>Proprietor Details</u></h5>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Name:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorName}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">CID:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorCid}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Mobile No:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorMobile}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Phone No:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorPhone}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Email:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.proprietorEmail}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-info">
+                            <Workflow
+                                :appNo="applicationdetails.application_no"
+                            />
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -274,10 +279,11 @@
                             </div>
                             <div class="row pb-2">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5><u>Attachments for Final Approval</u></h5>
+                                    <h5><u>Attachments for Verification & Approval</u></h5>
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
+                                                <th>Attachment Type</th>
                                                 <th>Attachment Name</th>
                                                 <th>Attachment</th>
                                                 <th>File</th>
@@ -285,9 +291,10 @@
                                         </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                                <template v-if="attach.upload_type=='final_verification'">
+                                                <template v-if="attach.upload_type!=null && attach.upload_type!='Applicant'">
+                                                    <td>{{replaceStr(attach.upload_type)}}</td>
                                                     <td>{{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
+                                                    <td>{{attach.name}}</td>
                                                     <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
@@ -311,8 +318,10 @@
     </div>
 </template>
 <script>
+import Workflow from "../../../common/view_workflow_details";
 export default {
     components: {
+        Workflow,
     },
     data(){
         return{
@@ -354,11 +363,14 @@ export default {
                 }
             });
         },
+        replaceStr(str){
+            return str.replaceAll("_", " ");
+        },
 
     },
     mounted(){
         this.getClass();
-        axios.get('organizationApproval/loadEstbDetailsForView/'+this.$route.query.id)
+        axios.get('organizationApproval/loadEstbDetailsForView/'+this.$route.params.data.application_no)
         .then((response) => {
             let data=response.data.data;
             this.applicationdetails=data;

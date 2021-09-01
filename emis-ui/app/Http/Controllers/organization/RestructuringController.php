@@ -31,6 +31,7 @@ class RestructuringController extends Controller
     }
 
     public function saveChangeBasicDetails(Request $request){
+        // dd($request);
         $this->service_name = $request['application_for'];
 
         //File Upload
@@ -137,11 +138,11 @@ class RestructuringController extends Controller
 
         $this->validate($request, $rules, $customMessages);
         $establishment_data=$establishment_data+[
-            'attachment_details'            =>   $attachment_details,
+            'attachment_details'     =>   $attachment_details,
         ];
         // dd($establishment_data);
         $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet,$request->application_for);
+        // dd($workflowdet);
         $screen_id="";
         $status="";
         $app_role="";

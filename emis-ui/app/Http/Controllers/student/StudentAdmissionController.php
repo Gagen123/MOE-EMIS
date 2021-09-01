@@ -93,7 +93,7 @@ class StudentAdmissionController extends Controller{
                 'father_nationality'                    => 'required',
                 'father_cid_passport'                   => 'required',
                 'father_first_name'                     => 'required',
-                'father_fulladdress'                    => 'required',
+                //'father_fulladdress'                    => 'required',
                 'father_present_dzongkhag'              => 'required',
                 'father_present_gewog'                  => 'required',
                 'father_present_village_id'             => 'required',
@@ -109,7 +109,7 @@ class StudentAdmissionController extends Controller{
                 'father_nationality.required'                    => 'This field is required',
                 'father_cid_passport.required'                   => 'This field is required',
                 'father_first_name.required'                     => 'This field is required',
-                'father_fulladdress.required'                    => 'This field is required',
+                //'father_fulladdress.required'                    => 'This field is required',
                 'father_present_dzongkhag.required'              => 'This field is required',
                 'father_present_gewog.required'                  => 'This field is required',
                 'father_present_village_id.required'             => 'This field is required',
@@ -347,10 +347,21 @@ class StudentAdmissionController extends Controller{
     /**
      * to load the list of students for admission from the portal
      */
+    
     public function loadStudentAdmissionList(){
         $org_id = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
         return $student_list;
+    }
+
+    /**
+     * Update Student Decision by  the school admin
+     * the function name used is the same as the one used in portal
+    */
+
+    public function deleteclassDetails($id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/deleteclassDetails/'.$id);
+        return $response_data;
     }
 
     public function loadStudentListwithsearch(Request $request){
@@ -385,6 +396,45 @@ class StudentAdmissionController extends Controller{
         $query = http_build_query($data);
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$query);
         return $student_list;
+    }
+
+    /**
+     * Saving the Details of the transfer students
+     * 
+     * The WEB BFF Route used is the same used by the portal
+     */
+
+    public function saveNewTransferStudent(Request $request){
+        $rules = [
+            'student_id'                 => 'required',
+            'class'                      => 'required',
+
+        ];
+        $customMessages = [
+            'student_id.required'         => 'This field is required',
+            'class.required'              => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $request['user_id']=$this->userId();
+        $request['school']=$this->getWrkingAgencyId();
+        $request['dzongkhag']=$this->getUserDzoId();
+        $request['dateOfapply']=date('Y-m-d');
+
+        $data = $request->all();
+        
+        $response_data= $this->apiService->createData('emis/students/admission/saveorgclassDetails', $data);
+        return $response_data;
+    }
+    
+    /**
+     * Validate the CID of a student to ensure that duplicate CID is not being entered
+     */
+
+    public function getstudentdetailsbyCid($cid){
+        $response = $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
+        return $response;
     }
 
     public function getStudentDetails($std_id=""){

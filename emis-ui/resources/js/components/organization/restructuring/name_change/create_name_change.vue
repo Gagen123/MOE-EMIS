@@ -219,8 +219,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-
-
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
@@ -229,6 +227,8 @@ export default {
                  $('#orgType').hide();
             });
         },
+        //loading screen details
+        
         
         /**
          * method to show next and previous tab
@@ -406,6 +406,25 @@ export default {
                 }
             });
         },
+        loadScreenDetails(){
+            // this.form.category=type;
+            axios.get('organizationApproval/getScreenId/'+'Application For Name Change'+1)
+            .then(response => {
+                alert(JSON.stringify(response));
+                let data = response.data[0];
+                if(data!=undefined){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+' ('+this.form.category+')</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.file_form.service_name=data.screenName;
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
@@ -458,6 +477,7 @@ export default {
         this.getLocation();
         this.getClass();
         this.getstream();
+        this.loadScreenDetails();
         this.getAttachmentType('ForTransaction__Application_for_Name_Change');
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
@@ -467,7 +487,6 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
-
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });

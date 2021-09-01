@@ -269,8 +269,17 @@ class AdmissionController extends Controller
         return $response_data;
     }
 
-    public function getStudentDetailsFromPortal($id=""){
-        $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$this->userId());
+    /**
+     * $type is either Student, Parent or NA
+     */
+
+    public function getStudentDetailsFromPortal($type=""){
+        if($type == 'Student'){
+            $id = $this->stdCid();
+        } else {
+            $id = $this->userId();
+        }
+        $response_data= $this->apiService->listData('emis/students/admission/getstudentadmissiondetails/'.$id);
         return $response_data;
     }
 
@@ -307,6 +316,88 @@ class AdmissionController extends Controller
 
     public function deleteclassDetails($id=""){
         $response_data= $this->apiService->listData('emis/students/admission/deleteclassDetails/'.$id);
+        return $response_data;
+    }
+
+    /**
+     * The Positions of the Class X Results
+     * Just for admission ranking
+     * param is the student code
+     */
+
+    public function loadResultPosition($std_code=""){
+        $response_data= $this->apiService->listData('emis/students/admission/loadResultPosition/'.$std_code);
+        return $response_data;
+    }
+
+    /**
+     * Load the Qualifiying marks for each subject
+     */
+
+    public function loadQualificationMarks(){
+        $response_data= $this->apiService->listData('emis/students/admission/loadQualificationMarks');
+        return $response_data;
+    }
+
+    /**
+     * Save Admission Requests
+     */
+
+    public function saveAdmissionRequest(Request $request){
+        $rules = [
+            'dzongkhag'               => 'required',
+            
+        ];
+        $customMessages = [
+            'dzongkhag.required'        => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').$request['application_type'];
+
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
+
+        $data =[
+            'student_id'              =>  $request->student_id,
+            'dzongkhag'                 =>  $request->dzongkhag,
+            'dateOfapply'               =>  $request->dateOfapply,
+            'reasons'                   =>  $request->reasons,
+            'action_by'                 =>  $this->userId(),
+            'attachment_details'        =>   $attachment_details,
+        ];
+
+        $response_data= $this->apiService->createData('emis/students/admission/saveAdmissionRequest', $data);
+        return $response_data;
+    }
+
+    /**
+     * Load the admission requests
+     * param is the student id
+     */
+
+    public function loadAdmissionRequest($std_id){
+        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id);
         return $response_data;
     }
 

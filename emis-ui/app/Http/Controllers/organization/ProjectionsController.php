@@ -56,18 +56,21 @@ class ProjectionsController extends Controller
         $customMessages = [
             
         ];
+
         $this->validate($request, $rules, $customMessages);
         $loc =[
             'id'                        => $request->id,
-            'feederschool'              => $request->preference_school1,
+            'feederschool'              => $request->feeder_school,
             'class'                     => $request->class,
-            'items_received'            =>  $request->items_received,
+            'parent_school'            =>  $request->parent_school,
             'user_id'                   =>  $this->userId(),
             'orgId'                     =>  $this->getWrkingAgencyId(),
         ];
+
         $response_data= $this->apiService->createData('emis/organization/feeder/saveFeeders', $loc);
         return $response_data;
     }
+
     public function loadFeeders(){
         $dzoId=$this->getUserDzoId();
         //dd( $orgId);

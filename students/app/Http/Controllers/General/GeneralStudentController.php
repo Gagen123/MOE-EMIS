@@ -49,6 +49,20 @@ class GeneralStudentController extends Controller
     }
 
     /**
+     * Get the student class details for a given student
+     * param is student id
+     */
+
+    public function getStudentClassId($std_id=""){
+        $records = DB::table('std_student')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->select('std_student_class_stream.OrgClassStreamId')
+                    ->where('std_student.id', $std_id)
+                    ->get();
+        return $records;
+    }
+
+    /**
      * Get the student list by stream and section (id, name, student code, class, section, stream)
      */
 
@@ -68,22 +82,6 @@ class GeneralStudentController extends Controller
     }
 
     public function loadStudentByType($type, $class_id){
-
-        try{
-            DB::table('std_student')
-                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
-                    ->join('std_student_type', 'std_student.stdType', '=', 'std_student_type.id')
-                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth', 'std_student.CmnSexId',
-                                'std_student_class_stream.OrgClassStreamId', 'std_student.noOfMeals', 'std_student.scholarshipType', 'std_student.isBoarder')
-                    ->where('std_student_class_stream.OrgClassStreamId',$class_id)
-                    ->where('std_student_type.Name',$type)
-                    //->where('academicYear', date('Y'))
-                    ->get();
-
-            } catch(\Illuminate\Database\QueryException $ex){ 
-                dd($ex->getMessage()); 
-                // Note any method of class PDOException can be called on $ex.
-            }
         
         $records = DB::table('std_student')
                     ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')

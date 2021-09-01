@@ -22,6 +22,11 @@ class OrganizationController extends Controller
         return $response_data;
     }
 
+    public function loadParentSchoolList($orgId){
+        $response_data= $this->apiService->getListData('emis/common_services/loadParentSchoolList/'.$orgId);
+        return $response_data;
+    }
+
     public function loadProjection($classId=""){
         $response_data= $this->apiService->getListData('emis/common_services/loadProjection/'.$classId);
         return $response_data;
@@ -31,4 +36,10 @@ class OrganizationController extends Controller
         $loadOrganizationDetails = $this->apiService->listData('emis/common_services/loadOrgDetails/fullOrgDetbyid/'.$id );
         return $loadOrganizationDetails;
     }
+
+    public function loadStreamList(){
+        $response_data = $this->apiService->listData('emis/masters/stream/loadStream');
+        return $response_data;
+    }
+    
 }
