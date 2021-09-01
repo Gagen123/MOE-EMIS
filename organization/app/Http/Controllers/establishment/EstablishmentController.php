@@ -726,7 +726,7 @@ class EstablishmentController extends Controller{
                 'typeOfSchool'              =>$org_details['typeOfSchool'],
             ];
         }
-        if($caegory=="private_eccd"){
+        if(strpos($caegory,'eccd')!==false){
             $application_data= ApplicationEstPrivate::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             $org_data = $org_data+[
                 'locationId'                =>$application_data->proposedLocation,

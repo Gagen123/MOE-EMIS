@@ -556,31 +556,9 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-            //     $('#locationType').addClass('select2-hidden-accessible');
-            // }
+            this.applyselect2field('gewog');
+            this.applyselect2field('chiwog');
         },
-
-        /**
-         * method to change tabs
-         */
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-            this.applyselect2();
-        },
-
 
         show_parent_school_details(param){
             if(param){
