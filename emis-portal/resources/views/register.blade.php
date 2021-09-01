@@ -63,7 +63,7 @@
                                 <has-error :form="form" field="email"></has-error>
                             </div>
                             <div class="input-group mb-3">
-                                <input type="password" class="form-control" name="password" placeholder="Password">
+                                <input type="password" class="form-control" name="password1" placeholder="Password">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
                                         <span class="fas fa-lock"></span>

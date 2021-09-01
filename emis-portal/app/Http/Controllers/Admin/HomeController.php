@@ -78,13 +78,13 @@ class HomeController extends Controller
                 'name'          =>  'required',
                 'contact'   =>  'required',
                 'email'          =>  'required',
-                'password'        =>  'required',
+                'password1'        =>  'required',
             ];
             $customMessages = [
                 'name.required' => 'Student Name field is required',
                 'contact.required' => 'Contact Field is required',
                 'email.after'             => 'Email is required',
-                'password.required' => 'Password is required',
+                'password1.required' => 'Password is required',
 
             ];
             $this->validate($request, $rules,$customMessages);
@@ -110,7 +110,9 @@ class HomeController extends Controller
             $this->validate($request, $rules,$customMessages);
         }
         $response_data=$this->apiService->createData('save_new_registration', $request->all());
+      
         if(json_decode($response_data)->id!=null && json_decode($response_data)->id!=""){
+
             return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);
         }
         else{

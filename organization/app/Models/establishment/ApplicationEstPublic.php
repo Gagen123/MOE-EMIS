@@ -21,7 +21,8 @@ class ApplicationEstPublic extends Model
         'ApplicationDetailsId',
         'proposedName',
         'initiated_by',
-        'parentAgency', //levelId
+        'parentAgency',
+        'levelId',
         'locationId',
         'isGeoPoliticallyLocated',
         'isSenSchool',

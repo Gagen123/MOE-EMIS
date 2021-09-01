@@ -20,6 +20,7 @@ use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
 use App\Models\DepartmentModel;
 use App\Models\generalInformation\Projection;
+use App\Models\Masters\Location;
 use Exception;
 
 class LoadOrganizationController extends Controller{
@@ -35,6 +36,9 @@ class LoadOrganizationController extends Controller{
             ->where('status','1')
             ->select( 'id','name','levelId','dzongkhagId')->get();
         }
+        if($type=="all_eccds_dzogkhag_wise"){
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','like','%eccd%')->get();
+        }
         if($type=="public_eccd"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_eccd','private_eccd'])->get();
         }
@@ -43,7 +47,6 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','private_school'])->get();
             }
             else{
-
                 $response_data=OrganizationDetails::wherein('category',['public_school','private_school'])->get();
             }
         }
@@ -140,7 +143,7 @@ class LoadOrganizationController extends Controller{
                 // WHERE category = 'public_school' OR category = 'private_school'
                 // GROUP BY a.category;");
 
-                //The following is the transpose of the above query                
+                //The following is the transpose of the above query
                 $response_data = DB::select(" SELECT l.name,
                         COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
                         COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
@@ -165,7 +168,7 @@ class LoadOrganizationController extends Controller{
                 // WHERE (category = 'public_school' OR category = 'private_school') AND dzongkhagId = '".$id."'
                 // GROUP BY a.category");
 
-                //The following is the transpose of the above query                
+                //The following is the transpose of the above query
                 $response_data = DB::select(" SELECT l.name,
                         COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
                         COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
@@ -384,6 +387,11 @@ class LoadOrganizationController extends Controller{
                     }
                 }
             }
+            $loc=Location::where('id',$response_data->locationId)->first();
+            // dd($response_data->locationId,$response_data);
+            if($loc!=null && $loc!=""){
+                $response_data->location_type_name=$loc->name;
+            }
 
         }
         if($type=="fullOrgDetbyid" || $type=="full_user_logedin_dzo_id"){
@@ -405,10 +413,11 @@ class LoadOrganizationController extends Controller{
             if($response_data->category=="private_school"){
                 $response_data->proprioter=OrganizationProprietorDetails::where('organizationId',$response_data->id)->first();
             }
-            $loc=Locations::where('organizationId',$response_data->id)->first();
+            $loc=Locations::where('id',$response_data->locationId)->first();
             if($loc!=null && $loc!=""){
-                $response_data->locationDetials=$loc;
+                $response_data->name=$loc->name;
             }
+
             $contact = ContactDetails::where('organizationId',$response_data->id)->first();
             if($contact!=null && $contact!=""){
                 $response_data->contactDetails=$contact;

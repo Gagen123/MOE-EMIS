@@ -561,7 +561,7 @@
                         </div>
 
                         <div class="callout callout-success" >
-                            <h4><u>Attachments</u></h4>
+                            <h4><u>Attachments (<span id="attname"></span>)</u></h4>
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
@@ -792,7 +792,7 @@ export default {
                         $('#attachment_name'+i).html('Requesting for Final Assessment');
                     }
                     if(i==5){
-                        $('#attachment_name'+i).html('Notify for Tentative Date of Final Feasibility Study');
+                        $('#attachment_name'+i).html('Notify for Tentative Date of Final Assessment');
                     }
                 }
                 if(status_id==2){ //initially submitted
@@ -863,6 +863,7 @@ export default {
                         this.SysRoleId=data.SysRoleId;
                         this.Sequence=data.Sequence;
                         this.Status_Name=data.Status_Name;
+                        $('#attname').html(data.Name);
                         this.getAttachmentType(data.Name.replaceAll(" ", "_"));
                         this.form.update_type=data.Name.replaceAll(" ", "_");
                         $('#update_btn_level').html(data.Name);

@@ -62,7 +62,7 @@ class EstablishmentController extends Controller
             'locationType.required'         => 'Location Type  is required',
 
         ];
-        if(strpos($request->establishment_type,'public')!==false){
+        if(strpos($request->establishment_type,'Public')!==false){
             $rules = $rules+[
                 'initiatedBy'           =>  'required',
             ];
@@ -70,7 +70,7 @@ class EstablishmentController extends Controller
                 'initiatedBy.required'          => 'Proposal Initiated By is required',
             ];
         }
-        if(strpos($request->establishment_type,'private')!==false){
+        if(strpos($request->establishment_type,'Private')!==false){
             $rules = $rules+[
                 'proprietorName'        =>  'required',
                 'proprietorCid'         =>  'required|min:11|max:11',
@@ -96,16 +96,8 @@ class EstablishmentController extends Controller
             'class.required'         => 'Class is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $classStream =[
-            'class'                     =>  $request['class'],
-            'stream'                    =>  $request['stream'],
-            'proposed_establishment'    =>  $request['proposed_establishment'],
-            'application_number'        =>  $request['application_number'],
-            'update_type'               =>  $request['update_type'],
-            'action_type'               =>  $request['action_type'],
-            'user_id'                   =>  $this->userId() ,
-        ];
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $classStream);
+        $request['user_id']=$this->userId();
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $request->all());
         return $response_data;
     }
 

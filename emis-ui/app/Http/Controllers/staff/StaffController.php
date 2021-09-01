@@ -39,6 +39,7 @@ class StaffController extends Controller{
             'working_agency_id'     =>  'required',
             // 'currier_stage'         =>  'required',
         ];
+    
 
         $customMessages = [
             'cid_work_permit.required'      => 'This field is required',
@@ -105,6 +106,7 @@ class StaffController extends Controller{
             'status'            =>  $request->status,
             'user_id'           =>$this->userId()
         ];
+        // dd( $personal_details);
         $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $personal_details);
         return $response_data;
     }

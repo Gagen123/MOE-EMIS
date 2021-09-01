@@ -77,21 +77,21 @@ class EstablishmentController extends Controller{
         else{
             $application_details_data = $this->extractApplicationDetailsData($request);
             switch($request['establishment_type']){
-                case "public_school" : {
-                        $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
-                        $dataModel = 'ApplicationEstPublic';
-                        break;
-                    }
-                case "private_school" : {
-                        $establishment_data = $this->extractPrivateEstDetailsData($request, $application_details_data->id);
-                        $dataModel = 'ApplicationEstPrivate';
-                        break;
-                    }
+                case "Public School" : {
+                    $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
+                    $dataModel = 'ApplicationEstPublic';
+                    break;
+                }
+                case "Private School" : {
+                    $establishment_data = $this->extractPrivateEstDetailsData($request, $application_details_data->id);
+                    $dataModel = 'ApplicationEstPrivate';
+                    break;
+                }
                 case "public_ecr" : {
-                        $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
-                        $dataModel = 'ApplicationEstPublic';
-                        break;
-                    }
+                    $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
+                    $dataModel = 'ApplicationEstPublic';
+                    break;
+                }
                 default : {
                     break;
                 }
@@ -108,6 +108,7 @@ class EstablishmentController extends Controller{
                 $response_data = $model::where('foreignKeyId',$request['ap_estb_id'])->delete();
             }
             $response_data = $this->insertData($establishment_data, $dataModel);
+
             $response_data->applicaiton_details=$application_details_data;
             if($request->isfeedingschool==1 && sizeof($request->feeding)>0 ){
                 foreach($request->feeding as $feed){
@@ -130,7 +131,7 @@ class EstablishmentController extends Controller{
      */
     private function extractApplicationDetailsData($request){
         $data =[
-            'establishment_type'   =>  $request['proposed_establishment'],
+            'establishment_type'   =>  $request['establishment_type'],
             'category'             =>  $request['category'],
             'dzongkhagId'          =>  $request['dzongkhag'],
             'gewogId'              =>  $request['gewog'],
@@ -242,7 +243,7 @@ class EstablishmentController extends Controller{
             'isFeedingSchool'              =>  $request['isfeedingschool'],
             'coLocatedParent'              =>  $request['coLocatedParent'],
             'parentSchool'                 =>  $request['parentSchool'],
-            'proposedLocation'             =>  $request['proposedLocation'],
+            'created_by'                   =>  $request->user_id,
             'created_at'                   =>  date('Y-m-d h:i:s')
         ];
         return $data;
@@ -280,7 +281,6 @@ class EstablishmentController extends Controller{
         $modelName = "App\\Models\\establishment\\"."$databaseModel";
         $model = new $modelName();
         $response_data = $model::create($data);
-
         return $response_data;
     }
 
@@ -333,14 +333,12 @@ class EstablishmentController extends Controller{
                 $classStream = [
                     'ApplicationDetailsId'  => $application_details->id,
                     'classId'               => $classId,
-                    'streamId'              => '',
                     'created_by'            => $request->user_id,
                     'created_at'            => date('Y-m-d h:i:s'),
                 ];
-                $class = ApplicationClassStream::create($classStream);
+                ApplicationClassStream::create($classStream);
             }
         }
-
         if($request->stream!=null && $request->stream!=""){
             foreach($request->stream as $key2 => $classStreamId){
                 $class_stream_data = $this->getClassStreamId($classStreamId);
@@ -352,12 +350,11 @@ class EstablishmentController extends Controller{
                         'created_by'            => $request->user_id,
                         'created_at'            => date('Y-m-d h:i:s'),
                     ];
-                    $class = ApplicationClassStream::create($classStream);
+                    ApplicationClassStream::create($classStream);
                 }
             }
         }
         $application_details= ApplicationDetails::where('application_no', $request->application_number)->first();
-
         return $this->successResponse($application_details, Response::HTTP_CREATED);
     }
 
@@ -393,6 +390,25 @@ class EstablishmentController extends Controller{
             DB::table('application_details')->where('application_no',$request->application_number)->update($array);
         }
         return $doc;
+    }
+
+    public function loaddraftApplication($type="",$user_id=""){
+        // dd(str_replace('%20',' ',$type));
+        $app_details=  ApplicationDetails::where('status','pending')->where('created_by',$user_id)->where('establishment_type',str_replace('%20',' ',$type))->first();
+        if($app_details!=""){
+            if($app_details->establishment_type=="Private School" || $app_details->establishment_type=="Private ECCD"){
+                $appData=ApplicationEstPrivate::where('ApplicationDetailsId',$app_details->id)->first();
+                $app_details->estb_details=$appData;
+            }
+            else{
+                $appData=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
+                $app_details->estb_details=$appData;
+                if($appData->isFeedingSchool!=null && $appData->isFeedingSchool==1){
+                    $app_details->meal_details=ApplicationNoMeals::where('foreignKeyId',$appData->id)->get();
+                }
+            }
+        }
+        return $this->successResponse($app_details);
     }
     /**
      * Check whether a class has streams or not
@@ -492,23 +508,35 @@ class EstablishmentController extends Controller{
     public function loadEstbDetailsForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         $response_data->application_date=date_format(Carbon::parse($response_data->action_date), 'Y-m-d h:i:s');
-        if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECCD" || $response_data->establishment_type=="Public ECR"){
+        $app_details="";
+        if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECR"){
             $app_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
             $response_data->org_details=$app_details;
             if($app_details->isFeedingSchool==1){
                 $response_data->feeding_modality=ApplicationNoMeals::where('foreignKeyId',$app_details->id)->get();
             }
         }
-        if($response_data->establishment_type=="Private School" || $response_data->establishment_type=="Private ECCD"){
-            $response_data->org_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
+        if($response_data->establishment_type=="Private School"){
+            $app_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
+            $response_data->org_details=$app_details;
+        }
+        $lev=Level::where('id',$app_details->levelId)->first();
+        if($lev!=null && $lev!=""){
+            $response_data->level=$lev->name;
         }
         $response_data->org_class_stream=
-            DB::table('application_class_stream')
-                ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
-                ->select('application_class_stream.*')
-                ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
-                ->orderBy('classes.displayOrder')
-                ->get();
+        DB::table('application_class_stream')
+            ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
+            ->select('application_class_stream.*')
+            ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
+            ->orderBy('classes.displayOrder')
+            ->get();
+        if($app_details->locationId!=""){
+            $loc=Location::where('id',$app_details->locationId)->first();
+            if($loc!=null && $loc!=""){
+                $response_data->location_type=$loc->name;
+            }
+        }
         $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
         $response_data->app_verification=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
         if($response_data!=null && $response_data!=""){
@@ -698,7 +726,7 @@ class EstablishmentController extends Controller{
                 'typeOfSchool'              =>$org_details['typeOfSchool'],
             ];
         }
-        if($caegory=="private_eccd"){
+        if(strpos($caegory,'eccd')!==false){
             $application_data= ApplicationEstPrivate::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             $org_data = $org_data+[
                 'locationId'                =>$application_data->proposedLocation,
@@ -1079,23 +1107,7 @@ class EstablishmentController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    public function loaddraftApplication($type="",$user_id=""){
-        $app_details=  ApplicationDetails::where('status','pending')->where('created_by',$user_id)->where('establishment_type',str_replace('_',' ',$type))->first();
-        if($app_details!=""){
-            if($app_details->establishment_type=="Private School" || $app_details->establishment_type=="Private ECCD"){
-                $appData=ApplicationEstPrivate::where('ApplicationDetailsId',$app_details->id)->first();
-                $app_details->estb_details=$appData;
-            }
-            else{
-                $appData=ApplicationEstPublic::where('ApplicationDetailsId',$app_details->id)->first();
-                $app_details->estb_details=$appData;
-                if($appData->isFeedingSchool!=null && $appData->isFeedingSchool==1){
-                    $app_details->meal_details=ApplicationNoMeals::where('foreignKeyId',$appData->id)->get();
-                }
-            }
-        }
-        return $this->successResponse($app_details);
-    }
+
     public function loadEstablishmentApplciaiton($record_id=""){
         $app_details=  ApplicationDetails::where('id',$record_id)->first();
         if($app_details!=""){

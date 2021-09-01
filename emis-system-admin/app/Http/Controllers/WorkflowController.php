@@ -42,7 +42,7 @@ class WorkflowController extends Controller{
             'action_date'           =>date('Y-m-d h:i:s'),
         ];
         $workflowdetails = Workflow::create($data);
-        if(($request->w_config_status=="Updated Feasibility Study Report" || $request->w_config_status=="Updated Final Feasibility Study Report") && $request->access_level=="Dzongkhag"){
+        if(($request->w_config_status=="Updated Feasibility Study Report" || $request->w_config_status=="Updated Final Assessment Report") && $request->access_level=="Dzongkhag"){
             //donot update tasklist while updating feasibility report by deo/teo
         }else{
             if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
