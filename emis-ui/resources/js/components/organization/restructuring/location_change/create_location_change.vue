@@ -281,7 +281,8 @@ export default {
                         formData.append('Status_Name', this.Status_Name);
 
                         axios.post('organizationApproval/saveUploadedFiles', formData, config)
-                        // this.form.post('organization/saveChangeBasicDetails')
+
+                        this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
