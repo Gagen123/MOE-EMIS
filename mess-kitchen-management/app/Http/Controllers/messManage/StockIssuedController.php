@@ -155,13 +155,17 @@ class StockIssuedController extends Controller
       //  dd($current_stock_data);
         if($current_stock_data!=null && $current_stock_data!=""){
             $current_stock_qty=   $current_stock_data->quantity;
+            $current_damage_qty = $current_stock_data->damagequantity;
             $request_qty=  $request->quantity;
-            if($request_qty > $current_stock_qty){
+            $request_dam_qty= $request->damagequantity;
+            if($request_qty > $current_stock_qty || $request_dam_qty > $current_damage_qty){
                 $qty_diff = $request_qty-$current_stock_qty;
+                $dmage_diff = $request_dam_qty-$current_damage_qty;
                 $qty_to_update_stock=  $current_stock_qty+ $qty_diff;
+                $damage_update_qty= $current_damage_qty + $dmage_diff; 
                 $stock_data=[
                     'quantity'       => $qty_to_update_stock,
-                    'damagequantity' => $request->damagequantity,
+                    'damagequantity' => $damage_update_qty,
                     'dateOfissue'    => $request->dateOfissue,
                     'remarks'        => $request->remarks
                 ];
@@ -169,10 +173,11 @@ class StockIssuedController extends Controller
                 $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
                 ->where('item_id', $current_stock_data->item_id)->where('procured_type',$current_stock_data->category)->first();
                 $stock_qty= $curr_tr_data->available_qty;
-                $update_tr_qty=  $stock_qty- $qty_diff;
+                $update_tr_qty=  ($stock_qty- $qty_diff)-$dmage_diff;
+                
                 $tr_data=[
                     'available_qty'  => $update_tr_qty,
-                    'updated_by'     =>$request->user_id,
+                    'updated_by'     => $request->user_id,
                     'updated_at'     =>  date('Y-m-d h:i:s'),
                 ];
              //   dd($tr_data);
@@ -180,10 +185,13 @@ class StockIssuedController extends Controller
                
             }else{
                 $qty_diff = $current_stock_qty -$request_qty;
+                $dmage_diff = $request_dam_qty-$current_damage_qty;
                 $qty_to_update_stock= $current_stock_qty-$qty_diff;
+                $damage_update_qty= $current_damage_qty - $dmage_diff; 
+
                 $stock_data=[
                     'quantity'       =>  $qty_to_update_stock,
-                    'damagequantity' =>  $request->damagequantity,
+                    'damagequantity' =>  $damage_update_qty,
                     'dateOfissue'    =>  $request->dateOfissue,
                     'remarks'        =>  $request->remarks
                 ];
@@ -191,7 +199,7 @@ class StockIssuedController extends Controller
                 $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
                 ->where('item_id', $current_stock_data->item_id)->where('procured_type',$current_stock_data->category)->first();
                 $stock_qty= $curr_tr_data->available_qty;
-                $update_tr_qty=  $stock_qty+ $qty_diff;
+                $update_tr_qty=  ($stock_qty+ $qty_diff)-$dmage_diff;
                 $tr_data=[
                     'available_qty' => $update_tr_qty,
                     'updated_by'    => $request->user_id,

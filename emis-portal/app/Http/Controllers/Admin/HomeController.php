@@ -110,7 +110,9 @@ class HomeController extends Controller
             $this->validate($request, $rules,$customMessages);
         }
         $response_data=$this->apiService->createData('save_new_registration', $request->all());
+      
         if(json_decode($response_data)->id!=null && json_decode($response_data)->id!=""){
+
             return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);
         }
         else{
