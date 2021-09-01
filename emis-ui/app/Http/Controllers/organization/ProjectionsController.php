@@ -30,12 +30,26 @@ class ProjectionsController extends Controller
             
         ];
         $this->validate($request, $rules, $customMessages);
-        $loc =[
-            'organizationId'            =>  $this->getWrkingAgencyId(),
-            'academicYear'              =>  $request['academicYear'],
-            'items_received'            =>  $request->items_received,
-            'user_id'                   =>  $this->userId()
-        ];
+
+        if($request->id != ""){
+            //use of class Id instead of class value
+            $loc =[
+                'id'                        =>  $request->id,
+                'organizationId'            =>  $this->getWrkingAgencyId(),
+                'academicYear'              =>  $request['academicYear'],
+                'class_projections'         =>  $request->class_projections,
+                'class'                     =>  $request->classId,
+                'user_id'                   =>  $this->userId()
+            ];
+        } else {
+            $loc =[
+                'id'                        =>  $request->id,
+                'organizationId'            =>  $this->getWrkingAgencyId(),
+                'academicYear'              =>  $request['academicYear'],
+                'class_projections'         =>  $request->class_projections,
+                'user_id'                   =>  $this->userId()
+            ];
+        }
 
         $response_data= $this->apiService->createData('emis/organization/projections/saveProjections', $loc);
         return $response_data;
@@ -51,10 +65,13 @@ class ProjectionsController extends Controller
 
     public function saveFeeders(Request $request){
         $rules = [
-            
+            'parent_school'     =>  'required',
+            'class'             => 'required'
         ];
+
         $customMessages = [
-            
+            'parent_school.required'    => 'Please select Parent School',
+            'class.required'            => 'Please select class'
         ];
 
         $this->validate($request, $rules, $customMessages);

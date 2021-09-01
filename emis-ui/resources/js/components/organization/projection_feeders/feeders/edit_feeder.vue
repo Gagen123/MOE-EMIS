@@ -3,19 +3,19 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
-                  <label>Feeder Schools:<span class="text-danger">*</span></label>
-                     <select v-model="form.preference_school1" :class="{ 'is-invalid ': form.errors.has('preference_school1') }" class="form-control " name="preference_school1" id="preference_school1">
+                  <label>Select Parent School:<span class="text-danger">*</span></label>
+                     <select v-model="form.parent_school" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parent_school') }" class="form-control " name="parent_school" id="parent_school">
                         <option value=""> -- Select-- </option>
                         <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="form" field="preference_school1"></has-error>
-                    <span class="text-danger" id="preference_school1_err"></span>
+                     </select>
+                    <has-error :form="form" field="parent_school"></has-error>
+                    <span class="text-danger" id="parent_school_err"></span>
                 </div>
                  <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
                     <label>Feeder School Class:<span class="text-danger">*</span></label><br>
-                        <input type="radio" name="class" v-model="form.class" value="Class(VI-VII)" id="Class(VI-VII)"  checked> <label>Class(VI-VII):</label>&nbsp;&nbsp;
-                        <input type="radio" name="class" v-model="form.class" value="Class (VIII-IX)" id="sClass (VIII-IX)" ><label>Class (VIII-IX)</label>&nbsp;&nbsp;
-                        <input type="radio" name="class" v-model="form.class" value="Class (X-XI)" id="Class (X-XI)"> <label>Class (X-XI)</label>
+                        <input type="radio" name="class" v-model="form.class" value="VI-VII" id="VI-VII"  checked> <label>Class(VI-VII):</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="VIII-IX" id="VIII-IX" ><label>Class (VIII-IX)</label>&nbsp;&nbsp;
+                        <input type="radio" name="class" v-model="form.class" value="X-XI" id="X-XI"> <label>Class (X-XI)</label>
                 </div> 
             </div>
             <div class="form-group row">
@@ -23,28 +23,16 @@
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
-                                  <th>Parents Schools<span class="text-danger">*</span></th>
+                                  <th>Feeder Schools<span class="text-danger">*</span></th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr v-for='(item, index) in form.items_received' :key="index">
-                                  <td>
-                                    <select v-model="item.parentschool" :class="{ 'is-invalid': form.errors.has('parentschool') }" class="form-control" name="parentschool" id="parentschool">
-                                        <option value=""> -- Select-- </option>
-                                        <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="parentschool"></has-error>
-                                    <span class="text-danger" id="parentschool_error"></span>
-                                  </td>
-                              </tr> 
-                               <tr>
-                                    <td colspan=7> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
-                                    </td>
-                               </tr>                                    
+                                <select v-model="form.feeder_school" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('feederschool') }" class="form-control " name="feederschool" id="feederschool">
+                                    <option value=""> -- Select-- </option>
+                                    <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="feederschool"></has-error>
+                                <span class="text-danger" id="feederschool_err"></span>                             
                           </tbody>
                      </table>
                   </div>
@@ -61,22 +49,17 @@ export default {
     data(){
         return {
             SchoolList:[],
-            classList:[],
             form: new form({
                 id:'',
-                preference_school1:'',
+                parent_school:'',
                 class:'',
                 remarks:'',
                 action_type:'add',
-                 items_received:
-                [{
-                    parentschool:''
-                }], 
+                feeder_school:''
             }),
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -114,20 +97,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadClassList(uri="loadCommons/getOrgClassStream"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.classList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        /**
-         * method to get stream list
-         */
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -146,20 +115,18 @@ export default {
         },
         addMore: function(){
             this.count++;
-            this.form.items_received.push({
-               parentschool:''})    
+            this.form.feeder_school.push({
+               feederschool:''})    
         }, 
         remove(index){    
-             if(this.form.items_received.length>1){
+             if(this.form.feeder_school.length>1){
                 this.count--;
-                this.form.items_received.splice(index,1); 
+                this.form.feeder_school.splice(index,1); 
             }
         },
         
     },
      mounted() {
-        var checkedValue = $('.messageCheckbox:checked').val();
-
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -168,15 +135,15 @@ export default {
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadClassList();
         this.loadOrgList();
         this.form.id=this.$route.params.data.id;
-        this.form.preference_school1=this.$route.params.data.feederschool;
+        this.form.parent_school=this.$route.params.data.parent_school;
+        this.form.feeder_school=this.$route.params.data.feeder_school;
         this.form.class=this.$route.params.data.class;
-        this.form.parentschool=this.$route.params.data.parentschool;
     },
     
 }

@@ -608,13 +608,11 @@ class LoadOrganizationController extends Controller{
      */
 
     public function getOrgClassStreamByOrg($org_id, $class_name){
-
-
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
                     ->select('organization_class_streams.id')
                     ->where('organization_class_streams.organizationId', $org_id)
-                    ->where('classes.class', $class_name)
+                    ->where('classes.class', 'LIKE', $class_name)
                     ->first();
 
         return $this->successResponse($response_data);
