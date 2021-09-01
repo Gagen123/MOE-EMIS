@@ -60,7 +60,7 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link to="/track_application" class="nav-link">
+                <router-link to="/admission_initiated" class="nav-link">
                     <i class="fa fa-search nav-icon"></i>
                     <p> Apply to Schools</p>
                 </router-link>

@@ -78,13 +78,13 @@ class HomeController extends Controller
                 'name'          =>  'required',
                 'contact'   =>  'required',
                 'email'          =>  'required',
-                'password'        =>  'required',
+                'password1'        =>  'required',
             ];
             $customMessages = [
                 'name.required' => 'Student Name field is required',
                 'contact.required' => 'Contact Field is required',
                 'email.after'             => 'Email is required',
-                'password.required' => 'Password is required',
+                'password1.required' => 'Password is required',
 
             ];
             $this->validate($request, $rules,$customMessages);

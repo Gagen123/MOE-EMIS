@@ -24,6 +24,7 @@ class TaskDetails extends Model
         'created_by',
         'applied_on',
         'claimed_by',
+        'w_config_status',
         'claimed_date',
         'last_action_by',
         'last_action_date',

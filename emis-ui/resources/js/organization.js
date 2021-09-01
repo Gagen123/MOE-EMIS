@@ -1,5 +1,5 @@
 const routes = [
-  
+
     { path: '/org_approvalMaster_link', component: require('./components/masters/organization_masters/OrgAppMasterIndex.vue').default,
       children:[
             { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
@@ -191,11 +191,11 @@ const routes = [
                   { path: '/equipment_item_list', name:'EquipmentItemList', component: require('./components/masters/organization_masters/equipment_item/equipment_item_list.vue').default },
                 ]
             },
-            
+
         ]
     },
 
-    // Facility 
+    // Facility
 
     { path: '/org_facilityMaster_index', component: require('./components/masters/organization_masters/OrgFacilityMasterIndex.vue').default,
       children:[
@@ -442,132 +442,20 @@ const routes = [
         ]
     },
 
-
     //Organziation Routes (Establishment)
-  
     { path: '/establishment_verification',  name:'establishment_verification',component: require('./components/organization/establishment/establishment_verification.vue').default },
     { path: '/change_basic_details_verification', name:'change_basic_details_verification', component: require('./components/organization/restructuring/change_basic_details_verification.vue').default },
-  
+
     { path: '/closure_verification',name:'closure_verification', component: require('./components/organization/restructuring/closure_verification.vue').default },
     { path: '/reopening_verification',  name:'reopening_verification',component: require('./components/organization/restructuring/reopening_verification.vue').default },
     { path: '/merger_verification',  name:'merger_verification',component: require('./components/organization/restructuring/merger_verification.vue').default },
     { path: '/bifurcation_verification',  name:'bifurcation_verification',component: require('./components/organization/restructuring/bifurcation_verification.vue').default },
-  
-    { path: '/establishment_index', component: require('./components/organization/establishment/establishment_index.vue').default,
-      children:[
-        { path: '/',name:"establishment_index", component: require('./components/organization/establishment/estblishment_guide.vue').default },
-        { path: '/public_school_index',
-          component: require('./components/organization/establishment/public_school/public_school_index.vue').default,
-          children: [
-            { path: '/', name:'public_school_index', component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
-            { path: '/list_public_school', name:'list_public_school', component: require('./components/organization/establishment/public_school/list_public_school.vue').default },
-            { path: '/create_public_school',name:"create_public_school", component: require('./components/organization/establishment/public_school/create_public_school.vue').default },
-            { path: '/edit_public_school',  name:'edit_public_school',component: require('./components/organization/establishment/public_school/edit_school_details.vue').default },
-            { path: '/acknowledgement_public_school',  name:'acknowledgement_public_school',component: require('./components/organization/establishment/public_school/acknowledgement.vue').default },
-            { path: '/show_public_school',  name:'show_public_school',component: require('./components/organization/establishment/public_school/show_public_school.vue').default },
-          ]
-        },
-        { path: '/public_eccd_index',
-          component: require('./components/organization/establishment/public_eccd/public_eccd_index.vue').default,
-          children: [
-            { path: '/', name:'public_eccd_index', component: require('./components/organization/establishment/public_eccd/list_public_eccd.vue').default },
-            { path: '/list_public_eccd', name:'list_public_eccd', component: require('./components/organization/establishment/public_eccd/list_public_eccd.vue').default },
-            { path: '/create_public_eccd',name:"create_public_eccd", component: require('./components/organization/establishment/public_eccd/create_public_eccd.vue').default },
-            { path: '/edit_public_eccd',  name:'edit_public_eccd',component: require('./components/organization/establishment/public_eccd/edit_public_eccd.vue').default },
-            { path: '/acknowledgement_public_eccd',  name:'acknowledgement_public_eccd',component: require('./components/organization/establishment/public_eccd/acknowledgement.vue').default },
-            { path: '/show_public_eccd',  name:'show_public_eccd',component: require('./components/organization/establishment/public_eccd/show_public_eccd.vue').default },
-          ]
-        },
-        { path: '/private_school_index',
-          component: require('./components/organization/establishment/private_school/private_school_index.vue').default,
-          children: [
-            { path: '/', name:'private_school_index', component: require('./components/organization/establishment/private_school/list_private_school.vue').default },
-            { path: '/list_private_school', name:'list_private_school', component: require('./components/organization/establishment/private_school/list_private_school.vue').default },
-            { path: '/create_private_school',name:"create_private_school", component: require('./components/organization/establishment/private_school/create_private_school.vue').default },
-            { path: '/edit_private_school',  name:'edit_private_school',component: require('./components/organization/establishment/private_school/edit_private_school.vue').default },
-            { path: '/acknowledgement_private_school',  name:'acknowledgement_private_school',component: require('./components/organization/establishment/private_school/acknowledgement.vue').default },
-            { path: '/show_private_school',  name:'show_private_school',component: require('./components/organization/establishment/private_school/show_private_school.vue').default },
-          ]
-        },
-        { path: '/private_eccd_index',
-          component: require('./components/organization/establishment/private_eccd/private_eccd_index.vue').default,
-          children: [
-            { path: '/', name:'private_eccd_index', component: require('./components/organization/establishment/private_eccd/list_private_eccd.vue').default },
-            { path: '/list_private_eccd', name:'list_private_eccd', component: require('./components/organization/establishment/private_eccd/list_private_eccd.vue').default },
-            { path: '/create_private_eccd',name:"create_private_eccd", component: require('./components/organization/establishment/private_eccd/create_private_eccd.vue').default },
-            { path: '/edit_private_eccd',  name:'edit_private_eccd',component: require('./components/organization/establishment/private_eccd/edit_private_eccd.vue').default },
-            { path: '/acknowledgement_private_eccd',  name:'acknowledgement_private_eccd',component: require('./components/organization/establishment/private_eccd/acknowledgement.vue').default },
-            { path: '/show_private_eccd',  name:'show_private_eccd',component: require('./components/organization/establishment/private_eccd/show_private_eccd.vue').default },
-          ]
-        },
-  
-        { path: '/ecr_index',
-        component: require('./components/organization/establishment/ecr/ecr_index.vue').default,
-        children: [
-          { path: '/', name:'ecr_index', component: require('./components/organization/establishment/ecr/list_ecr.vue').default },
-          { path: '/list_ecr', name:'list_ecr', component: require('./components/organization/establishment/ecr/list_ecr.vue').default },
-          { path: '/create_ecr',name:"create_ecr", component: require('./components/organization/establishment/ecr/create_ecr.vue').default },
-          { path: '/edit_ecr',  name:'edit_ecr',component: require('./components/organization/establishment/ecr/edit_ecr.vue').default },
-          { path: '/acknowledgement_ecr',  name:'acknowledgement_ecr',component: require('./components/organization/establishment/ecr/acknowledgement.vue').default },
-          { path: '/show_ecr',  name:'show_ecr',component: require('./components/organization/establishment/ecr/show_ecr.vue').default },
-        ]
-      },
-      { path: '/register',
-        component: require('./components/organization/establishment/register/register_index.vue').default ,
-        children: [
-          { path: '/',name:'register', component: require('./components/organization/establishment/register/register_list.vue').default },
-          { path: '/list_register',name:'list_register', component: require('./components/organization/establishment/register/register_list.vue').default },
-          { path: '/create_register',name:'create_register', component: require('./components/organization/establishment/register/register.vue').default },
-          { path: '/edit_register',name:'edit_register', component: require('./components/organization/establishment/register/edit_register.vue').default },
-        ]
-      },
-      { path: '/headquaters_index',
-        component: require('./components/organization/establishment/headquarters/headquarters_index.vue').default ,
-        children: [
-          { path: '/', name:'headquaters_index', component: require('./components/organization/establishment/headquarters/list_headquarters.vue').default },
-          { path: '/list_headquaters',  name:'list_headquaters', component: require('./components/organization/establishment/headquarters/list_headquarters.vue').default },
-          { path: '/create_headquaters',name:'create_headquaters', component: require('./components/organization/establishment/headquarters/create_headquaters.vue').default },
-          { path: '/edit_headquaters',name:'edit_headquaters', component: require('./components/organization/establishment/headquarters/edit_headquarters.vue').default },
-          { path: '/acknowledgement_headquarters',  name:'acknowledgement_headquarters',component: require('./components/organization/establishment/headquarters/acknowledgement.vue').default },
-        ]
-      },
-        // { path: '/new_establishment_index',  name:'establishment_index',
-        //   component: require('./components/organization/establishment/new_establishment/new_establishment_index.vue').default ,
-        //   children: [
-        //     { path: '',name:"establishment_index_list", component: require('./components/organization/establishment/new_establishment/establishment_index_list.vue').default },
-        //     { path: '/establishment',name:"establishment",
-        //         component: require('./components/organization/establishment/new_establishment/establishment.vue').default,
-        //         children: [
-        //             // { path: '/public_school',name:"public_school", component: require('./components/organization/establishment/new_establishment/public_school.vue').default },
-        //             { path: '/private_school',name:"private_school", component: require('./components/organization/establishment/new_establishment/private_school.vue').default },
-        //             { path: '/public_eccd', name:'public_eccd', component: require('./components/organization/establishment/new_establishment/public_eccd.vue').default },
-        //             { path: '/private_eccd',name:"private_eccd", component: require('./components/organization/establishment/new_establishment/private_eccd.vue').default },
-        //             { path: '/public_ecr',name:"public_ecr", component: require('./components/organization/establishment/new_establishment/public_ecr.vue').default },
-        //           ]
-        //     },
-        //     { path: '/estb_acknowledgement', name:'estb_acknowledgement', component: require('./components/organization/establishment/new_establishment/acknowledgement.vue').default },
-        //   ]
-        // },
-        // { path: '/org_details',
-        //   component: require('./components/organization/organization_details/org_details.vue').default ,
-        //   children: [
-        //     { path: '/org_details', name:'org_details', component: require('./components/organization/organization_details/org_details.vue').default },
-        //     { path: '/school_list',name:"school_list", component: require('./components/organization/organization_details/school_list.vue').default },
-        //     { path: '/school_details',  name:'school_details',component: require('./components/organization/organization_details/school_details.vue').default },
-        //     { path: '/school_full_details',  name:'school_full_details',component: require('./components/organization/organization_details/school_full_details.vue').default },
-        //   ]
-        // },
-  
-        { path: '/establishment_acknowledgement', name:'establishment_acknowledgement', component: require('./components/organization/establishment/acknowledgement.vue').default },
-      ]
-    },
-  
-  
+
     //Organization Routes (General Information)
     { path: '/general_index', component: require('./components/organization/general/general_index.vue').default,
         children:[
           { path: '/general_index',name:"general_index", component: require('./components/organization/general/general_index_list.vue').default },
-  
+
             { path: '/equipment_index',
                 component: require('./components/organization/general/equipment/equipment_index.vue').default,
                 children: [
@@ -586,9 +474,6 @@ const routes = [
                     { path: '/furniture_list', name:'furniture_list', component: require('./components/organization/general/furniture/furniture_list.vue').default },
                 ]
             },
-  
-           
-  
             //   { path: '/projections',
             //   component: require('./components/organization/centers_feeders/projections/projections.vue').default ,
             //   children: [
@@ -616,10 +501,10 @@ const routes = [
             //     { path: '/list_section', name:'list_section', component: require('./components/organization/general/section/list_section.vue').default },
             //     { path: '/create_section', name:'create_section', component: require('./components/organization/general/section/create_section.vue').default },
             //     { path: '/edit_section', name:'edit_section', component: require('./components/organization/general/section/edit_section.vue').default },
-  
+
             //   ]
             // },
-  
+
             // { path: '/sections_add', name:'sections_add',
             //     // component: require('./components/organization/general/section/sections_add.vue').default,
             //     children:
@@ -630,8 +515,8 @@ const routes = [
             //         { path: '/location_list', name:'LocationList', component: require('./components/masters/organization_masters/location/location_list.vue').default },
             //     ]
             // },
-  
-  
+
+
             // { path: '/org_class_mapping', name:'org_class_mapping',
             //     component: require('./components/organization/general/org_class_mapping.vue').default,
             //     children:
@@ -644,221 +529,12 @@ const routes = [
             // },
         ]
     },
-  
-  //  Organization (Restructuring Routes)
-    { path: '/restructuring_index', component: require('./components/organization/restructuring/restructuring_index.vue').default,
-      children:[
-      { path: '/restructuring_index',name:"restructuring_index", component: require('./components/organization/restructuring/restructuring_index_list.vue').default },
-  
-      { path: '/name_change_index',
-        component: require('./components/organization/restructuring/name_change/name_change_index.vue').default ,
-          children: [
-            { path: '/',name:'name_change_index', component: require('./components/organization/restructuring/name_change/list_name_change.vue').default },
-            { path: '/list_name_change',name:'list_name_change', component: require('./components/organization/restructuring/name_change/list_name_change.vue').default },
-            { path: '/create_name_change',name:'create_name_change', component: require('./components/organization/restructuring/name_change/create_name_change.vue').default },
-            { path: '/edit_name_change',name:'edit_name_change', component: require('./components/organization/restructuring/name_change/edit_name_change.vue').default },
-            { path: '/view_name_change',name:'view_name_change', component: require('./components/organization/restructuring/name_change/view_name_change.vue').default },
-            { path: '/name_change_acknowledgement', name:'name_change_acknowledgement', component: require('./components/organization/restructuring/name_change/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/level_change_index',
-        component: require('./components/organization/restructuring/level_change/level_change_index.vue').default ,
-          children: [
-            { path: '/',name:'level_change_index', component: require('./components/organization/restructuring/level_change/list_level_change.vue').default },
-            { path: '/list_level_change',name:'list_level_change', component: require('./components/organization/restructuring/level_change/list_level_change.vue').default },
-            { path: '/create_level_change',name:'create_level_change', component: require('./components/organization/restructuring/level_change/create_level_change.vue').default },
-            { path: '/edit_level_change',name:'edit_level_change', component: require('./components/organization/restructuring/level_change/edit_level_change.vue').default },
-            { path: '/view_level_change',name:'view_level_change', component: require('./components/organization/restructuring/level_change/view_level_change.vue').default },
-            { path: '/level_change_acknowledgement', name:'level_change_acknowledgement', component: require('./components/organization/restructuring/level_change/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/upgrade_index',
-        component: require('./components/organization/restructuring/upgrade/upgrade_index.vue').default ,
-          children: [
-            { path: '/',name:'upgrade_index', component: require('./components/organization/restructuring/upgrade/list_upgrade.vue').default },
-            { path: '/list_upgrade',name:'list_upgrade', component: require('./components/organization/restructuring/upgrade/list_upgrade.vue').default },
-            { path: '/create_upgrade',name:'create_upgrade', component: require('./components/organization/restructuring/upgrade/create_upgrade.vue').default },
-            { path: '/edit_upgrade',name:'edit_upgrade', component: require('./components/organization/restructuring/upgrade/edit_upgrade.vue').default },
-            { path: '/view_upgrade',name:'view_upgrade', component: require('./components/organization/restructuring/upgrade/view_upgrade.vue').default },
-            { path: '/upgrade_acknowledgement', name:'upgrade_acknowledgement', component: require('./components/organization/restructuring/upgrade/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/sen_details_index',
-        component: require('./components/organization/restructuring/sen_change/sen_change_index.vue').default ,
-          children: [
-            { path: '/',name:'sen_details_index', component: require('./components/organization/restructuring/sen_change/list_sen_change.vue').default },
-            { path: '/list_sen_change',name:'list_sen_change', component: require('./components/organization/restructuring/sen_change/list_sen_change.vue').default },
-            { path: '/create_sen_change',name:'create_sen_change', component: require('./components/organization/restructuring/sen_change/create_sen_change.vue').default },
-            { path: '/edit_sen_change',name:'edit_sen_change', component: require('./components/organization/restructuring/sen_change/edit_sen_change.vue').default },
-            { path: '/view_sen_change',name:'view_sen_change', component: require('./components/organization/restructuring/sen_change/view_sen_change.vue').default },
-            { path: '/sen_change_acknowledgement', name:'sen_change_acknowledgement', component: require('./components/organization/restructuring/sen_change/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/feeding_details_index',
-        component: require('./components/organization/restructuring/feeding_change/feeding_change_index.vue').default ,
-          children: [
-            { path: '/',name:'feeding_details_index', component: require('./components/organization/restructuring/feeding_change/list_feeding_change.vue').default },
-            { path: '/list_feeding_change',name:'list_feeding_change', component: require('./components/organization/restructuring/feeding_change/list_feeding_change.vue').default },
-            { path: '/create_feeding_change',name:'create_feeding_change', component: require('./components/organization/restructuring/feeding_change/create_feeding_change.vue').default },
-            { path: '/edit_feeding_change',name:'edit_feeding_change', component: require('./components/organization/restructuring/feeding_change/edit_feeding_change.vue').default },
-            { path: '/view_feeding_change',name:'view_feeding_change', component: require('./components/organization/restructuring/feeding_change/view_feeding_change.vue').default },
-            { path: '/feeding_change_acknowledgement', name:'feeding_change_acknowledgement', component: require('./components/organization/restructuring/feeding_change/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/proprietor_details_index',
-        component: require('./components/organization/restructuring/proprietor_change/proprietor_change_index.vue').default ,
-          children: [
-            { path: '/',name:'proprietor_details_index', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
-            { path: '/list_proprietor_change',name:'list_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/list_proprietor_change.vue').default },
-            { path: '/create_proprietor_change',name:'create_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/create_proprietor_change.vue').default },
-            { path: '/edit_proprietor_change',name:'edit_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/edit_proprietor_change.vue').default },
-            { path: '/view_proprietor_change',name:'view_proprietor_change', component: require('./components/organization/restructuring/proprietor_change/view_proprietor_change.vue').default },
-            { path: '/proprietor_change_acknowledgement', name:'proprietor_change_acknowledgement', component: require('./components/organization/restructuring/proprietor_change/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/location_change_index',
-        component: require('./components/organization/restructuring/location_change/location_change_index.vue').default ,
-          children: [
-            { path: '/',name:'location_change_index', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
-            { path: '/list_location_change',name:'list_location_change', component: require('./components/organization/restructuring/location_change/list_location_change.vue').default },
-            { path: '/create_location_change',name:'create_location_change', component: require('./components/organization/restructuring/location_change/create_location_change.vue').default },
-            { path: '/edit_location_change',name:'edit_location_change', component: require('./components/organization/restructuring/location_change/edit_location_change.vue').default },
-            { path: '/view_location_change',name:'view_location_change', component: require('./components/organization/restructuring/location_change/view_location_change.vue').default },
-            { path: '/location_change_acknowledgement', name:'location_change_acknowledgement', component: require('./components/organization/restructuring/location_change/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/fee_structure_change_index',
-        component: require('./components/organization/restructuring/fee_structure/fee_structure_index.vue').default ,
-          children: [
-            { path: '/',name:'fee_structure_change_index', component: require('./components/organization/restructuring/fee_structure/list_fee_structure.vue').default },
-            { path: '/list_fee_structure',name:'list_fee_structure', component: require('./components/organization/restructuring/fee_structure/list_fee_structure.vue').default },
-            { path: '/create_fee_structure',name:'create_fee_structure', component: require('./components/organization/restructuring/fee_structure/create_fee_structure.vue').default },
-            { path: '/edit_fee_structure',name:'edit_fee_structure', component: require('./components/organization/restructuring/fee_structure/edit_fee_structure.vue').default },
-            { path: '/view_fee_structure',name:'view_fee_structure', component: require('./components/organization/restructuring/fee_structure/view_fee_structure.vue').default },
-            { path: '/fee_structure_acknowledgement', name:'fee_structure_acknowledgement', component: require('./components/organization/restructuring/fee_structure/acknowledgement.vue').default },
-          ]
-      },
-      { path: '/bording_change_index',
-        component: require('./components/organization/restructuring/boarding/boarding_index.vue').default ,
-          children: [
-            { path: '/',name:'bording_change_index', component: require('./components/organization/restructuring/boarding/list_boarding.vue').default },
-            { path: '/list_boarding',name:'list_boarding', component: require('./components/organization/restructuring/boarding/list_boarding.vue').default },
-            { path: '/create_boarding',name:'create_boarding', component: require('./components/organization/restructuring/boarding/create_boarding.vue').default },
-            { path: '/edit_boarding',name:'edit_boarding', component: require('./components/organization/restructuring/boarding/edit_boarding.vue').default },
-            { path: '/view_boarding',name:'view_boarding', component: require('./components/organization/restructuring/boarding/view_boarding.vue').default },
-            { path: '/boarding_acknowledgement', name:'boarding_acknowledgement', component: require('./components/organization/restructuring/boarding/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/expension_index',
-        component: require('./components/organization/restructuring/expension/expension_index.vue').default ,
-          children: [
-            { path: '/',name:'expension_index', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
-            { path: '/list_expension',name:'list_expension', component: require('./components/organization/restructuring/expension/list_expension.vue').default },
-            { path: '/create_expension',name:'create_expension', component: require('./components/organization/restructuring/expension/create_expension.vue').default },
-            { path: '/edit_expension',name:'edit_expension', component: require('./components/organization/restructuring/expension/edit_expension.vue').default },
-            { path: '/view_expension',name:'view_expension', component: require('./components/organization/restructuring/expension/view_expension.vue').default },
-            { path: '/expension_acknowledgement', name:'expension_acknowledgement', component: require('./components/organization/restructuring/expension/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/autonomus_index',
-        component: require('./components/organization/restructuring/autonomous/autonomous_index.vue').default ,
-          children: [
-            { path: '/',name:'autonomus_index', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
-            { path: '/list_autonomous',name:'list_autonomous', component: require('./components/organization/restructuring/autonomous/list_autonomous.vue').default },
-            { path: '/create_autonomous',name:'create_autonomous', component: require('./components/organization/restructuring/autonomous/create_autonomous.vue').default },
-            { path: '/edit_autonomous',name:'edit_autonomous', component: require('./components/organization/restructuring/autonomous/edit_autonomous.vue').default },
-            { path: '/view_autonomous',name:'view_autonomous', component: require('./components/organization/restructuring/autonomous/show_autonomous.vue').default },
-            { path: '/autonomous_acknowledgement', name:'autonomous_acknowledgement', component: require('./components/organization/restructuring/autonomous/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/stream_change_index',
-        component: require('./components/organization/restructuring/stream_change/stream_change_index.vue').default ,
-          children: [
-            { path: '/',name:'stream_change_index', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
-            { path: '/list_stream_change',name:'list_stream_change', component: require('./components/organization/restructuring/stream_change/list_stream_change.vue').default },
-            { path: '/create_stream_change',name:'create_stream_change', component: require('./components/organization/restructuring/stream_change/create_stream_change.vue').default },
-            { path: '/edit_stream_change',name:'edit_stream_change', component: require('./components/organization/restructuring/stream_change/edit_stream_change.vue').default },
-            { path: '/view_stream_change',name:'view_stream_change', component: require('./components/organization/restructuring/stream_change/view_stream_change.vue').default },
-            { path: '/stream_change_acknowledgement', name:'stream_change_acknowledgement', component: require('./components/organization/restructuring/stream_change/acknowledgement.vue').default },
-          ]
-      },
-  
-      { path: '/bifurcation_index',
-        component: require('./components/organization/restructuring/bifurcation/bifurcation_index.vue').default ,
-          children: [
-            { path: '/',name:'bifurcation_index', component: require('./components/organization/restructuring/bifurcation/list_bifurcation.vue').default },
-            { path: '/list_bifurcation',name:'list_bifurcation', component: require('./components/organization/restructuring/bifurcation/list_bifurcation.vue').default },
-            { path: '/create_bifurcation',name:'create_bifurcation', component: require('./components/organization/restructuring/bifurcation/create_bifurcation.vue').default },
-            { path: '/edit_bifurcation',name:'edit_bifurcation', component: require('./components/organization/restructuring/bifurcation/edit_bifurcation.vue').default },
-            { path: '/show_bifurcation',name:'show_bifurcation', component: require('./components/organization/restructuring/bifurcation/show_bifurcation.vue').default },
-            { path: '/bifurcation_acknowledgement', name:'bifurcation_acknowledgement', component: require('./components/organization/restructuring/bifurcation/acknowledgement.vue').default },
-          ]
-      },
-  
-  
-  
-        // { path: '/change_details_index',
-        //   name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_index.vue').default,
-        //     children: [
-        //       { path: '',name:'change_details_index', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
-        //       { path: '/change_details_add',
-        //         component: require('./components/organization/restructuring/change_details/change_details_add.vue').default,
-        //         children: [
-        //           { path: '/change_name',name:"change_name", component: require('./components/organization/restructuring/change_details/change_name.vue').default },
-        //           { path: '/change_level',name:"change_level", component: require('./components/organization/restructuring/change_details/change_level.vue').default },
-        //           { path: '/change_feeding_details', name:'change_feeding_details', component: require('./components/organization/restructuring/change_details/change_feeding_details.vue').default },
-        //           { path: '/change_sen_details', name:'change_sen_details', component: require('./components/organization/restructuring/change_details/change_sen_details.vue').default },
-        //           { path: '/change_proprietor_details', name:'change_proprietor_details', component: require('./components/organization/restructuring/change_details/change_proprietor_details.vue').default },
-        //           { path: '/change_all_details', name:'change_all_details', component: require('./components/organization/restructuring/change_details/change_all_details.vue').default },
-        //         ]
-        //       },
-        //       { path: '/change_details_edit', name:'change_details_edit', component: require('./components/organization/restructuring/change_details/change_details_edit.vue').default },
-        //       { path: '/change_details_list', name:'change_details_list', component: require('./components/organization/restructuring/change_details/change_details_list.vue').default },
-        //     ]
-        // },
-  
-        //{ path: '/merger',name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
-        { path: '/merger_index',
-          component: require('./components/organization/restructuring/merger/merger_index.vue').default ,
-            children: [
-              { path: '/',name:'merger_index', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
-              { path: '/bifurcation_list',name:'bifurcation_list', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
-              { path: '/merger', name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
-            ]
-        },
-        { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
-        { path: '/closure_index',
-          component: require('./components/organization/restructuring/closure/closure_index.vue').default ,
-          children: [
-            { path: '/',name:'closure_index', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-            { path: '/closure_list',name:'closure_list', component: require('./components/organization/restructuring/closure/closure_list.vue').default },
-            { path: '/closure', name:'closure', component: require('./components/organization/restructuring/closure/closure.vue').default },
-            { path: '/closure_acknowledgement', name:'closure_acknowledgement', component: require('./components/organization/restructuring/closure/acknowledgement.vue').default },
-          ]
-        },
-        { path: '/reopening_index',
-          component: require('./components/organization/restructuring/reopening_public/reopening_index.vue').default ,
-          children: [
-            { path: '/',name:'reopening_index', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
-            { path: '/reopening_add',name:'reopening_add', component: require('./components/organization/restructuring/reopening_public/reopening_add.vue').default },
-            { path: '/reopening_list', name:'reopening_list', component: require('./components/organization/restructuring/reopening_public/reopening_list.vue').default },
-            { path: '/reopening_acknowledgement', name:'reopening_acknowledgement', component: require('./components/organization/restructuring/reopening_public/acknowledgement.vue').default },
-          ]
-        },
-      ]
-    },
-  
-  
+
     // Organisational Routes (structural facility route)
     { path: '/structural_index', component: require('./components/organization/structuralFacility/structural_index.vue').default,
       children:[
         { path: '/',name:"structural_index", component: require('./components/organization/structuralFacility/structural_index_list.vue').default },
-  
+
         { path: '/infrastructure_index',
           component: require('./components/organization/structuralFacility/infrastructure/infrastructure_index.vue').default ,
           children: [
@@ -886,7 +562,7 @@ const routes = [
             { path: '/eccd_list', name:'EccdList', component: require('./components/organization/structuralFacility/eccd_facilities/eccd_list.vue').default },
             ]
         },
-  
+
         { path: '/sport_index',
           component: require('./components/organization/structuralFacility/sport/sport_index.vue').default ,
           children: [
@@ -896,7 +572,7 @@ const routes = [
             { path: '/sport_list', name:'SportList', component: require('./components/organization/structuralFacility/sport/sport_list.vue').default },
           ]
         },
-  
+
         { path: '/financial_information',
           component: require('./components/organization/financials/financial_information/financial_information.vue').default ,
           children: [
@@ -906,7 +582,7 @@ const routes = [
             { path: '/list_financial_info', name:'list_financial_info', component: require('./components/organization/financials/financial_information/list_financial_information.vue').default },
           ]
         },
-  
+
         { path: '/income_information',
           component: require('./components/organization/financials/income_information/income_information.vue').default ,
           children: [
@@ -957,7 +633,7 @@ const routes = [
         { path: '/eccdfacilities',name:'eccdfacilities', component: require('./components/organization/structuralFacility/eccdFacilities.vue').default },
       ]
     },
-  
+
     { path: '/mission_vission',name:'mission_vission', component: require('./components/organization/organization_profile_update.vue').default },
     { path: '/organization_list',name:'organization_list', component: require('./components/organization/organization_list.vue').default },
     { path: '/view_organization_profile',name:'view_organization_profile', component: require('./components/organization/view_organization_profile.vue').default },
@@ -987,7 +663,7 @@ const routes = [
         { path: '/list_sen_module', name:'list_sen_module', component: require('./components/organization/general/sen_module/list_sen_module.vue').default },
       ]
     },
-  
+
     { path: '/org_programs',
       component: require('./components/organization/general/programs_clubs/org_programs.vue').default ,
       children: [
@@ -997,7 +673,7 @@ const routes = [
         { path: '/list_org_programs', name:'list_org_programs', component: require('./components/organization/general/programs_clubs/list_org_programs.vue').default },
       ]
     },
-  
+
     //organization subject offering
     { path: '/subject_offered',
       component: require('./components/organization/subject_offered/subject_offered_index.vue').default ,
@@ -1007,12 +683,12 @@ const routes = [
         { path: '/list_subject_offered', name:'list_subject_offered', component: require('./components/organization/subject_offered/list_subject_offered.vue').default },
       ]
     },
-  
-  
+
+
     //Latest Routes (31st May - All missing information as per the requirement gathering and discussion)
     { path: '/financials', component: require('./components/organization/financials/index.vue').default,
       children:[
-  
+
         { path: '/child_facilities',
           component: require('./components/organization/facilities/child/child_facilities.vue').default ,
           children: [
@@ -1022,7 +698,7 @@ const routes = [
             { path: '/list_child_facilities', name:'list_child_facilities', component: require('./components/organization/facilities/child/list_child_facilities.vue').default },
           ]
         },
-  
+
         { path: '/location_details',
           component: require('./components/organization/general/location_details/location_details.vue').default ,
           children: [
@@ -1038,10 +714,10 @@ const routes = [
     { path: '/projection_index', component: require('./components/organization/projection_feeders/projection_index.vue').default,
       children:[
         { path: '/',name:"projection_index", component: require('./components/organization/projection_feeders/list_projections.vue').default },
-  
+
         { path: '/projections',
         component: require('./components/organization/projection_feeders/projections/projections.vue').default ,
-  
+
         children: [
           { path: '',name:'projections', component: require('./components/organization/projection_feeders/projections/list_projections.vue').default },
           { path: '/add_projections', name:'add_projections', component: require('./components/organization/projection_feeders/projections/add_projections.vue').default },
@@ -1060,8 +736,8 @@ const routes = [
         },
       ]
     },
-  
-  
+
+
     //New Routes for Connectivity
     // { path: '/restructuringnew_index',
     //   component: require('./components/organization/restructuring/change_details/restructuringnew_index.vue').default,
@@ -1131,7 +807,7 @@ const routes = [
     //     },
     //   ]
     // },
-  
+
     //New Routes for Other Infromation
   //   { path: '/otherOrgInfo_index',
   //   component: require('./components/organization/otherOrganizationalinfo/otherOrgInfo_index.vue').default,
@@ -1163,7 +839,7 @@ const routes = [
   //         { path: '/equipment&furniture_list', name:'Equipment&FurnitureList', component: require('./components/organization/otherOrganizationalinfo/equipment&furniture/equipment&furniture_list.vue').default },
   //       ]
   //     },
-  
+
   //     { path: '/classMapping_index',
   //       component: require('./components/organization/otherOrganizationalinfo/class&sectionMapping/classMapping_index.vue').default ,
   //       children: [
@@ -1175,9 +851,9 @@ const routes = [
   //     },
   //   ]
   // },
-  
+
   //Create New Organization
-  
+
   //   { path: '/newEstablishment_index',
   //   component: require('./components/organization/newEstablishment/newEstablishment_index.vue').default,
   //     children:[
@@ -1199,7 +875,7 @@ const routes = [
   //         { path: '/registerOrg_list', name:'RegisterOrgList', component: require('./components/organization/newEstablishment/registerOrg/registerOrg_list.vue').default },
   //       ]
   //     },
-  
+
   //     { path: '/headQuarter_index',
   //       component: require('./components/organization/newEstablishment/headQuarter/HQ_index.vue').default ,
   //       children: [
@@ -1209,10 +885,9 @@ const routes = [
   //         { path: '/HQ_list', name:'HQList', component: require('./components/organization/newEstablishment/headQuarter/HQ_list.vue').default },
   //       ]
   //     },
-  
+
   //   ]
   // },
   ];
-  
+
   export default routes
-  

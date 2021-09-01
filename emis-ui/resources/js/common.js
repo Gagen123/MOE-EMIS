@@ -17,6 +17,30 @@ try {
                 }
             },
 
+            applyselect2field(id){
+                if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
+                    $('#'+id).addClass('select2-hidden-accessible');
+                }
+            },
+
+            remove_error(field_id){
+                if($('#'+field_id).val()!=""){
+                    $('#'+field_id).removeClass('is-invalid');
+                    $('#'+field_id+'_err').html('');
+                }
+            },
+
+            change_tab(nextclass){
+                $('#tabhead >li >a').removeClass('active');
+                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').addClass('active');
+                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
+                $('.'+nextclass+' >a').removeClass('disabled');
+                $('.tab-content-details').hide();
+                $('#'+nextclass).show().removeClass('fade');
+                this.applyselect2();
+            },
+
             getDepartmentListbydzo(type,dzoId){
                 let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
                 if(type=="DzongkhagHeadquarter"){
@@ -39,8 +63,62 @@ try {
                    console.log('error loadactivedzongkhags '+e);
                 }
             },
+
+            loadgewogList(dzongkhag){
+                let uri='masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                   console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
+            loadvillageList(gewog){
+                let uri='masters/all_active_dropdowns/gewog/'+gewog;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                   console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
+            loadlocationList(){
+                let uri='organization/getLocationInDropdown';
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                   console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
+            loadproposedByList(){
+                let uri='masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                   console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
             schoolList(dzo_id){
                 let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
+            schoolListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+            getClassStreamMappings(type){
+                let uri = '/masters/loadClassStreamMapping/'+type;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){

@@ -5,7 +5,9 @@
                 <tr>
                     <th >SL#</th>
                     <th >Stream</th>
-                    <th >Date of created</th>
+                    <th >Subject</th>
+                    <th >Min. Marks Required</th>
+                    <th >Min. Grade Required</th>
                     <th >Action</th>
                 </tr>
             </thead>
@@ -13,7 +15,9 @@
                 <tr v-for="(item, index) in streamclass" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{StreamName[item.streamId]}}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td >{{SubjectDropdown[item.aca_sub_id]}} </td>
+                    <td >{{item.marks}} </td>
+                    <td >{{item.grade}} </td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -29,10 +33,25 @@ export default {
     data(){
         return{
             streamclass:[],
+            SubjectDropdown:{},
             StreamName:{},
         }
     },
     methods:{
+        loadsubjectList(){
+            axios.get('masters/loadClassSubject/' +this.class_id)
+            .then(response => {
+                let data = response.data.data;
+                 for(let i=0;i<data.length;i++){
+                    this.SubjectDropdown[data[i].aca_sub_id] =data[i].subject;
+                }
+            })
+            .catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
         loadstreammarks(uri = '/masters/loadstreamMarks'){
             axios.get(uri)
             .then(response => {
@@ -45,7 +64,7 @@ export default {
                 }
             });
         },
-         loadStreamList(uri = 'masters/loadStream'){
+        loadStreamList(uri = 'masters/loadStream'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -66,7 +85,9 @@ export default {
     },
     mounted(){
         this.loadStreamList();
+        this.loadsubjectList();
         this.loadstreammarks();
+        
         this.dt =  $("#streamclass-table").DataTable()
      
     },

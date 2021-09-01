@@ -62,19 +62,24 @@ class StudentMasterController extends Controller
             $response_data = $this->insertData($data, $databaseModel);
         }
         else if($request->actiontype=="edit"){
-
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
        // dd($response_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
+
+    /**
+     * Qualification marks for class XI
+     */
+
     public function saveStreamSubject(Request $request){
         $id = $request->id;
         if($id != null){
             $subjectlist = [
                 'streamId'           =>  $request['streamId'],
                 'aca_sub_id'         =>  $request['aca_sub_id'],
+                'subject_name'       =>  $request['name'],
                 'marks'              =>  $request['marks'],
                 'grade'              =>  $request['grade'],
                 'id'                 =>  $request['id'],
@@ -95,6 +100,10 @@ class StudentMasterController extends Controller
                    if(isset($classstream['grade'])){
                        $grade=$classstream['grade'];
                    }
+                   $subject_name="";
+                   if(isset($classstream['name'])){
+                        $subject_name=$classstream['name'];
+                    }
                    $aca_sub_id="";
                    if(isset($classstream['aca_sub_id'])){
                        $aca_sub_id=$classstream['aca_sub_id'];
@@ -102,6 +111,7 @@ class StudentMasterController extends Controller
                    $data = array(
                     'streamId'           =>  $request['streamId'],
                     'aca_sub_id'         =>  $aca_sub_id,
+                    'subject_name'       =>  $subject_name,
                     'marks'              =>  $marks,
                     'grade'              =>  $grade,
                     'id'                 =>  $request['id'],
@@ -303,7 +313,7 @@ class StudentMasterController extends Controller
     private function insertData($data, $databaseModel){
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
-
+        
         $response_data = $model::create($data);
 
         return $response_data;
@@ -338,7 +348,7 @@ class StudentMasterController extends Controller
             $data->Unit_id   =  $dataRequest['Unit_id'];
             $data->CeaProgrammeItemVarietyId   =  $dataRequest['variety'];
         }
-        $data->Description = $dataRequest['Description'];
+
         $data->Status = $dataRequest['Status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
@@ -361,7 +371,7 @@ class StudentMasterController extends Controller
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
-            if($record_type!="StudentType" || $record_type!="ScholarType" || $record_type!="SpBenefit"){
+            if($record_type!="StudentType" && $record_type!="ScholarType" && $record_type!="SpBenefit"){
                 $additional_data = [
                     'Description'  =>  $request['description'],
                 ];

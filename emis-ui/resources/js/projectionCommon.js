@@ -2,7 +2,7 @@ try {
     Vue.mixin({
         methods: {
             loadEccdChildrens(type,dzoId){
-                let uri = 'projections/projectionController/loadEccdChildren/'+type+'/'+dzoId;
+                let uri = 'projections/education/loadEccdChildren/'+type+'/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
@@ -19,7 +19,7 @@ try {
             },
 
             loadStudents(dzoId){
-                let uri = 'projections/projectionController/loadStudents/'+dzoId;
+                let uri = 'projections/education/loadStudents/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
@@ -27,7 +27,7 @@ try {
                 }
             },
             loadeducationCenter(type,dzoId){
-                let uri = 'projections/OrgProjectionController/loadOrgListProjection/'+type+'/'+dzoId;
+                let uri = 'projections/institutes/loadOrgListProjection/'+type+'/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
@@ -35,15 +35,13 @@ try {
                 }
             }, 
             loadClassSize(type,dzoId){
-                let uri = 'projections/OrgProjectionController/loadClassSize/'+type+'/'+dzoId;
+                let uri = 'projections/institutes/loadClassSize/'+type+'/'+dzoId;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
                     console.log('error getdepartmentList '+e);
                 }
             },
-           
-            
         },
     })
 

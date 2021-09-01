@@ -10,6 +10,7 @@ class ApplicationClassStream extends Model
 {
     use HasFactory, Uuid;
     protected $table="application_class_stream";
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

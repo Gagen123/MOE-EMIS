@@ -1,118 +1,112 @@
 <template>
     <div>
-        <form class="bootbox-form" id="aboradstudent-detial">
-            <div class="card-body">
-                <div class="form-group row">
-                    <input type="hidden" class="form-control" v-model="form.organizationId"/>
-                      <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9">
-                        <label class="">CID:<span class="text-danger">*</span></label> 
-                        <input type="text" class="form-control" @keyup.enter="getDetailsbyCID('cid_passport','std')" @blur="getDetailsbyCID('cid_passport','std')" @change="removeerror('cid_passport')" :class="{ 'is-invalid': form.errors.has('cid_passport') }" id="cid_passport" v-model="form.cid_passport" placeholder="Identification No">
-                        <has-error :form="form" field="cid_passport"></has-error>
+        <div class="card-body">
+            <form id="" class="form-horizontal" enctype="multipart/form-data" action="#" method="POST">
+                <div class="form-group" id="main_form">
+                    <h6><u>Student Details</u></h6><br>
+                    <div class="row form-group">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >CID No/Reference  : </label>
+                            <label class="text-primary">{{std_admission_details.student_code}}</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Name of Student :</label>
+                            <label class="text-primary">{{std_admission_details.name}}</label>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Gender :</label>
+                            <label class="text-primary">{{ genderArray[std_admission_details.CmnSexId]}}</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label >Date of Birth :</label>
+                            <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
+                        </div>
+                    </div>
+                    <label>Present School Details: </label>
+                    <div class="row form-group">
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <label class="required" >Class : </label>
+                            <label class="text-primary">{{ }}</label>
+                        </div>
+                        <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                            <label class="required" >School : </label>
+                            <label class="text-primary"><span id="gewogid"></span>{{std_admission_details.organization_name}}</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Dzongkhag :</label>
+                            <label class="text-primary"><span id="vilageId"></span> {{dzongkhagArray[std_admission_details.organization_dzo]}}</label>
+                        </div>
                     </div>
                 </div>
+                <hr><br>
+                <div class="form-group" id="main_form">
+                    <h6><u>Admission Request Details</u></h6><br>
+                    <div class="row form-group">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Dzongkhag For Admission Request: </label>
+                            <label class="text-primary">{{dzongkhagArray[std_admission_details.dzongkhag]}}</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Date of Application:</label>
+                            <label class="text-primary">{{ std_admission_details.dateOfapply}}</label>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <label class="required" >Reasons :</label>
+                            <label class="text-primary">{{ std_admission_details.reasons}}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" id="main_form">
+                    <h6><u>Supporting Documents</u></h6><br>
+                    <div class="row form-group">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >Supporting Documents: </label>
+                            <a href="#" @click="openfile(std_admission_details.fileName, std_admission_details.filePath)" class="fa fa-eye"> View</a>
+                        </div>
+                    </div>
+                </div>
+                <hr>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >First Name:<span class="text-danger">*</span> </label>
-                        <input type="text" class="form-control" @change="removeerror('first_name')" :class="{ 'is-invalid': form.errors.has('first_name') }" id="first_name" v-model="form.first_name" placeholder="First Name">
-                            <has-error :form="form" field="first_name"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label > Middle Name: </label>
-                         <input type="text" class="form-control" @change="removeerror('middle_name')" :class="{ 'is-invalid': form.errors.has('middle_name') }" id="middle_name" v-model="form.middle_name" placeholder="Middle Name">
-                        <has-error :form="form" field="middle_name"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Last Name: </label>
-                        <input type="text" class="form-control" @change="removeerror('last_name')" :class="{ 'is-invalid': form.errors.has('last_name') }" id="last_name" v-model="form.last_name" placeholder="Last Name">
-                        <has-error :form="form" field="last_name"></has-error>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Remarks:</label>
+                        <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                        <span class="text-danger" id="remarks_err"></span>
                     </div>
                 </div>
-
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                       <label>Date of Birth:<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" @change="removeerror('dob')" :class="{ 'is-invalid': form.errors.has('dob') }" id="dob" v-model="form.dob" placeholder="Date of Birth">
-                        <has-error :form="form" field="dob"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Gender:<span class="text-danger">*</span></label>
-                        <select v-model="form.sex_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('sex_id') }" class="form-control select2" name="sex_id" id="sex_id">
-                            <option value=""> --Select--</option>
-                            <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="sex_id"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Mother Tongue:<span class="text-danger">*</span></label>
-                        <select v-model="form.mother_tongue" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('mother_tongue') }" class="form-control select2" name="mother_tongue" id="mother_tongue">
-                            <option value=""> --Select--</option>
-                            <option v-for="(item, index) in motherTongueList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="mother_tongue"></has-error>
+                <div class="row form-group fa-pull-right">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <button class="btn btn-success" @click="saveForm('approve')" id="approveId" type="button"> <i class="fa fa-check"></i>Approve Request</button>
+                        <button class="btn btn-danger" @click="saveForm('reject')" id="rejectId" type="button"> <i class="fa fa-times"></i> Reject Request</button>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Is the child currently  studying?:<span class="text-danger">*</span></label> 
-                        <br>
-                        <label><input v-model="form.status"  type="radio" value="1"/> Yes</label>
-                        <label><input v-model="form.status"  type="radio" value="0" /> No</label>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Present Address: </label>
-                        <textarea class="form-control" rows="3" @change="removeerror('fulladdress')" :class="{ 'is-invalid': form.errors.has('fulladdress') }" id="fulladdress" v-model="form.fulladdress" placeholder="Permanent Address"></textarea>
-                        <has-error :form="form" field="fulladdress"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Country : </label>
-                         <select v-model="form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('country') }" class="form-control select2" name="country" id="country">
-                            <option value=""> --Select--</option>
-                            <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
-                        </select>
-                        <has-error :form="form" field="country"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>City:</label>
-                        <input type="text" v-model="form.city" class="form-control editable_fields" id="city" />
-                    </div>
-                </div>
-            </div>
-            
-            <div class="card-footer text-right">
-                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>                                           
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-    
 </template>
 
 <script>
 export default {
     data(){
         return{
-            countryList:[],
+            student_id:'',
+            std_admission_details:'',
+            genderArray:{},
+            dzongkhagArray:{},
+            gewogArray:{},
+            villageArray:{},
             sex_idList:[],
+            countryList:[],
             dzongkhagList:[],
             std_gewog_list:[],
             std_villageList:[],
             motherTongueList:[],
             form: new form({
                 id: '', 
-                organizationId:'', 
-                cid_passport: '',
-                first_name: '',
-                middle_name:'',
-                last_name:'',
-                dob: '',
-                sex_id: '',
-                mother_tongue: '',
-                status: '1',
-                fulladdress: '',
-                country:'',
-                city: '',
+                remarks:'',
             })
         }
     },
@@ -122,51 +116,65 @@ export default {
         /**
          * method to remove error
          */
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
-
-        /**
-         * method to reset form
-         */
-        restForm(){
-            this.form.cid_passport= '';
-            this.form.first_name = '';
-            this.form.middle_name = '';
-            this.form.last_name= '';
-            this.form.dob= '';
-            this.form.sex_id= '';
-            this.form.mother_tongue= '';
-            this.form.status= '';
-            this.form.fulladdress='';
-            this.form.country = '';
-            this.form.city = '';
-        },
-
-        /**
-         * method to save data
-         */
-        formaction: function(type){
-            if(type=="reset"){
-                this.restForm();
-            }
-            if(type=="save"){
-                    this.form.post('/students/saveStudentAboard',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: ' Detail is added successfully'
-                    })
-                    this.$router.push('/studentaboard_list');
-                })
-                .catch(() => {
-                    console.log("Error......");
-                    this.applyselect();
-                })
-            }
+        removeerror(fieldid){
+			if($('#'+fieldid).val()!=""){
+				$('#'+fieldid).removeClass('is-invalid');
+				$('#'+errid).html(''); 
+			}
 		},
+        
+        /**
+         * method to show next tab and update application accordingly
+         */
+        saveForm(nextclass){
+            let action=true;
+            if(this.form.remarks==""){
+                $('#remarks_err').html('Please enter the remarks');
+                $('#remarks').addClass('is-invalid');
+                action=false;
+            }
+            if(action){
+                Swal.fire({
+                    text: "Are you sure you wish to "+nextclass+" this Application ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+                        let formData = new FormData();
+                        formData.append('id', this.form.id);
+                        formData.append('actiontype', nextclass);
+                        formData.append('remarks', this.form.remarks);
+                        axios.post('organization/updateBifurcationApplication', formData, config)
+                        .then((response) => {
+                            if(response!=""){
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application details has been updated.'
+                                });
+                                this.$router.push({path:'/tasklist'});
+                            }
+                        })
+                        .catch((err) => {
+                            Swal.fire(
+                                'error!',
+                                'Not able to update this application details. Please contact system administrator.Error: '+err,
+                                'error',
+                            );
+                            console.log("Error:"+err)
+                        })
+                    }
+                });
+            }
+        },
+
         loadAllActiveMasters(type){
             axios.get('masters/loadGlobalMasters/'+type)
             .then(response =>{
@@ -188,6 +196,30 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
+			axios.get(uri)
+			.then(Response =>{
+			let data = Response.data.data;
+			for(let i=0;i<data.length;i++){
+                    this.dzongkhagArray[data[i].id] = data[i].name;
+                }
+                $('#dzongkhag').prop('disabled',false);  
+            }).catch(error => console.log(error));
+
+		},
+        loadGenderList(uri="masters/loadGlobalMasters/all_active_gender"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.sex_idList =  data.data.data;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.genderArray[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
         applyselect(type){
             if(type=="std"){
                 if(!$('#sex_id').attr('class').includes('select2-hidden-accessible')){
@@ -205,98 +237,39 @@ export default {
                 $('#'+errid).html(''); 
             }
         },
+
+        loadAdmissionRequest(std_id){
+			axios.get('/students/loadAdmissionRequest/'+std_id)
+			.then(response => {
+                let data = response.data.data;
+                if(data != ""){
+                    this.std_admission_details = data[0];
+                }
+			});
+		},
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="sex_id"){
-                this.form.sex_id=$('#sex_id').val();
-            }
-            if(id=="mother_tongue"){
-                this.form.mother_tongue=$('#mother_tongue').val();
-            }
-            if(id=="country"){
-                this.form.country=$('#country').val();
-            }
              
         },
-        getDetailsbyCID(fieldId){
-            if ($('#'+fieldId).val().length != 11){
-                Swal.fire({
-                    html: "Please ender 11 digit CID",
-                    icon: 'error'
-                });
-            }
-
-
-
-            else{
-                axios.get('getpersonbycid/'+ $('#'+fieldId).val())
-                .then(response => {
-                    if (JSON.stringify(response.data)!='{}'){
-                        let personal_detail = response.data.citizenDetail[0];
-                        this.form.first_name = personal_detail.firstName;
-                        this.form.middle_name = personal_detail.middleName;
-                        this.form.last_name = personal_detail.lastName;
-                        let date_of_birth = new Date(personal_detail.dob);
-                        let month =(date_of_birth .getMonth() + 1);
-                        let day = date_of_birth .getDate();
-                         if(day<10){
-                            day='0'+day;
-                        }
-                        if(month<10){
-                            month='0'+month;
-                        }
-                        let year =date_of_birth .getFullYear();
-                        this.form.dob = year+ "-"+month + "-" + day;
-                         $('#dob').val(year+ "-"+month + "-" + day);
-                        if(personal_detail.gender=="M"){
-                             personal_detail.gender="male";
-                        }
-                        else if(personal_detail.gender=="F"){
-                            personal_detail.gender="female";
-                        }
-                        else{
-                            personal_detail.gender="others";
-                        }
-                        for(let i=0; i<this.sex_idList.length;i++){
-                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                $('#sex_id').val(this.sex_idList[i].id).trigger('change');
-                                this.form.sex_id =  this.sex_idList[i].id;
-                            }  
-                        }
-                        // this.form.dzongkhag =personal_detail.dzongkhagId;
-                        //  $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                        // this.getgewoglist(personal_detail.dzongkhagId);
-                        // this.form.gewog = personal_detail.gewogId;
-                        // this.getvillagelist(personal_detail.gewogId);
-                        // $('#village_id').val(personal_detail.villageSerialNo).trigger('change');
-                        // this.form.village_id = personal_detail.villageSerialNo;
-                    }else{
-                        Swal.fire({
-                            html: "No data found for this CID",
-                            icon: 'error'
-                        });
-                    }
-                })
-                .catch((exception) => {
-                    Swal.fire({
-                         html: "No data found for matching CID/service down"+exception,
-                        icon: 'error'
-                    });
-                });
-            }
-            
+        openfile(fileName, filePath){
+            let file_path=filePath+'/'+fileName;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
         },
     },
     mounted() { 
         this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
+        this.getdzongkhagList();
+        this.loadGenderList();
       
-           $('.select2').select2();
+        $('.select2').select2();
         $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id')); 
         });
@@ -304,18 +277,9 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.form.id=this.$route.params.data.id;
-        this.form.cid_passport=this.$route.params.data.cid_passport;
-        this.form.first_name=this.$route.params.data.first_name;
-        this.form.middle_name=this.$route.params.data.middle_name;
-        this.form.last_name=this.$route.params.data.last_name;
-        this.form.sex_id=this.$route.params.data.sex_id;
-        this.form.mother_tongue=this.$route.params.data.mother_tongue;
-        this.form.status=this.$route.params.data.status;
-        this.form.fulladdress=this.$route.params.data.fulladdress;
-        this.form.country=this.$route.params.data.country;
-        this.form.city=this.$route.params.data.city;
-        this.form.organizationId=this.$route.params.data.organizationId;
+        this.student_id = this.$route.params.data;
+        this.loadAdmissionRequest(this.$route.params.data);
+        
     }
 }
 </script>

@@ -86,6 +86,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savefilanorgclassDetails', ['uses' => 'Students\StudentAdmissionController@savefilanorgclassDetails']);
             $router->post('/studentAdmissionupdate', ['uses' => 'students\StudentAdmissionController@studentAdmissionupdate']);
             $router->get('/loadStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadStudentList']);
+            $router->get('/loadResultPosition/{std_code}',['uses' => 'Students\StudentAdmissionController@loadResultPosition']);
 
             $router->get('/loadBasicStudentList/{param}',['uses' => 'Students\StudentAdmissionController@loadBasicStudentList']);
             $router->get('/loadStudentAdmissionList/{org_id}',['uses' => 'Students\StudentAdmissionController@loadStudentAdmissionList']);
@@ -94,7 +95,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             //getting student details by cid number
             $router->get('/getstudentdetailsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@getstudentdetailsbyCid']);
 
-            $router->post('/savedrequestadmission',['uses' => 'Students\StudentAdmissionController@savedrequestadmission']);
+            $router->post('/saveAdmissionRequest',['uses' => 'Students\StudentAdmissionController@saveAdmissionRequest']);
+            $router->post('/updateAdmissionRequest',['uses' => 'Students\StudentAdmissionController@updateAdmissionRequest']);
 
             $router->get('/applicationListsbyCid/{cid}',['uses' => 'Students\StudentAdmissionController@applicationListsbyCid']);
             $router->post('/acceptApplication',['uses' => 'Students\StudentAdmissionController@acceptApplication']);
@@ -109,8 +111,11 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/updateStudentAdmission',['uses' => 'Students\StudentAdmissionController@updateStudentAdmission']);
             $router->post('/updateStudentTransfer',['uses' => 'Students\StudentAdmissionController@updateStudentTransfer']);
 
-
+            $router->get('/loadQualificationMarks',['uses' => 'Students\StudentAdmissionController@loadQualificationMarks']);
+            $router->get('/loadStudentMarks/{std_code}',['uses' => 'Students\StudentAdmissionController@loadStudentMarks']);
+            $router->get('/loadAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
         });
+
         //Student Updates
         $router->post('/saveStudentUpdates',['uses' => 'Students\StudentUpdateController@saveStudentUpdates']);
         $router->get('/loadStudentUpdatesList/{param}/{org_id}',['uses' => 'Students\StudentUpdateController@loadStudentUpdatesList']);
@@ -146,6 +151,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentByType/{type}/{class_id}', ['uses' => 'General\GeneralStudentController@loadStudentByType']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
         $router->get('/studentListByGender/{data}', ['uses' => 'General\GeneralStudentController@studentListByGender']);
+        $router->get('/getStudentClassId/{std_id}', ['uses' => 'General\GeneralStudentController@getStudentClassId']);
         $router->get('/loadStudentInformation/{org_id}/{param}', ['uses' => 'General\GeneralStudentController@loadStudentInformation']);
         //for profile
         $router->get('/getStudentDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentDetails']);

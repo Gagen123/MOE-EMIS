@@ -333,42 +333,6 @@ class TransferController extends Controller{
         }
 
     public function updateTransferApplication(Request $request){
-        if($request->status =="reporting"){
-            $applicant_det  = TransferApplication::where('id',$request->id)->first();
-            $staff_detials=PersonalDetails::where('id',$applicant_det->staff_id)->first();
-            $history_data=[
-                'id'                           =>$staff_detials->id,
-                'name'                         =>$staff_detials->name,
-                'cid_work_permit'              =>$staff_detials->cid_work_permit,
-                'dzo_id'                       =>$staff_detials->dzo_id,
-                'geowg_id'                     =>$staff_detials->geowg_id,
-                'village_id'                   =>$staff_detials->village_id,
-                'position_title_id'            =>$staff_detials->position_title_id,
-                'working_agency_id'            =>$staff_detials->working_agency_id,
-                'inserted_at'                  =>date('Y-m-d h:i:s'),
-                'inserted_by'                  =>$request->user_id,
-                'inserted_for'                 =>'Transfer Application',
-                'inserted_application_no'      =>$request->application_number,
-            ];
-            StaffHistory::create($history_data);
-            $final_data =[
-                'id'                           =>  $request->id,
-                'dzongkhagApproved'            =>  $request->dzongkhagApproved,
-                'updated_by'                   =>  $request->user_id,
-                'updated_at'                   =>  date('Y-m-d h:i:s'),
-                'preference_school'            =>  $request->preference_school,
-                'status'                       => 'Reported'
-            ];
-            $response_data=TransferApplication::where('id', $request->id)->update($final_data);
-            $update_data=[
-                'dzo_id'                       =>$request->dzongkhagApproved,
-                'working_agency_id'            =>$request->preference_school,
-            ];
-            PersonalDetails::where('id',$applicant_det->staff_id)->update($update_data);
-            return $this->successResponse($response_data, Response::HTTP_CREATED);
-
-        }
-        else{
             $extra_data =[
                 'id'                           =>  $request->id,
                 'status'                       =>  $request->status,
@@ -380,7 +344,7 @@ class TransferController extends Controller{
                 'aplication_number'            =>  $request->application_number,
             ];
             $response_data=TransferApplication::where('id', $request->id)->update($extra_data);
-        }
+            return $response_data;
     }
     public function getTransferConfigDetails($role_ids=""){
         $result_data="";
@@ -497,10 +461,10 @@ class TransferController extends Controller{
             $response_data=TransferApplication::whereIn('status',['Approved','Rejected'])->get();
         }
         else if($type=="intra_transfer") {
-            $response_data=TransferApplication::where('transferType','Intra Transfer')->get(); 
+            $response_data=TransferApplication::where('transferType','Intra Transfer')->where('created_by',$userId)->get(); 
         }
         else if($type=="inter_transfer") {
-            $response_data=TransferApplication::where('transferType','Inter Transfer')->get(); 
+            $response_data=TransferApplication::where('transferType','Inter Transfer')->where('created_by',$userId)->get(); 
         }
         else{
             $response_data=TransferApplication::where('created_by',$userId)->get(); 

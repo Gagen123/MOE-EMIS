@@ -532,7 +532,7 @@ export default {
             });
         },
         loadestablishmentapplicationdetails(appId,type){
-            axios.get('organization/loadEstbDetailsForVerification/'+appId+'/'+type)
+            axios.get('organizationApproval/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
                 this.form.applicationNo=data.application_no;

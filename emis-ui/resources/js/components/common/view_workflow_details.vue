@@ -9,7 +9,7 @@
                     <th>Action By</th>
                     <th>Action Date </th>
                 </tr>
-            </thead>  
+            </thead>
             <tbody>
                 <tr v-for="(item, index) in workflow_detail_list" :key="index">
                     <td>{{ index + 1 }}</td>
@@ -19,7 +19,7 @@
                     <td>{{ item.action_date }}</td>
                 </tr>
             </tbody>
-        </table> 
+        </table>
     </div>
 </template>
 <script>
@@ -44,8 +44,12 @@ export default {
             });
         }
     },
-    created(){ 
-        this.getworkflow(this.$route.params.data.application_number);
-    }
+    watch: {
+        'appNo': {
+            handler: function(appNo) {
+                this.getworkflow(appNo);
+            },
+        }
+    },
 }
 </script>

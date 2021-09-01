@@ -10,7 +10,7 @@ class ApplicationEstPublic extends Model
 {
     use HasFactory, Uuid;
     protected $table="application_est_public";
-
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +21,7 @@ class ApplicationEstPublic extends Model
         'ApplicationDetailsId',
         'proposedName',
         'initiated_by',
+        'parentAgency',
         'levelId',
         'locationId',
         'isGeoPoliticallyLocated',
@@ -29,8 +30,12 @@ class ApplicationEstPublic extends Model
         'coLocatedParent',
         'parentSchool',
         'locationTypeId',
-        'proposedLocation'
+        'proposedLocation',
+        'created_by',
+        'updated_by',
+        'created_at',
+        'updated_at'
     ];
 
-    
+
 }

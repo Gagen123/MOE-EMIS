@@ -16,6 +16,7 @@ class Workflow extends Model{
         'application_number',
         'screen_id',
         'status_id',
+        'w_config_status',
         'remarks',
         'action_by',
         'action_date',

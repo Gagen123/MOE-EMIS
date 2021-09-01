@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\spms;
 
 use App\Http\Controllers\Controller;
+use App\Models\spms\AcknowledgementAgencyInformForm;
+use App\Models\spms\ActionAgencyInformForm;
+use App\Models\spms\AgencyInputForm;
 use App\Models\spms\Evaluation;
 use App\Models\spms\EvaluationDetails;
+use App\Models\spms\ObservationAgencyInputForm;
 use App\Models\spms\SchoolPlan;
 use App\Models\spms\SchoolPlanHistory;
 use App\Traits\ApiResponser;
@@ -21,126 +25,79 @@ class SpmsController extends Controller
 
     public $database="spms_db";
 
-    public function getDeoDashboardData($dzon_id,$staff_id){
-        $condition = "";
-        $schools_assigned = DB::select("SELECT COUNT(id) AS schools_assigned FROM spm_school_deo WHERE staff_id = ?",[$staff_id]);
-        $query = "SELECT t2.spm_domain_subcat_id,t21.name AS sub_category,t2.status,t3.name AS status_name,COUNT(t1.org_id) AS no_of_schools
-                FROM spm_school_deo t1
-                    JOIN (spm_evaluation t2 JOIN spm_domain_sub_category t21 ON t2.spm_domain_subcat_id = t21.id) ON t1.org_id = t2.org_id
-                    JOIN spm_status t3 ON IFNULL(t2.status,0) = t3.id
-                WHERE t1.dzon_id = ?";
-        $params = [$dzon_id];
-        if($schools_assigned[0]->schools_assigned > 0){
-            $condition = " AND t1.staff_id = ?";
-            array_push($params,$staff_id);
+    public function schoolPerformaceDashboard(Request $request){
+        try{
+        if($request['dzongkhag_ids'] == "ALL"){
+            $evaluated_school_performances = DB::table('spm_evaluation')
+            ->selectRaw('dzon_id,evaluation_year AS year,COUNT(IF(status=1,1,null)) AS under_process,COUNT(IF(status=2,2,null)) AS completed')
+            ->where('evaluation_year',$request['year'])
+            ->groupBy(['dzon_id','evaluation_year'])
+            ->get();
+        }else{
+            $evaluated_school_performances = DB::table('spm_evaluation')
+            ->selectRaw('dzon_id,evaluation_year AS year,COUNT(IF(status=1,1,null)) AS under_process,COUNT(IF(status=2,2,null)) AS completed')
+            ->where('evaluation_year',$request['year'])
+            ->whereIn('dzon_id',explode(",",$request['dzongkhag_ids']))
+            ->groupBy(['dzon_id','evaluation_year'])
+            ->get();
         }
-        $evaluated_school_performances = DB::select("$query $condition GROUP BY t2.spm_domain_subcat_id,t21.name,t2.status,t3.name",$params);
-        $assigned_org_ids = DB::select("SELECT DISTINCT t1.org_id FROM spm_school_deo t1 WHERE t1.dzon_id = ? $condition", $params);
-        $sub_category_class_ids = DB::select("SELECT DISTINCT id AS spm_doamin_subcat_id,org_class_id,name FROM spm_domain_sub_category");
-
-       return $this->successResponse(['evaluated_school_performances'=>$evaluated_school_performances,'assigned_org_ids'=>$assigned_org_ids,'sub_category_class_ids'=>$sub_category_class_ids]);
+       return $this->successResponse($evaluated_school_performances);
+    }catch(Exception $e){
+        dd($e);
     }
-
-    // public function getSchoolDoeDetails($dzon_id,$staff_id,$spm_domain_subcat_id,$status = 0){
-    //     try {
-    //     $condition = "";
-    //     $schools_assigned = DB::select("SELECT COUNT(id) AS schools_assigned FROM spm_school_deo WHERE staff_id = ?",[$staff_id]);
-    //     $deoField = "0";
-
-    //     $query = "SELECT $deoField AS is_assigned_deo,t2.id AS evaluation_id,t3.id AS evaluation_detail_id,t3.spm_indicator_id,t1.org_id,t1.dzon_id,t2.spm_domain_subcat_id,t21.org_class_id,t21.name AS sub_category_name,t2.deo_remarks,t2.deo_review_remarks,SUM(t3.score) AS score,IFNULL(t2.status,0) AS status_id,t4.name AS status
-    //             FROM spm_school_deo t1 
-    //                 LEFT JOIN (spm_evaluation t2 JOIN spm_domain_sub_category t21 ON t2.spm_domain_subcat_id = t21.id JOIN spm_evaluation_detail t3 ON t2.id = t3.spm_evaluation_id) ON t1.org_id = t2.org_id 
-    //                 LEFT JOIN spm_status t4 ON IFNULL(t2.status,0) = t4.id
-    //             WHERE t1.dzon_id = ?";
-
-    //     $params = [$dzon_id];
-
-    //     if($schools_assigned[0]->schools_assigned > 0){
-    //         $deoField = "1";
-    //         $condition = " AND t1.staff_id = ?";
-    //         array_push($params,$staff_id);
-    //     }
-    //     if($status > 0){
-    //         $$condition .= " AND t2.status = ?";
-    //         array_push($params,$status);
-    //     }else{
-    //         $assigned_org_ids = DB::select("SELECT DISTINCT t1.org_id FROM spm_school_deo t1 WHERE t1.dzon_id = ? $condition", $params);
-    //         $sub_category_class_ids = DB::select("SELECT DISTINCT id AS spm_doamin_subcat_id,org_class_id,name FROM spm_domain_sub_category");
-    //         $condition .= " AND t2.status IS NULL";
-    //     }
-    //     $condition .= " AND t2.spm_domain_subcat_id = ?";
-    //     array_push($params,$spm_domain_subcat_idaff_id);
-    //     $var = DB::select("$query $condition GROUP BY t2.id,t3.id,t3.spm_indicator_id,t1.org_id,t1.dzon_id,t2.spm_domain_subcat_id,t21.org_class_id,t21.name,t2.deo_remarks,t2.deo_review_remarks,IFNULL(t2.status,0),t4.name",$params)
-    //     return $this->successResponse();
-
+    }
+    public function getSchoolPerformaceList($year,$dzon_id,$status){
+        $query = "SELECT id,org_id FROM spm_evaluation WHERE evaluation_year = ? AND dzon_id = ?";
+        $params = [$year,$dzon_id];
+        if($status !=0){
+            $query .= " AND status = ?";
+            array_push($params,$status);
+        }
+        return $this->successResponse(DB::select($query,$params));
+    }
+    // public function getEvaluation($org_id,$spm_domain_subcat_id){
+    //     try{
+    //         $evaluationId = "";
+    //         $evaluation = DB::select('SELECT id,status,deo_remarks AS overall_remarks FROM spm_evaluation WHERE org_id = ? AND spm_domain_subcat_id = ?',[$org_id,$spm_domain_subcat_id]);
+    //         if(count($evaluation)){
+    //             $evaluationId = $evaluation[0]->id;
+    //         }
+    //         $evaluationDetails = DB::select("SELECT t5.id,t1.id AS spm_indicator_id,t1.spm_parameter_id,t2.spm_area_id,t3.spm_domain_id,t4.name AS domain,t3.name AS area,t2.name As parameter,t1.name AS indicator,t5.score,t5.deo_remarks,t6.description AS score_description,
+    //         COUNT(t4.id) OVER (PARTITION BY t4.id) AS rows_per_domain,
+    //         COUNT(t3.id) OVER (PARTITION BY t3.id) AS rows_per_area,
+    //         COUNT(t2.id) OVER (PARTITION BY t2.id) AS rows_per_paramater
+    //             FROM (spm_indicator t1 
+    //                 JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
+    //                 JOIN spm_area t3 ON t2.spm_area_id = t3.id 
+    //                 JOIN spm_domain t4 ON t3.spm_domain_id= t4.id) 
+    //                 LEFT JOIN spm_evaluation_detail t5 ON t1.id = t5.spm_indicator_id AND t5.spm_evaluation_id = ? 
+    //                 LEFT JOIN spm_rating t6 ON t5.score = t6.score AND t5.spm_indicator_id = t6.spm_indicator_id",[$evaluationId]);
+    //         return $this->successResponse(['evaluation' => $evaluation,'evaluationDetails'=>$evaluationDetails]);
     //     }catch(Exception $e){
     //         dd($e);
     //     }
     // }
-
-    public function getSchoolDoeDetails($dzon_id,$staff_id,$spm_domain_subcat_id,$status = 0){
-        try {
-            $condition = "";
-            $params = [$dzon_id];
-            $schools_assigned = DB::select("SELECT COUNT(id) AS schools_assigned FROM spm_school_deo WHERE staff_id = ?",[$staff_id]);
-            $deoField = "0";
-            if($schools_assigned[0]->schools_assigned > 0){
-                $deoField = "1";
-                $condition = " AND t1.staff_id = ?";
-                array_push($params,$staff_id);
-            }
-            if($status == 0){
-                $isAcademic = DB::table('spm_domain_sub_category')->where('id',$spm_domain_subcat_id)->value('spm_domain_category_id');
-                if($isAcademic){
-                    $assigned_org_ids = DB::select("SELECT DISTINCT t1.org_id FROM spm_school_deo t1 WHERE t1.dzon_id = ? $condition", $params);
-                    $sub_category_class_ids = DB::select("SELECT id AS spm_doamin_subcat_id,org_class_id,name FROM spm_domain_sub_category WHERE id=?",[$spm_domain_subcat_id]);
-                    return $this->successResponse(['school_performances'=>[],'assigned_org_ids'=>$assigned_org_ids,'sub_category_class_ids'=>$sub_category_class_ids]);
-                }
-            }
-
-        $query = "SELECT $deoField AS is_assigned_deo,t2.id AS evaluation_id,t3.id AS evaluation_detail_id,t3.spm_indicator_id,t1.org_id,t1.dzon_id,t21.id AS spm_domain_subcat_id,t21.org_class_id,t21.name AS sub_category_name,t2.deo_remarks,t2.deo_review_remarks,SUM(t3.score) AS score,IFNULL(t2.status,0) AS status_id,t4.name AS status
-                FROM spm_school_deo t1 
-                    LEFT JOIN (spm_evaluation t2 JOIN spm_evaluation_detail t3 ON t2.id = t3.spm_evaluation_id) ON t1.org_id = t2.org_id 
-                    LEFT JOIN spm_status t4 ON IFNULL(t2.status,0) = t4.id
-                    LEFT JOIN spm_domain_sub_category t21 ON t2.spm_domain_subcat_id = t21.id OR t2.id IS NULL
-                WHERE t1.dzon_id = ?";
-        if($status > 0){
-            $condition .= " AND t2.status = ?";
-            array_push($params,$status);
-        }else{
-            $condition .= " AND t2.status IS NULL";
+    public function getEvaluation($org_id,$year){
+        $evaluationId = "";
+      try{  $evaluation = DB::select('SELECT id,status,remarks AS overall_remarks FROM spm_evaluation WHERE org_id = ? AND evaluation_year = ?',[$org_id,$year]);
+        if(count($evaluation)){
+            $evaluationId = $evaluation[0]->id;
         }
-        $condition .= " AND t21.id = ?";
-        array_push($params,$spm_domain_subcat_id);
-        $school_performances = DB::select("$query $condition GROUP BY t2.id,t3.id,t3.spm_indicator_id,t1.org_id,t1.dzon_id,t21.id,t21.org_class_id,t21.name,t2.deo_remarks,t2.deo_review_remarks,IFNULL(t2.status,0),t4.name",$params);
-        return $this->successResponse(['school_performances'=>$school_performances,'assigned_org_ids'=>[],'sub_category_class_ids'=>[]]);
-        }catch(Exception $e){
-            dd($e);
-        }
+        $evaluationDetails = DB::select("SELECT t5.id,t1.id AS spm_indicator_id,t1.spm_parameter_id,
+                t2.spm_area_id,t3.spm_domain_id,concat(t4.sequence_no,'. ',t4.name) AS domain,
+                concat(t4.sequence_no,'.',t3.sequence_no,' ',t3.name) AS area,t2.name As parameter,t1.name AS indicator,t1.mov,t5.score,
+                t5.remarks,t6.description AS score_description,
+                COUNT(t2.id) OVER (PARTITION BY t2.id) AS rows_per_paramater
+            FROM (spm_indicator t1 
+                JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
+                JOIN spm_area t3 ON t2.spm_area_id = t3.id 
+                JOIN spm_domain t4 ON t3.spm_domain_id= t4.id) 
+                LEFT JOIN spm_evaluation_detail t5 ON t1.id = t5.spm_indicator_id AND t5.spm_evaluation_id = ? 
+                LEFT JOIN spm_rating t6 ON t5.score = t6.score AND t5.spm_indicator_id = t6.spm_indicator_id",[$evaluationId]);
+        return $this->successResponse(['evaluation' => $evaluation,'evaluationDetails'=>$evaluationDetails]);
+    }catch(Exception $e){
+        dd($e);
     }
-
-    public function getEvaluation($org_id,$spm_domain_subcat_id){
-        try{
-            $evaluationId = "";
-            $evaluation = DB::select('SELECT id,status,deo_remarks AS overall_remarks FROM spm_evaluation WHERE org_id = ? AND spm_domain_subcat_id = ?',[$org_id,$spm_domain_subcat_id]);
-            if(count($evaluation)){
-                $evaluationId = $evaluation[0]->id;
-            }
-            $evaluationDetails = DB::select("SELECT t5.id,t1.id AS spm_indicator_id,t1.spm_parameter_id,t2.spm_area_id,t3.spm_domain_id,t4.name AS domain,t3.name AS area,t2.name As parameter,t1.name AS indicator,t5.score,t5.deo_remarks,t6.description AS score_description,
-            COUNT(t4.id) OVER (PARTITION BY t4.id) AS rows_per_domain,
-            COUNT(t3.id) OVER (PARTITION BY t3.id) AS rows_per_area,
-            COUNT(t2.id) OVER (PARTITION BY t2.id) AS rows_per_paramater,
-            COUNT(t1.id) OVER (PARTITION BY t1.id) AS rows_per_indicator
-                FROM (spm_indicator t1 
-                    JOIN spm_parameter t2 ON t1.spm_parameter_id = t2.id 
-                    JOIN spm_area t3 ON t2.spm_area_id = t3.id 
-                    JOIN spm_domain t4 ON t3.spm_domain_id= t4.id) 
-                    LEFT JOIN spm_evaluation_detail t5 ON t1.id = t5.spm_indicator_id AND t5.spm_evaluation_id = ? 
-                    LEFT JOIN spm_rating t6 ON t5.score = t6.score AND t5.spm_indicator_id = t6.spm_indicator_id",[$evaluationId]);
-            return $this->successResponse(['evaluation' => $evaluation,'evaluationDetails'=>$evaluationDetails]);
-        }catch(Exception $e){
-            dd($e);
-        }
     }
     public function saveEvaluation(Request $request){
         $rules = [
@@ -154,41 +111,59 @@ class SpmsController extends Controller
         $this->validate($request, $rules, $customMessages);
       
         DB::transaction(function() use($request) {
+            try{
             if($request['evaluation_id']){
-                $data = Evaluation::find($request['evaluation_id']);
-                $data->status = $request['status'];
-                $data->update();
+                $parent_table = Evaluation::find($request['evaluation_id']);
+                $parent_table->status = $request['status'];
+                $parent_table->update();
                 foreach($request['data'] as $evaluation_detail){
-                    $data2 = EvaluationDetails::find($evaluation_detail['id']);
-                    $data2->score = $evaluation_detail['score'];
-                    if(array_key_exists('deo_remarks',$evaluation_detail)){
-                        $data2->deo_remarks = $evaluation_detail['deo_remarks'];
-                    }   
-                    $data2->update();
+                    if(array_key_exists("id",$evaluation_detail) && $evaluation_detail['id']){
+                        $child_table = EvaluationDetails::find($evaluation_detail['id']);
+                        $child_table->score = $evaluation_detail['score'];
+                        if(array_key_exists('remarks',$evaluation_detail)){
+                            $child_table->remarks = $evaluation_detail['remarks'];
+                        }   
+                        $child_table->update();
+                    }else{
+                        $child_table['spm_indicator_id'] = $evaluation_detail['spm_indicator_id'];
+                        $child_table['spm_indicator_id'] = $evaluation_detail['spm_indicator_id'];
+                        $child_table['spm_evaluation_id'] = $request['evaluation_id'];
+                        $child_table['score'] = $evaluation_detail['score'];
+                        if(array_key_exists('remarks',$evaluation_detail)){
+                            $child_table['remarks'] = $evaluation_detail['remarks'];
+                        }
+                        $child_table['created_by'] =  $request['user_id'];
+                        $child_table['created_at'] =   date('Y-m-d h:i:s');
+                        EvaluationDetails::create($child_table);
+                    }
                 } 
             }else{
-                $data = [];
-                $data2 = [];
-                $data['org_id'] = $request['org_id'];
-                $data['status'] = $request['status'];
-                $data['spm_domain_subcat_id'] = $request['spm_domain_subcat_id'];
-                $data['created_by'] =  $request['user_id'];
-                $data['created_at'] =   date('Y-m-d h:i:s');
-                $ev = Evaluation::create($data);
-                foreach($request['data'] as $evaluation){
-                    $data2['spm_indicator_id'] = $evaluation['spm_indicator_id'];
-                    $data2['spm_indicator_id'] = $evaluation['spm_indicator_id'];
-                    $data2['spm_evaluation_id'] = $ev->id;
-                    $data2['score'] = $evaluation['score'];
-                    if(array_key_exists('deo_remarks',$evaluation)){
-                        $data2['deo_remarks'] = $evaluation['deo_remarks'];
+                $parent_table = [];
+                $child_table = [];
+                $parent_table['dzon_id'] = $request['dzon_id'];
+                $parent_table['org_id'] = $request['org_id'];
+                $parent_table['evaluation_year'] = $request['year'];
+                $parent_table['status'] = $request['status'];
+                $parent_table['spm_domain_subcat_id'] = $request['spm_domain_subcat_id'];
+                $parent_table['created_by'] =  $request['user_id'];
+                $parent_table['created_at'] =   date('Y-m-d h:i:s');
+                $e = Evaluation::create($parent_table);
+                foreach($request['data'] as $evaluation_detail){
+                    $child_table['spm_indicator_id'] = $evaluation_detail['spm_indicator_id'];
+                    $child_table['spm_indicator_id'] = $evaluation_detail['spm_indicator_id'];
+                    $child_table['spm_evaluation_id'] = $e->id;
+                    $child_table['score'] = $evaluation_detail['score'];
+                    if(array_key_exists('remarks',$evaluation_detail)){
+                        $child_table['remarks'] = $evaluation_detail['remarks'];
                     }
-                    $data2['created_by'] =  $request['user_id'];
-                    $data2['created_at'] =   date('Y-m-d h:i:s');
-
-                        EvaluationDetails::create($data2);
+                    $child_table['created_by'] =  $request['user_id'];
+                    $child_table['created_at'] =   date('Y-m-d h:i:s');
+                    EvaluationDetails::create($child_table);
                 }
             }
+        }catch(Exception $e){
+            dd($e);
+        }
             return $this->successResponse(1, Response::HTTP_CREATED);
         });
     }
@@ -205,13 +180,14 @@ class SpmsController extends Controller
     public function saveSchoolPlan(Request $request){
         $rules = [
             'spm_domain_id' => 'required',
-            'activity' => 'required',
-            'objective' => 'required',
-            'strategy' => 'required',
+            'activity' => 'required|unique:spm_school_plan',
+            'objective' => 'required|unique:spm_school_plan',
+            'strategy' => 'required|unique:spm_school_plan',
             'start_date' => 'required',
-            'end_date' => 'required',
+            'end_date' => 'required|after:start_date',
             'person_responsible' => 'required',
             'implementation_status_id' => 'required',
+            'remarks' => 'required',
         ];
         $customMessages = [
             'spm_domain_id.required' => 'This field is required',
@@ -222,6 +198,7 @@ class SpmsController extends Controller
             'end_date.required' => 'This field is required',
             'person_responsible.required' => 'This field is required',
             'implementation_status_id.required' => 'This field is required',
+            'remarks.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
       
@@ -244,11 +221,11 @@ class SpmsController extends Controller
                     'created_by' =>  $request['user_id'],
                     'created_at' =>   date('Y-m-d h:i:s'),
                 ];
-                try{
-                    $response = SchoolPlan::create($parent_data);
+                $response = SchoolPlan::create($parent_data);
 
                     $child_data = [
                         'user_id' => $request['user_id'],
+                        'spm_school_plan_id' => $response->id,
                         'name' => $request['full_name'],
                         'role' => $request['roles'],
                         'status_id' =>$request['implementation_status_id'] ,
@@ -257,10 +234,6 @@ class SpmsController extends Controller
                         'remarks' => $request['remarks'],
                     ];
                     $response = SchoolPlanHistory::create($child_data);
-                }catch(Exception $e){
-                    dd($e);
-                }
-              
 
             }
             if($request['action'] == 'edit'){
@@ -286,7 +259,7 @@ class SpmsController extends Controller
    
     }
     public function getSchoolPlan($school_id){
-        $response = DB::select("SELECT t1.id,t1.org_id,t1.spm_domain_id,t1.implementation_status_id,t1.year,t2.name AS domain,t1.activity,t1.objective,t1.strategy,t1.start_date,t1.end_date,t1.person_responsible,t3.name AS implementation_status,t1.remarks,t1.school_plan_status FROM spm_school_plan t1 
+        $response = DB::select("SELECT t1.implementation_status_id,t1.id,t2.name AS domain,t1.activity,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.school_plan_status FROM spm_school_plan t1 
             JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
             JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id WHERE t1.org_id = ?",[$school_id]);
         return $this->successResponse($response);
@@ -298,7 +271,7 @@ class SpmsController extends Controller
             'full_name' => 'required',
             'organization' => 'required',
             'roles' => 'required',
-            'id' => 'required',
+            'spm_school_plan_id' => 'required',
         ];
         $customMessages = [
             'comment.required' => 'This field is required',
@@ -306,34 +279,37 @@ class SpmsController extends Controller
             'full_name.required' => 'This field is required',
             'organization.required' => 'This field is required',
             'roles.required' => 'This field is required',
-            'id.required' => 'This field is required',
+            'spm_school_plan_id.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        try{
-        $parent_data = SchoolPlan::find($request['id']);
+        $parent_data = SchoolPlan::find($request['spm_school_plan_id']);
         $parent_data->implementation_status_id = $request['implementation_status_id'];
         $parent_data->update();
          
         $child_data = [
             'user_id' => $request['user_id'],
+            'spm_school_plan_id' => $parent_data->id,
             'name' => $request['full_name'],
             'role' => $request['roles'],
-            'status_id' =>$request['implementation_status'] ,
+            'status_id' =>$request['implementation_status_id'] ,
             'organization' =>$request['organization'] ,
             'status_date' => date('Y-m-d h:i:s'),
             'remarks' => $request['comment'],
         ];
         $response = SchoolPlanHistory::create($child_data);
-        }catch(Exception $e){
-            dd($e);
-        }
         
         return $this->successResponse($response);
     }
-    public function getSchoolPlanHistory(){
-        $response = DB::select("SELECT user_id,name,role,organization,status,status_date,remarks
-        FROM spm_school_plan_history");
-        return $this->successResponse($response);
+    public function getSchoolPlanDetails($spm_school_plan_id){
+        $schoolPlanDetail = DB::select("SELECT t1.id,t1.org_id,t2.name AS domain,t1.activity,t1.objective,t1.strategy,t1.person_responsible,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.remarks FROM spm_school_plan t1 
+        JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
+        JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id WHERE t1.id = ?",[$spm_school_plan_id]);
+        return $this->successResponse($schoolPlanDetail);
+    }
+    public function getSchoolPlanHistory($spm_school_plan_id){
+        $schoolPlanHistory = DB::select("SELECT t1.user_id,t1.name,t1.role,t1.organization,t1.status_id,t2.name AS status,t1.status_date,t1.remarks FROM spm_school_plan_history
+             t1 JOIN spm_school_plan_status t2 ON t1.status_id = t2.id WHERE t1.spm_school_plan_id = ? ORDER BY t1.created_at",[$spm_school_plan_id]);
+        return $this->successResponse($schoolPlanHistory);
     }
     public function getDzoEMO($emo_id){
         return $this->successResponse(DB::select('SELECT dzon_id,staff_id FROM spm_dzo_emo WHERE staff_id = ?',[$emo_id]));
@@ -352,6 +328,201 @@ class SpmsController extends Controller
             ->get();
         }
         return $response_data;
+    }
+    public function saveAgencyInputForm(Request $request){
+        $rules = [
+            'name' => 'required',
+            'org_division_id' => 'required',
+            'year' => 'required',
+            'input' => 'required',
+            'activity' => 'required',
+            'output' => 'required',
+        ];
+        $customMessages = [
+            'name.required' => 'This field is required',
+            'org_division_id.required' => 'This field is required',
+            'year.required' => 'This field is required',
+            'input.required' => 'This field is required',
+            'activity.required' => 'This field is required',
+            'output.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        if($request['action_type']=="add"){
+            $data = [
+                'org_division_id' => $request['org_division_id'],
+                'input'  => $request['input'],
+                'input_year'  => $request['year'],
+                'activity'  => $request['activity'],
+                'output'  => $request['output'],
+                'created_by'  => $request['user_id']
+            ];
+           try{ $response = AgencyInputForm::create($data);} catch(Exception $e){
+               dd($e);
+           }
+        }
+       try{ if($request['action_type']=="edit"){
+            $data = AgencyInputForm::find($request['agency_input_id']);
+            $messs_det='input_year:'.$data->input_year.'; input'.$data->input.'; activity:'.$data->activity.'; output'.$data->output;
+            $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','spm_agency_input','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+            $data->input_year = $request['year'];
+            $data->input = $request['input'];
+            $data->activity = $request['activity'];
+            $data->output = $request['output'];
+            $data->update();
+            $response = $data;
+        }}catch(Exception $e){
+            dd($e);
+        }
+        return $this->successResponse($response);
+    }
+    public function getAgencyInputForm($orgId){
+        $emd_id = env('EMD_ID');
+        return $this->successResponse(
+          DB::select("SELECT t1.id,t1.org_division_id,t2.id AS observation_id,t3.id AS action_id, t4.id AS ack_id,t1.input_year,t1.input,t2.observation,t3.action_taken,t4.acknowledgement,
+                    (t2.id IS NULL AND t1.org_division_id = ?) AS can_edit_input,
+                    (t3.id IS NULL AND ? = ?) AS can_edit_observation,
+                    (t4.id IS NULL AND t1.org_division_id = ?) AS can_edit_action_taken,
+                    (t2.id IS NULL AND ? = ?) AS can_add_observation,
+                    (t2.id IS NOT NULL AND t3.id IS NULL AND t1.org_division_id = ?) AS can_add_action_taken,
+                    (t3.id IS NOT NULL AND t4.id IS NULL AND t2.org_id = ?) AS can_add_acknowledgement
+                FROM spm_agency_input t1 
+                LEFT JOIN spm_agency_input_observation t2 ON t1.id = t2.agency_input_id 
+                LEFT JOIN spm_agency_input_revision t3 ON t1.id = t3.agency_input_id AND t2.id = t3.agency_input_obs_id 
+                LEFT JOIN spm_agency_input_acknowlegement t4 ON t1.id = t4.agency_input_id 
+            WHERE  ? = ? OR t1.org_division_id = ? OR t2.org_id = ?",[$orgId,$emd_id,$orgId,$orgId,$emd_id,$orgId,$orgId,$orgId,$emd_id,$orgId,$orgId,$orgId])
+        );
+    }
+    public function getAgencyInputFormDetail($agencyInputFormId,$orgId){
+        $emd_id = env('EMD_ID');
+        return $this->successResponse(
+          DB::select("SELECT t1.id AS agency_input_id,t1.org_division_id,t2.id AS observation_id,t3.id AS action_id,t4.id AS acknowlegement_id,t2.dzon_id,t2.org_id AS school_id,t1.input_year,t1.input,t1.activity,t1.output,t2.observation,t2.recommendation,t2.recommendation_date,t3.action_taken,
+            t3.action_taken_date,t4.acknowledgement
+                FROM spm_agency_input t1 
+                LEFT JOIN spm_agency_input_observation t2 ON t1.id = t2.agency_input_id 
+                LEFT JOIN spm_agency_input_revision t3 ON t1.id = t3.agency_input_id AND t2.id = t3.agency_input_obs_id 
+                LEFT JOIN spm_agency_input_acknowlegement t4 ON t1.id = t4.agency_input_id 
+            WHERE t1.id = ? AND (? = ? OR t1.org_division_id = ? OR t2.org_id = ?)",[$agencyInputFormId,$emd_id,$orgId,$orgId,$orgId])
+        );
+    }
+    public function saveObservationAgencyInputForm(Request $request){
+        $rules = [
+            'dzon_id' => 'required',
+            'school_id' => 'required',
+            'agency_input_id' => 'required',
+            'observation' => 'required',
+            'recommendation' => 'required',
+            'recommendation_date' => 'required'
+        ];
+        $customMessages = [
+            'dzon_id.required' => 'This field is required',
+            'school_id.required' => 'This field is required',
+            'agency_input_id.required' => 'This field is required',
+            'observation.required' => 'This field is required',
+            'recommendation.required' => 'This field is required',
+            'recommendation_date.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        if($request['action_type']=="add"){
+            $data = [
+                'dzon_id' => $request['dzon_id'],
+                'org_id'  => $request['school_id'],
+                'agency_input_id'  => $request['agency_input_id'],
+                'observation'  => $request['observation'],
+                'recommendation'  => $request['recommendation'],
+                'recommendation_date' => $request['recommendation_date'],
+                'created_by'  => $request['user_id']
+            ];
+        $response = ObservationAgencyInputForm::create($data);
+        } 
+        if($request['action_type']=="edit"){
+            $data = ObservationAgencyInputForm::find($request['observation_id']);
+            $messs_det='dzon_id:'.$data->dzon_id.'; org_id'.$data->org_id.'; agency_input_id:'.$data->agency_input_id.'; observation'.$data->observation.'; recommendation'.$data->recommendation.'; recommendation_date'.$data->recommendation_date;
+            $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','spm_agency_input_observation','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+            $data->dzon_id = $request['dzon_id'];
+            $data->org_id = $request['school_id'];
+            $data->agency_input_id = $request['agency_input_id'];
+            $data->observation = $request['observation'];
+            $data->recommendation = $request['recommendation'];
+            $data->recommendation_date = $request['recommendation_date'];
+            $data->update();
+            $response = $data;
+        }
+        return $this->successResponse($response);
+       
+    }
+    public function saveActionAgencyInputForm(Request $request){
+        $rules = [
+            'agency_input_id' => 'required',
+            'agency_input_obs_id' => 'required',
+            'action' => 'required',
+            'action_date' => 'required',
+        ];
+        $customMessages = [
+            'agency_input_id.required' => 'This field is required',
+            'agency_input_obs_id.required' => 'This field is required',
+            'action.required' => 'This field is required',
+            'action_date.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        if($request['action_type']=="add"){
+            $data = [
+                'agency_input_id' => $request['agency_input_id'],
+                'agency_input_obs_id'  => $request['agency_input_obs_id'],
+                'action_taken'  => $request['action'],
+                'action_taken_date'  => $request['action_date'],
+                'created_by'  => $request['user_id']
+            ];
+        try{$response = ActionAgencyInformForm::create($data);}catch(Exception $e){
+            dd($e);
+        }
+        } 
+        if($request['action_type']=="edit"){
+            $data = ActionAgencyInformForm::find($request['action_id']);
+            $messs_det='agency_input_id:'.$data->agency_input_id.'; agency_input_obs_id'.$data->agency_input_obs_id.'; action_taken'.$data->action_taken.'; action_taken_date'.$data->action_taken_date;
+            $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','spm_agency_input_revision','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+            $data->agency_input_id = $request['agency_input_id'];
+            $data->agency_input_obs_id = $request['agency_input_obs_id'];
+            $data->action_taken = $request['action'];
+            $data->action_taken_date = $request['action_date'];
+            $data->update();
+            $response = $data;
+        }
+        return $this->successResponse($response);
+    }
+    public function saveAcknowlegeAgencyInputForm(Request $request){
+        $rules = [
+            'agency_input_id' => 'required',
+            'school_id' => 'required',
+            'acknowledgement' => 'required',
+        ];
+        $customMessages = [
+            'agency_input_id.required' => 'This field is required',
+            'school_id.required' => 'This field is required',
+            'acknowledgement.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        if($request['action_type']=="add"){
+            $data = [
+                'agency_input_id' => $request['agency_input_id'],
+                'org_id'  => $request['school_id'],
+                'acknowledgement'  => $request['acknowledgement'],
+                'created_by'  => $request['user_id']
+            ];
+        try{$response = AcknowledgementAgencyInformForm::create($data);}catch(Exception $e){
+            dd($e);
+        }
+        } 
+        if($request['action_type']=="edit"){
+            $data = AcknowledgementAgencyInformForm::find($request['acknowlegement_id']);
+            $messs_det='agency_input_id:'.$data->agency_input_id.'; org_id'.$data->org_id.'; acknowledgement'.$data->acknowledgement;
+            $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','spm_agency_input_acknowlegement','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+            $data->agency_input_id = $request['agency_input_id'];
+            $data->org_id = $request['school_id'];
+            $data->acknowledgement = $request['acknowledgement'];
+            $data->update();
+            $response = $data;
+        }
+        return $this->successResponse($response);
     }
 
 }

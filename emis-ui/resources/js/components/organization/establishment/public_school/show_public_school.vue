@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.level}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -73,7 +73,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
@@ -310,7 +310,6 @@ export default {
             application_number:'',
             calssArray:{},
             streamArray:{},
-            levelList:{},
             locationList:{},
             applicationdetails:'',
             applicationOrgdetails:'',
@@ -329,7 +328,7 @@ export default {
                 this.applicationdetails=data;
                 this.application_number=this.applicationdetails.application_no;
                 this.applicationOrgdetails=data.org_details;
-                if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
+                if(this.applicationdetails.level.toLowerCase().includes('higher')){
                     this.isstream=true;
                     $('.isstream').show();
                 }
@@ -380,15 +379,7 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.levelList[data[i].id] = data[i].name;
-                }
-            });
-        },
+
         getLocation(uri = '/organization/getLocationInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -446,7 +437,6 @@ export default {
     mounted(){
         this.application_number=this.$route.query.id;
         this.loadproposedBy();
-        this.getLevel();
         this.getLocation();
         this.getClassStream();
         this.getClass();

@@ -191,6 +191,20 @@ Route::prefix('masters')->group(function () {
 Route::post('/saveQuater', [App\Http\Controllers\AdministrationController::class, 'saveQuater'])->name('saveQuater');
 Route::get('/loadQuater', [App\Http\Controllers\AdministrationController::class, 'loadQuater'])->name('loadQuater');
 
+Route::prefix('organizationApproval')->group(function () {
+    Route::get('/getScreenId/{serviceName}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'getScreenId'])->name('getScreenId');
+    Route::post('/saveEstablishment', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveEstablishment'])->name('saveEstablishment');
+    Route::post('/saveClassStream', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveClassStream'])->name('saveClassStream');
+    Route::post('/saveUploadedFiles', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveUploadedFiles'])->name('saveUploadedFiles');
+    Route::get('/loadOrgApplications/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadOrgApplications'])->name('loadOrgApplications');
+    Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
+    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+    Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
+    Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
+    Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
+
+});
+
 Route::prefix('organization')->group(function () {
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
@@ -329,7 +343,7 @@ Route::prefix('organization')->group(function () {
     Route::get('/getStream', [App\Http\Controllers\organization\EstablishmentController::class, 'getStream'])->name('getStream');
     Route::get('/getClassMappingDetails/{mapping_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'getClassMappingDetails'])->name('getClassMappingDetails');
     Route::get('/loadOrganizationDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadOrganizationDetails'])->name('loadOrganizationDetails');
-    Route::get('/loadEstbDetailsForVerification/{appNo}/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForVerification'])->name('loadEstbDetailsForVerification');
+
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
 
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
@@ -429,7 +443,7 @@ Route::prefix('questionAnswerController')->group(function () {
     Route::delete('/deleteAns/{id}', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'deleteAns'])->name('deleteAns');
 });
 
-
+Route::get('/getworkflows/{param}/{parentId}', [App\Http\Controllers\AdministrationController::class, 'getworkflows'])->name('getworkflows');
 Route::prefix('staff')->group(function () {
     Route::post('/saveStaffMasters', [App\Http\Controllers\staff\StaffMasterController::class, 'saveStaffMasters'])->name('saveStaffMasters');
     Route::get('/loadStaffMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadStaffMasters'])->name('loadStaffMasters');
@@ -570,6 +584,9 @@ Route::prefix('staff')->group(function () {
         Route::get('/getOnGoingLeave/{staff_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'getOnGoingLeave'])->name('getOnGoingLeave');
         Route::get('/getallLeaves', [App\Http\Controllers\staff\StaffServicesController::class, 'getallLeaves'])->name('getallLeaves');
     });
+
+
+
     Route::prefix('staffLeadershipSerivcesController')->group(function (){
         Route::post('/createPost', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'createPost'])->name('createPost');
         Route::get('/loadAllPosts', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPosts'])->name('loadAllPosts');
@@ -667,10 +684,13 @@ Route::prefix('students')->group(function () {
         Route::get('/loadStudentAdmissionList', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentAdmissionList'])->name('loadStudentAdmissionList');
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
-        Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getStudentGuardainDetails');
+        Route::get('/getstudentGuardainClassDetails/{cid}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('validateStudentCid');
+        Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getstudentGuardainClassDetails');
+        Route::post('/saveNewTransferStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveNewTransferStudent'])->name('saveNewTransferStudent');
         Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
+        Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'deleteclassDetails'])->name('deleteclassDetails');
     });
 
     Route::prefix('sen')->group(function (){
@@ -693,15 +713,18 @@ Route::prefix('students')->group(function () {
     Route::post('/saveStudentWhereabouts', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentWhereabouts'])->name('saveStudentWhereabouts');
     Route::get('/loadStudentWhereabouts/{param}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadStudentWhereabouts'])->name('loadStudentWhereabouts');
     Route::get('/loadAboardList/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAboardList'])->name('loadAboardList');
-    Route::get('/loadAdmissionRequest/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
+    Route::post('/updateAdmissionRequest', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'updateAdmissionRequest'])->name('updateAdmissionRequest');
+    Route::get('/loadAdmissionRequest/{std_id}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
     Route::post('/saveStudentAboard', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentAboard'])->name('saveStudentAboard');
 
+    Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
     Route::get('/loadStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentList'])->name('loadStudentList');
     Route::get('/loadBasicStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadBasicStudentList'])->name('loadBasicStudentList');
     Route::get('/loadStudentByClass/{class}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByClass'])->name('loadStudentByClass');
     Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
     Route::get('/loadStudentByType/{type}/{class_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByType'])->name('loadStudentByType');
     Route::get('/studentListByGender/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'studentListByGender'])->name('studentListByGender');
+    Route::get('/getStudentClassId/{std_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentClassId'])->name('getStudentClassId');
     Route::get('/loadStudentInformation/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentInformation'])->name('loadStudentInformation');
     //for profile
     Route::get('/getStudentDetails/{id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentDetails'])->name('getStudentDetails');
@@ -854,21 +877,25 @@ Route::prefix('academics')->group(function () {
 
 });
 Route::prefix('spms')->group(function () {
-    Route::get('/getDeoDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getDeoDashboardData'])->name('getDeoDashboardData');
-    Route::get('/getSchoolDoeDetails/{spm_domain_subcat_id}/{status?}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDoeDetails'])->name('getSchoolDoeDetails');
-    Route::get('/getEvaluation/{org_id}/{spm_domain_subcat_id}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
+    Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');
+    Route::get('/getSchoolPerformaceList/{year}/{dzon_id}/{status}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPerformaceList'])->name('getSchoolPerformaceList');
+    Route::get('/getEvaluation/{org_id}/{year}', [App\Http\Controllers\spms\SpmsController::class, 'getEvaluation'])->name('getEvaluation');
     Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
     Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
     Route::post('/saveSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'saveSchoolPlan'])->name('saveSchoolPlan');
     Route::get('/getSchoolPlan/{school_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlan'])->name('getSchoolPlan');
     Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
-    Route::get('/getSchoolPlanHistory', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
+    Route::get('/getSchoolPlanDetails/{spm_school_plan_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanDetails'])->name('getSchoolPlanDetails');
+    Route::get('/getSchoolPlanHistory/{spm_school_plan_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanHistory'])->name('getSchoolPlanHistory');
     Route::get('/loadOrgList', [App\Http\Controllers\spms\SpmsController::class, 'loadOrgList'])->name('loadOrgList');
+    Route::post('/saveAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveAgencyInputForm'])->name('saveAgencyInputForm');
+    Route::get('/getAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'getAgencyInputForm'])->name('getAgencyInputForm');
+    Route::get('/getAgencyInputFormDetail/{agencyInputFormId}', [App\Http\Controllers\spms\SpmsController::class, 'getAgencyInputFormDetail'])->name('getAgencyInputFormDetail');
+    Route::post('/saveObservationAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveObservationAgencyInputForm'])->name('saveObservationAgencyInputForm');
+    Route::post('/saveActionAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveActionAgencyInputForm'])->name('saveActionAgencyInputForm');
+    Route::post('/saveAcknowlegeAgencyInputForm', [App\Http\Controllers\spms\SpmsController::class, 'saveAcknowlegeAgencyInputForm'])->name('saveAcknowlegeAgencyInputForm');
 
 });
-
-
-
 
 Route::prefix('mess_manage')->group(function () {
     //FOOD RELEASE NOTE
@@ -929,17 +956,31 @@ Route::prefix('diatery')->group(function (){
 
 //Projection links
 Route::prefix('projections')->group(function (){
-    Route::prefix('projectionController')->group(function (){
+    //Data Import
+    Route::prefix('data')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+
+    //Education Indicators
+    Route::prefix('education')->group(function (){
+        Route::get('/loadEnrollment/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollment'])->name('loadEnrollment');
+
+        //old routes - delete after copying functions
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
         Route::get('/loadStudents/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadStudents'])->name('loadStudents');
     });
-    Route::prefix('OrgProjectionController')->group(function (){
+    //Quality Indicators
+    Route::prefix('quality')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Efficiency Indicators
+    Route::prefix('efficiency')->group(function (){
+        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+    });
+    //Educational Institutes
+    Route::prefix('institutes')->group(function (){
         Route::get('/loadOrgListProjection/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadOrgListProjection'])->name('loadOrgListProjection');
         Route::get('/loadClassSize/{type}/{parent_id}', [App\Http\Controllers\projections\OrgProjectionController::class, 'loadClassSize'])->name('loadClassSize');
-    });
-
-    Route::prefix('BcseaController')->group(function (){
-        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
 });
