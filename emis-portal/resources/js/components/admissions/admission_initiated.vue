@@ -8,17 +8,21 @@
             </div>
             <div class="form-group" id="main_form">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                        <label class="required" >CID No/Reference  : </label>
-                        <label class="text-primary">{{std_admission_details.CidNo}}</label>
-                    </div>
                     <template v-if="!is_student">
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <label class="required" >CID No/Reference  : </label>
+                            <label class="text-primary">{{std_admission_details.CidNo}}</label>
+                        </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="required" >Name of Student :</label>
                             <label class="text-primary">{{ std_admission_details.FirstName}} {{ std_admission_details.MiddleName=='null' ? '': std_admission_details.MiddleName}} {{ std_admission_details.LastName=='null' ? '': std_admission_details.LastName}}</label>
                         </div>
                     </template>
                     <template v-else>
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                <label class="required" >CID No/Reference  : </label>
+                                <label class="text-primary">{{std_admission_details.student_code}}</label>
+                            </div>
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="required" >Name of Student :</label>
                             <label class="text-primary">{{ std_admission_details.Name}} </label>
@@ -47,6 +51,18 @@
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                         <label class="required" >Village :</label>
                         <label class="text-primary"><span id="vilageId"></span> {{villageArray[std_admission_details.CmnChiwogId]}}</label>
+                    </div>
+                </div>
+                <hr>
+                <h6>Present School Details</h6>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label >School : </label>
+                        <label class="text-primary">{{ this.std_present_school }}</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <label>Class : </label>
+                        <label class="text-primary"><span id="present_class"></span>{{this.std_present_class}}</label>
                     </div>
                 </div>
             </div>
@@ -175,6 +191,8 @@ export default {
             is_student:false,
             std_id:'',
             std_class:'',
+            std_present_class:'',
+            std_present_school:'',
             org_id:'',
             parent_school_dzongkhag:'',
             genderArray:{},
@@ -192,6 +210,8 @@ export default {
             ppmonth:'',
             eccdmonth:'',
             response_data:[],
+            //prefedined an array of the classes
+            class_array:['PP', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'],
             student_form: new form({
                 id:'',
                 seats:0,
@@ -331,6 +351,7 @@ export default {
                         .then(Response =>{
                             let dzongkhag_data = Response.data.data;
                             this.parent_school_dzongkhag = dzongkhag_data.dzongkhagId;
+                            this.std_present_school = dzongkhag_data.name;
                             this.student_form.dzongkhag = this.parent_school_dzongkhag;
                             $('#dzongkhag').prop('disabled',true);
                             this.getStudentClass(data.id);
@@ -365,7 +386,11 @@ export default {
             try{
                 axios.get(uri).then(response => {
                     let data= response.data.data;
-                    this.std_class=data.class;
+                    //have to check whether the student passed or failed
+                    this.std_present_class = data.class;
+                    let index = this.class_array.indexOf(this.std_present_class);
+                    index++;
+                    this.std_class=this.class_array[index];
                     this.classList.push(this.std_class);
                     $('#classsection').show();
                 });
@@ -533,7 +558,7 @@ export default {
             this.student_form.dzongkhag=$('#'+dzo_id).val();
             var type;
             if(this.is_student){
-                type = 'VI';
+                type = this.std_class;
             } else{
                 type=$('input[name="registrationType"]:checked').val();
             }

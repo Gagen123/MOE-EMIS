@@ -22,6 +22,9 @@
                         <div class="btn-group btn-group-sm" v-if="showmess">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'view')"><i class="fas fa-eye"></i ></a>
                         </div>
+                        <div class="btn-group btn-group-sm" v-if="showmessedit">
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'edit')"><i class="fas fa-edit"></i ></a>
+                        </div>
                         <div class="btn-group btn-group-sm" v-if="showprincipaltask">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'open')"><i class="fa fa-file-signature"></i > Open</a>
                         </div>
@@ -133,6 +136,9 @@ export default {
             }
             if(type=="open"){
                 this.$router.push({name:'stockreceived_view',query: {id:item.id,type:type}});
+            }
+            if(type=="edit"){
+                this.$router.push({name:'StockIssuedEdit',params: {data:data}});
             }
 		},
 
