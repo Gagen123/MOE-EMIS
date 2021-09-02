@@ -9,6 +9,7 @@ use App\Models\DepartmentModel;
 use App\Models\establishment\ApplicationAttachments;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationDetails;
+use App\Models\establishment\ApplicationEstDetailsChange;
 use App\Models\establishment\ApplicationEstPrivate;
 use App\Models\establishment\ApplicationEstPublic;
 use App\Models\establishment\ApplicationNoMeals;
@@ -77,7 +78,7 @@ class OrganizationApprovalController extends Controller{
         $this->validate($request, $rules, $customMessages);
 
         //Created application detials for all application type
-        $application_details_data = $this->createApplicationDetail($request);
+        $application_details_data = $this->createApplicationDetail($request,'New Establishment');
         if(strpos($request->establishment_type,'Private')!==false){
             $app_Details=ApplicationEstPrivate::where('ApplicationDetailsId',$application_details_data->id)->first();
         }else{
@@ -158,7 +159,7 @@ class OrganizationApprovalController extends Controller{
         return $application_details_data;
     }
 
-    private function createApplicationDetail($request){
+    private function createApplicationDetail($request,$service=""){
         $year=date('Y');
         if(isset($request['year'])){
             $year=$request['year'];
@@ -169,7 +170,7 @@ class OrganizationApprovalController extends Controller{
             'dzongkhagId'          =>  $request['dzongkhag'],
             'gewogId'              =>  $request['gewog'],
             'chiwogId'             =>  $request['chiwog'],
-            'application_type'     =>  $request['level'],
+            'application_type'     =>  $request['application_type'],
             'year'                 =>  $year,
             'status'               =>  $request['status'],
             'remarks'              =>  $request['remarks'],
@@ -186,7 +187,7 @@ class OrganizationApprovalController extends Controller{
             }
             else{
                 $data =$data+[
-                    'application_no'       =>  $this->generateApplicationNo(),
+                    'application_no'       =>  $this->generateApplicationNo($service),
                     'created_by'           =>  $request->user_id,
                     'created_at'           =>  date('Y-m-d h:i:s')
                 ];
@@ -195,13 +196,12 @@ class OrganizationApprovalController extends Controller{
         }
         return $inserted_application_data;
     }
-    private function generateApplicationNo(){
-        $last_seq=ApplicationSequence::where('service_name','New Establishment')->first();
-
+    private function generateApplicationNo($serviceName=""){
+        $last_seq=ApplicationSequence::where('service_name',$serviceName)->first();
         if($last_seq==null || $last_seq==""){
             $last_seq=1;
             $app_details = [
-                'service_name'                  =>  'New Establishment',
+                'service_name'                  =>  $serviceName,
                 'last_sequence'                 =>  $last_seq,
             ];
             ApplicationSequence::create($app_details);
@@ -211,9 +211,12 @@ class OrganizationApprovalController extends Controller{
             $app_details = [
                 'last_sequence'                 =>  $last_seq,
             ];
-            ApplicationSequence::where('service_name', 'New Establishment')->update($app_details);
+            ApplicationSequence::where('service_name', $serviceName)->update($app_details);
         }
         $application_no='Estb-';
+        if(strpos($serviceName,'Location')!==false){
+            $application_no='LC-';
+        }
         if(strlen($last_seq)==1){
             $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
         }
@@ -316,67 +319,97 @@ class OrganizationApprovalController extends Controller{
     public function loadEstbDetailsForVerification($appNo=""){
         $response_data=ApplicationDetails::where('application_no',$appNo)->first();
         $response_data->application_date=date_format(Carbon::parse($response_data->action_date), 'Y-m-d h:i:s');
-        if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECCD" || $response_data->establishment_type=="Coorporate ECCD" || $response_data->establishment_type=="NGO ECCD" || $response_data->establishment_type=="Public ECR" ){
-            $app_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
-                    }
-        if($response_data->establishment_type=="Private School" || $response_data->establishment_type=="Private ECCD"){
-            $app_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
-        }
-        if($app_details->parentSchool!=""){
-            $org=OrganizationDetails::where('id',$app_details->parentSchool)->first();
-            if($org!=null && $org!=""){
-                $response_data->parent_school=$org->name;
-                if($org->levelId!=null && $org->levelId!=""){
-                    $level=Level::where('id',$org->levelId)->first();
-                    if($level!=null && $level!=""){
-                        $response_data->parent_school=$org->name.' '.$level->name;
-                    }
-                }
-            }
-        }
-        if($app_details->locationId!=""){
-            $loc=Location::where('id',$app_details->locationId)->first();
-            if($loc!=null && $loc!=""){
-                $response_data->location_type=$loc->name;
-            }
-        }
-        if($app_details->initiated_by!=""){
-            $proposed=ProposedBy::where('id',$app_details->initiated_by)->first();
-            if($proposed!=null && $proposed!=""){
-                $response_data->proposed_initiated=$proposed->name;
-            }
-        }
-        $response_data->org_details=$app_details;
-        if(isset($app_details->isFeedingSchool) && $app_details->isFeedingSchool==1){
-            $response_data->feeding_modality=ApplicationNoMeals::where('foreignKeyId',$app_details->id)->get();
-        }
-
-        $response_data->org_class_stream=
-            DB::table('application_class_stream')
-                ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
-                ->select('application_class_stream.*','classes.class')
-                ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
-                ->orderBy('classes.displayOrder')
-                ->get();
         $response_data->attachments=ApplicationAttachments::orderBy('created_at','ASC')->where('ApplicationDetailsId',$response_data->id)->get();
-        $ver=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->get();
-        if($ver!=null && $ver!="" && sizeof($ver)>0){
-            foreach($ver as $v){
-                $department=DepartmentModel::where('id',$v->department_id)->first();
-                if($department!=null && $department!=""){
-                    $v->department_name=$department->name;
+        if(strpos($appNo,'LC')===false){
+            if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECCD" || $response_data->establishment_type=="Coorporate ECCD" || $response_data->establishment_type=="NGO ECCD" || $response_data->establishment_type=="Public ECR" ){
+                $app_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
+            }
+            if($response_data->establishment_type=="Private School" || $response_data->establishment_type=="Private ECCD"){
+                $app_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
+            }
+            if($app_details->parentSchool!=""){
+                $org=OrganizationDetails::where('id',$app_details->parentSchool)->first();
+                if($org!=null && $org!=""){
+                    $response_data->parent_school=$org->name;
+                    if($org->levelId!=null && $org->levelId!=""){
+                        $level=Level::where('id',$org->levelId)->first();
+                        if($level!=null && $level!=""){
+                            $response_data->parent_school=$org->name.' '.$level->name;
+                        }
+                    }
                 }
-                $division=HeadQuaterDetails::where('id',$v->verifyingAgency)->first();
-                if($division!=null && $division!=""){
-                    $v->division_name=$division->agencyName;
+            }
+            if($app_details->locationId!=""){
+                $loc=Location::where('id',$app_details->locationId)->first();
+                if($loc!=null && $loc!=""){
+                    $response_data->location_type=$loc->name;
+                }
+            }
+            if($app_details->initiated_by!=""){
+                $proposed=ProposedBy::where('id',$app_details->initiated_by)->first();
+                if($proposed!=null && $proposed!=""){
+                    $response_data->proposed_initiated=$proposed->name;
+                }
+            }
+            $response_data->org_details=$app_details;
+            if(isset($app_details->isFeedingSchool) && $app_details->isFeedingSchool==1){
+                $response_data->feeding_modality=ApplicationNoMeals::where('foreignKeyId',$app_details->id)->get();
+            }
+
+            $response_data->org_class_stream=
+                DB::table('application_class_stream')
+                    ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
+                    ->select('application_class_stream.*','classes.class')
+                    ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
+                    ->orderBy('classes.displayOrder')
+                    ->get();
+
+            $ver=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->get();
+            if($ver!=null && $ver!="" && sizeof($ver)>0){
+                foreach($ver as $v){
+                    $department=DepartmentModel::where('id',$v->department_id)->first();
+                    if($department!=null && $department!=""){
+                        $v->department_name=$department->name;
+                    }
+                    $division=HeadQuaterDetails::where('id',$v->verifyingAgency)->first();
+                    if($division!=null && $division!=""){
+                        $v->division_name=$division->agencyName;
+                    }
+                }
+            }
+            $response_data->app_verification=$ver;
+            if($response_data!=null && $response_data!=""){
+                $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$response_data->id)->get();
+            }
+        }else{ //loading for location change data
+            $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$response_data->id)->first();
+            if($change_details!=null && $change_details!=""){
+                $loc=Location::where('id',$change_details->proposedLocation)->first();
+                if($loc!=null && $loc!=""){
+                    $response_data->app_location_type=$loc->name;
+                }
+                $orgDetails=OrganizationDetails::where('id',$change_details->organizationId)->first();
+                $response_data->orgDetails=$orgDetails;
+                if($orgDetails->parentSchool!=""){
+                    $org=OrganizationDetails::where('id',$orgDetails->parentSchool)->first();
+                    if($org!=null && $org!=""){
+                        $response_data->parent_school=$org->name;
+                        if($org->levelId!=null && $org->levelId!=""){
+                            $level=Level::where('id',$org->levelId)->first();
+                            if($level!=null && $level!=""){
+                                $response_data->parent_school=$org->name.' '.$level->name;
+                            }
+                        }
+                    }
+                }
+                if($orgDetails->locationId!=""){
+                    $loc=Location::where('id',$orgDetails->locationId)->first();
+                    if($loc!=null && $loc!=""){
+                        $response_data->location_type=$loc->name;
+                    }
                 }
             }
         }
-        $response_data->app_verification=$ver;
-        if($response_data!=null && $response_data!=""){
-            $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$response_data->id)->get();
-        }
-
         return $this->successResponse($response_data);
     }
 
@@ -486,6 +519,32 @@ class OrganizationApprovalController extends Controller{
     public function loadTeamVerificationList($id=""){
         $response_data= ApplicationVerificationTeam::where('ApplicationVerificationId',$id)->get();
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
+
+    public function saveLocationChange(Request $request){
+        $rules = [
+            'gewog'                 =>  'required',
+            'chiwog'                =>  'required',
+            'locationType'         =>  'required',
+        ];
+        $customMessages = [
+            'gewog.required'                => 'Gewog is required',
+            'chiwog.required'               => 'Chiwog is required',
+            'locationType.required'        => 'locationType is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        //Created application detials for all application type
+        $application_details_data = $this->createApplicationDetail($request,'Location Change');
+        $data =[
+            'ApplicationDetailsId'      =>  $application_details_data->id,
+            'organizationId'            =>  $request->organizationId,
+            'proposedLocation'          =>  $request['locationType'],
+            'change_type'               =>  'Location',
+            'proposedChange'            =>  'Change in Location',
+        ];
+        ApplicationEstDetailsChange::create($data);
+        return $application_details_data;
     }
 
 

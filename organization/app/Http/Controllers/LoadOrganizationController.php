@@ -551,14 +551,18 @@ class LoadOrganizationController extends Controller{
     }
 
     public function getOrgProfile($id=""){
-        //dd($id);
         $response_data =OrgProfile::where('org_id',$id)->first();
-        if($response_data!=""){
+        if($response_data!=null && $response_data!=""){
             $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
-            $response_data->orgName=$org_det->name;
-            $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
+            $orgName=$org_det->name;
+            if($org_det->levelId!=null && $org_det->levelId!=""){
+                $level=Level::where('id',$org_det->levelId)->first();
+                if($level!=null && $level!=""){
+                    $orgName=$orgName.' '.$level->name;
+                }
+            }
+            $response_data->orgName=$orgName;
         }
-        //dd($response_data);
         return $this->successResponse($response_data);
     }
 
@@ -617,13 +621,11 @@ class LoadOrganizationController extends Controller{
      */
 
     public function getOrgClassStreamByOrg($org_id, $class_name){
-
-
         $response_data = DB::table('organization_class_streams')
                     ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
                     ->select('organization_class_streams.id')
                     ->where('organization_class_streams.organizationId', $org_id)
-                    ->where('classes.class', $class_name)
+                    ->where('classes.class', 'LIKE', $class_name)
                     ->first();
 
         return $this->successResponse($response_data);

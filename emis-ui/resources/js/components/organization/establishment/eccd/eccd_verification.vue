@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.location_type!=null">
-                                    <label class="mb-0">Location Type: {{applicationdetails.location_type}} </label>
+                                    <label class="mb-0">Location Type: </label>
                                     <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.geopolicaticallyLocated!=null">

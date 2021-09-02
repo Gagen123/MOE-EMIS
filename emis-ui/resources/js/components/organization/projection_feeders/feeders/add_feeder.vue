@@ -62,8 +62,9 @@ export default {
         return {
             SchoolList:[],
             form: new form({
+                id:'',
                 parent_school:'',
-                class:'VI-VII',
+                class:'',
                 remarks:'',
                 action_type:'add',
                 feeder_school:

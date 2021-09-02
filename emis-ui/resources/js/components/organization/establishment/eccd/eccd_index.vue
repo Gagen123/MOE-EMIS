@@ -10,7 +10,7 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Private')"><i class="fa fa-plus"></i>New Private</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Public')"><i class="fa fa-plus"></i>New Public</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','NGO')"><i class="fa fa-plus"></i>New NGO</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Coorporate')"><i class="fa fa-plus"></i>New Coorporate</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Corporate')"><i class="fa fa-plus"></i>New Coorporate</button>
                     <!-- <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button> -->
                 </span>
             </div>

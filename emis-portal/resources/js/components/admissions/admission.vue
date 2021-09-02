@@ -1,24 +1,5 @@
 <template>
     <div class="container-fluid">
-        <div class="card card-primary card-outline">
-            <div class="card-body">
-                <div class="form-group">
-                    <label class="mb-0">CID No./Student Code:</label>
-                    <div class="row form-group">
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                            <label id="level_name"></label>
-                            <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('cid_std_code') }" id="cid_std_code" v-model="form.cid_std_code" placeholder="Ref/cid No">
-                            <has-error :form="form" field="cid_std_code"></has-error>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4">
-                            <button class="btn btn-primary" @click="getDetailsbyCID('cid_std_code')"><i class="fa fa-search"></i> Search</button>
-                        </div>
-                    </div>
-                </div>
-                <has-error :form="form" field="admission"></has-error>
-            </div>
-        </div>
-        <hr>
         <router-view></router-view>
     </div>
 </template>

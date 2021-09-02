@@ -81,6 +81,21 @@
                         </div>
                     </div>
                     <div class="form-group row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                             <label>Is Co-located with Parent School: <span class="text-danger">*</span></label>
+                            <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                            <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Parent School: <span class="text-danger">*</span></label>
+                            <select v-model="form.parentSchool" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parentSchool') }" class="form-control select2" name="parentSchool" id="parentSchool">
+                                <option value="">--- Please Select ---</option>
+                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <has-error :form="form" field="parentSchool"></has-error>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                             <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                 <thead>
@@ -112,7 +127,13 @@
                             </table>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Remarks</label>
+                            <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                            <span class="text-danger" id="remarks_err"></span>
+                        </div>
+                    </div>
                 </form>
                 <hr>
                 <div class="row form-group fa-pull-right">
@@ -149,10 +170,15 @@ export default {
 
             form: new form({
                 organizationId:'',
+                organization_category:'',
                 dzongkhag:'',
                 gewog:'',
                 chiwog:'0',
                 locationType:'',
+                coLocatedParent:'',
+                parentSchool:'',
+                remarks:'',
+                proposedName:'',
                 status:'Submitted',
                 fileUpload: [],
                 attachments:
@@ -181,14 +207,6 @@ export default {
                 this.gewogArray[data[i].id] = data[i].name;
             }
             $('#gewogid').val(this.gewogArray[gewogId]);
-        },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/all_eccds_dzogkhag_wise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
         },
 
         async loadactivedzongkhagList(){
@@ -262,7 +280,6 @@ export default {
                         }
 
                         let formData = new FormData();
-                        formData.append('id', this.form.id);
                         formData.append('ref_docs[]', this.form.ref_docs);
                         for(let i=0;i<this.form.ref_docs.length;i++){
                             formData.append('attachments[]', this.form.ref_docs[i].attach);
@@ -272,7 +289,14 @@ export default {
                         formData.append('dzongkhag', this.form.dzongkhag);
                         formData.append('gewog', this.form.gewog);
                         formData.append('chiwog', this.form.chiwog);
+                        formData.append('establishment_type', 'Location Change Services');
+                        formData.append('application_type', 'Location Change');
+                        formData.append('category', this.form.organization_category);
+                        formData.append('proposedName', this.form.proposedName); //for workflow
+                        formData.append('service_name', 'Location Change of ECCD Centres');
+
                         formData.append('locationType', this.form.locationType);
+                        formData.append('remarks', this.form.remarks);
                         formData.append('status', this.form.status);
 
                         formData.append('screenId', this.screenId);
@@ -280,25 +304,16 @@ export default {
                         formData.append('Sequence', this.Sequence);
                         formData.append('Status_Name', this.Status_Name);
 
-                        axios.post('organizationApproval/saveUploadedFiles', formData, config)
-
-                        this.form.post('organization/saveChangeBasicDetails')
+                        axios.post('organizationApproval/saveLocationChange', formData, config)
+                        // this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
-                                if(response.data=="No Screen"){
-                                    Toast.fire({
-                                        icon: 'error',
-                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
-                                    });
-                                }
-                                if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Change details is saved successfully'
-                                    });
-                                }
+                                let message="Application for Location Change has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Change details is saved successfully'
+                                });
                             }
                         })
                         .catch((err) => {
@@ -358,7 +373,8 @@ export default {
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.form.organization_category=response.data.data.category; //this is required to check the screen while submitting
+                this.form.proposedName=response.data.data.name;
                 this.organization_details=response.data.data;
                 this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
@@ -410,7 +426,6 @@ export default {
         this.locationList =await this.loadlocationList();
         this.proposed_by_list =  await this.loadproposedByList();
         this.loadactivedzongkhagList();
-        this.getOrgList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -425,12 +440,13 @@ export default {
         });
 
         this.loadattachments('Application_for_Location_Change');
+        this.orgList= await this.schoolListUnderUserDzongkhag();
 
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.form.organizationId=data['Agency_Code'];
-            this.getorgdetials(data['Agency_Code']);
+            // this.getorgdetials(data['Agency_Code']);
             $('#organizationId').val(data['Agency_Code']).trigger('change');
 
             this.form.dzongkhag=data['Dzo_Id'];
