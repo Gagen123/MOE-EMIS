@@ -97,6 +97,7 @@
             axios.get('common/getTaskList/common')
             .then(response => {
                 let data = response.data;
+                alert(JSON.stringify(data));
                 if(data!="Not Found"){
                     this.commonTaskList=data;
                 }

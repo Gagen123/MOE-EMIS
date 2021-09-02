@@ -46,8 +46,6 @@ class ChangeBasicDetailsController extends Controller
      * method to save change basic details
     */
     public function saveChangeBasicDetails(Request $request){
-        // dd($request);
-
         if($request->action_type!="edit"){
             $application_details_data =[
                 'application_no'       =>  $this->generateApplicationNo(),
@@ -57,7 +55,6 @@ class ChangeBasicDetailsController extends Controller
                 'status'               =>  $request['status'],
                 'created_by'           =>  $request['user_id']
             ];
-            // dd($application_details_data);
             // dd($request);
             $inserted_application_data = ApplicationDetails::create($application_details_data);
             $applicationDetailsId = $inserted_application_data->id;

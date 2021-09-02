@@ -1,14 +1,10 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change Name of Organization</label>
-                        </a>
-                    </li>
-                </ul>
+            <div class="form-group row bg-gray-light">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <span id="screenName"></span>
+                </div>
             </div>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
@@ -264,6 +260,11 @@ export default {
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         //this.form.post('organization/saveChangeBasicDetails')
@@ -407,41 +408,28 @@ export default {
             });
         },
         loadScreenDetails(){
-            // this.form.category=type;
-            axios.get('organizationApproval/getScreenId/'+'Application For Name Change'+1)
+            axios.get('organizationApproval/getScreenId/Application For Name Change__'+1)
             .then(response => {
-                alert(JSON.stringify(response));
                 let data = response.data[0];
                 if(data!=undefined){
-                    $('#screenName').html('<b>Creating Application for '+data.screenName+' ('+this.form.category+')</b>');
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;
                     this.Sequence=data.Sequence;
                     this.Status_Name=data.Status_Name;
-                    this.file_form.service_name=data.screenName;
+                    this.screen_name=data.screenName;
                 }
             })
             .catch(errors => {
                 console.log(errors)
             });
         },
-
-        applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+         applyselect2(){
+            this.applyselect2field('level');
+            this.applyselect2field('dzongkhag');
+            this.applyselect2field('gewog');
+            this.applyselect2field('chiwog');
+            this.applyselect2field('locationType');
         },
         loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
             axios.get(uri)
@@ -470,6 +458,7 @@ export default {
     },
 
     mounted() {
+        this.loadScreenDetails();
         this.loadactivedzongkhagList();
         this.loadproposedBy();
         this.getOrgList();
@@ -477,7 +466,6 @@ export default {
         this.getLocation();
         this.getClass();
         this.getstream();
-        this.loadScreenDetails();
         this.getAttachmentType('ForTransaction__Application_for_Name_Change');
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
