@@ -145,8 +145,25 @@ class RestructuringController extends Controller
 
         $seq=((int) $request->Sequence +1);
         $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+        // dd($request->screenId,$this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq),$seq);
         $role_id=$next_roleId[0]->SysRoleId;
-        
+        if(strpos($role_id,',')){
+            $roles=explode(',',$role_id);
+            foreach($roles as $role){
+                // dd($this->apiService->listData('system/getRolesWorkflow/roleName/'.$role));
+                $roleName=json_decode($this->apiService->listData('system/getRolesWorkflow/roleName/'.$role))[0]->Name;
+                if(strpos(strtolower($roleName),'eccd')!==false && strpos(strtolower($request->organization_type),'eccd')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
+                if(strpos(strtolower($roleName),'psd')!==false && strpos(strtolower($request->organization_type),'private_school')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
+                if(strpos(strtolower($roleName),'spcd')!==false && strpos(strtolower($request->organization_type),'public_school')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
+            }
+        }
+        //if there are multiple verifier, then need to mention verifier based on applicaiton type to be forwarded: Eg: if name chnage application has three verifier-spcd,psd and eccd, then need to specify which applicaiton type should be forwarded to where
         if($request->action_type!="edit"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,

@@ -369,6 +369,12 @@ class LoadOrganizationController extends Controller{
                 // $response_data->level=$level;
                 $response_data->name=$response_data->name.' '.$level->name;
             }
+            if($response_data!=null && $response_data->parentSchoolId!=null && $response_data->parentSchoolId!=""){
+                $parent=OrganizationDetails::where('id',$response_data->parentSchoolId)->first();
+                if($parent!=null && $parent!=""){
+                    $response_data->parentSchoolName=$parent->name;
+                }
+            }
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
@@ -551,14 +557,18 @@ class LoadOrganizationController extends Controller{
     }
 
     public function getOrgProfile($id=""){
-        //dd($id);
         $response_data =OrgProfile::where('org_id',$id)->first();
-        if($response_data!=""){
+        if($response_data!=null && $response_data!=""){
             $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
-            $response_data->orgName=$org_det->name;
-            $response_data->level=Level::where('id',$org_det->levelId)->first()->name;
+            $orgName=$org_det->name;
+            if($org_det->levelId!=null && $org_det->levelId!=""){
+                $level=Level::where('id',$org_det->levelId)->first();
+                if($level!=null && $level!=""){
+                    $orgName=$orgName.' '.$level->name;
+                }
+            }
+            $response_data->orgName=$orgName;
         }
-        //dd($response_data);
         return $this->successResponse($response_data);
     }
 

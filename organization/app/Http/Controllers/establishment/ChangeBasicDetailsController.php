@@ -53,6 +53,7 @@ class ChangeBasicDetailsController extends Controller
                 'application_type'     =>  $request['application_type'],
                 'year'                 =>  date('Y'),
                 'status'               =>  $request['status'],
+                'created_at'           =>  date('Y-m-d h:i:s'),
                 'created_by'           =>  $request['user_id']
             ];
             // dd($request);

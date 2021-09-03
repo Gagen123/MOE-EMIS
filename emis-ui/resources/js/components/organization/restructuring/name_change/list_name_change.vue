@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
                     <td>{{ item.establishment_type}}</td>
-                    <td>{{item.created_at}}</td>
+                    <td>{{reverseDate(item.created_at.substring(0,10))}}</td>
                     <td>{{ item.status}}</td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>

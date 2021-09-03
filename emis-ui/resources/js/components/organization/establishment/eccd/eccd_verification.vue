@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.location_type!=null">
-                                    <label class="mb-0">Location Type: {{applicationdetails.location_type}} </label>
+                                    <label class="mb-0">Location Type: </label>
                                     <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.geopolicaticallyLocated!=null">
@@ -328,7 +328,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Feasibility_Study'">
+                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
@@ -355,7 +355,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Feasibility_Study_Report'">
+                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
@@ -857,8 +857,9 @@ export default {
                 }
                 axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
                 .then(response => {
-                    let data = response.data[0];
-                    if(data!=undefined){
+                    // let data = response.data[0];
+                    let data = response.data.data;
+                    if(data!=undefined && data!="NA"){
                         this.screenId=data.screen;
                         this.SysRoleId=data.SysRoleId;
                         this.Sequence=data.Sequence;

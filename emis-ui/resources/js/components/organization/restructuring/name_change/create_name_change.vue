@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="form-group row bg-gray-light">
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -186,7 +190,6 @@ export default {
         }
     },
     methods: {
-        
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#fileName'+currentcount).val()!=""){
@@ -224,8 +227,8 @@ export default {
             });
         },
         //loading screen details
-        
-        
+
+
         /**
          * method to show next and previous tab
          */
@@ -277,7 +280,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -292,16 +295,6 @@ export default {
                     }
                 });
             }
-        },
-
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
         },
 
         /**
@@ -410,14 +403,21 @@ export default {
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/Application For Name Change__'+1)
             .then(response => {
-                let data = response.data[0];
-                if(data!=undefined){
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;
                     this.Sequence=data.Sequence;
                     this.Status_Name=data.Status_Name;
                     this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
                 }
             })
             .catch(errors => {

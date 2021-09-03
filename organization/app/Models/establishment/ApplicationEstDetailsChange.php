@@ -22,6 +22,9 @@ class ApplicationEstDetailsChange extends Model
         'organizationId',
         'change_type',
         'proposedChange',
+        'proposedLocation',
+        'coLocatedParent',
+        'parentSchoolId',
         'initiatedBy',
         'changeInDetails'
     ];

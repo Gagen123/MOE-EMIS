@@ -9,7 +9,7 @@
                     <td>{{ index+1}})  </td>
                     <td>{{ item.guideline}}</td>
                 </tr>
-                <tr v-for='(role, index) in eccdworkflow' :key="index">
+                <tr v-for='(role, index) in eccdworkflow' :key="'work'+index">
                     <td>ECCD Workflow</td>
                     <td>
                         <span v-html="role.AuthorityType"></span>

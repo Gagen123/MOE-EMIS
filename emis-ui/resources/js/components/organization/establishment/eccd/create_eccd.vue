@@ -226,7 +226,6 @@
                             </div>
                         </div>
                         <hr>
-
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('class-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
@@ -566,8 +565,9 @@ export default {
             this.form.category=type;
             axios.get('organizationApproval/getScreenId/'+'ECCD Centre__'+1)
             .then(response => {
-                let data = response.data[0];
-                if(data!=undefined){
+                // let data = response.data[0];
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+' ('+this.form.category+')</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;
@@ -586,7 +586,7 @@ export default {
                     $('#proposed_initiated_by_id').show();
                     $('#proposed_initiated_by_id1').show();
                 }
-                if(type=="Coorporate"){
+                if(type=="Corporate"){
                     $('#parent_agency_id').show();
                     $('#parent_agency_id1').show();
                 }

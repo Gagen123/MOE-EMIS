@@ -59,15 +59,15 @@
                                         <input type="text" readonly :value="locationArray[organization_details.locationId]"  class="form-control" id="proposedName"/>
                                     </div>
                                 </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Location Type:<span class="text-danger">*</span></label>
-                                <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                    <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
-                                        <option value="">--- Please Select ---</option>
-                                        <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
+                                <div class="form-group row">
+                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Location Type:<span class="text-danger">*</span></label>
+                                    <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
+                                        <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
+                                            <option value="">--- Please Select ---</option>
+                                            <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
                             </form>
 
                         </div>
