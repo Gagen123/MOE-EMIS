@@ -559,7 +559,7 @@
                             </div>
                             <hr>
                         </div>
-                        <div class="row">
+                        <div class="row" id="remarksSec">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
@@ -735,14 +735,8 @@ export default {
                     if(element.upload_type=="update_document" || element.upload_type=="Update_Feasibility_Study_Report"){
                         this.feasibilityReport=true;
                     }
-                    if(!this.feasibilityReport && this.access_level=="Dzongkhag"){
-                        $('#attacmentsection').hide();
-                    }
                     if(element.upload_type=="final_update_document" || element.upload_type=="Update_Final_Assessment"){
                         this.final_feasibilityReport=true;
-                    }
-                    if(!this.final_feasibilityReport && this.access_level=="Dzongkhag"){
-                        $('#attacmentsection').hide();
                     }
                 });
 
@@ -768,7 +762,7 @@ export default {
                         $('#attachment_name'+i).html('Notify for Tentative Date of Final Assessment');
                     }
                 }
-                // alert(status_id+this.access_level);
+                alert(status_id+this.access_level);
                 if(status_id==2){ //initially submitted
                     $('#setverifyingagency').show();
                     $('#getverifyingagency').hide();
@@ -797,14 +791,26 @@ export default {
 
                 $('#updateBtn').show();
                 //hide update button for deo/teo
+                if((status_id==4 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
+                    $('#attacmentsection').hide();
+                    $('#remarksSec').hide();
+                }
                 if((status_id==3 || status_id==4 || status_id==5 ||  status_id==7 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
                     $('#updateBtn').hide();
                     $('#rejectbtn').hide();
                     if(status_id==3 && !this.feasibilityReport){//show update button at deo level to update feasibility study report
                         $('#update_document_btn').show();
                     }
+                    if(status_id==3 && this.feasibilityReport){
+                        $('#attacmentsection').hide();
+                        $('#remarksSec').hide();
+                    }
                     if(status_id==7 && !this.final_feasibilityReport){//show update button at deo level to update final feasibility study report
                         $('#update_document_btn').show();
+                    }
+                    if(status_id==7 && this.final_feasibilityReport){
+                        $('#attacmentsection').hide();
+                        $('#remarksSec').hide();
                     }
                 }
 

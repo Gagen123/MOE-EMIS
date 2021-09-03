@@ -615,7 +615,7 @@
                             </div>
                             <hr>
                         </div>
-                        <div class="row">
+                        <div class="row" id="remarksSec">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks</label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
@@ -880,74 +880,90 @@ export default {
 
                 $('#updateBtn').show();
                 //hide update button for deo/teo
+                if((status_id==4 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
+                    $('#attacmentsection').hide();
+                    $('#remarksSec').hide();
+                }
                 if((status_id==3 || status_id==4 || status_id==5 ||  status_id==7 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
                     $('#updateBtn').hide();
                     $('#rejectbtn').hide();
                     if(status_id==3 && !this.feasibilityReport){//show update button at deo level to update feasibility study report
                         $('#update_document_btn').show();
                     }
+                    if(status_id==3 && this.feasibilityReport){
+                        $('#attacmentsection').hide();
+                        $('#remarksSec').hide();
+                    }
                     if(status_id==7 && !this.final_feasibilityReport){//show update button at deo level to update final feasibility study report
                         $('#update_document_btn').show();
                     }
+                    if(status_id==7 && this.final_feasibilityReport){
+                        $('#attacmentsection').hide();
+                        $('#remarksSec').hide();
+                    }
                 }
-
                 if(!this.taskDet.w_config_status.toLowerCase().includes('submitted')){
                     $('#staff_type').empty();
                     let option='<option value="">--Select--</option>';
                     this.form.verifying_agency_verified_list=[];
                     this.form.updated_final_verifying_agency_list=[];
-                    for(let i=0;i<data.app_verification.length;i++){
-                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
-                            issetfinal=true;
-                        }
-                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
-                            $('#tentative_remarks').val(data.app_verification[i].remarks);
-                            $('#tentative_date').val(data.app_verification[i].tentativeDate);
-                            this.form.tentative_date=data.app_verification[i].tentativeDate;
-                            $('#tentative_date').hide();
-                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
-                                $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
-                                $('#tentative_date_show').prop('disabled',true);
-                                $('#tentative_date_show').show();
+                    if(data.app_verification!=undefined){
+                        let issetfinal=false;
+                        for(let i=0;i<data.app_verification.length;i++){
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                                issetfinal=true;
                             }
-                            if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
-                                $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
-                                $('#feasibilityStudy_date_show').prop('disabled',true);
-                                $('#feasibilityStudy_date_show').show();
-                                $('#feasibilityStudy_date').hide();
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                                $('#tentative_remarks').val(data.app_verification[i].remarks);
+                                $('#tentative_date').val(data.app_verification[i].tentativeDate);
+                                this.form.tentative_date=data.app_verification[i].tentativeDate;
+                                $('#tentative_date').hide();
+                                if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                    $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                    $('#tentative_date_show').prop('disabled',true);
+                                    $('#tentative_date_show').show();
+                                }
+                                if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                                    $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                                    $('#feasibilityStudy_date_show').prop('disabled',true);
+                                    $('#feasibilityStudy_date_show').show();
+                                    $('#feasibilityStudy_date').hide();
+                                }
                             }
-                        }
-                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
-                            $('#finalverificationdetials').show();
-                            $('#setfinalverifyingagency').hide();
-                            $('#final_tentative_remarks').val(data.app_verification[i].remarks);
-                            $('#final_tentative_date').val(data.app_verification[i].tentativeDate);
-                            $('#final_tentative_date').hide();
-                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
-                                $('#final_tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
-                                $('#final_tentative_date_show').prop('disabled',true);
-                                $('#final_tentative_date_show').show();
-                            }
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                                $('#finalverificationdetials').show();
+                                $('#setfinalverifyingagency').hide();
+                                $('#final_tentative_remarks').val(data.app_verification[i].remarks);
+                                $('#final_tentative_date').val(data.app_verification[i].tentativeDate);
+                                $('#final_tentative_date').hide();
+                                if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                    $('#final_tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                    $('#final_tentative_date_show').prop('disabled',true);
+                                    $('#final_tentative_date_show').show();
+                                }
 
-                            if(data.final_assessment_date!=null && data.final_assessment_date!=""){
-                                $('#final_assessment_date_show').val(this.reverseDate(data.final_assessment_date));
-                                $('#final_assessment_date_show').prop('disabled',true);
-                                $('#final_assessment_date_show').show();
-                                $('#final_assessment_date').hide();
+                                if(data.final_assessment_date!=null && data.final_assessment_date!=""){
+                                    $('#final_assessment_date_show').val(this.reverseDate(data.final_assessment_date));
+                                    $('#final_assessment_date_show').prop('disabled',true);
+                                    $('#final_assessment_date_show').show();
+                                    $('#final_assessment_date').hide();
+                                }
+                                this.form.final_tentative_date=data.app_verification[i].tentativeDate;
                             }
-                            this.form.final_tentative_date=data.app_verification[i].tentativeDate;
+                        }
+                        for(let i=0;i<data.app_verification.length;i++){
+                            if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                                alert('dd');
+                                this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                                option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                            }
+                            if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                                this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                                option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                            }
                         }
                     }
-                    for(let i=0;i<data.app_verification.length;i++){
-                        if(!issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
-                            this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
-                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
-                        }
-                        if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
-                            this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
-                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
-                        }
-                    }
+
                     $('#staff_type').append(option);
                 }
 
