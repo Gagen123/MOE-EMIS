@@ -540,6 +540,8 @@ class OrganizationApprovalController extends Controller{
             'ApplicationDetailsId'      =>  $application_details_data->id,
             'organizationId'            =>  $request->organizationId,
             'proposedLocation'          =>  $request['locationType'],
+            'coLocatedParent'           =>  $request['coLocatedParent'],
+            'parentSchoolId'            =>  $request['parentSchool'],
             'change_type'               =>  'Location',
             'proposedChange'            =>  'Change in Location',
         ];

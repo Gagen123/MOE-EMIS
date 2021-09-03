@@ -50,6 +50,14 @@
                             <label>Location:</label>
                             <input type="text" readonly :value="organization_details.location_type_name"  class="form-control" id="location_type_name"/>
                         </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label>Is Co-located with Parent Schoo:</label>
+                            <input type="text" readonly :value="organization_details.isColocated==1? 'yes':'No'" class="form-control" id="gewogid"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label>Parent School:</label>
+                            <input type="text" readonly :value="organization_details.parentSchoolName" class="form-control" id="vilageId"/>
+                        </div>
                     </div>
                     <label class="mb-0"><i><u>Proposed Location Details</u></i></label>
                     <div class="form-group row">
@@ -289,6 +297,8 @@ export default {
                         formData.append('dzongkhag', this.form.dzongkhag);
                         formData.append('gewog', this.form.gewog);
                         formData.append('chiwog', this.form.chiwog);
+                        formData.append('coLocatedParent', this.form.coLocatedParent);
+                        formData.append('parentSchool', this.form.parentSchool);
                         formData.append('establishment_type', 'Location Change Services');
                         formData.append('application_type', 'Location Change');
                         formData.append('category', this.form.organization_category);
@@ -392,8 +402,9 @@ export default {
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/'+'Location Change of ECCD Centres__'+1)
             .then(response => {
-                let data = response.data[0];
-                if(data!=undefined){
+                // let data = response.data[0];
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;

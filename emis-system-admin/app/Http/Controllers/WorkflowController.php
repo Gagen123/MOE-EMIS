@@ -44,7 +44,8 @@ class WorkflowController extends Controller{
         $workflowdetails = Workflow::create($data);
         if(($request->w_config_status=="Updated Feasibility Study Report" || $request->w_config_status=="Updated Final Assessment Report") && $request->access_level=="Dzongkhag"){
             //donot update tasklist while updating feasibility report by deo/teo
-        }else{
+        }
+        else{
             if($request->status_id==1 || strpos($request->status_id,'__submitterRejects')!==false){
                 $status=$request->status_id;
                 if(strpos($request->status_id,'__submitterRejects')!==false){

@@ -565,8 +565,9 @@ export default {
             this.form.category=type;
             axios.get('organizationApproval/getScreenId/'+'ECCD Centre__'+1)
             .then(response => {
-                let data = response.data[0];
-                if(data!=undefined){
+                // let data = response.data[0];
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+' ('+this.form.category+')</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;

@@ -369,6 +369,12 @@ class LoadOrganizationController extends Controller{
                 // $response_data->level=$level;
                 $response_data->name=$response_data->name.' '.$level->name;
             }
+            if($response_data!=null && $response_data->parentSchoolId!=null && $response_data->parentSchoolId!=""){
+                $parent=OrganizationDetails::where('id',$response_data->parentSchoolId)->first();
+                if($parent!=null && $parent!=""){
+                    $response_data->parentSchoolName=$parent->name;
+                }
+            }
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')

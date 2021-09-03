@@ -434,6 +434,8 @@ class OrganizationApprovalController extends Controller{
             'locationType'                      =>  $request->locationType,
             'category'                          =>  $request->category,
             'establishment_type'                =>  $request->establishment_type,
+            'coLocatedParent'                   =>  $request->coLocatedParent,
+            'parentSchool'                      =>  $request->parentSchool,
             'application_type'                  =>  $request->application_type,
             'status'                            =>  $request->status,
             'remarks'                           =>  $request->remarks,

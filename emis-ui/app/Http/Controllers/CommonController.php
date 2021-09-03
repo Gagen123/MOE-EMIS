@@ -54,6 +54,7 @@ class CommonController extends Controller{
         return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
     }
     public function getApprovalWorkStatus(){
+        // dd($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
         $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
         // $w_status_screen=[];
         // foreach($work_status as $i=> $work){
@@ -72,7 +73,7 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
+        // $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
         // $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
@@ -115,7 +116,6 @@ class CommonController extends Controller{
     }
 
     public function getNotification(){
-        // dd($this->getRoleIds('roleIds').'/'.$this->userId());
         $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
         return $response_data;
     }

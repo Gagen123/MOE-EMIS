@@ -267,8 +267,9 @@ export default {
                 }
                 axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
                 .then(response => {
-                    let data = response.data[0];
-                    if(data!=undefined){
+                    // let data = response.data[0];
+                    let data = response.data.data;
+                    if(data!=undefined && data!="NA"){
                         this.screenId=data.screen;
                         this.SysRoleId=data.SysRoleId;
                         this.Sequence=data.Sequence;
