@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table id="award-list-table" class="table table-bordered text-sm table-striped">
+        <table id="sport-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -61,6 +61,15 @@ export default {
     },
     mounted(){
         this.loadDataList();
+         this.dt =  $("#sport-list-table").DataTable();
+    },
+       watch:{
+        dataList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#sport-list-table").DataTable();
+            });
+        },
     },
 }
 </script>

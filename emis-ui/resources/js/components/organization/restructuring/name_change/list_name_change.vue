@@ -46,7 +46,6 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 this.dataList =  data;
-                // alert(JSON.stringify(this.dataList));
             })
             .catch(function (error) {
                 console.log('error: '+error);
