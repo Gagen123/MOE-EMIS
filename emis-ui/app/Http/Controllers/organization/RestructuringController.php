@@ -164,19 +164,6 @@ class RestructuringController extends Controller
                 'action_by'         =>$this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-            // $type="";
-            // if($request->screen_name=="Application For Name Change"){
-            //     $type="Application For Name Change";
-            // }
-            // if($request->screen_name=="Upgrade"){
-            //     $type="upgrade";
-            // }
-            // if($request->screen_name=="Downgrade"){
-            //     $type="downgrade";
-            // }
-            // if($request->screen_name=="Downgrade"){
-            //     $type="downgrade";
-            // }
             $notification_data=[
                 'notification_for'              =>  $request->screen_name,
                 'notification_appNo'            =>  $appNo,
