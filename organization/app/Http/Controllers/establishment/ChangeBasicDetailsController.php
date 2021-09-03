@@ -56,7 +56,6 @@ class ChangeBasicDetailsController extends Controller
                 'created_at'           =>  date('Y-m-d h:i:s'),
                 'created_by'           =>  $request['user_id']
             ];
-            // dd($request);
             $inserted_application_data = ApplicationDetails::create($application_details_data);
             $applicationDetailsId = $inserted_application_data->id;
 

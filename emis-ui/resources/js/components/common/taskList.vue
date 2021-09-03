@@ -96,6 +96,7 @@
         loadcommontask(){
             axios.get('common/getTaskList/common')
             .then(response => {
+                alert(JSON.stringify(response));
                 let data = response.data;
                 if(data!="Not Found"){
                     this.commonTaskList=data;
