@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.location_type!=null">
-                                    <label class="mb-0">Location Type: {{applicationdetails.location_type}} </label>
+                                    <label class="mb-0">Location Type: </label>
                                     <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.geopolicaticallyLocated!=null">
@@ -328,7 +328,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Feasibility_Study'">
+                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
@@ -355,7 +355,7 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Feasibility_Study_Report'">
+                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
                                                 <td>  {{attach.user_defined_file_name}}</td>
                                                 <td>  {{attach.name}}</td>
                                                 <td>
@@ -384,6 +384,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Tentative Date for Feasibility Study:</label>
                                     <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control">
+                                    <input type="text" name="tentative_date_show" id="tentative_date_show" style="display:none" class="form-control">
                                     <span class="text-danger" id="tentative_date_err"></span>
                                 </div>
                             </div>
@@ -443,6 +444,14 @@
                                 </div>
                             </div>
                             <div id="verifier_team" style="display:none">
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Date for Feasibility Study:</label>
+                                        <input type="date" name="feasibilityStudy_date" v-model="form.feasibilityStudy_date" id="feasibilityStudy_date" class="form-control">
+                                        <input type="text" style="display:none" name="feasibilityStudy_date_show" id="feasibilityStudy_date_show" class="form-control">
+                                        <span class="text-danger" id="feasibilityStudy_date_err"></span>
+                                    </div>
+                                </div>
                                 <h5><u>Team Verification</u></h5>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
@@ -475,6 +484,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Tentative Date for Final Feasibility Study:</label>
                                     <input type="date" name="final_tentative_date" v-model="form.final_tentative_date" id="final_tentative_date" class="form-control">
+                                    <input type="text" name="final_tentative_date_show" id="final_tentative_date_show" style="display:none" class="form-control">
                                     <span class="text-danger" id="final_tentative_date_err"></span>
                                 </div>
                             </div>
@@ -533,6 +543,14 @@
                                 </div>
                             </div>
                             <div id="final_verifier_team" style="display:none">
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Date for final Assessment:</label>
+                                        <input type="date" name="final_assessment_date" v-model="form.final_assessment_date" id="final_assessment_date" class="form-control">
+                                        <input type="text" name="final_assessment_date_show" id="final_assessment_date_show" style="display:none" class="form-control">
+                                        <span class="text-danger" id="final_assessment_date_err"></span>
+                                    </div>
+                                </div>
                                 <h5><u>Final Team Verification</u></h5>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="final_showsearch">
@@ -560,7 +578,7 @@
                             </div>
                         </div>
 
-                        <div class="callout callout-success" >
+                        <div class="callout callout-success" id="attacmentsection">
                             <h4><u>Attachments (<span id="attname"></span>)</u></h4>
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -703,6 +721,8 @@ export default {
                 updated_final_verifying_agency_list:[],
                 tentative_date:'',
                 final_tentative_date:'',
+                feasibilityStudy_date:'',
+                final_assessment_date:'',
                 update_type:'',
                 servicename:'',
                 nomi_staffList:[],
@@ -769,10 +789,15 @@ export default {
                     if(element.upload_type=="update_document" || element.upload_type=="Update_Feasibility_Study_Report"){
                         this.feasibilityReport=true;
                     }
-                    if(element.upload_type=="final_update_document" || element.upload_type=="Update_Final_Feasibility_Study_Report"){
+                    if(status_id==5 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
+                        $('#attacmentsection').hide();
+                    }
+                    if(element.upload_type=="final_update_document" || element.upload_type=="Update_Final_Assessment"){
                         this.final_feasibilityReport=true;
                     }
-
+                    if(status_id==7 && !this.final_feasibilityReport && this.access_level=="Dzongkhag"){
+                        $('#attacmentsection').hide();
+                    }
                 });
                 this.applicationOrgdetails=data.org_details;
                 this.taskDet=response.data.app_stage;
@@ -780,10 +805,42 @@ export default {
                 this.getteamVerificationList();
 
                 let status_id=parseInt(this.taskDet.status_id)+1;
+
+                axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
+                .then(response => {
+                    // let data = response.data[0];
+                    let data = response.data.data;
+                    if(data!=undefined && data!="NA"){
+                        this.screenId=data.screen;
+                        this.SysRoleId=data.SysRoleId;
+                        this.Sequence=data.Sequence;
+                        this.Status_Name=data.Status_Name;
+                        $('#attname').html(data.Name);
+                        this.getAttachmentType(data.Name.replaceAll(" ", "_"));
+                        this.form.update_type=data.Name.replaceAll(" ", "_");
+                        $('#update_btn_level').html(data.Name);
+                        $('#updateBtn').show();
+                    }else{
+                        $('#screenPermission').show();
+                        $('#mainform').hide();
+                        $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+                    }
+                })
+                .catch(errors => {
+                    console.log(errors)
+                });
+
                 for(let i=0;i<parseInt(this.taskDet.status_id);i++){
                     $('#verificationattachment'+i).show();
                     if(i==1){
                         $('#attachment_name'+i).html('Notify for Tentative Date of Feasibility Study');
+                        $('#attname').html('Feasibility Study Report');
+                        if(status_id==3 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
+                            this.getAttachmentType('Update_Feasibility_Study_Report');
+                        }
+                        if(status_id==7 && this.access_level=="Dzongkhag"){
+                            this.getAttachmentType('Update_Final_Assessment');
+                        }
                     }
                     if(i==3){
                         $('#attachment_name'+i).html('Notify for Approval in Principle');
@@ -801,6 +858,12 @@ export default {
                 }else{
                     $('#setverifyingagency').hide();
                     $('#getverifyingagency').show();
+                    if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                        $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                        $('#feasibilityStudy_date_show').prop('disabled',true);
+                        $('#feasibilityStudy_date_show').show();
+                        $('#feasibilityStudy_date').hide();
+                    }
                     if(status_id==3 && this.access_level=="Ministry"){ //enable the button to update team verification
                         this.showsearch=true;
                         $('#verifier_team').show();
@@ -834,49 +897,60 @@ export default {
                     this.form.verifying_agency_verified_list=[];
                     this.form.updated_final_verifying_agency_list=[];
                     for(let i=0;i<data.app_verification.length;i++){
+                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                            issetfinal=true;
+                        }
                         if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
-                            this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
                             $('#tentative_remarks').val(data.app_verification[i].remarks);
                             $('#tentative_date').val(data.app_verification[i].tentativeDate);
                             this.form.tentative_date=data.app_verification[i].tentativeDate;
-                            $('#tentative_date').prop('disabled',true);
-                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                            $('#tentative_date').hide();
+                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                $('#tentative_date_show').prop('disabled',true);
+                                $('#tentative_date_show').show();
+                            }
+                            if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                                $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                                $('#feasibilityStudy_date_show').prop('disabled',true);
+                                $('#feasibilityStudy_date_show').show();
+                                $('#feasibilityStudy_date').hide();
+                            }
                         }
                         if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
                             $('#finalverificationdetials').show();
                             $('#setfinalverifyingagency').hide();
-                            this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
                             $('#final_tentative_remarks').val(data.app_verification[i].remarks);
                             $('#final_tentative_date').val(data.app_verification[i].tentativeDate);
-                            $('#final_tentative_date').prop('disabled',true);
+                            $('#final_tentative_date').hide();
+                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                $('#final_tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                $('#final_tentative_date_show').prop('disabled',true);
+                                $('#final_tentative_date_show').show();
+                            }
+
+                            if(data.final_assessment_date!=null && data.final_assessment_date!=""){
+                                $('#final_assessment_date_show').val(this.reverseDate(data.final_assessment_date));
+                                $('#final_assessment_date_show').prop('disabled',true);
+                                $('#final_assessment_date_show').show();
+                                $('#final_assessment_date').hide();
+                            }
                             this.form.final_tentative_date=data.app_verification[i].tentativeDate;
+                        }
+                    }
+                    for(let i=0;i<data.app_verification.length;i++){
+                        if(!issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                            this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                        }
+                        if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                            this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
                             option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
                         }
                     }
                     $('#staff_type').append(option);
                 }
-                axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
-                .then(response => {
-                    let data = response.data[0];
-                    if(data!=undefined){
-                        this.screenId=data.screen;
-                        this.SysRoleId=data.SysRoleId;
-                        this.Sequence=data.Sequence;
-                        this.Status_Name=data.Status_Name;
-                        $('#attname').html(data.Name);
-                        this.getAttachmentType(data.Name.replaceAll(" ", "_"));
-                        this.form.update_type=data.Name.replaceAll(" ", "_");
-                        $('#update_btn_level').html(data.Name);
-                        $('#updateBtn').show();
-                    }else{
-                        $('#screenPermission').show();
-                        $('#mainform').hide();
-                        $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
-                    }
-                })
-                .catch(errors => {
-                    console.log(errors)
-                });
+
             })
             .catch((error) => {
                 console.log("Error: "+error);
@@ -1042,6 +1116,12 @@ export default {
                         }
                     }
                 }
+                if(nextclass=="update_document"){
+                    this.form.update_type="update document for feasibility study";
+                    if(this.taskDet.status_id==6){
+                        this.form.update_type="update document for final assessment";
+                    }
+                }
                 if(action){
                     Swal.fire({
                         text: "Are you sure you wish to "+this.form.update_type.replaceAll("_", " ")+" for these application ?",
@@ -1066,6 +1146,8 @@ export default {
 
                             formData.append('tentative_date', this.form.tentative_date);
                             formData.append('final_tentative_date', this.form.final_tentative_date);
+                            formData.append('feasibilityStudy_date', this.form.feasibilityStudy_date);
+                            formData.append('final_assessment_date', this.form.final_assessment_date);
                             formData.append('update_type', this.form.update_type);
                             //update_type will be replaced when deo/teo update reports
                             if(nextclass=="update_document"){

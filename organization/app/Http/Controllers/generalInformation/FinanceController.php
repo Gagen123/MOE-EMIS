@@ -25,7 +25,6 @@ class FinanceController extends Controller
         //
     }
     public function saveIncomeInformation(Request $request){
-        //   dd($request);
           $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
@@ -70,7 +69,7 @@ class FinanceController extends Controller
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
             'organizationId.required'           => 'organizationId is required',
-            // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+            'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -79,7 +78,7 @@ class FinanceController extends Controller
             'date'                               =>  $request['date'],
             'remarks'                            =>  $request['remarks'],
             'organization_details_id'            =>  $request['organizationId'],
-            // 'incomeFacilitiesId'              =>  $request['income'],
+            'incomeFacilitiesId'              =>  $request['income'],
         ];
         $response_data = OrganizationIncomeFacilities::where('id', $id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -121,7 +120,7 @@ class FinanceController extends Controller
             'date'                              =>  'required',
             'remarks'                           =>  'required',
             'organizationId'                    =>  'required',
-            // 'financialInformationId'            =>  'required',
+            'financialInformationId'            =>  'required',
             
         ];
         $customMessages = [
@@ -129,7 +128,7 @@ class FinanceController extends Controller
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
             'organizationId.required'           => 'organizationId is required',
-            // 'financialInformationId.required'   => 'financialInformationId is required',
+            'financialInformationId.required'   => 'financialInformationId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -138,7 +137,7 @@ class FinanceController extends Controller
             'date'                              =>  $request['date'],
             'status'                            =>  $request['remarks'],
             'organizationId'                    =>  $request['organizationId'],
-            // 'financialInformationId'         =>  $request['financialInformationId'],
+            'financialInformationId'         =>  $request['financialInformationId'],
            
         ];
         $response_data = OrganizationFinancialInformation::where('id', $id)->update($data);
@@ -147,13 +146,22 @@ class FinanceController extends Controller
     }
 
     public function loadFinancialInformation($orgId=""){
-        $data=OrganizationFinancialInformation::where('organizationId',$orgId)->get();
-        return $data; 
+        $fincialquery= DB::table('master_financial_information as a')
+        ->join('orgnization_financial_information as b','b.financialInformationId', '=','a.id')
+        ->select('a.name','b.amount','b.date')
+        ->where('b.organizationId',$orgId)->get();
+        // $data=OrganizationFinancialInformation::where('organizationId',$orgId)->get();
+        return $fincialquery; 
     }
     
     public function loadIncomeInformation($orgId= ""){
-        $data=OrganizationIncomeFacilities::where('organization_details_id',$orgId)->get();
-        return $data; 
+        $incomequery= DB::table('master_income_facilities as a')
+        ->join('organization_income_facilities as b','b.incomeFacilitiesId', '=','a.id')
+        ->select('a.name','b.amountGenerated','b.date','b.remarks')
+        ->where('b.organization_details_id',$orgId)->get();
+
+        // $data=OrganizationIncomeFacilities::where('organization_details_id',$orgId)->get();
+        return $incomequery; 
     }
 }
 

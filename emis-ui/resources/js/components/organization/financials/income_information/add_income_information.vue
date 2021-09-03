@@ -4,10 +4,10 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Income Facilities/Source:<i class="text-danger">*</i></label>
-                    <select v-model="income_form.income" :class="{ 'is-invalid select2 select2-hidden-accessible': income_form.errors.has('income') }" class="form-control select2" name="income" id="income">
+                    <select v-model="income_form.incomeFacilitiesId" :class="{ 'is-invalid select2 select2-hidden-accessible': income_form.errors.has('incomeFacilitiesId') }" class="form-control select2" name="incomeFacilitiesId" id="incomeFacilitiesId">
                         <option v-for="(item, index) in incomeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="income_form" field="income"></has-error>
+                    <has-error :form="income_form" field="incomeFacilitiesId"></has-error>
                 </div> 
             </div>
             <div class="row">
@@ -55,7 +55,7 @@ export default {
         getloadincomeList(){
             axios.get('masters/organizationMasterController/loadincomeList')
             .then(response => {
-                let data = response;
+                let data = response.data;
                 this.incomeList = data;
             })
             .catch(function (error) {
@@ -96,6 +96,10 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
+            if(id=="incomeFacilitiesId"){
+                this.income_form.incomeFacilitiesId=$('#incomeFacilitiesId').val();
+            }
+            
         },
     },
      mounted() {

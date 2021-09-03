@@ -16,6 +16,11 @@ try {
                     $('#'+btnid).prop('disabled',false);
                 }
             },
+            reverseDate(dateData){
+                const reverse =
+                dateData.split("-").reverse().join("-");
+                return reverse;
+            },
 
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
@@ -38,7 +43,6 @@ try {
                 $('.'+nextclass+' >a').removeClass('disabled');
                 $('.tab-content-details').hide();
                 $('#'+nextclass).show().removeClass('fade');
-                this.applyselect2();
             },
 
             getDepartmentListbydzo(type,dzoId){
@@ -109,8 +113,24 @@ try {
                 }
             },
 
-            schoolListUnderUserDzongkhag(){
+            orgListUnderUserDzongkhag(){
                 let uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+            eccdListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/all_eccds_dzogkhag_wise/eccds';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+            schoolListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/school/schools';
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){

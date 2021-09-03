@@ -32,7 +32,6 @@ class RestructuringController extends Controller
 
     public function saveChangeBasicDetails(Request $request){
         $this->service_name = $request['application_for'];
-
         //File Upload
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -137,67 +136,53 @@ class RestructuringController extends Controller
 
         $this->validate($request, $rules, $customMessages);
         $establishment_data=$establishment_data+[
-            'attachment_details'            =>   $attachment_details,
+            'attachment_details'     =>   $attachment_details,
         ];
-        // dd($establishment_data);
-        $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet,$request->application_for);
-        $screen_id="";
-        $status="";
-        $app_role="";
-        $screen_name="";
-        foreach($workflowdet as $work){
-            if(strtolower($work->screenName)==strtolower($request->application_for)){
-                $screen_id=$work->SysSubModuleId;
-                $status=$work->Sequence;
-                $app_role=$work->SysRoleId;
-                $screen_name=$work->screenName;
+        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
+        $appNo=json_decode($response_data)->data->application_no;
+        $status=0;
+        $status= $status+1;
+
+        $seq=((int) $request->Sequence +1);
+        $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+        // dd($request->screenId,$this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq),$seq);
+        $role_id=$next_roleId[0]->SysRoleId;
+        if(strpos($role_id,',')){
+            $roles=explode(',',$role_id);
+            foreach($roles as $role){
+                // dd($this->apiService->listData('system/getRolesWorkflow/roleName/'.$role));
+                $roleName=json_decode($this->apiService->listData('system/getRolesWorkflow/roleName/'.$role))[0]->Name;
+                if(strpos(strtolower($roleName),'eccd')!==false && strpos(strtolower($request->organization_type),'eccd')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
+                if(strpos(strtolower($roleName),'psd')!==false && strpos(strtolower($request->organization_type),'private_school')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
+                if(strpos(strtolower($roleName),'spcd')!==false && strpos(strtolower($request->organization_type),'public_school')!==false){//checking role for the eccd verifier and approval
+                    $next_roleId=$role_id;
+                }
             }
         }
-        if($screen_id==null || $screen_id==""){
-            return 'No Screen';
-        }
-        // dd($establishment_data);
-        $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
-        // dd($response_data,$workflowdet,$request->application_for);
-        $appNo=json_decode($response_data)->data->application_no;
+        //if there are multiple verifier, then need to mention verifier based on applicaiton type to be forwarded: Eg: if name chnage application has three verifier-spcd,psd and eccd, then need to specify which applicaiton type should be forwarded to where
         if($request->action_type!="edit"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
-                'service_name'      =>$screen_name,//screen name
+                'service_name'      =>$request->screen_name,//screen name
                 'application_number'=>$appNo,
                 'name'              =>$request['application_for'], //Organizaiton Name
-                'screen_id'         =>$screen_id,
+                'screen_id'         =>$request->screenId,
                 'status_id'         =>$status,
                 'remarks'           =>null,
-                'app_role_id'       =>$app_role,
+                'app_role_id'       =>$request->SysRoleId,
                 'user_dzo_id'       =>$this->getUserDzoId(),
                 'access_level'      =>$this->getAccessLevel(),
                 'working_agency_id' =>$this->getWrkingAgencyId(),
                 'action_by'         =>$this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-            $type="";
-            if($screen_name=="Change in Name"){
-                $type="change_in_name";
-            }
-            if($screen_name=="Upgrade"){
-                $type="upgrade";
-            }
-            if($screen_name=="Downgrade"){
-                $type="downgrade";
-            }
-            if($screen_name=="Downgrade"){
-                $type="downgrade";
-            }
-            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$type.'/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1,$screen_name);
-            $seq=((int) $workflowdet[0]->Sequence +1);
-            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
-            $role_id=$next_roleId[0]->SysRoleId;
             $notification_data=[
-                'notification_for'              =>  $screen_name,
+                'notification_for'              =>  $request->screen_name,
                 'notification_appNo'            =>  $appNo,
                 'notification_message'          =>  '',
                 'notification_type'             =>  'role',
@@ -209,7 +194,7 @@ class RestructuringController extends Controller
                 'access_level'                  =>  $this->getAccessLevel(),
                 'action_by'                     =>  $this->userId(),
             ];
-            $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
         // return $response_data;

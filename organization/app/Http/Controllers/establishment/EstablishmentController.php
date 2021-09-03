@@ -712,10 +712,11 @@ class EstablishmentController extends Controller{
                 'isFeedingSchool'           =>$application_data->isFeedingSchool,
             ];
         }
-        if($caegory=="public_eccd" || $caegory=="ngo_eccd" || $caegory=="coorporate_eccd"){
+        if($caegory=="public_eccd" || $caegory=="ngo_eccd" || $caegory=="coorporate_eccd" || $caegory=="corporate_eccd"){
             $application_data= ApplicationEstPublic::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             $org_data = $org_data+[
                 'locationId'                =>$application_data->locationId,
+                'isColocated'               =>$application_data->coLocatedParent,
                 'parentSchoolId'            =>$application_data->parentSchool,
             ];
         }
@@ -726,10 +727,11 @@ class EstablishmentController extends Controller{
                 'typeOfSchool'              =>$org_details['typeOfSchool'],
             ];
         }
-        if(strpos($caegory,'eccd')!==false){
+        if(strpos($caegory,'private_eccd')!==false){
             $application_data= ApplicationEstPrivate::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
             $org_data = $org_data+[
                 'locationId'                =>$application_data->proposedLocation,
+                'isColocated'               =>$application_data->coLocatedParent,
                 'parentSchoolId'            =>$application_data->parentSchool,
             ];
         }
@@ -747,7 +749,6 @@ class EstablishmentController extends Controller{
         }
         // dd($org_data);
         $establishment = OrganizationDetails::create($org_data);
-
         if($caegory=="public_school" && $application_data->isFeedingSchool==1){
             $feeding_modality=ApplicationNoMeals::where('foreignKeyId',$org_details['id'])->get();
             if($feeding_modality!="" && sizeof($feeding_modality)>0){
@@ -763,7 +764,7 @@ class EstablishmentController extends Controller{
             }
         }
 
-        if($caegory=="private_school"){
+        if($caegory=="private_school" || $caegory=="private_eccd"){
             $prop_details = [
                 'organizationId'           =>  $establishment->id,
                 'cid'                      =>  $org_details['proprietorCid'],
@@ -1134,7 +1135,7 @@ class EstablishmentController extends Controller{
         }
         $adultWorkingwithChildren="";
         if($request['adultWorkingwithChildren']!=""){
-            $adultWorkingwithChildren=implode($request['adultWorkingwithChildren'], ", ");
+            $adultWorkingwithChildren=implode($request['adultWorkingwithChildren'], ",");
         }
         $org_details =[
             'org_id'                        =>  $request['org_id'],
@@ -1195,7 +1196,8 @@ class EstablishmentController extends Controller{
     }
 
     public function loadOrgChangeApplications($user_id="",$type=""){
-        $response_data=ApplicationDetails::where('created_by',$user_id)->where('establishment_type',str_replace("_"," ",$type))->get();
+
+        $response_data=ApplicationDetails::where('created_by',$user_id)->where('establishment_type',  str_replace('%20',' ',$type))->get();
         if($response_data!="" && $response_data!=null && sizeof($response_data)>0){
             foreach($response_data as $app){
                 $app->attachments=ApplicationAttachments::where('ApplicationDetailsId',$app->id)->get();

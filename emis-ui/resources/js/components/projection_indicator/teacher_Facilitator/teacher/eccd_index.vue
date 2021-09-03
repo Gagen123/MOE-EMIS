@@ -89,7 +89,7 @@ export default {
                     labels: [
                         'Public',
                         'Private',
-                        'Coorporate',
+                        'Corporate',
                         'NGO',
                     ],
                     datasets: [

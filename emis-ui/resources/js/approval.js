@@ -112,7 +112,7 @@ const routes = [
                 { path: '/view_level_change',name:'view_level_change', component: require('./components/organization/restructuring/level_change/view_level_change.vue').default },
                 { path: '/level_change_acknowledgement', name:'level_change_acknowledgement', component: require('./components/organization/restructuring/level_change/acknowledgement.vue').default },
                 ]
-            }, 
+            },
             { path: '/upgrade_index',
             component: require('./components/organization/restructuring/upgrade/upgrade_index.vue').default ,
                 children: [
@@ -261,5 +261,6 @@ const routes = [
     },
 
     { path: '/eccd_verification',  name:'eccd_verification',component: require('./components/organization/establishment/eccd/eccd_verification.vue').default },
+    { path: '/location_change_verification',  name:'location_change_verification',component: require('./components/organization/restructuring/location_change/location_change_verification.vue').default },
 ];
 export default routes
