@@ -1,11 +1,21 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                <ul class="nav nav-tabs border-primary" id="tabhead">
+                    <li class="nav-item organization-tab border-right" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change of Location type</label>
+                            <label class="mb-0.5">Organization Details </label>
+                        </a>
+                    </li>
+                    <li class="nav-item attachment-tab border-right" @click="shownexttab('attachment-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Attachments</label>
+                        </a>
+                    </li>
+                    <li class="nav-item verification-tab border-right" @click="shownexttab('verification-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Verification</label>
                         </a>
                     </li>
                 </ul>
@@ -13,321 +23,699 @@
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
-                            <form class="form-horizontal">
-                            <input type="hidden" class="form-control" v-model="form.id" id="id"/>
+                        <div class="callout callout-success">
+                            <h4><u>Application Details</u></h4>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
-                                        <option value="">--- Please Select ---</option>
-                                        <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                    </select>
-                                    <has-error :form="form" field="organizationId"></has-error>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Application Number:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
-                                    <label>Organization Type{{category}}</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Submitted Date:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Service Name:</label>
+                                    <span class="text-blue text-bold">{{taskDet.service_name}}</span>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                    <label class="mb-0">Current Status:</label>
+                                    <span class="text-blue text-bold">{{taskDet.w_config_status}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.applicant_remarks!=null">
+                                    <label class="mb-0">Remarks:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.applicant_remarks}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <h5><u>Organization Details</u></h5>
+                            <div class="form-group row">
+                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                                    <label class="mb-0">Name:</label>
+                                    <span class="text-blue text-bold">{{applicationOrgdetails.name}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Current Name:</label>
-                                        <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Level:</label>
-                                        <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
-                                    </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzongkhagArray[applicationOrgdetails.dzongkhagId]}}</span>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Dzongkhag:</label>
-                                        <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Gewog:</label>
-                                        <input type="text" readonly  class="form-control" id="gewogid"/>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Village:</label>
-                                        <input type="text" readonly class="form-control" id="vilageId"/>
-                                    </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Gewog:</label>
+                                    <span class="text-blue text-bold" id="gewogid"></span>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
-                                        <label>Location:</label>
-                                        <input type="text" readonly :value="locationArray[organization_details.locationId]"  class="form-control" id="proposedName"/>
-                                    </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Chiwog:</label>
+                                    <span class="text-blue text-bold" id="vilageId"></span>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Location Type:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-3 col-md-3 col-sm-3 pt-3">
-                                        <select name="locationCategory" v-model="form.locationType" :class="{ 'is-invalid': form.errors.has('locationType') }" id="locationType" class="form-control select2" @change="remove_error('locationType')">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.location_type!=null">
+                                    <label class="mb-0">Location Type:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
-                            </form>
-
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Is Co-located with Parent School:</label>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.coLocatedParent  == 1 ? "Yes" :  "No"}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationOrgdetails.parent_school!=''">
+                                    <label class="mb-0">Parent School:</label>
+                                    <span class="text-blue text-bold">
+                                        {{ applicationOrgdetails.parent_school}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success">
+                            <h5><u>Proposed Change Details</u></h5>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzongkhagArray[applicationdetails.dzongkhagId]}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Gewog:</label>
+                                    <span class="text-blue text-bold" id="appgewogid"></span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Chiwog:</label>
+                                    <span class="text-blue text-bold" id="appvilageId"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.app_location_type!=null">
+                                    <label class="mb-0">Location Type:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.app_location_type}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Is Co-located with Parent School:</label>
+                                    <span class="text-blue text-bold">{{ applicationdetails.colocated_parent_school  == 1 ? "Yes" :  "No"}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.app_parent_school!=''">
+                                    <label class="mb-0">Parent School:</label>
+                                    <span class="text-blue text-bold">
+                                        {{ applicationdetails.app_parent_school}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-info">
+                            <Workflow :appNo="form.applicationNo"/>
+                        </div>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
+                                <button class="btn btn-primary" @click="shownexttab('attachment-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
                         </div>
                     </div>
+                    <div class="tab-pane fade tab-content-details" id="attachment-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="callout callout-success">
+                            <h5><u>1. Applicant's Attachments</u></h5>
+                            <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Attachment Name</th>
+                                        <th>Attachment</th>
+                                        <th>File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                        <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
+                                            <td> {{attach.user_defined_file_name}} </td>
+                                            <td>  {{attach.name}}</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <span id="verificationattachment1" style="display:none">
+                            <div class="callout callout-success">
+                                <h5><u>2. Attachments (<span id="attachment_name1"></span>)</u></h5>
+                                <table  class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Feasibility_Study'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+
+                        <span v-if="feasibilityReport">
+                            <div class="callout callout-success">
+                                <!-- <span id="verificationattachment2" style="display:none"> -->
+                                <h5><u>3. Attachments (Feasibility Report)</u></h5>
+                                <table  class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='update_document' || attach.upload_type=='Update_Feasibility_Study_Report'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+
+                        <span id="verificationattachment3" style="display:none">
+                            <div class="callout callout-success">
+                                <h5><u>4. Attachments (<span id="attachment_name3"></span>)</u></h5>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='Notify_for_Approval_in_Principle'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+
+                        <span id="verificationattachment4" style="display:none">
+                            <div class="callout callout-success">
+                                <h5><u>5. Attachments (<span id="attachment_name4"></span>)</u></h5>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='Request_for_Final_Assessment'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+                        <span id="verificationattachment5" style="display:none">
+                            <div class="callout callout-success">
+                                <h5><u>6. Attachments (<span id="attachment_name5"></span>)</u></h5>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+
+                        <span v-if="final_feasibilityReport">
+                            <div class="callout callout-success">
+                                <!-- <span id="verificationattachment2" style="display:none"> -->
+                                <h5><u>7. Attachments (Final Feasibility Report)</u></h5>
+                                <table  class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
+                                                <td>  {{attach.user_defined_file_name}}</td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </span>
+                        <hr>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 fa-pull-right">
+                                <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                                <button class="btn btn-primary" @click="shownexttab('verification-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade tab-content-details" id="verification-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="callout callout-success" >
+                            <h4><u>Site Visit & Verification Details</u></h4>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Tentative Date for Feasibility Study:</label>
+                                    <input type="text" name="tentative_date_show" id="tentative_date_show" style="display:none" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">Sl#</th>
+                                                <th style="width:45%">Department</th>
+                                                <th style="width:45%">Division</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="getverifyingagency">
+                                            <tr v-for='(veri, index) in form.verifying_agency_verified_list' :key="index">
+                                                <td>{{index+1}}</td>
+                                                <td>
+                                                    {{veri.department}}
+                                                </td>
+                                                <td>
+                                                    {{veri.division}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                   <span id="tentative_remarks"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="verifier_team">
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Date for Feasibility Study:</label>
+                                        <input type="text" name="feasibilityStudy_date_show" id="feasibilityStudy_date_show" class="form-control">
+                                    </div>
+                                </div>
+                                <h5><u>Team Verification</u></h5>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                                        <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>CID/Passport</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-for='(user, index) in searchProviderList' :key="index">
+                                                <tr v-if="user.type!='final_verifier_team'">
+                                                    <td> {{user.cid}}</td>
+                                                    <td> {{user.name}}</td>
+                                                    <td> {{user.email}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="callout callout-success" style="display:none" id="finalverificationdetials">
+                            <h4><u>Final Site Visit & Verification Details</u></h4>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Tentative Date for Final Feasibility Study:</label>
+                                    <input type="text" name="final_tentative_date_show" id="final_tentative_date_show" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">Sl#</th>
+                                                <th style="width:45%">Department</th>
+                                                <th style="width:45%">Division</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="getfinalverifyingagency">
+                                            <tr v-for='(veri, index) in form.updated_final_verifying_agency_list' :key="index">
+                                                <td>{{index+1}}</td>
+                                                <td>
+                                                    {{veri.department}}
+                                                </td>
+                                                <td>
+                                                    {{veri.division}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                   <span id="final_tentative_remarks"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div id="final_verifier_team">
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Date for final Assessment:</label>
+                                        <input type="text" name="final_assessment_date_show" id="final_assessment_date_show" style="display:none" class="form-control">
+                                    </div>
+                                </div>
+                                <h5><u>Final Team Verification</u></h5>
+                                <div class="row form-group">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                                        <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>CID/Passport</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-for='(user, index) in searchProviderList' :key="index">
+                                                <tr v-if="user.type=='final_verifier_team'">
+                                                    <td> {{user.cid}}</td>
+                                                    <td> {{user.name}}</td>
+                                                    <td> {{user.email}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-success" @click="shownexttab('attachment-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
-
+import Workflow from "../../../common/view_workflow_details";
 export default {
+    components: {
+        Workflow,
+    },
     data(){
         return{
-            record_id:'',
-            organization_details:'',
-            proposed_by_list:[],
-            orgList:'',
-            classList:[],
-            locationList:[],
-            streamList:[],
-            category:'',
-            levelArray:{},
+            searchid:'',
+            count:1,
+            feasibilityReport:false,
+            final_feasibilityReport:false,
+            access_level:'',
+            proprietorList:[],
+            applicationdetails:[],
+            applicationOrgdetails:[],
+            taskDet:[],
+            staffList:[],
+            searchProviderList:[],
             dzongkhagArray:{},
             gewogArray:{},
             villageArray:{},
-            locationArray:{},
-            calssArray:{},
-            streamArray:{},
+
+            screenId:'',
+            SysRoleId:'',
+            Sequence:'',
+            Status_Name:'',
             form: new form({
-                organizationId:'',locationType:'',initiatedBy:' ', application_type:'location_type_change',
-                application_for:'Change in Location Type', action_type:'edit', status:'Submitted',organization_type:'',
+                id: '',
+                applicationNo:'',
+                actiontype:'',
+                remarks:'',
+                verifying_agency_verified_list:[],
+                verifying_agency_list:[{department:'',division:''}],
+                verifying_agency:[],
+                final_verifying_agency_list:[{department:'',division:''}],
+                updated_final_verifying_agency_list:[],
+                tentative_date:'',
+                final_tentative_date:'',
+                update_type:'',
+                servicename:'',
+                feasibilityStudy_date:'',
+                final_assessment_date:'',
+                nomi_staffList:[],
+                fileUpload: [],
+                attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
         }
     },
     methods: {
-        /**
-         * method to remove error
-         */
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
+        getteamVerificationList(){
+            axios.get('organizationApproval/loadTeamVerificationList/'+this.searchid)
             .then(response => {
-                this.orgList = response.data.data;
+                let data = response.data.data;
+                this.searchProviderList=data;
+                if(data!=null && data!="" && data.length>0){
+                    data.forEach(element => {
+                        $('#verifier_team').show();
+                        if(element.type=="final_verifier_team"){
+                            $('#final_verifier_team').show();
+                        }
+                    });
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
             });
         },
+        loadapplicationdetails(appId,type){
+            axios.get('organizationApproval/loadEstbDetailsForVerification/'+appId+'/'+type)
+            .then((response) => {
+                let data=response.data.data;
+                this.searchid=data.id;
+                this.getteamVerificationList();
+                this.form.applicationNo=data.application_no;
+                this.form.servicename=data.establishment_type;
+                this.applicationdetails=data;
+                this.applicationOrgdetails=data.orgDetails;
+                this.getGewogList(response.data.data.dzongkhagId,data.orgDetails.gewogId,'gewogid');
+                this.getvillagelist(response.data.data.gewogId,data.orgDetails.chiwogId,'vilageId');
 
-        /**
-         * method to show next and previous tab
-         */
-        shownexttab(nextclass){
-            if(nextclass=="final-tab"){
-                Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
-                        .then((response) => {
-                            if(response!=""){
-                                if(response.data=="No Screen"){
-                                    Toast.fire({
-                                        icon: 'error',
-                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
-                                    });
-                                }
-                                if(response!="" && response!="No Screen"){
-                                    let message="Application for Change of location type has been updated and send for approval. <br><b>Thank You !</b>";
-                                    this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Change details is saved successfully'
-                                    });
-                                }
-                            }
-                        })
-                        .catch((err) => {
-                            console.log("Error:"+err)
-                        })
+                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId,'appgewogid');
+                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId,'appvilageId');
+                this.taskDet=response.data.app_stage;
+                let status_id=parseInt(this.taskDet.status_id)+1;
+
+                axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
+                .then(response => {
+                    let data = response.data.data;
+                    if(data!=undefined && data!="NA"){
+                        this.screenId=data.screen;
+                        this.SysRoleId=data.SysRoleId;
+                        this.Sequence=data.Sequence;
+                        this.Status_Name=data.Status_Name;
+                        $('#attname').html(data.Name);
+                    }else{
+                        $('#screenPermission').show();
+                        $('#mainform').hide();
+                        $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+                    }
+                })
+                .catch(errors => {
+                    console.log(errors)
+                });
+
+                data.attachments.forEach(element => {
+                    if(element.upload_type=="update_document" || element.upload_type=="Update_Feasibility_Study_Report"){
+                        this.feasibilityReport=true;
+                    }
+                    if(!this.feasibilityReport && this.access_level=="Dzongkhag"){
+                        $('#attacmentsection').hide();
+                    }
+                    if(element.upload_type=="final_update_document" || element.upload_type=="Update_Final_Assessment"){
+                        this.final_feasibilityReport=true;
+                    }
+                    if(!this.final_feasibilityReport && this.access_level=="Dzongkhag"){
+                        $('#attacmentsection').hide();
                     }
                 });
-            }
-        },
 
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-        },
+                for(let i=0;i<parseInt(this.taskDet.status_id);i++){
+                    $('#verificationattachment'+i).show();
+                    if(i==1){
+                        $('#attachment_name'+i).html('Notify for Tentative Date of Feasibility Study');
+                        $('#attname').html('Feasibility Study Report');
+                        if(status_id==3 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
+                            this.getAttachmentType('Update_Feasibility_Study_Report');
+                        }
+                        if(status_id==7 && this.access_level=="Dzongkhag"){
+                            this.getAttachmentType('Update_Final_Assessment');
+                        }
+                    }
+                    if(i==3){
+                        $('#attachment_name'+i).html('Notify for Approval in Principle');
+                    }
+                    if(i==4){
+                        $('#attachment_name'+i).html('Requesting for Final Assessment');
+                    }
+                    if(i==5){
+                        $('#attachment_name'+i).html('Notify for Tentative Date of Final Assessment');
+                    }
+                }
+                if(data.feasibility_study_date!=null &&  data.feasibility_study_date!=""){
+                    $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                    $('#feasibilityStudy_date_show').prop('disabled',true);
+                    $('#feasibilityStudy_date_show').show();
+                    $('#feasibilityStudy_date').hide();
+                }
 
-        /**
-         * method to populate dropdown
-         */
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="organizationId"){
-                this.form.organizationId=$('#organizationId').val();
-                this.getorgdetials($('#organizationId').val());
-            }
-            if(id=="locationType"){
-                this.form.locationType=$('#locationType').val();
-            }
+                if(!this.taskDet.w_config_status.toLowerCase().includes('submitted')){
+                    this.form.verifying_agency_verified_list=[];
+                    this.form.updated_final_verifying_agency_list=[];
+                    if(data.app_verification!=undefined){
+                        for(let i=0;i<data.app_verification.length;i++){
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                                $('#tentative_remarks').val(data.app_verification[i].remarks);
+                                $('#tentative_date').val(data.app_verification[i].tentativeDate);
+                                this.form.tentative_date=data.app_verification[i].tentativeDate;
+                                $('#tentative_date').hide();
+                                if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                    $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                    $('#tentative_date_show').prop('disabled',true);
+                                    $('#tentative_date_show').show();
+                                }
+                                if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                                    $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                                    $('#feasibilityStudy_date_show').prop('disabled',true);
+                                    $('#feasibilityStudy_date_show').show();
+                                    $('#feasibilityStudy_date').hide();
+                                }
+                            }
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                                $('#finalverificationdetials').show();
+                                $('#setfinalverifyingagency').hide();
+                                $('#final_tentative_remarks').val(data.app_verification[i].remarks);
+                                $('#final_tentative_date').val(data.app_verification[i].tentativeDate);
+                                $('#final_tentative_date').hide();
+                                if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                    $('#final_tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                    $('#final_tentative_date_show').prop('disabled',true);
+                                    $('#final_tentative_date_show').show();
+                                }
 
+                                if(data.final_assessment_date!=null && data.final_assessment_date!=""){
+                                    $('#final_assessment_date_show').val(this.reverseDate(data.final_assessment_date));
+                                    $('#final_assessment_date_show').prop('disabled',true);
+                                    $('#final_assessment_date_show').show();
+                                    $('#final_assessment_date').hide();
+                                }
+                                this.form.final_tentative_date=data.app_verification[i].tentativeDate;
+                            }
+                        }
+                        for(let i=0;i<data.app_verification.length;i++){
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                                this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                            }
+                            if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                                this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                            }
+                        }
+                    }
+                }
 
-        },
-        getorgdetials(org_id){
-             this.form.organizationId=org_id;
-            $('#organizationId').val(org_id).trigger('change');
-            axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
-            .then(response => {
-                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
-                this.organization_details=response.data.data;
-                this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
-                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
-                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
-            });
-        },
-
-        applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
-        },
-        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.proposed_by_list =  data;
             })
-            .catch(function (error) {
-                console.log('error: '+error);
+            .catch((error) => {
+                console.log("Error: "+error);
             });
         },
 
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name;
-                }
-            });
+        async getGewogList(dzongkhag,gewogId,targetId){
+            let data = await this.loadgewogList(dzongkhag);
+            this.gewog_list = data;
+            for(let i=0;i<data.length;i++){
+                this.gewogArray[data[i].id] = data[i].name;
+            }
+            $('#'+targetId).html(this.gewogArray[gewogId]);
+        },
+        async getvillagelist(gewogId,vil_id,targetId){
+            let data = await this.loadvillageList(gewogId);
+            for(let i=0;i<data.length;i++){
+                this.villageArray[data[i].id] = data[i].name;
+            }
+            $('#'+targetId).html(this.villageArray[vil_id])
+        },
+        shownexttab(nextclass){
+            this.change_tab(nextclass);
         },
 
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        getGewogList(dzongkhag,gewogId){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name;
-                }
-                $('#gewogid').val(this.gewogArray[gewogId]);
-            });
-        },
-
-        getvillagelist(gewogId,vil_id){
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name;
-                }
-                $('#vilageId').val(this.villageArray[vil_id])
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-                for(let i=0;i<data.length;i++){
-                    this.locationArray[data[i].id] = data[i].name;
-                }
-            });
-        },
-        loadApplicationDetials(){
-            axios.get('organization/getChangeBasicDetails/'+this.record_id)
-            .then(response => {
-                let response_data=response.data.data;
-                this.getorgdetials(response_data.change_details.organizationId);
-                this.form.id=response_data.change_details.id;
-                this.form.initiatedBy=response_data.change_details.initiatedBy;
-                this.form.locationType=response_data.change_details.proposedChange;
-                $('#locationType').val(response_data.change_details.proposedChange).trigger('change');
-            });
-        },
     },
 
-    mounted() {
-        this.getLocation();
-        this.loadproposedBy();
-        this.loadactivedzongkhagList();
-        this.getOrgList();
-        this.getLevel();
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
+    async mounted() {
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.access_level=data.acess_level;
+        })
+        .catch(errors => {
+            console.log(errors)
         });
 
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
-        });
-
-        this.record_id=this.$route.params.data.application_no;
-        this.loadApplicationDetials();
+        let data= await this.loadactivedzongkhags();
+        for(let i=0;i<data.length;i++){
+            this.dzongkhagArray[data[i].id] = data[i].name;
+        }
+        this.loadapplicationdetails(this.$route.params.data.application_no,'NA');
     }
 }
 </script>
