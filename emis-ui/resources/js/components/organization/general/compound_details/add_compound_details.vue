@@ -57,7 +57,7 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> 
                 <!-- </div> -->
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

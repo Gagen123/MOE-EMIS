@@ -14,7 +14,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ typeArry[item.incomeFacilitiesId]}}</td>
+                    <td>{{ typeArry[item.name]}}</td>
                     <td>{{ item.amount}}</td>
                     <td>{{ item.date}}</td>
                     <td>
@@ -42,7 +42,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 for(let i=0;i<data.length;i++){
-                    this.typeArry[data[i].id] = data[i].name; 
+                    this.typeArry[data.data[i].id] = data.data[i].name; 
                 }
             })
             .catch(function (error) {

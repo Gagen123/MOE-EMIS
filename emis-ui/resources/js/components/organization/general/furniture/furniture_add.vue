@@ -11,6 +11,7 @@
                             </select>
                             <has-error :form="form" field="type"></has-error>
                     </div>
+                    
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Furniture Name:<span class="text-danger">*</span></label> 
                         <select name="item" class="form-control" v-model="form.item" :class="{ 'is-invalid': form.errors.has('item') }" id="item" @change="remove_err('item')">

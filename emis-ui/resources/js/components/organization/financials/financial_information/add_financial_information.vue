@@ -6,8 +6,9 @@
                     <label class="mb-0.5">Type:<i class="text-danger">*</i></label>
                     <select v-model="finacial_form.financialInformationId" :class="{ 'is-invalid select2 select2-hidden-accessible': finacial_form.errors.has('financialInformationId') }" class="form-control select2" name="financialInformationId" id="financialInformationId">
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        
                     </select>
-                    <has-error :form="finacial_form" field=""></has-error>
+                    <has-error :form="finacial_form" field="financialInformationId"></has-error>
                 </div> 
             </div>
             <div class="row">
@@ -55,9 +56,9 @@ export default {
         loadtypeList(){
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
-                alert(JSON.stringify(response.data.data));
-                let data = response;
-                this.typeList =  data.data.data;
+               alert(JSON.stringify(response.data.data));
+                let data = response.data.data;
+                this.typeList =  data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -77,7 +78,7 @@ export default {
                 formData.append('amount', this.finacial_form.amount);
                 formData.append('date', this.finacial_form.date);
                 formData.append('remarks', this.finacial_form.remarks);
-                
+                alert(this.this.finacial_form.financialInformationId);
                 axios.post('/organization/saveFinancialInfo',formData,config)
                 .then(()=>{
                     Toast.fire({

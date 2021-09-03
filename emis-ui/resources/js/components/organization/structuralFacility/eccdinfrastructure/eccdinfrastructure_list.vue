@@ -8,7 +8,7 @@
                     <th>Type of Structure</th>
                     <th>Year of Construction</th>
                     <th>Action</th> 
-                </tr>
+                </tr> 
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in infrastructureList" :key="index">
@@ -32,6 +32,7 @@ export default {
     data(){
         return{
             infrastructureList:[],
+             dt:'',
             // structureType:{},
             // eccdfacilityList:{}
         } 
@@ -85,6 +86,15 @@ export default {
         this.loadEccdInfrastructureList();
         this.getStructureTypeInDropdown();
         this.geteccdFacilityDropdown();
+        this.dt =  $("#infrastructure-table").DataTable();
+    },
+    watch: {
+        infrastructureList(){
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#infrastructure-table").DataTable()
+            });
+        }
     },
 }
 </script>

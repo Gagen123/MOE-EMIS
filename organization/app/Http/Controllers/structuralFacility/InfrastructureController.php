@@ -53,7 +53,7 @@ class InfrastructureController extends Controller
      */
     public function getSubCategoryInDropdown($categoryId){
         $equi = DB::table('structure_sub_categories as a')
-            ->select('a.id as id', 'a.subCategoryName as subCategoryName')
+            ->select('a.id as id', 'a.name as subCategoryName')
             ->where('structureCategory','=',$categoryId)
             ->get();
         return $equi;
@@ -239,7 +239,7 @@ class InfrastructureController extends Controller
     public function geteccdStructureFacilityInDropdown($structuretype){
         //dd('herea at microservices');
         $equi = DB::table('master_eccdFacilities_type as a')
-            ->select('a.id as id', 'a.faciltytype as facilty')
+            ->select('a.id as id', 'a.name as facilty')
             ->where('structuretype','=', $structuretype)
             ->get();
         return $equi;
