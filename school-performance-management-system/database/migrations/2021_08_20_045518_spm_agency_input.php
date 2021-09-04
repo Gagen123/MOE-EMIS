@@ -15,7 +15,7 @@ class SpmAgencyInput extends Migration
     {
         Schema::create('spm_agency_input', function (Blueprint $table) {
             $table->char('id',36)->primary();
-            $table->char('division_id',36)->index()->nullable();
+            $table->char('org_division_id',36)->index()->nullable();
             $table->year('input_year');
             $table->string('input',1000);
             $table->string('activity',1000);

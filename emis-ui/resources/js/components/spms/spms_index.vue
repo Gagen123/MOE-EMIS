@@ -19,7 +19,7 @@
                 </li>
                <li class="nav-item active pr-1" @click="activatelink('agency_input_form')">
                     <router-link id="agency_input_form" to="/agency-input-form" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
-                       Agency Input
+                       Dzongkhag/Thromde/Agency Input
                     </router-link>
                </li>
                 <li class="nav-item active pr-1" @click="activatelink('school_performance')">

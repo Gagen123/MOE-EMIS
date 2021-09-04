@@ -171,7 +171,28 @@ export default {
                     icon: 'success',
                     title: 'Details added successfully'
                 })
-                this.$router.push('/list-annual-school-plan')
+                Swal.fire({
+                title: 'Do you want to add activity?',
+                icon: 'question',
+                showDenyButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                denyButtonText:'No',
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        this.form.activity = ''
+                        this.form.objective = ''
+                        this.form.strategy = ''
+                        this.form.start_date = ''
+                        this.form.end_date = ''
+                        this.form.person_responsible = ''
+                        this.form.implementation_status_id = ''
+                        this.form.remarks = ''
+                    } else if (result.isDenied) {
+                        this.$router.push('/lists-annual-school-plan');
+                    }
+                })
             })
             .catch(() => {
                 console.log("Error.")

@@ -67,7 +67,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Action Taken by Agency:<span class="text-danger">*</span></label> 
+                        <label>Action Taken by Dzongkhag/Thromde/Agency:<span class="text-danger">*</span></label> 
                         <textarea class="form-control" v-model="form.action" :class="{ 'is-invalid': form.errors.has('action') }" id="action" @change="onChange('action')"></textarea>
                         <has-error :form="form" field="action"></has-error>
                     </div>

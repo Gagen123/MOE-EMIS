@@ -4,7 +4,7 @@
             <div class="card-body">
                <div class="ml-0 row form-group">
                     <div class="mr-2">
-                        <label>School:</label> {{ orgDetails.name }} 
+                        <label>School:</label> {{ form.organization }} 
                     </div>
                     <div>
                         <label>Year:</label>{{ form.year }} 
@@ -95,9 +95,9 @@ export default {
         return {
             domains:[],
             status:[],
-            orgDetails:'',
             form: new form({
-                id:'',
+                spm_school_plan_id:'',
+                plan_history_id:'',
                 year: new Date().getFullYear(),
                 spm_domain_id:'',
                 activity:'',
@@ -108,6 +108,9 @@ export default {
                 person_responsible:'',
                 implementation_status_id:'',
                 remarks:'',
+                full_name:'',
+                roles:'',
+                organization:'',
                 school_plan_status:'',
                 action:'edit'
             })
@@ -126,6 +129,40 @@ export default {
                 }
             });
         },
+         getSchoolPlanDetails(){
+            axios.get('spms/getSchoolPlanDetails/'+this.form.spm_school_plan_id)
+            .then(response => {
+                let data = response.data.data
+                for(let i=0; data.length > i; i++){
+                    this.form.activity = data[i]['activity']
+                    this.form.spm_domain_id = data[i]['spm_domain_id']
+                    this.form.objective = data[i]['objective']
+                    this.form.strategy = data[i]['strategy']
+                    this.form.start_date = data[i]['start_date']
+                    this.form.end_date = data[i]['end_date']
+                    this.form.implementation_status = data[i]['implementation_status']
+                    this.form.person_responsible = data[i]['person_responsible']
+                    this.form.remarks = data[i]['remarks']
+                }
+            })
+            .catch(function (error){
+              console.log("Error"+error)
+            });
+        },
+        getorgName(orgId,accessLevel){
+            let type="Headquarterbyid";
+            if(accessLevel=="Org"){
+                type="Orgbyid";
+            }
+            axios.get('loadCommons/loadOrgDetails/'+type+'/'+orgId)
+            .then(response => {
+                let data = response.data.data;
+                this.form.organization=data['name'];
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
         getSchoolPlanStatus(){
              axios.get('masters/loadSpmMasters/all_school_plan_status')
             .then(response => {
@@ -134,21 +171,6 @@ export default {
             })
             .catch(function (error){
               console.log("Error"+error)
-            });
-        },
-        getorgName(rogId,accessLevel){
-            let type="Headquarterbyid";
-            if(accessLevel=="Org"){
-                type="Orgbyid";
-            }
-            axios.get('loadCommons/loadOrgDetails/'+type+'/'+rogId)
-            .then(response => {
-                let data = response.data.data;
-                this.orgDetails=data;
-
-            })
-            .catch(errors => {
-                console.log(errors)
             });
         },
         remove_err(field_id){
@@ -169,7 +191,6 @@ export default {
                     icon: 'success',
                     title: 'Details added successfully'
                 })
-                this.$router.push('/list-annual-school-plan')
             })
             .catch(() => {
                 console.log("Error.")
@@ -177,19 +198,10 @@ export default {
 		}, 
     },
     created(){
-        this.form.domain =this.$route.params.data.domain
-        this.form.activity =this.$route.params.data.activity
-        this.form.objective =this.$route.params.data.objective
-        this.form.strategy =this.$route.params.data.strategy
-        this.form.start_date =this.$route.params.data.start_date
-        this.form.end_date =this.$route.params.data.end_date
-        this.form.person_responsible = this.$route.params.data.person_responsible
-        this.form.implementation_status = this.$route.params.data.implementation_status
+        this.form.spm_school_plan_id = this.$route.params.data.id
         this.form.implementation_status_id = this.$route.params.data.implementation_status_id
-        this.form.remarks = this.$route.params.data.remarks
-        this.form.spm_domain_id = this.$route.params.data.spm_domain_id
-        this.form.id = this.$route.params.data.id
-
+        this.form.spm_domain_id = this.$route.params.data.spm_domain_id       
+        this.form.plan_history_id = this.$route.params.data.plan_history_id                                                                                                                                                                                                                                                                                                                         
     },
     mounted(){
         $('.select2').select2();
@@ -205,15 +217,26 @@ export default {
         const event = new Event("change", { bubbles: true, cancelable: true })
         e.params.data.element.parentElement.dispatchEvent(event)
         });
-        axios.get('common/getSessionDetail')
+         axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
+                let roleName="";
+                for(let i=0;i<data['roles'].length;i++){
+                    if(i==data['roles'].length-1){
+                        roleName+=data['roles'][i].roleName;
+                    }
+                    else{
+                        roleName+=data['roles'][i].roleName+', ';
+                    }
+                }
+                this.form.full_name=data['Full_Name'];
+                this.form.roles=roleName;
                 this.getorgName(data['Agency_Code'],data['acess_level']);
-            })
-            .catch(errors => {
+            }).catch(errors => {
                 console.log(errors)
             });
         this.getDomains()
+        this.getSchoolPlanDetails()
         this.getSchoolPlanStatus()
     }
 }

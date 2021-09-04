@@ -39,7 +39,7 @@ class SpmsController extends Controller
         }else{
             $dzongkhag_ids = "ALL";
         }
-        $schoolPerformaces = json_decode($this->apiService->listData('emis/spms/schoolPerformaceDashboard?dzongkhag_ids='.$dzongkhag_ids.'&year='.$year),true)['data'];
+       return $schoolPerformaces = json_decode($this->apiService->listData('emis/spms/schoolPerformaceDashboard?dzongkhag_ids='.$dzongkhag_ids.'&year='.$year),true)['data'];
         $all_dzongkhags = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_active_dzongkhag'),true)['data'];
         $performances = [];
         if(count($dzongkhags) > 0){
@@ -151,7 +151,7 @@ class SpmsController extends Controller
             'objective' => 'required',
             'strategy' => 'required',
             'start_date' => 'required',
-            'end_date' => 'required|after:start_date',
+            'end_date' => 'required|after_or_equal:start_date',
             'person_responsible' => 'required',
             'implementation_status_id' => 'required',
             'remarks' => 'required',
