@@ -18,6 +18,7 @@ class ApplicationVerification extends Model
      */
     protected $fillable = [
         'id',
+        'type',
         'ApplicationDetailsId',
         'department_id',
         'verifyingAgency',

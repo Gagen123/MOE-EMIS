@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
                     <td>{{ item.establishment_type}}</td>
-                     <td>{{ reverseDate(item.created_at.substring(0,10))}}</td>
+                    <td>{{reverseDate(item.created_at.substring(0,10))}}</td>
                     <td>{{ item.status}}</td>
                     <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
@@ -31,8 +31,8 @@
 export default {
     data(){
         return{
-            id:'2',
             dataList:[],
+            id:'2',
         }
     },
     methods:{
@@ -41,11 +41,11 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgChangeApplications/Change_in_Name'){
+        loadDataList(uri='organization/loadOrgChangeApplications/Change in Name'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.dataList =  data.data.data;
+                let data = response.data.data;
+                this.dataList =  data;
             })
             .catch(function (error) {
                 console.log('error: '+error);

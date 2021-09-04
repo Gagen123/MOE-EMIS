@@ -32,9 +32,8 @@ class ProjectionsController extends Controller
             $projection = [
                 'organizationId'                        =>  $request['organizationId'],
                 'academicYear'                          =>  $request['academicYear'],
-                'ProjectionNo'                          =>  $request['ProjectionNo'],
+                'ProjectionNo'                          =>  $request['class_projections'],
                 'class'                                 =>  $request['class'],
-                'ProjectionNo'                          =>  $request['ProjectionNo'],
                 'remarks'                               =>  $request['remarks'],
                 'updated_by'                            =>  $request->user_id,
                 'created_at'                            =>  date('Y-m-d h:i:s')
@@ -44,7 +43,7 @@ class ProjectionsController extends Controller
 
             }else{
                 $organizationId  = $request['organizationId'];
-                foreach ($request->items_received as $i=> $item){
+                foreach ($request->class_projections as $i=> $item){
                     $remarks="";
                     if(isset($item['remarks'])){
                         $remarks=$item['remarks'];
@@ -53,7 +52,7 @@ class ProjectionsController extends Controller
                         'organizationId'                        =>  $organizationId,
                         'academicYear'                          =>  $request['academicYear'],
                         'ProjectionNo'                          =>  $item['ProjectionNo'],
-                        'class'                                 =>  $item['class'],
+                        'class'                                 =>  $item['id'],
                         'remarks'                               =>  $remarks,
                         'updated_by'                            =>  $request->user_id,
                         'created_at'                            =>  date('Y-m-d h:i:s')
@@ -69,41 +68,33 @@ class ProjectionsController extends Controller
         $id = $request->id;
 
         if( $id != null){
-            foreach ($request->items_received as $i=> $item){
                 $feeder = array(
-                    'feederschool'              => $request->feederschool,
+                    'parentschool'              => $request->parent_school,
                     'class'                     => $request->class,
-                    'parentschool'              =>  $item['parentschool'],
+                    'feederschool'              =>  $request->feederschool,
+                    'remarks'                   =>  $request->remarks,
+                    'created_by'                =>  $request->user_id,
+                    'updated_at'                =>  date('Y-m-d h:i:s')
+                );
+                $spo = Feeder::where('id', $id)->update($feeder);
+                return $this->successResponse($spo, Response::HTTP_CREATED);
+
+        }else{
+            foreach ($request->feederschool as $i=> $school){
+                $feeder = array(
+                    'parentschool'              => $request->parent_school,
+                    'class'                     => $request->class,
+                    'feederschool'              =>  $school['feederschool'],
                     'remarks'                   =>  $request['remarks'],
                     'created_by'                =>  $request->user_id,
                     'updated_at'                =>  date('Y-m-d h:i:s')
 
                 );
-                $spo = Feeder::where('id', $id)->update($feeder);
-                return $this->successResponse($feeder, Response::HTTP_CREATED);
+
+                $localpro = Feeder::create($feeder);
             }
-
-            }else{
-                foreach ($request->items_received as $i=> $item){
-                    $feeder = array(
-                        'feederschool'              => $request->feederschool,
-                        'class'                     => $request->class,
-                        'parentschool'              =>  $item['parentschool'],
-                        'remarks'                   =>  $request['remarks'],
-                        'created_by'                =>  $request->user_id,
-                        'created_at'                =>  date('Y-m-d h:i:s')
-
-                    );
-                    try{
-                        $localpro = Feeder::create($feeder);
-
-                        } catch(\Illuminate\Database\QueryException $ex){
-                            dd($ex->getMessage());
-                            // Note any method of class PDOException can be called on $ex.
-                        }
-                }
-                return $this->successResponse($localpro, Response::HTTP_CREATED);
-            }
+            return $this->successResponse($localpro, Response::HTTP_CREATED);
+        }
 
     }
 
@@ -112,7 +103,7 @@ class ProjectionsController extends Controller
                         ->join('organization_class_streams', 'organization_class_streams.id','=','organization_projections.class')
                         ->join('classes', 'classes.id','=','organization_class_streams.classId')
                         ->select('organization_projections.id', 'organization_projections.academicYear','organization_projections.ProjectionNo',
-                                    'classes.class as class')
+                                    'classes.class as class', 'organization_projections.class as classId')
                         ->where('organization_projections.organizationId', $orgId)
                         ->get();
         return $projections;
@@ -122,7 +113,8 @@ class ProjectionsController extends Controller
         $feeder = DB::table('organization_feeder')
                         ->join('organization_details as t1', 't1.id','=','organization_feeder.feederschool')
                         ->join('organization_details as t2', 't2.id','=','organization_feeder.parentschool')
-                        ->select('organization_feeder.id', 'organization_feeder.class', 't1.name as feeder_name','t2.name as parent_name')
+                        ->select('organization_feeder.id', 'organization_feeder.class', 'organization_feeder.parentschool as parent_school',
+                                    'organization_feeder.feederschool as feeder_school', 't1.name as feeder_name','t2.name as parent_name')
                         ->where('t1.dzongkhagId', $dzoId)
                         ->get();
         return $feeder;

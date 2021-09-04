@@ -292,6 +292,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClassByOrganizationId/{orgId}', 'generalInformation\SectionController@getClassByOrganizationId');
             $router->get('/getseatdetailsbyOrgId/{orgId}', 'generalInformation\SectionController@getseatdetailsbyOrgId');
             $router->get('/getStreamByClassId/{classId}', 'generalInformation\SectionController@getStreamByClassId');
+            $router->get('/getStreamByOrgId/{orgId}', 'generalInformation\SectionController@getStreamByOrgId');
             $router->get('/getExistingSectionByClass/{classId}', 'generalInformation\SectionController@getExistingSectionByClass');
 			$router->get('/getclassSections/{orgId}', 'generalInformation\SectionController@getclassSections');
 
@@ -379,7 +380,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateNewEstablishmentApplication', 'organizationApproval\OrganizationApprovalController@updateNewEstablishmentApplication');
             $router->post('/updateTeamVerification', 'organizationApproval\OrganizationApprovalController@updateTeamVerification');
             $router->get('/loadTeamVerificationList/{id}', ['uses' => 'organizationApproval\OrganizationApprovalController@loadTeamVerificationList']);
-
+            $router->post('/saveLocationChange', 'organizationApproval\OrganizationApprovalController@saveLocationChange');
         });
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
@@ -487,6 +488,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     });
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        $router->get('/loadParentSchoolList/{orgId}', ['uses' => 'LoadOrganizationController@loadParentSchoolList']);
         $router->get('/loadClassSize/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassSize']);
         $router->get('/loadProjection/{classid}', ['uses' => 'LoadOrganizationController@loadProjection']);
         $router->get('/loadInactiveOrgList/{dzo_id}', ['uses' => 'LoadOrganizationController@loadInactiveOrgList']);
@@ -498,6 +500,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->get('/getOrgClassStream/{org_id}', ['uses' => 'LoadOrganizationController@getOrgClassStream']);
         $router->get('/getOrgClassStreambyId/{id}', ['uses' => 'LoadOrganizationController@getOrgClassStreambyId']);
+        $router->get('/getOrgClassStreamByOrg/{org_id}/{class_name}', ['uses' => 'LoadOrganizationController@getOrgClassStreamByOrg']);
         $router->get('/getSectionById/{id}', ['uses' => 'LoadOrganizationController@getSectionById']);
         $router->get('/loadStreamList/{id}', ['uses' => 'LoadOrganizationController@loadStreamList']);
         $router->get('/loadSectionList/{id}', ['uses' => 'LoadOrganizationController@loadSectionList']);
@@ -506,11 +509,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getSectionArray/{org_id}', ['uses' => 'LoadOrganizationController@getSectionArray']);
         $router->get('/getOrgWiseClassesForSpms', ['uses' => 'LoadOrganizationController@getOrgWiseClassesForSpms']);
         $router->get('/getDzoWiseNoOfSchools', ['uses' => 'LoadOrganizationController@getDzoWiseNoOfSchools']);
-        
+
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
         $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
-
+        $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
     });
 });

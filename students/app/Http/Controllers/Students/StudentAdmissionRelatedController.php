@@ -68,6 +68,9 @@ class StudentAdmissionRelatedController extends Controller
     public function loadUnreportedStudents($org_id){
 
         $students = DB::table('std_student')
+                ->join('std_student_class_stream', 'std_student.id','=','std_student_class_stream.StdStudentId')
+                ->select('std_student.Name', 'std_student.id', 'std_student.student_code', 
+                        'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
                 ->where('OrgOrganizationId', $org_id)
                 ->where('IsRejoined', '1')
                 ->get();

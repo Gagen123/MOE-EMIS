@@ -9,6 +9,12 @@
                     <td>{{ index+1}})  </td>
                     <td>{{ item.guideline}}</td>
                 </tr>
+                <tr v-for='(role, index) in eccdworkflow' :key="'work'+index">
+                    <td>ECCD Workflow</td>
+                    <td>
+                        <span v-html="role.AuthorityType"></span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -18,6 +24,7 @@ export default {
     data(){
         return{
             dataList:[],
+            eccdworkflow:[],
         }
     },
     methods:{
@@ -34,9 +41,17 @@ export default {
         showedit(data){
             this.$router.push({name:'student_type_edit',params: {data:data}});
         },
+        loadworkflowList(uri = 'getworkflows/workflow_eccd_centre/ECCD_School'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.eccdworkflow = data;
+            });
+        },
     },
     mounted(){
         this.loadguidelieList();
+        this.loadworkflowList();
     },
 }
 </script>

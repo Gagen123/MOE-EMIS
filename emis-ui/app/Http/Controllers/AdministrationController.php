@@ -39,7 +39,7 @@ class AdministrationController extends Controller{
             $rules = [
                 'from_date'         =>  'required | date',
                 'to_date'           =>  'required | date | after:from_date',
-                'type'              =>  'required', 
+                'type'              =>  'required',
             ];
             $customMessages = [
                 'from_date.required' => 'This field is required',
@@ -105,6 +105,11 @@ class AdministrationController extends Controller{
         // dd($this->getRoleIds('roleIds'));
         $param=$param.'SSS'.$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId().'SSS'.$this->getRoleIds('roleIds');
         $system = $this->apiService->listData('system/get_roles/'.$param);
+        return $system;
+    }
+
+    public function getworkflows($param="",$parentId=""){
+        $system = $this->apiService->listData('system/get_actions/'.$param.'/'.$parentId);
         return $system;
     }
 

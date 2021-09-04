@@ -42,7 +42,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <textarea v-model="form.remarks" name="remarks" class="form-control"></textarea>
                             </div>
-                         </div>
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

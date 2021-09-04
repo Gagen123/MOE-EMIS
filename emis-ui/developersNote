@@ -27,6 +27,12 @@ Setting up the system administration, and user management:
 
     6) - for the workflow configuration, you need to check workflow radio while adding screens. then to configure, click on workflow management and proceed.
 
+    *********Workflow set up and update for eccd establishment********
+    1) Add/Update Workflow status from the link workflow status from user management/system administration
+    2) Add/Update workflow for eccd establishment from the link workflow management from user management/system administration
+    3) find and update relavent fields at eccd_verification.vue,OrganizaitonApprovalController for the relavent attachment name
+
+
     *********Leadership selection setup********
     For the leadership selection, you need to add type as Leadership in the table (category_type,question_service) to appear required data in the
     leadership nomination form setup

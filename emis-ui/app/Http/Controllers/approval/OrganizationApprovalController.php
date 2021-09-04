@@ -24,20 +24,17 @@ class OrganizationApprovalController extends Controller{
             'proposedName'          =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
+            'parentSchool'          =>  'required',
+            'locationType'         =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
+            'parentSchool.required'         => 'Parent school is required',
+            'locationType.required'        => 'locationType is required',
         ];
-        if(strpos($request->establishment_type,'ECCD')!==false){
-            $rules =$rules+ [
-                'parentSchool'          =>  'required',
-            ];
-            $customMessages = $customMessages+[
-                'parentSchool.required'         => 'Parent school is required',
-            ];
-        }
+
         if($request->establishment_type=="Coorporate ECCD"){
             $rules =$rules+ [
                 'parentAgency'          =>  'required',
@@ -46,31 +43,26 @@ class OrganizationApprovalController extends Controller{
                 'parentAgency.required'         => 'Parent agency is required',
             ];
         }
-        if($request->establishment_type=="Public ECCD"){
+        if($request->establishment_type=="Public ECCD" || $request->establishment_type=="NGO ECCD"){
             $rules =$rules+ [
                 'initiatedBy'          =>  'required',
-                'locationType'         =>  'required',
             ];
             $customMessages = $customMessages+[
                 'initiatedBy.required'         => 'Proposed initiated by is required',
-                'locationType.required'        => 'locationType is required',
             ];
         }
         if($request->establishment_type=="Private ECCD"){
             $rules =$rules+ [
-                'locationType'         =>  'required',
                 'proprietorCid'         =>  'required',
                 'proprietorName'         =>  'required',
                 'proprietorMobile'         =>  'required',
             ];
             $customMessages = $customMessages+[
-                'locationType.required'        => 'locationType is required',
                 'proprietorCid.required'        => 'CID is required',
                 'proprietorName.required'        => 'Name is required',
                 'proprietorMobile.required'        => 'Mobile number is required',
             ];
         }
-
         $this->validate($request, $rules, $customMessages);
         $request['user_id']=$this->userId();
         $response_data= $this->apiService->createData('emis/organization/organizationApproval/saveEstablishment', $request->all());
@@ -148,9 +140,15 @@ class OrganizationApprovalController extends Controller{
         if(isset($request->actiontype) && $request->actiontype=="reject"){
             $status=0;
         }
-        if(isset($request->update_type) && $request->update_type=="approve"){
+        if(isset($request->update_type) && (strpos(strtolower($request->update_type),'approved')!==false || strpos(strtolower($request->update_type),'final_approval')!==false)){
             $status=10;
             $w_status="Approved";
+        }
+        if($request->screenId==null){
+            $tasks=json_decode($this->apiService->listData('emis/common/getTaskDetials/'.$application_number));
+            $request->screenId=$tasks->screen_id;
+            $status=$tasks->status_id+1;
+            $request->SysRoleId=$this->getRoleIds('roleIds');
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -168,7 +166,6 @@ class OrganizationApprovalController extends Controller{
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
-        // dd($workflow_data);
         return $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
     }
     private function insertnotification($request,$application_number=""){
@@ -227,7 +224,19 @@ class OrganizationApprovalController extends Controller{
             'type'              =>  $type,
             'user_id'           =>  $this->userId(),
         ];
-        $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+        $tasks=json_decode($this->apiService->listData('emis/common/getTaskDetials/'.$appNo));
+
+        //condition for the dzongkhag to update task
+        if($type!="NA"){ //user by view page at location
+            if($this->getAccessLevel()=="Dzongkhag"){
+                if($tasks->status_id==1 || $tasks->status_id==4){
+                    $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+                }
+            }else{
+                $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
+            }
+        }
+
         $taskDetails=json_decode($this->apiService->listData('emis/common/getTaskDetials/'.$appNo));
         // $workflowstatus="";
         // $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
@@ -244,25 +253,19 @@ class OrganizationApprovalController extends Controller{
                 }
             }
         }
-        // foreach($workflowdet as $work){
-        //     if(strpos(strtolower($work->Status_Name),'establishment')===false ){
-        //         $workflowstatus=$work->Status_Name;
-        //     }
-        // }
-        // // dd($workflowdet);
-        // if($loadOrganizationDetails!=null){
-            $loadOrganizationDetails->app_stage=$taskDetails;
-        // }
-
+        $loadOrganizationDetails->app_stage=$taskDetails;
         //update notification
-        $notification_data=[
-            'notification_appNo'            =>  $appNo,
-            'dzo_id'                        =>  $this->getUserDzoId(),
-            'working_agency_id'             =>  $this->getWrkingAgencyId(),
-            'access_level'                  =>  $this->getAccessLevel(),
-            'action_by'                     =>  $this->userId(),
-        ];
-        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        if($type!="NA"){ //user by view page at location
+            $notification_data=[
+                'notification_appNo'            =>  $appNo,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        }
+
         return json_encode($loadOrganizationDetails);
     }
 
@@ -298,6 +301,14 @@ class OrganizationApprovalController extends Controller{
         if($request->actiontype=="approve"){
             $org_status="Approved";
         }
+        if($request->update_type=="update_document"){
+            $org_status="Updated Feasibility Study Report";
+            $request->Status_Name=$org_status;
+        }
+        if($request->update_type=="final_update_document"){
+            $org_status="Updated Final Assessment Report";
+            $request->Status_Name=$org_status;
+        }
 
         $estd =[
             'status'                       =>   $org_status,
@@ -306,49 +317,54 @@ class OrganizationApprovalController extends Controller{
             'remarks'                      =>   $request->remarks,
             'verifying_agency'             =>   $request->verifying_agency,
             'verifying_agency_list'        =>   json_decode($request->verifying_agency_list),
+            'final_verifying_agency_list'  =>   json_decode($request->final_verifying_agency_list),
             'tentative_date'               =>   $request->tentative_date,
+            'final_tentative_date'         =>   $request->final_tentative_date,
+            'feasibilityStudy_date'        =>   $request->feasibilityStudy_date,
+            'final_assessment_date'         =>   $request->final_assessment_date,
             'update_type'                  =>   $request->update_type,
             'nomi_staffList'               =>   json_decode($request->nomi_staffList),
             'attachment_details'           =>   $attachment_details,
             'user_id'                      =>   $this->userId()
         ];
+        // dd($estd);
         $response_data= $this->apiService->createData('emis/organization/organizationApproval/updateNewEstablishmentApplication', $estd);
         $workflow=$this->insertworkflow($request,$request->applicationNo);
-        if($request->update_type=="tentative" || $request->update_type=="approval_in_principal" || $request->update_type=="approve"){
-            $message='Notification for tentative date';
-            $messat_to='creater';
-            $message_type='user';
-            $link='tasklist';
-            $user_role_id=$request->created_by;
-        }
-        if($request->update_type=="document_update" || $request->update_type=="approval_in_principal_confirm"){
-            $seq=((int) $request->Sequence +1);
-            if($request->update_type=="approve"){
-                $seq=((int) $request->Sequence -1);
+        if($request->update_type!="update_document" && $request->update_type!="final_update_document"){
+            if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study" || $request->update_type=="Update_Feasibility_Study_Report" || $request->update_type=="Notify_for_Approval_in_Principle"
+            || $request->update_type=="Notify_for_Tentative_Date_of_Final_Assessment" || $request->update_type=="Update_Final_Assessment_Report" || strpos(strtolower($request->update_type),'final_approval')!==false){
+                $message='Notification for tentative date';
+                $messat_to='creater';
+                $message_type='user';
+                $link='tasklist';
+                $user_role_id=$request->created_by;
             }
-            // dd($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
-            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
-            $message='';
-            $messat_to='role';
-            $message_type='all';
-            $link='tasklist';
-            $user_role_id=$next_roleId[0]->SysRoleId;
+            if($request->update_type=="Request_for_Final_Assessment"){
+                $seq=((int) $request->Sequence +1);
+                // dd($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+                $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+                $message='';
+                $messat_to='role';
+                $message_type='all';
+                $link='tasklist';
+                $user_role_id=$next_roleId[0]->SysRoleId;
+            }
+            $notification_data=[
+                'notification_for'              =>  $request->service_name,
+                'notification_appNo'            =>  $request->applicationNo,
+                'notification_message'          =>  $message,
+                'notification_type'             =>  $messat_to,
+                'notification_access_type'      =>  $message_type,
+                'call_back_link'                =>  $link,
+                'user_role_id'                  =>  $user_role_id,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            // dd($notification_data);
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
-        $notification_data=[
-            'notification_for'              =>  $request->service_name,
-            'notification_appNo'            =>  $request->applicationNo,
-            'notification_message'          =>  $message,
-            'notification_type'             =>  $messat_to,
-            'notification_access_type'      =>  $message_type,
-            'call_back_link'                =>  $link,
-            'user_role_id'                  =>  $user_role_id,
-            'dzo_id'                        =>  $this->getUserDzoId(),
-            'working_agency_id'             =>  $this->getWrkingAgencyId(),
-            'access_level'                  =>  $this->getAccessLevel(),
-            'action_by'                     =>  $this->userId(),
-        ];
-        // dd($notification_data);
-        $this->apiService->createData('emis/common/insertNotification', $notification_data);
         return $response_data;
     }
 
@@ -358,6 +374,7 @@ class OrganizationApprovalController extends Controller{
             $response_data=$response_data->data;
             $udpate_data =[
                 'email'                         =>   $response_data->email,
+                'type'                          =>   $request->type,
                 'org_id'                        =>   $response_data->working_agency_id,
                 'id'                            =>   $request->id,
                 'name'                          =>   $response_data->name,
@@ -374,6 +391,59 @@ class OrganizationApprovalController extends Controller{
 
     public function loadTeamVerificationList($id=""){
         $response_data = $this->apiService->listData('emis/organization/organizationApproval/loadTeamVerificationList/'.$id);
+        return $response_data;
+    }
+
+    public function saveLocationChange(Request $request){
+        $application_number = $request->application_number;
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'LocationChange';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'application_number'     =>  $application_number,
+                        )
+                    );
+                }
+            }
+        }
+
+        $form_status=$request['status'];
+        if($request->submit_type=="reject"){
+            $form_status='Rejected';
+        }
+        $request_data =[
+            'organizationId'                    =>  $request->organizationId,
+            'dzongkhag'                         =>  $request->dzongkhag,
+            'gewog'                             =>  $request->gewog,
+            'chiwog'                            =>  $request->chiwog,
+            'locationType'                      =>  $request->locationType,
+            'category'                          =>  $request->category,
+            'establishment_type'                =>  $request->establishment_type,
+            'coLocatedParent'                   =>  $request->coLocatedParent,
+            'parentSchool'                      =>  $request->parentSchool,
+            'application_type'                  =>  $request->application_type,
+            'status'                            =>  $request->status,
+            'remarks'                           =>  $request->remarks,
+            'attachment_details'                =>  $attachment_details,
+            'user_id'                           =>  $this->userId()
+        ];
+        // dd($request_data);
+        $response_data= $this->apiService->createData('emis/organization/organizationApproval/saveLocationChange', $request_data);
+        $this->insertworkflow($request,json_decode($response_data)->application_no);
+        $this->insertnotification($request,json_decode($response_data)->application_no);
         return $response_data;
     }
 }

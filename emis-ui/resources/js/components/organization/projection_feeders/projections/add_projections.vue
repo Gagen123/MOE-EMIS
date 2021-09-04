@@ -14,33 +14,25 @@
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
-                                  <th>Class<span class="text-danger">*</span></th>
-                                  <th>No of Projections<span class="text-danger">*</span></th>
+                                  <th>Sl No<span class="text-danger"></span></th>
+                                  <th>Class<span class="text-danger"></span></th>
+                                  <th>Total Projection<span class="text-danger">*</span></th>
                                   <th>Remarks</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr v-for='(item, index) in form.items_received' :key="index">
-                                  <td>
-                                        <select name="class" class="form-control editable_fields"  v-model="item.class " :class="{ 'is-invalid': form.errors.has('class') }" @change="remove_err('class')">
-                                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
-                                        </select>
-                                  </td>
-                                  <td>                          
-                                        <input type="number" @change="remove_error('ProjectionNo')" name="ProjectionNo" class="form-control" v-model="item.ProjectionNo" :class="{ 'is-invalid': form.errors.has('ProjectionNo') }"/>
-                                  </td>
-                                  <td>
-                                        <input type="textarea" @change="remove_error('remarks')" name="remarks" class="form-control" v-model="item.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" />
-                                  </td>
-                              </tr> 
-                               <tr>
-                                    <td colspan=7> 
-                                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
-                                        @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
-                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
-                                        @click="remove()"><i class="fa fa-trash"></i> Remove</button>
+                                <tr v-for="(item, index) in classList" :key="index" >
+                                    <td>{{ index + 1 }}</td>
+                                    <td >
+                                        {{item.class}} 
                                     </td>
-                               </tr>                                    
+                                    <td>                          
+                                        <input type="number" name="ProjectionNo" class="form-control" v-model="item.ProjectionNo" :class="{ 'is-invalid': form.errors.has('ProjectionNo') }"/>
+                                    </td>
+                                    <td>                          
+                                        <input type="text" name="remarks" class="form-control" v-model="item.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }"/>
+                                    </td>
+                                </tr>                                  
                           </tbody>
                      </table>
                   </div>
@@ -52,8 +44,6 @@
             </div> 
             
             </div>
-            
-            
         </form>
     </div>
 </template>
@@ -67,10 +57,7 @@ export default {
             academicYear:'',
             form: new form({
                 academicYear:'',
-                  items_received:
-                [{
-                    class:'',ProjectionNo:'',remarks:'',
-                }], 
+                class_projections:[],
             })
         }
     },
@@ -88,7 +75,8 @@ export default {
                 this.restForm();
             }
              if(type=="save"){
-                     this.form.post('organization/saveProjections',this.form)
+                    this.form.class_projections = this.classList;
+                    this.form.post('organization/saveProjections',this.form)
                     .then(() => {
                         Toast.fire({
                             icon: 'success',

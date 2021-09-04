@@ -85,6 +85,19 @@ class SectionController extends Controller
     }
 
     /**
+     * method to get stream by org Id
+     */
+    public function getStreamByOrgId($orgId){
+        $stream = DB::table('organization_class_streams')
+            ->join('streams', 'streams.id', '=', 'organization_class_streams.streamId')
+            ->select('organization_class_streams.id as record_id','organization_class_streams.streamId as id', 'streams.stream as stream')
+            ->where('organization_class_streams.organizationId', $orgId)
+            ->groupby('organization_class_streams.streamId')
+            ->get();
+        return $stream;
+    }
+
+    /**
      * method to get existing section by class Id
      */
     public function getExistingSectionByClass($classId){

@@ -44,14 +44,14 @@ export default {
     data(){
         return{
             eccdeducationCenter:[],
-           
+
         }
     },
     methods:{
         async generatesdetail(dzo_id){
             this.eccdeducationCenter = await this.loadeducationCenter("eccd",dzo_id);
-           
-            
+
+
             //Ploating Graph
 
             if(this.eccdeducationCenter!=""){
@@ -59,7 +59,7 @@ export default {
                     labels: [
                         'Public',
                         'Private',
-                        'Coorporate',
+                        'Corporate',
                         'NGO',
                     ],
                     datasets: [
