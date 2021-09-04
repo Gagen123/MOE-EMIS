@@ -18,7 +18,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                 <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in eccdList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="organizationId"></has-error>
                             <span class="text-danger" id="organizationId_err"></span>
@@ -90,7 +90,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                             <label>Is Co-located with Parent School: <span class="text-danger">*</span></label>
+                            <label>Is Co-located with Parent School: <span class="text-danger">*</span></label><br>
                             <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                             <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                         </div>
@@ -164,6 +164,7 @@ export default {
             gewog_list:[],
             villageList:[],
             orgList:'',
+            eccdList:[],
             locationList:[],
             streamList:[],
             category:'',
@@ -354,6 +355,10 @@ export default {
             if(id=="locationType"){
                 this.form.locationType=$('#locationType').val();
             }
+            if(id=="parentSchool"){
+                this.form.parentSchool=$('#parentSchool').val();
+            }
+
         },
         validateForm(){
             let returntype=true;
@@ -451,6 +456,7 @@ export default {
         });
 
         this.loadattachments('Application_for_Location_Change');
+        this.eccdList= await this.eccdListUnderUserDzongkhag();
         this.orgList= await this.schoolListUnderUserDzongkhag();
 
         axios.get('common/getSessionDetail')

@@ -28,7 +28,7 @@ class LoadOrganizaitonController extends Controller{
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
-        if($type=="userdzongkhagwise"){
+        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" || $type=="school"){
             $param=$this->getUserDzoId();
         }
 
@@ -48,9 +48,6 @@ class LoadOrganizaitonController extends Controller{
         //type=gewoggwise, parent_id=?: to list with gewog id
         if($type=="private" || $type=="SEN"|| $type=="tertiary" || $type=="ECR" || $type=="eccd" || $type=="School" || $type=="all_eccds"){
             $param=$id;
-        }
-        if($type=="all_eccds_dzogkhag_wise"){
-            $param=$this->getUserDzoId();
         }
 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
