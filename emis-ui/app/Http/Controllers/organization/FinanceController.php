@@ -30,7 +30,6 @@ class FinanceController extends Controller
         return $dis;
     }
 
-
     public function saveFinancialInformation(Request $request){
         $rules = [
             'type'          =>  'required',

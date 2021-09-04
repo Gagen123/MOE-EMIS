@@ -13,7 +13,7 @@
                 <tr v-for="(item, index) in transferConfigurationList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{item.name}}</td>
-                    <td>{{ roleList[item.submitter_role_id]}}</td>
+                    <td>{{roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
@@ -26,9 +26,10 @@
 export default {
     data(){
         return{
+            roleList:{},
             transferConfigurationList:[],
             transfertypeList:{},
-            roleList:{},
+            
         }
     },
     methods:{
@@ -48,6 +49,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response.data;
+                alert(JSON.stringify(data));
                  for(let i=0;i<data.length;i++){
                     this.roleList[data[i].Id] = data[i].Name;
                 }

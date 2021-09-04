@@ -3,13 +3,14 @@
         <div class="callout callout-danger" style="display:none" id="screenPermission">
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="message"></div>
-        </div>
-        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="form-group row bg-gray-light">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <span id="screenName"></span>
-                </div>
+        </div><br>
+         <div class="form-group row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <span id="screenName"></span>
             </div>
+         </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+            
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
@@ -27,7 +28,7 @@
                                     </div>
                                      <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
                                         <label>Organization Type:</label>
-                                        <input type="text" readonly :value="form.category"  class="form-control" id="category"/>
+                                        <input type="text" readonly :value="form.organization_type"  class="form-control" id="category"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -35,7 +36,7 @@
                                         <label>Current Name:</label>
                                         <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="col-lg-4 col-md-4 col-sm-4" id="level">
                                         <label>Level:</label>
                                         <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
                                     </div>
@@ -320,6 +321,10 @@ export default {
                 this.form.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+                if(this.form.organization_type == "public_eccd" || this.form.organization_type == "private_eccd" ){
+                   $('#level').hide();  
+
+                }
             });
         },
         getLevel(uri = '/organization/getLevelInDropdown'){

@@ -119,20 +119,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  existing_details.classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="callout callout-info">
                             <div class="form-group row">
@@ -381,13 +367,6 @@
                                 </div>
                             </div>
                          </div>
-                        <!-- <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Effective Date:</label>
-                                <input type="date" class="form-control" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
-                                <span class="text-danger" id="effective_date_err"></span>
-                            </div>
-                        </div> -->
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
@@ -401,8 +380,8 @@
                                 <!-- <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button> -->
                                 <button class="btn btn-info text-white" @click="shownexttab('update')" style="display:none" id="updateBtn"> <i class="fa fa-edit"></i><span id="update_btn_level"></span> </button>
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
-                                <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" > <i class="fa fa-forward"></i>Verify </button>
+                                <button class="btn btn-dark" @click="shownexttab('approve')"  > <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>
@@ -571,6 +550,7 @@ export default {
                 this.appicationDetails=data;
                 this.form.sequence=response.data.sequence;
                 this.form.screen_id=response.data.screen_id;
+                this.form.status_id=response.data.status_id;
                 this.form.establishment_type=data.establishment_type;
                 this.isfeedingschool=data.change_details.proposedChange;
                 this.senSchool=data.change_details.proposedChange;
@@ -600,8 +580,6 @@ export default {
                 console.log("Error......"+error);
             });
         },
-
-
 
         /**
          * method to show next tab and update application accordingly
