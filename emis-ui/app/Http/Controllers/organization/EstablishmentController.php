@@ -4,7 +4,7 @@ namespace App\Http\Controllers\organization;
 
 use Session;
 // use Redirect;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client;c
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
