@@ -50,7 +50,7 @@ class EstablishmentController extends Controller
             'category'              =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
-            'locationType'          =>  'required',
+            // 'locationType'          =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
@@ -59,7 +59,7 @@ class EstablishmentController extends Controller
             'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
-            'locationType.required'         => 'Location Type  is required',
+            // 'locationType.required'         => 'Location Type  is required',
 
         ];
         if(strpos($request->establishment_type,'Public')!==false){

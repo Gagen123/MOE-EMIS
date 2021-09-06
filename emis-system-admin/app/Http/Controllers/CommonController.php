@@ -76,7 +76,7 @@ class CommonController extends Controller{
                 }
                 //show to deo for notification, once updates at eccd
                 if(strtolower($access_level)=="dzongkhag"){
-                    $result_data.='OR ( (t.service_name = "Location Change of ECCD Centres" || t.service_name = "Establishment of New ECCD Centre") AND t.status_id NOT IN(1,5,10) AND (t.claimed_by <> "'.$user_id.'" || t.claimed_by IS NULL)) ';
+                    $result_data.='OR ( t.service_name = "Establishment of New ECCD Centre" AND t.status_id NOT IN(1,5) AND t.claimed_by <> "'.$user_id.'") ';
                 }
             }
             //pulling leave application

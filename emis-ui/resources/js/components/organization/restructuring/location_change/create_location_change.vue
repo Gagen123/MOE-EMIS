@@ -7,10 +7,6 @@
                     <div class="form-group row bg-gray-light">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <span id="screenName"></span>
-                            <!-- {{screenId}}<br>
-                            {{SysRoleId}}<br>
-                            {{Sequence}}<br>
-                            {{Status_Name}} -->
                         </div>
                     </div>
                     <div class="form-group row">

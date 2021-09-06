@@ -448,7 +448,6 @@ export default {
             });
         },
 
-
         /**
          * method to show next tab
          */
@@ -595,7 +594,6 @@ export default {
                     this.form.proposedName  =draft.estb_details.proposedName;
                     this.form.level=draft.estb_details.levelId;
                     $('#level').val(draft.estb_details.levelId).trigger('change');
-
                     this.getClassStream(this.levelArray[draft.estb_details.levelId]);
 
                     this.form.gewog  =draft.gewogId;
@@ -630,7 +628,7 @@ export default {
             });
         },
 
-        getAttachmentType(){
+        async getAttachmentType(){
             let data = await this.getRequiredDocument(type);
             if(data!=""){
                 data.forEach((item =>{
