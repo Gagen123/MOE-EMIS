@@ -176,7 +176,7 @@ class OrganizationApprovalController extends Controller{
             'notification_for'              =>  $request->service_name,
             'notification_appNo'            =>  $application_number,
             'notification_message'          =>  '',
-            'notification_type'             =>  'role',
+            'notification_type'             =>  'role',//user
             'notification_access_type'      =>  'all',
             'call_back_link'                =>  'tasklist',
             'user_role_id'                  =>  $role_id,

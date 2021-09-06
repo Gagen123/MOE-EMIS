@@ -60,7 +60,9 @@
           }
       });
     }
+    
     getNotification();
+
     let count=10;
     setInterval(function(){
         getNotification();

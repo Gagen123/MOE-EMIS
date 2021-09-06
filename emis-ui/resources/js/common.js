@@ -43,6 +43,7 @@ try {
                 $('.'+nextclass+' >a').removeClass('disabled');
                 $('.tab-content-details').hide();
                 $('#'+nextclass).show().removeClass('fade');
+                this.applyselect2();
             },
 
             getDepartmentListbydzo(type,dzoId){
@@ -108,6 +109,15 @@ try {
                 let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+dzo_id;
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactivedzongkhags '+e);
+                }
+            },
+
+            loadLevelList(){
+                let uri = 'organization/getLevelInDropdown';
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
                     console.log('error loadactivedzongkhags '+e);
                 }
