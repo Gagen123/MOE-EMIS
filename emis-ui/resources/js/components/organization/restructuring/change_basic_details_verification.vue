@@ -28,10 +28,6 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
-                                    <label>Zest Code:</label>
-                                    <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
-                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{existing_details.category}}</span>
@@ -285,24 +281,6 @@
                                     <div class="col-lg-6 col-md-6 col-sm-6">
                                         <label>Requested Stream:</label><br>
                                         <span class="text-blue text-bold">{{strm}}</span>
-                                        <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="strm_clas">Stream</th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr v-for="(item, key, index) in  streamList" :key="index">
-                                                        <td> {{item.stream}}</td>
-                                                        <td>
-                                                            <input type="checkbox" disabled :id="'strm'+item.id" name="streams" :value="item.id">
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div> -->
                                     </div>
                                 </div>
                             </div>
@@ -331,7 +309,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div>appicationDetails
                             </div>
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
@@ -385,49 +363,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Previous Class Stream Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section1" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -542,7 +477,6 @@ export default {
                     let curr_strem=data.change_details.proposedChange.split(', ');
                     for(let i=0;i<curr_strem.length;i++){
                         app_stream+=this.streamArray[curr_strem[i]]+', ';
-                        // $('#strm'+curr_strem[i]).prop('checked',true);
                     }
                     this.strm=app_stream;
                 }

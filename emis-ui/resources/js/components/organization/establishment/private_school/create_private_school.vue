@@ -86,17 +86,6 @@
                                 <has-error :form="form" field="level"></has-error>
                             </div>
                         </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Expected Enrollment:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.enrollmentBoys" :class="{ 'is-invalid': form.errors.has('enrollmentBoys') }" @change="remove_error('enrollmentBoys')" class="form-control" id="enrollmentBoys" placeholder="Boys" />
-                                <has-error :form="form" field="enrollmentBoys"></has-error>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.enrollmentGirls" :class="{ 'is-invalid': form.errors.has('enrollmentGirls') }" @change="remove_error('enrollmentGirls')" class="form-control" id="enrollmentGirls" placeholder="Girls"/>
-                                <has-error :form="form" field="enrollmentGirls"></has-error>
-                            </div>
-                        </div> -->
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -129,13 +118,6 @@
                                 <label><input  type="radio" v-model="form.typeOfSchool" value="0" tabindex=""/> Boarding</label>
                             </div>
                         </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Area of Land Proposed:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.totalLand" :class="{ 'is-invalid': form.errors.has('totalLand') }" @change="remove_error('totalLand')" class="form-control" id="totalLand" />
-                                <has-error :form="form" field="totalLand"></has-error>
-                            </div>
-                        </div> -->
                         </form>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -460,7 +442,6 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-
         /**
          * method to get class in checkbox
          */
@@ -504,7 +485,6 @@ export default {
                     message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
-
                     Swal.fire({
                         text: status,
                         icon: 'info',
@@ -636,7 +616,6 @@ export default {
                     this.form.proposedName  =draft.estb_details.proposedName;
                     this.form.level=draft.estb_details.levelId;
                     $('#level').val(draft.estb_details.levelId).trigger('change');
-
                     this.getClassStream(this.levelArray[draft.estb_details.levelId]);
 
                     this.form.gewog  =draft.gewogId;
