@@ -1,10 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\organization;
 
 use Session;
 // use Redirect;
-use GuzzleHttp\Client;c
+use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
