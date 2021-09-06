@@ -73,7 +73,7 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
+        // $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
         // $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
@@ -87,13 +87,12 @@ class CommonController extends Controller{
 
         $leadership_data="Invalid";
         $hrd_roles=config('services.constant.hrd_role_id');
-        if(strpos($hrd_roles,',')){
-            $hrd_roles=explode(',',$hrd_roles);
-            dd($hrd_roles);
+        $hr_roles="";
+        if(strpos($hrd_roles,',')!==false){
+            $hr_roles=explode(',',$hrd_roles);
         }
-        dd($hrd_roles);
-        if(strpos($hrd_roles,',')!==false && sizeof($hrd_roles)>1){
-            foreach($hrd_roles as $role){
+        if(strpos($hrd_roles,',')!==false && sizeof($hr_roles)>1){
+            foreach($hr_roles as $role){
                 if($role!=null && strpos($this->getRoleIds('roleIds'),$role)!==false){
                     $leadership_data="Valid";
                 }
