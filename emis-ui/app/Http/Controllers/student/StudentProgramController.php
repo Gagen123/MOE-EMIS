@@ -36,6 +36,7 @@ class StudentProgramController extends Controller
             'id'                => $request->id,
             'organisation_id'   => $this->getWrkingAgencyId(),
             'program'           => $request->program,
+            'program_type'      => $request->program_type,
             'supporter'         => $request->supporter,
             'year'              => $request->year,
             'remarks'           => $request->remarks,
@@ -45,6 +46,7 @@ class StudentProgramController extends Controller
             'user_id'           => $this->userId(),
             'id'                => $request->id
         ];
+       // dd( $data );
         //Validate to ensure that there is no duplication of entries
         //Not creating but using the createData service as we are sending the $data
         $validate_data= $this->apiService->createData('emis/students/validateStudentData', $data);
@@ -93,6 +95,7 @@ class StudentProgramController extends Controller
 
     public function loadStudentPrograms($param=""){
         $param = $this->getWrkingAgencyId();
+        dd($param);
         $student_records = $this->apiService->listData('emis/students/loadStudentPrograms/'.$param);
         return $student_records;
     }

@@ -57,12 +57,20 @@ const routes = [
                 ]
             },
             { path: '/promotion-rule', component: require('./components/masters/academics_masters/promotion_rule/promotion_rule_index.vue').default,
-            children: [
-                { path: '', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule').default },
-                { path: '/list-promotion-rule', name:'list_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule.vue').default },
-                { path: '/edit-promotion-rule', name: 'edit_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/edit_promotion_rule.vue').default },
-            ]
-        },
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule').default },
+                    { path: '/list-promotion-rule', name:'list_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule.vue').default },
+                    { path: '/edit-promotion-rule', name: 'edit_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/edit_promotion_rule.vue').default },
+                ]
+            },
+            { path: '/teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/teaching_subject_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/teaching_subject/list_teaching_subject.vue').default },
+                    { path: '/list_teaching_subject', name:'list_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/list_teaching_subject.vue').default },
+                    { path: '/create_teaching_subject', name: 'create_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/create_teaching_subject.vue').default },
+                    { path: '/edit_teaching_subject', name: 'edit_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/edit_teaching_subject.vue').default },
+                ]
+            },
 
         ]
     },

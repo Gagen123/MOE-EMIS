@@ -105,12 +105,12 @@ class FinanceController extends Controller
             'financialInformationId'            =>  $request['financialInformationId'],
         ];
        // dd($data);
-        try{
+        // try{
         $response_data = OrganizationFinancialInformation::create($data);
-        }catch(\Illuminate\Database\QueryException $ex){
-            dd($ex);
+        // }catch(\Illuminate\Database\QueryException $ex){
+        //     dd($ex);
 
-        }
+        // }
         return $response_data;
     }
     public function updateFinancialInfo(Request $request){

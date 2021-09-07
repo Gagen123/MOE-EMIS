@@ -324,6 +324,20 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
+        if($request['record_type'] == 'teaching_subject') {
+            $rules = [
+                'name'              =>  'required',
+                'code'              =>  'required',
+                'displayorder'      =>  'required',
+                'status'            =>  'required',
+            ];
+            $customMessages = [
+                'name.required'         => 'This field is required',
+                'code.required'         => 'This field is required',
+                'displayorder.required' => 'This field is required',
+                'status.required'       => 'This field is required',
+            ];
+        }
         $this->validate($request, $rules, $customMessages);
 
         $request['user_id'] = $this->userId();

@@ -23,7 +23,7 @@
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'view')"><i class="fas fa-eye"></i ></a>
                         </div>
                         <div class="btn-group btn-group-sm" v-if="showmessedit">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'edit')"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockReceivedList(item,'edit')"><i class="fas fa-edit"></i ></a>
                         </div>
                         <div class="btn-group btn-group-sm" v-if="showprincipaltask">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewitemreceived(item,'open')"><i class="fa fa-file-signature"></i > Open</a>
@@ -103,6 +103,7 @@ export default {
             dt:'',
             showmess:false,
             showprincipaltask:false,
+            showmessedit:false,
         }
     },
 
@@ -221,6 +222,10 @@ export default {
             if(roleName.toLowerCase().includes('principal') && !roleName.toLowerCase().includes('assistant') && !roleName.toLowerCase().includes('vice')){
                 this.showprincipaltask=true;
                 this.loadFoodReleaseListing('OrgWise');
+            }
+            if(roleName.toLowerCase().includes('mess')){
+                this.showmessedit=true;
+                this.viewStockReceivedList('Creater');
             }
         })
         .catch(errors =>{

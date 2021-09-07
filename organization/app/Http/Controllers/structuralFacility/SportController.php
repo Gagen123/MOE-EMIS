@@ -52,8 +52,8 @@ class SportController extends Controller
     }
 
     public function getSportsDetails($sportId=""){
-        //dd($sportId);
-        $response_data=Sport::where('id',$sportId)->first();
+       // dd($sportId);
+        $response_data=Sport::where('id',$sportId)->get();
         return $this->successResponse($response_data);
     }
 
@@ -61,55 +61,65 @@ class SportController extends Controller
      * method to save sport details
      */
     public function saveSport(Request $request){
+        //dd($request);
         $id = $request->id;
+        $organizationId  = $request['organizationId'];
+        $facility = $request['facility'];
         if( $id != null){
-            $sport = [
-                'id'                                    =>  $request['id'],
-                'organizationId'                        =>  $request['organizationId'],
-                'facility'                              =>  $request['facility'],
-                'number'                                =>  $request['number'],
-                'type'                                  =>  $request['type'],
-                'yearOfEstablishment'                   =>  $request['yoe'],
-                'status'                                =>  $request['status'],
-                'size'                                  =>  $request['area'],
-                'sportstype'                            =>  $request['sportstype'],
-                'supportedBy'                           =>  $request['support'],
-                'accessibleToDisabled'                  =>  $request['access'],
-                'updated_by'                            =>  $request->user_id,
-                'created_at'                            =>  date('Y-m-d h:i:s')
-            ];
-            $spo = Sport::where('id', $id)->update($sport);
-            return $this->successResponse($spo, Response::HTTP_CREATED);
-
-            }else{
-                $organizationId  = $request['organizationId'];
-                $facility = $request['facility'];
-
-                foreach ($request->items_received as $i=> $item){
-                    $sport = array(
-                     'organizationId'                   =>  $organizationId,
-                     'facility'                         =>  $facility,
-                     'type'                             =>  $item['type'],
-                     'number'                           =>  $item['number'],
-                     'yearOfEstablishment'              =>  $item['yoe'],
-                     'accessibleToDisabled'             =>  $item['access'],
-                     'size'                             =>  $request['area'],
-                     'status'                           =>  $item['status'],
-                     'sportstype'                       =>  $item['sportstype'],
-                     'supportedBy'                      =>  $item['support'],
-                     'updated_by'                       =>  $request->user_id,
-                     'created_at'                       =>  date('Y-m-d h:i:s')
-                    );
-                  // dd( $facility);
-                try{
-                 $localpro = Sport::create($sport);
+            DB::table('sports')->where('id', $request->id)->delete();
+            foreach($request->items_received as $i=> $item){
+                $size="";
+                if(isset($item['area'])){
+                    $size=$item['area'];
                 }
-                catch(\Illuminate\Database\QueryException $ex){
-                    dd($ex);
-
-                }
+                $sport = [
+                    'id'                                    =>  $id,
+                    'organizationId'                        =>  $organizationId,
+                    'facility'                              =>  $facility,
+                    'number'                                =>  $item['number'],
+                    'type'                                  =>  $item['type'],
+                    'yearOfEstablishment'                   =>  $item['yoe'],
+                    'status'                                =>  $item['status'],
+                    'size'                                  =>  $size,
+                    'sportstype'                            =>  $item['sportstype'],
+                    'supportedBy'                           =>  $item['support'],
+                    'accessibleToDisabled'                  =>  $item['access'],
+                    'updated_by'                            =>  $request->user_id,
+                    'created_at'                            =>  date('Y-m-d h:i:s')
+                ];
+               // dd( $sport);
+                $spo = Sport::create($sport);
             }
-            return $this->successResponse($localpro, Response::HTTP_CREATED);
+            return $this->successResponse($spo, Response::HTTP_CREATED);
+        }
+        else{
+            $organizationId  = $request['organizationId'];
+            $facility = $request['facility'];
+            foreach ($request->items_received as $i=> $item){
+                $size="";
+                if(isset($item['area'])){
+                    $size=$item['area'];
+                }
+                //  dd($item);
+                $sport = array(
+                    'id'                               =>   $id,
+                    'organizationId'                   =>  $organizationId,
+                    'facility'                         =>  $facility,
+                    'type'                             =>  $item['type'],
+                    'number'                           =>  $item['number'],
+                    'yearOfEstablishment'              =>  $item['yoe'],
+                    'accessibleToDisabled'             =>  $item['access'],
+                    'size'                             =>  $size,
+                    'status'                           =>  $item['status'],
+                    'sportstype'                       =>  $item['sportstype'],
+                    'supportedBy'                      =>  $item['support'],
+                    'updated_by'                       =>  $request->user_id,
+                    'created_at'                       =>  date('Y-m-d h:i:s')
+                );
+                // dd( $sport);
+                $sportdata = Sport::create($sport);
+            }
+            return $this->successResponse($sportdata, Response::HTTP_CREATED);
         }
     }
     public function saveEccd(Request $request){

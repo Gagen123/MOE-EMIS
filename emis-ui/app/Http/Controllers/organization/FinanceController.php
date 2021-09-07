@@ -83,7 +83,7 @@ class FinanceController extends Controller
             'remarks'                           =>  $request['remarks'],
             'financialInformationId'            =>  $request->financialInformationId,
         ];
-        dd($data);
+      //  dd($data);
         $response_data= $this->apiService->createData('emis/organization/finance/saveFinancialInformation', $data );
         return $response_data;
     } 
