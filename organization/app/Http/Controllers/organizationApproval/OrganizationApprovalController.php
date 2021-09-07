@@ -38,14 +38,14 @@ class OrganizationApprovalController extends Controller{
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
             'parentSchool'          =>  'required',
-            'locationType'         =>  'required',
+            // 'locationType'         =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
             'parentSchool.required'         => 'Parent school is required',
-            'locationType.required'        => 'locationType is required',
+            // 'locationType.required'        => 'locationType is required',
         ];
 
         if($request->establishment_type=="Coorporate ECCD"){

@@ -179,8 +179,9 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
-        this.loadtransferType();
         this.loadroleList();
+        this.loadtransferType();
+       
     },
 }
 </script>

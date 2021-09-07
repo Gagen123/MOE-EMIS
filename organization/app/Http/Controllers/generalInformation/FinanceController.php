@@ -150,7 +150,6 @@ class FinanceController extends Controller
         ->join('orgnization_financial_information as b','b.financialInformationId', '=','a.id')
         ->select('a.name','b.amount','b.date')
         ->where('b.organizationId',$orgId)->get();
-        // $data=OrganizationFinancialInformation::where('organizationId',$orgId)->get();
         return $fincialquery; 
     }
     
@@ -159,8 +158,6 @@ class FinanceController extends Controller
         ->join('organization_income_facilities as b','b.incomeFacilitiesId', '=','a.id')
         ->select('a.name','b.amountGenerated','b.date','b.remarks')
         ->where('b.organization_details_id',$orgId)->get();
-
-        // $data=OrganizationIncomeFacilities::where('organization_details_id',$orgId)->get();
         return $incomequery; 
     }
 }

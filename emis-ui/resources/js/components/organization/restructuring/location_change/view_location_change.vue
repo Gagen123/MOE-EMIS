@@ -159,13 +159,6 @@
                             <div class="callout callout-success">
                                 <h5><u>2. Attachments (<span id="attachment_name1"></span>)</u></h5>
                                 <table  class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Feasibility_Study'">
@@ -186,13 +179,6 @@
                                 <!-- <span id="verificationattachment2" style="display:none"> -->
                                 <h5><u>3. Attachments (Feasibility Report)</u></h5>
                                 <table  class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='update_document' || attach.upload_type=='Update_Feasibility_Study_Report'">
@@ -212,13 +198,6 @@
                             <div class="callout callout-success">
                                 <h5><u>4. Attachments (<span id="attachment_name3"></span>)</u></h5>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='Notify_for_Approval_in_Principle'">
@@ -238,13 +217,6 @@
                             <div class="callout callout-success">
                                 <h5><u>5. Attachments (<span id="attachment_name4"></span>)</u></h5>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='Request_for_Final_Assessment'">
@@ -263,13 +235,6 @@
                             <div class="callout callout-success">
                                 <h5><u>6. Attachments (<span id="attachment_name5"></span>)</u></h5>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
@@ -290,13 +255,6 @@
                                 <!-- <span id="verificationattachment2" style="display:none"> -->
                                 <h5><u>7. Attachments (Final Feasibility Report)</u></h5>
                                 <table  class="table w-100 table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Attachment Name</th>
-                                            <th>Attachment</th>
-                                            <th>File</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                             <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
@@ -596,12 +554,6 @@ export default {
                     if(i==1){
                         $('#attachment_name'+i).html('Notify for Tentative Date of Feasibility Study');
                         $('#attname').html('Feasibility Study Report');
-                        if(status_id==3 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
-                            this.getAttachmentType('Update_Feasibility_Study_Report');
-                        }
-                        if(status_id==7 && this.access_level=="Dzongkhag"){
-                            this.getAttachmentType('Update_Final_Assessment');
-                        }
                     }
                     if(i==3){
                         $('#attachment_name'+i).html('Notify for Approval in Principle');

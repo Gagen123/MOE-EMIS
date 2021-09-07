@@ -191,7 +191,8 @@ Route::prefix('masters')->group(function () {
 Route::post('/saveQuater', [App\Http\Controllers\AdministrationController::class, 'saveQuater'])->name('saveQuater');
 Route::get('/loadQuater', [App\Http\Controllers\AdministrationController::class, 'loadQuater'])->name('loadQuater');
 
-Route::prefix('organizationApproval')->group(function () {
+Route::prefix('organizationApproval')->group(function (){
+    //eccd and location change
     Route::get('/getScreenId/{serviceName}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'getScreenId'])->name('getScreenId');
     Route::post('/saveEstablishment', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveEstablishment'])->name('saveEstablishment');
     Route::post('/saveClassStream', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveClassStream'])->name('saveClassStream');
@@ -202,8 +203,10 @@ Route::prefix('organizationApproval')->group(function () {
     Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
     Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
     Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
-
     Route::post('/saveLocationChange', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveLocationChange'])->name('saveLocationChange');
+
+    //private and public
+    
 });
 
 Route::prefix('organization')->group(function () {
@@ -320,11 +323,10 @@ Route::prefix('organization')->group(function () {
     Route::get('/getDesignerDropdown', [App\Http\Controllers\organization\StructuralController::class, 'getDesignerDropdown'])->name('getDesignerDropdown');
     Route::get('/getInfrastructureDetails/{infraId}', [App\Http\Controllers\organization\StructuralController::class, 'getInfrastructureDetails'])->name('getInfrastructureDetails');
     Route::prefix('structural')->group(function () {
-    Route::post('/saveWashFeeding', [App\Http\Controllers\organization\StructuralController::class, 'saveWashFeeding'])->name('saveWashFeeding');
-    Route::get('/getWashFeeding/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getWashFeeding'])->name('getWashFeeding');
-    Route::post('/saveEccdFacilities', [App\Http\Controllers\organization\StructuralController::class, 'saveEccdFacilities'])->name('saveEccdFacilities');
-    Route::get('/getEccdFacilitiesList/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getEccdFacilitiesList'])->name('getEccdFacilitiesList');
-
+        Route::post('/saveWashFeeding', [App\Http\Controllers\organization\StructuralController::class, 'saveWashFeeding'])->name('saveWashFeeding');
+        Route::get('/getWashFeeding/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getWashFeeding'])->name('getWashFeeding');
+        Route::post('/saveEccdFacilities', [App\Http\Controllers\organization\StructuralController::class, 'saveEccdFacilities'])->name('saveEccdFacilities');
+        Route::get('/getEccdFacilitiesList/{type}', [App\Http\Controllers\organization\StructuralController::class, 'getEccdFacilitiesList'])->name('getEccdFacilitiesList');
     });
     //eccd Infrastructure
     Route::post('/saveEccdInfrastructure', [App\Http\Controllers\organization\StructuralController::class, 'saveEccdInfrastructure'])->name('saveEccdInfrastructure');
