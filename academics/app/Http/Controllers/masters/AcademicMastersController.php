@@ -230,10 +230,13 @@ class AcademicMastersController extends Controller
         }
         if($request['record_type'] == 'reason_for_absent') {
             $rules = [
-                'status'  =>  'required',
+               
+                'status'            =>  'required',
+
             ];
             $customMessages = [
-                'status.required' => 'This field is required',
+               
+                'status.required'               => 'This field is required',
             ];
 
             if($request['action_type'] =="add"){
@@ -248,6 +251,56 @@ class AcademicMastersController extends Controller
                     'status'    =>  $request['status'],
                     'created_by' =>  $request['user_id'],
                     'created_at'=>   date('Y-m-d h:i:s'),
+                ];
+              $responsedata= ReasonsForAbsent::create($data);
+            }
+            if($request['action_type'] =="edit"){
+                $new_rules = array('name' =>'required');
+                $final_rules=array_merge($rules, $new_rules);
+
+                $new_customMessages = array('name.required' => 'This field is required');
+                $final_customMessages=array_merge($customMessages, $new_customMessages);
+
+                $this->validate($request, $final_rules,  $final_customMessages);
+              
+                $data = ReasonsForAbsent::find($request['id']);
+                $messs_det='name'.$data->name.'; status:'.$data->status;
+                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_reasons_for_absent','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data->name = $request['name'];
+                $data->status = $request['status'];
+                $data->update();
+                $responsedata = $data;
+            }
+        }
+        if($request['record_type'] == 'teaching_subject') {
+            $rules = [
+                'name'              =>  'required',
+                'code'              =>  'required',
+                'displayorder'      => 'required',
+                'status'            =>  'required',
+            ];
+            $customMessages = [
+                'name.required'                 => 'This field is required',
+                'code.required'                 => 'This field is required',
+                'displayorder.required'         => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+
+            if($request['action_type'] =="add"){
+                $new_rules = array('name' =>'required|unique:teaching_sub');
+                $final_rules=array_merge($rules, $new_rules);
+
+                $new_customMessages = array('name.required' => 'This field is required');
+                $final_customMessages=array_merge($customMessages, $new_customMessages);
+                $this->validate($request, $final_rules, $final_customMessages);
+                $data = [
+                    'name'              =>  $request['name'],
+                    'code'              =>  $request['code'],
+                    'displayorder'      =>  $request['displayorder'],
+                    'description'       =>  $request['description'],
+                    'status'            =>  $request['status'],
+                    'created_by'        =>  $request['user_id'],
+                    'created_at'        =>   date('Y-m-d h:i:s'),
                 ];
               $responsedata= ReasonsForAbsent::create($data);
             }
