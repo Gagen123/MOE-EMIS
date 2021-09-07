@@ -3,11 +3,11 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Upgradation/Downgradation</label>
-                        </a>
-                    </li>
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -258,8 +258,6 @@ export default {
             .then(response => {
                 this.orgList = response.data.data;
                 this.form.levelId = response.data.data.levelId;
-                alert(JSON.stringify(this.form.levelId))
-
             });
         },
         getorgdetials(org_id){
