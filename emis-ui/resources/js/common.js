@@ -74,7 +74,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadgewogList '+e);
                 }
             },
 
@@ -83,7 +83,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadvillageList '+e);
                 }
             },
 
@@ -92,7 +92,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadlocationList '+e);
                 }
             },
 
@@ -101,7 +101,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadproposedByList '+e);
                 }
             },
 
@@ -110,7 +110,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error schoolList '+e);
                 }
             },
 
@@ -119,7 +119,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error loadLevelList '+e);
                 }
             },
 
@@ -128,7 +128,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error orgListUnderUserDzongkhag '+e);
                 }
             },
             eccdListUnderUserDzongkhag(){
@@ -136,7 +136,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error eccdListUnderUserDzongkhag '+e);
                 }
             },
             schoolListUnderUserDzongkhag(){
@@ -144,7 +144,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error schoolListUnderUserDzongkhag '+e);
                 }
             },
             getClassStreamMappings(type){
@@ -152,7 +152,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error getClassStreamMappings '+e);
                 }
             },
 
@@ -204,6 +204,17 @@ try {
                 }catch(e){
                     console.log('error loadpositionTitleList '+e);
                 }
+            },
+            loadactiveGlobalList(type){
+                let uri="masters/loadGlobalMasters/"+type;
+                axios.get(uri)
+                .then(response => {
+                    let data = response;
+                    this.sex_idList =  data.data.data;
+                })
+                .catch(function (error) {
+                    console.log("Error loadactivesex_idList:"+error)
+                });
             },
             getRequiredDocument(type){
                 let uri = 'masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__'+type+'/DocumentType';

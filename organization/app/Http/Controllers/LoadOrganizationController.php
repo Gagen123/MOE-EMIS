@@ -445,6 +445,10 @@ class LoadOrganizationController extends Controller{
             $response_data=DepartmentModel::where('dzo_id',$id)->get();
         }
 
+        if($type=="dzongkhag_department"){
+            $response_data=DepartmentModel::where('dzo_id',$id)->where('type','dzongkhag')->get();
+        }
+
         if($type=="all_division"){
             $response_data=HeadQuaterDetails::where('departmentId',$id)->select('id','agencyName AS name','dzongkhagId')->get();
         }

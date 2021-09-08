@@ -11,7 +11,7 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" id="feedback_link">
+                <!-- <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Leadership Selection Type
                     </router-link>
@@ -36,7 +36,8 @@
                     <router-link id="service" to="/apply_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Apply for Post
                     </router-link>
-                </li>
+                </li> -->
+
                 <!-- Previous nomination Link
                 <li class="nav-item active pr-1">
                     <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
@@ -45,11 +46,11 @@
                 </li> -->
 
                 <!-- This menu should be static as its checked through the user id -->
-                <li class="nav-item active pr-1" id="feedback_link">
+                <!-- <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_feedback" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Feedback
                     </router-link>
-                </li>
+                </li> -->
 
             </ul>
             <router-view></router-view>

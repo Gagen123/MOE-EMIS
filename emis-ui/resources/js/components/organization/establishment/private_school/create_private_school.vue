@@ -37,12 +37,12 @@
                             <label class="mb-0"><i><u>School Details</u></i></label>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-4 col-md-46 col-sm-4">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
                                     <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
                                     <has-error :form="form" field="proposedName"></has-error>
                                 </div>
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
-                                <div class="col-lg-4 col-md-4 col-sm-46">
+                                <div class="col-lg-4 col-md-4 col-sm-4">
                                     <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -82,7 +82,11 @@
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <input type="text" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" @change="remove_error('proposedLocation')" class="form-control" id="proposedLocation" placeholder="Proposed Location"/>
+                                    <has-error :form="form" field="proposedLocation"></has-error>
+                                    <select name="proposedLocation" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" id="proposedLocation" class="form-control select2" @change="remove_error('proposedLocation')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
                                     <has-error :form="form" field="proposedLocation"></has-error>
                                 </div>
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of School:<span class="text-danger">*</span></label>
@@ -116,7 +120,7 @@
                                     <has-error :form="form" field="proprietorPhone"></has-error>
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                                    <input type="text" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email"/>
+                                    <input type="text" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email *"/>
                                     <has-error :form="form" field="proprietorEmail"></has-error>
                                 </div>
                             </div>
@@ -280,13 +284,13 @@ export default {
                 gewog:'',
                 chiwog:'0',
                 proposedLocation:'',
-                typeOfSchool:'',
+                typeOfSchool:1,
                 // totalLand:'',
                 // enrollmentBoys:'',
                 // enrollmentGirls:'',
 
-                category:'',
-                establishment_type:'',
+                category:'private_school',
+                establishment_type:'Private School',
                 status:'pending',
             }),
 
@@ -343,7 +347,7 @@ export default {
             let leveldata=await this.loadLevelList();
             this.levelList =leveldata;
             for(let i=0;i<leveldata.length;i++){
-                this.levelArray[data[i].id] = data[i].name;
+                this.levelArray[leveldata[i].id] = leveldata[i].name;
             }
         },
 
@@ -421,6 +425,10 @@ export default {
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
             }
+            if(id=="proposedLocation"){
+                this.form.proposedLocation=$('#proposedLocation').val();
+            }
+
         },
 
         /**
@@ -503,6 +511,12 @@ export default {
                                 formData.append('service_name', this.file_form.service_name);
                                 formData.append('proposedName', this.form.proposedName);
                                 formData.append('submit_type', nextclass);
+
+                                formData.append('screenId', this.screenId);
+                                formData.append('SysRoleId', this.SysRoleId);
+                                formData.append('Sequence', this.Sequence);
+                                formData.append('Status_Name', this.Status_Name);
+
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
@@ -513,7 +527,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
                                             Toast.fire({
                                                 icon: 'success',
@@ -542,7 +556,7 @@ export default {
             }
             else{
                 if(nextclass=="class-tab"){
-                    this.form.post('organization/saveEstablishment',this.form)
+                    this.form.post('organization/saveprivatepublicschoolEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
@@ -586,6 +600,7 @@ export default {
                     this.form.proprietorName=draft.estb_details.proprietorName;
                     this.form.proprietorPhone   =draft.estb_details.proprietorPhone;
                     this.form.proposedLocation   =draft.estb_details.proposedLocation;
+                    $('#proposedLocation').val(draft.estb_details.proposedLocation).trigger('change');
                     this.form.typeOfSchool   =draft.estb_details.typeOfSchool;
                     this.form.gewogId   =draft.estb_details.gewogId;
                     this.form.chiwogId   =draft.estb_details.chiwogId;
@@ -608,6 +623,7 @@ export default {
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
             this.applyselect2field('level');
+            this.applyselect2field('proposedLocation');
         },
 
         getDetailsbyCID(fieldId){
@@ -628,7 +644,7 @@ export default {
             });
         },
 
-        async getAttachmentType(){
+        async getAttachmentType(type){
             let data = await this.getRequiredDocument(type);
             if(data!=""){
                 data.forEach((item =>{
@@ -665,7 +681,7 @@ export default {
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
-       this.loadpendingdetails('Private_School');
+       this.loadpendingdetails('Private School');
     },
 }
 </script>

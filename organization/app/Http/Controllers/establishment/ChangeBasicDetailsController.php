@@ -273,7 +273,7 @@ class ChangeBasicDetailsController extends Controller
 
 
             if($request['application_type']=="stream_change"){
-                $stream=implode($request['stream'],', ');
+                $stream=implode(', ',$request['stream']);
                 if($request['stream']!=""){
                     $data =[
                         'change_type'                   =>  $request->changetype,
@@ -555,7 +555,7 @@ class ChangeBasicDetailsController extends Controller
                 'ApplicationDetailsId'          =>  $applicationDetailsId,
                 'organizationId'                =>  $request['organizationId'],
                 'change_type'                   =>  $request->changetype,
-                'proposedChange'                =>  implode($request['stream'],', '),
+                'proposedChange'                =>  implode(', ',$request['stream']),
                 'created_by'                    =>  $request['user_id']
             ];
             $changeDetails = ApplicationEstDetailsChange::create($data);

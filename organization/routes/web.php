@@ -385,7 +385,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
             $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
-            $router->post('/saveEstablishment', 'establishment\EstablishmentController@saveEstablishment');
+            $router->post('/saveprivatepublicschoolEstablishment', 'establishment\EstablishmentController@saveprivatepublicschoolEstablishment');
+            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
+            $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
+
             $router->post('/updateEstablishment', 'establishment\EstablishmentController@updateEstablishment');
             $router->get('/loadTeamVerificationList/{id}', 'establishment\EstablishmentController@loadTeamVerificationList');
 
@@ -394,8 +397,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
             $router->get('/getClassMappingDetails/{mapping_id}', 'establishment\EstablishmentController@getClassMappingDetails');
-            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
-            $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
+
+
             $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
 

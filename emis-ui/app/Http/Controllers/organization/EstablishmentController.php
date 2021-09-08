@@ -10,8 +10,7 @@ use Illuminate\Http\Request;
 use App\Traits\AuthUser;
 use App\Http\Controllers\Controller;
 
-class EstablishmentController extends Controller
-{
+class EstablishmentController extends Controller{
     use AuthUser;
     use ServiceHelper;
     public $apiService;
@@ -32,34 +31,22 @@ class EstablishmentController extends Controller
         return $level;
     }
 
-    public function saveEstablishment(Request $request){
-        $this->validateSchoolFields($request);
-        $request['user_id']=$this->userId();
-        $response_data= $this->apiService->createData('emis/organization/establishment/saveEstablishment', $request->all());
-        return $response_data;
-    }
-
-    /**
-     * Validation function for various types of Establishments
-     */
-    private function validateSchoolFields($request){
+    public function saveprivatepublicschoolEstablishment(Request $request){
         $rules = [
             'proposedName'          =>  'required',
             'level'                 =>  'required',
             'category'              =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
-            // 'locationType'          =>  'required',
+            'proposedLocation'      =>  'required',
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'level.required'                => 'Level is required',
             'category.required'             => 'Category is required',
-            'dzongkhag.required'            => 'Dzongkhag is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
-            // 'locationType.required'         => 'Location Type  is required',
-
+            'proposedLocation.required'     => 'Select location type',
         ];
         if(strpos($request->establishment_type,'Public')!==false){
             $rules = $rules+[
@@ -71,30 +58,28 @@ class EstablishmentController extends Controller
         }
         if(strpos($request->establishment_type,'Private')!==false){
             $rules = $rules+[
+                'typeOfSchool'          =>  'required',
                 'proprietorName'        =>  'required',
                 'proprietorCid'         =>  'required|min:11|max:11',
                 'proprietorMobile'      =>  'required|min:8|max:8',
                 'proprietorEmail'       =>  'required|email',
             ];
             $customMessages = $customMessages+[
+                'typeOfSchool.requrired'        => 'choose type of school',
                 'proprietorName.required'       => 'Proprietor Name is required',
                 'proprietorCid.required'        => 'Proprietor CID is required',
                 'proprietorEmail.required'      => 'email. is required',
                 'proprietorMobile.required'     => 'Mobile No.  is required',
             ];
         }
-        $this->validate($request, $rules, $customMessages);
+        $this->validate($request, $rules,$customMessages);
+
+        $request['user_id']=$this->userId();
+        $response_data= $this->apiService->createData('emis/organization/establishment/saveprivatepublicschoolEstablishment', $request->all());
+        return $response_data;
     }
 
-
     public function saveClassStream(Request $request){
-        $rules = [
-            'class'          =>  'required',
-        ];
-        $customMessages = [
-            'class.required'         => 'Class is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
         $request['user_id']=$this->userId();
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $request->all());
         return $response_data;
@@ -104,7 +89,6 @@ class EstablishmentController extends Controller
         $application_number = $request->application_number;
         $files = $request->attachments;
         $filenames = $request->attachmentname;
-        $remarks = $request->remarks;
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'Organization';
         if($files!=null && $files!=""){
@@ -140,88 +124,89 @@ class EstablishmentController extends Controller
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId()
         ];
-        // dd($request_data);
         $response_data= $this->apiService->createData('emis/organization/establishment/saveUploadedFiles', $request_data);
-        // dd($response_data);
         if($request['action_type']!="edit"){
-            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet);
-            $screen_id="";
-            $status="";
-            $app_role="";
-            foreach($workflowdet as $work){
-                if(strtolower($work->screenName)==strtolower($request->service_name)){
-                    $screen_id=$work->SysSubModuleId;
-                    $status=$work->Sequence;
-                    $app_role=$work->SysRoleId;
-                }
-            }
-            if($request->submit_type=="reject"){
-                $status='0__submitterRejects';
-            }
-            $workflow_data=[
-                'db_name'           =>$this->database_name,
-                'table_name'        =>$this->table_name,
-                'service_name'      =>$request->service_name,//service name
-                'name'              =>$request['proposedName'],//service name
-                'application_number'=>$application_number,
-                'screen_id'         =>$screen_id,
-                'status_id'         =>$status,
-                'remarks'           =>$request['remarks'],
-                'app_role_id'       => $app_role,
-                'user_dzo_id'       =>$this->getUserDzoId(),
-                'access_level'      =>$this->getAccessLevel(),
-                'working_agency_id' =>$this->getWrkingAgencyId(),
-                'action_by'         =>$this->userId(),
-            ];
-            $app_type="";
-            if(strpos($request->service_name,'Establishment of Public School')){
-                $app_type="establishment_of_public_school";
-            }
-            if(strpos($request->service_name,'Establishment of Private School')){
-                $app_type="establishment_of_private_school";
-            }
-            if(strpos($request->service_name,'Establishment of Private ECCD')){
-                $app_type="establishment_of_private_eccd";
-            }
-            if(strpos($request->service_name,'Establishment of Public ECCD')){
-                $app_type="establishment_of_public_eccd";
-            }
-            if(strpos($request->service_name,'Establishment of Public ECR')){
-                $app_type="establishment_of_public_ecr";
-            }
-            // dd($workflow_data);
-            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
-            //Notification preparation
-            $workflowdet=json_decode($this->apiService->getListData('system/getScreenAccess/workflow__'.$app_type.'/'.$this->getRoleIds('roleIds')));
-            // dd($workflowdet[0]->SysSubModuleId,$workflowdet[0]->Sequence+1);
-            $seq=((int) $workflowdet[0]->Sequence +1);
-            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$workflowdet[0]->SysSubModuleId.'__'.$seq));
-            $role_id=$next_roleId[0]->SysRoleId;
-            $notification_data=[
-                'notification_for'              =>  $request->service_name,
-                'notification_appNo'            =>  $application_number,
-                'notification_message'          =>  '',
-                'notification_type'             =>  'role',
-                'notification_access_type'      =>  'all',
-                'call_back_link'                =>  'tasklist',
-                'user_role_id'                  =>  $role_id,
-                'dzo_id'                        =>  $this->getUserDzoId(),
-                'working_agency_id'             =>  $this->getWrkingAgencyId(),
-                'access_level'                  =>  $this->getAccessLevel(),
-                'action_by'                     =>  $this->userId(),
-            ];
-            $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            $workflow=$this->insertworkflow($request,$application_number);
+            $notification=$this->insertnotification($request,$application_number);
         }
+        return $response_data;
+    }
+    private function insertworkflow($request,$application_number=""){
+        $status=$request->Sequence;
+        $w_status=$request->Status_Name;
+        if(isset($request->submit_type) && $request->submit_type=="reject"){
+            $status='0__submitterRejects';
+        }
+        if(isset($request->actiontype) && $request->actiontype=="reject"){
+            $status=0;
+        }
+        if(isset($request->update_type) && (strpos(strtolower($request->update_type),'approved')!==false || strpos(strtolower($request->update_type),'final_approval')!==false)){
+            $status=10;
+            $w_status="Approved";
+        }
+        // dd($request->SysRoleId,$w_status,$status,$request->screenId);
+        if($request->screenId==null){
+            $tasks=json_decode($this->apiService->listData('emis/common/getTaskDetials/'.$application_number));
+            $request->screenId=$tasks->screen_id;
+            $status=$tasks->status_id+1;
+            $request->SysRoleId=$this->getRoleIds('roleIds');
+        }
+
+        $workflow_data=[
+            'db_name'           =>$this->database_name,
+            'table_name'        =>$this->table_name,
+            'service_name'      =>$request->service_name,
+            'name'              =>$request->proposedName,
+            'application_number'=>$application_number,
+            'screen_id'         =>$request->screenId,
+            'w_config_status'   =>$w_status,
+            'status_id'         =>$status,
+            'app_role_id'       =>$request->SysRoleId,
+            'remarks'           =>$request->remarks,
+            'user_dzo_id'       =>$this->getUserDzoId(),
+            'access_level'      =>$this->getAccessLevel(),
+            'working_agency_id' =>$this->getWrkingAgencyId(),
+            'action_by'         =>$this->userId(),
+        ];
+        return $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+    }
+    private function insertnotification($request,$application_number=""){
+        $seq=((int) $request->Sequence +1);
+        $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+        $role_id=$next_roleId[0]->SysRoleId;
+        $notification_data=[
+            'notification_for'              =>  $request->service_name,
+            'notification_appNo'            =>  $application_number,
+            'notification_message'          =>  '',
+            'notification_type'             =>  'role',//user
+            'notification_access_type'      =>  'all',
+            'call_back_link'                =>  'tasklist',
+            'user_role_id'                  =>  $role_id,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        return $this->apiService->createData('emis/common/insertNotification', $notification_data);
+    }
+
+    public function loaddraftApplication($type=""){
+        $response_data = $this->apiService->listData('emis/organization/establishment/loaddraftApplication/'.$type.'/'.$this->userId());
+        return $response_data;
+    }
+
+    public function loadEstablishmentApplciaiton($record_id=""){
+        $response_data = $this->apiService->listData('emis/organization/establishment/loadEstablishmentApplciaiton/'.$record_id);
         return $response_data;
     }
 
 
+
+
+
+
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');
-        // $response_data=json_decode($classInCheckbox);
-        // $classInCheckbox = collect($response_data)->sortBy('sequence')->toArray();
         return $classInCheckbox;
     }
 
@@ -601,15 +586,8 @@ class EstablishmentController extends Controller
         return $response_data;
     }
 
-    public function loaddraftApplication($type=""){
-        $response_data = $this->apiService->listData('emis/organization/establishment/loaddraftApplication/'.$type.'/'.$this->userId());
-        // dd($response_data);
-        return $response_data;
-    }
 
-    public function loadEstablishmentApplciaiton($record_id=""){
-        $response_data = $this->apiService->listData('emis/organization/establishment/loadEstablishmentApplciaiton/'.$record_id);
-        return $response_data;
-    }
+
+
 
 }
