@@ -28,7 +28,7 @@ class LoadOrganizaitonController extends Controller{
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
-        if($type=="userdzongkhagwise"){
+        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" || $type=="school"){
             $param=$this->getUserDzoId();
         }
 
@@ -49,9 +49,6 @@ class LoadOrganizaitonController extends Controller{
         if($type=="private" || $type=="SEN"|| $type=="tertiary" || $type=="ECR" || $type=="eccd" || $type=="School" || $type=="all_eccds"){
             $param=$id;
         }
-        if($type=="all_eccds_dzogkhag_wise"){
-            $param=$this->getUserDzoId();
-        }
 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
@@ -66,7 +63,6 @@ class LoadOrganizaitonController extends Controller{
 
     //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
     public function loadOrgDetails($type="",$id=""){
-
         if($type=="full_user_logedin_dzo_id"){
             $id=$this->getUserDzoId();
         }

@@ -10,10 +10,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in transferConfigurationList" :key="index">
+                <tr v-for="(item, index) in dataLists" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{item.name}}</td>
-                    <td>{{ roleList[item.submitter_role_id]}}</td>
+                    <td>{{roleList[item.submitter_role_id]}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
@@ -26,9 +26,8 @@
 export default {
     data(){
         return{
-            transferConfigurationList:[],
-            transfertypeList:{},
-            roleList:{},
+            dataLists:[],
+            roleList:[],
         }
     },
     methods:{
@@ -36,7 +35,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.transferConfigurationList = data;
+                this.dataLists = data;
             })
             .catch(function (error){
                 if(error.toString().includes("500")){
@@ -66,7 +65,7 @@ export default {
             this.TransferConfigurationList();
         },
        watch: {
-            transferConfigurationList(){
+            dataLists(){
                 this.$nextTick(() => {
                     this.dt =  $("#transfer_config_list").DataTable()
                 });

@@ -9,7 +9,7 @@
         @if(session('org_profile')->logo_path!='')
           <img src="storage/{{session('org_profile')->logo_path}}" onerror="this.src='img/question.PNG'" class="brand-image elevation-5 img-sm ml-4 img-circle" style="opacity: .8">
         @endif
-        <span class="brand-text font-weight-light text-white ml-4">{{ session('org_profile')->orgName }} {{ session('org_profile')->level }}</span>
+        <span class="brand-text font-weight-light text-white ml-4">{{ session('org_profile')->orgName }}</span>
       </div>
     @endif
 

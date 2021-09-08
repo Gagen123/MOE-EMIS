@@ -53,6 +53,8 @@ class TransferController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/transfer/getDraftDetails/'.$this->userId());
         return $response_data;
     }
+    
+    //submitting the final application for transfer
     public function submitFinalapplicantDetails(Request $request){
         $service_name = $request->service_name;
         $rules = [
@@ -102,6 +104,7 @@ class TransferController extends Controller{
             'user_id'                           =>  $this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
+        $appNo = json_decode($response_data)->data->aplication_number;
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -118,6 +121,20 @@ class TransferController extends Controller{
             'action_by'         =>$this->userId(),
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        $notification_data=[
+            'notification_for'              =>$request->screen_name,
+            'notification_appNo'            =>  $appNo,
+            'notification_message'          =>  '',
+            'notification_type'             =>  'role',
+            'notification_access_type'      =>  'all',
+            'call_back_link'                =>  'tasklist',
+            // 'user_role_id'                  =>  $role_id,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
         return $work_response_data;
     }
 

@@ -7,10 +7,6 @@
                     <div class="form-group row bg-gray-light">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <span id="screenName"></span>
-                            {{screenId}}
-                            {{SysRoleId}}
-                            {{Sequence}}
-                            {{Status_Name}}
                         </div>
                     </div>
                     <div class="form-group row">
@@ -18,21 +14,23 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                 <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in eccdList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="organizationId"></has-error>
+                            <span class="text-danger" id="organizationId_err"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Current Name:</label>
-                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName" @click="remove_error('proposedName')"/>
+                            <span class="text-danger" id="proposedname_err"></span>
                         </div>
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Dzongkhag:</label>
-                            <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="dzongkhagId"/>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Gewog:</label>
@@ -46,7 +44,15 @@
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Location:</label>
-                            <input type="text" readonly :value="organization_details.location_type_name"  class="form-control" id="proposedName"/>
+                            <input type="text" readonly :value="organization_details.location_type_name"  class="form-control" id="location_type_name"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label>Is Co-located with Parent Schoo:</label>
+                            <input type="text" readonly :value="organization_details.isColocated==1? 'yes':'No'" class="form-control" id="gewogid"/>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4">
+                            <label>Parent School:</label>
+                            <input type="text" readonly :value="organization_details.parentSchoolName" class="form-control" id="vilageId"/>
                         </div>
                     </div>
                     <label class="mb-0"><i><u>Proposed Location Details</u></i></label>
@@ -58,6 +64,7 @@
                                 <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="gewog"></has-error>
+                            <span class="text-danger" id="gewog_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Chiwog: <span class="text-danger">*</span></label>
@@ -66,6 +73,7 @@
                                 <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <has-error :form="form" field="chiwog"></has-error>
+                            <span class="text-danger" id="chiwog_err"></span>
                         </div>
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Location Type: <span class="text-danger">*</span></label>
@@ -73,6 +81,22 @@
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
+                            <span class="text-danger" id="locationType_err"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Is Co-located with Parent School: <span class="text-danger">*</span></label><br>
+                            <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
+                            <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <label>Parent School: <span class="text-danger">*</span></label>
+                            <select v-model="form.parentSchool" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parentSchool') }" class="form-control select2" name="parentSchool" id="parentSchool">
+                                <option value="">--- Please Select ---</option>
+                                <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <has-error :form="form" field="parentSchool"></has-error>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -107,12 +131,18 @@
                             </table>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <label class="mb-0">Remarks</label>
+                            <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
+                            <span class="text-danger" id="remarks_err"></span>
+                        </div>
+                    </div>
                 </form>
                 <hr>
                 <div class="row form-group fa-pull-right">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-primary" @click="shownexttab('final-tab')">Submit </button>
+                        <button class="btn btn-primary" @click="shownexttab()">Submit </button>
                     </div>
                 </div>
             </div>
@@ -130,6 +160,7 @@ export default {
             gewog_list:[],
             villageList:[],
             orgList:'',
+            eccdList:[],
             locationList:[],
             streamList:[],
             category:'',
@@ -144,14 +175,16 @@ export default {
 
             form: new form({
                 organizationId:'',
+                organization_category:'',
+                dzongkhag:'',
                 gewog:'',
                 chiwog:'0',
                 locationType:'',
-                service_name:'',
-                application_type:'location_type_change',
-                application_for:'Change in Location Type',
+                coLocatedParent:'',
+                parentSchool:'',
+                remarks:'',
+                proposedName:'',
                 status:'Submitted',
-                organization_type:'',
                 fileUpload: [],
                 attachments:
                 [{
@@ -181,12 +214,19 @@ export default {
             $('#gewogid').val(this.gewogArray[gewogId]);
         },
 
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/all_eccds_dzogkhag_wise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
+        async loadactivedzongkhagList(){
+            let data= await this.loadactivedzongkhags();
+            for(let i=0;i<data.length;i++){
+                this.dzongkhagArray[data[i].id] = data[i].name;
+            }
+        },
+
+        async getvillagelist(gewogId,vil_id){
+            let data = await this.loadvillageList(gewogId);
+            for(let i=0;i<data.length;i++){
+                this.villageArray[data[i].id] = data[i].name;
+            }
+            $('#vilageId').val(this.villageArray[vil_id])
         },
 
         async getproposedvillagelist(id){
@@ -227,10 +267,10 @@ export default {
         /**
          * method to show next and previous tab
          */
-        shownexttab(nextclass){
-            if(nextclass=="final-tab"){
+        shownexttab(){
+            if(this.validateForm()){
                 Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
+                    text: "Are you sure you wish to submit this application details for further action ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -238,23 +278,49 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed) {
-                        this.form.post('organization/saveChangeBasicDetails')
+                        const config = {
+                            headers: {
+                                'content-type': 'multipart/form-data'
+                            }
+                        }
+
+                        let formData = new FormData();
+                        formData.append('ref_docs[]', this.form.ref_docs);
+                        for(let i=0;i<this.form.ref_docs.length;i++){
+                            formData.append('attachments[]', this.form.ref_docs[i].attach);
+                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                        }
+                        formData.append('organizationId', this.form.organizationId);
+                        formData.append('dzongkhag', this.form.dzongkhag);
+                        formData.append('gewog', this.form.gewog);
+                        formData.append('chiwog', this.form.chiwog);
+                        formData.append('coLocatedParent', this.form.coLocatedParent);
+                        formData.append('parentSchool', this.form.parentSchool);
+                        formData.append('establishment_type', 'Location Change Services');
+                        formData.append('application_type', 'Location Change');
+                        formData.append('category', this.form.organization_category);
+                        formData.append('proposedName', this.form.proposedName); //for workflow
+                        formData.append('service_name', 'Location Change of ECCD Centres');
+
+                        formData.append('locationType', this.form.locationType);
+                        formData.append('remarks', this.form.remarks);
+                        formData.append('status', this.form.status);
+
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+
+                        axios.post('organizationApproval/saveLocationChange', formData, config)
+                        // this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
-                                if(response.data=="No Screen"){
-                                    Toast.fire({
-                                        icon: 'error',
-                                        title: 'No dont have privileged to submit this application. Please contact system administrator'
-                                    });
-                                }
-                                if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Change details is saved successfully'
-                                    });
-                                }
+                                let message="Application for Location Change has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Change details is saved successfully'
+                                });
                             }
                         })
                         .catch((err) => {
@@ -285,11 +351,41 @@ export default {
             if(id=="locationType"){
                 this.form.locationType=$('#locationType').val();
             }
+            if(id=="parentSchool"){
+                this.form.parentSchool=$('#parentSchool').val();
+            }
+
+        },
+        validateForm(){
+            let returntype=true;
+            if($('#organizationId').val()=="" || $('#organizationId').val()==undefined){
+                $('#organizationId_err').html('Please select Organization for location change');
+                returntype=false;
+            }
+            if($('#proposedName').val()==""){
+                $('#proposedname_err').html('This name is not able to populate. Please contact with system administrator');
+                returntype=false;
+            }
+            if($('#gewog').val()==""){
+                $('#gewog_err').html('Please select new gewog');
+                returntype=false;
+            }
+            if($('#chewog').val()==""){
+                $('#chewog_err').html('Please select new chewog');
+                returntype=false;
+            }
+            if($('#locationType').val()==""){
+                $('#locationType_err').html('Please select new location type');
+                returntype=false;
+            }
+
+            return returntype;
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
-                this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
+                this.form.organization_category=response.data.data.category; //this is required to check the screen while submitting
+                this.form.proposedName=response.data.data.name;
                 this.organization_details=response.data.data;
                 this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
@@ -304,39 +400,12 @@ export default {
             this.applyselect2field('locationType');
         },
 
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.dzongkhagArray[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-
-        getvillagelist(gewogId,vil_id){
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name;
-                }
-                $('#vilageId').val(this.villageArray[vil_id])
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/'+'Location Change of ECCD Centres__'+1)
             .then(response => {
-                let data = response.data[0];
-                if(data!=undefined){
+                // let data = response.data[0];
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;
@@ -369,7 +438,6 @@ export default {
         this.locationList =await this.loadlocationList();
         this.proposed_by_list =  await this.loadproposedByList();
         this.loadactivedzongkhagList();
-        this.getOrgList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -384,15 +452,16 @@ export default {
         });
 
         this.loadattachments('Application_for_Location_Change');
+        this.eccdList= await this.eccdListUnderUserDzongkhag();
+        this.orgList= await this.schoolListUnderUserDzongkhag();
 
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.form.organizationId=data['Agency_Code'];
-            this.getorgdetials(data['Agency_Code']);
+            // this.getorgdetials(data['Agency_Code']);
             $('#organizationId').val(data['Agency_Code']).trigger('change');
 
-            this.dzongkhag=data['Dzo_Id'];
             this.form.dzongkhag=data['Dzo_Id'];
             this.getGewogList(data['Dzo_Id']);
         })

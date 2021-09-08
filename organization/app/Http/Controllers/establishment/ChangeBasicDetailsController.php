@@ -46,8 +46,6 @@ class ChangeBasicDetailsController extends Controller
      * method to save change basic details
     */
     public function saveChangeBasicDetails(Request $request){
-        // dd($request);
-
         if($request->action_type!="edit"){
             $application_details_data =[
                 'application_no'       =>  $this->generateApplicationNo(),
@@ -55,10 +53,9 @@ class ChangeBasicDetailsController extends Controller
                 'application_type'     =>  $request['application_type'],
                 'year'                 =>  date('Y'),
                 'status'               =>  $request['status'],
+                'created_at'           =>  date('Y-m-d h:i:s'),
                 'created_by'           =>  $request['user_id']
             ];
-            // dd($application_details_data);
-            // dd($request);
             $inserted_application_data = ApplicationDetails::create($application_details_data);
             $applicationDetailsId = $inserted_application_data->id;
 
@@ -276,7 +273,7 @@ class ChangeBasicDetailsController extends Controller
 
 
             if($request['application_type']=="stream_change"){
-                $stream=implode($request['stream'],', ');
+                $stream=implode(', ',$request['stream']);
                 if($request['stream']!=""){
                     $data =[
                         'change_type'                   =>  $request->changetype,
@@ -558,7 +555,7 @@ class ChangeBasicDetailsController extends Controller
                 'ApplicationDetailsId'          =>  $applicationDetailsId,
                 'organizationId'                =>  $request['organizationId'],
                 'change_type'                   =>  $request->changetype,
-                'proposedChange'                =>  implode($request['stream'],', '),
+                'proposedChange'                =>  implode(', ',$request['stream']),
                 'created_by'                    =>  $request['user_id']
             ];
             $changeDetails = ApplicationEstDetailsChange::create($data);

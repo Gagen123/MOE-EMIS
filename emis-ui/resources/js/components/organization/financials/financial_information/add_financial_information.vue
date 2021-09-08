@@ -4,31 +4,31 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Type:<i class="text-danger">*</i></label>
-                    <select v-model="finacial_form.financialInformationId" :class="{ 'is-invalid select2 select2-hidden-accessible': finacial_form.errors.has('financialInformationId') }" class="form-control select2" name="financialInformationId" id="financialInformationId">
+                     <select v-model="form.financialInformationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('financialInformationId') }" class="form-control select2" name="financialInformationId" id="financialInformationId">
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="finacial_form" field=""></has-error>
+                    <has-error :form="form" field="financialInformationId"></has-error>
                 </div> 
             </div>
             <div class="row">
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="mb-1">Amount:<i class="text-danger">*</i></label>
-                        <input type="text" @change="remove_error('amount')" v-model="finacial_form.amount" :class="{ 'is-invalid': finacial_form.errors.has('amount') }" class="form-control" name="amount" id="amount" >
-                        <has-error :form="finacial_form" field="amount"></has-error>
+                        <input type="text" @change="remove_error('amount')" v-model="form.amount" :class="{ 'is-invalid': form.errors.has('amount') }" class="form-control" name="amount" id="amount" >
+                        <has-error :form="form" field="amount"></has-error>
                     </div> 
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="finacial_form.date" :class="{ 'is-invalid': finacial_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
-                    <has-error :form="finacial_form" field="date"></has-error>
+                    <input class="form-control" v-model="form.date" :class="{ 'is-invalid': form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <has-error :form="form" field="date"></has-error>
                 </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="finacial_form.remarks" :class="{ 'is-invalid': finacial_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="finacial_form" field="remarks"></has-error>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -43,11 +43,12 @@ export default {
     data(){
         return {
             typeList:[],
-            finacial_form: new form({
+            form: new form({
+                financialInformationId:'',
                 amount: '',
                 date:'',
                 remarks: '',
-                financialInformationId:'',
+              
             }),
         }
     },
@@ -55,7 +56,6 @@ export default {
         loadtypeList(){
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
-                alert(JSON.stringify(response.data.data));
                 let data = response;
                 this.typeList =  data.data.data;
             })
@@ -71,13 +71,11 @@ export default {
                 }
                 }
                 // this.$Progress.start();
-
                 let formData = new FormData(); 
-                formData.append('financialInformationId', this.finacial_form.financialInformationId);
-                formData.append('amount', this.finacial_form.amount);
-                formData.append('date', this.finacial_form.date);
-                formData.append('remarks', this.finacial_form.remarks);
-                
+                formData.append('financialInformationId', this.form.financialInformationId);
+                formData.append('amount', this.form.amount);
+                formData.append('date', this.form.date);
+                formData.append('remarks', this.form.remarks);
                 axios.post('/organization/saveFinancialInfo',formData,config)
                 .then(()=>{
                     Toast.fire({
@@ -103,6 +101,9 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="financialInformationId"){
+                this.form.financialInformationId=$('#financialInformationId').val();
             }
         },
     },

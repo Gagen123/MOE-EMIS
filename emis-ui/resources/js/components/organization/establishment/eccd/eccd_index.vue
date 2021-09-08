@@ -7,15 +7,14 @@
         <div class="card card-primary card-outline" id="mainform">
             <div class="card-header pt-0 mt-0 pb-0">
                 <span class="card-title pt-2 mb-0">
-                        <b>Applications for New ECCD</b>
+                    <b><span id="screenName"></span></b>
                 </span>
                 <span class="fa-pull-right pr-2 py-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_eccd')"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Private')"><i class="fa fa-plus"></i>New Private</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Public')"><i class="fa fa-plus"></i>New Public</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','NGO')"><i class="fa fa-plus"></i>New NGO</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Coorporate')"><i class="fa fa-plus"></i>New Coorporate</button>
-                    <!-- <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-print"></i> Print</button> -->
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_eccd','Corporate')"><i class="fa fa-plus"></i>New Coorporate</button>
                 </span>
             </div>
             <div class="card-body pt-1 pb-0">
@@ -32,13 +31,15 @@ export default {
 		},
     },
     mounted() {
-        axios.get('common/getScreenAccess/workflow__establishment_of_public_school')//workflow will specify that the process have workflow
+        axios.get('organizationApproval/getScreenId/'+'ECCD Centre__'+1)
         .then(response => {
-            let data = response.data[0].total_count;
-            if(data<1){
+            let data = response.data.data;
+            if(data!=undefined && data!="NA"){
+                $('#screenName').html('<b>Application for '+data.screenName);
+            }else{
                 $('#screenPermission').show();
                 $('#mainform').hide();
-                $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
+                $('#message').html("You don't have privileges to create new application for this service. Please contact with system administrator for further enquiry. <br> Thank you!");
             }
         })
         .catch(errors => {

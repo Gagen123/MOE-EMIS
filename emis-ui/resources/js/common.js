@@ -16,6 +16,11 @@ try {
                     $('#'+btnid).prop('disabled',false);
                 }
             },
+            reverseDate(dateData){
+                const reverse =
+                dateData.split("-").reverse().join("-");
+                return reverse;
+            },
 
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
@@ -69,7 +74,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadgewogList '+e);
                 }
             },
 
@@ -78,7 +83,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadvillageList '+e);
                 }
             },
 
@@ -87,7 +92,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadlocationList '+e);
                 }
             },
 
@@ -96,7 +101,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                   console.log('error loadactivedzongkhags '+e);
+                   console.log('error loadproposedByList '+e);
                 }
             },
 
@@ -105,16 +110,41 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error schoolList '+e);
                 }
             },
 
-            schoolListUnderUserDzongkhag(){
+            loadLevelList(){
+                let uri = 'organization/getLevelInDropdown';
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                    console.log('error loadLevelList '+e);
+                }
+            },
+
+            orgListUnderUserDzongkhag(){
                 let uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA';
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error orgListUnderUserDzongkhag '+e);
+                }
+            },
+            eccdListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/all_eccds_dzogkhag_wise/eccds';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error eccdListUnderUserDzongkhag '+e);
+                }
+            },
+            schoolListUnderUserDzongkhag(){
+                let uri = 'loadCommons/loadOrgList/school/schools';
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error schoolListUnderUserDzongkhag '+e);
                 }
             },
             getClassStreamMappings(type){
@@ -122,7 +152,7 @@ try {
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
-                    console.log('error loadactivedzongkhags '+e);
+                    console.log('error getClassStreamMappings '+e);
                 }
             },
 
@@ -173,6 +203,14 @@ try {
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
                     console.log('error loadpositionTitleList '+e);
+                }
+            },
+            loadactiveGlobalList(type){
+                let uri = "masters/loadGlobalMasters/"+type;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactiveGlobalList '+e);
                 }
             },
             getRequiredDocument(type){

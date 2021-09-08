@@ -29,106 +29,106 @@
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <form class="form-horizontal">
-                        <input type="hidden" class="form-control" v-model="form.id" id="id"/>
-                        <label class="mb-0"><i><u>Proprietor Details</u></i></label>
-                        <p>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
-                                <has-error :form="form" field="proprietorCid"></has-error>
+                            <div class="form-group row bg-gray-light mt-xl-n3">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <span id="privatescreen"></span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
-                                <has-error :form="form" field="proprietorName"></has-error>
+                            <label class="mb-0"><i><u>School Details</u></i></label>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
+                                    <has-error :form="form" field="proposedName"></has-error>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="level"></has-error>
+                                </div>
                             </div>
-                        </div>
+                            <!-- <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Expected Enrollment:<span class="text-danger">*</span></label>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <input type="number" v-model="form.enrollmentBoys" :class="{ 'is-invalid': form.errors.has('enrollmentBoys') }" @change="remove_error('enrollmentBoys')" class="form-control" id="enrollmentBoys" placeholder="Boys" />
+                                    <has-error :form="form" field="enrollmentBoys"></has-error>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <input type="number" v-model="form.enrollmentGirls" :class="{ 'is-invalid': form.errors.has('enrollmentGirls') }" @change="remove_error('enrollmentGirls')" class="form-control" id="enrollmentGirls" placeholder="Girls"/>
+                                    <has-error :form="form" field="enrollmentGirls"></has-error>
+                                </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="gewog"></has-error>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Chiwog:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="chiwog"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <has-error :form="form" field="proposedLocation"></has-error>
+                                    <select name="proposedLocation" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" id="proposedLocation" class="form-control select2" @change="remove_error('proposedLocation')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="proposedLocation"></has-error>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of School:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="1" tabindex=""/> Day</label>
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="0" tabindex=""/> Boarding</label>
+                                </div>
+                            </div>
+                            <hr>
+                            <label class="mb-0"><i><u>Proprietor Details</u></i></label>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">CID:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="number" max="11" min="11" @keyup.enter="getDetailsbyCID('proprietorCid')" @blur="getDetailsbyCID('proprietorCid')" v-model="form.proprietorCid" :class="{ 'is-invalid': form.errors.has('proprietorCid') }" @change="remove_error('proprietorCid')" class="form-control" id="proprietorCid" placeholder="CID No."/>
+                                    <has-error :form="form" field="proprietorCid"></has-error>
+                                </div>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Name:<span class="text-danger">*</span></label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="text" v-model="form.proprietorName" :class="{ 'is-invalid': form.errors.has('proprietorName') }" @change="remove_error('proprietorName')" class="form-control" id="proprietorName" placeholder="Proprietor Name"/>
+                                    <has-error :form="form" field="proprietorName"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-xs-12 col-form-label">Contact Information:</label>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <input type="number" v-model="form.proprietorMobile" :class="{ 'is-invalid': form.errors.has('proprietorMobile') }" @change="remove_error('proprietorMobile')" class="form-control" id="proprietorMobile" placeholder="Mobile No *"/>
+                                    <has-error :form="form" field="proprietorMobile"></has-error>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <input type="number" v-model="form.proprietorPhone" :class="{ 'is-invalid': form.errors.has('proprietorPhone') }" @change="remove_error('proprietorPhone')" class="form-control" id="proprietorPhone" placeholder="Phone No" />
+                                    <has-error :form="form" field="proprietorPhone"></has-error>
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <input type="text" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email *"/>
+                                    <has-error :form="form" field="proprietorEmail"></has-error>
+                                </div>
+                            </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Contact Information:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.proprietorPhone" :class="{ 'is-invalid': form.errors.has('proprietorPhone') }" @change="remove_error('proprietorPhone')" class="form-control" id="proprietorPhone" placeholder="Phone No" />
-                                <has-error :form="form" field="proprietorPhone"></has-error>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.proprietorMobile" :class="{ 'is-invalid': form.errors.has('proprietorMobile') }" @change="remove_error('proprietorMobile')" class="form-control" id="proprietorMobile" placeholder="Mobile No"/>
-                                <has-error :form="form" field="proprietorMobile"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Email:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="email" v-model="form.proprietorEmail" :class="{ 'is-invalid': form.errors.has('proprietorEmail') }" @change="remove_error('proprietorEmail')" class="form-control" id="proprietorEmail" placeholder="Email"/>
-                                <has-error :form="form" field="proprietorEmail"></has-error>
-                            </div>
-                        </div>
-                        <hr>
-                        <label class="mb-0"><i><u>School Details</u></i></label>
-                        <p>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name"/>
-                                <has-error :form="form" field="proposedName"></has-error>
-                            </div>
-                        </div>
 
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Level:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="level"></has-error>
-                            </div>
-                        </div>
-                        <!-- <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Expected Enrollment:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.enrollmentBoys" :class="{ 'is-invalid': form.errors.has('enrollmentBoys') }" @change="remove_error('enrollmentBoys')" class="form-control" id="enrollmentBoys" placeholder="Boys" />
-                                <has-error :form="form" field="enrollmentBoys"></has-error>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input type="number" v-model="form.enrollmentGirls" :class="{ 'is-invalid': form.errors.has('enrollmentGirls') }" @change="remove_error('enrollmentGirls')" class="form-control" id="enrollmentGirls" placeholder="Girls"/>
-                                <has-error :form="form" field="enrollmentGirls"></has-error>
-                            </div>
-                        </div> -->
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Gewog:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <select v-model="form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="gewog"></has-error>
-                            </div>
-                            <label class="col-lg-1.5 col-md-1.5 col-sm-1.5 col-form-label">Chiwog:<span class="text-danger">*</span></label>
-                            <div class="col-lg-2.5 col-md-2.5 col-sm-2.5">
-                                <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="chiwog"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Location:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <input type="text" v-model="form.proposedLocation" :class="{ 'is-invalid': form.errors.has('proposedLocation') }" @change="remove_error('proposedLocation')" class="form-control" id="proposedLocation" placeholder="Proposed Location"/>
-                                <has-error :form="form" field="proposedLocation"></has-error>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of School:<span class="text-danger">*</span></label>
-                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                <label><input  type="radio" v-model="form.typeOfSchool" value="1" tabindex=""/> Day</label>
-                                <label><input  type="radio" v-model="form.typeOfSchool" value="0" tabindex=""/> Boarding</label>
-                            </div>
-                        </div>
+
+
+
                         <!-- <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Area of Land Proposed:<span class="text-danger">*</span></label>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -255,20 +255,45 @@
 export default {
     data(){
         return{
-            dzongkhag:'',
             levelList:[],
             locationList:[],
-            dzongkhagList:[],
             gewog_list:[],
             villageList:[],
-            orgList:[],
             levelArray:{},
-            proposed_by_list:[],
-            classList:[],
-            streamList:[],
+
             classStreamList:[],
             fileUpload: [],
             draft_data:[],
+
+            screenId:'',
+            SysRoleId:'',
+            Sequence:'',
+            Status_Name:'',
+
+            form: new form({
+                id: '',
+                proprietorCid:'',
+                proprietorName:'',
+                proprietorPhone:'',
+                proprietorMobile:'',
+                proprietorEmail:'',
+
+                proposedName:'',
+                level:'',
+                dzongkhag:'',
+                gewog:'',
+                chiwog:'0',
+                proposedLocation:'',
+                typeOfSchool:1,
+                // totalLand:'',
+                // enrollmentBoys:'',
+                // enrollmentGirls:'',
+
+                category:'private_school',
+                establishment_type:'Private School',
+                status:'pending',
+            }),
+
             file_form: new form({
                 id:'',
                 file_name: '',
@@ -285,13 +310,7 @@ export default {
                 }],
                 ref_docs:[],
             }),
-            form: new form({
-                id: '', proposedName:'', level:'',category:'2', dzongkhag:'', gewog:'', chiwog:'0', proposedLocation:'',
-                proprietorCid:'', proprietorName:'', proprietorPhone:'', proprietorMobile:'', proprietorEmail:'', totalLand:'',
-                enrollmentBoys:'', enrollmentGirls:'', typeOfSchool:'', establishment_type:'private_school', status:'pending',
-                action_type:'add',
 
-            }),
             classStreamForm: new form({
                 id: '',class:[], stream:[], proposed_establishment:'Private School', status:'submitted',application_number:'',
                 action_type:'add',submit_type:'',remarks:'',proposedName:'',
@@ -299,75 +318,51 @@ export default {
         }
     },
     methods: {
-        /**
-         * method to remove error
-         */
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/'+'Private School__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#privatescreen').html('<b>'+data.screenName);
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.file_form.service_name=data.screenName;
+                }else{
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
         },
 
         /**
          * method to get level in dropdown
          */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-                 for(let i=0;i<data.length;i++){
-                    this.levelArray[data[i].id] = data[i].name;
-                }
-            });
-        },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
-
-        /**
-         * method to get location in dropdown
-         */
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
+        async getLevel(){
+            let leveldata=await this.loadLevelList();
+            this.levelList =leveldata;
+            for(let i=0;i<leveldata.length;i++){
+                this.levelArray[leveldata[i].id] = leveldata[i].name;
+            }
         },
 
         /**
          * method to get Gewog in dropdown
          */
-        getGewogList(dzongkhag){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.gewog_list = data.data;
-            });
+        async getGewogList(dzongkhag){
+            this.gewog_list =await this.loadgewogList(dzongkhag);
         },
-
-
         async getvillagelist(id){
             let gewogId=$('#gewog').val();
             if(id!="" && (gewogId==null || gewogId=="")){
                 gewogId=id;
             }
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.villageList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
+            this.villageList =await this.loadvillageList(gewogId);
         },
 
         /**
@@ -423,10 +418,6 @@ export default {
                 this.form.level=$('#level').val();
                  this.getClassStream(text);
             }
-            // if(id=="dzongkhag"){
-            //     this.form.dzongkhag=$('#dzongkhag').val();
-            //     this.getgewoglist();
-            // }
             if(id=="gewog"){
                 this.form.gewog=$('#gewog').val();
                 this.getvillagelist();
@@ -434,6 +425,10 @@ export default {
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
             }
+            if(id=="proposedLocation"){
+                this.form.proposedLocation=$('#proposedLocation').val();
+            }
+
         },
 
         /**
@@ -462,26 +457,6 @@ export default {
         },
 
         /**
-         * method to get class in checkbox
-         */
-        getClass:function(){
-            axios.get('/organization/getClass')
-              .then(response => {
-                this.classList = response.data;
-            });
-        },
-
-        /**
-         * method to get stream in checkbox
-         */
-        getStream:function(){
-            axios.get('/organization/getStream')
-              .then(response => {
-                this.streamList = response.data;
-            });
-        },
-
-        /**
          * method to show next tab
          */
         shownexttab(nextclass){
@@ -504,7 +479,6 @@ export default {
                     message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
                 }
                 if(subform){
-
                     Swal.fire({
                         text: status,
                         icon: 'info',
@@ -537,6 +511,12 @@ export default {
                                 formData.append('service_name', this.file_form.service_name);
                                 formData.append('proposedName', this.form.proposedName);
                                 formData.append('submit_type', nextclass);
+
+                                formData.append('screenId', this.screenId);
+                                formData.append('SysRoleId', this.SysRoleId);
+                                formData.append('Sequence', this.Sequence);
+                                formData.append('Status_Name', this.Status_Name);
+
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
@@ -547,7 +527,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_private_school',params: {data:message+res }});
                                             Toast.fire({
                                                 icon: 'success',
@@ -576,18 +556,11 @@ export default {
             }
             else{
                 if(nextclass=="class-tab"){
-                    this.form.feeding=[];
-                    let meals=[];
-                    $("input[name='feeding']:checked").each( function () {
-                        meals.push($(this).val());
-                    });
-                    this.form.feeding=meals;
-                    this.form.post('organization/saveEstablishment',this.form)
+                    this.form.post('organization/saveprivatepublicschoolEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
                             this.classStreamForm.application_number=response.data.data.applicaiton_details.application_no;
-                            // this.loadpendingdetails('Public_School');
                             this.change_tab(nextclass);
                         }
                     })
@@ -599,7 +572,6 @@ export default {
                 }
                 else if(nextclass=="file-tab"){
                     this.classStreamForm.submit_type=nextclass;
-                    // this.classStreamForm.proposedName=this.form.proposedName;
                     this.classStreamForm.post('organization/saveClassStream')
                     .then((response) => {
                         if(response.data!=""){
@@ -628,6 +600,7 @@ export default {
                     this.form.proprietorName=draft.estb_details.proprietorName;
                     this.form.proprietorPhone   =draft.estb_details.proprietorPhone;
                     this.form.proposedLocation   =draft.estb_details.proposedLocation;
+                    $('#proposedLocation').val(draft.estb_details.proposedLocation).trigger('change');
                     this.form.typeOfSchool   =draft.estb_details.typeOfSchool;
                     this.form.gewogId   =draft.estb_details.gewogId;
                     this.form.chiwogId   =draft.estb_details.chiwogId;
@@ -636,7 +609,6 @@ export default {
                     this.form.proposedName  =draft.estb_details.proposedName;
                     this.form.level=draft.estb_details.levelId;
                     $('#level').val(draft.estb_details.levelId).trigger('change');
-
                     this.getClassStream(this.levelArray[draft.estb_details.levelId]);
 
                     this.form.gewog  =draft.gewogId;
@@ -648,48 +620,12 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-            //     $('#dzongkhag').addClass('select2-hidden-accessible');
-            // }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('gewog');
+            this.applyselect2field('chiwog');
+            this.applyselect2field('level');
+            this.applyselect2field('proposedLocation');
         },
 
-        /**
-         * method to change tabs
-         */
-        change_tab(nextclass){
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
-            this.applyselect2();
-        },
-
-        loadProprietorDetails(){
-            axios.get('organization/loadProprietorDetails')
-            .then((response) => {
-
-                let data=response.data.data[0];
-                this.form.cid           =   data.cid;
-                this.form.name          =   data.fullName;
-                this.form.phoneNo       =   data.phoneNo;
-                this.form.email         =   data.email;
-            })
-            .catch((error) => {
-                console.log("Error......"+error);
-            });
-        },
         getDetailsbyCID(fieldId){
             axios.get('getpersonbycid/'+ $('#'+fieldId).val())
             .then(response => {
@@ -703,47 +639,26 @@ export default {
                     });
                 }
             })
-            .catch((exception) => {
+            .catch((exception) =>{
                 console.log(exception);
             });
         },
 
-        getScreenAccess(){
-            axios.get('common/getScreenAccess/workflow__establishment__private_school')
-            .then(response => {
-                let data = response.data[0].total_count;
-                if(data<1){
-                    $('#screenPermission').show();
-                    $('#mainform').hide();
-                    $('#message').html('This page is not accessible to you. Please contact system administrator for further assistant<br> Thank you');
-                }
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
-        },
-        getAttachmentType(){
-            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__Application_for_Private_School/DocumentType')
-            .then(response => {
-                let data = response.data;
-                data.forEach((item => {
+        async getAttachmentType(type){
+            let data = await this.getRequiredDocument(type);
+            if(data!=""){
+                data.forEach((item =>{
                     this.count++;
                     this.file_form.fileUpload.push({file_name:item.name, file_upload:''})
                 }));
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
+            }
         }
     },
-    mounted() {
-        this.getScreenAccess();
-        this.getClass();
-        this.getStream();
+    async mounted() {
+        this.loadScreenDetails();
+        this.locationList = await this.loadlocationList();
         this.getLevel();
-        this.getLocation();
-        this.getOrgList();
-        this.getAttachmentType();
+        this.getAttachmentType('Application_for_Private_School');
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -766,7 +681,7 @@ export default {
         Fire.$on('changefunction',(id,text)=> {
             this.changefunction(id,text);
         });
-       this.loadpendingdetails('Private_School');
+       this.loadpendingdetails('Private School');
     },
 }
 </script>

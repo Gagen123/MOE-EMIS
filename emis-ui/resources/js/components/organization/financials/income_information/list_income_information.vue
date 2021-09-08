@@ -1,6 +1,6 @@
 <template>
     <div>
-        <table id="award-list-table" class="table table-bordered text-sm table-striped">
+        <table id="income-list-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
@@ -14,7 +14,7 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                     <td>{{ item.name}}</td>
+                    <td>{{ item.name}}</td>
                     <td>{{ item.amountGenerated}}</td>
                     <td>{{ item.date}}</td>
                     <td>{{ item.remarks}}</td>
@@ -59,6 +59,15 @@ export default {
     },
     mounted(){
         this.loadIncomeList();
+         this.dt =  $("#finacial-list-table").DataTable();
+    },
+      watch:{
+        dataList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#income-list-table").DataTable();
+            });
+        },
     },
 }
 </script>

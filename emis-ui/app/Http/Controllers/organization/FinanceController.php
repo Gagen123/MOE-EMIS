@@ -30,7 +30,6 @@ class FinanceController extends Controller
         return $dis;
     }
 
-
     public function saveFinancialInformation(Request $request){
         $rules = [
             'type'          =>  'required',
@@ -91,14 +90,14 @@ class FinanceController extends Controller
             'amount'                            =>  'required',
             'date'                              =>  'required',
             'remarks'                           =>  'required',
-            // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
+            'incomeFacilitiesId'                =>  'required',
             
         ];
         $customMessages = [
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
             'remarks.required'                  => 'remarks is required',
-            // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+            'incomeFacilitiesId.required'       => 'incomeFacilitiesId is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -106,7 +105,7 @@ class FinanceController extends Controller
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'remarks'                           =>  $request['remarks'],
-            // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
+            'incomeFacilitiesId'                =>  $request['incomeFacilitiesId'],
         ];
          $response_data= $this->apiService->createData('emis/organization/finance/saveIncomeInformation', $data );
          return $response_data;
@@ -117,14 +116,14 @@ class FinanceController extends Controller
                 'amount'                            =>  'required',
                 'date'                              =>  'required',
                 'remarks'                           =>  'required',
-                // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
+                'incomeFacilitiesId'                =>  'incomeFacilitiesId',
                 
             ];
             $customMessages = [
                 'amount.required'                   => 'amount is required',
                 'date.required'                     => 'date is required',
                 'remarks.required'                  => 'remarks is required',
-                // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+                'incomeFacilitiesId.required'       => 'incomeFacilitiesId is required',
             ];
             $this->validate($request, $rules, $customMessages);
             $data =[
@@ -133,7 +132,7 @@ class FinanceController extends Controller
                 'date'                              =>  $request['date'],
                 'remarks'                           =>  $request['remarks'],
                 'id'                                =>  $request['id'],
-                // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
+                'incomeFacilitiesId'                =>  $request['incomeFacilitiesId'],
             ];
              $response_data= $this->apiService->createData('emis/organization/finance/updateIncomeInformation', $data );
              return $response_data;
