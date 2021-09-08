@@ -687,7 +687,6 @@ export default {
         data.forEach((item => {
             this.form.attachments.push({file_name:item.name, file_upload:''})
         }));
-       
     },
 }
 </script>

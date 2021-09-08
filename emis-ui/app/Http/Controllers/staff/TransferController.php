@@ -53,6 +53,8 @@ class TransferController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/transfer/getDraftDetails/'.$this->userId());
         return $response_data;
     }
+    
+    //submitting the final application for transfer
     public function submitFinalapplicantDetails(Request $request){
         $service_name = $request->service_name;
         $rules = [

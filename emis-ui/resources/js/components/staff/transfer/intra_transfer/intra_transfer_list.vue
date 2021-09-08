@@ -17,7 +17,7 @@
                         <tr v-for="(item, index) in transfer_list" :key="index">
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.applicant_name}}</td>
-                             <td>{{ item.aplication_number}}</td>
+                            <td>{{ item.aplication_number}}</td>
                             <td>{{ item.created_at}}</td>
                            <td><span class="badge badge-success">{{ item.status}}</span></td>
                            <td>
