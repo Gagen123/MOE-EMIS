@@ -206,15 +206,12 @@ try {
                 }
             },
             loadactiveGlobalList(type){
-                let uri="masters/loadGlobalMasters/"+type;
-                axios.get(uri)
-                .then(response => {
-                    let data = response;
-                    this.sex_idList =  data.data.data;
-                })
-                .catch(function (error) {
-                    console.log("Error loadactivesex_idList:"+error)
-                });
+                let uri = "masters/loadGlobalMasters/"+type;
+                try{
+                    return  axios.get(uri).then(response => { return response.data.data});
+                }catch(e){
+                    console.log('error loadactiveGlobalList '+e);
+                }
             },
             getRequiredDocument(type){
                 let uri = 'masters/organizationMasterController/loadOrganizaitonmasters/ForTransaction__'+type+'/DocumentType';

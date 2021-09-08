@@ -13,6 +13,7 @@ class Substitution extends Migration
             $table->string('name',200)->nullable(false);
             $table->char('gender',36)->nullable(false);
             $table->char('dzongkhag',36)->nullable(false);
+            $table->string('dob')->nullable(false);
             $table->string('contact',50)->nullable();
             $table->string('email',100)->nullable();
             $table->string('qualification',100)->nullable(false);

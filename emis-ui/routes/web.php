@@ -630,6 +630,8 @@ Route::prefix('staff')->group(function () {
 
     Route::prefix('substitution')->group(function (){
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
+        Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
+
     });
 
 
