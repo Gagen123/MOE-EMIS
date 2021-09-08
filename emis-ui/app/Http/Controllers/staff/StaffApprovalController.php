@@ -31,7 +31,7 @@ class StaffApprovalController extends Controller
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
     }
-
+    //This function is for saving the pricipal recruitment application 
     public function savePrincipalApproval(Request $request){
         $this->service_name = $request['application_for'];
         //File Upload
@@ -78,46 +78,49 @@ class StaffApprovalController extends Controller
             $principalApproval_data=$principalApproval_data+[
                 'attachment_details'            =>   $attachment_details,
             ];
-            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            //  dd($workflowdet,$request->application_for);
-            $screen_id="";
-            $status="";
-            $app_role="";
-            $screen_name="";
-            foreach($workflowdet as $work){
-                if(strtolower($work->screenName)==strtolower($request->application_for)){
-                    $screen_id=$work->SysSubModuleId;
-                    $status=$work->Sequence;
-                    $app_role=$work->SysRoleId;
-                    $screen_name=$work->screenName;
-                }
-            }
+            $status=0;
+            $status= $status+1;
 
-            if($screen_id==null || $screen_id==""){
-                return 'No Screen';
-            }
+            //pulling the role id for next verifier or approval 
+            $seq=((int) $request->Sequence +1);
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            $role_id=$next_roleId[0]->SysRoleId;
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/savePrincipalApproval', $principalApproval_data);
+            $appNo=json_decode($response_data)->application_no;
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
                     'table_name'        =>$this->table_name,
-                    'service_name'      =>$screen_name,//screen name
+                    'service_name'      =>$request->screen_name,//screen name
                     'application_number'=>json_decode($response_data)->application_no,
                     'name'              =>$request['application_for'],
-                    'screen_id'         =>$screen_id,
+                    'screen_id'          =>$request->screenId,
                     'status_id'         =>$status,
                     'remarks'           =>null,
-                    'app_role_id'       => $app_role,
+                    'app_role_id'       =>$request->SysRoleId,
                     'user_dzo_id'       =>$this->getUserDzoId(),
                     'access_level'      =>$this->getAccessLevel(),
                     'working_agency_id' =>$this->getWrkingAgencyId(),
                     'action_by'         =>$this->userId(),
                 ];
-                 $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+                $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+                $notification_data=[
+                    'notification_for'              =>$request->screen_name,
+                    'notification_appNo'            =>  $appNo,
+                    'notification_message'          =>  '',
+                    'notification_type'             =>  'role',
+                    'notification_access_type'      =>  'all',
+                    'call_back_link'                =>  'tasklist',
+                    'user_role_id'                  =>$role_id,
+                    'dzo_id'                        =>  $this->getUserDzoId(),
+                    'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                    'access_level'                  =>  $this->getAccessLevel(),
+                    'action_by'                     =>  $this->userId(),
+                ];
+                $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
             }
                  return $response_data;
     }
-
     //Loading the principal recuritment application details
     public function loadPrincipalRecuritmentApplication($appNo="",$type=""){
         $update_data=[
@@ -157,7 +160,6 @@ class StaffApprovalController extends Controller
         // $PrincipalApprovalDetails->app_stage=$workflowstatus;
         return json_encode($PrincipalApprovalDetails);
     }
-
     //updating the principal application during the approval process
     public function updatePrincipalApproval(Request $request){
         $org_status='Verified';
@@ -391,41 +393,46 @@ class StaffApprovalController extends Controller
            $Expatriate_data=$Expatriate_data+[
                     'attachment_details'            =>   $attachment_details,
                 ];
-            $workflowdet=json_decode($this->apiService->listData('system/getRolesWorkflow/submitter/'.$this->getRoleIds('roleIds')));
-            $screen_id="";
-            $status="";
-            $app_role="";
-            $screen_name="";
-            foreach($workflowdet as $work){
-                if(strtolower($work->screenName)==strtolower($request->application_for)){
-                    $screen_id=$work->SysSubModuleId;
-                    $status=$work->Sequence;
-                    $app_role=$work->SysRoleId;
-                    $screen_name=$work->screenName;
-                }
-            }
-            if($screen_id==null || $screen_id==""){
-                return 'No Screen';
-            }
+            $status=0;
+            $status= $status+1;
+            //pulling the role for next verified or approval
+            $seq=((int) $request->Sequence +1);
+            $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            $role_id=$next_roleId[0]->SysRoleId;
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/saveExpatriateRecuritment', $Expatriate_data);
+            $appNo=json_decode($response_data)->application_no;
 
             if($request->action_type!="edit"){
                 $workflow_data=[
                     'db_name'           =>$this->database_name,
                     'table_name'        =>$this->table_name,
-                    'service_name'      =>$screen_name,//screen name
-                    'application_number'=>json_decode($response_data)->application_no,
+                    'service_name'      =>$request->screen_name,//screen name
+                    'application_number'=>$appNo,
                     'name'              =>$request['application_for'],
-                    'screen_id'         =>$screen_id,
+                    'screen_id'          =>$request->screenId,
                     'status_id'         =>$status,
                     'remarks'           =>null,
-                    'app_role_id'       => $app_role,
+                    'app_role_id'       =>$request->SysRoleId,
                     'user_dzo_id'       =>$this->getUserDzoId(),
                     'access_level'      =>$this->getAccessLevel(),
                     'working_agency_id' =>$this->getWrkingAgencyId(),
                     'action_by'         =>$this->userId(),
                 ];
                  $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+                 $notification_data=[
+                    'notification_for'              =>  $request->screen_name,
+                    'notification_appNo'            =>  $appNo,
+                    'notification_message'          =>  '',
+                    'notification_type'             =>  'role',
+                    'notification_access_type'      =>  'all',
+                    'call_back_link'                =>  'tasklist',
+                    'user_role_id'                  =>  $role_id,
+                    'dzo_id'                        =>  $this->getUserDzoId(),
+                    'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                    'access_level'                  =>  $this->getAccessLevel(),
+                    'action_by'                     =>  $this->userId(),
+                ];
+                $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
             }
                  return $response_data;
     }

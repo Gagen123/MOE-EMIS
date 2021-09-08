@@ -27,8 +27,7 @@ export default {
     data(){
         return{
             dataLists:[],
-            roleList:{},
-            
+            roleList:[],
         }
     },
     methods:{
@@ -48,7 +47,6 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response.data;
-                alert(JSON.stringify(data));
                  for(let i=0;i<data.length;i++){
                     this.roleList[data[i].Id] = data[i].Name;
                 }
@@ -65,7 +63,6 @@ export default {
         mounted(){
             this.loadroleList();
             this.TransferConfigurationList();
-           
         },
        watch: {
             dataLists(){
