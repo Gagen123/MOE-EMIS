@@ -958,12 +958,16 @@ Route::prefix('diatery')->group(function (){
 Route::prefix('projections')->group(function (){
     //Data Import
     Route::prefix('data')->group(function (){
+        //old routes - delete after copying functions
         Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
     //Education Indicators
     Route::prefix('education')->group(function (){
         Route::get('/loadEnrollment/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollment'])->name('loadEnrollment');
+        Route::get('/loadEnrollmentByAge/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollmentByAge'])->name('loadEnrollmentByAge');
+        Route::get('/loadTeacherNumbers/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadTeacherNumbers'])->name('loadTeacherNumbers');
+        Route::get('/loadTeacherNationality/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadTeacherNationality'])->name('loadTeacherNationality');
 
         //old routes - delete after copying functions
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
@@ -971,7 +975,7 @@ Route::prefix('projections')->group(function (){
     });
     //Quality Indicators
     Route::prefix('quality')->group(function (){
-        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+        Route::get('/loadClassSize/{type}/{dzo_id}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadClassSize'])->name('loadClassSize');
     });
     //Efficiency Indicators
     Route::prefix('efficiency')->group(function (){

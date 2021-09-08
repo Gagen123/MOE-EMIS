@@ -207,6 +207,12 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/saveFeedback', ['uses' => 'staff\StaffLeadershipSerivcesController@saveFeedback']);
             $router->get('/updatedVisited/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@updatedVisited']);
         });
+
+        //Projections and Indicators
+        $router->group(['prefix' => 'projections_indicators'], function () use ($router) {
+            $router->post('/loadTeacherNumbers', 'staff\ProjectionIndicatorController@loadTeacherNumbers');
+            $router->post('/loadTeacherNationality', 'staff\ProjectionIndicatorController@loadTeacherNationality');
+        });
     });
 
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {

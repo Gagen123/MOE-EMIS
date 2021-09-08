@@ -29,6 +29,12 @@
                     Gender Parity Index
                 </router-link>
             </li>
+            <li class="nav-item pr-1">
+                <router-link to="/ei_teachers_attrition_index" id ="ei_teachers_attrition_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                   <span class=""></span>
+                    Teachers Attrition Rate
+                </router-link>
+            </li>
         </ul>
         <router-view></router-view>
     </div>

@@ -273,9 +273,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
         });
 
-
+        //Class Projections
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
+            $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        //Projections and Indicators
+        $router->group(['prefix' => 'projections_indicators'], function () use ($router) {
+            $router->get('/getOrgClassIds/{class_data}', 'projections\EducationIndicatorController@getOrgClassIds');
+            $router->get('/getOrgIds/{org_data}', 'projections\EducationIndicatorController@getOrgIds');
             $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
         });
 
@@ -484,8 +491,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         });
 
-
     });
+
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadParentSchoolList/{orgId}', ['uses' => 'LoadOrganizationController@loadParentSchoolList']);

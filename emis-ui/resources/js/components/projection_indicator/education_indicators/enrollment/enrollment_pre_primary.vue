@@ -6,15 +6,15 @@
                     <tbody>
                         <tr>
                             <th>Category</th>
-                            <th>Public</th>
-                            <th>Private</th>
+                            <th>Male</th>
+                            <th>Female</th>
                             <th>Total</th>
                         </tr>
-                       <tr v-for="(item, index) in schooleducationCenter" :key="index">
-                            <td>{{item.name}}</td>
-                            <td>{{item.Public_School}}</td>
-                            <td>{{item.Private_School}}</td>
-                            <td>{{item.Total}}</td>
+                       <tr>
+                            <td>Pre-Primary (PP)</td>
+                            <td>{{this.male}}</td>
+                            <td>{{this.female}}</td>
+                            <td>{{this.male + this.female}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -33,52 +33,31 @@
 export default {
     data(){
         return{
-            schooleducationCenter:[],
-            // primary_private:'',
-            // public_private:'',
-            // middle_private:'',
-            // middle_private:'',
-            // lower_private:'',
-            // lower_private:'',
-            // higher_private:'',
-            // higher_private:'',
+            studentData:[],
+            male:'',
+            female:''
            
         }
     },
     methods:{
         async generatesdetail(dzo_id){
-            let type = "pre_primary";
-            
+            let type = "PrePrimary";
             let uri = 'projections/education/loadEnrollment/'+type+'/'+dzo_id;
+
             try{
                 axios.get(uri).then(response => { 
-                    this.schooleducationCenter = response.data.data;
+                    this.studentData = response.data.data;
 
                     //Plotting Graph
-                    if(this.schooleducationCenter!=""){
-                        for(let i=0;i<this.schooleducationCenter.length;i++){
-                            if(this.schooleducationCenter[i].name == "Primary School"){
-                                this.primary_private = this.schooleducationCenter[i].Private_School;
-                                this.primary_public = this.schooleducationCenter[i].Public_School;
-                            }
-                            if(this.schooleducationCenter[i].name == "Middle Secondary School"){
-                                this.middle_private = this.schooleducationCenter[i].Private_School;
-                                this.middle_public = this.schooleducationCenter[i].Public_School;
-                            }
-                            if(this.schooleducationCenter[i].name == "Lower Secondary School"){
-                                this.lower_private = this.schooleducationCenter[i].Private_School;
-                                this.lower_public = this.schooleducationCenter[i].Public_School;
-                            }
-                            if(this.schooleducationCenter[i].name == "Higher Secondary School"){
-                                this.higher_private = this.schooleducationCenter[i].Private_School;
-                                this.higher_public = this.schooleducationCenter[i].Public_School;
-                            }
-                        }
+                    if(this.studentData!=""){
+                        this.male = this.studentData['PP'].male;
+                        this.female = this.studentData['PP'].female;
+                        
                         var areaChartData = {
-                            labels  : ['Primary', 'Middle Secondary', 'Lower Secondary', 'Higher Secondary'],
+                            labels  : ['Pre-Primary (PP)'],
                             datasets: [
                                 {
-                                    label               : 'Public',
+                                    label               : 'Male',
                                     backgroundColor     : 'rgba(60,141,188,0.9)',
                                     borderColor         : 'rgba(60,141,188,0.8)',
                                     pointRadius          : false,
@@ -86,10 +65,10 @@ export default {
                                     pointStrokeColor    : 'rgba(60,141,188,1)',
                                     pointHighlightFill  : '#fff',
                                     pointHighlightStroke: 'rgba(60,141,188,1)',
-                                    data                : [this.primary_public, this.middle_public, this.lower_public, this.higher_public]
+                                    data                : [this.male]
                                 },
                                 {
-                                    label               : 'Private',
+                                    label               : 'Female',
                                     backgroundColor     : 'rgba(136, 22, 236)',
                                     borderColor         : 'rgba(136, 22, 236)',
                                     pointRadius         : false,
@@ -97,19 +76,7 @@ export default {
                                     pointStrokeColor    : '#c1c7d1',
                                     pointHighlightFill  : '#fff',
                                     pointHighlightStroke: 'rgba(220,220,220,1)',
-                                    data                : [this.primary_private, this.middle_private, this.lower_private, this.higher_private]
-                                },
-                                {
-                                    label               : 'Total',
-                                    backgroundColor     : 'rgba(136, 22, 1)',
-                                    borderColor         : 'rgba(136, 22, 1)',
-                                    pointRadius         : false,
-                                    pointColor          : 'rgba(136, 22, 1)',
-                                    pointStrokeColor    : '#c1c7d1',
-                                    pointHighlightFill  : '#fff',
-                                    pointHighlightStroke: 'rgba(220,220,220,1)',
-                                    data                : [this.primary_public+this.primary_private, this.middle_public+this.middle_private, 
-                                                            this.lower_public+this.lower_private, this.higher_public+this.higher_private]
+                                    data                : [this.female]
                                 },
                             ]
                         }

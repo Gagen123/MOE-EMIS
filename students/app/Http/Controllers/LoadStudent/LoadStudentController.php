@@ -49,7 +49,8 @@ class LoadStudentController extends Controller{
             COUNT(CASE WHEN FLOOR(DATEDIFF(CURRENT_DATE,s.DateOfBirth) / 365.25)>16 AND s.CmnSexId='".$female."' THEN 1 END) abovefemale";
         }
         $query =$query ." FROM std_student s JOIN std_student_class_stream c ON s.id=c.StdStudentId
-        WHERE c.OrgClassStreamId IN (".rtrim($orgclas,', ').")";
+                            WHERE c.OrgClassStreamId IN (".rtrim($orgclas,', ').")";
+                            
         $records=DB::select($query);
         return $records;
     }
