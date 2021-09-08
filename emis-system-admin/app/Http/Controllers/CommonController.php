@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
@@ -100,7 +101,12 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                if(Str::endsWith($result_data, 'WHERE ')){
+                        $result_data.=' (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                }else{
+                        $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                }
+
             }
 
             //pulling application for the transfer

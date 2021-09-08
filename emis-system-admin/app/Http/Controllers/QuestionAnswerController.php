@@ -237,7 +237,7 @@ class QuestionAnswerController extends Controller{
             if(strpos($type,"SSS")!==false){
                 $questionlist = DB::table('question_details as q')
                 ->join('question_category as c', 'q.category_id', '=', 'c.id')
-                ->select('q.name', 'q.id', 'q.answer_type') 
+                ->select('q.name', 'q.id', 'q.answer_type')
                 ->where('q.status', '=', 1)
                 // ->where('c.name', '=', '%' . Input::get('name') . '%')
                 ->where('c.name',str_replace('SSS',' ',explode("_",$type)[1]))
@@ -246,7 +246,7 @@ class QuestionAnswerController extends Controller{
             else{
                 $questionlist = DB::table('question_details as q')
                     ->join('question_category as c', 'q.category_id', '=', 'c.id')
-                    ->select('q.name', 'q.id', 'q.answer_type') 
+                    ->select('q.name', 'q.id', 'q.answer_type')
                     ->where('q.status', '=', 1)
                     // ->where('c.name', '=', '%' . Input::get('name') . '%')
                     ->where('c.name', 'LIKE',explode("_",$type)[1]. '%')
@@ -309,6 +309,7 @@ class QuestionAnswerController extends Controller{
             }
         }
         if($request->actiontype=="edit"){
+            $model="";//added this variable to remove below error by Tshewang
             $data = $model::find($request->id);
             //prepare data to save in audit
             $messs_det="";
@@ -322,7 +323,7 @@ class QuestionAnswerController extends Controller{
             $procid=DB::select("CALL emis_audit_proc('".$this->database."','".$this->database_table."','".$request->id."','".$messs_det."','".$request->user_id."','Edit')");
 
             //replace the data by request data to update current detials
-            $data->name             = $request->name;
+            $data->name  = $request->name;
             if($request->record_type=="Service" || $request->record_type=="Category"){
                 $data->parent_id    =  $request->parent_field;
             }
