@@ -79,15 +79,18 @@ class StudentProgramController extends Controller
 
     public function loadStudentPrograms($param=""){
         $org_id = $param;
-      
+        //dd($param);
         //commented by Tshewang and added CeaProgrammeTypeId in the select statement for creating program and clubs in organizaiton
         // $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
         $records = DB::table('cea_school_programme')
             ->join('cea_programme', 'cea_school_programme.CeaProgrammeId', '=', 'cea_programme.id')
             ->join('cea_programme_supporter', 'cea_school_programme.CeaProgrammeSupporterId', '=', 'cea_programme_supporter.id')
             ->join('cea_programme_type', 'cea_school_programme.CeaProgrammeTypeId', '=', 'cea_programme_type.id')
-            ->select('cea_school_programme.*','CeaProgrammeTypeId', 'cea_programme.name AS program_name',
-            'cea_programme_supporter.name AS supporter_name')
+            // ->select('cea_school_programme.*','CeaProgrammeTypeId', 'cea_programme.name AS program_name',
+            // 'cea_programme_supporter.name AS supporter_name')
+            
+             ->select('cea_school_programme.*', 'cea_programme.name AS program_name',
+             'cea_programme_supporter.name AS supporter_name', )
             ->where('cea_school_programme.OrgOrganizationId', $org_id)
             // ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
             ->get();
@@ -153,9 +156,9 @@ class StudentProgramController extends Controller
      * Get the Program Details given a program id
      */
 
-    public function getProgramDetails($param=""){
-        $id = $param;
+    public function getProgramDetails($id=""){
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
+       // dd($response_data);
         //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();
         return $this->successResponse($response_data);
       //  dd($response_data);

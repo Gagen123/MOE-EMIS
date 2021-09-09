@@ -19,8 +19,9 @@ use App\Models\masters\RatingType;
 use App\Models\masters\ReasonsForAbsent;
 use App\Models\masters\SubjectAssessmentType;
 use App\Models\masters\SubjectAssessmentTypeHistory;
+use App\Models\masters\TeachingSubject;
 use Exception;
-use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Continue_;        
 
 class AcademicMastersController extends Controller
 {
@@ -31,7 +32,7 @@ class AcademicMastersController extends Controller
     public $database="academic_db";
 
     public function saveAcademicMasters(Request $request) {
-
+       // dd($request);
         if($request['record_type']=="subject"){
             if($request['action_type'] =="add"){
                 $rules = [
@@ -272,27 +273,21 @@ class AcademicMastersController extends Controller
                 $responsedata = $data;
             }
         }
-        if($request['record_type'] == 'teaching_subject') {
-            $rules = [
-                'name'              =>  'required',
-                'code'              =>  'required',
-                'displayorder'      => 'required',
-                'status'            =>  'required',
-            ];
-            $customMessages = [
-                'name.required'                 => 'This field is required',
-                'code.required'                 => 'This field is required',
-                'displayorder.required'         => 'This field is required',
-                'status.required' => 'This field is required',
-            ];
-
+        if($request['record_type']=="teaching_subject"){
             if($request['action_type'] =="add"){
-                $new_rules = array('name' =>'required|unique:teaching_sub');
-                $final_rules=array_merge($rules, $new_rules);
-
-                $new_customMessages = array('name.required' => 'This field is required');
-                $final_customMessages=array_merge($customMessages, $new_customMessages);
-                $this->validate($request, $final_rules, $final_customMessages);
+                $rules = [
+                    'name'              =>  'required',
+                    'code'              =>  'required',
+                    'displayorder'      =>  'required',
+                    'status'            =>  'required',
+                ];
+                $customMessages = [
+                    'name.required'                 => 'This field is required',
+                    'code.required'                 => 'This field is required',
+                    'displayorder.required'         => 'This field is required',
+                    'status.required'               => 'This field is required',
+                ];
+                $this->validate($request, $rules,  $customMessages);
                 $data = [
                     'name'              =>  $request['name'],
                     'code'              =>  $request['code'],
@@ -302,21 +297,36 @@ class AcademicMastersController extends Controller
                     'created_by'        =>  $request['user_id'],
                     'created_at'        =>   date('Y-m-d h:i:s'),
                 ];
-              $responsedata= ReasonsForAbsent::create($data);
-            }
-            if($request['action_type'] =="edit"){
-                $new_rules = array('name' =>'required');
-                $final_rules=array_merge($rules, $new_rules);
+               // dd($data);
+            //  try{  
+                  $responsedata= TeachingSubject::create($data);
+             //   }catch(Exception $e){
+             //     dd($e);
+            //  }
+            } 
+            if($request['action_type']=="edit"){
+                $rules = [
+                    'name'              =>  'required',
+                    'code'              =>  'required',
+                    'displayorder'      =>  'required',
+                    'status'            =>  'required',
+                ];
+                $customMessages = [
+                    'name.required'                 => 'This field is required',
+                    'code.required'                 => 'This field is required',
+                    'displayorder.required'         => 'This field is required',
+                    'status.required'               => 'This field is required',
+                ];
+                
+                $this->validate($request, $rules,  $customMessages);
 
-                $new_customMessages = array('name.required' => 'This field is required');
-                $final_customMessages=array_merge($customMessages, $new_customMessages);
-
-                $this->validate($request, $final_rules,  $final_customMessages);
-              
-                $data = ReasonsForAbsent::find($request['id']);
-                $messs_det='name'.$data->name.'; status:'.$data->status;
-                $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_reasons_for_absent','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data = TeachingSubject::find($request['id']);
+                $messs_det='name:'.$data->name.'; code:'.$data->code.'; displayorder:'.$data->displayorder.';  description'.$data->description.'; status:'.$data->status;
+              //  $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_teaching_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
+                $data->description = $request['description'];
+                $data->code = $request['code'];
+                $data->displayorder = $request['displayorder'];
                 $data->status = $request['status'];
                 $data->update();
                 $responsedata = $data;
@@ -421,6 +431,10 @@ class AcademicMastersController extends Controller
         if($param == "promotion_sub_group"){
             $promotion_sub_group = DB::select('SELECT id,description FROM aca_promotion_sub_group ORDER BY (id<0),id');
             return $this->successResponse($promotion_sub_group);
+        }
+        if($param == "all_teaching_subject"){
+            $teachingSub = DB::select('SELECT id, name, code, displayorder, description, status FROM aca_teaching_subject ORDER BY displayorder');
+            return $this->successResponse($teachingSub);
         }
     }
     public function loadClassSubject($class_id="",$stream_id=""){

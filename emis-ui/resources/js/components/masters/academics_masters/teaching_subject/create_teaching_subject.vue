@@ -13,15 +13,17 @@
                         <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.displayorder" :class="{ 'is-invalid': form.errors.has('displayorder') }" id="displayorder" @change="remove_err('displayorder')" type="text">
                         <has-error :form="form" field="displayorder"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Discription<span class="text-danger">*</span></label> 
-                        <input class="form-control form-control-sm" v-model="form.discription" :class="{ 'is-invalid': form.errors.has('discription') }" id="discription" @change="remove_err('discription')" type="text">
-                        <has-error :form="form" field="discription"></has-error>
+                        <label>Description<span class="text-danger">*</span></label> 
+                        <input class="form-control form-control-sm" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <has-error :form="form" field="description"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
@@ -47,7 +49,7 @@ export default {
                 name: '',
                 code: '',
                 displayorder: '',
-                discription: '',
+                description: '',
                 status: 1,
                 record_type:'teaching_subject',
                 action_type:'add',
@@ -65,7 +67,7 @@ export default {
                 this.form.name= '';
                 this.form.code = '';
                 this.form.displayorder = '';
-                this.form.discription = '';
+                this.form.description = '';
                 this.form.status= 1;
             }
             if(type=="save"){

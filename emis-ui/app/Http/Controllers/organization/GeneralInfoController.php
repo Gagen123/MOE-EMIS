@@ -87,7 +87,7 @@ class GeneralInfoController extends Controller
      * For Furniture
      */
 
-    public function getFurnitureType(){
+    public function getFurnitureType(){ 
        // dd('m here');
         $type = $this->apiService->listData('emis/organization/furniture/getFurnitureType');
         return $type;

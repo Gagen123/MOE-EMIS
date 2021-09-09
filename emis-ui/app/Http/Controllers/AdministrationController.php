@@ -342,6 +342,7 @@ class AdministrationController extends Controller{
 
         $request['user_id'] = $this->userId();
         $data = $request->all();
+      //  dd( $data);
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
     }

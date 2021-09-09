@@ -195,6 +195,11 @@ class StudentMasterController extends Controller{
         return $response_data;
     }
 
+    public function loadActiveProgramLists($itemId=""){
+        //  dd('m here');
+        $itemList = $this->apiService->listData('emis/masters/students/loadActiveProgramLists/'.$itemId);
+        return $itemList;
+    }
     public function saveCounsellingType(Request $request){
         //dd($request);
         $rules = [

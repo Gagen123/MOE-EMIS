@@ -5,7 +5,7 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Type:<i class="text-danger">*</i></label>
                     <select v-model="student_form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type">
-                        <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{item.Name}}</option>
+                        <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="student_form" field="program_type"></has-error>
                 </div>
@@ -75,7 +75,7 @@ export default {
             .catch(function (error) {
                 console.log("Error......"+error)
             });
-        }, 
+        },
 
         loadActiveProgramList(type){
             let uri="masters/loadActiveStudentMasters/"+type;
@@ -150,30 +150,22 @@ export default {
                 this.student_form.supporter=$('#supporter').val();
             }
         },
-        getStudentProgramDetails(id){
-            
+        getStudentProgramDetails(id){ 
             axios.get('students/getProgramDetails/'+id)
             .then((response) => {  
-               
+            //   alert(this.student_form.program);
             // alert(JSON.stringify(response.data.data));
                 let data=response.data.data;
                 this.student_form.id= data.id;
                 this.student_form.program_type = data.CeaProgrammeTypeId;
+                $('#program_type').val(data.CeaProgrammeTypeId).trigger('change');
+                this.loadActiveProgramTypeList();
                 this.student_form.program = data.CeaProgrammeId;
+                this.loadActiveProgramList();
                 this.student_form.year = data.EstablishmentYear;
                 this.student_form.supporter= data.CeaProgrammeSupporterId;
                 this.student_form.remarks= data.Remarks;
 
-            //    // let prop=data.roles;
-            //     let rolesAssigned=[];
-            //     for(let i=0;i<prop.length;i++){
-            //         rolesAssigned.push({teacher:prop[i].StfStaffId, role:prop[i].CeaRoleId, remarks:prop[i].Remarks});
-            //     }
-                // this.count=data.length;
-                // this.student_form.assigned_staff = rolesAssigned;
-                this.loadActiveProgramList();
-                this.loadActiveSupportList();
-                this.loadActiveProgramTypeList();
             })
             .catch((error) =>{  
                 console.log("Error:"+error);
@@ -199,6 +191,7 @@ export default {
     created() {
         this.getStudentProgramDetails(this.$route.params.data.id);
     },
+
 
 }
 </script>
