@@ -234,5 +234,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'substitution'], function () use ($router) {
         $router->post('/savestaff', ['uses' => 'staff\SubstitutionController@savestaff']);
         $router->get('/loadStaff/{type}/{model}', ['uses' => 'staff\SubstitutionController@loadStaff']);
+        $router->get('/loadsubstitutestaff', ['uses' => 'staff\SubstitutionController@loadsubstitutestaff']);
     });
 });

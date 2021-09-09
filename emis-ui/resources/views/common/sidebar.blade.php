@@ -829,10 +829,18 @@
                 </ul>
             </li>
 
+            <li class="nav-item" id="tre">
+                <router-link to="/tre" class="nav-link">
+                    <p>
+                        <i class="fas fa-users-cog nav-icon"></i>
+                     TRE
+                    </p>
+                </router-link>
+            </li>
             <li class="nav-item" id="track_application">
                 <router-link to="/track_application" class="nav-link">
                     <p>
-                        <i class="fa fa-search nav-icon"></i>
+                        <i class="fa fa-search nav-icon"></i>  
                         Track Application
                     </p>
                 </router-link>
