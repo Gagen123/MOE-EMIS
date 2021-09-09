@@ -17,7 +17,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item" id="dzongkhagmaster">
-                        <router-link to="/global_master" class="nav-link pt-1 pb-1">
+                        <router-link to="/global_master" class="nav-link pt-1 pb-1" onclick="afterclick()">
                             <i class="fa fa-globe nav-icon"></i>
                             Common Masters
                         </router-link>
@@ -196,9 +196,7 @@
                 </ul>
             <!--academic-->
 
-                <li class="nav-item has-treeview" id="organizationlink">
-            </li>
-            @if(session('User_Details')!=null)
+            {{-- @if(session('User_Details')!=null)
                 @foreach (session('User_Details')['modules'] as $mod)
                     @if($mod['module_route']!=null || $mod['module_route']!="")
                     <li class="nav-item" >
@@ -289,7 +287,10 @@
                     </li>
                     @endif
                 @endforeach
-            @endif
+            @endif --}}
+
+            <span id="sidebars"></span>
+
             <br>
             <br>
             <hr>
@@ -480,7 +481,6 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="management_body" onclick="setclass('organizationlink','','management_body')">
-                    <!-- <li class="nav-item" id="track_application"> -->
                         <router-link to="/management_body" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -489,7 +489,6 @@
                         </router-link>
                     </li>
                     <li class="nav-item" id="projection_index" onclick="setclass('organizationlink','','projection_index')">
-                    <!-- <li class="nav-item" id="track_application"> -->
                         <router-link to="/projection_index" class="nav-link">
                             <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
@@ -555,14 +554,6 @@
                             </p>
                         </router-link>
                     </li>
-                    {{-- <li class="nav-item has-treeview" id="staff_self_update">
-                        <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
-                            <p>
-                            <i class="fa fa-angle-double-right nav-icon"></i>
-                                Self Service
-                            </p>
-                        </router-link>
-                    </li> --}}
                     <li class="nav-item" id="staff_services_index">
                         <router-link to="/staff_services_index" class="nav-link">
                             <p>
@@ -655,23 +646,6 @@
                             </p>
                         </router-link>
                     </li>
-                    {{-- <li class="nav-item" id="studenthealth">
-                        <router-link to="/student_health" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Remedial Actions
-                            </p>
-                        </router-link>
-                    </li> --}}
-                    <!-- Non-Academic Activities -->
-                    {{-- <li class="nav-item" id="studenthealth">
-                        <router-link to="/student_health" class="nav-link">
-                            <p>
-                                <i class="fa fa-angle-double-right nav-icon"></i>
-                                Hobbies & Interest
-                            </p>
-                        </router-link>
-                    </li> --}}
                     <li class="nav-item" id="programs">
                         <router-link to="/student_programs_clubs" class="nav-link">
                             <p>

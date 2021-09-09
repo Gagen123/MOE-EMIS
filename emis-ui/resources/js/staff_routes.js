@@ -520,16 +520,6 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
-            { path: '/substitute_staff',
-                component: require('./components/staff/substitute/substitute_index.vue').default,
-                children:[
-                    { path: '/',name:'substitute',  component: require('./components/staff/substitute/list_substitute.vue').default },
-                    { path: '/list_substitute',name:'list_substitute',  component: require('./components/staff/substitute/list_substitute.vue').default },
-                    { path: '/create_substitute',name:'create_substitute', component: require('./components/staff/substitute/create_substitute.vue').default },
-                    { path: '/edit_substitute', name:'edit_substitute', component: require('./components/staff/substitute/edit_substitute.vue').default },
-                ],
-            },
-
             //Transfer reporting from staff transfer
             { path: '/reporting',
             component: require('./components/staff/reporting/report_index.vue').default,
@@ -548,6 +538,16 @@ const routes = [
                     { path: '/list_transfer_window',name:'list_transfer_window',  component: require('./components/staff/transfer_window/transfer_window_list.vue').default },
                     { path: '/create_transfer_window',name:'create_transfer_window', component: require('./components/staff/transfer_window/create_transfer_window.vue').default },
                     { path: '/edit_transfer_window', name:'edit_transfer_window', component: require('./components/staff/transfer_window/edit_transfer_window.vue').default },
+                ],
+            },
+
+            { path: '/seperation_details',
+                component: require('./components/staff/second_seperation/seperation_details/seperation_index.vue').default,
+                children:[
+                    { path: '/', name:'seperation_details',  component: require('./components/staff/second_seperation/seperation_details/list_seperation_details.vue').default },
+                    { path: '/list_seperation_details',name:'list_seperation_details',  component: require('./components/staff/second_seperation/seperation_details/list_seperation_details.vue').default },
+                    { path: '/create_seperation_details',name:'create_seperation_details', component: require('./components/staff/second_seperation/seperation_details/create_seperation_details.vue').default },
+                    { path: '/edit_seperation_details', name:'edit_seperation_details', component: require('./components/staff/second_seperation/seperation_details/edit_seperation_details.vue').default },
                 ],
             },
         ]
@@ -604,15 +604,17 @@ const routes = [
                 ],
             },
 
-            { path: '/seperation_details',
-                component: require('./components/staff/second_seperation/seperation_details/seperation_index.vue').default,
+            { path: '/secondment_details',
+                component: require('./components/staff/second_seperation/secondment_details/secondment_index.vue').default,
                 children:[
-                    { path: '/', name:'seperation_details',  component: require('./components/staff/second_seperation/seperation_details/list_seperation_details.vue').default },
-                    { path: '/list_seperation_details',name:'list_seperation_details',  component: require('./components/staff/second_seperation/seperation_details/list_seperation_details.vue').default },
-                    { path: '/create_seperation_details',name:'create_seperation_details', component: require('./components/staff/second_seperation/seperation_details/create_seperation_details.vue').default },
-                    { path: '/edit_seperation_details', name:'edit_seperation_details', component: require('./components/staff/second_seperation/secondment_details/edit_secondment_details.vue').default },
+                    { path: '/', name:'secondment_details',  component: require('./components/staff/second_seperation/secondment_details/list_secondment_details.vue').default },
+                    { path: '/list_secondment_details',name:'list_secondment_details',  component: require('./components/staff/second_seperation/secondment_details/list_secondment_details.vue').default },
+                    { path: '/create_secondment_details',name:'create_secondment_details', component: require('./components/staff/second_seperation/secondment_details/create_secondment_details.vue').default },
+                    { path: '/edit_secondment_details', name:'edit_secondment_details', component: require('./components/staff/second_seperation/secondment_details/edit_secondment_details.vue').default },
                 ],
             },
+
+
 
 
         ]
@@ -852,16 +854,6 @@ const routes = [
         component: require('./components/staff/second_seperation/second_seperation_index.vue').default,
         children:[
             { path: '/', name:'staff_second_seperation', component: require('./components/staff/second_seperation/second_seperation_list.vue').default },
-            { path: '/secondment_details',
-                component: require('./components/staff/second_seperation/secondment_details/secondment_index.vue').default,
-                children:[
-                    { path: '/', name:'secondment_details',  component: require('./components/staff/second_seperation/secondment_details/list_secondment_details.vue').default },
-                    { path: '/list_secondment_details',name:'list_secondment_details',  component: require('./components/staff/second_seperation/secondment_details/list_secondment_details.vue').default },
-                    { path: '/create_secondment_details',name:'create_secondment_details', component: require('./components/staff/second_seperation/secondment_details/create_secondment_details.vue').default },
-                    { path: '/edit_secondment_details', name:'edit_secondment_details', component: require('./components/staff/second_seperation/secondment_details/edit_secondment_details.vue').default },
-                ],
-            },
-
 
 
 

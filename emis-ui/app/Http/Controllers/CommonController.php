@@ -157,4 +157,11 @@ class CommonController extends Controller{
         return $data;
     }
 
+    public function getscreens($type=""){
+        $token =Session::get('User_Token');
+        $headers['Authorization'] = 'bearer '. $token;
+        $role_riv=$this->apiService->listData('getAllPrivilegesOnRoles/'.$type.'__'.$this->getRoleIds('roleIds'), [], $headers);
+        return $role_riv;
+    }
+
 }
