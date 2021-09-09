@@ -452,16 +452,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadactivePdzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.p_dzongkhagList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error loadactivePdzongkhagList:"+error)
-            });
-        },
+
         async getgewoglist(id){
             let dzoId=$('#dzongkhag').val();
             this.gewog_list = [];
@@ -561,16 +552,7 @@ export default {
                 });
             }
         },
-        loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.sex_idList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error loadactivesex_idList:"+error)
-            });
-        },
+
         loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
             axios.get(uri)
             .then(response => {
@@ -578,9 +560,7 @@ export default {
                 this.marital_statusList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log(error);
             });
         },
         loadpositiontitleList(uri="staff/loadStaffMasters/active/PositionTitle"){
@@ -1065,7 +1045,7 @@ export default {
             }
         },
     },
-     mounted() {
+    async mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -1079,9 +1059,9 @@ export default {
             this.changefunction(id);
         });
         this.loadactivecountryList();
-        this.loadactivePdzongkhagList();
+        this.p_dzongkhagList =await this.loadactivedzongkhags();
         this.loadactivedzongkhagList();
-        this.loadactivesex_idList();
+        this.sex_idList =  await this.loadactiveGlobalList('all_active_gender');
         this.loadactivemaritalList();
         this.loadpositiontitleList();
         this.loadactivecureerstageList();

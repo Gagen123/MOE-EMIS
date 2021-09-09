@@ -42,7 +42,7 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgApplications/Private_School'){
+        loadDataList(uri='organizationApproval/loadOrgApplications/Private_School'){
             axios.get(uri)
             .then(response => {
                 let data = response;

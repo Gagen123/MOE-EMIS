@@ -3,11 +3,11 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Downgradation</label>
-                        </a>
-                    </li>
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -100,29 +100,6 @@
                                         <has-error :form="form" field="level"></has-error>
                                     </div>
                                 </div>
-
-                                    <!--
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
-                                            <input type="checkbox" v-model="form.class" :value="item.classId">
-                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                        </span>
-                                    </span>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
-                                            <label class="pr-3">
-                                                {{ item.class }}
-                                                <span v-if="item.stream"> -
-                                                    {{  item.stream  }}
-                                                </span>
-                                            </label>
-                                        </span>
-                                    </span>
-                                </div> -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>

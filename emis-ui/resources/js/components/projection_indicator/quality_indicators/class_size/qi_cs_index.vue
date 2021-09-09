@@ -17,11 +17,12 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="mb-0">Organization Category:</label>
                         <select class="form-control select2" id="category_id">
+                            <option value="ECR"> Extended Classroom</option>
                             <option value="Primary"> Primary Education</option>
                             <option value="Middle"> Middle Secondary Education</option>
                             <option value="Lower"> Lower Secondary Education</option>
                             <option value="Higher"> Higher Secondary Education</option>
-                            <option value="Tertiary"> Tertiary Education</option>
+                            <option value="Special"> Special Institute</option>
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
                     </div>
@@ -46,18 +47,21 @@ export default {
         loadpage:function(){
             let dzo_id=$('#dzongkhag_id').val();
             let type=$('#category_id').val();
-            let route='growth_primary';
+            let route='cs_ecr';
+            if(type=="Primary"){
+                route='cs_primary';
+            }
             if(type=="Middle"){
-                route='growth_middle_secondary';
+                route='cs_middle_secondary';
             }
             if(type=="Lower"){
-                route='growth_lower_secondary';
+                route='cs_lower_secondary';
             }
             if(type=="Higher"){
-                route='growth_higher_secondary';
+                route='cs_higher_secondary';
             }
-            if(type=="Tertiary"){
-                route='growth_tertiary';
+            if(type=="Special"){
+                route='cs_special_institute';
             }
             // this.$router.push({name:route,query: {dzo_id:dzo_id}});
             this.$router.push({path:route,query: {dzo_id:dzo_id}}).catch(()=>{});

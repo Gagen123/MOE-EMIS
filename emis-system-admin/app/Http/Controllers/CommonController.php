@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
 use App\Models\TaskDetails;
@@ -54,6 +55,8 @@ class CommonController extends Controller{
             return DB::select($result_data);
         }
         else{
+            $result_data.=' t.claimed_by IS NULL AND ';
+            
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
@@ -64,11 +67,11 @@ class CommonController extends Controller{
 
             //pulling workflow set up from system administration such as org approval and change detials etc..
             if($work_flow_from_system_admin_status!=""){
-                $result_data.=' (t.claimed_by IS NULL AND (';
+                $result_data.=' (';
                 foreach($work_flow_from_system_admin_status as $i => $srcn){
                     $result_data.='( t.screen_id="'.$srcn['SysSubModuleId'].'"  AND t.status_id='.($srcn['Sequence']-1).') ';
                     if(sizeof($work_flow_from_system_admin_status)-1==$i){
-                        $result_data.='))';
+                        $result_data.=')';
                     }
                     else{
                         $result_data.=' OR ';
@@ -82,15 +85,15 @@ class CommonController extends Controller{
             //pulling leave application
             if($work_flow_for_leave!=""){
                 if($work_flow_from_system_admin_status==null || $work_flow_from_system_admin_status==""){
-                    $result_data.='(t.claimed_by IS NULL AND (';
+                    $result_data.='(';
                 }
                 else{
-                    $result_data.=' OR (t.claimed_by IS NULL AND (';
+                    $result_data.=' OR (';
                 }
                 foreach($work_flow_for_leave as $i => $srcn){
                     $result_data.='( t.application_number like "L%" AND t.record_type_id="'.$srcn['leave_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_leave)-1==$i){
-                        $result_data.='))';
+                        $result_data.=')';
                     }
                     else{
                         $result_data.=' OR ';
@@ -100,20 +103,24 @@ class CommonController extends Controller{
 
             //pulling application for the leadership selection
             if($work_flow_for_leadership=="Valid"){
-                $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                if(Str::endsWith($result_data, 'AND ')){
+                        $result_data.=' (t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                }else{
+                        $result_data.=' OR (t.application_number like "STF_REC%"  AND t.status_id=1 )';
+                }
             }
 
             //pulling application for the transfer
             // return $work_flow_for_transfer;
             if($work_flow_for_transfer!=""){
-                $result_data.='  OR (t.claimed_by IS NULL AND (';
+                $result_data.='(';
                 foreach($work_flow_for_transfer as $i => $srcn){
-                    $result_data.='( (t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                    $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                     if(sizeof($work_flow_for_transfer)-1==$i){
-                        $result_data.='))';
+                        $result_data.=')';
                     }
                     else{
-                        $result_data.=' OR ';
+                        $result_data.='  OR ';
                     }
                 }
             }
@@ -122,7 +129,7 @@ class CommonController extends Controller{
                 $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
             }
             //final query
-            // return $result_data;
+            return $result_data;
             return DB::select($result_data);
         }
     }

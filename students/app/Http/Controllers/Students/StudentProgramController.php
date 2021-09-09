@@ -156,7 +156,8 @@ class StudentProgramController extends Controller
      * Get the Program Details given a program id
      */
 
-    public function getProgramDetails($id=""){
+    public function getProgramDetails($param=""){
+        $id = $param;
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
        // dd($response_data);
         //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();

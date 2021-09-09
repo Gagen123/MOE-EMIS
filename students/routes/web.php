@@ -285,11 +285,15 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->group(['prefix' => 'loadStudent'], function () use ($router) {
             $router->get('/loadStudents/{type}/{param}', ['uses' => 'LoadStudent\LoadStudentController@loadStudents']);
         });
-    });
 
-    $router->group(['prefix' => 'projections'], function () use ($router) {
-        $router->group(['prefix' => 'bcsea'], function () use ($router) {
-            $router->get('/loadIndicatorResult/{type}', ['uses' => 'Projections\BcseaController@loadIndicatorResult']);
+        //Projections and Indicators
+        $router->group(['prefix' => 'projections_indicators'], function () use ($router) {
+            //Education
+            $router->post('/loadEnrollment', ['uses' => 'Projections\EducationIndicatorController@loadEnrollment']);
+            $router->post('/loadEnrollmentByAge', ['uses' => 'Projections\EducationIndicatorController@loadEnrollmentByAge']);
+
+            //Quality
+            $router->post('/loadClassSize', ['uses' => 'Projections\QualityIndicatorController@loadClassSize']);
         });
     });
 

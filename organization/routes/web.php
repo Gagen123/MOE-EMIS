@@ -273,9 +273,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
         });
 
-
+        //Class Projections
         $router->group(['prefix' => 'projections'], function () use ($router) {
             $router->post('/saveProjections', 'generalInformation\ProjectionsController@saveProjections');
+            $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
+        });
+
+        //Projections and Indicators
+        $router->group(['prefix' => 'projections_indicators'], function () use ($router) {
+            $router->get('/getOrgClassIds/{class_data}', 'projections\EducationIndicatorController@getOrgClassIds');
+            $router->get('/getOrgIds/{org_data}', 'projections\EducationIndicatorController@getOrgIds');
             $router->get('/loadProjections/{orgId}', 'generalInformation\ProjectionsController@loadProjections');
         });
 
@@ -385,7 +392,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->group(['prefix' => 'establishment'], function () use ($router) {
             $router->get('/getLevelInDropdown', 'establishment\EstablishmentController@getLevelInDropdown');
             $router->get('/getLocationInDropdown', 'establishment\EstablishmentController@getLocationInDropdown');
-            $router->post('/saveEstablishment', 'establishment\EstablishmentController@saveEstablishment');
+            $router->post('/saveprivatepublicschoolEstablishment', 'establishment\EstablishmentController@saveprivatepublicschoolEstablishment');
+            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
+            $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
+
             $router->post('/updateEstablishment', 'establishment\EstablishmentController@updateEstablishment');
             $router->get('/loadTeamVerificationList/{id}', 'establishment\EstablishmentController@loadTeamVerificationList');
 
@@ -394,8 +404,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/getClass', 'establishment\EstablishmentController@getClass');
             $router->get('/getStream', 'establishment\EstablishmentController@getStream');
             $router->get('/getClassMappingDetails/{mapping_id}', 'establishment\EstablishmentController@getClassMappingDetails');
-            $router->get('/loaddraftApplication/{type}/{user_id}', 'establishment\EstablishmentController@loaddraftApplication');
-            $router->get('/loadEstablishmentApplciaiton/{record_id}', 'establishment\EstablishmentController@loadEstablishmentApplciaiton');
+
+
             $router->post('/saveUploadedFiles', 'establishment\EstablishmentController@saveUploadedFiles');
             $router->get('/loadOrganizationDetails/{user_id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetails']);
 
@@ -484,8 +494,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         });
 
-
     });
+
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
         $router->get('/loadParentSchoolList/{orgId}', ['uses' => 'LoadOrganizationController@loadParentSchoolList']);

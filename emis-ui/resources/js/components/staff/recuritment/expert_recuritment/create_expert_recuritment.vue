@@ -1,6 +1,15 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" >
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                             <span id="screenName"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div><br>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details"  >
@@ -201,6 +210,12 @@ export default {
             formData.append('application_for', this.form.application_for);
             formData.append('action_type', this.form.action_type);
             formData.append('status', this.form.status);
+            formData.append('screenId', this.screenId);
+            formData.append('SysRoleId', this.SysRoleId);
+            formData.append('Sequence', this.Sequence);
+            formData.append('Status_Name', this.Status_Name);
+            formData.append('screen_name', this.screen_name);
+            formData.append('organization_type', this.form.organization_type);
             axios.post('staff/StaffApprovalController/saveExpatriateRecuritment', formData, config)
             .then((response) => {
                 if(response!=""){
@@ -211,7 +226,7 @@ export default {
                         });
                     }
                     if(response!="" && response!="No Screen"){
-                        let message="Application details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                        let message="Application details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                         this.$router.push({name:'expert_recuritment_acknowledgement',params: {data:message}});
                         Toast.fire({
                             icon: 'success',
@@ -247,6 +262,30 @@ export default {
                 console.log(errors)
             });
         },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Expatriate Recruitment__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
 
@@ -269,6 +308,7 @@ export default {
         }));
     },
      created() {
+         this.loadScreenDetails();
          this.loadcountryList();
 
     },
