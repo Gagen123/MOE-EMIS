@@ -49,6 +49,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadStudentMasters/{param}','Masters\StudentMasterController@loadStudentMasters');
         $router->get('/loadActiveStudentMasters/{param}','Masters\StudentMasterController@loadActiveStudentMasters');
         $router->get('/allActiveStudentDropdowns/{param}/{id}','Masters\StudentMasterController@allActiveStudentDropdowns');
+        $router->get('/loadActiveProgramLists/{typeId}', 'Masters\StudentMasterController@loadActiveProgramLists');
         //get Scouts Section Level By Scouts Section Id
         $router->get('/getScoutSectionLevel/{scoutSectionId}','Masters\StudentMasterController@getScoutSectionLevel');
         $router->get('/getScoutBadge/{scoutSectionId}','Masters\StudentMasterController@getScoutBadge');
@@ -248,7 +249,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentProgram', ['uses' => 'Students\StudentProgramController@saveStudentProgram']);
         $router->get('/loadStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@loadStudentPrograms']);
         $router->get('/listStudentPrograms/{param}', ['uses' => 'Students\StudentProgramController@listStudentPrograms']);
-        $router->get('/getProgramDetails/{param}', ['uses' => 'Students\StudentProgramController@getProgramDetails']);
+        $router->get('/getProgramDetails/{id}', ['uses' => 'Students\StudentProgramController@getProgramDetails']);
         $router->post('/saveProgramMembers', ['uses' => 'Students\StudentProgramController@saveProgramMembers']);
         $router->get('/listProgramMembers/{param}', ['uses' => 'Students\StudentProgramController@listProgramMembers']);
 
@@ -284,11 +285,15 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->group(['prefix' => 'loadStudent'], function () use ($router) {
             $router->get('/loadStudents/{type}/{param}', ['uses' => 'LoadStudent\LoadStudentController@loadStudents']);
         });
-    });
 
-    $router->group(['prefix' => 'projections'], function () use ($router) {
-        $router->group(['prefix' => 'bcsea'], function () use ($router) {
-            $router->get('/loadIndicatorResult/{type}', ['uses' => 'Projections\BcseaController@loadIndicatorResult']);
+        //Projections and Indicators
+        $router->group(['prefix' => 'projections_indicators'], function () use ($router) {
+            //Education
+            $router->post('/loadEnrollment', ['uses' => 'Projections\EducationIndicatorController@loadEnrollment']);
+            $router->post('/loadEnrollmentByAge', ['uses' => 'Projections\EducationIndicatorController@loadEnrollmentByAge']);
+
+            //Quality
+            $router->post('/loadClassSize', ['uses' => 'Projections\QualityIndicatorController@loadClassSize']);
         });
     });
 

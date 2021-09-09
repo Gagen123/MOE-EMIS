@@ -565,7 +565,7 @@ class LoadOrganizationController extends Controller{
         }
 
     }
-
+ 
     public function getOrgProfile($id=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){

@@ -185,6 +185,7 @@ class StudentMasterController extends Controller{
     }
 
     public function loadActiveStudentMasters($param=""){
+       // dd($param);
         $student_masters = $this->apiService->listData('emis/masters/students/loadActiveStudentMasters/'.$param);
         return $student_masters;
     }
@@ -194,6 +195,11 @@ class StudentMasterController extends Controller{
         return $response_data;
     }
 
+    public function loadActiveProgramLists($itemId=""){
+        //  dd('m here');
+        $itemList = $this->apiService->listData('emis/masters/students/loadActiveProgramLists/'.$itemId);
+        return $itemList;
+    }
     public function saveCounsellingType(Request $request){
         //dd($request);
         $rules = [

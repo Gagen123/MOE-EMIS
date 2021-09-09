@@ -78,4 +78,7 @@ class SubstitutionController extends Controller{
             return $response_data;
         }
     }
+    public function loadsubstitutestaff(){
+        
+    }
 }

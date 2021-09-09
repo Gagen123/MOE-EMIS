@@ -142,6 +142,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
     Route::get('/loadActiveStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveStudentMasters'])->name('loadActiveStudentMasters');
     Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
+    Route::get('/loadActiveProgramLists/{typeId}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveProgramLists'])->name('loadActiveProgramLists');
     //GET Scout Section
     Route::get('/getScoutSection', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSection'])->name('');
     //Get Scouts Section Level By Scouts Section Level
@@ -626,9 +627,10 @@ Route::prefix('staff')->group(function () {
 
     });
 
-    Route::prefix('substitution')->group(function (){
+    Route::prefix('substitution')->group(function (){  
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
+        Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
 
     });
 
@@ -931,6 +933,7 @@ Route::prefix('mess_manage')->group(function () {
     Route::post('/saveStockReceived', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceived'])->name('saveStockReceived');
     Route::get('/loadStockReceivedDetails/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceivedDetails'])->name('loadStockReceivedDetails');
     Route::post('/approvereject', [App\Http\Controllers\mess_manage\MessManagementController::class, 'approvereject'])->name('approvereject');
+    Route::post('/saveStockReceivedEdit', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceivedEdit'])->name('saveStockReceivedEdit');
     //just added today
     Route::get('/getStockReceivedDetails/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getStockReceivedDetails'])->name('getStockReceivedDetails');
     Route::get('/viewitemreceived/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'viewitemreceived'])->name('viewitemreceived');
@@ -972,12 +975,16 @@ Route::prefix('diatery')->group(function (){
 Route::prefix('projections')->group(function (){
     //Data Import
     Route::prefix('data')->group(function (){
+        //old routes - delete after copying functions
         Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\BcseaController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
     });
 
     //Education Indicators
     Route::prefix('education')->group(function (){
         Route::get('/loadEnrollment/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollment'])->name('loadEnrollment');
+        Route::get('/loadEnrollmentByAge/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadEnrollmentByAge'])->name('loadEnrollmentByAge');
+        Route::get('/loadTeacherNumbers/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadTeacherNumbers'])->name('loadTeacherNumbers');
+        Route::get('/loadTeacherNationality/{type}/{dzo_id}', [App\Http\Controllers\projections\EducationIndicatorController::class, 'loadTeacherNationality'])->name('loadTeacherNationality');
 
         //old routes - delete after copying functions
         Route::get('/loadEccdChildren/{type}/{dzo_id}', [App\Http\Controllers\projections\ProjectionController::class, 'loadEccdChildren'])->name('loadEccdChildren');
@@ -985,7 +992,7 @@ Route::prefix('projections')->group(function (){
     });
     //Quality Indicators
     Route::prefix('quality')->group(function (){
-        Route::get('/loadIndicatorResult/{type}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadIndicatorResult'])->name('loadIndicatorResult');
+        Route::get('/loadClassSize/{type}/{dzo_id}', [App\Http\Controllers\projections\QualityIndicatorController::class, 'loadClassSize'])->name('loadClassSize');
     });
     //Efficiency Indicators
     Route::prefix('efficiency')->group(function (){

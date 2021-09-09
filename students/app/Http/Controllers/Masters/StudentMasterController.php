@@ -305,6 +305,11 @@ class StudentMasterController extends Controller
         return $this->successResponse($model::where('id',$id)->first());
 
     }
+    public function loadActiveProgramLists($typeId){ 
+        // dd('form services');
+        return $this->successResponse(CeaProgram::where ('CeaProgrammeTypeId',$typeId)->get());
+ 
+    }
 
     /**
      * Function to insert data into the respective tables

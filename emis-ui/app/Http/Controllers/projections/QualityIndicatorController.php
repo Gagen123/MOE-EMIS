@@ -17,15 +17,15 @@ class QualityIndicatorController extends Controller{
     }
 
     /**
-     * Load the Indicator Reports
-     * $type is the whether BCSE or BHSEC
-     */
+    * Load the Quality Indicator (Class Size)
+    * $type is the whether ECCD, Pre-Primary etc
+    * $dzo_id also contains ALL for consolidated for all dzongkhags
+    */
 
-    public function loadIndicatorResult($type=""){
-        $response_data=[];
+   public function loadClassSize($type="", $dzo_id=""){
+       
+       $response_data= $this->apiService->getListData('emis/projections/quality/loadClassSize/'.$type.'/'.$dzo_id);
 
-        $response_data= $this->apiService->getListData('emis/projections/bcsea/loadIndicatorResult/'.$type);
-
-        return $response_data;
-    }
+       return $response_data;
+   }
 }

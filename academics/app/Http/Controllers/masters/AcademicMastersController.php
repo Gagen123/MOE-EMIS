@@ -19,8 +19,9 @@ use App\Models\masters\RatingType;
 use App\Models\masters\ReasonsForAbsent;
 use App\Models\masters\SubjectAssessmentType;
 use App\Models\masters\SubjectAssessmentTypeHistory;
+use App\Models\masters\TeachingSubject;
 use Exception;
-use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\Continue_;        
 
 class AcademicMastersController extends Controller
 {
@@ -31,7 +32,7 @@ class AcademicMastersController extends Controller
     public $database="academic_db";
 
     public function saveAcademicMasters(Request $request) {
-
+       // dd($request);
         if($request['record_type']=="subject"){
             if($request['action_type'] =="add"){
                 $rules = [
@@ -230,10 +231,13 @@ class AcademicMastersController extends Controller
         }
         if($request['record_type'] == 'reason_for_absent') {
             $rules = [
-                'status'  =>  'required',
+               
+                'status'            =>  'required',
+
             ];
             $customMessages = [
-                'status.required' => 'This field is required',
+               
+                'status.required'               => 'This field is required',
             ];
 
             if($request['action_type'] =="add"){
@@ -264,6 +268,65 @@ class AcademicMastersController extends Controller
                 $messs_det='name'.$data->name.'; status:'.$data->status;
                 $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_reasons_for_absent','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
+                $data->status = $request['status'];
+                $data->update();
+                $responsedata = $data;
+            }
+        }
+        if($request['record_type']=="teaching_subject"){
+            if($request['action_type'] =="add"){
+                $rules = [
+                    'name'              =>  'required',
+                    'code'              =>  'required',
+                    'displayorder'      =>  'required',
+                    'status'            =>  'required',
+                ];
+                $customMessages = [
+                    'name.required'                 => 'This field is required',
+                    'code.required'                 => 'This field is required',
+                    'displayorder.required'         => 'This field is required',
+                    'status.required'               => 'This field is required',
+                ];
+                $this->validate($request, $rules,  $customMessages);
+                $data = [
+                    'name'              =>  $request['name'],
+                    'code'              =>  $request['code'],
+                    'displayorder'      =>  $request['displayorder'],
+                    'description'       =>  $request['description'],
+                    'status'            =>  $request['status'],
+                    'created_by'        =>  $request['user_id'],
+                    'created_at'        =>   date('Y-m-d h:i:s'),
+                ];
+               // dd($data);
+            //  try{  
+                  $responsedata= TeachingSubject::create($data);
+             //   }catch(Exception $e){
+             //     dd($e);
+            //  }
+            } 
+            if($request['action_type']=="edit"){
+                $rules = [
+                    'name'              =>  'required',
+                    'code'              =>  'required',
+                    'displayorder'      =>  'required',
+                    'status'            =>  'required',
+                ];
+                $customMessages = [
+                    'name.required'                 => 'This field is required',
+                    'code.required'                 => 'This field is required',
+                    'displayorder.required'         => 'This field is required',
+                    'status.required'               => 'This field is required',
+                ];
+                
+                $this->validate($request, $rules,  $customMessages);
+
+                $data = TeachingSubject::find($request['id']);
+                $messs_det='name:'.$data->name.'; code:'.$data->code.'; displayorder:'.$data->displayorder.';  description'.$data->description.'; status:'.$data->status;
+              //  $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_teaching_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
+                $data->name = $request['name'];
+                $data->description = $request['description'];
+                $data->code = $request['code'];
+                $data->displayorder = $request['displayorder'];
                 $data->status = $request['status'];
                 $data->update();
                 $responsedata = $data;
@@ -368,6 +431,10 @@ class AcademicMastersController extends Controller
         if($param == "promotion_sub_group"){
             $promotion_sub_group = DB::select('SELECT id,description FROM aca_promotion_sub_group ORDER BY (id<0),id');
             return $this->successResponse($promotion_sub_group);
+        }
+        if($param == "all_teaching_subject"){
+            $teachingSub = DB::select('SELECT id, name, code, displayorder, description, status FROM aca_teaching_subject ORDER BY displayorder');
+            return $this->successResponse($teachingSub);
         }
     }
     public function loadClassSubject($class_id="",$stream_id=""){

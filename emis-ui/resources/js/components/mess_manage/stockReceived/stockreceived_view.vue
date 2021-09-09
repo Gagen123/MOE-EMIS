@@ -265,7 +265,7 @@ export default {
                 this.form.quarter=data.quarter_id;
                 $('#quarter').val(data.quarter_id).trigger('change');
                 $('#quarter').prop('disabled',true);
-                this.form.items_received=[];
+                this.form.items_received=[]; 
                 data.itemDetails.forEach(itm => {
                     this.form.items_received.push({
                         item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks, damagequantity:itm.damagequantity

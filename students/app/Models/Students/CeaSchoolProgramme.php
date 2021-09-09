@@ -15,6 +15,7 @@ class CeaSchoolProgramme extends Model
         'id',
         'OrgOrganizationId',
         'CeaProgrammeId',
+        'CeaProgrammeTypeId',
         'EstablishmentYear',
         'CeaProgrammeSupporterId',
         'Remarks'
