@@ -18,31 +18,54 @@
                             <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-8 col-md-8 col-sm-8">
                                     <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{form.organization_type}}</label>
-                                </div>
+                                </div> -->
                             </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Current Capacity:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" readonly v-model="form.currentCapacity" :class="{ 'is-invalid': form.errors.has('currentCapacity') }" @change="remove_error('currentCapacity')" class="form-control" id="currentCapacity"/>
-                                    <has-error :form="form" field="currentCapacity"></has-error>
-                                </div>
+                             <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="category"></has-error>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Capacity:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.proposedCapacity" :class="{ 'is-invalid': form.errors.has('proposedCapacity') }" @change="remove_error('proposedCapacity')" class="form-control" id="proposedCapacity"/>
-                                    <has-error :form="form" field="proposedCapacity"></has-error>
-                                </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
+                                </select>
+                                <has-error :form="form" field="subCategory"></has-error>
                             </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
+                                <has-error :form="form" field="constructionType"></has-error>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
+                            <div class="col-lg-8 col-md-8 col-sm-8">
+                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                            </div>
+                           
+                        </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0">Upload the Required Documents</label>
@@ -92,7 +115,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
@@ -105,9 +127,13 @@ export default {
             classList:[],
             locationList:[],
             streamList:[],
+            categoryList:[],
+            subCategortList:[],
+            contructionTypeList:[],
             form: new form({
-                organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change',
+                organizationId:'', application_type:'expension_change',structureNo:'',
                 application_for:'Expansion', action_type:'add', status:'Submitted',organization_type:'',
+                category: '',subCategory: '',constructionType:'',structureNo: '',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -139,12 +165,12 @@ export default {
         /**
          * method to remove error
          */
-        remove_error(field_id){
+          remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
             }
         },
+
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -179,13 +205,21 @@ export default {
                             formData.append('attachments[]', this.form.ref_docs[i].attach);
                             formData.append('attachmentname[]', this.form.ref_docs[i].name);
                         }
+
                         formData.append('organizationId', this.form.organizationId);
-                        formData.append('currentCapacity', this.form.currentCapacity);
-                        formData.append('proposedCapacity', this.form.proposedCapacity);
+                        formData.append('category', this.form.category);
+                        formData.append('constructionType', this.form.constructionType);
+                        formData.append('subCategory', this.form.subCategory);
+                        formData.append('structureNo', this.form.structureNo);
                         formData.append('application_type', this.form.application_type);
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
 
                         axios.post('organization/saveChangeBasicDetails', formData, config)
@@ -199,7 +233,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Expansion details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Expansion details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'expension_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -249,6 +283,54 @@ export default {
                 this.existing_details=response.data.data;
                 this.category=this.existing_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.existing_details.category.replace('_', " ").slice(1);
 
+            });
+        },
+        getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.categoryList = data;
+            });
+        },
+        getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.subCategortList = data;
+            });
+        },
+        loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
+            axios.get(uri)
+            .then(response => {
+                 let data = response.data.data;
+                this.contructionTypeList =  data;
+            })
+            .catch(function (error) {
+                    console.log('error: '+error);
+            });
+        },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Expansion__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
             });
         },
 
@@ -303,6 +385,10 @@ export default {
     },
 
     mounted() {
+        this.loadScreenDetails();
+        this.getCategoryDropdown();
+        this.getSubCategoryDropdown();
+        this.loadconstructionTypeList(),
         this.getLocation();
         this.loadproposedBy();
         $('[data-toggle="tooltip"]').tooltip();

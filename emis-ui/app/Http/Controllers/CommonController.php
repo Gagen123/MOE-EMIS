@@ -73,9 +73,10 @@ class CommonController extends Controller{
             'user_id'               =>  $this->userId(),
             'type'                  =>  $type,
         ];
-        $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
+        // $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
+        // dd($tr_data);
         // $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
 
         if(config('services.constant.deo_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.deo_role_id'))!==false){
@@ -111,7 +112,7 @@ class CommonController extends Controller{
             'access_level'              =>  $this->getAccessLevel(),
         ];
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
-        dd($response_data);
+        // dd($response_data);
         return $response_data;
 
     }

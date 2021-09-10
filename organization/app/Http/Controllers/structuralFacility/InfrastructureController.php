@@ -54,8 +54,7 @@ class InfrastructureController extends Controller
     public function getSubCategoryInDropdown($categoryId){
         $equi = DB::table('structure_sub_categories as a')
             ->select('a.id as id', 'a.subCategoryName as subCategoryName')
-            ->where('structureCategory','=',$categoryId)
-            ->get();
+            ->where('structureCategory','=',$categoryId)->get();
         return $equi;
     }
 

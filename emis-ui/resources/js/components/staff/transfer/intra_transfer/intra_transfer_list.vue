@@ -58,7 +58,7 @@ export default {
             axios.get('staff/transfer/loadtransferDetails/intra_transfer')
             .then((response) => {
                 let data = response.data
-                this.form.applicant_name = response.data[0].applicant_name;
+                // this.form.applicant_name = response.data[0].applicant_name;
                 this.transfer_list = data;
              })
             .catch((error) => {
