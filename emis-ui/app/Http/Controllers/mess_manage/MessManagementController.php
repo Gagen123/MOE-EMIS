@@ -163,7 +163,7 @@ class MessManagementController extends Controller
             'user_id'                       =>  $this->userId()
 
         ];
-      // dd($stockreceived);
+        dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -364,6 +364,41 @@ class MessManagementController extends Controller
       // dd($request->local_item);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcureEdit', $localprocure);
+         //   dd($response_data);
+            return $response_data;
+        }
+        catch(\GuzzleHttp\Exception\ClientException $e){
+            return $e;
+        }
+    }
+    public function saveStockReceivedEdit(Request $request){
+        //return $request
+        $rules = [
+            'dateOfreceived'             =>  'required',
+
+        ]; 
+        $customMessages = [
+            'dateOfreceived.required'    => 'dateOfprocure is required',
+
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $receive =[
+            'organizationId'         =>  $this->getWrkingAgencyId(),
+            'dateOfreceived'         =>  $request['datdateOfreceivedeOfprocure'],
+            'id'                     =>  $request['id'],
+            'remarks'                =>  $request['remarks'],
+            'quarter'                =>  $request['quarter'],
+            'item_id'                =>  $request['item_id'],        
+            'unit_id'                =>  $request['unit_id'],
+            'quantity'               =>  $request['quantity'],
+            'damagequantity'         =>  $request['damagequantity'],
+            'remarks'                =>  $request['remarks'],
+            'user_id'                =>  $this->userId()
+        ];
+      //  dd($receive);
+      // dd($request->local_item);
+        try{
+            $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcureEdit', $receive);
          //   dd($response_data);
             return $response_data;
         }

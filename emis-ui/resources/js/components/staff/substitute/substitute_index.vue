@@ -18,16 +18,11 @@
 </template>
 <script>
 export default {
-    data(){
-    },
     methods: {
         showadprocess(type){
             this.$router.push("/"+type);
 		},
     },
-    mounted() {
-    },
-
 }
 </script>
 

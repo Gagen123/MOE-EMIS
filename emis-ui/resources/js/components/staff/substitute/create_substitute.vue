@@ -1,6 +1,10 @@
 <template>
     <div>
-        <form class="bootbox-form">
+        <div class="callout callout-danger" style="display:none" id="errorscreen">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
+        <form class="bootbox-form" id="mainform">
             <div class="row form-group">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">CID:<i class="text-danger">*</i></label>
@@ -42,7 +46,7 @@
                     <span class="text-danger" id="dzongkhag_err"></span>
                 </div>
                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">Designation:<i class="text-danger">*</i></label>
+                    <label class="mb-0.5">Qualification:<i class="text-danger">*</i></label>
                     <input v-model="form.qualification" :class="{ 'is-invalid': form.errors.has('qualification') }" type="text" id="qualification" class="form-control" @change="remove_err('qualification')">
                     <has-error :form="form" field="qualification"></has-error>
                     <span class="text-danger" id="designation_err"></span>
@@ -62,7 +66,7 @@
                     <span class="text-danger" id="email_err"></span>
                 </div>
             </div>
-            <div class="row form-group fa-pull-right">
+            <div class="row form-group fa-pull-right" id="actionbtn">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button type="button" class="btn btn-primary" @click="submitDetails()"> <i class="fa fa-save"></i>Save </button>
                 </div>
@@ -86,7 +90,7 @@ export default {
                 contact:'',
                 email:'',
                 qualification:'',
-                action_type:'',
+                action_type:'add',
             }),
         }
     },
@@ -115,59 +119,75 @@ export default {
 
         getDetailsbyCID(){
             if (this.form.cid.length == 11){
-                axios.get('getpersonbycid/'+ this.form.cid)
-                .then(response => {
-                    this.ciderror = '';
-                    let personal_detail = response.data;
-                    if (personal_detail!=""){
-                        let fullname=personal_detail.firstName;
-                        if(personal_detail.middleName!=null && personal_detail.middleName!="null" && personal_detail.middleName!=""){
-                            fullname=fullname+' '+personal_detail.middleName;
-                        }
-                        if(personal_detail.lastName!=null && personal_detail.lastName!="null" && personal_detail.lastName!=""){
-                            fullname=fullname+' '+personal_detail.lastName;
-                        }
-                        $('#cid').prop('disabled',true);
-                        this.form.name = fullname;
-                        $('#name').prop('disabled',true);
-                        this.form.dob =personal_detail.dob;
-                        $('#dob').prop('disabled',true);
+                axios.get('staff/substitution/loadStaff/by_cid__'+this.form.cid+'/SubstitutionModel')
+                .then((response) => {
+                    let data=response.data;
+                    if(data==""){
+                        axios.get('getpersonbycid/'+ this.form.cid)
+                        .then(response => {
+                            this.ciderror = '';
+                            let personal_detail = response.data;
+                            if (personal_detail!=""){
+                                let fullname=personal_detail.firstName;
+                                if(personal_detail.middleName!=null && personal_detail.middleName!="null" && personal_detail.middleName!=""){
+                                    fullname=fullname+' '+personal_detail.middleName;
+                                }
+                                if(personal_detail.lastName!=null && personal_detail.lastName!="null" && personal_detail.lastName!=""){
+                                    fullname=fullname+' '+personal_detail.lastName;
+                                }
+                                $('#cid').prop('disabled',true);
+                                this.form.name = fullname;
+                                $('#name').prop('disabled',true);
+                                this.form.dob =personal_detail.dob;
+                                $('#dob').prop('disabled',true);
 
-                        if(personal_detail.gender=="M"){
-                            personal_detail.gender="male";
-                        }
-                        else if(personal_detail.gender=="F"){
-                            personal_detail.gender="female";
-                        }
-                        else{
-                            personal_detail.gender="others";
-                        }
-                        for(let i=0; i<this.sex_idList.length;i++){
-                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                $('#gender').val(this.sex_idList[i].id).trigger('change');
-                                this.form.gender = this.sex_idList[i].id;
+                                if(personal_detail.gender=="M"){
+                                    personal_detail.gender="male";
+                                }
+                                else if(personal_detail.gender=="F"){
+                                    personal_detail.gender="female";
+                                }
+                                else{
+                                    personal_detail.gender="others";
+                                }
+                                for(let i=0; i<this.sex_idList.length;i++){
+                                    if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
+                                        $('#gender').val(this.sex_idList[i].id).trigger('change');
+                                        this.form.gender = this.sex_idList[i].id;
+                                    }
+                                }
+                                $('#gender').prop('disabled',true);
+                                this.form.dzongkhag = personal_detail.dzongkhagId;
+                                $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                                $('#dzongkhag').prop('disabled',true);
+                                this.form.contact = personal_detail.mobileNumber;
+                            }else{
+                                this.ciderror = 'Invalid CID.';
+                                Swal.fire({
+                                    html: "No data found for matching CID",
+                                    icon: 'info'
+                                });
                             }
-                        }
-                        $('#gender').prop('disabled',true);
-                        this.form.dzongkhag = personal_detail.dzongkhagId;
-                        $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                        $('#dzongkhag').prop('disabled',true);
-                        this.form.contact = personal_detail.mobileNumber;
-                    }else{
-                        this.ciderror = 'Invalid CID.';
-                        Swal.fire({
-                            html: "No data found for matching CID",
-                            icon: 'info'
+                        })
+                        .catch((e) => {
+                            this.ciderror = 'Invalid CID / service down.';
+                            Swal.fire({
+                                html: "No data found for matching CID/service down"+e,
+                                icon: 'error'
+                            });
                         });
+                    }else{
+                        Swal.fire({
+                            html: "this person is already recorded in the system",
+                            icon: 'error'
+                        });
+                        $('#mainform').hide();
+                        $('#errorscreen').show();
+                        $('#message').html('this person is already recorded in the system');
                     }
+
                 })
-                .catch((e) => {
-                    this.ciderror = 'Invalid CID / service down.';
-                    Swal.fire({
-                        html: "No data found for matching CID/service down"+e,
-                        icon: 'error'
-                    });
-                });
+
             }
         },
         submitDetails(){

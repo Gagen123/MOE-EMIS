@@ -17,12 +17,11 @@
                     <tbody>
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.emp_type_id}}</td>
+                            <td>{{ item.cid}}</td>
                             <td>{{ item.name}}</td>
-                            <td>{{ genderArray[item.sex_id]}}</td>
-                            <td>{{ item.working_agency}}</td>
+                            <td>{{ genderArray[item.gender]}}</td>
                             <td>{{ item.email}}</td>
-                            <td>{{ item.contact_no}}</td>
+                            <td>{{ item.contact}}</td>
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
                             </td>
@@ -38,6 +37,7 @@ export default {
     data(){
         return{
             dataList:[],
+            genderArray:{},
             dt:''
         }
     },
@@ -46,18 +46,22 @@ export default {
             this.$router.push({name:"edit_substitute",params:{data:staff}});
 		},
         loadstff(type){
-            axios.get('loadCommons/loadStaffList/'+type)
+            axios.get('staff/substitution/loadStaff/'+type)
             .then((response) => {
-                this.dataList =  response.data.data;
+                this.dataList =  response.data;
              })
             .catch((error) => {
                 console.log("Error."+error);
             });
         },
     },
-    mounted() {
+    async mounted() {
         this.dt =  $("#private-staff-table").DataTable();
-        this.loadstff();
+        let sex_idList =  await this.loadactiveGlobalList('all_active_gender');
+        for(let i=0; i<sex_idList.length;i++){
+            this.genderArray[sex_idList[i].id] = sex_idList[i].name;
+        }
+        this.loadstff('all/SubstitutionModel');
     },
     watch: {
         dataList(){

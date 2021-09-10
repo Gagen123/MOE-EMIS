@@ -38,9 +38,12 @@
                                             <option v-for="(itm, index) in itemList" :key="index" v-bind:value="itm.id">{{ itm.Name }}</option>
                                         </select>
                                     </td>
-                                    <td>
+                                    <!-- <td>
                                         <span :id="'measurement_unit'+index">{{item.unit}}</span>
-                                    </td>
+                                    </td> -->
+                                     <td>
+                                    <span>{{unitArray[form.unit_id]}}</span>
+                                  </td>
                                     <td>
                                         <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                     </td>
@@ -99,7 +102,7 @@ export default {
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
                 [{
-                    item:'',quantity:'',unit:'', remarks:'', damagequantity:'',
+                    item:'',quantity:'',unit_id:'', remarks:'', damagequantity:'',
                 }],
             })
         }
@@ -188,7 +191,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -268,10 +271,10 @@ export default {
                 this.form.items_received=[];
                 for(let i=0;i<data.stockreceived.length;i++){
                     this.form.items_received.push({
-                    itemid:data.stockreceived[i].item_id,
+                    item:data.stockreceived[i].item_id,
                     // unit:this.unitArray[data.stockreceived[i].unit_id],
                     quantity:data.stockreceived[i].receivedquantity,
-                    measurement_unit:data.stockreceived[i].unit_id,
+                    unit:data.stockreceived[i].unit_id,
                     remarks:data.stockreceived[i].remarks,
                     damagequantity:data.stockreceived[i].damagequantity});
                 }

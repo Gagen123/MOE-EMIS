@@ -16,6 +16,7 @@ class CounsellingClassRange extends Model
         'id',
         'Name', 
         'Description',
+        'Code',
         'Status',
         'created_by',
         'created_at',

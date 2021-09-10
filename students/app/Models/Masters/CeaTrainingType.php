@@ -14,6 +14,8 @@ class CeaTrainingType extends Model
     protected $fillable = [
         'id',
         'Name', 
+        'Description',
+        'Code',
         'Status'
     ];
 }

@@ -39,7 +39,7 @@
             </div>
         </div>
       <!--  Temporary model table  -->
-      <div class="modal fade" id="viewfoodreleasenote" tabindex="-1" role="dialog">
+        <div class="modal fade" id="viewfoodreleasenote" tabindex="-1" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">

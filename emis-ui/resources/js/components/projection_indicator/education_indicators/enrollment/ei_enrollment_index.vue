@@ -21,8 +21,8 @@
                             <option value="PrePrimary"> Pre-Primary Education</option>
                             <option value="Primary"> Primary Education</option>
                             <option value="Basic"> Basic Education</option>
-                            <option value="Middle"> Middle Secondary Education</option>
                             <option value="Lower"> Lower Secondary Education</option>
+                            <option value="Middle"> Middle Secondary Education</option>
                             <option value="Higher"> Higher Secondary Education</option>
                             <option value="Tertiary"> Tertiary Education</option>
                         </select>

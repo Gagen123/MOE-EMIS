@@ -89,13 +89,12 @@ class FinanceController extends Controller
          $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
-            'remarks'                           =>  'required',
-            
+           // 'remarks'                           =>  'required',
         ];
         $customMessages = [
             'amount.required'                   => 'amount is required',
             'date.required'                     => 'date is required',
-            'remarks.required'                  => 'remarks is required',
+          //  'remarks.required'                  => 'remarks is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -105,12 +104,13 @@ class FinanceController extends Controller
             'status'                            =>  $request['remarks'],
             'financialInformationId'            =>  $request['financialInformationId'],
         ];
-        try{
+       // dd($data);
+        // try{
         $response_data = OrganizationFinancialInformation::create($data);
-        }catch(\Illuminate\Database\QueryException $ex){
-            dd($ex);
+        // }catch(\Illuminate\Database\QueryException $ex){
+        //     dd($ex);
 
-        }
+        // }
         return $response_data;
     }
     public function updateFinancialInfo(Request $request){

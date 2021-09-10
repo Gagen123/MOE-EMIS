@@ -257,25 +257,46 @@ export default {
             }
         },
         getSportsDetails(sportId){
+            this.form.items_received=[];
             axios.get('organization/getSportsDetails/' +sportId)
             .then((response) => {  
                 let data=response.data.data;
-                this.form.organizationId        =    data.organizationId;
-                this.form.facility              =    data.facility;
-                this.form.id                    =    data.id;
-                let prop=data.facility;
-                let facilityDetails=[];
-                for(let i=0;i<prop.length;i++){
-                    facilityDetails.push({type:prop[i].type,number:prop[i].number,
-                    yoe:prop[i].yearOfEstablishment,access:prop[i].accessibleToDisabled,
-                    area:prop[i].size,sportstype:prop[i].sportstype,support:prop[i].supportedBy,
-                    status:prop[i].status});
+                // alert(data.length);
+                for(let i=0; i<data.length;i++){
+                    this.form.facility = data[i].facility;
+                    this.form.id       = data[i].id;
+                    this.form.items_received.push({
+                        type:data[i].type,
+                        
+                        number:data[i].number,
+                        yoe:data[i].yearOfEstablishment,
+                        access:data[i].accessibleToDisabled,
+                        area:data[i].size,
+                        sportstype:data[i].sportstype,
+                        support:data[i].supportedBy,
+                        status:data[i].status
+                    });
+                }
+                // this.form.organizationId        =    data.organizationId;
+                // this.form.facility              =    data.facility;
+                // this.form.id                    =    data.id;
+                // let prop=data.facility;
+                // let facilityDetails=[];
+               
+                // for(let i=0;i<prop.length;i++){
+                //     facilityDetails.push({type:prop[i].type,
+                //     number:prop[i].number,
+                //     yoe:prop[i].yearOfEstablishment,
+                //     access:prop[i].accessibleToDisabled,
+                //     area:prop[i].size,
+                //     sportstype:prop[i].sportstype,
+                //     support:prop[i].supportedBy,
+                //     status:prop[i].status});
                    // this.getSubFacilityDropdown();
                    // 
-                }
+            
                 this.count=data.length;
-                this.form.users=facilityDetails;
-                
+                this.getSubFacilityDropdown();
             })
             .catch((error) =>{  
                 console.log("Error:"+error);

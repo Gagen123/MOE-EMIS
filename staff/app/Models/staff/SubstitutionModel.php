@@ -14,6 +14,7 @@ class SubstitutionModel extends Model{
         'name',
         'gender',
         'dzongkhag',
+        'dob',
         'contact',
         'email',
         'qualification',

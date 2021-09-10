@@ -1039,7 +1039,7 @@ export default {
             }
             let cid_empid=$('#cideid').val();
             if (cid_empid!= ""){
-                axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/'+cid_empid)
+                axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/2020-02-25')
                 .then(response => {
                     this.ciderror = '';
                     let detail = response.data;

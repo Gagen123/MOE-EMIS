@@ -312,7 +312,8 @@ export default {
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/Expansion__'+1)
             .then(response => {
-                let data = response.data.data;
+                let data = response.data;
+                alert(JSON.stringify(data));
                 if(data!=undefined && data!="NA"){
                     $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
                     this.screenId=data.screen;
@@ -326,7 +327,7 @@ export default {
                 else{
                     $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
                     $('#screenPermission').show();
-                    $('#mainform').hide();
+                    // $('#mainform').hide();
                 }
             })
             .catch(errors => {

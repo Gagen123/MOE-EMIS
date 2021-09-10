@@ -1,21 +1,5 @@
 <template>
 <div>
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">User Profile</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -26,9 +10,9 @@
                 </div>
                 <div class="col-md-9">
                     <div class="profile-head">
-                        <h5>{{personal_form.name}}</h5>
-                        <h6>Gender: {{sex_Array[personal_form.sex_id]}}</h6>
-                        <h6>Nationality: {{countryList[personal_form.country_id]}}</h6>
+                        <h5>{{response_data.name}}</h5>
+                        <h6>Gender: {{sex_Array[response_data.sex_id]}}</h6>
+                        <h6>Nationality: {{countryList[response_data.country_id]}}</h6>
                     </div>
                 </div>
             </div>
@@ -41,26 +25,26 @@
                 <div class="col-12 col-sm-12">
                     <div class="card card-primary card-outline card-outline-tabs">
                         <div class="card-header p-0 border-bottom-0">
-                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                                <li class="nav-item">
+                            <ul class="nav nav-tabs border-primary" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item border-right">
                                     <a class="nav-link active" id="custom-tabs-four-basic-tab" data-toggle="pill" href="#custom-tabs-four-basic" role="tab" aria-controls="custom-tabs-four-basic" aria-selected="true">Basic Info</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-personal-tab" data-toggle="pill" href="#custom-tabs-four-personal" role="tab" aria-controls="custom-tabs-four-personal" aria-selected="false">Personal Details</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-work-tab" data-toggle="pill" href="#custom-tabs-four-work" role="tab" aria-controls="custom-tabs-four-work" aria-selected="false">Work Experience</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-education-tab" data-toggle="pill" href="#custom-tabs-four-education" role="tab" aria-controls="custom-tabs-four-education" aria-selected="false">Education</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-promotion-tab" data-toggle="pill" href="#custom-tabs-four-promotion" role="tab" aria-controls="custom-tabs-four-promotion" aria-selected="false">Promotion Record</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-training-tab" data-toggle="pill" href="#custom-tabs-four-training" role="tab" aria-controls="custom-tabs-four-training" aria-selected="false">Training Record</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-nominations-tab" data-toggle="pill" href="#custom-tabs-four-nominations" role="tab" aria-controls="custom-tabs-four-nominations" aria-selected="false">Nominations</a>
                                 </li>
                             </ul>
@@ -73,15 +57,13 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="width:15%">Employee Id:</td>
-                                                    <td style="width:35%">{{ personal_form.emp_id }}</td>
-                                                    <td style="width:15%"></td>
-                                                    <td style="width:35%"></td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.emp_id }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Working Agency:</td>
-                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.working_agency }}</td>
                                                     <td style="width:15%">Dzongkhag:</td>
-                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.dzongkhagName }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -90,61 +72,47 @@
                                         <table class="table table-borderless table-sm">
                                             <tbody>
                                                 <tr>
-                                                    <td style="width:15%">Title:</td>
-                                                    <td style="width:35%">{{ positiontitleList[personal_form.position_title] }}</td>
-                                                    <td style="width:15%">Position:</td>
-                                                    <td style="width:35%">{{ }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="width:15%">Department:</td>
-                                                    <td style="width:35%">{{ }}</td>
-                                                    <td style="width:15%">Dzongkhag:</td>
-                                                    <td style="width:35%">{{ }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="width:15%">Occupational Group:</td>
-                                                    <td style="width:35%">{{ }}</td>
+                                                    <td style="width:15%">Position Title:</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.position_title_name }}</td>
                                                     <td style="width:15%">Employee Type:</td>
-                                                    <td style="width:35%">{{ personal_form.emp_type==1 ? 'Regular' : personal_form.emp_type==2 ? 'Contract' :'Volunteer'  }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.emp_type_id==1 ? 'Regular' : response_data.emp_type_id==2 ? 'Contract' :'Volunteer'  }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Date of Joining:</td>
-                                                    <td style="width:35%">{{ }}</td>
-                                                    <td>{{ }}</td>
-                                                    <td>{{ }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.initial_appointment_date}}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                    <hr>
                                 </div>
+
                                 <div class="tab-pane fade" id="custom-tabs-four-personal" role="tabpanel" aria-labelledby="custom-tabs-four-personal-tab">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <table class="table table-borderless table-sm">
                                             <tbody>
                                                 <tr>
                                                     <td style="width:15%">CID/Work Permit:</td>
-                                                    <td style="width:35%">{{ personal_form.cid_work_permit }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.cid_work_permit }}</td>
                                                     <td style="width:15%">Date of Birth</td>
-                                                    <td style="width:35%">{{ personal_form.dob }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.dob }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Contact No:</td>
-                                                    <td style="width:35%">{{ personal_form.contact_number }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.contact_number }}</td>
                                                     <td style="width:15%">Email</td>
-                                                    <td style="width:35%">{{ personal_form.email }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.email }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Alternative Email:</td>
-                                                    <td style="width:35%">{{ personal_form.alternative_email }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.alternative_email }}</td>
                                                     <td style="width:15%"></td>
-                                                    <td style="width:35%">{{  }}</td>
+                                                    <td style="width:35%" class="text-bold">{{  }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Marital Status:</td>
-                                                    <td style="width:35%">{{ marital_statusList[personal_form.marital_status] }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ marital_statusList[response_data.marital_status] }}</td>
                                                     <td style="width:15%">Nationality:</td>
-                                                    <td style="width:35%">{{ countryList[personal_form.country_id] }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ countryList[response_data.country_id] }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -155,11 +123,11 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="width:15%">Present Dzongkhag:</td>
-                                                    <td style="width:15%">{{ dzongkhagList[personal_form.dzongkhag] }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ dzongkhagList[response_data.dzongkhag] }}</td>
                                                     <td style="width:15%">Present Gewog:</td>
-                                                    <td style="width:15%">{{ personal_form.gewog }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ response_data.gewog }}</td>
                                                     <td style="width:15%">Present Village:</td>
-                                                    <td style="width:15%">{{ personal_form.village_id }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ response_data.village_id }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -169,11 +137,11 @@
                                             <tbody>
                                                 <tr>
                                                     <td style="width:15%">Permanant Dzongkhag:</td>
-                                                    <td style="width:15%">{{ dzongkhagList[personal_form.p_dzongkhag] }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ dzongkhagList[response_data.p_dzongkhag] }}</td>
                                                     <td style="width:15%">Permanant Gewog:</td>
-                                                    <td style="width:15%">{{ personal_form.p_gewog }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ response_data.p_gewog }}</td>
                                                     <td style="width:15%">Permanant Village:</td>
-                                                    <td style="width:15%">{{ personal_form.p_village_id }}</td>
+                                                    <td style="width:15%" class="text-bold">{{ response_data.p_village_id }}</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -190,7 +158,7 @@
                                                 <td>To Date</td>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -239,7 +207,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -257,7 +225,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -315,11 +283,11 @@
 export default {
     data(){
         return{
+            response_data:[],
             grand_total:0,
             qualification_tbl_row_count:0,
             sex_Array:{},
             marital_statusList:[],
-            positiontitleList:[],
             countryList:[],
             dzongkhagList:{},
             villageList1:{},
@@ -336,53 +304,12 @@ export default {
             coursemodeList:[],
             repationshipList:[],
             staff_nomination_list:[],
+            staff_qualification_list:[],
             attachmentDetails:[],
 
-            personal_form: new form({
-                isteaching:false,
-                organization_type:'',
-                personal_id: '',
-                cideid:'',
-                emp_type: 1,
-                emp_id:'',
-                cid_work_permit:'',
-                name:'',
-                p_address:'',
-                position_title:'',
-                sex_id:'',
-                dob:'',
-                marital_status:'',
-                country_id:'',
-                dzongkhag:'',
-                village_id:'',
-                gewog:'',
-                p_dzongkhag:'',
-                p_village_id:'',
-                p_gewog:'',
-                working_agency_id:'',
-                contact_number:'',
-                email:'',
-                alternative_email:'',
-                comp_sub:'',
-                elective_sub1:'',
-                elective_sub2:'',
-                currier_stage:'',
-                initial_appointment_date:'',
-                emp_file_code:'',
-                remarks:'',
-                status:'Created',
-            }),
-            staff_qualification_list:'',
         }
     },
     methods: {
-        openfile(file){
-            let file_path=file.path+'/'+file.original_name;
-            file_path=file_path.replaceAll('/', 'SSS');
-            let uri = 'common/viewFiles/'+file_path;
-            window.location=uri;
-        },
-
         loadqualication(staff_id){
             if(staff_id!=null && staff_id!=""){
                 let uri = 'staff/loadStaffQualification/'+staff_id;
@@ -395,29 +322,6 @@ export default {
                     console.log("Error:"+error)
                 });
             }
-        },
-
-        loadqualificationdescription(){
-            let uri = 'masters/loadStaffMasters/all_active_qualification_description_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.qualificationDescription = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadqualification(){
-            let uri = 'masters/loadStaffMasters/all_active_qualification_List';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.staffqualificationlist = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
         },
 
         loadnomination(staff_id){
@@ -433,28 +337,6 @@ export default {
                     console.log("Error:"+error)
                 });
             }
-        },
-
-        loadcoursemode(){
-            let uri = 'masters/loadStaffMasters/all_active_coursemode_list';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.coursemodeList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        shownexttab(nextclass){
-            $('.personname').html(this.personal_form.name);
-            $('#tabhead >li >a').removeClass('active');
-            $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').addClass('active');
-            $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-            $('.'+nextclass+' >a').removeClass('disabled');
-            $('.tab-content-details').hide();
-            $('#'+nextclass).show().removeClass('fade');
         },
 
         loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
@@ -515,18 +397,6 @@ export default {
                 console.leg(error);
             });
         },
-        loadpositiontitleList(uri="masters/loadStaffMasters/all_active_position_title_with_level"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
 
         loadrelationshipList(uri="masters/loadStaffMasters/all_active_relationship_list"){
             axios.get(uri)
@@ -571,7 +441,7 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.gewogArray[data[i].id] = data[i].name;
                 }
-                this.personal_form.p_gewog=this.gewogArray[gewogid];
+                this.response_data.p_gewog=this.gewogArray[gewogid];
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -585,7 +455,7 @@ export default {
                 for(let i=0;i<data.data.data.length;i++){
                     this.villageList[data.data.data[i].id] = data.data.data[i].name;
                 }
-                this.personal_form.p_village_id=this.villageList[vill];
+                this.response_data.p_village_id=this.villageList[vill];
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -599,7 +469,7 @@ export default {
                 for(let i=0;i<data.data.data.length;i++){
                     this.gewogArray1[data.data.data[i].id] = data.data.data[i].name;
                 }
-                this.personal_form.gewog=this.gewogArray1[gewog];
+                this.response_data.gewog=this.gewogArray1[gewog];
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -613,75 +483,43 @@ export default {
                 for(let i=0;i<data.data.data.length;i++){
                     this.villageList1[data.data.data[i].id] = data.data.data[i].name;
                 }
-                this.personal_form.village_id=this.villageList1[village];
+                this.response_data.village_id=this.villageList1[village];
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
         },
-
-        allOrgList(){
-            let org_type=$('#organization_type').val();
-            let uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            //Below two should change according to the data from rcsc
-            if(org_type=="Dzongkhag"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            }
-            if(org_type=="Ministry"){
-                uri = 'loadCommons/loadOrgList/dzongkhagwise/'+$('#dzongkhag').val();
-            }
-            this.orgList = [];
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.orgList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-
-
 
         loadpersonalDetails(){
-            axios.get('loadCommons/viewStaffDetails/by_id/'+this.$route.params.data.id)
+            axios.get('staff/viewStaffProfile/'+this.$route.params.data.id)
             .then((response) => {
                 let data=response.data.data;
-
-                this.personal_form.personal_id=data.id;
-                this.personal_form.emp_type=data.emp_type_id;
-                this.personal_form.emp_id=data.emp_id;
-                this.personal_form.cid_work_permit=data.cid_work_permit;
-                this.personal_form.name=data.name;
-                this.personal_form.position_title=data.position_title_id;
-                this.personal_form.marital_status=data.merital_status;
-                this.personal_form.dob=data.dob;
-
-                this.personal_form.p_dzongkhag=data.p_dzongkhag;
+                this.response_data=data
+                this.response_data.p_dzongkhag=data.p_dzongkhag;
                 this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
-                this.personal_form.p_gewog=data.p_gewog;
+                this.response_data.p_gewog=data.p_gewog;
                 this.getPvillagelist(data.p_gewog,data.p_village);
-                this.personal_form.p_village_id=data.p_village;
+                this.response_data.p_village_id=data.p_village;
 
-                this.personal_form.dzongkhag=data.dzo_id;
+                this.response_data.dzongkhag=data.dzo_id;
                 this.getgewoglist(data.dzo_id,data.geowg_id);
-                this.personal_form.gewog=data.geowg_id;
+                this.response_data.gewog=data.geowg_id;
                 this.getvillagelist(data.geowg_id,data.village_id);
-                this.personal_form.village_id=data.village_id;
+                this.response_data.village_id=data.village_id;
 
-                this.personal_form.sex_id=data.sex_id;
-                this.personal_form.country_id=data.country_id;
-                this.personal_form.working_agency_id=data.working_agency_id;
-                this.personal_form.contact_number=data.contact_no;
-                this.personal_form.email=data.email;
-                this.personal_form.alternative_email=data.alternative_email;
-                this.personal_form.comp_sub=data.comp_sub_id;
-                this.personal_form.elective_sub1=data.elective_sub_id1;
-                this.personal_form.elective_sub2=data.elective_sub_id2;
-                this.personal_form.currier_stage=data.cureer_stagge_id;
-                this.personal_form.emp_file_code=data.employee_code;
-                this.personal_form.remarks=data.remarks;
-                this.personal_form.initial_appointment_date=data.initial_appointment_date;
+                this.response_data.sex_id=data.sex_id;
+                this.response_data.country_id=data.country_id;
+                this.response_data.working_agency_id=data.working_agency_id;
+                this.response_data.contact_number=data.contact_no;
+                this.response_data.email=data.email;
+                this.response_data.alternative_email=data.alternative_email;
+                this.response_data.comp_sub=data.comp_sub_id;
+                this.response_data.elective_sub1=data.elective_sub_id1;
+                this.response_data.elective_sub2=data.elective_sub_id2;
+                this.response_data.currier_stage=data.cureer_stagge_id;
+                this.response_data.emp_file_code=data.employee_code;
+                this.response_data.remarks=data.remarks;
+                this.response_data.initial_appointment_date=data.initial_appointment_date;
                 this.loadqualication(data.id);
                 this.loadnomination(data.id);
             })
@@ -693,24 +531,10 @@ export default {
     },
 
     mounted() {
-        $('[data-toggle="tooltip"]').tooltip();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
-        });
-
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
-        });
         this.loadactivemaritalList();
         this.loadactivesex_idList();
-        this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
-
         this.loadAcademicMasters();
         this.loadactivesubjectList();
         this.loadactivecureerstageList();
