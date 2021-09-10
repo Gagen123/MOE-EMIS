@@ -13,6 +13,8 @@ class SpBenefit extends Model
     protected $fillable = [
         'id',
         'Name',
+        'Description',
+        'Code',
         'Status',
         'created_by', 
         'created_at',

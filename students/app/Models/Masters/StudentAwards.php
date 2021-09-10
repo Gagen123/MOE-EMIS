@@ -18,6 +18,7 @@ class StudentAwards extends Model
         'CeaAwardId',
         'CeaProgrammeId',
         'Description', 
+        'Code',
         'Status'
     ];
 }

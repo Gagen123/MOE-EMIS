@@ -15,7 +15,8 @@ class CeaProgramItemVariety extends Model
         'id',
         'Name',
         'UnitId',
-        'Description', 
+        'Description',
+        'Code',
         'Status'
     ];
 }

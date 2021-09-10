@@ -26,6 +26,11 @@
                     </div>
                 </div>
                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
@@ -57,6 +62,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                code:'',
                 award_type_id:'',
                 program_id:'',
                 description:'',
@@ -67,7 +73,7 @@ export default {
         }
     },
     methods: {
-        loadActiveAwardList(uri='masters/loadStudentMasters/student_award_type'){
+        loadActiveAwardList(uri='masters/loadActiveStudentMasters/student_award_type'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -112,16 +118,27 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStudentMasters',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/student_award_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('/masters/saveStudentMasters',this.form)
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push('/student_award_list');
+                        })
+                        .catch(() => {
+                            console.log("Error......")
+                        })
+                    }
                 })
             }
 		}, 

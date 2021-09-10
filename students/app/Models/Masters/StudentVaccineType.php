@@ -13,9 +13,10 @@ class StudentVaccineType extends Model
     protected $table="std_vaccine_type";
     protected $fillable = [
         'id',
-        'name',
-        'status',
-        'description',
+        'Name',
+        'Status',
+        'Description',
+        'Code',
         'vaccineFor',
         'created_by',
         'created_at',

@@ -45,23 +45,21 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
-       // dd($request);
         $rules = [
             'name'  =>  'required',
         ];
 
         $this->validate($request, $rules);
 
-        $record_type = $request['recordtype'];
+        $record_type = $request['record_type'];
 
         $data = $this->extractRequestInformation($request, $record_type, $type='data');
-
         $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
 
-        if($request->actiontype=="add"){
+        if($request->action_type=="add"){
             $response_data = $this->insertData($data, $databaseModel);
         }
-        else if($request->actiontype=="edit"){
+        else if($request->action_type=="edit"){
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
        // dd($response_data);
@@ -92,51 +90,44 @@ class StudentMasterController extends Controller
 
         }else{
             foreach ($request->input('subjectlist') as  $i=> $classstream){
-                   $marks="";
-                   if(isset($classstream['marks'])){
-                       $marks=$classstream['marks'];
-                   }
-                   $grade="";
-                   if(isset($classstream['grade'])){
-                       $grade=$classstream['grade'];
-                   }
-                   $subject_name="";
-                   if(isset($classstream['name'])){
-                        $subject_name=$classstream['name'];
-                    }
-                   $aca_sub_id="";
-                   if(isset($classstream['aca_sub_id'])){
-                       $aca_sub_id=$classstream['aca_sub_id'];
-                   }
-                   $data = array(
-                    'streamId'           =>  $request['streamId'],
-                    'aca_sub_id'         =>  $aca_sub_id,
-                    'subject_name'       =>  $subject_name,
-                    'marks'              =>  $marks,
-                    'grade'              =>  $grade,
-                    'id'                 =>  $request['id'],
-                    'created_by'         =>  $request->user_id,
-                    'created_at'         =>  date('Y-m-d h:i:s')
-                   );
-                   try{
-                    SubjectMarks::create($data);
-        
-                    } catch(\Illuminate\Database\QueryException $ex){
-                        dd($ex->getMessage());
-                        // Note any method of class PDOException can be called on $ex.
-                    }
-                   
-               }
-
+                $marks="";
+                if(isset($classstream['marks'])){
+                    $marks=$classstream['marks'];
+                }
+                $grade="";
+                if(isset($classstream['grade'])){
+                    $grade=$classstream['grade'];
+                }
+                $subject_name="";
+                if(isset($classstream['name'])){
+                    $subject_name=$classstream['name'];
+                }
+                $aca_sub_id="";
+                if(isset($classstream['aca_sub_id'])){
+                    $aca_sub_id=$classstream['aca_sub_id'];
+                }
+                $data = array(
+                'streamId'           =>  $request['streamId'],
+                'aca_sub_id'         =>  $aca_sub_id,
+                'subject_name'       =>  $subject_name,
+                'marks'              =>  $marks,
+                'grade'              =>  $grade,
+                'id'                 =>  $request['id'],
+                'created_by'         =>  $request->user_id,
+                'created_at'         =>  date('Y-m-d h:i:s')
+                );
+                SubjectMarks::create($data);
+                
             }
-            return $this->successResponse(Response::HTTP_CREATED);
-
 
         }
-        public function loadstreamMarks(){
-            return $this->successResponse(SubjectMarks::all());
+        return $this->successResponse(Response::HTTP_CREATED);
+    }
 
-        }
+    public function loadstreamMarks(){
+        return $this->successResponse(SubjectMarks::all());
+
+    }
 
     public function saveValidationcondition(Request $request){
         $rules = [
@@ -336,19 +327,20 @@ class StudentMasterController extends Controller
         //data to be updated
         $data->Name = $dataRequest['Name'];
         // dd($data);
-        if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
+        if($request['record_type']!="StudentType" && $request['record_type']!="ScholarType" && $request['record_type']!="SpBenefit"){
             $data->Description = $dataRequest['Description'];
         }
-        if($request['recordtype']=="vaccine_type" ){
+        if($request['record_type']=="vaccine_type" ){
             $data->Description = $dataRequest['vaccineFor'];
         }
-        if($request['recordtype']=="program_item" ){
+        if($request['record_type']=="program_item" ){
             $data->Central   =  $dataRequest['Central'];
             $data->Local     =  $dataRequest['Local'];
             $data->Unit_id   =  $dataRequest['Unit_id'];
             $data->CeaProgrammeItemVarietyId   =  $dataRequest['variety'];
         }
 
+        $data->Code = $dataRequest['Code'];
         $data->Status = $dataRequest['Status'];
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
@@ -367,6 +359,7 @@ class StudentMasterController extends Controller
             $data = [
                 'id'  =>  $request['id'],
                 'Name'  =>  $request['name'],
+                'Code'  =>  $request['code'],
                 'Status'    =>  $request['status'],
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
@@ -649,23 +642,23 @@ class StudentMasterController extends Controller
            $id = $request->id;
            if( $id != null){
                $data =[
-                   'id'                =>  $request->id,
-                   'name'              =>  $request->name,
-                   'description'       =>  $request->description,
-                   'status'            =>  $request->status,
-                   'updated_by'        =>  $request['user_id'],
-                   'updated_at'        =>  date('Y-m-d h:i:s'),
+                    'id'                =>  $request->id,
+                    'Name'              =>  $request->Name,
+                    'Description'       =>  $request->Description,
+                    'Status'            =>  $request->Status,
+                    'updated_by'        =>  $request['user_id'],
+                    'updated_at'        =>  date('Y-m-d h:i:s'),
                 ];
                 CounsellingType::where('id', $id)->update($data);
                $response_data = CounsellingType::where('id', $id)->first();
            } else {
                $data =[
                 'id'                =>  $request->id,
-                'name'              =>  $request->name,
-                'description'       =>  $request->description,
-                'status'            =>  $request->status,
-                'created_by'        =>  $request['user_id'],
-                'created_at'        =>  date('Y-m-d h:i:s'),
+                'Name'              =>  $request->Name,
+                'Description'       =>  $request->Description,
+                'Status'            =>  $request->Status,
+                'updated_by'        =>  $request['user_id'],
+                'updated_at'        =>  date('Y-m-d h:i:s'),
                ];
                $response_data = CounsellingType::create($data);
            }
@@ -683,7 +676,7 @@ class StudentMasterController extends Controller
         $id = $request->id;
         if( $id != null){
             $data =[
-                 'id'                =>  $request->id,
+                 'id'               =>  $request->id,
                 'Name'              =>  $request->Name,
                 'Description'       =>  $request->Description,
                 'Status'            =>  $request->Status,

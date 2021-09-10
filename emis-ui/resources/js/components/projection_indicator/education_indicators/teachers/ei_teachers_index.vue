@@ -18,12 +18,10 @@
                         <label class="mb-0">Organization Category:</label>
                         <select class="form-control select2" id="category_id">
                             <option value="ECCD"> ECCD</option>
-                            <option value="PrePrimary"> Pre-Primary Education</option>
-                            <option value="Primary"> Primary Education</option>
-                            <option value="Middle"> Middle Secondary Education</option>
-                            <option value="Lower"> Lower Secondary Education</option>
-                            <option value="Higher"> Higher Secondary Education</option>
-                            <option value="Tertiary"> Tertiary Education</option>
+                            <option value="Primary"> Primary School</option>
+                            <option value="Middle"> Middle Secondary School</option>
+                            <option value="Lower"> Lower Secondary School</option>
+                            <option value="Higher"> Higher Secondary School</option>
                         </select>
                         <span class="text-danger" id="org_id_err"></span>
                     </div>

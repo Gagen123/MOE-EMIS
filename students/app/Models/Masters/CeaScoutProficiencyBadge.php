@@ -14,8 +14,9 @@ class CeaScoutProficiencyBadge extends Model
     protected $fillable = [
         'id',
         'CeaScoutSectionId',
-        'name',
-        'description',
-        'status'
+        'Name',
+        'Description',
+        'Code',
+        'Status'
     ];
 }

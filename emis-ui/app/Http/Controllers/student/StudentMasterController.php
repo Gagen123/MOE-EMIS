@@ -26,78 +26,7 @@ class StudentMasterController extends Controller{
         ];
         $this->validate($request, $rules, $customMessages);
 
-        $data =[
-            'id'             =>  $request->id,
-            'name'           =>  $request->name,
-            'variety'        =>  $request->variety,
-            'unit_id'        =>  $request->unit_id,
-            'central'        =>  $request->central,
-            'local'          =>  $request->local,
-            'description'    =>  $request->description,
-            'status'         =>  $request->status,
-            'actiontype'     =>  $request->action_type,
-            'recordtype'     =>  $request->record_type,
-            'user_id'        => $this->userId()
-        ];
-        
-        if($request->record_type == 'student_awards'){
-            $additional_data = [
-                'award_type_id' => $request->award_type_id,
-                'program_id' => $request->program_id
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'offence_type' || $request->record_type == 'disciplinary_action_taken'){
-            $additional_data = [
-                'offence_severity_id' => $request->offence_severity_id
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'training'){
-            $additional_data = [
-                'training_type_id' => $request->training_type_id,
-                'program_id'       => $request->program_id
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'program_role'){
-            $additional_data = [
-                'program' => $request->program,
-                'assigned_to' => $request->assigned_to
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'program_name'){
-            $additional_data = [
-                'program_type' => $request->program_type
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'scout_section_level' || $request->record_type == 'scout_badge'){
-            $additional_data = [
-                'scout_type' => $request->scout_type
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'vaccine_type'){
-            $additional_data = [
-                'vaccineFor' => $request->vaccineFor
-            ];
-            $data = $data + $additional_data;
-        }
-
-        if($request->record_type == 'item_variety'){
-            $additional_data = [
-                'unit_id' => $request->unit_id
-            ];
-            $data = $data + $additional_data;
-        }
+        $data = $request->all();
 
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
@@ -121,6 +50,7 @@ class StudentMasterController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/students/saveStreamSubject', $data);
         return $response_data;
     }
+
     public function saveValidationcondition(Request $request){
         $rules = [
             'date'          =>  'required',

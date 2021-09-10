@@ -15,6 +15,7 @@ class CeaProgramType extends Model
         'id',
         'Name',
         'Description',
+        'Code',
         'Status'
     ];
 }

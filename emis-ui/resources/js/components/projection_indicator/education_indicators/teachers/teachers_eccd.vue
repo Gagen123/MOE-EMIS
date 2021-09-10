@@ -2,56 +2,42 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Enrollment in School</label>
-                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label>Facilitators in ECCD</label>
+                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                     <tbody>
                         <tr>
-                            <th>Class</th>
-                            <th>Male</th>
-                            <th>Female</th>
-                            <th>Total</th>
-                        </tr>
-                       <tr>
-                            <td>PP</td>
-                            <td>{{this.pp_male}}</td>
-                            <td>{{this.pp_female}}</td>
-                            <td>{{this.pp_male + this.pp_female}}</td>
+                            <th colspan="3">Public</th>
+                            <th colspan="3">Private</th>
+                            <th colspan="3">NGO</th>
+                            <th colspan="3">Corporate</th>
                         </tr>
                         <tr>
-                            <td>I</td>
-                            <td>{{this.i_male}}</td>
-                            <td>{{this.i_female}}</td>
-                            <td>{{this.i_male + this.i_female}}</td>
+                            <th>M</th>
+                            <th>F</th>
+                            <th>T</th>
+                            <th>M</th>
+                            <th>F</th>
+                            <th>T</th>
+                            <th>M</th>
+                            <th>F</th>
+                            <th>T</th>
+                            <th>M</th>
+                            <th>F</th>
+                            <th>T</th>
                         </tr>
                         <tr>
-                            <td>II</td>
-                            <td>{{this.ii_male}}</td>
-                            <td>{{this.ii_female}}</td>
-                            <td>{{this.ii_male + this.ii_female}}</td>
-                        </tr>
-                        <tr>
-                            <td>III</td>
-                            <td>{{this.iii_male}}</td>
-                            <td>{{this.iii_female}}</td>
-                            <td>{{this.iii_male + this.iii_female}}</td>
-                        </tr>
-                        <tr>
-                            <td>IV</td>
-                            <td>{{this.iv_male}}</td>
-                            <td>{{this.iv_female}}</td>
-                            <td>{{this.iv_male + this.iv_female}}</td>
-                        </tr>
-                        <tr>
-                            <td>V</td>
-                            <td>{{this.v_male}}</td>
-                            <td>{{this.v_female}}</td>
-                            <td>{{this.v_male + this.v_female}}</td>
-                        </tr>
-                        <tr>
-                            <td>VI</td>
-                            <td>{{this.vi_male}}</td>
-                            <td>{{this.vi_female}}</td>
-                            <td>{{this.vi_male + this.vi_female}}</td>
+                            <td>{{this.public_male}}</td>
+                            <td>{{this.public_female}}</td>
+                            <td>{{this.public_male + this.public_female}}</td>
+                            <td>{{this.private_male}}</td>
+                            <td>{{this.private_female}}</td>
+                            <td>{{this.private_male + this.private_female}}</td>
+                            <td>{{this.ngo_male}}</td>
+                            <td>{{this.ngo_female}}</td>
+                            <td>{{this.ngo_male + this.ngo_female}}</td>
+                            <td>{{this.corp_male}}</td>
+                            <td>{{this.corp_female}}</td>
+                            <td>{{this.corp_male + this.corp_female}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -65,169 +51,53 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <label>Enrollment in By Age</label>
-                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <label>Facilitators By Nationality</label>
+                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                     <tbody>
                         <tr>
-                            <th rowspan="2">Class</th>
-                            <th rowspan="2">Right Age (Years)</th>
-                            <th colspan="5">Right Age Enrollment</th>
-                            <th colspan="5">Overage Enrollment</th>
-                            <th colspan="5">Underage Enrollment</th>
+                            <th colspan="3">Public</th>
+                            <th colspan="3">Private</th>
+                            <th colspan="3">NGO</th>
+                            <th colspan="3">Corporate</th>
                         </tr>
                         <tr>
-                            <th>2017</th>
-                            <th>2018</th>
-                            <th>2019</th>
-                            <th>2020</th>
-                            <th>2021</th>
-                            <th>2017</th>
-                            <th>2018</th>
-                            <th>2019</th>
-                            <th>2020</th>
-                            <th>2021</th>
-                            <th>2017</th>
-                            <th>2018</th>
-                            <th>2019</th>
-                            <th>2020</th>
-                            <th>2021</th>
-                        </tr>
-                       <tr>
-                            <td>PP</td>
-                            <td>5</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <th>B</th>
+                            <th>N-B</th>
+                            <th>T</th>
+                            <th>B</th>
+                            <th>N-B</th>
+                            <th>T</th>
+                            <th>B</th>
+                            <th>N-B</th>
+                            <th>T</th>
+                            <th>B</th>
+                            <th>N-B</th>
+                            <th>T</th>
                         </tr>
                         <tr>
-                            <td>I</td>
-                            <td>6</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>II</td>
-                            <td>7</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>III</td>
-                            <td>8</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>IV</td>
-                            <td>9</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>V</td>
-                            <td>10</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>VI</td>
-                            <td>11</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td>{{this.public_bht}}</td>
+                            <td>{{this.public_nonbht}}</td>
+                            <td>{{this.public_bht + this.public_nonbht}}</td>
+                            <td>{{this.private_bht}}</td>
+                            <td>{{this.private_nonbht}}</td>
+                            <td>{{this.private_bht + this.private_nonbht}}</td>
+                            <td>{{this.ngo_bht}}</td>
+                            <td>{{this.ngo_nonbht}}</td>
+                            <td>{{this.ngo_bht + this.ngo_nonbht}}</td>
+                            <td>{{this.corp_bht}}</td>
+                            <td>{{this.corp_nonbht}}</td>
+                            <td>{{this.corp_bht + this.corp_nonbht}}</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <div class="card card-warning">
+                    <div class="card-body">
+                        <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -236,12 +106,24 @@
 export default {
     data(){
         return{
-            studentData:[],
-            studentAgeData:[],
+            teacherData:[],
+            teacherNationality:[],
             private_male:'',
             private_female:'',
             public_male:'',
-            public_female:'',         
+            public_female:'',
+            ngo_male:'',
+            ngo_female:'', 
+            corp_male:'',
+            corp_female:'',
+            private_bht:'',
+            private_nonbht:'',
+            public_bht:'',
+            public_nonbht:'',
+            ngo_bht:'',
+            ngo_nonbht:'', 
+            corp_bht:'',
+            corp_nonbht:''
         }
     },
     methods:{
@@ -251,14 +133,38 @@ export default {
 
             try{
                 axios.get(uri).then(response => { 
-                    this.studentData = response.data.data;
+                    this.teacherData = response.data.data;
 
                     //Plotting Graph
-                    if(this.studentData!=""){
-                        this.private_male = this.studentData['PP'].male;
-                        this.private_female = this.studentData['PP'].female;
-                        this.public_male = this.studentData['I'].male;
-                        this.public_female = this.studentData['I'].female;
+                    if(this.teacherData!=""){
+                        if(this.teacherData.hasOwnProperty('private_eccd')){
+                            this.private_male = this.teacherData['private_eccd'].male;
+                            this.private_female = this.teacherData['private_eccd'].female;
+                        } else {
+                            this.private_male = 0;
+                            this.private_female = 0;
+                        }
+                        if(this.teacherData.hasOwnProperty('public_eccd')){
+                            this.public_male = this.teacherData['public_eccd'].male;
+                            this.public_female = this.teacherData['public_eccd'].female;
+                        } else {
+                            this.public_male = 0;
+                            this.public_female = 0;
+                        }
+                        if(this.teacherData.hasOwnProperty('ngo_eccd')){
+                            this.ngo_male = this.teacherData['ngo_eccd'].male;
+                            this.ngo_female = this.teacherData['ngo_eccd'].female;
+                        } else {
+                            this.ngo_male = 0;
+                            this.ngo_female = 0;
+                        }
+                        if(this.teacherData.hasOwnProperty('corporate_eccd')){
+                            this.corp_male = this.teacherData['corporate_eccd'].male;
+                            this.corp_female = this.teacherData['corporate_eccd'].female;
+                        } else {
+                            this.corp_male = 0;
+                            this.corp_female = 0;
+                        }
                         
                         var areaChartData = {
                             labels  : ['Private', 'Public', 'Total'],
@@ -328,7 +234,35 @@ export default {
 
             try{
                 axios.get(uri2).then(response => { 
-                    this.studentAgeData = response.data.data;
+                    this.teacherNationality = response.data.data;
+                    if(this.teacherNationality.hasOwnProperty('private_eccd')){
+                        this.private_bht = this.teacherNationality['private_eccd'].bht_male + this.teacherNationality['private_eccd'].bht_female;
+                        this.private_nonbht = this.teacherNationality['private_eccd'].non_bht_male + this.teacherNationality['private_eccd'].non_bht_female;
+                    } else {
+                        this.private_bht = 0;
+                        this.private_nonbht = 0;
+                    }
+                    if(this.teacherNationality.hasOwnProperty('public_eccd')){
+                        this.public_bht = this.teacherNationality['public_eccd'].bht_male + this.teacherNationality['public_eccd'].bht_female;
+                        this.public_nonbht = this.teacherNationality['public_eccd'].non_bht_male + this.teacherNationality['public_eccd'].non_bht_female;
+                    } else {
+                        this.public_bht = 0;
+                        this.public_nonbht = 0;
+                    }
+                    if(this.teacherNationality.hasOwnProperty('ngo_eccd')){
+                        this.ngo_bht = this.teacherNationality['ngo_eccd'].bht_male + this.teacherNationality['ngo_eccd'].bht_female;
+                        this.ngo_nonbht = this.teacherNationality['ngo_eccd'].non_bht_male + this.teacherNationality['ngo_eccd'].non_bht_female;
+                    } else {
+                        this.ngo_bht = 0;
+                        this.ngo_nonbht = 0;
+                    }
+                    if(this.teacherNationality.hasOwnProperty('corporate_eccd')){
+                        this.corp_bht = this.teacherNationality['corporate_eccd'].bht_male + this.teacherNationality['corporate_eccd'].bht_female;
+                        this.corp_nonbht = this.teacherNationality['corporate_eccd'].non_bht_male + this.teacherNationality['corporate_eccd'].non_bht_female;
+                    } else {
+                        this.corp_bht = 0;
+                        this.corp_nonbht = 0;
+                    }
                 });
             }catch(e){
                 console.log('error loadIndicatorResult '+e);
