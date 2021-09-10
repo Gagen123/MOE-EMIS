@@ -15,9 +15,10 @@ class CounsellingType extends Model
 
     protected $fillable = [
         'id',
-        'name', 
-        'description',
-        'status',
+        'Name', 
+        'Description',
+        'Code',
+        'Status',
         'created_by',
         'created_at',
         'updated_by',

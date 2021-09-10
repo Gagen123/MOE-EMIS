@@ -10,12 +10,13 @@ class FoodSourceType extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="std_foodSource_type";
+    protected $table="std_food_source_type";
 
     protected $fillable = [
         'id',
         'Name', 
         'Description',
+        'Code',
         'Status',
         'created_by',
         'created_at',

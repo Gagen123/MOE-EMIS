@@ -206,9 +206,6 @@ Route::prefix('organizationApproval')->group(function (){
     Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
     Route::post('/saveLocationChange', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveLocationChange'])->name('saveLocationChange');
 
-
-
-
 });
 
 Route::prefix('organization')->group(function () {
@@ -468,6 +465,7 @@ Route::prefix('staff')->group(function () {
     
     
 
+    Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen
     Route::prefix('StaffApprovalController')->group(function (){
         Route::post('/savePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'savePrincipalApproval'])->name('savePrincipalApproval');
@@ -646,6 +644,7 @@ Route::prefix('staff')->group(function () {
 });
 Route::prefix('common')->group(function () {
     Route::get('/getRoles/{param}', [App\Http\Controllers\CommonController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
+    Route::get('/getscreens/{type}', [App\Http\Controllers\CommonController::class, 'getscreens'])->name('getscreens');
 
     Route::get('/viewFiles/{full_path}', [App\Http\Controllers\CommonController::class, 'viewFiles'])->name('viewFiles');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\CommonController::class, 'deleteFile'])->name('deleteFile');

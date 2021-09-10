@@ -15,6 +15,7 @@ class ScreeningEndorsedBy extends Model
         'id',
         'Name',
         'Description',
+        'Code',
         'Status'
     ];
 }

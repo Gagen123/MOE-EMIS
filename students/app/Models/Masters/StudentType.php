@@ -15,6 +15,7 @@ class StudentType extends Model
         'Name',
         'Status',
         'Description',
+        'Code',
         'created_by',
         'created_at',
         'updated_by',

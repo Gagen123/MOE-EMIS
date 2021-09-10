@@ -15,6 +15,7 @@ class HealthScreening extends Model
         'id',
         'Name', 
         'Description',
+        'Code',
         'Status'
     ];
 }

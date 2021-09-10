@@ -14,6 +14,7 @@ class CeaScoutType extends Model
     protected $fillable = [
         'id',
         'Name',
+        'Code',
         'Status',
         'created_by',
         'updated_by',

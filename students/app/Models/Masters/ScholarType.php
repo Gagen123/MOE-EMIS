@@ -14,6 +14,7 @@ class ScholarType extends Model{
         'Name',
         'SchoolCategory',
         'Description',
+        'Code',
         'Status',
         'created_by', 
         'created_at',
