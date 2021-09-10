@@ -15,6 +15,7 @@ class StudentHealth extends Model
     protected $fillable = [
         'id',
         'Name', 
+        'Code',
         'Status'
     ];
 }

@@ -16,6 +16,11 @@ class VaccineType extends Model
         'Name', 
         'vaccineFor',
         'Description',
-        'Status'
+        'Code',
+        'Status',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
     ];
 }

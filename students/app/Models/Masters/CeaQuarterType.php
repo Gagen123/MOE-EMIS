@@ -15,6 +15,7 @@ class CeaQuarterType extends Model
         'id',
         'Name', 
         'Description', 
+        'Code',
         'Status'
     ];
 }

@@ -15,6 +15,7 @@ class CeaProjectType extends Model
         'id',
         'Name', 
         'Description', 
+        'Code',
         'Status'
     ];
 }

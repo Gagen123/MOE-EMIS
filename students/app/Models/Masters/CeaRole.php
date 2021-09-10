@@ -17,6 +17,7 @@ class CeaRole extends Model
         'Name',
         'AssignedTo',
         'Remarks', 
+        'Code',
         'Status'
     ];
 }

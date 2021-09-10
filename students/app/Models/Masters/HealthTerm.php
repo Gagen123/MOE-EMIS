@@ -15,6 +15,7 @@ class HealthTerm extends Model
         'id',
         'Name', 
         'Description', 
+        'Code',
         'Status'
     ];
 }
