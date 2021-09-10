@@ -57,7 +57,7 @@ export default {
     data(){
         return {
             studentList:[],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+           // org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
 
             student_form: new form({
                 id:'',

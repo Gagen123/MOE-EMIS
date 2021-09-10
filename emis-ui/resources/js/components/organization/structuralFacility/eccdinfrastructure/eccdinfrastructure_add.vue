@@ -106,7 +106,7 @@
                                     <td>
                                         <select name="facility" id="facility" class="form-control editable_fields" v-model="user.facility">
                                             <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in eccdfacilityList" :key="index" v-bind:value="item.id">{{ item.facilty }}</option>
+                                            <option v-for="(item, index) in eccdfacilityList" :key="index" v-bind:value="item.id">{{item.facilty}}</option>
                                         </select>
                                     </td>
                                     
@@ -270,7 +270,7 @@ export default {
         geteccdFacilityDropdown(uri = '/organization/geteccdStructureFacilityInDropdown/'+this.form.structuretype){
             axios.get(uri)
             .then(response => {
-              //  alert(JSON.stringify(response));
+              // alert(JSON.stringify(response));
                 let data = response.data;
                 this.eccdfacilityList = data;
             });

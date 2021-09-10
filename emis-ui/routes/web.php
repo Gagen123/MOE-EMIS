@@ -142,6 +142,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
     Route::get('/loadActiveStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveStudentMasters'])->name('loadActiveStudentMasters');
     Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
+    Route::get('/loadActiveProgramLists/{typeId}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveProgramLists'])->name('loadActiveProgramLists');
     //GET Scout Section
     Route::get('/getScoutSection', [App\Http\Controllers\student\StudentMasterController::class, 'getScoutSection'])->name('');
     //Get Scouts Section Level By Scouts Section Level
@@ -204,9 +205,6 @@ Route::prefix('organizationApproval')->group(function (){
     Route::post('/updateTeamVerification', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'updateTeamVerification'])->name('updateTeamVerification');
     Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
     Route::post('/saveLocationChange', [App\Http\Controllers\approval\OrganizationApprovalController::class, 'saveLocationChange'])->name('saveLocationChange');
-
-
-
 
 });
 
@@ -465,6 +463,7 @@ Route::prefix('staff')->group(function () {
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
 
+    Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen
     Route::prefix('StaffApprovalController')->group(function (){
         Route::post('/savePrincipalApproval', [App\Http\Controllers\staff\StaffApprovalController::class, 'savePrincipalApproval'])->name('savePrincipalApproval');
@@ -628,9 +627,10 @@ Route::prefix('staff')->group(function () {
 
     });
 
-    Route::prefix('substitution')->group(function (){
+    Route::prefix('substitution')->group(function (){  
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
+        Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
 
     });
 
@@ -638,6 +638,7 @@ Route::prefix('staff')->group(function () {
 });
 Route::prefix('common')->group(function () {
     Route::get('/getRoles/{param}', [App\Http\Controllers\CommonController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
+    Route::get('/getscreens/{type}', [App\Http\Controllers\CommonController::class, 'getscreens'])->name('getscreens');
 
     Route::get('/viewFiles/{full_path}', [App\Http\Controllers\CommonController::class, 'viewFiles'])->name('viewFiles');
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\CommonController::class, 'deleteFile'])->name('deleteFile');
@@ -932,6 +933,7 @@ Route::prefix('mess_manage')->group(function () {
     Route::post('/saveStockReceived', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceived'])->name('saveStockReceived');
     Route::get('/loadStockReceivedDetails/{id}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceivedDetails'])->name('loadStockReceivedDetails');
     Route::post('/approvereject', [App\Http\Controllers\mess_manage\MessManagementController::class, 'approvereject'])->name('approvereject');
+    Route::post('/saveStockReceivedEdit', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockReceivedEdit'])->name('saveStockReceivedEdit');
     //just added today
     Route::get('/getStockReceivedDetails/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getStockReceivedDetails'])->name('getStockReceivedDetails');
     Route::get('/viewitemreceived/{stockreceivedId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'viewitemreceived'])->name('viewitemreceived');

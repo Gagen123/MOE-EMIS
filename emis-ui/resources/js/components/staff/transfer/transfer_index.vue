@@ -41,12 +41,11 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/seperation_details" id="relative_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/secondment_details" id="relative_details" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
-                        Seperation
+                        Secondment
                     </router-link>
                 </li>
-
             </ul>
             <router-view></router-view>
         </div>

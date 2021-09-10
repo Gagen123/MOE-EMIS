@@ -64,6 +64,7 @@ class FinanceController extends Controller
     }
 
     public function saveFinancialInfo(Request $request){
+       // dd($request);
         $rules = [
             'amount'                            =>  'required',
             'date'                              =>  'required',
@@ -79,8 +80,9 @@ class FinanceController extends Controller
             'amount'                            =>  $request['amount'],
             'date'                              =>  $request['date'],
             'remarks'                           =>  $request['remarks'],
-            'financialInformationId'            =>  $request['financialInformationId'],
+            'financialInformationId'            =>  $request->financialInformationId,
         ];
+      //  dd($data);
         $response_data= $this->apiService->createData('emis/organization/finance/saveFinancialInformation', $data );
         return $response_data;
     } 

@@ -6,6 +6,7 @@
                     <label class="mb-0.5">Type:<i class="text-danger">*</i></label>
                      <select v-model="form.financialInformationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('financialInformationId') }" class="form-control select2" name="financialInformationId" id="financialInformationId">
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        
                     </select>
                     <has-error :form="form" field="financialInformationId"></has-error>
                 </div> 

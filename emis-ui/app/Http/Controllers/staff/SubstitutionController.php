@@ -45,4 +45,9 @@ class SubstitutionController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/substitution/loadStaff/'.$type.'/'.$model);
         return $response_data;
     }
+    
+    public function loadsubstitutestaff(){
+        $response_data= $this->apiService->listData('emis/staff/substitution/loadsubstitutestaff/');
+        return $response_data;
+    }
 }

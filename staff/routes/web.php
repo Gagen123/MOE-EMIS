@@ -67,6 +67,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getEmisUsers/{empId}', ['uses' => 'staff\StaffController@getEmisUsers']);
 
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
+        $router->get('/viewStaffProfile/{id}', ['uses' => 'staff\StaffController@viewStaffProfile']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
@@ -234,5 +235,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'substitution'], function () use ($router) {
         $router->post('/savestaff', ['uses' => 'staff\SubstitutionController@savestaff']);
         $router->get('/loadStaff/{type}/{model}', ['uses' => 'staff\SubstitutionController@loadStaff']);
+        $router->get('/loadsubstitutestaff', ['uses' => 'staff\SubstitutionController@loadsubstitutestaff']);
     });
+
 });
