@@ -55,11 +55,12 @@ export default {
             this.$router.push({name:data,query: {data:action}});
         },
     },
-    mounted(){
+    async mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
-        if(process.env.NODE_ENV!=="development"){
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
             $('.developemntEnv').hide();
         }
     },

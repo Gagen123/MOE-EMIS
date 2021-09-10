@@ -58,11 +58,12 @@ export default {
             });
         },
     },
-    mounted() {
+    async mounted() {
         let routeparam=this.$route.query.data;
         this.menu_id=routeparam;
         this.getmenus();
-        if(process.env.NODE_ENV!=="development"){
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
             $('.developemntEnv').hide();
         }
     },

@@ -65,7 +65,7 @@ export default {
     },
     methods:{
     },
-    mounted(){
+    async mounted(){
         let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
         axios.get(uri)
         .then(response => {
@@ -75,7 +75,8 @@ export default {
         .catch(function (error) {
             console.log(error);
         });
-        if(process.env.NODE_ENV!=="development"){
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
             $('.developemntEnv').hide();
         }
     },
