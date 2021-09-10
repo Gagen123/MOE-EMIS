@@ -37,6 +37,8 @@ Setting up the system administration, and user management:
     For the leadership selection, you need to add type as Leadership in the table (category_type,question_service) to appear required data in the
     leadership nomination form setup
 
+    *********Tasklist and track application********
+    add or update screen with the workflow and from user management, give just submitter roles
 
     *************Students******************
     For the table std_student_class_stream, an additional field, "academic year" was added to take care of history
@@ -125,6 +127,8 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
 2021-08-01:
     added new master table: secondment and seperation, and added new field called description on master_course_mode
     added new transaction table staff_secondment,staff_seperation
+
+
 
 
 

@@ -111,7 +111,7 @@ class CommonController extends Controller{
             'access_level'              =>  $this->getAccessLevel(),
         ];
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
-        dd($response_data);
+        // dd($response_data);
         return $response_data;
 
     }
@@ -160,7 +160,7 @@ class CommonController extends Controller{
     public function getscreens($type=""){
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
-        $role_riv=$this->apiService->listData('getAllPrivilegesOnRoles/'.$type.'__'.$this->getRoleIds('roleIds'), [], $headers);
+        $role_riv=$this->apiService->listData('getAllPrivilegesOnRoles/'.$type.'__'.$this->getRoleIds('roleIds').'__'.$this->currentUser()['system_id'], [], $headers);
         return $role_riv;
     }
 
