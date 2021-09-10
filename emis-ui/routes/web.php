@@ -465,6 +465,8 @@ Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
+    
+    
 
     //staff approval by gagen
     Route::prefix('StaffApprovalController')->group(function (){
@@ -498,6 +500,8 @@ Route::prefix('staff')->group(function () {
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
         Route::get('/loadSecondment/{type}/{model}', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadSecondment'])->name('loadSecondment');
+        //for generating staff with leave type 
+        Route::get('/loadLeaveStaffList', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadLeaveStaffList'])->name('loadLeaveStaffList');
     });
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');
@@ -633,7 +637,9 @@ Route::prefix('staff')->group(function () {
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
         Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
-
+        //
+        Route::post('/saveStaffSubstituted', [App\Http\Controllers\staff\SubstitutionController::class, 'saveStaffSubstituted'])->name('saveStaffSubstituted');
+        
     });
 
 

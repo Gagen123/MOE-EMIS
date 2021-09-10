@@ -88,4 +88,23 @@ class StaffSepSecController extends Controller{
             return $response_data;
         }
     }
+    public function loadLeaveStaffList(){
+        $modelName = "App\\Models\\staff\\"."$model";
+        $model = new $modelName();
+        if($type == 'all'){
+            $response_data=$model::get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)){
+                foreach($response_data as $data){
+                    $data->staff_detials = PersonalDetails::select(
+                        'emp_id',
+                        'name',
+                        'position_title_id',
+                        'working_agency_id',
+                    )
+                    ->where('id', $data['staff_id'])->first();
+                }
+            }
+            return $response_data;
+        }
+    }
 }

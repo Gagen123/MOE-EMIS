@@ -78,7 +78,48 @@ class SubstitutionController extends Controller{
             return $response_data;
         }
     }
-    public function loadsubstitutestaff(){
-        
+    public function saveStaffSubstituted(Request $request){
+       // dd($request);
+        $modelName = "App\\Models\\staff\\"."$request->model";
+        $model = new $modelName();
+        $rules = [
+            'staff_id'              =>  'required',
+            'start_date'            =>  'required',
+            'subsTeacher'           =>  'required',
+            'teaching_subject'      =>  'required',
+        ];
+        $customMessages = [
+            'staff_id.required'     => 'Please select applicant',
+            'start_date.required'   => 'Please select applicant',
+            'subsTeacher'           => 'This field is required',
+            'teaching_subject'      => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $insert_data = [
+            'staff_id'              =>  $request->staff_id,
+            'from_date'             =>  $request->start_date,
+            'to_date'               =>  $request->end_date,
+            'remarks'               =>  $request->remarks,
+            'subsTeacher'           =>  $request->subsTeacher,
+            'teaching_subject'      =>  $request->teaching_subject,
+            'isextended'            =>  $request->isextended,
+           
+        ];
+       //dd($insert_data);
+        if($request->action_type=="add"){
+            $insert_data =$insert_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = $model::create($insert_data);
+        }
+        if($request->action_type=="edit"){
+            $insert_data =$insert_data+[
+                'updated_by'        =>  $request->user_id,
+                'updated_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = $model::where('id',$request->id)->update($insert_data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 }
