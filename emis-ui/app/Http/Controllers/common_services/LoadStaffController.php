@@ -93,6 +93,7 @@ class LoadStaffController extends Controller{
     //load staff details: id,name,gender and position title
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         $param="";
+        //dd('m here');
         //type=allstaff: to listentire staff
         if($type=="allstaff"){
             $param='NA';

@@ -83,6 +83,15 @@ class SubstitutionController extends Controller{
         $response_data= $this->apiService->createData('emis/staff/substitution/saveStaffSubstituted', $request_data);
         return $response_data;
     }
-
+    public function loadSubstaff(){
+        //dd('m here');
+        $response_data= $this->apiService->listData('emis/staff/substitution/loadSubstaff');
+        return $response_data;
+    }
+    public function getEditSubstitutedList($subid=""){
+        //dd('m here');
+        $response_data= $this->apiService->listData('emis/staff/substitution/getEditSubstitutedList/'.$subid);
+        return $response_data;
+    }
 }   
 

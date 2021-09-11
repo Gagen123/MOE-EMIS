@@ -4,8 +4,11 @@ namespace App\Http\Controllers\staff;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\staff\SubstitutionModel;
+use App\Models\staff\SubstitutedTeacher;
+use App\Models\staff\PersonalDetails;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;
+use Illuminate\Support\Facades\DB;
 use DateTime;
 
 class SubstitutionController extends Controller{
@@ -122,4 +125,35 @@ class SubstitutionController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+    public function loadSubstaff(){
+        //dd('from services');
+        $response_data = DB::table('substituted_teachers')
+        ->join('stf_staff', 'substituted_teachers.staff_id', '=', 'stf_staff.id')
+        ->join('staff_substitution', 'substituted_teachers.subsTeacher', '=', 'staff_substitution.id')
+        ->select('substituted_teachers.id AS id','stf_staff.emp_id AS empId', 'stf_staff.name AS name','staff_substitution.name AS subtituted_by',
+            'staff_substitution.cid AS cid', 'substituted_teachers.from_date AS from_date','substituted_teachers.to_date AS to_date',
+            'substituted_teachers.teaching_subject AS teaching_subject','substituted_teachers.isextended AS contact_extended')
+        ->get();
+        //dd($response_data);
+        return $this->successResponse($response_data);
+
+    }
+    public function getEditSubstitutedList($subid=""){
+     // dd($subid);
+        $response_data = DB::table('substituted_teachers')
+    //    ->join('stf_staff', 'substituted_teachers.staff_id', '=', 'stf_staff.id')
+        ->select('id','staff_id','subsTeacher',
+            'from_date','to_date',
+            'teaching_subject','isextended',
+            'remarks')->where('id',$subid)->first();
+  
+        //dd($response_data);
+        return $this->successResponse($response_data);
+
+    }
+    // public function localProcureEditList($subid=""){
+    //     //dd($subid);
+    //     $response_data=SubstitutedTeacher::where('id', $subid)->first();
+    //     return $this->successResponse($response_data);
+    // }
 }

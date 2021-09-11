@@ -630,14 +630,15 @@ Route::prefix('staff')->group(function () {
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
 
     });
-
+    
     Route::prefix('substitution')->group(function (){  
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
         Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
         //
         Route::post('/saveStaffSubstituted', [App\Http\Controllers\staff\SubstitutionController::class, 'saveStaffSubstituted'])->name('saveStaffSubstituted');
-        
+        Route::get('/loadSubstaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadSubstaff'])->name('loadSubstaff');
+        Route::get('/getEditSubstitutedList/{subid}', [App\Http\Controllers\staff\SubstitutionController::class, 'getEditSubstitutedList'])->name('getEditSubstitutedList');
     });
 
 

@@ -238,6 +238,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadStaff/{type}/{model}', ['uses' => 'staff\SubstitutionController@loadStaff']);
         $router->get('/loadsubstitutestaff', ['uses' => 'staff\SubstitutionController@loadsubstitutestaff']);
         $router->post('/saveStaffSubstituted', ['uses' => 'staff\SubstitutionController@saveStaffSubstituted']);
+        $router->get('/loadSubstaff', ['uses' => 'staff\SubstitutionController@loadSubstaff']);
+        $router->get('/getEditSubstitutedList/{subid}', ['uses' => 'staff\SubstitutionController@getEditSubstitutedList']);
     });
 
 });

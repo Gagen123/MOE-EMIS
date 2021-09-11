@@ -11,6 +11,6 @@ class DepartmentMaster extends Model{
     protected $table="master_department";
 
     protected $fillable = [
-        'id','name','dzo_id', 'description', 'status','type','created_by','updated_by','created_at','updated_at'
+        'id','name','dzo_id','code', 'description', 'status','type','created_by','updated_by','created_at','updated_at'
     ];
 }

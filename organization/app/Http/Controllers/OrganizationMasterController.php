@@ -25,11 +25,13 @@ class OrganizationMasterController extends Controller{
         $response_data="";
         $rules = [
             'name'          =>  'required',
+            'code'          =>  'required',
             'description'   =>  'required',
             'status'        =>  'required',
         ];
         $customMessages = [
             'name.required'         => 'This field is required',
+            'code.required'         => 'This field is required',
             'description.required'  => 'This field is required',
             'status.required'       => 'This field is required',
         ];
@@ -38,6 +40,7 @@ class OrganizationMasterController extends Controller{
         //name,description and status should be common to all models. respective model should be passed from ui.
         $master_data = [
             'name'              =>  $request->name,
+            'code'              =>  $request->code,       
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
