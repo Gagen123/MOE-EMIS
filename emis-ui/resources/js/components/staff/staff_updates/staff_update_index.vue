@@ -10,6 +10,8 @@
                         <span :class="item.screen_icon"></span> {{ item.screen_name}}
                     </router-link>
                 </li>
+            </ul>
+            <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
                 <li class="nav-item pr-1">
                     <router-link to="/career_stage" id="career_stage" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
@@ -74,10 +76,14 @@ export default {
             });
         },
     },
-    mounted() {
+    async mounted() {
         let routeparam=this.$route.query.data;
         this.menu_id=routeparam;
         this.getmenus();
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

@@ -644,6 +644,7 @@ Route::prefix('staff')->group(function () {
 
 });
 Route::prefix('common')->group(function () {
+    Route::get('/getEnvValues/{param}', [App\Http\Controllers\CommonController::class, 'getEnvValues'])->name('getEnvValues');
     Route::get('/getRoles/{param}', [App\Http\Controllers\CommonController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
     Route::get('/getscreens/{type}', [App\Http\Controllers\CommonController::class, 'getscreens'])->name('getscreens');
 
