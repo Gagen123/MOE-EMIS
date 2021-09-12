@@ -72,27 +72,20 @@ export default {
         }
     },
     methods: {
-		getmenus(){
-            if(this.menu_id!=undefined && this.menu_id!=null && this.menu_id!=""){
-                let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
-                axios.get(uri)
-                .then(response => {
-                    let data = response;
-                    this.menubar =  data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }
-        },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
         },
     },
     async mounted(){
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
             $('.developemntEnv').hide();

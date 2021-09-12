@@ -63,8 +63,6 @@ export default {
             menubar:[],
         }
     },
-    methods:{
-    },
     async mounted(){
         let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
         axios.get(uri)
