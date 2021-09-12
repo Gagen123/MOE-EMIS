@@ -27,7 +27,8 @@
                             <td>{{ item.from_date}}</td>
                             <td>{{ item.to_date}}</td>
                             <td>{{ teachingSubjList[item.teaching_subject]}}</td>
-                            <td>{{ item.contact_extended}}</td>
+                            <td>{{ item.contact_extended==  1 ? "Yes" : " " }}</td>
+                            <!-- <td>{{ item.contact_extended}}</td> -->
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
                             </td>

@@ -108,6 +108,11 @@ class SubstitutionController extends Controller{
             'isextended'            =>  $request->isextended,
            
         ];
+        if(isset($request->isextended)){
+            $insert_data = $insert_data+[
+                'agency'   =>  $request->agency,
+            ];
+        }
        //dd($insert_data);
         if($request->action_type=="add"){
             $insert_data =$insert_data+[

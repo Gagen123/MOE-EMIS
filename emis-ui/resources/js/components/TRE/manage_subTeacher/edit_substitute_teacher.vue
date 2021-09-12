@@ -119,17 +119,32 @@ export default {
                 this.form.isextended = '';
                 $('#staff_id').val('').trigger('change');
             }
-            if(type=="save"){   
-                this.form.post('staff/substitution/saveStaffSubstituted')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/list_substitute_teacher');
-                })
-                .catch(() => {
-                    console.log("Error:")
+            if(type=="save"){
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('staff/substitution/saveStaffSubstituted',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/list_substitute_teacher');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},
@@ -223,7 +238,7 @@ export default {
             .then((response) =>{
                 let data=response.data.data;
                 this.form.id                        = data.id;
-                alert(JSON.stringify(data.id));
+               // alert(JSON.stringify(data.id));
                 this.form.staff_id                  = data.staff_id;
                 this.form.subsTeacher               = data.subsTeacher;
                 this.form.teaching_subject          = data.teaching_subject;
