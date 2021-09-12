@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Disaster Type</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <!-- <th>Created Date</th> -->
@@ -15,6 +16,7 @@
                 <tr v-for="(item, index) in disasterList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.Created_At }}</td> -->

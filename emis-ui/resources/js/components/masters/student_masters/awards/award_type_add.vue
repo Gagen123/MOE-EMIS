@@ -61,7 +61,7 @@ export default {
                 this.form.name= '';
                 this.form.description='';
                 this.form.status= 1;
-            }
+            } 
             if(type=="save"){
                 Swal.fire({
                     title: 'Are you sure you wish to submit this form ?',

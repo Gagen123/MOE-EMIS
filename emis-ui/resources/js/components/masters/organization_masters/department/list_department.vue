@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Dzongkhag</th>
                     <th>Department</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Type</th>
                     <th>Status</th>
@@ -17,6 +18,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ dzoArray[item.dzo_id]}}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.type}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>

@@ -1,74 +1,73 @@
 <template>
     <div>
-        <form class="bootbox-form">
-            <div class="row form-group">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">CID:<i class="text-danger">*</i></label>
-                    <input v-model="form.cid" :class="{ 'is-invalid': form.errors.has('cid') }" type="text" id="cid" class="form-control" @change="remove_err('cid')">
-                    <has-error :form="form" field="cid"></has-error>
-                    <span class="text-danger" id="cid_err"></span>
-                </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5"> Full Name:<i class="text-danger">*</i></label>
-                    <input v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" type="text" id="name" class="form-control" @change="remove_err('name')">
-                    <has-error :form="form" field="name"></has-error>
-                    <span class="text-danger" id="name_err"></span>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">Gender:<i class="text-danger">*</i></label>
-                    <select v-model="form.gender" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('gender') }" class="form-control select2" name="gender" id="gender">
+        <form>
+            
+            <div class="form-group row">
+                <!-- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
+                    <input type="text" class="form-control" name="staff" readonly id="staff" v-model="form.staffname">
+                </div> -->
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9">
+                    <label class="mb-0.5">Staff:<i class="text-danger">*</i></label><br>
+                    <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
                         <option value=""> --Select--</option>
-                        <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.emp_id }}: {{ item.name }} </option>
                     </select>
-                    <has-error :form="form" field="gender"></has-error>
-                    <span class="text-danger" id="gender_err"></span>
+                    <has-error :form="form" field="staff_id"></has-error>
                 </div>
-                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5"> DOB:<i class="text-danger">*</i></label>
-                    <input v-model="form.dob" :class="{ 'is-invalid': form.errors.has('dob') }" type="text" id="dob" class="form-control" @change="remove_err('dob')">
-                    <has-error :form="form" field="dob"></has-error>
-                    <span class="text-danger" id="dob_err"></span>
-                </div>
-            </div>
-            <div class="row form-group">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">Dzongkhag:<i class="text-danger">*</i></label>
-                    <select v-model="form.dzongkhag" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('dzongkhag') }" class="form-control select2" name="dzongkhag" id="dzongkhag">
-                        <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9">
+                    <label class="">Substitute Teacher:<i class="text-danger">*</i></label>
+                    <select v-model="form.subsTeacher" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('subsTeacher') }" class="form-control select2" name="subsTeacher" id="subsTeacher">
+                        <option v-for="(item, index) in substituteTeacherList" :key="index" v-bind:value="item.id">{{ item.name }} ({{item.cid}})</option>
                     </select>
-                    <has-error :form="form" field="dzongkhag"></has-error>
-                    <span class="text-danger" id="dzongkhag_err"></span>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                   <button type="button" id="updatebtn" @click="getDetailsbyCID()" class="btn btn-primary"> Update Personal Details</button>
+                    <has-error :form="form" field="subsTeacher"></has-error>
+                    <span class="text-danger" id="subsTeacher_err"></span>
                 </div>
             </div>
-            <div class="row form-group">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">Qualification:<i class="text-danger">*</i></label>
-                    <input v-model="form.qualification" :class="{ 'is-invalid': form.errors.has('qualification') }" type="text" id="qualification" class="form-control" @change="remove_err('qualification')">
-                    <has-error :form="form" field="qualification"></has-error>
-                    <span class="text-danger" id="designation_err"></span>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5">Contact Number:<i class="text-danger">*</i></label>
-                    <input v-model="form.contact" :class="{ 'is-invalid': form.errors.has('contact') }" type="text" id="contact" class="form-control" @change="remove_err('contact')">
-                    <has-error :form="form" field="contact"></has-error>
-                    <span class="text-danger" id="contact_err"></span>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label class="mb-0.5"> Email:<i class="text-danger">*</i></label>
-                    <input v-model="form.email" :class="{ 'is-invalid': form.errors.has('email') }" type="text" id="email" class="form-control" @change="remove_err('email')">
-                    <has-error :form="form" field="email"></has-error>
-                    <span class="text-danger" id="email_err"></span>
+            <div class="form-group row">    
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-9">
+                    <label class="">Teaching Subject:<i class="text-danger">*</i></label>
+                    <select v-model="form.teaching_subject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('teaching_subject') }" class="form-control select2" name="teaching_subject" id="teaching_subject">
+                        <option v-for="(item, index) in teachingSubjList" :key="index" v-bind:value="item.id">{{ item.name }} [{{item.code}}]</option>
+                    </select>
+                    <has-error :form="form" field="teaching_subject"></has-error>
+                    <span class="text-danger" id="teaching_subject_err"></span>
                 </div>
             </div>
-            <div class="row form-group fa-pull-right">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <button type="button" class="btn btn-primary" @click="submitDetails()"> <i class="fa fa-save"></i>Save </button>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-1">From Date:<i class="text-danger">*</i></label>
+                    <input type="date" @change="remove_error('start_date')" v-model="form.start_date" :class="{ 'is-invalid': form.errors.has('start_date') }" class="form-control" name="start_date" id="start_date">
+                    <has-error :form="form" field="start_date"></has-error>
                 </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-1">To Date:<i class="text-danger">*</i></label>
+                    <input type="date" @change="remove_error('end_date')" v-model="form.end_date" :class="{ 'is-invalid': form.errors.has('end_date') }" class="form-control" name="end_date" id="end_date">
+                    <has-error :form="form" field="end_date"></has-error>
+                </div>
+            </div>
+           
+            <div class="form-group row">
+                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9">
+                    <label class="mb-0.5">Remarks:</label>
+                    <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                    <has-error :form="form" field="remarks"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                    <label for="isextended" class="">Contract Extension</label>
+                    <div class="col-sm-6">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" v-model="form.isextended">
+                        <label class="form-check-label" for="isextended">
+                          Check, If Yes.
+                        </label>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-right">
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -77,147 +76,189 @@
 export default {
     data(){
         return {
-            sex_idList:[],
-            dzongkhagList:[],
+         //   dzongkhagList:[],
+         //   dzo_id:'',
+         //   departmentList:[],
+         //   orgList:[],
+            staffList:[],
+            teachingSubjList:[],
+            substituteTeacherList:[],
+            positiontitleList:[],
+          //  name:'',
+          //  emp_id:'',
             form: new form({
                 id:'',
-                cid:'',
-                name:'',
-                dob:'',
-                gender:'',
-                dzongkhag:'',
-                contact:'',
-                email:'',
-                qualification:'',
-                action_type:'edit',
+                staff_id:'', 
+                // staffname:'',
+                subsTeacher: '',
+                teaching_subject: '',
+                start_date:'',
+                end_date:'',
+                remarks:'',
+                isextended:'',
+                model:'SubstitutedTeacher',
+                action_type:'edit'
             }),
         }
     },
     methods: {
-        remove_err(field_id){
+        remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
         },
-
-        async changefunction(id){
+        formaction: function(type){
+            if(type=="reset"){
+                this.form.staff_id= '';
+                this.form.subsTeacher= '',
+                this.form.teaching_subject= '',
+                this.form.start_date= '';
+                this.form.end_date= '';
+                this.form.remarks= '';
+                this.form.isextended = '';
+                $('#staff_id').val('').trigger('change');
+            }
+            if(type=="save"){
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('staff/substitution/saveStaffSubstituted',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/list_substitute_teacher');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
+                })
+            }
+		},
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="gender"){
-                this.form.gender=$('#gender').val();
+            // if(id=="dzongkhag_id"){
+            //     if($('#organization_type_id').val()==""){
+            //         $('#organization_type_id_err').html('Please select Organization type');
+            //     }else{
+            //         this.departmentList=[];
+            //         this.orgList=[];
+            //         $('#organization_type_id_err').html('');
+            //         // alert($('#organization_type_id').val());
+            //         if($('#organization_type_id').val()=="Org"){
+            //             $('#departmentdiv').hide();
+            //             this.orgList=await this.schoolList($('#dzongkhag_id').val());
+            //         } else if($('#organization_type_id').val()=="Ministry"){
+            //             $('#departmentdiv').show();
+            //             this.departmentList=await this.getDepartmentListbydzo($('#organization_type_id').val(),$('#dzongkhag_id').val());
+            //         } else{
+            //             this.departmentList=[];
+            //             $('#departmentdiv').show();
+            //             this.departmentList=await this.getDepartmentListbydzo($('#organization_type_id').val(),$('#dzongkhag_id').val());
+            //         }
+            //     }
+            // }
+            // if(id=="dzongkhag_id"){
+            //     this.orgList = [];
+            //     this.orgList=await this.schoolList($('#dzongkhag_id').val());
+            // }
+            // if(id=="department_id"){
+            //     if($('#department_id').val()!=""){
+            //         this.orgList=await this.getdivisionList($('#department_id').val());
+            //     }
+            // }
+            // if(id=="org_id"){
+            //     this.staffList = [];
+            //     this.staffList=await this.staffOrgwise($('#org_id').val());
+            // }
+            if(id=="staff_id"){
+                this.form.staff_id =$('#staff_id').val();
             }
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
+            if(id="subsTeacher"){
+                this.form.subsTeacher =$('#subsTeacher').val();
             }
-        },
+            if(id="teaching_subject"){
+                this.form.teaching_subject =$('#teaching_subject').val();
+            }
+            
 
-        submitDetails(){
-            if(this.validateform()){
-                Swal.fire({
-                    text: "Are you sure you wish to save this staff details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form.post('staff/substitution/savestaff')
-                        .then((response)=> {
-                            Swal.fire(
-                                'Success!',
-                                'Details has been saved successfully.',
-                                'success',
-                            )
-                            this.$router.push('/list_substitute');
-                        })
-                        .catch((error) => {
-                            console.log("Error shownexttab:"+error)
-                        });
-                    }
-                });
-            }
         },
-        validateform(){
-            let returntype=true;
-            if($('#cid').val()==""){
-                $('#cid_err').html('Please provide CID');
-                returntype=false;
-            }
-            if($('#name').val()==""){
-                $('#name_err').html('Please provide name of the person');
-                returntype=false;
-            }
-            if($('#contact').val()==""){
-                $('#contact_err').html('Please provide contact number');
-                returntype=false;
-            }
-            return returntype;
+        loadstaff(uri = 'loadCommons/loadFewDetailsStaffList/allstaff/NA'){
+            axios.get(uri)
+            .then(response => {
+                let data = response 
+                this.staffList =  data.data.data;
+            })
+             .catch(function (error) {
+                console.log("Error......"+error)
+            });
         },
-        getDetailsbyCID(){
-            if (this.form.cid.length == 11){
-                axios.get('getpersonbycid/'+ this.form.cid)
-                .then(response => {
-                    this.ciderror = '';
-                    let personal_detail = response.data;
-                    if (personal_detail!=""){
-                        let fullname=personal_detail.firstName;
-                        if(personal_detail.middleName!=null && personal_detail.middleName!="null" && personal_detail.middleName!=""){
-                            fullname=fullname+' '+personal_detail.middleName;
-                        }
-                        if(personal_detail.lastName!=null && personal_detail.lastName!="null" && personal_detail.lastName!=""){
-                            fullname=fullname+' '+personal_detail.lastName;
-                        }
-                        $('#cid').prop('disabled',true);
-                        this.form.name = fullname;
-                        $('#name').prop('disabled',true);
-                        this.form.dob =personal_detail.dob;
-                        $('#dob').prop('disabled',true);
-
-                        if(personal_detail.gender=="M"){
-                            personal_detail.gender="male";
-                        }
-                        else if(personal_detail.gender=="F"){
-                            personal_detail.gender="female";
-                        }
-                        else{
-                            personal_detail.gender="others";
-                        }
-                        for(let i=0; i<this.sex_idList.length;i++){
-                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                $('#gender').val(this.sex_idList[i].id).trigger('change');
-                                this.form.gender = this.sex_idList[i].id;
-                            }
-                        }
-                        $('#gender').prop('disabled',true);
-                        this.form.dzongkhag = personal_detail.dzongkhagId;
-                        $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                        $('#dzongkhag').prop('disabled',true);
-                    }else{
-                        this.ciderror = 'Invalid CID.';
-                        Swal.fire({
-                            html: "No data found for matching CID",
-                            icon: 'info'
-                        });
-                    }
-                })
-                .catch((e) => {
-                    this.ciderror = 'Invalid CID / service down.';
-                    Swal.fire({
-                        html: "No data found for matching CID/service down"+e,
-                        icon: 'error'
-                    });
-                });
-            }
+        loadstff(uri="staff/substitution/loadStaff/all/SubstitutionModel"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.substituteTeacherList =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_teaching_subject'){
+            axios.get(uri)
+            .then(response => {
+                let data = response 
+                this.teachingSubjList =  data.data.data;
+            })
+             .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        
+        getEditSubstitutedList(subid){
+           // alert(subid);
+            axios.get('staff/substitution/getEditSubstitutedList/' +subid)
+           
+            .then((response) =>{
+                let data=response.data.data;
+                this.form.id                        = data.id;
+               // alert(JSON.stringify(data.id));
+                this.form.staff_id                  = data.staff_id;
+                this.form.subsTeacher               = data.subsTeacher;
+                this.form.teaching_subject          = data.teaching_subject;
+                $('#teaching_subject').val(data.teaching_subject).trigger('change');
+                this.form.start_date                = data.from_date;
+                this.form.end_date                  = data.to_date;
+                this.form.remarks                   = data.remarks;
+                this.form.isextended                = data.isextended;
+                // $('#source').val(data.food_source).trigger('change');
+                // this.form.remark                = data.remark;
+                
+            })
+            .catch((error) =>{
+                console.log("Error:"+error);
+            });
         },
     },
-    async mounted(){
-        this.sex_idList =  await this.loadactiveGlobalList('all_active_gender');
-        this.dzongkhagList =await this.loadactivedzongkhags();
+    mounted(){
+        this.loadstaff();
+     //   this.dzongkhagList= await this.loadactivedzongkhags();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -229,31 +270,16 @@ export default {
         Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
-        axios.get('staff/substitution/loadStaff/by_id__'+this.$route.params.data.id+'/SubstitutionModel')
-        .then((response) => {
-            let data=response.data;
-            if(data!=null && data!=""){
-                this.form.id = data.id;
-                this.form.cid = data.cid;
-                $('#cid').prop('disabled',true);
-                this.form.name = data.name;
-                $('#name').prop('disabled',true);
-                this.form.dob = data.dob;
-                $('#dob').prop('disabled',true);
-                this.form.gender = data.gender;
-                $('#gender').val(data.gender).trigger('change');
-                $('#gender').prop('disabled',true);
-                this.form.dzongkhag = data.dzongkhag;
-                $('#dzongkhag').val(data.dzongkhag).trigger('change');
-                $('#dzongkhag').prop('disabled',true);
-                this.form.qualification = data.qualification;
-                this.form.contact = data.contact;
-                this.form.email = data.email;
-            }
-        })
-        .catch((error) => {
-            console.log("Error......"+error);
-        });
+
+        
+        // this.loadstaff();
+    },
+    created() {
+        this.getEditSubstitutedList(this.$route.params.data.id);
+        this.LoadTeachingSubject();
+        this.loadstff();  
+        this.loadstaff();
+       
     },
 }
 </script>

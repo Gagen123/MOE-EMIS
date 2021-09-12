@@ -462,6 +462,8 @@ Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
+    
+    
 
     Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen
@@ -496,6 +498,8 @@ Route::prefix('staff')->group(function () {
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
         Route::get('/loadSecondment/{type}/{model}', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadSecondment'])->name('loadSecondment');
+        //for generating staff with leave type 
+        Route::get('/loadLeaveStaffList', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadLeaveStaffList'])->name('loadLeaveStaffList');
     });
 
     Route::post('/savequalificationDetails', [App\Http\Controllers\staff\StaffController::class, 'savequalificationDetails'])->name('savequalificationDetails');
@@ -626,12 +630,15 @@ Route::prefix('staff')->group(function () {
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
 
     });
-
-    Route::prefix('substitution')->group(function (){
+    
+    Route::prefix('substitution')->group(function (){  
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
         Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
-
+        //
+        Route::post('/saveStaffSubstituted', [App\Http\Controllers\staff\SubstitutionController::class, 'saveStaffSubstituted'])->name('saveStaffSubstituted');
+        Route::get('/loadSubstaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadSubstaff'])->name('loadSubstaff');
+        Route::get('/getEditSubstitutedList/{subid}', [App\Http\Controllers\staff\SubstitutionController::class, 'getEditSubstitutedList'])->name('getEditSubstitutedList');
     });
 
 

@@ -230,12 +230,16 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
     $router->group(['prefix' => 'staffSepSecController'], function () use ($router) {
         $router->post('/saveSecondmentSeperation', ['uses' => 'staff\StaffSepSecController@saveSecondmentSeperation']);
         $router->get('/loadSecondment/{type}/{model}', ['uses' => 'staff\StaffSepSecController@loadSecondment']);
+        $router->get('/loadLeaveStaffList', ['uses' => 'staff\StaffSepSecController@loadLeaveStaffList']);
     });
 
     $router->group(['prefix' => 'substitution'], function () use ($router) {
         $router->post('/savestaff', ['uses' => 'staff\SubstitutionController@savestaff']);
         $router->get('/loadStaff/{type}/{model}', ['uses' => 'staff\SubstitutionController@loadStaff']);
         $router->get('/loadsubstitutestaff', ['uses' => 'staff\SubstitutionController@loadsubstitutestaff']);
+        $router->post('/saveStaffSubstituted', ['uses' => 'staff\SubstitutionController@saveStaffSubstituted']);
+        $router->get('/loadSubstaff', ['uses' => 'staff\SubstitutionController@loadSubstaff']);
+        $router->get('/getEditSubstitutedList/{subid}', ['uses' => 'staff\SubstitutionController@getEditSubstitutedList']);
     });
 
 });
