@@ -276,12 +276,14 @@ class AcademicMastersController extends Controller
         if($request['record_type']=="teaching_subject"){
             if($request['action_type'] =="add"){
                 $rules = [
+                    'subjecttype'       => 'required',
                     'name'              =>  'required',
                     'code'              =>  'required',
                     'displayorder'      =>  'required',
                     'status'            =>  'required',
                 ];
                 $customMessages = [
+                    'subjecttype.required'          => 'This field is required',
                     'name.required'                 => 'This field is required',
                     'code.required'                 => 'This field is required',
                     'displayorder.required'         => 'This field is required',
@@ -289,6 +291,7 @@ class AcademicMastersController extends Controller
                 ];
                 $this->validate($request, $rules,  $customMessages);
                 $data = [
+                    'subjecttype'       =>  $request['subjecttype'],
                     'name'              =>  $request['name'],
                     'code'              =>  $request['code'],
                     'displayorder'      =>  $request['displayorder'],
@@ -306,12 +309,14 @@ class AcademicMastersController extends Controller
             } 
             if($request['action_type']=="edit"){
                 $rules = [
+                    'subjecttype'       =>  'required',
                     'name'              =>  'required',
                     'code'              =>  'required',
                     'displayorder'      =>  'required',
                     'status'            =>  'required',
                 ];
                 $customMessages = [
+                    'subjecttype.required'          => 'This field is required',
                     'name.required'                 => 'This field is required',
                     'code.required'                 => 'This field is required',
                     'displayorder.required'         => 'This field is required',
@@ -321,10 +326,11 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = TeachingSubject::find($request['id']);
-                $messs_det='name:'.$data->name.'; code:'.$data->code.'; displayorder:'.$data->displayorder.';  description'.$data->description.'; status:'.$data->status;
+                $messs_det='name:'.$data->name.'; code:'.$data->code.';subjecttype:'.$data->subjecttype.'; displayorder:'.$data->displayorder.';  description'.$data->description.'; status:'.$data->status;
               //  $procid= DB::select("CALL ".$this->audit_table.".emis_audit_proc('".$this->database."','aca_teaching_subject','".$request['id']."','".$messs_det."','".$request['user_id']."','Edit')");
                 $data->name = $request['name'];
                 $data->description = $request['description'];
+                $data->subjecttype = $request['subjecttype'];
                 $data->code = $request['code'];
                 $data->displayorder = $request['displayorder'];
                 $data->status = $request['status'];

@@ -263,10 +263,10 @@ class AdministrationController extends Controller{
     public function saveAcademicMasters(Request $request){
         if($request['record_type'] == 'subject') {
             $rules = [
-                'name'    =>  'required',
-                'aca_sub_category_id' => 'required',
-                'display_order' => 'required',
-                'status'    =>  'required',
+                'name'                      =>  'required',
+                'aca_sub_category_id'       => 'required',
+                'display_order'             => 'required',
+                'status'                    =>  'required',
                 'assessed_by_class_teacher' => 'required'
 
             ];
@@ -316,33 +316,37 @@ class AdministrationController extends Controller{
         }
         if($request['record_type'] == 'reason_for_absent') {
             $rules = [
-                'name'  =>  'required',
-                'status'    =>  'required',
+               
+                'name'              =>  'required',
+                'status'            =>  'required',
             ];
             $customMessages = [
-                'name.required' => 'This field is required',
-                'status.required' => 'This field is required',
+               
+                'name.required'                 => 'This field is required',
+                'status.required'               => 'This field is required',
             ];
         }
         if($request['record_type'] == 'teaching_subject') {
             $rules = [
+                'subjecttype'       => 'required',
                 'name'              =>  'required',
                 'code'              =>  'required',
                 'displayorder'      =>  'required',
                 'status'            =>  'required',
             ];
             $customMessages = [
-                'name.required'         => 'This field is required',
-                'code.required'         => 'This field is required',
-                'displayorder.required' => 'This field is required',
-                'status.required'       => 'This field is required',
+                'subjecttype.required'          => 'This field is required',
+                'name.required'                 => 'This field is required',
+                'code.required'                 => 'This field is required',
+                'displayorder.required'         => 'This field is required',
+                'status.required'               => 'This field is required',
             ];
         }
         $this->validate($request, $rules, $customMessages);
 
         $request['user_id'] = $this->userId();
         $data = $request->all();
-      //  dd( $data);
+      
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
     }
