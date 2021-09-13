@@ -627,7 +627,7 @@ Route::prefix('staff')->group(function () {
 
     });
 
-    Route::prefix('substitution')->group(function (){  
+    Route::prefix('substitution')->group(function (){
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
         Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
@@ -637,6 +637,7 @@ Route::prefix('staff')->group(function () {
 
 });
 Route::prefix('common')->group(function () {
+    Route::get('/getEnvValues/{param}', [App\Http\Controllers\CommonController::class, 'getEnvValues'])->name('getEnvValues');
     Route::get('/getRoles/{param}', [App\Http\Controllers\CommonController::class, 'getRoles'])->name('loadTrangetRolessferWindow');
     Route::get('/getscreens/{type}', [App\Http\Controllers\CommonController::class, 'getscreens'])->name('getscreens');
 

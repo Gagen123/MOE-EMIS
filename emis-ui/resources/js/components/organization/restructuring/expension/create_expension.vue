@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="card-header p-0 border-bottom-0">
+             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Expension</label>
-                        </a>
-                    </li>
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -221,7 +221,6 @@ export default {
                         formData.append('Status_Name', this.Status_Name);
                         formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
-
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         // this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
@@ -309,31 +308,6 @@ export default {
                     console.log('error: '+error);
             });
         },
-        loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Expansion__'+1)
-            .then(response => {
-                let data = response.data;
-                alert(JSON.stringify(data));
-                if(data!=undefined && data!="NA"){
-                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
-                    this.screenId=data.screen;
-                    this.SysRoleId=data.SysRoleId;
-                    this.Sequence=data.Sequence;
-                    this.Status_Name=data.Status_Name;
-                    this.screen_name=data.screenName;
-                    $('#screenPermission').hide();
-                    $('#mainform').show();
-                }
-                else{
-                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
-                    $('#screenPermission').show();
-                    // $('#mainform').hide();
-                }
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
-        },
 
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
@@ -377,6 +351,30 @@ export default {
                 data.forEach((item => {
                     this.form.attachments.push({file_name:item.name, file_upload:''});
                 }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Application For Expansion__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
             })
             .catch(errors => {
                 console.log(errors)

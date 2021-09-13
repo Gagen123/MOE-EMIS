@@ -3,11 +3,11 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Stream Change</label>
-                        </a>
-                    </li>
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -321,6 +321,11 @@ export default {
                         }
                         formData.append('application_type', this.form.application_type);
                         formData.append('action_type', this.form.action_type);
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
                         formData.append('status', this.form.status);
                         formData.append('changetype', this.form.changetype);
@@ -335,7 +340,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change of Stream has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change of Stream has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'stream_change_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
@@ -433,6 +438,30 @@ export default {
                 console.log(errors)
             });
         },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Application For Stream Change__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
 
     },
 
@@ -441,6 +470,7 @@ export default {
         .then(response => {
             this.classStreamList = response.data.data;
         });
+        this.loadScreenDetails();
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();

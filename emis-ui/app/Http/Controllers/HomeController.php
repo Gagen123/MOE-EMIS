@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Redirect;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use App\Helper\EmisService;
-use App\Models\Process;
-use App\Models\ActionType;
-use App\Models\Role;
-
+use App\Traits\AuthUser;
 class HomeController extends Controller{
+    use AuthUser;
     public $apiService;
     public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
@@ -191,8 +187,8 @@ class HomeController extends Controller{
         $token =Session::get('User_Token');
         $headers['Authorization'] = 'bearer '. $token;
         // dd($type.' : '.$id.':'.Session::get('User_Details')['system_id']);
-        $role_riv=$this->apiService->listData('getmenusSubMenus/'.$id.'/'.$type, [], $headers);
-        $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.Session::get('User_Details')['system_id'].'/'.$id.'/'.$type, [], $headers);
+        $role_riv=$this->apiService->listData('getmenusSubMenus/'.$this->currentUser()['system_id'].'__'.$this->getRoleIds('roleIds').'/'.$id.'/'.$type, [], $headers);
+        $role_workflow_submitter=$this->apiService->listData('getEmisWorkFlows/submitter/'.$this->currentUser()['system_id'].'__'.$this->getRoleIds('roleIds').'/'.$id.'/'.$type, [], $headers);
         $screens=[];
         $screens_ids="";
         if(($role_workflow_submitter!=null || $role_workflow_submitter!="") && $role_workflow_submitter!="Unauthorized."){

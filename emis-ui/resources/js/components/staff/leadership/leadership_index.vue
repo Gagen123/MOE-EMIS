@@ -11,7 +11,9 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <!-- <li class="nav-item active pr-1" id="feedback_link">
+            </ul>
+            <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
+                <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Leadership Selection Type
                     </router-link>
@@ -36,22 +38,14 @@
                     <router-link id="service" to="/apply_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Apply for Post
                     </router-link>
-                </li> -->
-
-                <!-- Previous nomination Link
-                <li class="nav-item active pr-1">
-                    <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Nomination
-                    </router-link>
-                </li> -->
+                </li>
 
                 <!-- This menu should be static as its checked through the user id -->
-                <!-- <li class="nav-item active pr-1" id="feedback_link">
+                <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_feedback" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Feedback
                     </router-link>
-                </li> -->
-
+                </li>
             </ul>
             <router-view></router-view>
         </div>
@@ -98,11 +92,15 @@ export default {
             this.$router.push({name:data,query: {data:action}});
         },
     },
-    mounted(){
+    async mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
         this.checkfeedbackMenu();
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

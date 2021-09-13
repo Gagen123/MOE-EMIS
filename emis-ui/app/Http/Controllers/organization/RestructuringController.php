@@ -148,7 +148,7 @@ class RestructuringController extends Controller
         // dd($request->screenId,$this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq),$seq);
         $role_id=$next_roleId[0]->SysRoleId;
 
-        //For name change and respecially when there are multipe approver
+        //For name change and especially when there are multipe approver
         if($request->application_type == "name_change"){
             if(strpos($role_id,',')){
                 $roles=explode(',',$role_id);
@@ -283,7 +283,6 @@ class RestructuringController extends Controller
             'user_id'           =>  $this->userId(),
         ];
         $updated_data=$this->apiService->createData('emis/common/updateTaskDetails',$update_data);
-
         // $workflowstatus=$this->getCurrentWorkflowStatus(json_decode($updated_data)->data->screen_id);
         $workflowstatus="";
         $screen_id="";

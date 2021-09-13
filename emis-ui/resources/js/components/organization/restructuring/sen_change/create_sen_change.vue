@@ -281,7 +281,6 @@ export default {
                 console.log(errors)
             });
         },
-
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');

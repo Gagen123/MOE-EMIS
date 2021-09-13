@@ -387,7 +387,7 @@ export default {
                 console.log(errors)
             });
         },
-         loadScreenDetails(){
+        loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/Application for Autonomy__'+1)
             .then(response => {
                 let data = response.data.data;
