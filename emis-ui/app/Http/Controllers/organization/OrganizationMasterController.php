@@ -26,7 +26,7 @@ class OrganizationMasterController extends Controller{
         $customMessages = [
             'name.required'         => 'This field is required',
             'status.required'       => 'This field is required',
-            'code.required'       => 'This field is required',
+            'code.required'         => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $request_data =[

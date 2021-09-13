@@ -16,6 +16,6 @@ class Stream extends Model
      * @var array
      */
     protected $fillable = [
-        'id','stream', 'description', 'status','created_by','updated_by'
+        'id','stream','code', 'description', 'status','created_by','updated_by'
     ];
 }
