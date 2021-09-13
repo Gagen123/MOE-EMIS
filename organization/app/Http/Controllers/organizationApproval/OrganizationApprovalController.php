@@ -357,8 +357,20 @@ class OrganizationApprovalController extends Controller{
                     }
                 }
             }
+            if($app_details->levelId!=""){
+                $lev=Level::where('id',$app_details->levelId)->first();
+                if($lev!=null && $lev!=""){
+                    $response_data->org_level=$lev->name;
+                }
+            }
             if($app_details->locationId!=""){
                 $loc=Location::where('id',$app_details->locationId)->first();
+                if($loc!=null && $loc!=""){
+                    $response_data->location_type=$loc->name;
+                }
+            }
+            if($response_data->establishment_type=="Private School" && $app_details->proposedLocation!=""){
+                $loc=Location::where('id',$app_details->proposedLocation)->first();
                 if($loc!=null && $loc!=""){
                     $response_data->location_type=$loc->name;
                 }

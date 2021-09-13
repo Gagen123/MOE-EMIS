@@ -65,11 +65,11 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
-                                    <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
+                                    <span class="text-blue text-bold">{{app_org_details.proposedName}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Private School'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{levelList[applicationOrgdetails.levelId]}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.org_level}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -89,11 +89,11 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
-                                    <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.location_type}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Private School'">
                                     <label class="mb-0">Type of School:</label>
-                                    <span class="text-blue text-bold">{{ applicationOrgdetails.typeOfSchool  == 1 ? "Yes" :  "No" }}</span>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.typeOfSchool}}</span>
                                 </div>
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
@@ -143,42 +143,8 @@
                                         <span class="text-blue text-bold">{{applicationdetails.org_details.proprietorEmail}}</span>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                   <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Total Area of Land Proposed:</label>
-                                        <span class="text-blue text-bold">{{applicationdetails.org_details.totalLand}}</span>
-                                    </div> -->
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Type of School:</label>
-                                        <span class="text-blue text-bold">{{ applicationdetails.org_details.typeOfSchool  == 1 ? "Day" :  "Boarding"}}</span>
-                                    </div>
-                                </div>
                             </div>
-                            <div class="row pb-2">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5><u>Attachments</u></h5>
-                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Attachment Name</th>
-                                                <th>Attachment</th>
-                                                <th>File</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                                <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
-                                                    <td> {{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
-                                                    <td>
-                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                    </td>
-                                                </template>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -189,7 +155,7 @@
                     </div>
                     <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
-                            <h4><u>Classes / streams / Age Group</u></h4>
+                            <h4><u>Classes / streams</u></h4>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                 <table id="class-table" class="table table-sm table-bordered table-striped">
                                     <thead>
@@ -219,15 +185,37 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <br>
-                                        <input type="checkbox" checked="true"><label class="pr-4">
-                                         &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                    </span>
-                                </div>  -->
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
+                        <div class="row pb-2">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h5><u>Attachments</u></h5>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Attachment Name</th>
+                                            <th>Attachment</th>
+                                            <th>File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                            <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
+                                                <td> {{attach.user_defined_file_name}} </td>
+                                                <td>  {{attach.name}}</td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade tab-content-details" id="verification-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <h4><u>Site Visit and Verification Details</u></h4>
                             <div class="row form-group">
@@ -445,9 +433,7 @@ export default {
             streamArray:{},
             sectionList:[],
 
-            levelList:{},
             proposed_by_list:{},
-            locationList:[],
             feeding:[],
             isFeeding:0,
             feed_details:'',
@@ -511,6 +497,9 @@ export default {
                 this.applicationdetails=data;
                 this.taskDet=response.data.app_stage;
                 this.app_org_details=data.org_details;
+                if(this.applicationdetails.org_level.toLowerCase().includes('higher')){
+                    $('.strm_clas').show();
+                }
                 if(data.attachments!=undefined && data.attachments!=""){
                     this.app_attachments=data.attachments;
                 }
@@ -588,9 +577,6 @@ export default {
 
                 }
 
-                if(this.levelList[this.applicationOrgdetails.levelId].toLowerCase().includes('higher')){
-                    $('.strm_clas').show();
-                }
 
             })
             .catch((error) => {
@@ -786,24 +772,7 @@ export default {
                 $('#'+nextclass).show().removeClass('fade');
             }
         },
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.levelList[data[i].id] = data[i].name;
-                }
-            });
-        },
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.locationList[data[i].id] = data[i].name;
-                }
-            });
-        },
+
         getClassStream:function(){
             axios.get('/masters/loadClassStreamMapping')
               .then(response => {
@@ -849,14 +818,10 @@ export default {
         },
     },
     mounted(){
-        this.getLevel();
-        this.getLocation();
         this.getClass();
         this.getstream();
         this.loadproposedBy();
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
-
-
     }
 }
 </script>
