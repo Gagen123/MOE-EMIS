@@ -11,6 +11,6 @@ class ProposedBy extends Model
     use HasFactory, Uuid;
     protected $table="master_proposed_by";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by'
+        'id','name', 'code','description', 'status','created_by','updated_by'
     ];
 }

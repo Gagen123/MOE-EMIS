@@ -14,6 +14,11 @@
                         <has-error :form="form" field="addfield_1"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" tabindex="2" autofocus="true">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" tabindex="2" :class="{ 'is-invalid': form.errors.has('description') }" id="description" type="text"/>
                         <has-error :form="form" field="description"></has-error>
@@ -42,6 +47,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                code: '',
                 addfield_1:'',
                 description:'',
                 status: 1,
@@ -60,26 +66,43 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.code= '';
                 this.form.description= '';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/organizationMasterController/saveOrganizationMaster')
-                .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Financial Information is udpated successfully'
-                    })
-                    this.$router.push('/list_financial_information');
-                })
-                .catch((err) => {
-                    console.log("Error:"+err)
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('masters/organizationMasterController/saveOrganizationMaster',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/list_financial_information');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},
     },
     created() {
         this.form.name          =this.$route.query.data.name;
+        this.form.code          =this.$route.query.data.code;
         this.form.description   =this.$route.query.data.description;
         this.form.addfield_1    =this.$route.query.data.applicableTo;
         this.form.status        =this.$route.query.data.status;

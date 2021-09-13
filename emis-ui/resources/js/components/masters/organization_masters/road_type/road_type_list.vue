@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Road Type</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in roadTypeList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
