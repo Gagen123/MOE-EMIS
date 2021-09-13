@@ -91,8 +91,8 @@
                                 </div>
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
-                                    <label><input  type="radio" v-model="form.typeOfSchool" value="1" tabindex=""/> Day</label>
-                                    <label><input  type="radio" v-model="form.typeOfSchool" value="0" tabindex=""/> Boarding</label>
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="Day Scholar" tabindex=""/> Day</label>
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="Boarding" tabindex=""/> Boarding</label>
                                 </div>
                             </div>
                             <hr>
@@ -288,8 +288,7 @@ export default {
                 // totalLand:'',
                 // enrollmentBoys:'',
                 // enrollmentGirls:'',
-
-                category:'private_school',
+                category:'private',
                 establishment_type:'Private School',
                 status:'pending',
             }),
@@ -318,28 +317,6 @@ export default {
         }
     },
     methods: {
-        loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/'+'Private School__'+1)
-            .then(response => {
-                let data = response.data.data;
-                if(data!=undefined && data!="NA"){
-                    $('#privatescreen').html('<b>'+data.screenName);
-                    this.screenId=data.screen;
-                    this.SysRoleId=data.SysRoleId;
-                    this.Sequence=data.Sequence;
-                    this.Status_Name=data.Status_Name;
-                    this.file_form.service_name=data.screenName;
-                }else{
-                    $('#screenPermission').show();
-                    $('#mainform').hide();
-                    $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
-                }
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
-        },
-
         /**
          * method to get level in dropdown
          */
@@ -655,7 +632,26 @@ export default {
         }
     },
     async mounted() {
-        this.loadScreenDetails();
+        axios.get('organizationApproval/getScreenId/'+'Private School__'+1)
+        .then(response => {
+            let data = response.data.data;
+            if(data!=undefined && data!="NA"){
+                $('#privatescreen').html('<b>Application for Establishment of '+data.screenName);
+                this.screenId=data.screen;
+                this.SysRoleId=data.SysRoleId;
+                this.Sequence=data.Sequence;
+                this.Status_Name=data.Status_Name;
+                this.file_form.service_name=data.screenName;
+            }else{
+                $('#screenPermission').show();
+                $('#mainform').hide();
+                $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+            }
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
         this.locationList = await this.loadlocationList();
         this.getLevel();
         this.getAttachmentType('Application_for_Private_School');

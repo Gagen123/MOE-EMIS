@@ -701,6 +701,10 @@ class ChangeBasicDetailsController extends Controller
         $data =[
             'ApplicationDetailsId'          => $applicationDetailsId,
             'organizationId'                =>  $request['organizationId'],
+            // 'category'                      =>  $request['category'],
+            // 'subCategory'                   =>  $request['subCategory'],
+            // 'constructionType'              =>  $request['constructionType'],
+            // 'structureNo'                   =>  $request['structureNo'],
             'change_type'                   =>  $request['application_for'],
             'proposedChange'                =>  $request['currentCapacity'],
             'changeInDetails'               =>  $request['proposedCapacity'],
