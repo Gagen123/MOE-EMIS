@@ -50,4 +50,48 @@ class SubstitutionController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/substitution/loadsubstitutestaff/');
         return $response_data;
     }
-}
+    public function saveStaffSubstituted(Request $request){
+        $rules = [
+            'staff_id'              =>  'required',
+            'start_date'            =>  'required',
+            'subsTeacher'           =>  'required',
+            'teaching_subject'      =>  'required',
+            // 'end_date'              =>  'required',
+        ];
+        $customMessages = [
+            'staff_id.required'                 => 'Please select applicant',
+            'start_date.required'               => 'This field is required',
+            'subsTeacher.required'              => 'This field is required',
+            'teaching_subject.required'         => 'This field is required',
+            // 'end_date.required'     => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $request_data =[
+            'id'                                =>  $request->id,
+            'staff_id'                          =>  $request->staff_id,
+            'subsTeacher'                       =>  $request->subsTeacher,
+            'teaching_subject'                  =>  $request->teaching_subject,
+            'start_date'                        =>  $request->start_date,
+            'end_date'                          =>  $request->end_date,
+            'isextended'                        =>  $request->isextended,
+            'model'                             =>  $request->model,
+            'action_type'                       =>  $request->action_type,
+            'remarks'                           =>  $request->remarks,
+            'user_id'                           =>  $this->userId(),
+        ];
+       // dd( $request_data);
+        $response_data= $this->apiService->createData('emis/staff/substitution/saveStaffSubstituted', $request_data);
+        return $response_data;
+    }
+    public function loadSubstaff(){
+        //dd('m here');
+        $response_data= $this->apiService->listData('emis/staff/substitution/loadSubstaff');
+        return $response_data;
+    }
+    public function getEditSubstitutedList($subid=""){
+        //dd('m here');
+        $response_data= $this->apiService->listData('emis/staff/substitution/getEditSubstitutedList/'.$subid);
+        return $response_data;
+    }
+}   
+

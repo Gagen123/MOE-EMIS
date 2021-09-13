@@ -12,6 +12,7 @@ class MastersAccessible extends Model
     use HasFactory, Uuid;
     protected $table="accessible_type";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by','created_at','updated_at'
+        'id','name', 'description','code',
+         'status','created_by','updated_by','created_at','updated_at'
     ];
 }
