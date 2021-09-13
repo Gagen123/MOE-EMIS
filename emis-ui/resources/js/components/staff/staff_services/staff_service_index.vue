@@ -58,23 +58,16 @@ export default {
             menu_id:'',
         }
     },
-    methods: {
-		getmenus(){
-            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
-        },
-    },
     async mounted() {
-        let routeparam=this.$route.query.data;
-        this.menu_id=routeparam;
-        this.getmenus();
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
             $('.developemntEnv').hide();

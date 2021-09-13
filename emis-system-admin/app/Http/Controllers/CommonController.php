@@ -35,6 +35,7 @@ class CommonController extends Controller{
             'user_id'                   =>  $request->user_id,
             'type'                      =>  $request->type,
         ];
+       
         $access_level=$data['access_level'];
         $dzo_id=$data['dzongkhag'];
         $org_id=$data['org'];
@@ -110,26 +111,61 @@ class CommonController extends Controller{
                 }
             }
 
-            //pulling application for the transfer
             // return $work_flow_for_transfer;
-            if($work_flow_for_transfer!=""){
-                $result_data.='(';
-                foreach($work_flow_for_transfer as $i => $srcn){
-                    $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
-                    if(sizeof($work_flow_for_transfer)-1==$i){
-                        $result_data.=')';
-                    }
-                    else{
-                        $result_data.='  OR ';
+            //This query is for organization level during the transfer process
+            if(strtolower($access_level)=="org"){
+                if($work_flow_for_transfer!=""){
+                    $result_data.='OR (';
+                    foreach($work_flow_for_transfer as $i => $srcn){
+                        $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                        if(sizeof($work_flow_for_transfer)-1==$i){
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.='  OR ';
+                        }
                     }
                 }
             }
+            //This query is for dzongkhag level during the transfer process
+            else if(strtolower($access_level)=="dzongkhag"){
+                if($work_flow_for_transfer!=""){
+                    $result_data.='OR(';
+                    foreach($work_flow_for_transfer as $i => $srcn){
+                        $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                        if(sizeof($work_flow_for_transfer)-1==$i){
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.='  OR ';
+                        }
+                    }
+                }
+
+            }
+             //This query is for Ministry level during the transfer process
+            else if(strtolower($access_level)=="ministry"){
+                if($work_flow_for_transfer!=""){
+                    $result_data.='(';
+                    foreach($work_flow_for_transfer as $i => $srcn){
+                        $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
+                        if(sizeof($work_flow_for_transfer)-1==$i){
+                            $result_data.=')';
+                        }
+                        else{
+                            $result_data.='  OR ';
+                        }
+                    }
+                }
+
+            }
+
             //pulling approved transfer Application for DEO
             if($request->approved_transfer_data=="Valid"){
                 $result_data.=' OR (t.claimed_by IS NULL AND t.application_number like "TR%"  AND t.status_id=10 AND t.service_name = "Inter Transfer")';
             }
             //final query
-            return $result_data;
+            // return $result_data;
             return DB::select($result_data);
         }
     }

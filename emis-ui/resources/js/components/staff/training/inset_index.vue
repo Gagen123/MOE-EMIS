@@ -38,27 +38,20 @@ export default {
         }
     },
     methods: {
-		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
         },
     },
     async mounted(){
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
             $('.developemntEnv').hide();

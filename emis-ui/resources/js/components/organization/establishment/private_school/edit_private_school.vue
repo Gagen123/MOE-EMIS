@@ -91,8 +91,8 @@
                                 </div>
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of School:<span class="text-danger">*</span></label>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
-                                    <label><input  type="radio" v-model="form.typeOfSchool" value="1" tabindex=""/> Day</label>
-                                    <label><input  type="radio" v-model="form.typeOfSchool" value="0" tabindex=""/> Boarding</label>
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="Day Scholar" tabindex=""/> Day</label>
+                                    <label><input  type="radio" v-model="form.typeOfSchool" value="Boarding" tabindex=""/> Boarding</label>
                                 </div>
                             </div>
                             <hr>
@@ -575,8 +575,6 @@ export default {
                     .catch((err) => {
                         console.log("Error:"+err)
                     })
-
-
                 }else{
                     this.change_tab(nextclass);
                 }

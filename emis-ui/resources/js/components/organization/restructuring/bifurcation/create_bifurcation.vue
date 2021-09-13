@@ -1,8 +1,15 @@
 <template>
     <div>
         <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="existmessage"></div>
+           <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
+                </ul>
+            </div>
         </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
@@ -126,15 +133,7 @@
                                         <has-error :form="form" field="level1"></has-error>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
-                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
-                                    </div>
-                                </div> -->
+                              
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
@@ -154,31 +153,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.senSchool1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.senSchool1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Co-Located with Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input  type="radio" v-model="form.coLocated1" value="1" tabindex=""/> Yes</label>
-                                        <label><input  type="radio" v-model="form.coLocated1" value="0"  tabindex=""/> No</label>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Parent School:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="category" v-model="form.parentSchool1" id="" class="form-control currentDetails">
-                                            <option value="">--- Please Select ---</option>
-                                            <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                        </select>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
@@ -682,13 +656,19 @@ export default {
                         formData.append('senSchool1', this.form.senSchool1);
                         formData.append('coLocated1', this.form.coLocated1);
                         formData.append('parentSchool1', this.form.parentSchool1);
+                       
+
                         for(let i=0;i<this.form.class.length;i++){
                             formData.append('class[]', this.form.class[i]);
                         }
                          for(let i=0;i<this.form.stream.length;i++){
                             formData.append('stream[]', this.form.stream[i]);
                         }
-
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
@@ -703,7 +683,7 @@ export default {
                         //this.form.post('organization/saveBifurcation')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application response.data.application_numberfor Bifurcation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'bifurcation_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -756,26 +736,31 @@ export default {
                 this.orgList = response.data.data;
             });
         },
-
-        /**
-         * method to check pending status
-         */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
-
-        // checkPendingApplication(){
-        //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {
-        //         let data=response.data;
-        //         if(data!=""){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error: "+error);
-        //     });
-        // },
+        //loading the screen id
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Application For Bifurcation__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
@@ -789,9 +774,11 @@ export default {
                 console.log(errors)
             });
         },
+       
 
     },
     created(){
+        // this.loadScreenDetails();
         this.getLevel();
         this.getLocation();
         this.getLevel1();
