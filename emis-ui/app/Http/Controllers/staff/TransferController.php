@@ -53,6 +53,8 @@ class TransferController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/transfer/getDraftDetails/'.$this->userId());
         return $response_data;
     }
+
+    //submitting the final application for transfer
     public function submitFinalapplicantDetails(Request $request){
         $service_name = $request->service_name;
         $rules = [
@@ -102,6 +104,7 @@ class TransferController extends Controller{
             'user_id'                           =>  $this->userId(),
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
+        $appNo = json_decode($response_data)->data->aplication_number;
         $workflow_data=[
             'db_name'           =>$this->database_name,
             'table_name'        =>$this->table_name,
@@ -118,6 +121,24 @@ class TransferController extends Controller{
             'action_by'         =>$this->userId(),
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        // $sequence=1;
+        // $seq= $sequence +1;
+        // $role_id= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')."__nextrole"));
+        // // dd($role_id);
+        // $notification_data=[
+        //     'notification_for'              =>$request->screen_name,
+        //     'notification_appNo'            =>  $appNo,
+        //     'notification_message'          =>  '',
+        //     'notification_type'             =>  'role',
+        //     'notification_access_type'      =>  'all',
+        //     'call_back_link'                =>  'tasklist',
+        //     'user_role_id'                  =>  'e5877ece-9d58-46f1-b860-db1051f7523a',
+        //     'dzo_id'                        =>  $this->getUserDzoId(),
+        //     'working_agency_id'             =>  $this->getWrkingAgencyId(),
+        //     'access_level'                  =>  $this->getAccessLevel(),
+        //     'action_by'                     =>  $this->userId(),
+        // ];
+        // $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
         return $work_response_data;
     }
 
@@ -231,7 +252,7 @@ class TransferController extends Controller{
             $org_status="Joined";
             $work_status=8;
         }
-        if($request->transferType == "intra_transfer"){
+        if($request->transferType == "Intra Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
@@ -249,7 +270,7 @@ class TransferController extends Controller{
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
         }
-        if($request->transferType == "inter_transfer"){
+        if($request->transferType == "Inter Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
                 'status'            =>  $org_status,
@@ -269,7 +290,7 @@ class TransferController extends Controller{
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         }
-        if($request->transferType=='intra_transfer'){
+        if($request->transferType=='Intra Transfer'){
             $data =[
                 'id'                            =>  $request->id,
                 'status'                        =>  $org_status,
@@ -289,7 +310,7 @@ class TransferController extends Controller{
 
             $response_data= $this->apiService->createData('emis/staff/transfer/updateTransferApplication', $data);
         }
-        else if($request->transferType=='inter_transfer'){
+        else if($request->transferType=='Inter Transfer'){
             $data =[
                 'id'                            =>  $request->id,
                 'status_id'                     =>  $org_status,

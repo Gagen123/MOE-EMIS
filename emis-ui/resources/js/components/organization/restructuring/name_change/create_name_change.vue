@@ -1,14 +1,14 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="screenPermission">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="message"></div>
-        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <div class="form-group row bg-gray-light">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <span id="screenName"></span>
-                </div>
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
+                </ul>
             </div>
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
@@ -27,7 +27,7 @@
                                     </div>
                                      <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
                                         <label>Organization Type:</label>
-                                        <input type="text" readonly :value="form.category"  class="form-control" id="category"/>
+                                        <input type="text" readonly :value="form.organization_type"  class="form-control" id="organization_type"/>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -35,7 +35,7 @@
                                         <label>Current Name:</label>
                                         <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <div class="col-lg-4 col-md-4 col-sm-4" id="level">
                                         <label>Level:</label>
                                         <input type="text" readonly :value="levelArray[organization_details.levelId]"  class="form-control" id="proposedName"/>
                                     </div>
@@ -66,16 +66,16 @@
                                             <thead>
                                                 <tr>
                                                     <th>Classes</th>
-                                                    <th class="strm_clas">Stream</th>
+                                                    <th class="strm_clas" id="stream">Stream</th>
                                                     <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(item, key, index) in  organization_details.classes" :key="index">
                                                     <td>
-                                                        <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                                        <label class="pr-4"> &nbsp;{{ classArray[item.classId] }} </label>
                                                     </td>
-                                                    <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
+                                                    <td class="strm_clas" v-if="classArray[item.classId]=='Class 11' || classArray[item.classId]=='XI' || classArray[item.classId]=='Class 12' || classArray[item.classId]=='XII'" id="classArray">
                                                         {{  streamArray[item.streamId]  }}
                                                     </td>
                                                     <td class="strm_clas" v-else> </td>
@@ -170,7 +170,7 @@ export default {
             gewogArray:{},
             villageArray:{},
             locationArray:{},
-            calssArray:{},
+            classArray:{},
             streamArray:{},
             orgList:'',
             classList:[],
@@ -226,9 +226,6 @@ export default {
                  $('#orgType').hide();
             });
         },
-        //loading screen details
-
-
         /**
          * method to show next and previous tab
          */
@@ -270,7 +267,6 @@ export default {
                         formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
                         axios.post('organization/saveChangeBasicDetails', formData, config)
-                        //this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
                                 if(response.data=="No Screen"){
@@ -320,6 +316,10 @@ export default {
                 this.form.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
+                if(this.form.organization_type == "public_eccd" || this.form.organization_type == "private_eccd" ){
+                   $('#level').hide();  
+
+                }
             });
         },
         getLevel(uri = '/organization/getLevelInDropdown'){
@@ -386,11 +386,10 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class;
+                    this.classArray[data[i].id] = data[i].class;
                 }
             });
         },
-
         getstream:function(){
             axios.get('/organization/getStream')
               .then(response => {
@@ -424,7 +423,7 @@ export default {
                 console.log(errors)
             });
         },
-         applyselect2(){
+        applyselect2(){
             this.applyselect2field('level');
             this.applyselect2field('dzongkhag');
             this.applyselect2field('gewog');

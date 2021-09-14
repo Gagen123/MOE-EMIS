@@ -17,6 +17,6 @@ class StructureSubCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'id','structureCategory','name', 'description', 'status','created_by','updated_by'
+        'id','structureCategory','name','code', 'description', 'status','created_by','updated_by'
     ];
 }

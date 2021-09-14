@@ -18,6 +18,7 @@ class CeaTraining extends Model
         'CeaTrainingId',
         'CeaProgrammeId',
         'Description', 
+        'Code',
         'Status'
     ];
 }

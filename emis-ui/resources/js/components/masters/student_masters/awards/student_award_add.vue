@@ -18,7 +18,7 @@
                             <has-error :form="form" field="award_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0.5">Program:<i class="text-danger">*</i></label>
+                        <label class="mb-0.5">Program:</label>
                             <select v-model="form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
                                 <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
@@ -26,6 +26,11 @@
                     </div>
                 </div>
                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
@@ -57,17 +62,18 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                code:'',
                 award_type_id:'',
                 program_id:'',
                 description:'',
                 status: 1,
-                record_type:'student_awards',
+                record_type:'StudentAwards',
                 action_type:'add',
             })
         }
     },
     methods: {
-        loadActiveAwardList(uri='masters/loadStudentMasters/student_award_type'){
+        loadActiveAwardList(uri='masters/loadActiveStudentMasters/StudentAwardType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -77,7 +83,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -112,16 +118,31 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStudentMasters',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/student_award_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('/masters/saveStudentMasters',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/student_award_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		}, 

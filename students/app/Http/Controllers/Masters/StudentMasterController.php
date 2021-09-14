@@ -45,26 +45,23 @@ class StudentMasterController extends Controller
     */
 
     public function saveStudentMasters(Request $request){
-       // dd($request);
         $rules = [
             'name'  =>  'required',
         ];
 
         $this->validate($request, $rules);
 
-        $record_type = $request['recordtype'];
+        $record_type = $request['record_type'];
 
         $data = $this->extractRequestInformation($request, $record_type, $type='data');
-
         $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
 
-        if($request->actiontype=="add"){
+        if($request->action_type=="add"){
             $response_data = $this->insertData($data, $databaseModel);
         }
-        else if($request->actiontype=="edit"){
+        else if($request->action_type=="edit"){
             $response_data = $this->updateData($request,$data, $databaseModel);
         }
-       // dd($response_data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
@@ -92,51 +89,44 @@ class StudentMasterController extends Controller
 
         }else{
             foreach ($request->input('subjectlist') as  $i=> $classstream){
-                   $marks="";
-                   if(isset($classstream['marks'])){
-                       $marks=$classstream['marks'];
-                   }
-                   $grade="";
-                   if(isset($classstream['grade'])){
-                       $grade=$classstream['grade'];
-                   }
-                   $subject_name="";
-                   if(isset($classstream['name'])){
-                        $subject_name=$classstream['name'];
-                    }
-                   $aca_sub_id="";
-                   if(isset($classstream['aca_sub_id'])){
-                       $aca_sub_id=$classstream['aca_sub_id'];
-                   }
-                   $data = array(
-                    'streamId'           =>  $request['streamId'],
-                    'aca_sub_id'         =>  $aca_sub_id,
-                    'subject_name'       =>  $subject_name,
-                    'marks'              =>  $marks,
-                    'grade'              =>  $grade,
-                    'id'                 =>  $request['id'],
-                    'created_by'         =>  $request->user_id,
-                    'created_at'         =>  date('Y-m-d h:i:s')
-                   );
-                   try{
-                    SubjectMarks::create($data);
-        
-                    } catch(\Illuminate\Database\QueryException $ex){
-                        dd($ex->getMessage());
-                        // Note any method of class PDOException can be called on $ex.
-                    }
-                   
-               }
-
+                $marks="";
+                if(isset($classstream['marks'])){
+                    $marks=$classstream['marks'];
+                }
+                $grade="";
+                if(isset($classstream['grade'])){
+                    $grade=$classstream['grade'];
+                }
+                $subject_name="";
+                if(isset($classstream['name'])){
+                    $subject_name=$classstream['name'];
+                }
+                $aca_sub_id="";
+                if(isset($classstream['aca_sub_id'])){
+                    $aca_sub_id=$classstream['aca_sub_id'];
+                }
+                $data = array(
+                'streamId'           =>  $request['streamId'],
+                'aca_sub_id'         =>  $aca_sub_id,
+                'subject_name'       =>  $subject_name,
+                'marks'              =>  $marks,
+                'grade'              =>  $grade,
+                'id'                 =>  $request['id'],
+                'created_by'         =>  $request->user_id,
+                'created_at'         =>  date('Y-m-d h:i:s')
+                );
+                SubjectMarks::create($data);
+                
             }
-            return $this->successResponse(Response::HTTP_CREATED);
-
 
         }
-        public function loadstreamMarks(){
-            return $this->successResponse(SubjectMarks::all());
+        return $this->successResponse(Response::HTTP_CREATED);
+    }
 
-        }
+    public function loadstreamMarks(){
+        return $this->successResponse(SubjectMarks::all());
+
+    }
 
     public function saveValidationcondition(Request $request){
         $rules = [
@@ -161,7 +151,7 @@ class StudentMasterController extends Controller
             'no_months'                 =>  $request->no_months,
             'no_months1'                =>  $request->no_months1,
         ];
-        // dd($data);
+        
         $existing_data=AdmissionValidationModel::first();
         if($existing_data!=null && $existing_data!=""){
             $response_data = AdmissionValidationModel::first();
@@ -195,40 +185,38 @@ class StudentMasterController extends Controller
     public function loadStudentMasters($param=""){
         $orginal_param=$param;
         if(strpos($param,'_Active')){
-            // $param=explode('_',$param)[0]; //commented by Tshewang as there are pareamers which contains _ more then 1 like student_program_Active
             $param=str_replace('_Active','',$param);
         }
 
-        $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+        if($param == 'program_name' || $param == 'club_name'){
+            $model_name = 'CeaProgram';
+        } else {
+            $model_name = $param;
+        }
+
+        $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
 
         $model = new $modelName();
-        //need to separate programs from clubs
 
         if($param == 'program_name'){
-            //commented by Tshewang and load respective master data by program type
-            // $program_type = CeaProgram::where('Name', 'like', 'Program%')->select('id')->first();
-            // $response_data = $model::where('id', $program_type->id)->get();
             $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
             $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
-            // dd($response_data);
 
         } elseif($param == 'club_name'){
-            //commented by Tshewang and load respective master data by program type
-            // $program_type = CeaProgram::where('Name', 'like', 'Club%')->select('id')->first();
-            // $response_data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
             $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
             return $this->successResponse($response_data);
 
-        } elseif(strpos($orginal_param,'_Active')){//change from param to $orginal_param as param value is changing above
+        } elseif(strpos($orginal_param,'_Active')){
+            //change from param to $orginal_param as param value is changing above
             return $this->successResponse($model::where('status',1)->get());
 
-        } elseif($param == 'student_award_type'){
+        } elseif($param == 'StudentAwardType'){
             return $this->successResponse(StudentAwardType::all());
 
-        } elseif($param == 'program_type'){
+        } elseif($param == 'CeaProgramType'){
             return $this->successResponse(CeaProgramType::all());
 
         } else {
@@ -245,16 +233,17 @@ class StudentMasterController extends Controller
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
-            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());
 
         } else if($param == 'program_student_roles'){
             $status = '1';
             $assigned_to = '2';
-            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());//change from assigned_to AssignTo by Tshewang as its find in db
+            return $this->successResponse(CeaRole::where('status',$status)->where('AssignedTo', $assigned_to)->get());
 
         } else if($param == 'program_name'){
+            $model_name = 'CeaProgram';
             $program_type = CeaProgramType::where('Name', 'like', 'Program%')->select('id')->first();
-            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
 
@@ -262,8 +251,9 @@ class StudentMasterController extends Controller
             return $data;
 
         } else if($param == 'club_name'){
+            $model_name = 'CeaProgram';
             $program_type = CeaProgramType::where('Name', 'like', 'Club%')->select('id')->first();
-            $databaseModel=$this->extractRequestInformation($request=NULL, $param, $type='Model');
+            $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
             $model = new $modelName();
 
@@ -305,6 +295,10 @@ class StudentMasterController extends Controller
         return $this->successResponse($model::where('id',$id)->first());
 
     }
+    public function loadActiveProgramLists($typeId){ 
+        return $this->successResponse(CeaProgram::where ('CeaProgrammeTypeId',$typeId)->get());
+ 
+    }
 
     /**
      * Function to insert data into the respective tables
@@ -323,37 +317,26 @@ class StudentMasterController extends Controller
      * Function to insert data into the respective tables
      */
 
-    private function updateData($request,$dataRequest, $databaseModel){
+    private function updateData($request, $dataRequest, $databaseModel){
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
         $data = $model::find($request->id);
-       //  dd($data);
+
         //Audit Trails
         $msg_det='Name:'.$data->Name.'; Status:'.$data->Status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
         // $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$databaseModel."','".$request->id."','".$msg_det."','".$request['user_id']."','Edit')");
-      // dd('m here',$dataRequest);
+        // dd('m here',$dataRequest);
 
         //data to be updated
         $data->Name = $dataRequest['Name'];
-        // dd($data);
-        if($request['recordtype']!="StudentType" && $request['recordtype']!="ScholarType" && $request['recordtype']!="SpBenefit"){
-            $data->Description = $dataRequest['Description'];
-        }
-        if($request['recordtype']=="vaccine_type" ){
+
+        if($request['record_type']=="vaccine_type" ){
             $data->Description = $dataRequest['vaccineFor'];
         }
-        if($request['recordtype']=="program_item" ){
-            $data->Central   =  $dataRequest['Central'];
-            $data->Local     =  $dataRequest['Local'];
-            $data->Unit_id   =  $dataRequest['Unit_id'];
-            $data->CeaProgrammeItemVarietyId   =  $dataRequest['variety'];
-        }
 
-        $data->Status = $dataRequest['Status'];
-        $data->updated_by = $dataRequest['created_by'];
-        $data->updated_at = date('Y-m-d h:i:s');
-        $data->update();
-        return $data;
+        $response_data = $model::where('id',$request->id)->update($dataRequest);
+
+        return $response_data;
 
     }
 
@@ -367,17 +350,14 @@ class StudentMasterController extends Controller
             $data = [
                 'id'  =>  $request['id'],
                 'Name'  =>  $request['name'],
+                'Code'  =>  $request['code'],
+                'Description'  =>  $request['description'],
                 'Status'    =>  $request['status'],
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
-            if($record_type!="StudentType" && $record_type!="ScholarType" && $record_type!="SpBenefit"){
-                $additional_data = [
-                    'Description'  =>  $request['description'],
-                ];
-                $data = $data + $additional_data;
-            }
-            if($record_type=="program_item"){
+
+            if($record_type=="CeaProgramItem"){
                 $additional_data = [
                     'Central'   =>  $request['central'],
                     'Local'     =>  $request['local'],
@@ -389,11 +369,7 @@ class StudentMasterController extends Controller
         }
 
         switch($record_type){
-            case "student_award_type" : {
-                    $databaseModel = "StudentAwardType";
-                    break;
-                }
-            case "student_awards" : {
+            case "StudentAwards" : {
                     $databaseModel = "StudentAwards";
                     if($type =='data'){
                         $additional_data = [
@@ -405,7 +381,7 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "offence_type" : {
+            case "OffenceType" : {
                     $databaseModel = "OffenceType";
                     if($type == 'data'){
                         $additional_data = [
@@ -415,11 +391,7 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "offence_severity" : {
-                    $databaseModel = "OffenceSeverity";
-                    break;
-                }
-            case "disciplinary_action_taken" : {
+            case "DisciplinaryActionTaken" : {
                     $databaseModel = "DisciplinaryActionTaken";
                     if($type == 'data'){
                         $additional_data = [
@@ -429,42 +401,17 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "roles_responsibilities" : {
-                    $databaseModel = "StudentRole";
-                    break;
-                }
-            case "program_name" : {
+            case "CeaProgram" : {
                     $databaseModel = "CeaProgram";
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeTypeId'  =>  $request['program_type'],
-                            //'CeaProgrammeId'  =>  $request['program_id']
                         ];
                         $data = $data + $additional_data;
                     }
                     break;
                 }
-            case "club_name" : {
-                    $databaseModel = "CeaProgram";
-                    break;
-                }
-            case "program_type" : {
-                    $databaseModel = "CeaProgramType";
-                    break;
-                }
-            case "program_support" : {
-                    $databaseModel = "CeaProgramSupporter";
-                    break;
-                }
-            case "project_type" : {
-                    $databaseModel = "CeaProjectType";
-                    break;
-                }
-            case "training_type" : {
-                    $databaseModel = "CeaTrainingType";
-                    break;
-                }
-            case "training" : {
+            case "CeaTraining" : {
                     $databaseModel = "CeaTraining";
                     if($type =='data'){
                         $additional_data = [
@@ -475,12 +422,8 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "scout_section" : {
-                    $databaseModel = "CeaScoutSection";
-                    break;
-                }
 
-            case "scout_section_level" : {
+            case "CeaScoutSectionLevel" : {
                     $databaseModel = "CeaScoutSectionLevel";
                     if($type =='data'){
                         $additional_data = [
@@ -491,28 +434,23 @@ class StudentMasterController extends Controller
                     break;
                 }
 
-            case "scout_badge" : {
+            case "CeaScoutBadge" : {
                     $databaseModel = "CeaScoutBadge";
                     if($type =='data'){
                         $additional_data = [
-                            'CeaScoutSectionLevelId' => $request->scout_level_id,
+                            'CeaScoutSectionId' => $request->scout_type,
                         ];
                         $data = $data + $additional_data;
                     }
                     break;
                 }
 
-            case "scout_leader" : {
-                    $databaseModel = "CeaScoutLeader";
-                    break;
-                }
-
-            case "program_role" : {
+            case "CeaRole" : {
                     $databaseModel = "CeaRole";
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeId' => $request->program,
-                            'AssignedTo'=> $request->assigned_to,  //change from assigned_to AssignTo by Tshewang as its find in db
+                            'AssignedTo'=> $request->assigned_to, 
                             'remarks'=> $request->remarks
                         ];
                         $data = $data + $additional_data;
@@ -520,11 +458,7 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "quarter_name" : {
-                    $databaseModel = "CeaQuarterType";
-                    break;
-                }
-            case "vaccine_type" : {
+            case "VaccineType" : {
                     $databaseModel = "VaccineType";
                     if($type =='data'){
                         $additional_data = [
@@ -534,31 +468,7 @@ class StudentMasterController extends Controller
                     }
                     break;
                 }
-            case "term_type" : {
-                    $databaseModel = "HealthTerm";
-                    break;
-                }
-            case "health_screening" : {
-                    $databaseModel = "HealthScreening";
-                    break;
-                }
-            case "health_supplementation" : {
-                    $databaseModel = "HealthSupplementation";
-                    break;
-                }
-            case "screening_position" : {
-                    $databaseModel = "ScreeningPositionTitle";
-                    break;
-                }
-            case "screening_endorser" : {
-                    $databaseModel = "ScreeningEndorsedBy";
-                    break;
-                }
-            case "program_item" : {
-                    $databaseModel = "CeaProgramItem";
-                    break;
-                }
-            case "item_variety" : {
+            case "CeaProgramItemVariety" : {
                     $databaseModel = "CeaProgramItemVariety";
                     if($type =='data'){
                         $additional_data = [
@@ -566,18 +476,6 @@ class StudentMasterController extends Controller
                         ];
                         $data = $data + $additional_data;
                     }
-                    break;
-                }
-            case "program_measurement" : {
-                    $databaseModel = "CeaProgramMeasurement";
-                    break;
-                }
-            case "counselling_class_range" : {
-                    $databaseModel = "CounsellingClassRange";
-                    break;
-                }
-            case "counselling_age_range" : {
-                    $databaseModel = "CounsellingAgeRange";
                     break;
                 }
             default : {
@@ -645,45 +543,41 @@ class StudentMasterController extends Controller
      */
 
     public function saveCounsellingType(Request $request){
-         //  dd($request);
            $id = $request->id;
            if( $id != null){
                $data =[
-                   'id'                =>  $request->id,
-                   'name'              =>  $request->name,
-                   'description'       =>  $request->description,
-                   'status'            =>  $request->status,
-                   'updated_by'        =>  $request['user_id'],
-                   'updated_at'        =>  date('Y-m-d h:i:s'),
+                    'id'                =>  $request->id,
+                    'Name'              =>  $request->Name,
+                    'Description'       =>  $request->Description,
+                    'Status'            =>  $request->Status,
+                    'updated_by'        =>  $request['user_id'],
+                    'updated_at'        =>  date('Y-m-d h:i:s'),
                 ];
                 CounsellingType::where('id', $id)->update($data);
                $response_data = CounsellingType::where('id', $id)->first();
            } else {
                $data =[
                 'id'                =>  $request->id,
-                'name'              =>  $request->name,
-                'description'       =>  $request->description,
-                'status'            =>  $request->status,
-                'created_by'        =>  $request['user_id'],
-                'created_at'        =>  date('Y-m-d h:i:s'),
+                'Name'              =>  $request->Name,
+                'Description'       =>  $request->Description,
+                'Status'            =>  $request->Status,
+                'updated_by'        =>  $request['user_id'],
+                'updated_at'        =>  date('Y-m-d h:i:s'),
                ];
                $response_data = CounsellingType::create($data);
            }
-          // dd($data);
            return $this->successResponse($response_data, Response::HTTP_CREATED);
        }
 
        public function getCounsellingTypeDropdown(){
-        // dd('from microserve ');
          return CounsellingType::where('status',1)->get();
     }
 
     public function saveFoodSourceType(Request $request){
-    //  dd($request);
         $id = $request->id;
         if( $id != null){
             $data =[
-                 'id'                =>  $request->id,
+                 'id'               =>  $request->id,
                 'Name'              =>  $request->Name,
                 'Description'       =>  $request->Description,
                 'Status'            =>  $request->Status,
@@ -703,7 +597,6 @@ class StudentMasterController extends Controller
             ];
             $response_data = FoodSourceType::create($data);
         }
-         // dd($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
@@ -712,7 +605,6 @@ class StudentMasterController extends Controller
         return $data;
     }
     public function loadActiveFoodSourceMaster(){
-        // dd('from microserve ');
          return FoodSourceType::where('status',1)->get();
     }
 }

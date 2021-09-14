@@ -284,7 +284,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.subCategortList = data;
-                alert(JSON.stringify(response.data));
+              //  alert(JSON.stringify(response.data));
             });
         },
 

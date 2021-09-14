@@ -1,27 +1,45 @@
 <template>
     <div>
-        
         <form class="bootbox-form" id="programRolesId">
             <div class="card-body">
-                <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Award Name:<span class="text-danger">*</span></label> 
+                        <label>Program Roles:<span class="text-danger">*</span></label> 
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                </div>  
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Program Name:<span class="text-danger">*</span></label> 
+                        <select v-model="form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program') }" class="form-control select2" name="program" id="program">
+                        <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
+                    </select>
+                    <has-error :form="form" field="program"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
                         <textarea class="form-control" v-model="form.description" id="description" type="text"/>
                     </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Assigned To:</label>
+                        <br>
+                        <label><input v-model="form.assigned_to"  type="radio" value="1" /> Staff</label>
+                        <label><input v-model="form.assigned_to"  type="radio" value="2" /> Student</label>
+                    </div>
+                </div>  
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
-            </div>         
+                </div>           
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -34,21 +52,43 @@
 export default {
     data() {
         return {
-            count:10,
+            programList:[],
             form: new form({
                 id: '',
                 name: '',
+                program:'',
                 description:'',
-                status:'',
-                record_type:'program_role',
+                assigned_to:'',
+                status: 1,
+                record_type:'CeaRole',
                 action_type:'edit',
             })
         }
     },
     methods: {
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.programList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
+            }
+        },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="program"){
+                this.form.program=$('#program').val();
             }
         },
 		formaction: function(type){
@@ -58,26 +98,56 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/student',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Role for Program details updated successfully'
-                    })
-                    this.$router.push('/list_dzongkhag');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('/masters/saveStudentMasters',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/program_roles_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		}, 
     },
+    mounted() {
+        $('[data-toggle="tooltip"]').tooltip();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.loadActiveProgramList();
+    },
     created() {
-        this.form.name=this.$route.params.data.name;
-        this.form.description=this.$route.params.data.description;
-        this.form.status=this.$route.params.data.status;
+        this.form.name=this.$route.params.data.Name;
+        this.form.description=this.$route.params.data.Description;
+        this.form.code=this.$route.params.data.Code;
+        this.form.status=this.$route.params.data.Status;
         this.form.id=this.$route.params.data.id;
     },
-    
 }
 </script>

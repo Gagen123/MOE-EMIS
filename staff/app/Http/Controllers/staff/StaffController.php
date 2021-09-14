@@ -16,6 +16,7 @@ use App\Models\staff\StaffHistory;
 use App\Models\staff\TransferWindow;
 use App\Models\staff_leadership\LeadershipApplication;
 use App\Models\staff_leadership\LeadershipDetails;
+use App\Models\staff_masters\PositionTitle;
 use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller{
@@ -447,6 +448,17 @@ class StaffController extends Controller{
 	public function getLoginUser($orgId){
         $user = DB::select('SELECT t1.id AS stf_staff_id, t1.employee_code, t1.working_agency_id, t1.name,t2.name AS position FROM stf_staff t1 JOIN master_stf_position_title t2 ON t1.position_title_id = t2.id where t1.working_agency_id = ?', [$orgId]);
         return $this->successResponse($user);
+    }
+
+    public function viewStaffProfile($id=""){
+        $staff_det=PersonalDetails::where('id',$id)->first();
+        if($staff_det!=null && $staff_det!=""){
+            $position=PositionTitle::where('id',$staff_det->position_title_id)->first();
+            if($position!=null && $position!=""){
+                $staff_det->position_title_name=$position->name;
+            }
+        }
+        return $this->successResponse($staff_det);
     }
 
 

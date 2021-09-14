@@ -3,11 +3,11 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Upgradation/Downgradation</label>
-                        </a>
-                    </li>
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -102,29 +102,6 @@
                                         <has-error :form="form" field="level"></has-error>
                                     </div>
                                 </div>
-
-                                    <!--
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <span v-if="item.class!='Class 11' && item.class!='XI' && item.class!='Class 12' && item.class!='XII'">
-                                            <input type="checkbox" v-model="form.class" :value="item.classId">
-                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
-                                        </span>
-                                    </span>
-                                </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                    <span v-for="(item, key, index) in  classStreamList" :key="index">
-                                        <span v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
-                                            <label class="pr-3">
-                                                {{ item.class }}
-                                                <span v-if="item.stream"> -
-                                                    {{  item.stream  }}
-                                                </span>
-                                            </label>
-                                        </span>
-                                    </span>
-                                </div> -->
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
                                     <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                         <thead>
@@ -222,7 +199,7 @@ export default {
             organization_details:'',
             form: new form({
                 organizationId:'', level:'', application_type:'upgradation', class:[], stream:[],
-                application_for:'Upgradation', action_type:'add', status:'Submitted',organization_type:'',
+                application_for:'Upgradation', action_type:'add', status:'Submitted',organization_type:'',levelId:'',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -276,13 +253,13 @@ export default {
         },
 
         //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
+        getOrgList(uri = 'loadCommons/loadOrgList/school/NA'){
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
+                this.form.levelId = response.data.data.levelId;
             });
         },
-
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
@@ -328,8 +305,6 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-
-
         /**
          * method to show next and previous tab
          */
@@ -370,6 +345,11 @@ export default {
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('organization_type', this.form.organization_type);
                         axios.post('organization/saveChangeBasicDetails', formData, config)
                         //this.form.post('organization/saveChangeBasicDetails')
@@ -382,11 +362,11 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for organization upgradation has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                     this.$router.push({name:'upgrade_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',
-                                        title: 'Change details is saved successfully'
+                                        title: 'Your details has been saved successfully'
                                     });
                                 }
                             }
@@ -483,6 +463,30 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Application For Upgrade__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
@@ -500,6 +504,7 @@ export default {
     },
 
     mounted() {
+        this.loadScreenDetails();
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();

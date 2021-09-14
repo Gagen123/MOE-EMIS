@@ -17,6 +17,7 @@ class OffenceType extends Model
         'StdDisciplinarySeverity',
         'Name', 
         'Description', 
+        'Code',
         'Status'
     ];
 }

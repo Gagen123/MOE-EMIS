@@ -44,11 +44,12 @@ class StreamController extends Controller
         $id = $request->id;
         if( $id != null){
             $cla = [
-                'stream'         => $request['streamName'],
-                'description'    => $request['description'],
-                'status'         => $request['status'],
-                'updated_by'     =>$request['user_id'],
-                'created_at'     =>date('Y-m-d h:i:s'),
+                'stream'                => $request['name'],
+                'code'                  => $request['code'],
+                'description'           => $request['description'],
+                'status'                => $request['status'],
+                'updated_by'            => $request['user_id'],
+                'created_at'            =>date('Y-m-d h:i:s'),
             ];
             $data = Stream::find($request['id']);
             $messs_det='streamName:'.$data->stream.'; description:'.$data->description.';status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
@@ -59,11 +60,12 @@ class StreamController extends Controller
         }else{
 
             $cla = [
-                'stream'         => $request['streamName'],
-                'description'    => $request['description'],
-                'status'         => $request['status'],
-                'created_by'     =>$request['user_id'],
-                'created_at'     =>date('Y-m-d h:i:s'),
+                'stream'                => $request['name'],
+                'code'                  => $request['code'],
+                'description'           => $request['description'],
+                'status'                => $request['status'],
+                'created_by'            =>$request['user_id'],
+                'created_at'            =>date('Y-m-d h:i:s'),
             ];
 
             $class = Stream::create($cla);

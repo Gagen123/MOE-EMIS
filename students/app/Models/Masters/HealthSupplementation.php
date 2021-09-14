@@ -15,6 +15,7 @@ class HealthSupplementation extends Model
         'id',
         'Name', 
         'Description',
+        'Code',
         'Status'
     ];
 }

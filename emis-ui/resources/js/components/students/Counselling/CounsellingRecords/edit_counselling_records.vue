@@ -83,14 +83,14 @@ export default {
                 this.counsellingTypeList = data;
             });
         },
-        getCounsellingAgeRangeDropdown(uri = '/masters/loadActiveStudentMasters/counselling_age_range'){
+        getCounsellingAgeRangeDropdown(uri = '/masters/loadActiveStudentMasters/CounsellingAgeRange'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
                 this.counsellingAgeList = data;
             });
         },
-        getCounsellingClassRangeDropdown(uri = '/masters/loadActiveStudentMasters/counselling_class_range'){
+        getCounsellingClassRangeDropdown(uri = '/masters/loadActiveStudentMasters/CounsellingClassRange'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

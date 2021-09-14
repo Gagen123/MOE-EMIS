@@ -11,6 +11,8 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
+            </ul>
+            <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
                 <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/leadership_type_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Leadership Selection Type
@@ -37,12 +39,6 @@
                         Apply for Post
                     </router-link>
                 </li>
-                <!-- Previous nomination Link
-                <li class="nav-item active pr-1">
-                    <router-link id="service" to="/nomination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                        Nomination
-                    </router-link>
-                </li> -->
 
                 <!-- This menu should be static as its checked through the user id -->
                 <li class="nav-item active pr-1" id="feedback_link">
@@ -50,7 +46,6 @@
                         Feedback
                     </router-link>
                 </li>
-
             </ul>
             <router-view></router-view>
         </div>
@@ -66,20 +61,6 @@ export default {
         }
     },
     methods: {
-		getmenus(sub_mod_id){
-            if(sub_mod_id!=undefined){
-                let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-                axios.get(uri)
-                .then(response => {
-                    let data = response;
-                    this.menubar =  data.data;
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-            }
-        },
-
         checkfeedbackMenu(){
             let uri = '/staff/staffLeadershipSerivcesController/checkforfeedbackLink'
             axios.get(uri)
@@ -97,11 +78,21 @@ export default {
             this.$router.push({name:data,query: {data:action}});
         },
     },
-    mounted(){
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+    async mounted(){
         this.checkfeedbackMenu();
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

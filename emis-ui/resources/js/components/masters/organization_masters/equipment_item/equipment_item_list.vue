@@ -6,6 +6,7 @@
                      <th>SL#</th>
                     <th>Equipment Item</th>
                     <th>Equipment Type</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ equipmentTypeList[item.equipmentType]}}</td> 
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>

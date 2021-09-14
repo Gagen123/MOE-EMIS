@@ -150,7 +150,7 @@ export default {
     },
 
     methods: {
-        loadActiveVaccineList(uri="masters/loadActiveStudentMasters/vaccine_type"){
+        loadActiveVaccineList(uri="masters/loadActiveStudentMasters/VaccineType"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -34,11 +34,13 @@ class StructuralController extends Controller
         $this->validate($request, $rules, $customMessages);
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
+            'id'                                    => $request['id'],
             'facility'                              =>  $request['facility'],
-           // 'support'                               =>  $request['support'],
+           // 'support'                              =>  $request['support'],
             'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
+       // dd( $sport);
         // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
@@ -49,7 +51,7 @@ class StructuralController extends Controller
     }
 
     public function getSportsDetails($sportId=""){
-       // dd($sportId);
+       //dd($sportId);
         $sportDetails = $this->apiService->listData('emis/organization/sport/getSportsDetails/'.$sportId);
         return $sportDetails;
     }

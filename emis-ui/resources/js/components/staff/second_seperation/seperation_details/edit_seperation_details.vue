@@ -57,7 +57,7 @@ export default {
                 start_date:'',
                 end_date:'',
                 remarks:'',
-                model:'Secondment',
+                model:'Seperation',
                 action_type:'edit'
             }),
         }
@@ -72,7 +72,7 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.staff_id= '';
-                this.form.seperation_type= '',
+                this.form.seperation_type= '';
                 this.form.start_date= '';
                 this.form.end_date= '';
                 this.form.remarks= '';
@@ -85,9 +85,9 @@ export default {
                         icon: 'success',
                         title: 'Details updaetd successfully'
                     })
-                    this.$router.push('/list_secondment_details');
+                    this.$router.push('/list_seperation_details');
                 })
-                .catch(() => {
+                .catch(() =>{
                     console.log("Error:")
                 })
             }
@@ -101,7 +101,6 @@ export default {
             if(id=="currier_stage"){
                 this.form.currier_stage=$('#currier_stage').val();
             }
-
         },
 
         loadactiveseperationListList(uri="staff/loadStaffMasters/active/SeperationMaster"){

@@ -75,7 +75,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveRoleList(uri="masters/loadActiveStudentMasters/roles_responsibilities"){
+        loadActiveRoleList(uri="masters/loadActiveStudentMasters/StudentRole"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -11,7 +11,7 @@
                     <th style="width:20%">Action</th>
                 </tr>
             </thead>
-            <tbody id="tbody">
+            <tbody>
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.application_no}}</td>
@@ -42,20 +42,12 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgApplications/Private_School'){
+        loadDataList(uri='organizationApproval/loadOrgApplications/Private_School'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.dataList =  data.data.data;
             })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-
-            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_private_school',params: {id:data.id}});

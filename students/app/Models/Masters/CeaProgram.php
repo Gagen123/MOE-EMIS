@@ -16,7 +16,8 @@ class CeaProgram extends Model
         'CeaProgrammeTypeId',
         'Name',
         'CeaProgrammeId',
-        'Description', 
+        'Description',
+        'Code',
         'status'
     ];
 }

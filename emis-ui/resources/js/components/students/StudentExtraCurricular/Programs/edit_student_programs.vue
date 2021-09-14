@@ -104,7 +104,7 @@ export default {
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -114,7 +114,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveSupportList(uri="masters/loadActiveStudentMasters/program_support"){
+        loadActiveSupportList(uri="masters/loadActiveStudentMasters/CeaProgramSupporter"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -208,8 +208,11 @@ export default {
                 let data=response.data.data;
                 this.student_form.id= data.id;
                 this.student_form.program= data.CeaProgrammeId;
+                $('#program').val(data.CeaProgrammeId).trigger('change');
+            //    this.loadActiveProgramList();
                 this.student_form.year = data.EstablishmentYear;
                 this.student_form.supporter= data.CeaProgrammeSupporterId;
+                $('#supporter').val(data.CeaProgrammeSupporterId).trigger('change');
                 this.student_form.remarks= data.Remarks;
 
                 // let prop=data.roles;
@@ -226,6 +229,9 @@ export default {
         },
     },
      mounted() {
+        this.loadActiveProgramList();
+        this.loadActiveSupportList();
+        this.loadActiveRolesList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -240,9 +246,7 @@ export default {
         });
 
         //this.loadTeacherList();
-        this.loadActiveProgramList();
-        this.loadActiveSupportList();
-        this.loadActiveRolesList();
+       
     },
     created() {
         this.getStudentProgramDetails(this.$route.params.data.id);

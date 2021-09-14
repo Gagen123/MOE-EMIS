@@ -76,6 +76,12 @@ const routes = [
                     { path: '', component: require('./components/masters/academics_masters/subject_mapping_for_tre/list_subject_mapping_for_tre.vue').default },
                     { path: '/list-subject-mapping-for-tre', name:'list_subject_mapping_for_tre', component: require('./components/masters/academics_masters/subject_mapping_for_tre/list_subject_mapping_for_tre.vue').default },
                     { path: '/create-subject-mapping-for-tre', name: 'create_subject_mapping_for_tre', component: require('./components/masters/academics_masters/subject_mapping_for_tre/create_subject_mapping_for_tre.vue').default },
+            { path: '/teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/teaching_subject_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/teaching_subject/list_teaching_subject.vue').default },
+                    { path: '/list_teaching_subject', name:'list_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/list_teaching_subject.vue').default },
+                    { path: '/create_teaching_subject', name: 'create_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/create_teaching_subject.vue').default },
+                    { path: '/edit_teaching_subject', name: 'edit_teaching_subject', component: require('./components/masters/academics_masters/teaching_subject/edit_teaching_subject.vue').default },
                 ]
             },
 

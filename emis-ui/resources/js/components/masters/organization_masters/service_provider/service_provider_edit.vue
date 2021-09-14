@@ -12,8 +12,13 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Service Name:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.serviceName" :class="{ 'is-invalid': form.errors.has('serviceName') }" id="serviceName" @change="remove_err('serviceName')" type="text" tabindex="1" autofocus="true">
-                        <has-error :form="form" field="serviceName"></has-error>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label>
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" tabindex="1" autofocus="true">
+                        <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label> 
@@ -43,9 +48,12 @@ export default {
             form: new form({
                 id: '',
                 serviceType: '',
-                serviceName: '',
+                name: '',
+                code:'',
                 description:'',
                 status: 1,
+                action_type:'edit',
+                model:'ServiceProvider'
             })
         }
     },
@@ -59,21 +67,37 @@ export default {
         formaction: function(type){
             if(type=="reset"){
                 this.form.serviceType= '';
-                this.form.serviceName= '';
+                this.form.name= '';
+                this.form.code= '';
                 this.form.description='';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('masters/saveServiceProvider',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Service provoder details updated successfully'
-                    })
-                    this.$router.push('/service_provider_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('masters/organizationMasterController/saveOrganizationMaster',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/service_provider_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},
@@ -81,7 +105,8 @@ export default {
 
     created() {
         this.form.serviceType=this.$route.params.data.serviceType;
-        this.form.serviceName=this.$route.params.data.name;
+        this.form.name=this.$route.params.data.name;
+        this.form.code=this.$route.params.data.code;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;

@@ -17,6 +17,7 @@ class DisciplinaryActionTaken extends Model
         'Name', 
         'StdDisciplinarySeverity',
         'Description', 
+        'Code',
         'Status'
     ];
 }

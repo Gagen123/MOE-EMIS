@@ -23,17 +23,10 @@ class CommonController extends Controller{
         $system = $this->apiService->listData('system/get_roles/'.$param);
         return $system;
     }
+
     public function viewFiles($full_path=""){
         $full_path=str_replace('SSS','/',$full_path);
-        // // $headers = ['Content-Type: application/pdf'];
-        // $headers = array(
-        //     'Content-Type: application/pdf',
-        // );
-        // $file_name = explode('/',$full_path);
-        // $finel_name = end($file_name);
         return response()->download($full_path);
-        // header("Content-Disposition: inline; filename=filename.pdf");
-        //@readfile($full_path);
 
     }
 
@@ -54,14 +47,7 @@ class CommonController extends Controller{
         return $this->apiService->getListData('emis/common/getApplicationDetials/'.$applicationId);
     }
     public function getApprovalWorkStatus(){
-        // dd($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
         $work_status=json_decode($this->apiService->listData('system/getRolesWorkflow/verificationApproval/'.$this->getRoleIds('roleIds')));
-        // $w_status_screen=[];
-        // foreach($work_status as $i=> $work){
-        //     if($work->Sequence>1){
-        //         array_push($w_status_screen,$work->SysSubModuleId.'SSS'.($work->Sequence - 1).'SSS'.$work->Establishment_type);
-        //     }
-        // }
         return $work_status;
     }
     public function getTaskList($type=""){
@@ -76,7 +62,6 @@ class CommonController extends Controller{
         // $response_data=$this->apiService->createData('emis/common/getTaskList',$data);
         $leave_config_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
-        // $tr_data= json_decode($this->apiService->listData('emis/staff/staffServices/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
 
         if(config('services.constant.deo_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.deo_role_id'))!==false){
             $approved_transfer_data="Valid";//pull approved Transfer application only for DEO role
@@ -87,11 +72,12 @@ class CommonController extends Controller{
 
         $leadership_data="Invalid";
         $hrd_roles=config('services.constant.hrd_role_id');
-        if(strpos($hrd_roles,',')){
-            $hrd_roles=explode(',',$hrd_roles);
+        $hr_roles="";
+        if(strpos($hrd_roles,',')!==false){
+            $hr_roles=explode(',',$hrd_roles);
         }
-        if(sizeof($hrd_roles)>1){
-            foreach($hrd_roles as $role){
+        if(strpos($hrd_roles,',')!==false && sizeof($hr_roles)>1){
+            foreach($hr_roles as $role){
                 if($role!=null && strpos($this->getRoleIds('roleIds'),$role)!==false){
                     $leadership_data="Valid";
                 }
@@ -110,7 +96,7 @@ class CommonController extends Controller{
             'access_level'              =>  $this->getAccessLevel(),
         ];
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
-        // dd($response_data);getTaskList
+        // dd($response_data);
         return $response_data;
 
     }
@@ -155,5 +141,16 @@ class CommonController extends Controller{
         $data=$this->apiService->listData('emis/students/getStudentList/'.$orgId.'/'.$orgClassStreamId);
         return $data;
     }
+
+    public function getscreens($type=""){
+        $token =Session::get('User_Token');
+        $headers['Authorization'] = 'bearer '. $token;
+        $role_riv=$this->apiService->listData('getAllPrivilegesOnRoles/'.$type.'__'.$this->getRoleIds('roleIds').'__'.$this->currentUser()['system_id'], [], $headers);
+        return $role_riv;
+    }
+    public function getEnvValues($type=""){
+        return env($type);
+    }
+
 
 }

@@ -6,15 +6,21 @@
                     <tbody>
                         <tr>
                             <th>Category</th>
-                            <th>Public</th>
-                            <th>Private</th>
+                            <th>Male</th>
+                            <th>Female</th>
                             <th>Total</th>
                         </tr>
-                       <tr v-for="(item, index) in schooleducationCenter" :key="index">
-                            <td>{{item.name}}</td>
-                            <td>{{item.Public_School}}</td>
-                            <td>{{item.Private_School}}</td>
-                            <td>{{item.Total}}</td>
+                        <tr>
+                            <td>IX</td>
+                            <td>{{this.ix_male}}</td>
+                            <td>{{this.ix_female}}</td>
+                            <td>{{this.ix_male + this.ix_female}}</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>{{this.x_male}}</td>
+                            <td>{{this.x_female}}</td>
+                            <td>{{this.x_male + this.x_female}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -27,108 +33,179 @@
                 </div>
             </div>
         </div>
+        <div class="form-group row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <label>Enrollment in By Age</label>
+                <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <tbody>
+                        <tr>
+                            <th rowspan="2">Class</th>
+                            <th rowspan="2">Right Age (Years)</th>
+                            <th colspan="5">Right Age Enrollment</th>
+                            <th colspan="5">Overage Enrollment</th>
+                            <th colspan="5">Underage Enrollment</th>
+                        </tr>
+                        <tr>
+                            <th>2017</th>
+                            <th>2018</th>
+                            <th>2019</th>
+                            <th>2020</th>
+                            <th>2021</th>
+                            <th>2017</th>
+                            <th>2018</th>
+                            <th>2019</th>
+                            <th>2020</th>
+                            <th>2021</th>
+                            <th>2017</th>
+                            <th>2018</th>
+                            <th>2019</th>
+                            <th>2020</th>
+                            <th>2021</th>
+                        </tr>
+                       <tr>
+                            <td>IX</td>
+                            <td>14</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>15</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            schooleducationCenter:[],
-            primary_private:'',
-            public_private:'',
-            middle_private:'',
-            middle_private:'',
-            lower_private:'',
-            lower_private:'',
-            higher_private:'',
-            higher_private:'',
-           
+            studentData:[],
+            ix_male:'',
+            ix_female:'',
+            x_male:'',
+            x_female:''
         }
     },
     methods:{
         async generatesdetail(dzo_id){
-            this.schooleducationCenter = await this.loadeducationCenter("School",dzo_id);
-            
-            //Plotting Graph
-            if(this.schooleducationCenter!=""){
-                for(let i=0;i<this.schooleducationCenter.length;i++){
-                    if(this.schooleducationCenter[i].name == "Primary School"){
-                        this.primary_private = this.schooleducationCenter[i].Private_School;
-                        this.primary_public = this.schooleducationCenter[i].Public_School;
-                    }
-                    if(this.schooleducationCenter[i].name == "Middle Secondary School"){
-                        this.middle_private = this.schooleducationCenter[i].Private_School;
-                        this.middle_public = this.schooleducationCenter[i].Public_School;
-                    }
-                    if(this.schooleducationCenter[i].name == "Lower Secondary School"){
-                        this.lower_private = this.schooleducationCenter[i].Private_School;
-                        this.lower_public = this.schooleducationCenter[i].Public_School;
-                    }
-                    if(this.schooleducationCenter[i].name == "Higher Secondary School"){
-                        this.higher_private = this.schooleducationCenter[i].Private_School;
-                        this.higher_public = this.schooleducationCenter[i].Public_School;
-                    }
-                }
-                var areaChartData = {
-                    labels  : ['Primary', 'Middle Secondary', 'Lower Secondary', 'Higher Secondary'],
-                    datasets: [
-                        {
-                            label               : 'Public',
-                            backgroundColor     : 'rgba(60,141,188,0.9)',
-                            borderColor         : 'rgba(60,141,188,0.8)',
-                            pointRadius          : false,
-                            pointColor          : '#3b8bba',
-                            pointStrokeColor    : 'rgba(60,141,188,1)',
-                            pointHighlightFill  : '#fff',
-                            pointHighlightStroke: 'rgba(60,141,188,1)',
-                            data                : [this.primary_public, this.middle_public, this.lower_public, this.higher_public]
-                        },
-                        {
-                            label               : 'Private',
-                            backgroundColor     : 'rgba(136, 22, 236)',
-                            borderColor         : 'rgba(136, 22, 236)',
-                            pointRadius         : false,
-                            pointColor          : 'rgba(136, 22, 236)',
-                            pointStrokeColor    : '#c1c7d1',
-                            pointHighlightFill  : '#fff',
-                            pointHighlightStroke: 'rgba(220,220,220,1)',
-                            data                : [this.primary_private, this.middle_private, this.lower_private, this.higher_private]
-                        },
-                        {
-                            label               : 'Total',
-                            backgroundColor     : 'rgba(136, 22, 1)',
-                            borderColor         : 'rgba(136, 22, 1)',
-                            pointRadius         : false,
-                            pointColor          : 'rgba(136, 22, 1)',
-                            pointStrokeColor    : '#c1c7d1',
-                            pointHighlightFill  : '#fff',
-                            pointHighlightStroke: 'rgba(220,220,220,1)',
-                            data                : [this.primary_public+this.primary_private, this.middle_public+this.middle_private, 
-                                                    this.lower_public+this.lower_private, this.higher_public+this.higher_private]
-                        },
-                    ]
-                }
+            let type = "Middle";
+            let uri = 'projections/education/loadEnrollment/'+type+'/'+dzo_id;
 
-                var barChartCanvas = $('#barChart').get(0).getContext('2d')
-                var barChartData = jQuery.extend(true, {}, areaChartData)
-                var temp0 = areaChartData.datasets[0]
-                var temp1 = areaChartData.datasets[1]
-                barChartData.datasets[0] = temp1
-                barChartData.datasets[1] = temp0
+            try{
+                axios.get(uri).then(response => { 
+                    this.studentData = response.data.data;
 
-                var barChartOptions = {
-                responsive              : true,
-                maintainAspectRatio     : false,
-                datasetFill             : false
-                }
+                    //Plotting Graph
+                    if(this.studentData!=""){
+                        this.ix_male = this.studentData['IX'].male;
+                        this.ix_female = this.studentData['IX'].female;
+                        this.x_male = this.studentData['X'].male;
+                        this.x_female = this.studentData['X'].female;
+                        
+                        var areaChartData = {
+                            labels  : ['IX', 'X'],
+                            datasets: [
+                                {
+                                    label               : 'Male',
+                                    backgroundColor     : 'rgba(60,141,188,0.9)',
+                                    borderColor         : 'rgba(60,141,188,0.8)',
+                                    pointRadius          : false,
+                                    pointColor          : '#3b8bba',
+                                    pointStrokeColor    : 'rgba(60,141,188,1)',
+                                    pointHighlightFill  : '#fff',
+                                    pointHighlightStroke: 'rgba(60,141,188,1)',
+                                    data                : [this.ix_male, this.x_male]
+                                },
+                                {
+                                    label               : 'Female',
+                                    backgroundColor     : 'rgba(136, 22, 236)',
+                                    borderColor         : 'rgba(136, 22, 236)',
+                                    pointRadius         : false,
+                                    pointColor          : 'rgba(136, 22, 236)',
+                                    pointStrokeColor    : '#c1c7d1',
+                                    pointHighlightFill  : '#fff',
+                                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                                    data                : [this.ix_female, this.x_female]
+                                },
+                                {
+                                    label               : 'Total',
+                                    backgroundColor     : 'rgba(136, 22, 1)',
+                                    borderColor         : 'rgba(136, 22, 1)',
+                                    pointRadius         : false,
+                                    pointColor          : 'rgba(136, 22, 1)',
+                                    pointStrokeColor    : '#c1c7d1',
+                                    pointHighlightFill  : '#fff',
+                                    pointHighlightStroke: 'rgba(220,220,220,1)',
+                                    data                : [this.ix_male + this.ix_female, this.x_male + this.x_female]
+                                },
+                            ]
+                        }
 
-                var barChart = new Chart(barChartCanvas, {
-                    type: 'bar',
-                    data: barChartData,
-                    options: barChartOptions
-                })
+                        var barChartCanvas = $('#barChart').get(0).getContext('2d')
+                        var barChartData = jQuery.extend(true, {}, areaChartData)
+                        var temp0 = areaChartData.datasets[0]
+                        var temp1 = areaChartData.datasets[1]
+                        barChartData.datasets[0] = temp1
+                        barChartData.datasets[1] = temp0
+
+                        var barChartOptions = {
+                        responsive              : true,
+                        maintainAspectRatio     : false,
+                        datasetFill             : false
+                        }
+
+                        var barChart = new Chart(barChartCanvas, {
+                            type: 'bar',
+                            data: barChartData,
+                            options: barChartOptions
+                        })
+                    }
+                });
+            }catch(e){
+                console.log('error loadIndicatorResult '+e);
             }
-        }
+            //Get the enrollment by age
+            let uri2 = 'projections/education/loadEnrollmentByAge/'+type+'/'+dzo_id;
+
+            try{
+                axios.get(uri2).then(response => { 
+                    this.studentAgeData = response.data.data;
+                });
+            }catch(e){
+                console.log('error loadIndicatorResult '+e);
+            }
+        } 
     },
     mounted() {
         this.generatesdetail(this.$route.query.dzo_id);

@@ -5,8 +5,9 @@
                 <tr>
                     <th >SL#</th>
                     <th >Student Award Type</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
-                    <th >description</th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -14,8 +15,9 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Code }}</td>
                     <td>{{ item.Description }}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -34,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/student_award_type'){
+        loadDataList(uri = 'masters/loadStudentMasters/StudentAwardType'){
             axios.get(uri)
             .then(response => {
                 let data = response;

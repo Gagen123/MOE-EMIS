@@ -11,7 +11,8 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-
+            </ul>
+            <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
                 <li class="nav-item active pr-1">
                     <router-link id="service" to="/programme_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Programme
@@ -22,7 +23,6 @@
                         Update Participant
                     </router-link>
                 </li>
-                
             </ul>
             <router-view></router-view>
         </div>
@@ -38,27 +38,24 @@ export default {
         }
     },
     methods: {
-		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/submodule/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
         },
     },
-    mounted(){
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+    async mounted(){
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

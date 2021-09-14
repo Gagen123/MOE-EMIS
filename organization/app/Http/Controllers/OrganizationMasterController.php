@@ -26,12 +26,14 @@ class OrganizationMasterController extends Controller{
         $response_data="";
         $rules = [
             'name'          =>  'required',
-            'description'   =>  'required',
+            'code'          =>  'required',
+            // 'description'   =>  'required',
             'status'        =>  'required',
         ];
         $customMessages = [
             'name.required'         => 'This field is required',
-            'description.required'  => 'This field is required',
+            'code.required'         => 'This field is required',
+            // 'description.required'  => 'This field is required',
             'status.required'       => 'This field is required',
         ];
 
@@ -39,10 +41,13 @@ class OrganizationMasterController extends Controller{
         //name,description and status should be common to all models. respective model should be passed from ui.
         $master_data = [
             'name'              =>  $request->name,
+            'code'              =>  $request->code,       
             'description'       =>  $request->description,
             'service_type'       =>  $request->service_type,
             'status'            =>  $request->status,
         ];
+        //  dd( $master_data);
+        
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
                 'applicableTo'              =>  implode(', ', $request->addfield_1),
@@ -84,6 +89,11 @@ class OrganizationMasterController extends Controller{
                 'equipmentType'              =>  $request->equipmentType,
             ];
         }
+        if($request->model=="serviceType"){  
+            $master_data =$master_data+[
+                'serviceType'              =>  $request->serviceType,
+            ];
+        }
 
         if($request->action_type=="add"){
             $master_data =$master_data+[
@@ -91,7 +101,7 @@ class OrganizationMasterController extends Controller{
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
             $response_data = $model::create($master_data);
-           // dd($response_data);
+            // dd($response_data);
         }
 
         if($request->action_type=="edit"){

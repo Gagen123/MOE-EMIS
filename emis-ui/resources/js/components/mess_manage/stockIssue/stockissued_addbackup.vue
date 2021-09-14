@@ -180,7 +180,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        //    loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
         //        axios.get(uri)
         //        .then(response => {
         //            let data = response;
@@ -194,7 +194,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_local"){
            axios.get(uri)
            .then(response => {
                let data = response;
@@ -204,7 +204,7 @@ export default {
                console.log("Error......"+error)
            });
         },
-        loadCentralItem(uri="masters/loadActiveStudentMasters/program_item_central"){
+        loadCentralItem(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
             axios.get(uri)
             .then(response => {
                let data = response;
@@ -280,7 +280,7 @@ export default {
         //     $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         // },
 
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response =>{
                 let data = response;

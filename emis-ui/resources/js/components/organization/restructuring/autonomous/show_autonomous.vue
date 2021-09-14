@@ -5,7 +5,7 @@
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change to Autonomous</label>
+                            <label class="mb-0.5">Application For Autonomous</label>
                         </a>
                     </li>
                 </ul>
@@ -25,9 +25,9 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{category}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">

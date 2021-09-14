@@ -5,6 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Health Supplementation</th>
+                    <th> Code</th>
                     <th> Description</th>
                     <th >Status</th>
                     <!-- <th >Created At</th> -->
@@ -15,6 +16,7 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
                     <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <!-- <td>{{ item.created_at }}</td> -->
@@ -36,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/health_supplementation'){
+        loadDataList(uri = 'masters/loadStudentMasters/HealthSupplementation'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -59,7 +61,7 @@ export default {
         },
         
         showedit(data){
-            this.$router.push({name:'ScreeningEdit',params: {data:data}});
+            this.$router.push({name:'SupplementationEdit',params: {data:data}});
         },
     },
     mounted(){

@@ -85,7 +85,7 @@ class LoadStaffController extends Controller{
     }
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         if($type=="allstaff"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('id', 1)->all());
+            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->get());
         }
         if($type=="userdzongkhagwise" || $type=="dzongkhagwise"){
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('dzo_id',$parent_id)->where('status','Created')->get());

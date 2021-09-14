@@ -170,7 +170,7 @@ export default {
         /**
          * method to get quarter in dropdown
          */
-        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/CeaQuarterType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -195,7 +195,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -212,7 +212,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -265,7 +265,7 @@ export default {
                 this.form.quarter=data.quarter_id;
                 $('#quarter').val(data.quarter_id).trigger('change');
                 $('#quarter').prop('disabled',true);
-                this.form.items_received=[];
+                this.form.items_received=[]; 
                 data.itemDetails.forEach(itm => {
                     this.form.items_received.push({
                         item:itm.item_id,quantity:itm.receivedquantity,unit:itm.unit_id,remarks:itm.remarks, damagequantity:itm.damagequantity

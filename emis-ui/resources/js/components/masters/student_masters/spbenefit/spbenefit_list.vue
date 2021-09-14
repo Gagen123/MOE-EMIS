@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th>
@@ -14,6 +16,8 @@
                 <tr v-for="(item, index) in spbenefitList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>

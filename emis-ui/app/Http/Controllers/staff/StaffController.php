@@ -39,7 +39,7 @@ class StaffController extends Controller{
             'working_agency_id'     =>  'required',
             // 'currier_stage'         =>  'required',
         ];
-    
+
 
         $customMessages = [
             'cid_work_permit.required'      => 'This field is required',
@@ -325,4 +325,9 @@ class StaffController extends Controller{
     //     $response_data= $this->apiService->listData('emis/staff/loadStaff/'.$type.'/'.$param);
     //     return $response_data;
     // }
+
+    public function viewStaffProfile($id=""){
+        $response_data= $this->apiService->listData('emis/staff/viewStaffProfile/'.$id);
+        return $response_data;
+    }
 }

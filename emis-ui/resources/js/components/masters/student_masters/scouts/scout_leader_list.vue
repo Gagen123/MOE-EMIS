@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Scout</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th> 
@@ -14,6 +16,8 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -34,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/scout_leader'){
+        loadDataList(uri = 'masters/loadStudentMasters/CeaScoutLeader'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -53,7 +57,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'scout_edit',params: {data:data}});
+            this.$router.push({name:'scout_leader_edit',params: {data:data}});
         },
     },
     mounted(){

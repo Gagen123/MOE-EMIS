@@ -57,7 +57,7 @@ class LoadOrganizationController extends Controller{
             $response_data=OrganizationDetails::where('gewogId',$id)->wherein('category',['public_school','public_eccd','public_ecr'])->select( 'id','name','levelId','dzongkhagId')->get();
         }
         if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
-            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','public_eccd','coorporate_eccd','ngo_eccd','public_ecr'])->get();
+            $response_data=OrganizationDetails::where('dzongkhagId',$id)->wherein('category',['public_school','public_eccd','coorporate_eccd','ngo_eccd','public_ecr','private_school','private_eccd'])->get();
         }
 
         if($type=="allorganizationList"){
@@ -375,6 +375,7 @@ class LoadOrganizationController extends Controller{
                     $response_data->parentSchoolName=$parent->name;
                 }
             }
+
             if($response_data!=null && $response_data!=""){
                 $data = DB::table('classes as c')
                 ->join('organization_class_streams as cl', 'c.id', '=', 'cl.classId')
@@ -392,11 +393,12 @@ class LoadOrganizationController extends Controller{
                         $response_data->meals=$feed_det;
                     }
                 }
-            }
-            $loc=Location::where('id',$response_data->locationId)->first();
-            // dd($response_data->locationId,$response_data);
-            if($loc!=null && $loc!=""){
-                $response_data->location_type_name=$loc->name;
+
+                $loc=Location::where('id',$response_data->locationId)->first();
+                // dd($response_data->locationId,$response_data);
+                if($loc!=null && $loc!=""){
+                    $response_data->location_type_name=$loc->name;
+                }
             }
 
         }
@@ -443,6 +445,14 @@ class LoadOrganizationController extends Controller{
         }
         if($type=="user_dzongkhag"){
             $response_data=DepartmentModel::where('dzo_id',$id)->get();
+        }
+
+        if($type=="dzongkhag_department"){
+            $response_data=DepartmentModel::where('dzo_id',$id)->where('type','dzongkhag')->get();
+        }
+
+        if($type=="details_by_id"){
+            $response_data=HeadQuaterDetails::where('id',$id)->first();
         }
 
         if($type=="all_division"){
@@ -555,7 +565,7 @@ class LoadOrganizationController extends Controller{
         }
 
     }
-
+ 
     public function getOrgProfile($id=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){

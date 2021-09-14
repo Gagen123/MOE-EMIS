@@ -17,6 +17,7 @@ class CeaProgramItem extends Model
         'CeaProgrammeItemVarietyId',
         'Name',
         'Description',
+        'Code',
         'Central',
         'Local',
         'Unit_id',
