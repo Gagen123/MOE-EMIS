@@ -140,7 +140,7 @@ export default {
                 consoele.log("Error:"+e)
             });
         },
-        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/HealthTerm"){
             axios.get(uri)
             .then(response => {
                 let data = response;

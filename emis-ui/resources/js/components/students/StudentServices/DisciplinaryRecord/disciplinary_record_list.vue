@@ -53,7 +53,7 @@ export default {
                 console.log(error);
             });
         },
-        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
+        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/OffenceSeverity"){
             axios.get(uri)
             .then(response => {
                 let data = response;

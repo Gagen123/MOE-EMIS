@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Vaccination Type</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th> 
@@ -13,7 +15,9 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -34,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/vaccine_type'){
+        loadDataList(uri = 'masters/loadStudentMasters/VaccineType'){
             axios.get(uri)
             .then(response => {
                 let data = response;

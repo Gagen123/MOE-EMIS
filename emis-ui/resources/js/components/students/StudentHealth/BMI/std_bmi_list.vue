@@ -99,7 +99,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/HealthTerm"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

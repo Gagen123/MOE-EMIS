@@ -34,7 +34,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/screening_position'){
+        loadDataList(uri = 'masters/loadStudentMasters/ScreeningPositionTitle'){
             axios.get(uri)
             .then(response => {
                 let data = response;

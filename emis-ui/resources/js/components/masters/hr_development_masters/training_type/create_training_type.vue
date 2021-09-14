@@ -38,7 +38,7 @@ export default {
                 name: '',
                 code:'',
                 status: 1,
-                record_type:'training_type',
+                record_type:'CeaTrainingType',
                 action_type:'add',
             })
         }

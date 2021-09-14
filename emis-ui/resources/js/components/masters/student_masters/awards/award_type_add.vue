@@ -44,8 +44,9 @@ export default {
                 id: '',
                 name: '',
                 description:'',
+                code:'',
                 status: 1,
-                record_type:'student_award_type',
+                record_type:'StudentAwardType',
                 action_type:'add',
             })
         }

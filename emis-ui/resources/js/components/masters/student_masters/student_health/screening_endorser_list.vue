@@ -34,7 +34,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/screening_endorser'){
+        loadDataList(uri = 'masters/loadStudentMasters/ScreeningEndorsedBy'){
             axios.get(uri)
             .then(response => {
                 let data = response;

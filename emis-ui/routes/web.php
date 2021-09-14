@@ -158,8 +158,6 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadValidationcondition', [App\Http\Controllers\student\StudentMasterController::class, 'loadValidationcondition'])->name('loadValidationcondition');
     Route::post('/saveCounsellingType', [App\Http\Controllers\student\StudentMasterController::class, 'saveCounsellingType'])->name('saveCounsellingType');
 
-    Route::post('/saveFoodSourceType', [App\Http\Controllers\student\StudentMasterController::class, 'saveFoodSourceType'])->name('saveFoodSourceType');
-    Route::get('/loadfoodSourceList', [App\Http\Controllers\student\StudentMasterController::class, 'loadfoodSourceList'])->name('loadfoodSourceList');
     Route::get('/loadActiveFoodSourceMaster', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveFoodSourceMaster'])->name('loadActiveFoodSourceMaster');
 
 

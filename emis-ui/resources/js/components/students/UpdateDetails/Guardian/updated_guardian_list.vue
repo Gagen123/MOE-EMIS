@@ -52,7 +52,7 @@ export default {
                 }); 
             }, 3000);  
         },
-        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
+        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/OffenceSeverity"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -129,7 +129,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -139,7 +139,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveSupportList(uri="masters/loadActiveStudentMasters/program_support"){
+        loadActiveSupportList(uri="masters/loadActiveStudentMasters/CeaProgramSupporter"){
             axios.get(uri)
             .then(response => {
                 let data = response;

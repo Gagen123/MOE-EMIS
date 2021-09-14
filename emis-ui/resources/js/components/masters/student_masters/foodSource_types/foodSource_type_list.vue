@@ -5,6 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
+                    <th >Code</th>
                     <th >Description</th>
                     <th >Status</th>
                     <th >Action</th>
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in foodSourceList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
                     <td>{{ item.Description }}</td>
                     <td>{{ item.Status==  1 ? "Inactive" : "Active" }}</td>
                     <td>
@@ -34,10 +36,10 @@ export default {
         }
     },
     methods:{
-        loadfoodSourceList(uri = 'masters/loadfoodSourceList'){
+        loadfoodSourceList(uri = 'masters/loadStudentMasters/FoodSourceType'){
             axios.get(uri)
             .then(response => {
-                let data = response;
+                let data = response.data;
                 this.foodSourceList =  data.data;
             })
             .catch(function (error) {

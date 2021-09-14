@@ -6,6 +6,8 @@
                     <th >SL#</th>
                     <th >Item Name</th>
                     <th >Unit</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th>
@@ -16,6 +18,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
                     <td>{{ measurementList[item.UnitId]}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -37,7 +41,7 @@ export default {
         }
     },
     methods:{
-        loadProgramItemList(uri = 'masters/loadStudentMasters/item_variety'){
+        loadProgramItemList(uri = 'masters/loadStudentMasters/CeaProgramItemVariety'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -48,9 +52,9 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'ProgramItemEdit',params: {data:data}});
+            this.$router.push({name:'ItemVarietyEdit',params: {data:data}});
         },
-        loadMeasurementList(uri = 'masters/loadStudentMasters/program_measurement'){
+        loadMeasurementList(uri = 'masters/loadStudentMasters/CeaProgramMeasurement'){
             axios.get(uri)
             .then(response => {
                 let data = response;
