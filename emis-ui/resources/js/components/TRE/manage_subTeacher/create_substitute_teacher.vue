@@ -261,7 +261,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_teaching_subject'){
+        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_active_main_subject'){
             axios.get(uri)
             .then(response => {
                 let data = response 

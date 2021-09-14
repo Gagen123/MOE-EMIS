@@ -289,12 +289,9 @@ class AcademicMastersController extends Controller
         }
         if($request['record_type'] == 'reason_for_absent') {
             $rules = [
-               
                 'status'            =>  'required',
-
             ];
             $customMessages = [
-               
                 'status.required'               => 'This field is required',
             ];
 
@@ -501,10 +498,10 @@ class AcademicMastersController extends Controller
             $promotion_sub_group = DB::select('SELECT id,description FROM aca_promotion_sub_group ORDER BY (id<0),id');
             return $this->successResponse($promotion_sub_group);
         }
-        if($param == "all_teaching_subject"){
-            $teachingSub = DB::select('SELECT id, name, code, displayorder, description, status FROM aca_teaching_subject ORDER BY displayorder');
-            return $this->successResponse($teachingSub);
-        }
+        // if($param == "all_teaching_subject"){
+        //     $teachingSub = DB::select('SELECT id, name, code, displayorder, description, status FROM aca_teaching_subject ORDER BY displayorder');
+        //     return $this->successResponse($teachingSub);
+        // }
     }
     public function loadClassSubject($class_id="",$stream_id=""){
         $query = 'SELECT (t2.id IS NOT NULL) AS sub_selected, trim(t2.pass_score)+0 AS pass_score, t1.id AS aca_sub_id,t1.aca_sub_category_id,t3.input_type, t1.name AS subject,t1.dzo_name AS sub_dzo_name,t2.aca_rating_type_id, t2.is_elective,t2.show_in_result FROM aca_subject t1 LEFT JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ? LEFT JOIN aca_rating_type t3 ON t2.aca_rating_type_id = t3.id' ;

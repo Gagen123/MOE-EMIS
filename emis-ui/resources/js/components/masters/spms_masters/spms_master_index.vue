@@ -73,10 +73,14 @@ export default {
             });
         },
     },
-    mounted() {
+    async mounted() {
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
     
 }
