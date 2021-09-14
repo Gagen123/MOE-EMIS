@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Serivce</th>
                     <th>Description</th>
+                    <th>Type</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -15,6 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
+                    <td>{{ item.service_type}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

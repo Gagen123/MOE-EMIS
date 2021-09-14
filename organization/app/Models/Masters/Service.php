@@ -9,6 +9,6 @@ class Service extends Model{
     use HasFactory, Uuid;
     protected $table="master_services";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by'
+        'id','name','service_type', 'description', 'status','created_by','updated_by'
     ];
 }

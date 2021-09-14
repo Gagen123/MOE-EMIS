@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff_masters\PositionTitle;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class LoadStaffController extends Controller{
@@ -123,6 +124,23 @@ class LoadStaffController extends Controller{
             }
         }
 
+    }
+    // method by Chimi Thinley to get Staff by array of aca_teacher_sub_ids
+    public function loadFewDetailsStaffListBySubject(Request $request){
+        try{
+
+        $staffs_by_subject = DB::table('stf_staff')
+            ->join('master_stf_position_title', 'stf_staff.position_title_id', '=', 'master_stf_position_title.id')
+            ->selectRaw('stf_staff.id,stf_staff.emp_id,stf_staff.comp_sub_id,stf_staff.elective_sub_id1,stf_staff.elective_sub_id2,stf_staff.name,master_stf_position_title.name AS position')
+            ->where('stf_staff.working_agency_id',$request['orgId'])
+            ->whereIn('stf_staff.comp_sub_id',explode(",",$request['aca_teacher_sub_ids']))
+            ->orWhereIn('stf_staff.elective_sub_id1',explode(",",$request['aca_teacher_sub_ids']))
+            ->orWhereIn('stf_staff.elective_sub_id2',explode(",",$request['aca_teacher_sub_ids']))
+            ->get();
+        return $this->successResponse($staffs_by_subject);
+        }catch(Exception $e){
+            dd($e);
+        }
     }
 
 }

@@ -32,6 +32,7 @@ class OrganizationMasterController extends Controller{
             'name'                      =>  $request->name,
             'addfield_1'                =>  $request->addfield_1,
             'description'               =>  $request->description,
+            'service_type'              =>  $request->service_type,
             'status'                    =>  $request->status,
             'action_type'               =>  $request->action_type,
             'model'                     =>  $request->model,
@@ -63,6 +64,31 @@ class OrganizationMasterController extends Controller{
         $type = $this->apiService->listData('emis/organization/organizationMasterController/loadincomeList/');
         return $type;
 
+    }
+    public function saveNotificationConfigMasters(Request $request){
+        $rules=[];
+        $customMessages =[];
+        $rules = [
+            'service_id' => 'required',
+            'submitter_role_id' => 'required',
+            'notification_to_role_id' =>  'required',
+        ];
+        $customMessages = [
+            'service_id.required' => 'This field is required',
+            'submitter_role_id.required' => 'This field is required',
+            'notification_to_role_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $data =[
+            'id'                      =>  $request['id'],
+            'service_id'              =>  $request['service_id'],
+            'submitter_role_id'       =>  $request['submitter_role_id'],
+            'notification_to_role_id' =>  $request['notification_to_role_id'],
+            'action_type'             =>  $request['action_type'],
+            'user_id'                 =>  $this->userId()
+        ];
+        $response_data= $this->apiService->createData('emis/organization/organizationMasterController/saveNotificationConfigMasters', $data);
+        return $response_data;
     }
 
 

@@ -4,6 +4,14 @@ const routes = [
         children:
         [
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
+            { path: '/main-subject-master', component: require('./components/masters/academics_masters/main_subject/main_subject_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/main_subject/list_main_subject.vue').default },
+                    { path: '/list-main-subject', name: 'list_main_subject', component: require('./components/masters/academics_masters/main_subject/list_main_subject.vue').default },
+                    { path: '/create-main-subject', name: 'create_main_subject', component: require('./components/masters/academics_masters/main_subject/create_main_subject.vue').default },
+                    { path: '/edit-main-subject', name: 'edit_main_subject', component: require('./components/masters/academics_masters/main_subject/edit_main_subject.vue').default },
+                ]
+            },
             { path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,
                 children: [
                     { path: '', component: require('./components/masters/academics_masters/subject/list_subject.vue').default },
@@ -57,12 +65,19 @@ const routes = [
                 ]
             },
             { path: '/promotion-rule', component: require('./components/masters/academics_masters/promotion_rule/promotion_rule_index.vue').default,
-            children: [
-                { path: '', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule').default },
-                { path: '/list-promotion-rule', name:'list_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule.vue').default },
-                { path: '/edit-promotion-rule', name: 'edit_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/edit_promotion_rule.vue').default },
-            ]
-        },
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule').default },
+                    { path: '/list-promotion-rule', name:'list_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/list_promotion_rule.vue').default },
+                    { path: '/edit-promotion-rule', name: 'edit_promotion_rule', component: require('./components/masters/academics_masters/promotion_rule/edit_promotion_rule.vue').default },
+                ]
+            },
+            { path: '/subject-mapping-for-tre', component: require('./components/masters/academics_masters/subject_mapping_for_tre/subject_mapping_for_tre_index.vue').default,
+                children: [
+                    { path: '', component: require('./components/masters/academics_masters/subject_mapping_for_tre/list_subject_mapping_for_tre.vue').default },
+                    { path: '/list-subject-mapping-for-tre', name:'list_subject_mapping_for_tre', component: require('./components/masters/academics_masters/subject_mapping_for_tre/list_subject_mapping_for_tre.vue').default },
+                    { path: '/create-subject-mapping-for-tre', name: 'create_subject_mapping_for_tre', component: require('./components/masters/academics_masters/subject_mapping_for_tre/create_subject_mapping_for_tre.vue').default },
+                ]
+            },
 
         ]
     },

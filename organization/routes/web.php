@@ -23,6 +23,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrganizaitonmasters/{type}/{model}', 'OrganizationMasterController@loadOrganizaitonmasters');
         $router->get('/loadFinacialtype', 'OrganizationMasterController@loadFinacialtype');
         $router->get('/loadincomeList', 'OrganizationMasterController@loadincomeList');
+        $router->post('/saveNotificationConfigMasters', 'OrganizationMasterController@saveNotificationConfigMasters');
     });
 
     $router->group(['prefix' => 'masters/disaster'], function () use ($router) {

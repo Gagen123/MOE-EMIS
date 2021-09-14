@@ -13,6 +13,17 @@
                         <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" tabindex="2" id="description" type="text"/>
                         <has-error :form="form" field="description"></has-error>
                     </div>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Type:<span class="text-danger">*</span></label>
+                            <select name="service_type" id="service_type" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('service_type') }" v-model="form.service_type">
+                                <option value="">--- Please Select ---</option>
+                                <option value="Notification">Notification</option>
+                                <option value="Other">Other</option>
+                            </select><br>
+                        <has-error :form="form" field="service_type"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -39,6 +50,7 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
+                service_type:'',
                 action_type:'add',
                 model:'Service'
             })

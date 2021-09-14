@@ -5,10 +5,17 @@
                 <table id="agency-input-form-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th class="text-center">Agency</th>
-                            <th class="text-center">Input<small><br>(Resources & trainings provided by the Dzongkhag/Thromde/Agency)</small></th>
-                            <th class="text-center">Observation By EMD</th>
-                            <th class="text-center">Action Taken by Dzongkhag/Thromde/Agency</th>
+                            <th class="text-center">Input By</th>
+                            <th class="text-center">Input<small><br>(Resources & trainings provided by the
+                                <span v-if="org_id == emd_id">Dzongkhag/Thromde/Agency</span>
+                                <span v-else-if="acess_level == 'Dzongkhag'">Dzongkhag/Thromde</span>
+                                <span v-else>Agency</span>)
+                             </small></th>
+                            <th class="text-center">Observation by EMD</th>
+                            <th class="text-center">Action Taken by 
+                                <span v-if="org_id == emd_id">Dzongkhag/Thromde/Agency</span>
+                                <span v-else-if="acess_level == 'Dzongkhag'">Dzongkhag/Thromde</span>
+                                <span v-else>Agency</span></th>
                             <th class="text-center">Acknowledgement/Comments by School</th>
                             <th class="text-center">Action</th>
                         </tr>
@@ -58,6 +65,8 @@
 export default {
     data(){
         return {
+            emd_id:process.env.MIX_EMD_ID,
+            org_id:'',
             division:'',
             acess_level:'',
             agency_inputs:[],
@@ -109,6 +118,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 this.acess_level = data['acess_level']
+                this.org_id = data['Agency_Code']
             })
             .catch(errors => {
                 console.log(errors)

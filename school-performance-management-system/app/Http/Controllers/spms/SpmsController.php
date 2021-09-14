@@ -78,7 +78,6 @@ class SpmsController extends Controller
     }
     }
     public function saveEvaluation(Request $request){
-        dd($request);
         $rules = [
             'data.*.spm_indicator_id' => 'required',
             'data.*.score' => 'required',

@@ -260,7 +260,7 @@ class SpmsMasterController extends Controller
               $responsedata= Rating::create($data);
             }
             if($request['action_type']=="edit"){
-                   $rules = [
+             $rules = [
                 'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'mov' => 'required',

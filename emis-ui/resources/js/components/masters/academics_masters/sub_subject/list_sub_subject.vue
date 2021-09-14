@@ -8,6 +8,7 @@
                             <th >Display Order</th>
                             <th >Subject</th>
                             <th >Sub-Subject (Paper) </th>
+                            <th >Code</th>
                             <th >Status</th>
                             <th >Action</th> 
                         </tr>
@@ -17,6 +18,7 @@
                             <td class="text-right">{{ item.display_order}}</td>
                             <td>{{item.sub_name}} <span v-if="item.dzo_subject">( {{ item.dzo_subject }} )</span></td>
                             <td>{{ item.sub_subeject_name }} <br><span v-if="item.dzo_name"> {{ item.dzo_name }} </span></td>
+                            <td class="text-right">{{ item.code}}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
