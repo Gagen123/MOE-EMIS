@@ -220,8 +220,15 @@ try {
                 }catch(e){
                     console.log('error loadpositionTitleList '+e);
                 }
+            },
+            getEnvValues(type){
+                let uri = 'common/getEnvValues/'+type;
+                try{
+                    return  axios.get(uri).then(response => { return response.data});
+                }catch(e){
+                    console.log('error getEnvValues '+e);
+                }
             }
-
         },
     })
 

@@ -8,6 +8,6 @@ class DocumentType extends Model{
     use HasFactory, Uuid;
     protected $table="master_document_type";
     protected $fillable = [
-        'id','name','applicableTo', 'description', 'status','created_by','updated_by'
+        'id','name','code','applicableTo', 'description', 'status','created_by','updated_by'
     ];
 }

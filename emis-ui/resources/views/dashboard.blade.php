@@ -97,7 +97,6 @@
                             '<i class=" '+item.screen_icon+'"></i> <p>'+item.screenName+
                             '</p></a>';
                         }
-
                         if(item.moudle_name!=null && submoduleList!=undefined){
                             menu=menu+'<ul class="nav nav-treeview">';
                                 submoduleList.forEach(sub_item =>{
@@ -115,6 +114,52 @@
                     });
                 }
                 $('#sidebars').html(menu);
+            }
+        });
+
+        //workflow Submitter Links
+        let workmenu='';
+        let workflowmoduleList=[];
+        axios.get('common/getscreens/workflowmodule')
+        .then(response =>{
+            workflowmoduleList= response.data;
+        });
+
+        axios.get('common/getscreens/workflowsubmodule')
+        .then(response =>{
+            let workflowList= response.data;
+            if(workflowmoduleList!=undefined){
+                if(workflowmoduleList.length!=undefined){
+                    workflowmoduleList.forEach(item =>{
+                        if(item.moduleName!=null && item.moduleName!="null" && item.moduleName!=""){
+                            workmenu=workmenu+'<li class="nav-item has-treeview"><a href="#" class="nav-link border-bot text-body text-body pt-1 pb-1">'+
+                            '<i class=" '+item.module_icon+'"></i> <p>'+item.moduleName+
+                            '<i class="right fas fa-angle-left"></i></p>'+
+                            '</a>';
+                        }
+                        if(item.moduleName==null && item.screen_name!=null && item.screen_name!=""){
+                            workmenu=workmenu+'<li class="nav-item"><a href="#/'+item.Route+'" class="nav-link border-bot text-body text-body pt-1 pb-1">'+
+                            '<i class=" '+item.screen_icon+'"></i> <p>'+item.screen_name+
+                            '</p></a>';
+                        }
+
+                        if(item.moduleName!=null && workflowList!=undefined){
+                            workmenu=workmenu+'<ul class="nav nav-treeview">';
+                                workflowList.forEach(sub_item =>{
+                                if(sub_item.mod_id_In_sub==item.mod_id){
+                                    workmenu=workmenu+'<li class="nav-item ">'+
+                                    '<a href="#/'+sub_item.sub_mod_route+'?data='+sub_item.sub_mod_id+'" class="nav-link text-body border-bot text-body">'+
+                                    '<i class=" nav-icon '+sub_item.submod_icon+'"></i>'+
+                                    '<p>'+sub_item.sub_mod_name+'</p>'+
+                                    '</a></li>';
+                                }
+                            });
+                            workmenu=workmenu+'</ul>';
+                        }
+                        workmenu=workmenu+'</li>';
+                    });
+                }
+                $('#sidebars').append(workmenu);
             }
         });
     }

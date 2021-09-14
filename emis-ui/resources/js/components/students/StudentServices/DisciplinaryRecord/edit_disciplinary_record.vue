@@ -139,7 +139,7 @@ export default {
                 let data = response;
                 this.severityList =  data.data.data;
             })
-            .catch(function (error) {
+            .catch(function (error) { 
                 console.log("Error......"+error)
             });
         },

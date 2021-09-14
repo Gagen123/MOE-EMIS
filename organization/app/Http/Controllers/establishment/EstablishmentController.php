@@ -1203,8 +1203,8 @@ class EstablishmentController extends Controller{
     }
 
     public function loadOrgChangeApplications($user_id="",$type=""){
-
         $response_data=ApplicationDetails::where('created_by',$user_id)->where('establishment_type',  str_replace('%20',' ',$type))->get();
+        return $this->successResponse($response_data);
         if($response_data!="" && $response_data!=null && sizeof($response_data)>0){
             foreach($response_data as $app){
                 $app->attachments=ApplicationAttachments::where('ApplicationDetailsId',$app->id)->get();

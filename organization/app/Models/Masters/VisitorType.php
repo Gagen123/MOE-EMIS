@@ -13,6 +13,6 @@ class VisitorType extends Model
     use HasFactory, Uuid;
     protected $table="master_visitor_type";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by','created_at','updated_at'
+        'id','name','code', 'description', 'status','created_by','updated_by','created_at','updated_at'
     ];
 }

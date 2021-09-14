@@ -567,7 +567,7 @@ export default {
                 // let data = response.data[0];
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
-                    $('#eccdservice').html('<b>'+data.screenName+' ('+this.form.category+')</b>');
+                    $('#eccdservice').html('Application for Establishment of <b>'+data.screenName+' ('+this.form.category+')</b>');
                     this.screenId=data.screen;
                     this.SysRoleId=data.SysRoleId;
                     this.Sequence=data.Sequence;

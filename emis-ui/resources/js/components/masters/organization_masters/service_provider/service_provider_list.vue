@@ -6,6 +6,7 @@
                     <th>SL#</th>
                     <th>Service Type</th>
                     <th>Service Provider</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.serviceType == 1 ? "Internet" : "Telephone"}}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td> {{item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
@@ -39,23 +41,15 @@ export default {
     },
 
     methods:{
-        loadServiceList(uri = 'masters/loadServiceProvider'){
+        loadServiceList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/ServiceProvider'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.serviceList =  data.data;
+                let data = response.data.data;
+                this.serviceList =  data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error: '+error);
             });
-            setTimeout(function(){
-                $("#service-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 300);  
         },
         viewServiceList(data){
             data.action='edit';

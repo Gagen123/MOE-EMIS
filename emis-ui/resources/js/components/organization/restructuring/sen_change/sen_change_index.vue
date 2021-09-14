@@ -6,9 +6,9 @@
         </div>
         <div class="card card-primary card-outline" id="mainform">
             <div class="card-header pt-0 mt-0 pb-0">
-                <span class="card-title pt-2 mb-0">
+                <!-- <span class="card-title pt-2 mb-0">
                     <b>Applications for Change in SEN details</b>
-                </span>
+                </span> -->
                 <span class="fa-pull-right pr-2 py-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_sen_change')"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_sen_change')"><i class="fa fa-plus"></i> Apply for Change in SEN</button>
@@ -43,11 +43,11 @@ export default {
         axios.get('common/getScreenAccess/workflow__change_in_sen_details')//workflow will specify that the process have workflow
         .then(response => {
             let data = response.data[0].total_count;
-            if(data<1){
-                $('#screenPermission').show();
-                $('#mainform').hide();
-                $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
-            }
+            // if(data<1){
+            //     $('#screenPermission').show();
+            //     $('#mainform').hide();
+            //     $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
+            // }
         })
         .catch(errors => {
             console.log(errors)

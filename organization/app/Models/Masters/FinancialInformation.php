@@ -10,6 +10,6 @@ class FinancialInformation extends Model
     use HasFactory, Uuid;
     protected $table="master_financial_information";
     protected $fillable = [
-        'id','name','applicableTo', 'description', 'status','created_by','updated_by'
+        'id','name','code','applicableTo', 'description', 'status','created_by','updated_by'
     ];
 }

@@ -38,14 +38,15 @@ class ClassController extends Controller
         $id = $request->id;
         if( $id != null){
             $cla = [
-                'class'          => $request['className'],
-                'description'    =>  $request['description'],
-                'status'         => $request['status'],
-                'updated_by'     =>$request['user_id'],
-                'created_at'     =>date('Y-m-d h:i:s'),
+                'class'                 => $request['className'],
+                'code'                  => $request['code'],
+                'description'           =>  $request['description'],
+                'status'                => $request['status'],
+                'updated_by'            =>$request['user_id'],
+                'created_at'            =>date('Y-m-d h:i:s'),
             ];
             $data = Classes::find($request['id']);
-            $messs_det='className:'.$data->name.'; description:'.$data->description.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $messs_det='className:'.$data->name.'; description:'.$data->description.';code:'.$data->code.'; status:'.$data->status.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
             $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('organization_db','class','".$request['id']."','".$messs_det."','".$request->input('user_id')."','Edit')");
                 
             $class = Classes::where('id', $id)->update($cla);
@@ -53,11 +54,12 @@ class ClassController extends Controller
         }else{
 
             $cla = [
-                'class'          => $request['className'],
-                'description'    =>  $request['description'],
-                'status'         => $request['status'],
-                'created_by'     =>$request['user_id'],
-                'created_at'     =>date('Y-m-d h:i:s'),
+                'class'                 =>  $request['className'],
+                'code'                  =>  $request['code'],
+                'description'           =>  $request['description'],
+                'status'                =>  $request['status'],
+                'created_by'            =>  $request['user_id'],
+                'created_at'            =>date('Y-m-d h:i:s'),
             ];
             //dd($cla);
             $class = Classes::create($cla);

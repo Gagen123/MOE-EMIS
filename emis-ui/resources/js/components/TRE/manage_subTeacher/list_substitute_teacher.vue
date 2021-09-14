@@ -20,14 +20,15 @@
                     <tbody>
                         <tr v-for="(item, index) in dataList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.cid}}</td>
+                            <td>{{ item.empId}}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ item.subtituted_by}}</td>
                             <td>{{ item.cid}}</td>
                             <td>{{ item.from_date}}</td>
                             <td>{{ item.to_date}}</td>
-                            <td>{{ item.teaching_subject}}</td>
-                            <td>{{ item.contact_extended}}</td>
+                            <td>{{ teachingSubjList[item.teaching_subject]}}</td>
+                            <td>{{ item.contact_extended==  1 ? "Yes" : " " }}</td>
+                            <!-- <td>{{ item.contact_extended}}</td> -->
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
                             </td>
@@ -43,28 +44,47 @@ export default {
     data(){
         return{
             dataList:[],
-            dt:''
+            dt:'',
+            teachingSubjList:{},
+            teachingSubjList:[]
         }
     },
     methods:{
-        loadSubstaff(type){
-            axios.get('staff/substitution/loadSubstaff/'+type)
-            .then((response) => {
-                this.dataList =  response.data;
-             })
-            .catch((error) => {
-                console.log("Error."+error);
+        loadSubstaff(uri = 'staff/substitution/loadSubstaff'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dataList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log(error);
             });
         },
         loadeditpage(staff){
             this.$router.push({name:"edit_substitute_teacher",params:{data:staff}});
 		},
-       
+        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_teaching_subject'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+            // alert(JSON.stringify(response.data.data));
+
+                for(let i=0;i<data.data.data.length;i++){
+                    this.teachingSubjList[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
+        },
     },
+    
    
-    async mounted() {
+    mounted() {
+        this.LoadTeachingSubject();
         this.dt =  $("#substitute-staff-table").DataTable();
-        this.loadSubstaff('all/SubstitutionModel');
+        this.loadSubstaff();
+        
     },
     watch: {
         dataList(){

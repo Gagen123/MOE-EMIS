@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Class</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in classList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.class}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>

@@ -359,11 +359,25 @@ class TransferController extends Controller{
             LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id
             WHERE d.role_id IN(".$roles.")";
         }
+        
+        else if(strpos( $role_ids,'__')){
+            $role_ids=explode('__',$role_ids);
+            $roles="";
+            foreach($role_ids as $role){
+                $roles.="'$role'__";
+            }
+            $roles=rtrim($roles,'__');
+            $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l
+            LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id;
+            WHERE d.sequence IN(".$roles.")";
+        }
+
         else{
             $result_data="SELECT l.transfer_type_id,l.submitter_role_id,d.role_id,d.sequence,d.authority_type_id FROM master_staff_transfer_config l
             LEFT JOIN master_staff_transfer_config_details d ON l.id=d.transfer_config_id
             WHERE d.role_id ='".$role_ids."'";
         }
+
         return DB::select($result_data);
     }
 

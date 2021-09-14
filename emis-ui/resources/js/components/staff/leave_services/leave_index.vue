@@ -10,7 +10,8 @@
                         <span :class="item.screen_icon"></span> {{ item.screen_name}}
                     </router-link>
                 </li>
-               
+            </ul>
+            <ul class="nav nav-pills mb-2 development" role="tablist">
                 <li class="nav-item active pr-1">
                     <router-link to="/apply_leave" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
@@ -38,19 +39,21 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+            .catch(function (error) {
+                console.log(error);
             });
         },
     },
-    mounted() {
+    async mounted() {
         let routeparam=this.$route.query.data;
         this.menu_id=routeparam;
         this.getmenus();
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

@@ -16,6 +16,16 @@
                             <label class="mb-0.5">Classes and Stream </label>
                         </a>
                     </li>
+                    <li class="nav-item file-tab" @click="shownexttab('file-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Attachments</label>
+                        </a>
+                    </li>
+                    <li class="nav-item verification-tab border-right" @click="shownexttab('verification-tab')">
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Verification</label>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -34,14 +44,22 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
-                                    <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
+                                    <span class="text-blue text-bold">{{taskDet.service_name}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Current Status:</label>
+                                    <span class="text-blue text-bold">{{taskDet.w_config_status}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.applicant_remarks!=null">
+                                    <label class="mb-0">Remarks:</label>
+                                    <span class="text-blue text-bold">{{applicationdetails.applicant_remarks}}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
                             <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School' || applicationdetails.establishment_type=='Public ECCD'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
                                     <label class="mb-0">Proposal Initiated By:</label>
                                     <span class="text-blue text-bold">{{proposed_by_list[applicationOrgdetails.initiated_by]}}</span>
                                 </div>
@@ -73,6 +91,10 @@
                                     <label class="mb-0">Location Type:</label>
                                     <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Private School'">
+                                    <label class="mb-0">Type of School:</label>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.typeOfSchool  == 1 ? "Yes" :  "No" }}</span>
+                                </div>
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Geopolitically Located:</label>
                                     <span class="text-blue text-bold">
@@ -90,7 +112,8 @@
                                     <span class="text-blue text-bold"> {{feed_details}} </span>
                                 </div>
                             </div>
-                            <div v-if="applicationdetails.establishment_type=='Private School' || applicationdetails.establishment_type=='Private ECCD'">
+
+                            <div v-if="applicationdetails.establishment_type=='Private School'">
                                 <div class="row pb-2">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <h5><u>Proprietor Details</u></h5>
@@ -318,11 +341,6 @@
                             <div id="verifier_team" style="display:none">
                                 <h5><u>Team Verification</u></h5>
                                 <div class="row form-group">
-                                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="showsearch">
-                                        <label>Enter the Members CID:</label>
-                                        <input type="text" name="emp_deails" id="emp_deails" class="form-control">
-                                        <span class="text-danger" id="emp_deails_err"></span>
-                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-2" v-if="showsearch">
                                         <button type="button" @click="getEmpDetails()" class="btn btn-sm btn-primary"><i class="fa fa-search"></i> Search</button>
                                     </div>
@@ -345,57 +363,9 @@
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <!-- <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>CID/Passport</th>
-                                                    <th>Position Title</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for='(user, index) in form.nomi_staffList' :key="index">
-                                                    <td> {{user.name}}</td>
-                                                    <td> {{user.cid}}</td>
-                                                    <td> {{user.po_title}}</td>
-                                                </tr>
-                                                <tr id="removeBtn">
-                                                    <td colspan="5">
-                                                        <button type="button" class="btn btn-flat btn-sm btn-danger" id="removeId"
-                                                        @click="remove('nomination')"><i class="fa fa-trash"></i> Remove</button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                            <span id="nminees_error" class="text-danger"></span>
-                                        </table> -->
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="row pb-2" style="display:none" id="team_verificationAttachment">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5><u>Attachments</u></h5>
-                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Attachment Name</th>
-                                                <th>Attachment</th>
-                                                <th>File</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
-                                                <template v-if="attach.upload_type=='team_verification'">
-                                                    <td>{{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
-                                                    <td>
-                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                    </td>
-                                                </template>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div> -->
                         </div>
                          <div class="callout callout-success">
                             <h4><u>Attachments</u></h4>
@@ -463,6 +433,9 @@ export default {
     },
     data(){
         return{
+            taskDet:'',
+            applicationdetails:[],
+            app_org_details:[],
             internalstaff:false,
             count:1,
             showsearch:false,
@@ -471,7 +444,7 @@ export default {
             calssArray:{},
             streamArray:{},
             sectionList:[],
-            applicationdetails:[],
+
             levelList:{},
             proposed_by_list:{},
             locationList:[],
@@ -535,11 +508,18 @@ export default {
             axios.get('organizationApproval/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
+                this.applicationdetails=data;
+                this.taskDet=response.data.app_stage;
+                this.app_org_details=data.org_details;
+                if(data.attachments!=undefined && data.attachments!=""){
+                    this.app_attachments=data.attachments;
+                }
+                this.app_class_details=data.org_class_stream;
+
                 this.form.applicationNo=data.application_no;
                 this.form.servicename=data.establishment_type;
                 this.form.id=data.id;
                 this.search.id=data.id;
-                this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
                 this.class_section=data.org_class_stream;
                 this.getteamVerificationList();
@@ -580,7 +560,6 @@ export default {
                 }
                 else{
                     $('#tentativeAttachment').show();
-                    // this.form.verifying_agency=data.app_verification.verifyingAgency;
                     let veri=data.app_verification.verifyingAgency.split(',');
                     this.form.verifying_agency_list=[];
                     for(let i=0;i<veri.length;i++){
@@ -592,7 +571,7 @@ export default {
                     this.form.tentative_date=data.app_verification.tentativeDate;
                     $('#tentative_date').prop('readonly',true);
                     $('#verifier_team').show();
-                    if((data.establishment_type=="Private School" ||  data.establishment_type=="Private ECCD" || data.establishment_type=="Public ECCD") && data.status!="Document Updated"){
+                    if((data.establishment_type=="Private School") && data.status!="Document Updated"){
                         $('#verifyId').hide();
                         $('#approveId').hide();
                         $('#rejectbtn').hide();
@@ -606,36 +585,6 @@ export default {
                     $('#updateBtn').hide();
                     $('#update_btn_level').hide();
 
-                    //if(data.app_verification_team.length==0){
-                        // this.form.update_type='team_verification';
-                        // this.getAttachmentType('ForTransaction__Update_Team_Verification_for_Public');
-                        // // $('#update_btn_level').html('Notify For team Verification');
-                        // this.showsearch=true;
-                        // $('#updateBtn').hide();
-                        // $('#verifyId').show();
-                        // $('#approveId').show();
-                        // $('#update_btn_level').hide();
-                    //     this.showsearch=true;
-                    //     this.form.update_type='final_verification';
-
-                    //     $('#removeBtn').hide();
-                    //     $('#team_verificationAttachment').show();
-                    // }
-                    // else{
-
-                    //     this.showsearch=false;
-                    //     this.form.update_type='final_verification';
-                    //     this.getAttachmentType('ForTransaction__Establishment_of_Public_Schoo_Approv');
-                    //     $('#removeBtn').hide();
-                    //     $('#team_verificationAttachment').show();
-                    //     for(let i=0;i<data.app_verification_team.length;i++){
-                    //         this.form.nomi_staffList.push({id:'NA',staff_id:data.app_verification_team[i].teamMember,
-                    //             name:data.app_verification_team[i].name,
-                    //             cid:data.app_verification_team[i].cid,
-                    //             po_title:data.app_verification_team[i].po_title,
-                    //         })
-                    //     }
-                    // }
 
                 }
 
@@ -749,38 +698,6 @@ export default {
 		},
         getEmpDetails(){
             $('#search-modal').modal('show');
-            // if($('#emp_deails').val()==""){
-            //     $('#emp_deails_err').html('Please provide this field');
-            // }
-            // else{
-            //     $('#emp_deails_err').html('');
-            //     let type="";
-            //     if($('#emp_deails').val().length==11){
-            //         type="cid";
-            //     }
-            //     else{
-            //         type="emp_id";
-            //     }
-            //     let uri="loadCommons/viewStaffDetails/"+type+'/'+$('#emp_deails').val();
-            //     axios.get(uri)
-            //     .then((response) => {
-            //         let data=response.data.data;
-            //         $('#emp_deails').val('');
-            //         $('#nminees_error').html('');
-            //         if(data==null){
-            //             Swal.fire({
-            //                 text: "No details are found with this input!",
-            //                 icon: 'error',
-            //             });
-            //         }
-            //         else{
-            //             this.form.nomi_staffList.push({id:'NA',staff_id:data.id, name:data.name, cid:data.cid_work_permit, po_title:data.position_title, org_id:data.working_agency_id,org:data.working_agency, dzo_id:data.dzo_id,dzo:data.dzongkhag})
-            //         }
-            //     })
-            //     .catch(function (error){
-            //         console.log(error);
-            //     });
-            // }
         },
         shownexttab(nextclass){
             if(nextclass=="reject" || nextclass=="update" || nextclass=="verify" || nextclass=="approve"){
@@ -934,11 +851,9 @@ export default {
     mounted(){
         this.getLevel();
         this.getLocation();
-        // this.getClassStream();
         this.getClass();
         this.getstream();
         this.loadproposedBy();
-        // this.applicationdetails.applicationNo=this.$route.params.data.application_number;
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
 
 

@@ -38,12 +38,17 @@ class StaffSepSecController extends Controller{
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId(),
         ];
+       // dd( $request_data);
         $response_data= $this->apiService->createData('emis/staff/staffSepSecController/saveSecondmentSeperation', $request_data);
         return $response_data;
     }
 
     public function loadSecondment($type="",$model=""){
         $response_data= $this->apiService->listData('emis/staff/staffSepSecController/loadSecondment/'.$type.'/'.$model);
+        return $response_data;
+    }
+    public function loadLeaveStaffList(){
+        $response_data= $this->apiService->listData('emis/staff/staffSepSecController/loadLeaveStaffList');
         return $response_data;
     }
 }

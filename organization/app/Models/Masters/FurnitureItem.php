@@ -17,6 +17,6 @@ class FurnitureItem extends Model
      * @var array
      */
     protected $fillable = [
-        'id','furnitureType','name','description','status','created_by','updated_by'
+        'id','furnitureType','code','name','description','status','created_by','updated_by'
     ];
 }
