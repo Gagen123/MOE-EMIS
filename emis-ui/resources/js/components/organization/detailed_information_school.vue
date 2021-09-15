@@ -18,7 +18,7 @@
                                         </div>
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Counselling'>
                                                     <label>Has Counselling room:</label><br>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
@@ -258,6 +258,7 @@
                          $('#AspNet').hide();
                          $('#Resource').hide();
                          $('#Has_CE').hide();
+                         $('#Counselling').hide();
                         
                     }
                     if(response_data.category=="public_school" ||response_data.category=="private_school" ||response_data.category=="public_ecr" ){
