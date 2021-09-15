@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Accessible extends Model
+class MastersAccessible extends Model
+
 {
-    //
     use HasFactory, Uuid;
     protected $table="accessible_type";
     protected $fillable = [

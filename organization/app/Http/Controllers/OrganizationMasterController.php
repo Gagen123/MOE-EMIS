@@ -45,7 +45,6 @@ class OrganizationMasterController extends Controller{
             'status'            =>  $request->status,
         ];
         //  dd( $master_data);
-        
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
                 'applicableTo'              =>  implode(', ', $request->addfield_1),
@@ -99,7 +98,7 @@ class OrganizationMasterController extends Controller{
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
             $response_data = $model::create($master_data);
-            // dd($response_data);
+             
         }
 
         if($request->action_type=="edit"){
