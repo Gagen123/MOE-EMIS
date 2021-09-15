@@ -7,6 +7,7 @@
                     <th>Serivce</th>
                     <th>Code</th>
                     <th>Description</th>
+                    <th>Type</th>
                     <th>Status</th>
                     <th>Action</th> 
                 </tr>
@@ -17,6 +18,7 @@
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
+                    <td>{{ item.service_type}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

@@ -207,7 +207,7 @@ export default {
             }
           
             if(type=="save"){
-                 const config = {
+                const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
                     }
@@ -236,6 +236,50 @@ export default {
                     console.log("Error."+err.message)
                 })
             }
+            // if(type=="save"){
+            //     Swal.fire({
+            //         title: 'Are you sure you wish to submit this form ?',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Yes!',
+            //         }).then((result) =>{
+            //         if (result.isConfirmed){
+            //             const config = {
+            //         headers: {
+            //             'content-type': 'multipart/form-data'
+            //         }
+            //     }
+            //      let formData = new FormData();
+            //     formData.append('dateOfrelease', this.form.dateOfrelease);
+            //  //    formData.append('dzongkhag', this.form.dzongkhag);
+            //     // alert(this.form.attachments);
+            //     //    formData.append('organizaiton', this.form.organizaiton);
+            //     formData.append('quarter', this.form.quarter);
+            //     formData.append('remarks', this.form.remarks);
+            //      for(let i=0;i<this.form.ref_docs.length;i++){
+            //             formData.append('attachments[]', this.form.ref_docs[i].attach);
+            //             formData.append('attachmentname[]', this.form.ref_docs[i].name);
+            //         }
+            //             this.form.post('/mess_manage/saveFoodRelease',this.form)
+            //             .then((response) =>{
+            //                 Toast.fire({
+            //                 icon: 'success',
+            //                 title: 'Details added successfully'
+            //             })
+            //             this.$router.push('/foodrelease_list');
+            //             })
+            //             .catch((error) => {
+            //                 Toast.fire({
+            //                     icon: 'error',
+            //                     title: 'Unexpected error occured. Try again.'
+            //                 });
+            //                 console.log("Error:"+error);
+            //             })
+            //         }
+            //     })
+            // }
 
 
         },
@@ -278,7 +322,7 @@ export default {
         /**
          * method to get term in dropdown
          */
-        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/CeaQuarterType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -297,7 +341,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -311,7 +355,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -103,7 +103,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveAwardTypeList(uri="masters/loadActiveStudentMasters/student_award_type"){
+        loadActiveAwardTypeList(uri="masters/loadActiveStudentMasters/StudentAwardType"){
             axios.get(uri)
             .then(response => {
                 let data = response;

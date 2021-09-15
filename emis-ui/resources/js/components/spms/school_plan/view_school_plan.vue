@@ -240,7 +240,6 @@ export default {
                         roleName+=data['roles'][i].roleName+', ';
                     }
                 }
-                console.log(data['Agency_Code'],data['acess_level'])
                 this.form.full_name=data['Full_Name'];
                 this.form.roles=roleName;
                 this.getorgName(data['Agency_Code'],data['acess_level']);

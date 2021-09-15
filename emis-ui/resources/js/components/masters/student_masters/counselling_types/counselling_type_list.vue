@@ -5,6 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
+                    <th >Code</th>
                     <th >Description</th>
                     <th >Status</th>
                     <th >Action</th>
@@ -13,9 +14,10 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in counsellingList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.description }}</td>
-                    <td>{{ item.status==  1 ? "Inactive" : "Active" }}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Code }}</td>
+                    <td>{{ item.Description }}</td>
+                    <td>{{ item.Status==  1 ? "Inactive" : "Active" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

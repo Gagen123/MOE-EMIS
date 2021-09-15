@@ -15,6 +15,7 @@ class Subject extends Model
         'id',
         'aca_sub_id',
         'name',
+        'code',
         'dzo_name',
         'aca_sub_category_id',
         'display_order',

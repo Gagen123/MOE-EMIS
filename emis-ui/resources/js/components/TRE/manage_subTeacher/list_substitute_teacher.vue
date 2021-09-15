@@ -63,7 +63,7 @@ export default {
         loadeditpage(staff){
             this.$router.push({name:"edit_substitute_teacher",params:{data:staff}});
 		},
-        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_teaching_subject'){
+        LoadTeachingSubject(uri = 'masters/loadAcademicMasters/all_active_main_subject'){
             axios.get(uri)
             .then(response =>{
                 let data = response;

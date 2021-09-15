@@ -113,7 +113,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveOffenceTypeList(uri="masters/loadActiveStudentMasters/offence_type"){
+        loadActiveOffenceTypeList(uri="masters/loadActiveStudentMasters/OffenceType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -123,7 +123,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveActionTakenList(uri="masters/loadActiveStudentMasters/disciplinary_action_taken"){
+        loadActiveActionTakenList(uri="masters/loadActiveStudentMasters/DisciplinaryActionTaken"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -133,7 +133,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/offence_severity"){
+        loadActiveSeverityList(uri="masters/loadActiveStudentMasters/OffenceSeverity"){
             axios.get(uri)
             .then(response => {
                 let data = response;

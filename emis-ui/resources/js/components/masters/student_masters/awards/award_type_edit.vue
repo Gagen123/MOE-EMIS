@@ -47,7 +47,7 @@ export default {
                 description:'',
                 code:'',
                 status: '',
-                record_type:'student_award_type',
+                record_type:'StudentAwardType',
                 action_type:'edit',
             })
         }
@@ -66,7 +66,7 @@ export default {
             }
             if(type=="save"){
                 Swal.fire({
-                    title: 'Are you sure you wish to submit edited data form ?',
+                    title: 'Are you sure you wish to submit this form ?',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

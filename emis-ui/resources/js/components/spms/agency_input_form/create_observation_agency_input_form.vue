@@ -81,7 +81,7 @@
                 </div>
                 <div class="card-footer text-right">
                     <button type="button" @click="save" class="btn btn-flat btn-sm btn-primary"  data-dismiss="modal" aria-label="Save">
-                        <i class="fa fa-save"></i><span aria-hidden="true">Save</span>
+                        <i class="fa fa-save"></i><span aria-hidden="true"> Save</span>
                     </button>
                 </div>
             </div>

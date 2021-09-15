@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Training Type</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th> 
@@ -13,8 +15,10 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -34,11 +38,11 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri = 'masters/loadStudentMasters/training_type'){
+        loadDataList(uri = 'masters/loadStudentMasters/CeaTrainingType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.dataList =  data.data;
+                this.dataList =  data.data.data;
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -53,7 +57,7 @@ export default {
             }, 3000);  
         },
         showedit(data){
-            this.$router.push({name:'TrainingTypeEdit',params: {data:data}});
+            this.$router.push({name:'StudentTrainingTypeEdit',params: {data:data}});
         },
     },
     mounted(){

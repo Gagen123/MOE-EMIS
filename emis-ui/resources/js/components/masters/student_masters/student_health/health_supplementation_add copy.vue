@@ -36,7 +36,7 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
-                record_type:'health_supplementation',
+                record_type:'HealthSupplementation',
                 action_type:'add',
                 model:'',
             })

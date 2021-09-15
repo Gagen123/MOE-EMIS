@@ -130,7 +130,7 @@ export default {
             // this.student_form.studentList.bmi=bmi;
            $('#result'+index).html(bmi);
         },
-        loadActiveTermList(uri="masters/loadActiveStudentMasters/term_type"){
+        loadActiveTermList(uri="masters/loadActiveStudentMasters/HealthTerm"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -65,14 +65,11 @@ export default {
     mounted(){ 
         this.getRatings();
         this.dt =  $("#rating-data-table").DataTable({
+              rowGroup: {
+                dataSrc: [0,1,2,3] 
+            },
             columnDefs: [
-                { width: 10, targets: 0},
-                { width: 100, targets: 2},
-                { width: 200, targets: 3},
-                { width: 10, targets: 4},
-                { width: 300, targets: 5},
-                { width: 50, targets: 6},
-                { width: 50, targets: 7},
+                {targets:  [0,1,2,3],visible: false},
             ],
         })
     },
@@ -80,9 +77,21 @@ export default {
         ratings(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#rating-data-table").DataTable()
+                this.dt =  $("#rating-data-table").DataTable({
+                    rowGroup: {
+                        dataSrc: [0,1,2,3] 
+                    },
+                    columnDefs: [
+                        {targets:  [0,1,2,3],visible: false},
+                    ],
+                })
             });
         }
     }
 }
 </script>
+<style scoped>
+.bolded {
+  font-weight:bold;
+}
+</style>

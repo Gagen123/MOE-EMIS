@@ -1,7 +1,6 @@
 <template>
     <div>
         <form class="bootbox-form" autocomplete="off">
-            <strong class="ml-3">Create Agency Input</strong>
             <div class="card-body">
                 <div class="row form-group">
                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -22,25 +21,25 @@
                 </div>  
                 <div class="row form-group">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Input:<span class="text-danger">*</span></label> 
+                        <label>Input:<span class="text-danger">*</span> <small class="text-muted">Resources & trainings provided by the<span v-if="acess_level =='Dzongkhag'"> Dzongkhag/Thromde</span><span v-else> Agency</span></small></label>
                         <textarea class="form-control form-control-sm" v-model="form.input" :class="{ 'is-invalid': form.errors.has('input') }" id="input" @change="onChange('input')"></textarea>
-                        <small class="form-text text-muted">Resources & trainings provided by the agency.</small>
+                        
                         <has-error :form="form" field="input"></has-error>
                     </div>
                 </div>          
                 <div class="row form-group">
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Process/Activities:<span class="text-danger">*</span></label> 
+                        <label>Process/Activities:<span class="text-danger">*</span> <small class="text-muted"> What schools are expected to do using input provided</small></label> 
                         <textarea class="form-control form-control-sm" v-model="form.activity" :class="{ 'is-invalid': form.errors.has('activity') }" id="activity" @change="onChange('activity')"></textarea>
-                        <small class="form-text text-muted">What schools are expected to do using input provided.</small>
+                        
                         <has-error :form="form" field="activity"></has-error>
                     </div>
                 </div>  
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Output:<span class="text-danger">*</span></label> 
+                    <label>Output:<span class="text-danger">*</span>  <small class="text-muted">What are the expected products/services to be achieved by schools</small></label> 
                     <textarea class="form-control form-control-sm" v-model="form.output" :class="{ 'is-invalid': form.errors.has('output') }" id="output" @change="onChange('output')"></textarea>
-                    <small class="form-text text-muted">What are the expected products/services to be achieved by schools.</small>
+                   
                     <has-error :form="form" field="output"></has-error>
                 </div>
                 </div>  
@@ -108,6 +107,7 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 this.getorgName(data['Agency_Code'],data['acess_level']);
+                this.acess_level = data['acess_level']
             })
             .catch(errors => {
                 console.log(errors)

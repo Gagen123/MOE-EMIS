@@ -67,7 +67,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Action Taken by Agency:</label> 
+                        <label>Action Taken by Dzongkhag/Thromde/Agency:</label> 
                         <br>
                         {{action}}
                     </div>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Acknowledgement by Schools:<span class="text-danger">*</span></label> 
+                        <label>Acknowledgement/Comments by School:<span class="text-danger">*</span></label> 
                         <textarea class="form-control" v-model="form.acknowledgement" :class="{ 'is-invalid': form.errors.has('acknowledgement') }" id="acknowledgement" @change="onChange('acknowledgement')"></textarea>
                         <has-error :form="form" field="acknowledgement"></has-error>
                     </div>

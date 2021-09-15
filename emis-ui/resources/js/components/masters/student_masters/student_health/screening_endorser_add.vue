@@ -36,7 +36,7 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
-                record_type:'screening_endorser',
+                record_type:'ScreeningEndorsedBy',
                 action_type:'add',
             })
         }

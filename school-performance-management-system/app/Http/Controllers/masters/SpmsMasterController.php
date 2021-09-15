@@ -260,7 +260,7 @@ class SpmsMasterController extends Controller
               $responsedata= Rating::create($data);
             }
             if($request['action_type']=="edit"){
-                   $rules = [
+             $rules = [
                 'sequence_no' =>  'required',
                 'name'   =>  'required',
                 'mov' => 'required',
@@ -347,7 +347,7 @@ class SpmsMasterController extends Controller
                 JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id 
                 JOIN spm_parameter t3 ON t2.spm_parameter_id = t3.id 
                 JOIN spm_area t4 ON t3.spm_area_id = t4.id 
-                JOIN spm_domain t5 ON t4.spm_domain_id = t5.id ORDER BY t1.score');
+                JOIN spm_domain t5 ON t4.spm_domain_id = t5.id ORDER BY t1.created_at');
             return $this->successResponse($ratings);
         }
         if($param =='all_active_ratings'){
@@ -356,7 +356,7 @@ class SpmsMasterController extends Controller
                     JOIN spm_indicator t2 ON t1.spm_indicator_id = t2.id 
                     JOIN spm_parameter t3 ON t2.spm_parameter_id = t3.id 
                     JOIN spm_area t4 ON t3.spm_area_id = t4.id JOIN spm_domain t5 ON t4.spm_domain_id = t5.id 
-             WHERE t1.status = 1 ORDER BY t1.score');
+             WHERE t1.status = 1 ORDER BY t1.created_at');
             return $this->successResponse($ratings);
         }
         if($param =='all_school_plan_status'){

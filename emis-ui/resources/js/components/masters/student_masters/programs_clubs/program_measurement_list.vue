@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Measurement/Units/Quantity</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th> 
@@ -14,6 +16,8 @@
                 <tr v-for="(item, index) in measurementList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -34,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadMeasurementList(uri = 'masters/loadStudentMasters/program_measurement'){
+        loadMeasurementList(uri = 'masters/loadStudentMasters/CeaProgramMeasurement'){
             axios.get(uri)
             .then(response => {
                 let data = response;
