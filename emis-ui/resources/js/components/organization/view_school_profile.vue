@@ -49,7 +49,7 @@
                                                          <th><span class="text-bold">{{existing_details.name}}</span></th>
                                                       </tr>
                                                   </thead>
-                                                 <tbody>
+                                                <tbody>
                                                   <tr>
                                                      <td>Levels</td>
                                                      <td>{{levelArray[existing_details.levelId]}}</td>
@@ -113,34 +113,35 @@
                                                         <th><span class="text-bold"></span></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody v-if="std_data">
+                                                <!-- <tbody v-if="std_data"> -->
+                                                <tbody>
                                                     <tr>
                                                         <td>Longitude</td>
-                                                        <td>{{existing_details.longitude}}</td>
+                                                        <td>{{loc_details.longitude}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Lattitude</td>
-                                                        <td>{{existing_details.latitude}}</td>
+                                                        <td>{{loc_details.latitude}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>Altitude</td>
-                                                        <td>{{existing_details.altitude}}</td>
+                                                        <td>{{loc_details.altitude}}</td>
                                                     </tr>
                                                     <tr>
                                                         <td>School Contact No</td>
-                                                        <td>{{existing_details.mofCode}}</td>
+                                                        <td>{{contactdetail.phone}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Mail ID</td>
-                                                        <td>{{existing_details.contactDetails.email}}</td>
+                                                        <td>{{contactdetail.email}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Website Link</td>
-                                                        <td>{{existing_details.contactDetails.website}}</td>
+                                                        <td>{{contactdetail.website}}</td>
                                                     </tr>
                                                     <tr>
                                                     <td>Facebook Link</td>
-                                                        <td>{{existing_details.contactDetails.facebookLink}}</td>
+                                                        <td>{{contactdetail.facebookLink}}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -335,6 +336,8 @@
                 isprofile:false,
                 std_data:false,
                 existing_details:'',
+                contactdetail:[],
+                loc_details:[],
                 totalGeneralStudent:0,
                 totalSenStudent:0,
                 levelArray:{},
@@ -346,7 +349,8 @@
                     vission: '',
                     mission:'',
                     profile_path:'',
-                })
+
+                }),
             }
         },
         methods:{
@@ -417,7 +421,12 @@
             loadPriviousOrgDetails(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
+                   
                     this.existing_details=response.data.data;
+                    this.contactdetail=response.data.data.contactDetails;
+                    this.loc_details=response.data.data.loc_details;
+                    
+                   // alert(this.loc_details);
                     this.std_data=true;
                     let mapid=response.data.data.locationDetials.googleMapPath;
                     mapid=mapid.replace('width="600"','width="450"');
@@ -425,6 +434,7 @@
                     mapid=mapid.replace('width="800"','width="450"');
                     mapid=mapid.replace('height="600"','height=300"');
                     $("#preview_sec").html(mapid);
+                    
                     // this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                     // this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
                 })

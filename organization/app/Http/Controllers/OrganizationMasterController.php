@@ -43,7 +43,6 @@ class OrganizationMasterController extends Controller{
             'name'              =>  $request->name,
             'code'              =>  $request->code,       
             'description'       =>  $request->description,
-            'service_type'       =>  $request->service_type,
             'status'            =>  $request->status,
         ];
         //  dd( $master_data);
