@@ -27,6 +27,11 @@
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label class="pl-2"><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label>Unit:</label>
                         <select v-model="form.unit_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('unit_id') }" class="form-control" name="unit_id" id="unit_id">
@@ -59,10 +64,11 @@ export default {
                 variety:'',
                 central:'',
                 unit_id:'',
+                code:'',
                 local:'',
                 description:'',
                 status: 1,
-                record_type:'program_item',
+                record_type:'CeaProgramItem',
                 action_type:'add',
             })
         }
@@ -93,20 +99,35 @@ export default {
                 else{
                     this.form.local=0;
                 }
-                this.form.post('/masters/saveStudentMasters',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/program_item_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('/masters/saveStudentMasters',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/program_item_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},
-        loadMeasurementList(uri = 'masters/loadStudentMasters/program_measurement_Active'){
+        loadMeasurementList(uri = 'masters/loadStudentMasters/CeaProgramMeasurement_Active'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -116,7 +137,7 @@ export default {
                 console.log(error);
             });
         },
-        loadVarietyList(uri = 'masters/loadActiveStudentMasters/item_variety'){
+        loadVarietyList(uri = 'masters/loadActiveStudentMasters/CeaProgramItemVariety'){
             axios.get(uri)
             .then(response => {
                 let data = response;

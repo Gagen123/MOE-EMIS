@@ -89,7 +89,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveAwardList(uri="masters/loadActiveStudentMasters/student_awards"){
+        loadActiveAwardList(uri="masters/loadActiveStudentMasters/StudentAwards"){
             axios.get(uri)
             .then(response => {
                 let data = response;

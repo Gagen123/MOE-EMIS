@@ -38,7 +38,7 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
-                record_type:'program_name',
+                record_type:'CeaProgram',
                 action_type:'edit',
             })
         }

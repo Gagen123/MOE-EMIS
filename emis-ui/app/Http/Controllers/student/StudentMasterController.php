@@ -188,41 +188,6 @@ class StudentMasterController extends Controller{
         return $awards;
     }
     
-    
-    public function saveFoodSourceType(Request $request){
-        //dd($request);
-        $rules = [
-            'Name'          =>  'required',
-          //  'description'   =>  'required',
-            'Status'        =>  'required',
-
-        ];
-        $customMessages = [
-            'Name.required'   => 'This field is required',
-            'Status.required' => 'This field is required',
-
-        ];
-        $this->validate($request, $rules, $customMessages);
-        $data =[
-            'id'                =>  $request['id'],
-            'Name'              =>  $request['Name'],
-            'Description'       =>  $request['Description'],
-            'Status'            =>  $request['Status'],
-            'user_id'           => $this->userId()
-        ];
-      // dd($data);
-
-        $response_data= $this->apiService->createData('emis/masters/students/saveFoodSourceType', $data);
-        return $response_data;
-
-    }
-   
-    public function loadfoodSourceList(){
-        // dd('m here');
-         $student_masters = $this->apiService->listData('emis/masters/students/loadfoodSourceList');
-         return $student_masters;
-    }
-
     public function loadActiveFoodSourceMaster(){
         // dd('m here');
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveFoodSourceMaster');

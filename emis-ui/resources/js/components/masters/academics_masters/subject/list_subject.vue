@@ -7,6 +7,7 @@
                         <tr>
                             <th>Display Order</th>
                             <th>Subject</th>
+                            <th>Code</th>
                             <th>Subject Category</th>
                             <th>Assessed by Class Teacher</th>
                             <th>Is Special Educational Needs (SEN) </th>
@@ -21,6 +22,7 @@
                                 <br> 
                                 <span v-if="item.dzo_name"> {{ item.dzo_name }} </span>
                             </td>
+                            <td>{{ item.code }} </td>
                             <td>{{ item.sub_category_name }}</td>
                             <td>{{ item.assessed_by_class_teacher ==  1 ? "Yes" : "No" }}</td>
                              <td>{{ item.is_special_educational_needs ==  1 ? "Yes" : "No" }}</td>
@@ -68,6 +70,8 @@ export default {
         this.dt =  $("#subject-table").DataTable({
             columnDefs: [
                 { width: 50, targets: 0},
+                { width: 50, targets: 4},
+                { width: 100, targets: 5},
             ],
         })
     },

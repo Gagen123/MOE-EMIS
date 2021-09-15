@@ -127,15 +127,17 @@ class AcademicController extends Controller
         }
     }
     public function getSubjectTeacher(Request $request,$orgId){
-        $query = "SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id,t2.name, t2.dzo_name FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t2.assessed_by_class_teacher<>1 AND t1.org_class_id = ?";
+        try{
+        $query = "SELECT t1.org_class_id, t1.org_stream_id, t1.aca_sub_id,t2.name, t2.dzo_name,t3.aca_teacher_sub_id FROM aca_class_subject t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id LEFT JOIN aca_subject_mapping_for_tre t3 ON t2.id=t3.aca_sub_id WHERE t2.assessed_by_class_teacher<>1 AND t1.org_class_id = ?";
         $query1 = "SELECT org_id, stf_staff_id, org_class_id, org_stream_id,org_section_id, aca_sub_id FROM aca_class_subject_teacher WHERE org_id = ? AND org_class_id = ?";
-
+        $query2 = "SELECT org_class_id,org_stream_id,aca_sub_id,aca_teacher_sub_id,standard_hours,standard_minutes FROM aca_subject_mapping_for_tre WHERE org_class_id = ?";
         $param = [$request['org_class_id']];
         $param1 = [$orgId,$request['org_class_id']];
 
         if($request['org_stream_id']){
             $query .= ' AND t1.org_stream_id = ?';
             $query1 .= ' AND org_stream_id = ?';
+            $query2 .= ' AND org_stream_id = ?';
             array_push($param, $request['org_stream_id']);
             array_push($param1, $request['org_stream_id']);
 
@@ -144,10 +146,15 @@ class AcademicController extends Controller
             $query1 .= ' AND org_section_id = ?';
             array_push($param1, $request['org_section_id']);
         }
-        $classSubjects = DB::select($query,$param);
+        $classSubjects = DB::select($query." GROUP BY t1.org_class_id, t1.org_stream_id, t1.aca_sub_id,t2.name, t2.dzo_name,t3.aca_teacher_sub_id",$param);
         $classSubjectTeachers = DB::select($query1,$param1);
+        $subjectMappingForTre = DB::select($query2,$param);
        
-        return $this->successResponse(["classSubjects"=>$classSubjects, "classSubjectTeachers"=>$classSubjectTeachers]);
+       return $this->successResponse(["classSubjects"=>$classSubjects, "classSubjectTeachers"=>$classSubjectTeachers, "subjectMappingForTre" =>$subjectMappingForTre]);
+    }
+    catch(Exception $e){
+        dd($e);
+    }
     }
     public function getStudentElectiveSubjects(){
         return $this->successResponse(
@@ -384,38 +391,6 @@ class AcademicController extends Controller
         return $this->successResponse($instructional_days_special_case);
     }
     public function loadStudentAssessmentList(Request $request,$staffId, $orgId){
-        // $currentTerms = "SELECT SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_class_id)),6) AS org_class_id,
-        //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x1.org_stream_id)),6) AS org_stream_id,
-        //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.id)),6) AS aca_assmt_term_id,
-        //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.name)),6) AS term_name,
-        //         SUBSTRING(MIN(CONCAT(LPAD(x2.display_order,5,'0'),x2.dzo_name)),6) AS term_dzo_name
-        //     FROM aca_class_assessment_frequency x1 JOIN aca_assessment_term x2 ON x1.aca_assmt_frequency_id=x2.aca_assmt_frequency_id
-        //     where x2.id NOT IN (SELECT aa.aca_assmt_term_id FROM aca_result_consolidated aa WHERE aa.finalized=1 AND aa.org_id = ?)
-        //     GROUP BY x1.org_class_id,x1.org_stream_id";
-        //         -- JOIN ($currentTerms) t3 ON t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL))
-
-
-         // $classTeacherSubjects = "SELECT t2.assessed_by_class_teacher,t6.id AS std_assmt_id,
-            // t1.org_class_id,
-            // t1.org_stream_id,
-            // t1.org_section_id,
-            // t1.aca_sub_id,
-            // x2.id AS aca_assmt_term_id,
-            // t2.name AS sub_name,
-            // t2.dzo_name AS sub_dzo_name,
-            // x2.name AS term_name,
-            // x2.dzo_name AS term_dzo_name,
-            // (t4.id IS NOT NULL) AS is_class_teacher,
-            // (t1.stf_staff_id = ? OR (t4.id IS NOT NULL AND t2.assessed_by_class_teacher=1)) AS is_subject_teacher,
-            // t6.finalized,
-            // DATE_FORMAT(t6.finalized_date,'%d-%m-%Y %H:%i %p') AS finalized_date
-            // FROM aca_class_subject_teacher t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id AND t1.org_id = ?
-            // JOIN (aca_class_assessment_frequency x1 JOIN aca_assessment_term x2 ON x1.aca_assmt_frequency_id=x2.aca_assmt_frequency_id) ON t1.org_class_id = x1.org_class_id AND (t1.org_stream_id = x1.org_stream_id OR (t1.org_stream_id IS NULL AND x1.org_stream_id IS NULL))
-            // LEFT JOIN aca_class_teacher t4 ON t1.org_class_id = t4.org_class_id AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL)) AND (t1.org_section_id = t4.org_section_id OR (t1.org_section_id IS NULL AND t4.org_section_id IS NULL)) AND IFNULL(t4.stf_staff_id,'') = ?
-            // LEFT JOIN aca_student_assessment t6 ON x2.id=t6.aca_assmt_term_id AND t1.org_class_id = t6.org_class_id AND (t1.org_stream_id = t6.org_stream_id OR (t1.org_stream_id IS NULL AND t6.org_stream_id IS NULL)) AND (t1.org_section_id = t6.org_section_id OR (t1.org_section_id IS NULL AND t6.org_section_id IS NULL)) AND t1.aca_sub_id = t6.aca_sub_id AND t6.org_id = ?
-            // WHERE t2.status = 1 AND (t1.stf_staff_id = ? OR IFNULL(t4.stf_staff_id,'') = ?)";
-
-
         $classTeacherSubjects = "SELECT t2.assessed_by_class_teacher,
                 t6.id AS std_assmt_id,
                 IFNULL(t3.org_class_id,t4.org_class_id) AS org_class_id,

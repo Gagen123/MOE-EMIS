@@ -155,7 +155,23 @@ export default {
                     icon: 'success',
                     title: 'Details added successfully'
                 })
-                this.$router.push('/list-rubrics')
+                Swal.fire({
+                    title: 'Do you want to add more score?',
+                    icon: 'question',
+                    showDenyButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes',
+                    denyButtonText:'No',
+                    }).then((result) => {
+                        if(result.isConfirmed) {
+                            this.form.score = ''
+                            this.form.description = ''
+                        } else if (result.isDenied) {
+                            this.$router.push('/list-rubrics')
+
+                        }
+                    })
             })
             .catch(() => {
                 console.log("Error.")

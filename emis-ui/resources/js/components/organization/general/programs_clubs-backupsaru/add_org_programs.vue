@@ -66,7 +66,7 @@ export default {
         }
     },
     methods: {
-        loadActiveProgramTypeList(uri="masters/loadActiveStudentMasters/program_type"){
+        loadActiveProgramTypeList(uri="masters/loadActiveStudentMasters/CeaProgramType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -88,7 +88,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadActiveSupportList(uri="masters/loadActiveStudentMasters/program_support"){
+        loadActiveSupportList(uri="masters/loadActiveStudentMasters/CeaProgramSupporter"){
             axios.get(uri)
             .then(response => {
                 let data = response;

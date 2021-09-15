@@ -41,6 +41,15 @@ const routes = [
                 { path: '/edit_document_type',name:'edit_document_type', component: require('./components/masters/organization_masters/document_type/edit_document_type.vue').default },
                 ]
             },
+            { path: '/notification_config_index',
+            component: require('./components/masters/organization_masters/notification_config/notification_config_index.vue').default ,
+                children: [
+                { path: '/',name:'notification_config_index', component: require('./components/masters/organization_masters/notification_config/list_notification_config.vue').default },
+                { path: '/list_notification_config',name:'list_notification_config', component: require('./components/masters/organization_masters/notification_config/list_notification_config.vue').default },
+                { path: '/create_notification_config',name:'create_notification_config', component: require('./components/masters/organization_masters/notification_config/create_notification_config.vue').default },
+                { path: '/edit_notification_config',name:'edit_notification_config', component: require('./components/masters/organization_masters/notification_config/edit_notification_config.vue').default },
+                ]
+            },
             { path: '/attachment_index',
                 component: require('./components/masters/organization_masters/attachment/attachment_index.vue').default ,
                 children:

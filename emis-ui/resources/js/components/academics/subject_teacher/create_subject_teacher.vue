@@ -25,15 +25,12 @@
                                     <span v-if="item.dzo_name">( {{ item.dzo_name }} )</span>
                                 </td>                                                                               
                                 <td>
-                                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                                         <select v-model="subjectTeacherList[index].stf_staff_id" class="form-control select2"> 
                                             <option selected="selected" value="">---Select---</option>
-                                            <option v-for="(item1, index1) in teacherList" :key="index1" :value="item1.stf_staff_id">
-                                                <span v-if="item1.cid_work_permit">{{item1.cid_work_permit}}: </span> 
-                                                {{ item1.name }}, {{item1.position_title}}
+                                            <option v-for="(item1, index1) in getSubjectWiseTeachers(item.aca_sub_id)" :key="index1" :value="item1.stf_staff_id">
+                                                {{ item1.name }}, {{item1.position}} [ {{item1.emp_id}} ]
                                             </option>
                                         </select>
-                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -62,31 +59,6 @@ export default {
                 $('#' + field_id).removeClass('is-invalid')
             }
         },
-        async getTeacher(){
-           let finalTeachers = []
-            try{
-                let teachers = await axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA').then(response => response.data.data)
-                let bb = []
-                teachers.forEach((item => {
-                    bb['cid_work_permit'] = item.cid_work_permit
-                    bb["emp_id"] = item.emp_id;
-                    bb["gender"] = item.gender;
-                    bb["name"] = item.name;
-                    bb["position_title"] = item.position_title;
-                    bb["position_title_id"] = item.position_title_id;
-                    bb["sex_id"] = item.sex_id;
-                    bb["stf_staff_id"] = item.id
-                    const obj = {...bb};
-                    finalTeachers.push(obj);
-                }))
-                this.teacherList = finalTeachers
-
-              }catch(e){
-                if(e.toString().includes("500")){
-                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-             }  
-        },
          async getsubjectTeachers(){
             let uri = 'academics/getSubjectTeacher'
             uri += ('?org_class_id='+this.org_class_id)
@@ -97,20 +69,37 @@ export default {
                 uri += ('&org_section_id='+this.org_section_id)
             }
              try{
-                let subjectTeachers = await axios.get(uri).then(response => response.data.data)
+                let data = await axios.get(uri).then(response => response.data)
+                let subjectTeachers = data.subjectTeachers
+                let staffList = data.staffs
                 subjectTeachers["classSubjects"].forEach((finalSubjectTeacher,index) => {
                     subjectTeachers["classSubjectTeachers"].forEach(classSubjectTeacher => {
                         if(finalSubjectTeacher.aca_sub_id == classSubjectTeacher.aca_sub_id && finalSubjectTeacher.org_class_id == classSubjectTeacher.org_class_id && (finalSubjectTeacher.org_stream_id == classSubjectTeacher.org_stream_id || ((finalSubjectTeacher.org_stream_id == null || finalSubjectTeacher.org_stream_id == "") && (classSubjectTeacher.org_stream_id == null)|| classSubjectTeacher.org_stream_id == ""))){
                             subjectTeachers["classSubjects"][index].stf_staff_id = classSubjectTeacher.stf_staff_id
+                            
                         }
                     });
                 });
+                 subjectTeachers["subjectMappingForTre"].forEach((mappedSubject,i) => {
+                    staffList.forEach(staff => {
+                        if((mappedSubject.aca_teacher_sub_id == staff.comp_sub_id) || (mappedSubject.aca_teacher_sub_id == staff.elective_sub_id1) || (mappedSubject.aca_teacher_sub_id == staff.elective_sub_id2)){
+                            subjectTeachers["subjectMappingForTre"][i]['stf_staff_id'] = staff.id
+                            subjectTeachers["subjectMappingForTre"][i]['emp_id'] = staff.emp_id
+                            subjectTeachers["subjectMappingForTre"][i]['name'] = staff.name
+                            subjectTeachers["subjectMappingForTre"][i]['position'] = staff.position
+                        }
+                    })
+                })
                 this.subjectTeacherList = subjectTeachers["classSubjects"];
+                this.teacherList = subjectTeachers["subjectMappingForTre"]
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
              }                           
+        },
+        getSubjectWiseTeachers(aca_sub_id){
+            return this.teacherList.filter(item => item.aca_sub_id == aca_sub_id);
         },
         save(){
              axios.post('/academics/saveSubjectTeacher', {org_class_id:this.org_class_id,org_stream_id:this.org_stream_id,org_section_id:this.org_section_id,class_stream_section:this.class_stream_section,data:this.subjectTeacherList})
@@ -134,7 +123,6 @@ export default {
     },
     mounted(){ 
         this.getsubjectTeachers();
-        this.getTeacher();
         this.dt = $("#subject-teacher-table").DataTable({
             columnDefs: [
                 { width: 2, targets: 0},

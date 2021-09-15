@@ -21,7 +21,7 @@
                                     <!-- <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span> -->
                                 </th> 
                                 <th>Name 
-                                    <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span>
+                                    <!-- <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span> -->
                                 </th>
                                 <th v-for="(item, index) in assessmentAreaList" :key="index">{{item.assessment_area}} 
                                     <span v-if="item.assmt_area_dzo_name">( {{item.assmt_area_dzo_name}} )</span>
@@ -112,17 +112,19 @@
             } 
             setTimeout(function(){
                 $("#assessment-term-table").DataTable({
-                    "responsive": false,
-                    "autoWidth": true,
-                    scrollY:        "300px",
-                    scrollX:        true,
+                    // "responsive": false,
+                    // "autoWidth": true,
+                    scrollY:"300px",
+                    scrollX: true,
                     scrollCollapse: true,
-                    paging:         false,
+                    paging: false,
                     searching: false,
                     fixedColumns:   {
                         leftColumns: 2
                     },
                     columnDefs: [
+                        { width: 50, targets: 0},
+                        { width: 200, targets: 1},
                         { width: 100, targets: 2},
                     ],
                     drawCallback: function(dt) {

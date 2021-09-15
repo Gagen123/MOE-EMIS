@@ -5,8 +5,9 @@
                 <tr>
                     <th >SL#</th>
                     <th >Type of Action Taken</th>
-                    <th >Status</th>
+                    <th >Code</th>
                     <th >Description</th>
+                    <th >Status</th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -14,8 +15,9 @@
                 <tr v-for="(item, index) in actionTakenList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Code }}</td>
                     <td>{{ item.Description }}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -34,7 +36,7 @@ export default {
         }
     },
     methods:{
-        loadActionTakenList(uri = 'masters/loadStudentMasters/disciplinary_action_taken'){
+        loadActionTakenList(uri = 'masters/loadStudentMasters/DisciplinaryActionTaken'){
             axios.get(uri)
             .then(response => {
                 let data = response;

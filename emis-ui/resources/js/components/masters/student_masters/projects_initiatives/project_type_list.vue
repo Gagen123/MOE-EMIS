@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Project Type</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th> 
@@ -13,8 +15,10 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in projectTypeList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -34,7 +38,7 @@ export default {
         }
     },
     methods:{
-        loadProjectTypeList(uri = 'masters/loadStudentMasters/project_type'){
+        loadProjectTypeList(uri = 'masters/loadStudentMasters/CeaProjectType'){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -5,20 +5,30 @@
                 <table id="agency-input-form-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th class="text-center">Input<small><br>(Resources & trainings provided by the agency)</small></th>
-                            <th class="text-center">Observation</th>
-                            <th class="text-center">Action Taken by Agency</th>
-                            <th class="text-center">Acknowledgement by Schools</th>
+                            <th class="text-center">Input By</th>
+                            <th class="text-center">Input<small><br>(Resources & trainings provided by the
+                                <span v-if="org_id == emd_id">Dzongkhag/Thromde/Agency</span>
+                                <span v-else-if="acess_level == 'Dzongkhag'">Dzongkhag/Thromde</span>
+                                <span v-else>Agency</span>)
+                             </small></th>
+                            <th class="text-center">Observation by EMD</th>
+                            <th class="text-center">Action Taken by 
+                                <span v-if="org_id == emd_id">Dzongkhag/Thromde/Agency</span>
+                                <span v-else-if="acess_level == 'Dzongkhag'">Dzongkhag/Thromde</span>
+                                <span v-else>Agency</span></th>
+                            <th class="text-center">Acknowledgement/Comments by School</th>
                             <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item,index) in agency_inputs" :key="index">
+                            <td>{{division}}</td>
                             <td>
                                 {{item.input}}
                                 <i  v-if="item.can_edit_input == 1"  @click="showedit(item,'edit_agency_input_form')" class="fa fa-edit color" data-toggle="tooltip" data-placement="top" title="Edit"></i >
                             </td>
                             <td>
+                                <span class="ml-4 pl-3" v-if="(item.can_edit_input == 1 && item.action_taken == null)">NA</span>
                                 <router-link v-if="item.can_add_observation == 1" :to="{name:'create_observation_agency_input_form', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-plus"></i > Add</router-link>
                                 <span v-else>
                                     {{item.observation}}
@@ -26,7 +36,7 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="ml-4 pl-3" v-if="(item.observation == null && item.action_taken == null)">NA</span>
+                                <span class="ml-4 pl-3" v-if="((item.observation == null || item.can_edit_observation == 1) && item.action_taken == null)">NA</span>
                                 <router-link  v-else-if="item.can_add_action_taken == 1" :to="{name:'create_action_agency_input_form', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-plus"></i > Add</router-link>
                                 <span v-else>
                                     {{item.action_taken}}
@@ -34,7 +44,7 @@
                                 </span>
                             </td>
                             <td>
-                                <span class="ml-4 pl-4" v-if="(item.action_taken == null && item.acknowledgement == null)">NA</span>
+                                <span class="ml-4 pl-4" v-if="((item.action_taken == null || item.can_edit_action_taken == 1) && item.acknowledgement == null)">NA</span>
                                 <router-link  v-else-if="item.can_add_acknowledgement == 1" :to="{name:'create_acknowledgement_agency_input_form', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-plus"></i > Add</router-link>
                                 <span v-else>
                                     {{item.acknowledgement}}
@@ -55,6 +65,10 @@
 export default {
     data(){
         return {
+            emd_id:process.env.MIX_EMD_ID,
+            org_id:'',
+            division:'',
+            acess_level:'',
             agency_inputs:[],
             school:'',
             year:'',
@@ -65,11 +79,26 @@ export default {
         getAgencyInputForm(){
              axios.get('spms/getAgencyInputForm')
             .then(response => { 
-                this.agency_inputs = response.data.data
+                let data = response.data.data
+                this.agency_inputs = data
+                for(let i = 0; i< data.length; i++){
+                    this.getorgName(data[i]['org_division_id']);
+                }
             }).catch(function (error){
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
+            });
+        },
+        getorgName(orgId){
+            let type="Headquarterbyid";
+            axios.get('loadCommons/loadOrgDetails/'+type+'/'+orgId)
+            .then(response => {
+                let data = response.data.data;
+                this.division=data['name'];
+            })
+            .catch(errors => {
+                console.log(errors)
             });
         },
         showedit(data,type){
@@ -79,24 +108,28 @@ export default {
     mounted(){
         this.dt = $("#agency-input-form-table").DataTable({
              columnDefs: [
-                { width: 500, targets: 0},
+                { width: 400, targets: 1},
                 { width: 100, targets: 3},
-                { width: 70, targets: 4},
+                { width: 100, targets: 4},
+                { width: 70, targets: 5},
             ],
         })
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                this.acess_level = data['acess_level']
+                this.org_id = data['Agency_Code']
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
         this.getAgencyInputForm()
     },
     watch: {
         agency_inputs(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#agency-input-form-table").DataTable({
-                    columnDefs: [
-                        { width: 500, targets: 0},
-                        { width: 100, targets: 3},
-                        { width: 70, targets: 4},
-                    ],
-                })
+                this.dt = $("#agency-input-form-table").DataTable()
             });
         }
     }
