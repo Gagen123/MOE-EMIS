@@ -439,7 +439,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($promotion_sub_group);
         }
         if($param == "all_teaching_subject"){
-            $teachingSub = DB::select('SELECT id, name, code, displayorder, description, status FROM aca_teaching_subject ORDER BY displayorder');
+            $teachingSub = DB::select('SELECT id, name, code, displayorder, description, subjecttype, status FROM aca_teaching_subject ORDER BY displayorder');
             return $this->successResponse($teachingSub);
         }
     }
