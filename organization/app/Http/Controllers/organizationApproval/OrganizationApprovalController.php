@@ -388,11 +388,12 @@ class OrganizationApprovalController extends Controller{
 
             $response_data->org_class_stream=
                 DB::table('application_class_stream')
-                    ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
-                    ->select('application_class_stream.*','classes.class')
-                    ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
-                    ->orderBy('classes.displayOrder')
-                    ->get();
+                ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
+                ->leftjoin('streams', 'streams.id', '=', 'application_class_stream.streamId')
+                ->select('application_class_stream.*','classes.class','streams.stream')
+                ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
+                ->orderBy('classes.displayOrder')
+                ->get();
 
 
         }else{ //loading for location change data
