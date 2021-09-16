@@ -80,6 +80,7 @@
                                                     @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                                 </td>
                                             </tr>
+
                                         </tbody>
                                     </table>
                                 </div>

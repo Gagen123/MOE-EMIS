@@ -200,11 +200,6 @@ class EstablishmentController extends Controller{
         return $response_data;
     }
 
-
-
-
-
-
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');
         return $classInCheckbox;
