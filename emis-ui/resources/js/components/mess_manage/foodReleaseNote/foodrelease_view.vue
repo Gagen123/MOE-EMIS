@@ -185,7 +185,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
+         loadActiveQuarterList(uri="masters/loadActiveStudentMasters/CeaQuarterType"){
             axios.get(uri)
             .then(response => {
                 let data = response;

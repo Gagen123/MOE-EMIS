@@ -54,26 +54,29 @@
              <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Recommendation:</label> 
+                    <br>
                     {{recommendation}}
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Recommendation Date:</label> 
+                    <br>
                     {{recommendation_date}}
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Action Taken by Agency:</label> 
+                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Action Taken by Dzongkhag/Thromde/Agency:</label> 
                     <br>
                     {{action}}
                 </div>
-            </div>
+             </div>
             <div class="row form-group">
+               
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date of Action Taken:</label> 
                     <br>
                     {{action_date}}
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Acknowledgement by Schools: </label> 
+                    <label>Acknowledgement by School: </label> 
                     <br>
                     {{acknowledgement}}
                     

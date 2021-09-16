@@ -5,6 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Program Name</th>
+                    <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th>
@@ -14,6 +16,8 @@
                 <tr v-for="(item, index) in programNameList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -35,6 +39,7 @@ export default {
         }
     },
     methods:{
+        //we use club_name and not CeaProgram as we need to pull only clubs
         loadProgramNameList(uri = 'masters/loadStudentMasters/club_name'){
             axios.get(uri)
             .then(response => {

@@ -4,6 +4,13 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Subject<span class="text-danger">*</span></label> 
+                        <select name="subjecttype" class="form-control select2" v-model="form.subjecttype" :class="{ 'is-invalid': form.errors.has('subjecttype') }" id="subjecttype" @change="remove_err('subjecttype')">
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Name<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
@@ -48,6 +55,7 @@ export default {
             form: new form({
                 name: '',
                 code: '',
+                subjecttype:'',
                 displayorder: '',
                 description: '',
                 status: 1,
@@ -66,6 +74,7 @@ export default {
             if(type=="reset"){
                 this.form.name= '';
                 this.form.code = '';
+                this.form.subjecttype='',
                 this.form.displayorder = '';
                 this.form.description = '';
                 this.form.status= 1;
@@ -87,6 +96,7 @@ export default {
     },
     created() {
         this.form.name=this.$route.params.data.name;
+        this.form.subjecttype=this.$route.params.data.subjecttype;
         this.form.code=this.$route.params.data.code;
         this.form.displayorder=this.$route.params.data.displayorder;
         this.form.description=this.$route.params.data.description;

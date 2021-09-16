@@ -52,13 +52,13 @@ export default {
                 program_type:'',
                 description:'',
                 status: 1,
-                record_type:'program_name',
+                record_type:'CeaProgram',
                 action_type:'add',
             })
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_type"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgramType"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -18,7 +18,7 @@
                             <has-error :form="form" field="award_type_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="mb-0.5">Program:<i class="text-danger">*</i></label>
+                        <label class="mb-0.5">Program:</label>
                             <select v-model="form.program_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_id') }" class="form-control select2" name="program_id" id="program_id">
                                 <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                             </select>
@@ -67,13 +67,13 @@ export default {
                 program_id:'',
                 description:'',
                 status: 1,
-                record_type:'student_awards',
+                record_type:'StudentAwards',
                 action_type:'add',
             })
         }
     },
     methods: {
-        loadActiveAwardList(uri='masters/loadActiveStudentMasters/student_award_type'){
+        loadActiveAwardList(uri='masters/loadActiveStudentMasters/StudentAwardType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -83,7 +83,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -128,15 +128,19 @@ export default {
                     }).then((result) =>{
                     if (result.isConfirmed){
                         this.form.post('/masters/saveStudentMasters',this.form)
-                            .then(() => {
+                        .then((response) =>{
                             Toast.fire({
-                                icon: 'success',
-                                title: 'Details added successfully'
-                            })
-                            this.$router.push('/student_award_list');
+                            icon: 'success',
+                            title: 'Details added successfully'
                         })
-                        .catch(() => {
-                            console.log("Error......")
+                        this.$router.push('/student_award_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
                         })
                     }
                 })

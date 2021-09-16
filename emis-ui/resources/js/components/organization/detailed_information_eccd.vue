@@ -229,17 +229,17 @@
                     this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
-                    if(response_data.locationDetials!=null && response_data.locationDetials!=""){
-                        this.form.altitude=response_data.locationDetials.altitude;
-                        this.form.climate_type=response_data.locationDetials.climate_type;
-                        // this.form.disasterArea=response_data.locationDetials.disasterArea;
-                        this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
-                        this.form.entranceGate=response_data.locationDetials.entranceGate;
-                        this.form.fencingtypeId=response_data.locationDetials.fencingtypeId;
-                        this.form.map_path=response_data.locationDetials.googleMapPath;
-                        this.form.latitude=response_data.locationDetials.latitude;
-                        this.form.longitude=response_data.locationDetials.longitude;
-                        this.form.thramNo=response_data.locationDetials.thramNo;
+                    if(response_data.loc_details!=null && response_data.loc_details!=""){
+                        this.form.altitude=response_data.loc_details.altitude;
+                        this.form.climate_type=response_data.loc_details.climate_type;
+                        // this.form.disasterArea=response_data.loc_details.disasterArea;
+                        this.form.distance_from_dzo=response_data.loc_details.distance_from_dzo;
+                        this.form.entranceGate=response_data.loc_details.entranceGate;
+                        this.form.fencingtypeId=response_data.loc_details.fencingtypeId;
+                        this.form.map_path=response_data.loc_details.googleMapPath;
+                        this.form.latitude=response_data.loc_details.latitude;
+                        this.form.longitude=response_data.loc_details.longitude;
+                        this.form.thramNo=response_data.loc_details.thramNo;
                     }
                     let prop=data.contact;
                     let contactDetails=[];

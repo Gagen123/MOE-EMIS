@@ -5,6 +5,7 @@
                 <tr>
                     <th>SL#</th>
                     <th>Stream</th>
+                    <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
                     <th>Action</th> 
@@ -14,7 +15,8 @@
                 <tr v-for="(item, index) in streamList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.stream}}</td>
-                     <td>{{ item.description}} </td>
+                    <td>{{ item.code}}</td>
+                    <td>{{ item.description}} </td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
@@ -59,11 +61,11 @@ export default {
         //     this.$router.push({name:'StreamEdit',params: {data:data}});
         // },
 
-        loadStreamList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/Stream'){
+        loadStreamList(uri = 'masters/loadStream'){
             axios.get(uri)
             .then(response => {
-                let data = response.data.data;
-                this.streamList =  data;
+                let data = response;
+                this.streamList =  data.data;
             })
             .catch(function (error) {
                 console.log('error: '+error);

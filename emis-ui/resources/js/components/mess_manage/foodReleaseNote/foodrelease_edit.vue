@@ -335,7 +335,7 @@ export default {
         /**
          * method to get term in dropdown
          */
-        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/CeaQuarterType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -354,7 +354,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -368,7 +368,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem"){
             axios.get(uri)
             .then(response => {
                 let data = response;

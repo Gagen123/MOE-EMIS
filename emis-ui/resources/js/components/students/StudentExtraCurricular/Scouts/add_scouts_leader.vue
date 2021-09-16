@@ -48,7 +48,7 @@ export default {
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/scout_section"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaScoutSection"){
             axios.get(uri)
             .then(response => {
                 let data = response;

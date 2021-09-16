@@ -9,6 +9,11 @@
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code<span class="text-danger">*</span></label> 
+                        <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject Category:<span class="text-danger">*</span></label> 
                         <select class="form-control select2" id="subject_category_id" v-model="form.aca_sub_category_id" :class="{ 'is-invalid': form.errors.has('aca_sub_category_id') }"  @change="remove_err('subject_category_id')">
                             <option value=""> --Select--</option>
@@ -18,13 +23,14 @@
                         </select> 
                         <has-error :form="form" field="aca_sub_category_id"></has-error>
                     </div>
+                    
+                </div> 
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Subject (In Dzongkha Text):</label>
                         <input class="form-control form-control-sm" v-model="form.dzo_name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                </div> 
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number" min="0">
@@ -33,17 +39,17 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Aessessed by Class Teacher:</label>
                         <br> 
-                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="1" />Yes</label>
-                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="0" />No</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Is Special Educational Needs (SEN) :</label>
-                        <br> 
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" />Yes</label>
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" />No</label>
+                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.assessed_by_class_teacher"  type="radio" value="0" /> No</label>
                     </div>
                 </div>  
                   <div class="row form-group">
+                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Is Special Educational Needs (SEN) :</label>
+                        <br> 
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" /> No</label>
+                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -66,6 +72,7 @@ export default {
             subject_category_list:[],
             form: new form({
                 name: '',
+                code:'',
                 aca_sub_category_id:'',
                 dzo_name:'',
                 display_order:'',

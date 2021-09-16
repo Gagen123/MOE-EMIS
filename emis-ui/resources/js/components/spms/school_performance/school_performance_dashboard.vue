@@ -47,19 +47,13 @@
                             </td>
                             <td class="text-right">
                                 {{ item.completed}}
-                                <span  v-if="(item.completed > 0)" class="ml-2">
+                                <span  v-if="(item.completed > 0)" class="ml-2" d>
                                     <router-link class="badge badge-primary" :to="{name:'list_school_performance',params: {data:item,status:2}}">
                                         View Assessment
                                     </router-link>
                                 </span>
                             </td>
                             <td class="text-right">{{ (isNaN(item.not_assessed) ? 0 : item.not_assessed) + (isNaN(item.under_process) ? 0 : item.under_process) + (isNaN(item.completed) ? 0 : item.completed) }}</td>
-
-                            <!-- <td class="text-right pr-4"> 
-                                <router-link :to="{name:'list_school_performance',params: {data:item}}">
-                                     {{item.no_of_schools}}
-                                </router-link>
-                            </td> -->
                         </tr>
                     </tbody>
                 </table>

@@ -4,7 +4,14 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Subject Name<span class="text-danger">*</span></label> 
+                        <label>Subject<span class="text-danger">*</span></label> 
+                        <select name="subjecttype" class="form-control select2" v-model="form.subjecttype" :class="{ 'is-invalid': form.errors.has('subjecttype') }" id="subjecttype" @change="remove_err('subjecttype')">
+                            <option value="">--- Please Select ---</option>
+                            <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Master/Compulsory Subject<span class="text-danger">*</span></label> 
                         <input class="form-control form-control-sm" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -44,10 +51,11 @@
 export default {
     data(){
         return {
-            subject_category_list:[],
+            subjectList:[],
             form: new form({
                 name: '',
                 code: '',
+                subjecttype:'',
                 displayorder: '',
                 description: '',
                 status: 1,
@@ -66,6 +74,7 @@ export default {
             if(type=="reset"){
                 this.form.name= '';
                 this.form.code = '';
+                this.form.subjecttype = '';
                 this.form.displayorder = '';
                 this.form.description = '';
                 this.form.status= 1;
@@ -84,6 +93,49 @@ export default {
                 })
             }
 		}, 
+        loadsubjectgroupList(uri = 'masters/loadAcademicMasters/all_subject'){
+            axios.get(uri)
+            .then(response => {
+                let data = response
+                this.subjectList =  data.data.data;
+            })
+            .catch(function (error){
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
+        },
+        applyselect(){
+             if(!$('#subjecttype').attr('class').includes('select2-hidden-accessible')){
+                $('#subjecttype').addClass('select2-hidden-accessible');
+            }
+        },
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+          
+            if(id=="subjecttype"){
+                this.form.subjecttype=$('#subjecttype').val();
+            }
+        
+           
+        },
     },
+    mounted(){
+        this.loadsubjectgroupList();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+         Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+    }
 }
 </script>

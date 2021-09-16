@@ -151,7 +151,7 @@ class SpmsController extends Controller
             'objective' => 'required',
             'strategy' => 'required',
             'start_date' => 'required',
-            'end_date' => 'required|after:start_date',
+            'end_date' => 'required|after_or_equal:start_date',
             'person_responsible' => 'required',
             'implementation_status_id' => 'required',
             'remarks' => 'required',
@@ -274,6 +274,7 @@ class SpmsController extends Controller
         $response_data = $this->apiService->createData('emis/spms/saveAgencyInputForm',$data);
         return $response_data;
     }
+    
     public function getAgencyInputForm(){
         $orgId = $this->getWrkingAgencyId();
         $global_masters = $this->apiService->listData('emis/spms/getAgencyInputForm/'.$orgId);
@@ -341,8 +342,25 @@ class SpmsController extends Controller
         $request['user_id'] = $this->userId();
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/spms/saveAcknowlegeAgencyInputForm',$data);
+        $this->insertnotification($request);
         return $response_data;
     }
+    // private function insertnotification($request){
+    //     $notification_data=[
+    //         'notification_for'              =>  $request->service_name,
+    //         'notification_appNo'            =>  'NA',
+    //         'notification_message'          =>  '',
+    //         'notification_type'             =>  'role',
+    //         'notification_access_type'      =>  'all',
+    //         'call_back_link'                =>  'tasklist',
+    //         'user_role_id'                  =>  $role_id,
+    //         'dzo_id'                        =>  $this->getUserDzoId(),
+    //         'working_agency_id'             =>  $this->getWrkingAgencyId(),
+    //         'access_level'                  =>  $this->getAccessLevel(),
+    //         'action_by'                     =>  $this->userId(),
+    //     ];
+    //     return $this->apiService->createData('emis/common/insertNotification', $notification_data);
+    // }
 
 }
 

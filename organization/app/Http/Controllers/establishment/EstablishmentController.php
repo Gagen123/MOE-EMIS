@@ -530,47 +530,6 @@ class EstablishmentController extends Controller{
         return $this->successResponse(ApplicationProprietorDetails::all());
     }
 
-    public function loadEstbDetailsForVerification($appNo=""){
-        $response_data=ApplicationDetails::where('application_no',$appNo)->first();
-        $response_data->application_date=date_format(Carbon::parse($response_data->action_date), 'Y-m-d h:i:s');
-        $app_details="";
-        if($response_data->establishment_type=="Public School" || $response_data->establishment_type=="Public ECR"){
-            $app_details=ApplicationEstPublic::where('ApplicationDetailsId',$response_data->id)->first();
-            $response_data->org_details=$app_details;
-            if($app_details->isFeedingSchool==1){
-                $response_data->feeding_modality=ApplicationNoMeals::where('foreignKeyId',$app_details->id)->get();
-            }
-        }
-        if($response_data->establishment_type=="Private School"){
-            $app_details=ApplicationEstPrivate::where('ApplicationDetailsId',$response_data->id)->first();
-            $response_data->org_details=$app_details;
-        }
-        $lev=Level::where('id',$app_details->levelId)->first();
-        if($lev!=null && $lev!=""){
-            $response_data->level=$lev->name;
-        }
-        $response_data->org_class_stream=
-        DB::table('application_class_stream')
-            ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
-            ->select('application_class_stream.*')
-            ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
-            ->orderBy('classes.displayOrder')
-            ->get();
-        if($app_details->locationId!=""){
-            $loc=Location::where('id',$app_details->locationId)->first();
-            if($loc!=null && $loc!=""){
-                $response_data->location_type=$loc->name;
-            }
-        }
-        $response_data->attachments=ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
-        $response_data->app_verification=ApplicationVerification::where('ApplicationDetailsId',$response_data->id)->first();
-        if($response_data!=null && $response_data!=""){
-            $response_data->app_verification_team=ApplicationVerificationTeam::where('ApplicationVerificationId',$response_data->id)->get();
-        }
-
-        return $this->successResponse($response_data);
-    }
-
     public function updateEstablishment(Request $request){
         if($request->attachment_details!="" ){
             if(sizeof($request->attachment_details)>0){
@@ -772,7 +731,6 @@ class EstablishmentController extends Controller{
                 'bifOrgId'                  =>$application_data->organizationId,
                 'isSenSchool'               =>$application_data->isSenSchool,
                 'isFeedingSchool'           =>$application_data->isFeedingSchool,
-
             ];
         }
         //Added for merger but have to revisted after submitting the data from ui

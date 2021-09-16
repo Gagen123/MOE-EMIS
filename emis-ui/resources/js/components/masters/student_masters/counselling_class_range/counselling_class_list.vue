@@ -5,6 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Class Range</th>
+                    <th >Code</th>
                     <th >Description</th>
                     <th >Status</th>
                     <th >Action</th>
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in counsellingList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
                     <td>{{ item.Description }}</td>
                     <td>{{ item.Status==  1 ? "Inactive" : "Active" }}</td>
                     <td>
@@ -53,7 +55,7 @@ export default {
             }, 3000);
         },
         showedit(data){
-            this.$router.push({name:'counselling_type_edit',params: {data:data}});
+            this.$router.push({name:'counselling_class_edit',params: {data:data}});
         },
     },
     mounted(){

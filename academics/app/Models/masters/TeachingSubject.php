@@ -17,6 +17,7 @@ class TeachingSubject extends Model
         'id',
         'name',
         'code',
+        'subjecttype',
         'displayorder',
         'description',
         'status', 

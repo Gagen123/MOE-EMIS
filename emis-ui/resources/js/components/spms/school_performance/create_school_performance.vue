@@ -153,14 +153,12 @@ export default {
 
     },
     created(){
-        console.log(this.$route.params.data)
         this.org_id =this.$route.params.data.school_id
         this.school =this.$route.params.data.school
         this.year =this.$route.params.year,
         this.dzon_id =this.$route.params.data.dzon_id
     },
     mounted(){
-        
         this.getEvaluation()
         this.dt = $("#create-evaluation-table").DataTable({
             rowGroup: {

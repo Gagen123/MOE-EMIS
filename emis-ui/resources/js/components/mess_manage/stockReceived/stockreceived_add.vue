@@ -158,7 +158,7 @@ export default {
         /**
          * method to get quarter in dropdown
          */
-        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/quarter_name"){
+        loadActiveQuarterList(uri="masters/loadActiveStudentMasters/CeaQuarterType"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -183,7 +183,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+       loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -200,7 +200,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        // loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+        // loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
         //     axios.get(uri)
         //     .then(response => {
         //         let data = response;
@@ -243,7 +243,7 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
             axios.get(uri)
             .then(response => {
                 let data = response.data;

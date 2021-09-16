@@ -13,6 +13,6 @@ class InternetAccessible extends Model
     use HasFactory, Uuid;
     protected $table="master_internet_accessible";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by','created_at','updated_at'
+        'id','name','code', 'description', 'status','created_by','updated_by','created_at','updated_at'
     ];
 }

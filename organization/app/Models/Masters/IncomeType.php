@@ -10,6 +10,6 @@ class IncomeType extends Model
     use HasFactory, Uuid;
     protected $table="master_income_facilities";
     protected $fillable = [
-        'id','name', 'description', 'status','created_by','updated_by'
+        'id','name', 'code','description', 'status','created_by','updated_by'
     ];
 }

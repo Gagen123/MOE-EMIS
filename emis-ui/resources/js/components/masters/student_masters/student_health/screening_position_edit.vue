@@ -36,7 +36,7 @@ export default {
                 name: '',
                 description:'',
                 status: 1,
-                record_type:'screening_position',
+                record_type:'ScreeningPositionTitle',
                 action_type:'edit',
             })
         }

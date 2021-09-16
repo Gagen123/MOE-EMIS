@@ -89,7 +89,7 @@ export default {
         }
     },
     methods: {
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/program_name"){
+        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -99,7 +99,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveTrainingList(uri="masters/loadActiveStudentMasters/training_type"){
+        loadActiveTrainingList(uri="masters/loadActiveStudentMasters/CeaTrainingType"){
             axios.get(uri)
             .then(response => {
                 let data = response;

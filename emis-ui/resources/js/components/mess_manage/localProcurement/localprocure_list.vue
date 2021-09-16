@@ -65,7 +65,7 @@ export default {
             data.action='edit';
             this.$router.push({name:'LocalProcureEdit',params: {data:data}});
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -78,7 +78,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        loadActiveUnitList(uri="masters/loadActiveStudentMasters/program_measurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;

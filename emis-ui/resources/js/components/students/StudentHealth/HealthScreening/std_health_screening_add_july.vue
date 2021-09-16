@@ -141,7 +141,7 @@ export default {
     },
 
     methods: {
-        loadActiveScreeningList(uri="masters/loadActiveStudentMasters/health_screening"){
+        loadActiveScreeningList(uri="masters/loadActiveStudentMasters/HealthScreening"){
             axios.get(uri)
             .then(response => {
                 let data = response;

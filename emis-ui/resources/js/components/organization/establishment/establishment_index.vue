@@ -12,7 +12,7 @@
                 </router-link>
             </li>
         </ul>
-        <ul class="nav nav-pills mb-3 developemntEnv" id="mainmenu" role="tablist">
+        <ul class="nav nav-pills mb-3 developemntEnv" role="tablist">
             <li class="nav-item pr-1">
                 <router-link to="/public_school_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                    <span class=""></span>
@@ -62,8 +62,6 @@ export default {
         return{
             menubar:[],
         }
-    },
-    methods:{
     },
     async mounted(){
         let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;

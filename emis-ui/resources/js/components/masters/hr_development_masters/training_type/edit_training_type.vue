@@ -39,7 +39,7 @@ export default {
                 name: '',
                 code:'',
                 status:'',
-                record_type:'training_type',
+                record_type:'CeaTrainingType',
                 action_type:'edit',
             })
         }

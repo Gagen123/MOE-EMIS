@@ -17,6 +17,7 @@ class SpmEvaluation extends Migration
             $table->char('id',36)->primary();
             $table->year('evaluation_year');
             $table->char('org_id',36)->index();
+            $table->unsignedTinyInteger('dzon_id')->index();
             $table->unsignedTinyInteger('spm_domain_subcat_id')->nullable()->index();
             $table->unsignedTinyInteger('status')->index();
             $table->string('remarks',500)->nullable();

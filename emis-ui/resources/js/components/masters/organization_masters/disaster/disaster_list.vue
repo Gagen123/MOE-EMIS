@@ -53,7 +53,7 @@ export default {
             });
         },
         editmasters(data){
-            this.$router.push({name:'DisasterEdit',params: {data:data}});
+            this.$router.push({name:'disaster_edit',params: {data:data}});
         },
         // loadDisasterList(uri = 'masters/loadDisaster'){
         //     axios.get(uri)

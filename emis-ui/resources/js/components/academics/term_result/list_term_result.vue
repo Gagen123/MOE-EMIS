@@ -49,8 +49,8 @@
                                 </div>
                                 <div v-else-if="item.is_subject_teacher && !item.finalized" class="ml-2 btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-default text-white" width="500" @click="showedit(item)">
-                                        <span v-if="item.std_assmt_id"><i class="fas fa-edit"></i >Edit</span>
-                                        <span v-else><i class="fas fa-plus"></i >Add</span>
+                                        <span v-if="item.std_assmt_id"><i class="fas fa-edit"></i > Edit</span>
+                                        <span v-else><i class="fas fa-plus"></i > Add</span>
                                     </div>
                                 </div>
                                 <div v-if="item.std_assmt_id" class="ml-2 mt-1 btn-group btn-group-sm">
@@ -69,14 +69,12 @@
 export default {
     data(){
         return{
-            
             classList:[],
             terms:[],
             aca_assmt_term_id:'',
             class_stream_section_id:'',
             TermsResultList:[],
             dt:'',
-            
         }
     },
     methods:{
@@ -131,26 +129,6 @@ export default {
             if(this.class_stream_section_id[3] !== null){
                 uri += ('&org_section_id='+this.class_stream_section_id[3])
             }
-            //  let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-            //     let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
-            //     studentsConsolidatedResult.forEach((item,index) => {
-            //         classSections.forEach(item1 => {
-            //             if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
-            //                 studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
-            //                 if(item1.stream && item1.section){
-            //                      studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
-            //                 }else if(item1.stream){
-            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
-            //                 }else if(item1.section){
-            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
-            //                 }
-            //                 else{
-            //                     studentsConsolidatedResult[index]['class_stream_section'] = item1.class
-            //                 }
-            //                 studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
-            //             }
-            //         })
-            // })
             let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
             axios.get(uri).then(response=>{
                 let data = response.data.data
@@ -174,7 +152,6 @@ export default {
                     })
 
                 })
-              
                 this.TermsResultList = data
             })
         },
@@ -196,7 +173,6 @@ export default {
                                 })
                                 window.location.reload()
                                 this.$router.push('/list-term-result');
-
                             })
                             .catch(function(error){
                             this.errors = error;
@@ -221,12 +197,19 @@ export default {
         });
         this.classSubjectTeacher()
         this.getTerms()
+        this.getTermResult()
         this.dt = $("#assessment-term-table").DataTable({
             "order": [[ 0, "asc" ]],
             "lengthChange": false,
             "searching": false,
         })
 
+    },
+    created(){
+        if(!(this.$route.params.aca_assmt_term_id == undefined) && !(this.$route.params.aca_assmt_term_id == undefined)){
+            this.aca_assmt_term_id=this.$route.params.aca_assmt_term_id.aca_assmt_term_id;
+            this.class_stream_section_id=this.$route.params.class_stream_section_id.class_stream_section_id;
+        }
     },
     watch: {
         TermsResultList(val) {
