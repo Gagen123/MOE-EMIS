@@ -16,6 +16,7 @@ use App\Models\establishment\ApplicationEstMerger;
 use App\Models\establishment\ApplicationClassStream;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\establishment\ApplicationNoMeals;
+use App\Models\establishment\ApplicationAttachments;
 use App\Models\ApplicationSequence;
 use App\Models\HistoryForOrganizaitonDetail;
 use App\Models\OrganizationDetails;
@@ -58,7 +59,7 @@ class MergerController extends Controller{
         }
         $data =[
             'application_no'       =>  $application_no,
-            'establishment_type'   =>  'public_school',
+            'establishment_type'   =>  'Merger',
             'application_type'     =>  'Merger',
             'dzongkhagId'          =>   '',
             'gewogId'              =>   '',
@@ -76,13 +77,20 @@ class MergerController extends Controller{
             'service'                       =>       'Merger',
             'OldOrganizationId'             =>        $request['orgId1'],
             'OldOrganizationId2'            =>       $request['orgId2'],
-            'proposedName'                  =>       $request['proposedName'],
+            'proposedName'                  =>       $request['newOrgName'],
+            'levelId'                       =>       $request['newOrgLevel'],
+            'Category'                      =>       $request['newOrgCategory'],
+            'Dzo'                           =>       $request['newOrgDzo'],
+            'Gewog'                         =>       $request['newOrgchiwog'],
+            'chiwog'                        =>       $request['newOrgchiwog'],
+            'locationId'                    =>       $request['newOrgLocation'],
+            'OrgType'                       =>       $request['OrgType'],
             'created_by'                    =>       $request->user_id,
             'status'                        =>       'Submitted',
             'created_at'                    =>       date('Y-m-d h:i:s')
         ];
 
-        $merger = ApplicationEstMerger::create($merger_data);
+        $merger_data = ApplicationEstMerger::create($merger_data);
         
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
@@ -93,25 +101,7 @@ class MergerController extends Controller{
         $merger=ApplicationEstMerger::where('ApplicationDetailsId',$response_data->id)->first();
         
         $response_data->merger=$merger;
-        // if($merger->isfeedingschool==1){
-        //     $response_data->feeding=ApplicationNoMeals::where('ApplicationDetailsId',$merger->id)->get();
-        // }
-        
-        // $response_data->level=Level::where('id',$merger->levelId)->first()->name;
-        // $response_data->locationType=Location::where('id',$merger->locationId)->first()->name;
-        // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        // $classSection=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->groupBy('classId')->get();
-        // $sections=ApplicationClassStream::where('ApplicationDetailsId',$merger->id)->where('streamId','<>',null)->get();
-        // foreach($classSection as $cls){
-        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        // }
-        // $response_data->class_section=$classSection;
-        // if($sections!="" && sizeof($sections)>0){
-        //     foreach($sections as $sec){
-        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        //     }
-        //     $response_data->stream=$sections;
-        // }
+       
         return $this->successResponse($response_data); 
     }
     
@@ -148,66 +138,112 @@ class MergerController extends Controller{
      */
 
     public function updateMergerDetails(Request $request){
-
-        //Code is copied from updateChangeBasicDetails
-        // to update the applications table
-
         $estd =[
             'status'                        =>   $request->status,
             'remarks'                       =>   $request->remarks,
             'updated_by'                    =>   $request->user_id, 
         ];
         ApplicationDetails::where('application_no', $request->application_number)->update($estd);
-       
-        if($request->attachment_details!="" ){
-            $type="Verification";
-            if($request->status=="Approved"){
-                $type="Approval";
+        if($request->status=="Approved"){
+            if($request->OrgType=="org1"){
+                $org_details=OrganizationDetails::where('id',$request->org1)->first();
+                $org_data =[
+                    'id'                        =>  $org_details->id,
+                    'name'                      =>  $org_details->name,
+                    'updated_by'                =>  $org_details->updated_by,
+                    'updated_at'                =>  $org_details->updated_at,
+                    'recorded_on'               =>  date('Y-m-d h:i:s'),
+                    'recorded_for'              =>  'Name Change', 
+                    'recorded_by'               =>  $request->user_id, 
+                ];
+                $merger_details_data = HistoryForOrganizaitonDetail::create($org_data);
+                $org_update_data =[
+                    // 'name'                      =>  $request->proposedName,
+                    'updated_by'                =>  date('Y-m-d h:i:s'),
+                    'updated_at'                =>  $request->user_id, 
+                ];
+                $merger_details_data=OrganizationDetails::where('id',$request->org1)->update($org_update_data);
             }
-            if(sizeof($request->attachment_details)>0){
-                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
-                foreach($request->attachment_details as $att){
-                    $attach =[
-                        'ApplicationDetailsId'      =>  $application_details->id,
-                        'path'                      =>  $att['path'],
-                        'user_defined_file_name'    =>  $att['user_defined_name'],
-                        'name'                      =>  $att['original_name'],
-                        'upload_type'               =>  $type,
-                        'created_by'                =>  $request->user_id, 
-                    ];
-                    $doc = ApplicationAttachments::create($attach);
-                }
+
+            if($request->OrgType=="org2"){
+                $org_details=OrganizationDetails::where('id',$request->org2)->first();
+                $org_data =[
+                    'id'                        =>  $org_details->id,
+                    'name'                      =>  $org_details->name,
+                    'updated_by'                =>  $org_details->updated_by,
+                    'updated_at'                =>  $org_details->updated_at,
+                    'recorded_on'               =>  date('Y-m-d h:i:s'),
+                    'recorded_for'              =>  'Name Change', 
+                    'recorded_by'               =>  $request->user_id, 
+                ];
+                $merger_details_data = HistoryForOrganizaitonDetail::create($org_data);
+                $org_update_data =[
+                    // 'name'                      =>  $request->proposedName,
+                    'updated_by'                =>  date('Y-m-d h:i:s'),
+                    'updated_at'                =>  $request->user_id, 
+                ];
+                $merger_details_data=OrganizationDetails::where('application_no',$request->org1)->update($org_update_data);
             }
+
+            if($request->OrgType=="newOrg"){
+                $estd =[
+                        'dzongkhagId'                   =>   $request->Dzo,
+                        'gewogId'                       =>   $request->Gewog,
+                        'chiwogId'                      =>   $request->chiwog,
+                        'updated_by'                    =>   $request->user_id, 
+                ];
+                ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+            }
+            return $this->successResponse($merger_details_data, Response::HTTP_CREATED);
         }
+        // ata tshewang old code
+        // if($request->attachment_details!="" ){
+        //     $type="Verification";
+        //     if($request->status=="Approved"){
+        //         $type="Approval";
+        //     }
+        //     if(sizeof($request->attachment_details)>0){
+        //         $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+        //         foreach($request->attachment_details as $att){
+        //             $attach =[
+        //                 'ApplicationDetailsId'      =>  $application_details->id,
+        //                 'path'                      =>  $att['path'],
+        //                 'user_defined_file_name'    =>  $att['user_defined_name'],
+        //                 'name'                      =>  $att['original_name'],
+        //                 'upload_type'               =>  $type,
+        //                 'created_by'                =>  $request->user_id, 
+        //             ];
+        //             $doc = ApplicationAttachments::create($attach);
+        //         }
+        //     }
+        // }
 
-        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+        // $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
 
-        $merger_details=ApplicationEstMerger::where('ApplicationDetailsId',$app_details->id)->first();
-        $org_details=OrganizationDetails::where('id',$merger_details->OldOrganizationId2)->first();
-        $merger_details_data="";
+        // $merger_details=ApplicationEstMerger::where('ApplicationDetailsId',$app_details->id)->first();
+        // $org_details=OrganizationDetails::where('id',$merger_details->OldOrganizationId2)->first();
+        // $merger_details_data="";
 
-        $org_data =[
-            'id'                        =>  $org_details->id,
-            'name'                      =>  $org_details->name,
-            'updated_by'                =>  $org_details->updated_by,
-            'updated_at'                =>  $org_details->updated_at,
-            'recorded_on'               =>  date('Y-m-d h:i:s'),
-            'recorded_for'              =>  'Name Change', 
-            'recorded_by'               =>  $request->user_id, 
-        ];
-        $merger_details_data = HistoryForOrganizaitonDetail::create($org_data);
-        if($merger_details->proposedName != "" && $merger_details->proposedName != NULL){
-            $org_update_data =[
-                'name'                      =>  $merger_details->proposedName,
-                'updated_by'                =>  date('Y-m-d h:i:s'),
-                'updated_at'                =>  $request->user_id, 
-            ];
-            $merger_details_data=OrganizationDetails::where('id',$merger_details->OldOrganizationId)->update($org_update_data);
+        // $org_data =[
+        //     'id'                        =>  $org_details->id,
+        //     'name'                      =>  $org_details->name,
+        //     'updated_by'                =>  $org_details->updated_by,
+        //     'updated_at'                =>  $org_details->updated_at,
+        //     'recorded_on'               =>  date('Y-m-d h:i:s'),
+        //     'recorded_for'              =>  'Name Change', 
+        //     'recorded_by'               =>  $request->user_id, 
+        // ];
+        // $merger_details_data = HistoryForOrganizaitonDetail::create($org_data);
+        // if($merger_details->proposedName != "" && $merger_details->proposedName != NULL){
+        //     $org_update_data =[
+        //         'name'                      =>  $merger_details->proposedName,
+        //         'updated_by'                =>  date('Y-m-d h:i:s'),
+        //         'updated_at'                =>  $request->user_id, 
+        //     ];
+        //     $merger_details_data=OrganizationDetails::where('id',$merger_details->OldOrganizationId)->update($org_update_data);
             
-        }
+        // }
         
-
-        return $this->successResponse($merger_details_data, Response::HTTP_CREATED);
     }
 
 }

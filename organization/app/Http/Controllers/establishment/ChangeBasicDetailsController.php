@@ -118,7 +118,6 @@ class ChangeBasicDetailsController extends Controller
                     break;
                 }
             }
-
             if($request->attachment_details!=null && $request->attachment_details!=""){
                 // $application_details=  ApplicationDetails::where('application_no',$change_details_data['application_number'],)->first();
                 foreach($request->attachment_details as $att){
@@ -225,7 +224,6 @@ class ChangeBasicDetailsController extends Controller
             }
 
             if($request['application_type']=="proprietor_change"){
-                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
                 $prop_data =[
                     'proprietorName'                => $request['proprietorName'],
                     'proprietorCid'                 => $request['proprietorCid'],
@@ -234,6 +232,7 @@ class ChangeBasicDetailsController extends Controller
                     'proprietorEmail'               => $request['proprietorEmail']
                 ];
                 ApplicationProprietorDetails::where('ApplicationEstDetailsChangeId',$request->id)->update($prop_data);
+                $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
                 $applicationDetailsId=$inserted_application_data->ApplicationDetailsId;
             }
 
@@ -263,8 +262,10 @@ class ChangeBasicDetailsController extends Controller
             }
             if($request['application_type']=="expension_change"){
                 $data =[
-                    'proposedChange'                =>  $request['currentCapacity'],
-                    'changeInDetails'               =>  $request['proposedCapacity'],
+                    'category'                  =>  $request['category'],
+                    'subCategory'               =>  $request['subCategory'],
+                    'constructionType'          =>  $request['constructionType'],
+                    'structureNo'               =>  $request['structureNo'],
                 ];
                 ApplicationEstDetailsChange::where('id',$request->id)->update($data);
                 $inserted_application_data= ApplicationEstDetailsChange::where('id',$request->id)->first();
@@ -560,43 +561,6 @@ class ChangeBasicDetailsController extends Controller
             ];
             $changeDetails = ApplicationEstDetailsChange::create($data);
         }
-
-        // $EstDetailsChangeId = $changeDetails->id;
-
-        // if($request->class){
-        //     foreach($request->class as $key => $classId){
-        //         $stream_exists = $this->checkStreamExists($classId);
-        //         if(empty($stream_exists)){
-        //             $classStream = [
-        //                 'ApplicationDetailsId'  => $EstDetailsChangeId,
-        //                 'classId'               => $classId,
-        //                 'streamId'              => '',
-        //                 'created_by'            => $request->user_id,
-        //                 'created_at'            => date('Y-m-d h:i:s'),
-        //             ];
-
-        //             $class = ApplicationClassStream::create($classStream);
-
-        //         }
-        //     }
-        // }
-
-        // if($request->stream!=null && $request->stream!=""){
-        //     foreach($request->stream as $key2 => $classStreamId){
-        //         $class_stream_data = $this->getClassStreamId($classStreamId);
-
-        //         foreach($class_stream_data as $v){
-        //             $classStream = [
-        //                 'ApplicationDetailsId'  => $EstDetailsChangeId,
-        //                 'classId'               => $v->classId,
-        //                 'streamId'              => $v->streamId,
-        //                 'created_by'            => $request->user_id,
-        //                 'created_at'            => date('Y-m-d h:i:s'),
-        //             ];
-        //             $class = ApplicationClassStream::create($classStream);
-        //         }
-        //     }
-        // }
         return $changeDetails;
     }
 
@@ -648,9 +612,9 @@ class ChangeBasicDetailsController extends Controller
             'proprietorPhone'               => $request['proprietorPhone'],
             'proprietorEmail'               => $request['proprietorEmail']
         ];
-
+        // dd( $prop_data);
+    
         $propDetails = ApplicationProprietorDetails::create($prop_data);
-
         return $propDetails;
 
     }
@@ -701,10 +665,10 @@ class ChangeBasicDetailsController extends Controller
         $data =[
             'ApplicationDetailsId'          => $applicationDetailsId,
             'organizationId'                =>  $request['organizationId'],
-            // 'category'                      =>  $request['category'],
-            // 'subCategory'                   =>  $request['subCategory'],
-            // 'constructionType'              =>  $request['constructionType'],
-            // 'structureNo'                   =>  $request['structureNo'],
+            'category'                      =>  $request['category'],
+            'subCategory'                   =>  $request['subCategory'],
+            'constructionType'              =>  $request['constructionType'],
+            'structureNo'                   =>  $request['structureNo'],
             'change_type'                   =>  $request['application_for'],
             'proposedChange'                =>  $request['currentCapacity'],
             'changeInDetails'               =>  $request['proposedCapacity'],

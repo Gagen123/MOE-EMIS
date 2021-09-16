@@ -88,7 +88,7 @@ class ClosureController extends Controller
             'id'                       =>  $request['id'],
             'user_id'                  =>  $request['user_id']
         ];
-
+        
         ApplicationEstClosure::create($closure);
         if($request->attachment_details!=null && $request->attachment_details!=""){
             foreach($request->attachment_details as $att){

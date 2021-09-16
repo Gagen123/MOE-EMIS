@@ -29,43 +29,43 @@
                                     <label>Organization Type{{form.organization_type}}</label>
                                 </div> -->
                             </div>
-                             <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="category"></has-error>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="category"></has-error>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
-                                </select>
-                                <has-error :form="form" field="subCategory"></has-error>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
+                                    </select>
+                                    <has-error :form="form" field="subCategory"></has-error>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
-                                    <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                                </select>
-                                <has-error :form="form" field="constructionType"></has-error>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="constructionType"></has-error>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                                </div>
+                            
                             </div>
-                           
-                        </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0">Upload the Required Documents</label>

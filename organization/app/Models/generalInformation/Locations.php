@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Locations extends Model
 {
-    use HasFactory, Uuid;
+    use HasFactory, Uuid; 
     protected $table="organization_locations";
     protected $fillable = [
         'id','organizationId','entranceGate','gate_type','longitude','latitude','altitude','compoundFencing','compoundArea','landOwnership',

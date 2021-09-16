@@ -39,6 +39,7 @@ use App\Models\establishment\ApplicationVerificationTeam;
 use App\Models\establishment\ApplicationAttachments;
 use App\Models\establishment\ApplicationEstDetailsChange;
 use App\Models\restructuring\Bifurcation;
+use App\Models\establishment\ApplicationEstMerger;
 
 class EstablishmentController extends Controller{
     use ApiResponser;
@@ -608,6 +609,9 @@ class EstablishmentController extends Controller{
                 else if($data->establishment_type=="Bifurcation"){
                     $data->proposedName=Bifurcation::where('ApplicationDetailsId',$data->id)->first()->proposedName;
                 }
+                else if($data->establishment_type=="Merger"){
+                    $data->proposedName=ApplicationEstMerger::where('ApplicationDetailsId',$data->id)->first()->proposedName;
+                }
                 else if(strpos($data->establishment_type,'Public')!==false || strpos($data->establishment_type,'NGO')!==false || strpos($data->establishment_type,'Coorporate')!==false){
                     //dd('ddd');proposedName
                     $data->proposedName=ApplicationEstPublic::where('ApplicationDetailsId',$data->id)->first()->proposedName;
@@ -727,6 +731,19 @@ class EstablishmentController extends Controller{
                 'bifOrgId'                  =>$application_data->organizationId,
                 'isSenSchool'               =>$application_data->isSenSchool,
                 'isFeedingSchool'           =>$application_data->isFeedingSchool,
+            ];
+        }
+        //Added for merger but have to revisted after submitting the data from ui
+        if($caegory=="Merger"){
+            $application_data= ApplicationEstMerger::where('ApplicationDetailsId',$request->Applicationdetails['id'])->first();
+            $org_data = $org_data+[
+                'levelId'                   =>$application_data->levelId,
+                'locationId'                =>$application_data->locationId,
+                'isGeopoliticallyLocated'   =>$application_data->isGeoPoliticallyLocated,
+                'bifOrgId'                  =>$application_data->organizationId,
+                'isSenSchool'               =>$application_data->isSenSchool,
+                'isFeedingSchool'           =>$application_data->isFeedingSchool,
+
             ];
         }
         // dd($org_data);

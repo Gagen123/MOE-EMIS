@@ -88,19 +88,13 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Application Number:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
+                                    <span class="text-blue text-bold" >{{appicationDetails.application_no}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Type of Change:</label>
                                     <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed New Name:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.bifurcation.proposedName}}</span>
-                                </div>
-                            </div> -->
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:</label>
@@ -232,56 +226,12 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <!-- <button class="btn btn-success" @click="shownexttab('organization-tab')"><i class="fa fa-arrow-left"></i>Previous </button> -->
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                                 <button class="btn btn-dark" @click="shownexttab('approve')" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Previous Class Stream Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section1" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -395,7 +345,21 @@ export default {
             .then((response) => {
                 let data=response.data.data;
                 this.loadPriviousOrgDetails(data.bifurcation.organizationId);
+
+                //application details 
                 this.appicationDetails=data;
+                this.application_no=data.application_no;
+                this.ProposedOrgestablishment_type=data.establishment_type;
+                this.ParentOrgName=data.bifurcation.proposedName1;
+                this.ProposedOrgName=data.bifurcation.proposedName;
+                this.ProposedOrglevelId=data.bifurcation.levelId;
+                this.ProposedOrglocationId=data.bifurcation.locationId;
+                this.dateOfBifurcation=data.bifurcation.dateOfBifurcation;
+                this.ParentOrganizationId=data.bifurcation.organizationId;
+                this.ProposedOrgdzongkhagId=data.dzongkhagId;
+                this.ProposedOrgGewogName=data.gewogId;
+                
+                //Existing organiation details
                 this.form.sequence=response.data.sequence;
                 this.form.screen_id=response.data.screen_id;
                 this.form.establishment_type=data.establishment_type;
@@ -414,9 +378,7 @@ export default {
                 console.log("Error in retrieving:"+error);
             });
         },
-
-
-
+                
         /**
          * method to show next tab and update application accordingly
          */
@@ -451,6 +413,17 @@ export default {
                             formData.append('screen_id', this.form.screen_id);
                             formData.append('applicationNo', this.form.applicationNo);
                             formData.append('remarks', this.form.remarks);
+                            formData.append('ProposedOrgestablishment_type', this.ProposedOrgestablishment_type);
+                            formData.append('ProposedOrgName', this.ProposedOrgName);
+                            formData.append('ProposedOrglevelId', this.ProposedOrglevelId);
+                            formData.append('ProposedOrgdzongkhagId', this.ProposedOrgdzongkhagId);
+                            formData.append('ProposedOrgGewogName', this.ProposedOrgGewogName);
+                            formData.append('ProposedOrgVillageName', this.ProposedOrgVillageName);
+                            formData.append('ProposedOrglocationId', this.ProposedOrglocationId);
+                            formData.append('dateOfBifurcation', this.dateOfBifurcation);
+                            formData.append('ParentOrgName', this.ParentOrgName);
+                            formData.append('ParentOrganizationId', this.ParentOrganizationId);
+                            formData.append('appclassStreamList', this.appclassStreamList);
                             formData.append('service_name', this.form.establishment_type);
                             formData.append('ref_docs[]', this.form.ref_docs);
                             for(let i=0;i<this.form.ref_docs.length;i++){
@@ -594,6 +567,19 @@ export default {
                 }
             });
         },
+        getAttachmentType(type){
+            this.form.attachments=[];
+            axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
+            .then(response => {
+                let data = response.data;
+                data.forEach((item => {
+                    this.form.attachments.push({file_name:item.name, file_upload:''});
+                }));
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
     },
 
     mounted(){
@@ -603,6 +589,7 @@ export default {
         this.getClass();
         this.getStream();
         this.loaddzongkhagList();
+        this.getAttachmentType('Application_for_Bifurcation_verification');
         this.form.applicationNo=this.$route.params.data.application_number;
         this.loadChangeBasicApplicationDetails(this.$route.params.data.application_number,this.$route.params.type);
 

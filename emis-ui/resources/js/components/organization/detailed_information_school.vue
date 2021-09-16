@@ -18,7 +18,7 @@
                                         </div>
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Counselling'>
                                                     <label>Has Counselling room:</label><br>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
@@ -258,6 +258,7 @@
                          $('#AspNet').hide();
                          $('#Resource').hide();
                          $('#Has_CE').hide();
+                         $('#Counselling').hide();
                         
                     }
                     if(response_data.category=="public_school" ||response_data.category=="private_school" ||response_data.category=="public_ecr" ){
@@ -289,30 +290,31 @@
                     this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
-                    if(response_data.locationDetials!=null && response_data.locationDetials!=""){
-                        this.form.altitude=response_data.locationDetials.altitude;
-                        this.form.climate_type=response_data.locationDetials.climate_type;
-                        if(response_data.locationDetials.disasterArea!=null && response_data.locationDetials.disasterArea!=""){
-                            if(response_data.locationDetials.disasterArea.includes(',')){
-                                response_data.locationDetials.disasterArea.split(',').forEach(itm => {
+                    if(response_data.loc_details!=null && response_data.loc_details!=""){
+                        this.form.altitude=response_data.loc_details.altitude;
+                        this.form.climate_type=response_data.loc_details.climate_type;
+                        if(response_data.loc_details.disasterArea!=null && response_data.loc_details.disasterArea!=""){
+                            if(response_data.loc_details.disasterArea.includes(',')){
+                                response_data.loc_details.disasterArea.split(',').forEach(itm => {
                                     $('#dester'+itm).prop('checked',true);
                                 });
                             }else{
-                                $('#dester'+response_data.locationDetials.disasterArea).prop('checked',true);
+                                $('#dester'+response_data.loc_details.disasterArea).prop('checked',true);
                             }
                         }
-                        this.form.disasterArea=response_data.locationDetials.disasterArea;
-                        this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
-                        this.form.entranceGate=response_data.locationDetials.entranceGate;
-                        this.form.fencingtype=response_data.locationDetials.fencingtypeId;
-                        this.form.map_path=response_data.locationDetials.googleMapPath;
-                        if(response_data.locationDetials.googleMapPath!=null && response_data.locationDetials.googleMapPath!=""){
-                            this.populategooglemap(response_data.locationDetials.googleMapPath);
+                        this.form.disasterArea=response_data.loc_details.disasterArea;
+                        this.form.distance_from_dzo=response_data.loc_details.distance_from_dzo;
+                        this.form.entranceGate=response_data.loc_details.entranceGate;
+                        this.form.fencingtype=response_data.loc_details.fencingtypeId;
+                        this.form.map_path=response_data.loc_details.googleMapPath;
+                        if(response_data.loc_details.googleMapPath!=null && response_data.loc_details.googleMapPath!=""){
+                            this.populategooglemap(response_data.loc_details.googleMapPath);
                         }
-                        this.form.latitude=response_data.locationDetials.latitude;
-                        this.form.longitude=response_data.locationDetials.longitude;
-                        this.form.thramNo=response_data.locationDetials.thramNo;
-                        this.form.gate_type=response_data.locationDetials.gate_type;
+                        this.form.latitude=response_data.loc_details.latitude;
+                        this.form.longitude=response_data.loc_details.longitude;
+                        this.form.thramNo=response_data.loc_details.thramNo;
+                        this.form.gate_type=response_data.loc_details.gate_type;
+                        // alert(this.form.gate_type);
                     }
                     let prop=response_data.contactDetails;
                     let contactDetails=[];

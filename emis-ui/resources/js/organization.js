@@ -448,6 +448,15 @@ const routes = [
                   { path: '/list_gate_type', name:'list_gate_type', component: require('./components/masters/organization_masters/gate_type/list_gate_type.vue').default },
                 ]
             },
+            { path: '/disaster_index',
+              component: require('./components/masters/organization_masters/disaster/disaster_index.vue').default ,
+              children:[
+                { path: '',name:'disaster_index', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
+                { path: '/disaster_add', name:'disaster_add', component: require('./components/masters/organization_masters/disaster/disaster_add.vue').default },
+                { path: '/disaster_edit', name:'disaster_edit', component: require('./components/masters/organization_masters/disaster/disaster_edit.vue').default },
+                { path: '/disaster_list', name:'disaster_list', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
+              ]
+            },
         ]
     },
 

@@ -29,6 +29,8 @@ class Reopening extends Model
         'isSenSchool',
         'isFeedingSchool',
         'locationTypeId',
-        'proposedLocation'
+        'proposedLocation',
+        'created_by',
+        'updated_by'
     ]; 
 }
