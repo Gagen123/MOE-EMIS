@@ -3,6 +3,15 @@
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                        <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
+                </ul>
+            </div><br>
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
                             <label class="mb-0.5">School Details </label>
@@ -20,9 +29,31 @@
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Year of Merger:</label>
-                                <span class="text-blue text-bold">{{form.year}}</span>
-                            </div>
+                                <label> Year:</label>
+                                <label class="text-blue text-bold">{{form.year}}</label>
+                            </div><br>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                <div class="row form-group">
+                                    <label>Merge To School/ECR/ECCD 1:</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="org1" v-model="form.newOrgType" value="org1" id="org1" @click="showOrg('org1')">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label>Merge To School/ECR/ECCD 2:</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="org2" v-model="form.newOrgType" value="org2" id="org2" @click="showOrg('org2')">
+                                    </div>
+                                </div>  
+                                <div class="row form-group">
+                                    <label>Merge To New Organization: &nbsp;&nbsp;&nbsp;</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showOrg('newOrg')" checked>
+                                    </div>
+                                </div>  
+                            </div> 
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -41,7 +72,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" >
                                 <div class="card card-primary card-outline">
                                     <div class="card-body">
                                         <h3 class="card-title">School/ECR/ECCD 1</h3>
@@ -96,9 +127,11 @@
                                                 <span class="text-blue text-bold" id="mergerSen1">{{org1_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                         </div>
+                                       
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <div class="card card-primary card-outline">
                                     <div class="card-body">
@@ -154,9 +187,11 @@
                                                 <span class="text-blue text-bold" id="mergerSen1">{{org2_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
+                           
                         </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
@@ -165,8 +200,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade tab-content-details" id="merger-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="card card-primary card-outline">
+                    <!-- Views for merging the organization -->
+                    <div class="tab-pane fade tab-content-details" id="merger-tab" role="tabpanel" aria-labelledby="basicdetails" >
+                        <div class="card card-primary card-outline" id="organization1">
                             <div class="card-body">
                                 <h3 class="card-title">Merged School Details</h3>
                                 <hr>
@@ -229,7 +265,182 @@
                                 </div>
                             </div>
                         </div>
-                        <hr>
+                        
+                        <!-- when selecting second organization -->
+                        <div class="card card-primary card-outline" id="organization2">
+                            <div class="card-body">
+                                <h3 class="card-title">Merged School Details</h3>
+                                <hr>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label class="mb-0">Proposed Name:<span class="text-danger">*</span></label>
+                                        <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" />
+                                        <has-error :form="form" field="proposedName"></has-error>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Code:</label>
+                                        <span class="text-blue text-bold" id="mergerCode1">{{org2_details.code}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Name:</label>
+                                        <span class="text-blue text-bold" id="mergerName1">{{org2_details.name}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Category:</label>
+                                        <span class="text-blue text-bold" id="megerCategory1">{{org2_details.category  == 'public_school' ? "Public School" :  "Private School"}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Level:</label>
+                                        <span class="text-blue text-bold" id="mergerLevel1">{{org2_details.level}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Dzongkhag:</label>
+                                        <span class="text-blue text-bold" id="mergerDzongkhag1">{{org2_details.dzongkhag}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Gewog:</label>
+                                        <span class="text-blue text-bold" id="mergerGewog1">{{org2_details.gewog}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Chiwog:</label>
+                                        <span class="text-blue text-bold" id="mergerChiwog1">{{org2_details.village}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Location Type:</label>
+                                        <span class="text-blue text-bold" id="mergerLocationtype1">{{org2_details.locationType}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>Geopolitically Located:</label>
+                                        <span class="text-blue text-bold" id="mergerGeoLocated1">{{org2_details.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <label>SEN School:</label>
+                                        <span class="text-blue text-bold" id="mergerSen1">{{org2_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- when they want to create new organization -->
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" id="organization3">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h3 class="card-title">Create New Organization</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <input type="text" class="form-control currentDetails" id="name1" v-model="form.name1" :class="{ 'is-invalid': form.errors.has('name1') }" @change="remove_error('name1')"/>
+                                                <has-error :form="form" field="name1"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                                <select name="level1" id="level1" v-model="form.level1" :class="{ 'is-invalid': form.errors.has('level1') }" class="form-control editable_fields" @change="getCategory1(),remove_error('level1')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in levelList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="level1"></has-error>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="location1"></has-error>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                <label><input  type="radio" v-model="form.geoLocated1" value="1" tabindex=""/> Yes</label>
+                                                <label><input  type="radio" v-model="form.geoLocated1" value="0"  tabindex=""/> No</label>
+                                            </div>
+                                        </div>
+
+                                        <label class="mb-0"><i><u>Other Details</u></i></label>
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                <select v-model="form.dzongkhag1" :class="{ 'is-invalid': form.errors.has('dzongkhag1') }" class="form-control select2" name="dzongkhag1" id="dzongkhag1">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in dzongkhagList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="dzongkhag1"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                <select v-model="form.gewog1" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('gewog1') }" class="form-control select2" name="gewog1" id="gewog1">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in gewog_list1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="gewog1"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:<span class="text-danger">*</span></label>
+                                            <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
+                                                <select v-model="form.chiwog1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog1') }" class="form-control select2" name="chiwog1" id="chiwog1">
+                                                    <option value="">--- Please Select ---</option>
+                                                    <option v-for="(item, index) in villageList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="chiwog1"></has-error>
+                                            </div>
+                                        </div>
+                                        <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
+                                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Classes</th>
+                                                        <th class="strm_clas">Stream</th>
+                                                        <!-- <th></th> -->
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr v-for="(item, key, index) in  classStreamList" :key="index">
+                                                        <td>
+                                                            <label class="pr-4"> &nbsp;{{ item.class }} </label>
+                                                        </td>
+                                                        <td class="strm_clas" v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                            {{  item.stream  }}
+                                                        </td>
+                                                        <td class="strm_clas" v-else>
+
+                                                        </td>
+                                                        <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                            <input type="checkbox" v-model="form.stream"  :id="item.id" :value="item.id">
+                                                        </td>
+                                                        <td v-else>
+                                                            <input type="checkbox" v-model="form.class" :value="item.classId">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Submit </button>
@@ -269,10 +480,24 @@ export default {
                 name:'',
                 phoneNo:'',
                 email:'',
+                screenId:'',
+                SysRoleId:'',
+                Sequence:'',
+                Status_Name:'',
+                screen_name:'',
                 class:[],
-                stream:[]
+                stream:[],
+                name1:'',level1:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',location1:'',newOrgType:'',
+                class:[],stream:[],
+
             }),
             levelList:[],
+            levelList1:[],
+            locationList1:[],
+            dzongkhagList1:[],
+            gewog_list1:[],
+            villageList1:[],
+            classStreamList:[],
             locationList:[],
             classList:[],
             streamList:[],
@@ -349,7 +574,68 @@ export default {
                 $(".eccd").hide();
             }
         },
-
+        getCategory1(){
+            let level = $('#level1 option:selected').text();
+            $('.strm_clas').hide();
+            if(level.toLowerCase().includes('middle')){
+                level="10";
+            }
+            else if(level.toLowerCase().includes('lower')){
+                level="8";
+            }
+            else if(level.toLowerCase().includes('primary')){
+                level="6";
+            }
+            else{
+                level="12";
+                $('.strm_clas').show();
+            }
+            axios.get('/masters/loadClassStreamMapping/school_'+level)
+              .then(response => {
+                this.classStreamList = response.data.data;
+            });
+        },
+        getLevel1(uri = '/organization/getLevelInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.levelList1 = data;
+            });
+        },
+        loadactivedzongkhagList1(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.dzongkhagList1 =  data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        getLocation1(uri = '/organization/getLocationInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.locationList1 = data;
+            });
+        },
+        showOrg:function(type){
+            if(type=="org1"){
+                $('#organization1').show();
+                $('#organization2').hide();
+                $('#organization3').hide();
+            }
+            if(type=="org2"){
+                 $('#organization1').hide();
+                $('#organization2').show();
+                $('#organization3').hide();
+            }
+            if(type=="newOrg" ){
+                $('#organization1').hide();
+                $('#organization2').hide();
+                $('#organization3').show();
+            }
+        },
         showprivatedetails(type){
             if(type=='private'){
                 $('#privatedetails').show();
@@ -461,6 +747,36 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        async getgewoglist1(id){
+            let dzoId=$('#dzongkhag1').val();
+            if(id!="" && dzoId==null){
+                dzoId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzoId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.gewog_list1 = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
+        async getvillagelist1(id){
+            let gewogId=$('#gewog1').val();
+            if(id!="" && gewogId==null){
+                gewogId=id;
+            }
+            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
+            axios.get(uri)
+            .then(response =>{
+                let data = response;
+                this.villageList1 = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
         /**
          * method to get gewog list
          */
@@ -515,7 +831,21 @@ export default {
             if(id=="parentSchool"){
                 this.form.parentSchool=$('#parentSchool').val();
             }
-
+            if(id=="parent_id"){
+                this.form.parent_id=$('#parent_id').val();
+                this.getOrgDetails($('#parent_id').val());
+            }
+            if(id=="dzongkhag1"){
+                this.form.dzongkhag1=$('#dzongkhag1').val();
+                this.getgewoglist1();
+            }
+            if(id=="gewog1"){
+                this.form.gewog1=$('#gewog1').val();
+                this.getvillagelist1();
+            }
+            if(id=="chiwog1"){
+                this.form.chiwog1=$('#chiwog1').val();
+            }
         },
 
         /**
@@ -535,7 +865,7 @@ export default {
                         this.form.post('organization/saveMerger')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'restr_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -551,7 +881,7 @@ export default {
                 });
             }
             else{
-                if(this.form.orgId2!="" && this.form.orgId1!=""){
+                if(this.form.orgId2!="" && this.form.orgId1!="" && this.form.newOrgType!=""){
                     this.change_tab(nextclass);
                 }
                 else{
@@ -602,39 +932,30 @@ export default {
             }
         },
 
-        // getScreenAccess(){
-        //     axios.get('common/getSessionDetail')
-        //     .then(response => {
-        //         let data = response.data.data.acess_level;
-        //         if(data == "Org" || data == "Ministry"){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have no access to this page.');
-        //         }
-
-        //     })
-        //     .catch(errors => {
-        //         console.log(errors)
-        //     });
-        // }
-
-        /**
-         * method to check pending status
-         */
-        // checkPendingApplication(){
-        //     axios.get('organization/checkPendingApplication/merger')
-        //     .then((response) => {
-        //         let data=response.data;
-        //         if(data!=""){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error: "+error);
-        //     });
-        // },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Application For Merger__'+1)
+            .then(response => {
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.form.screenId=data.screen;
+                    this.form.SysRoleId=data.SysRoleId;
+                    this.form.Sequence=data.Sequence;
+                    this.form.Status_Name=data.Status_Name;
+                    this.form.screen_name=data.screenName;
+                    $('#screenPermission').hide();
+                    $('#mainform').show();
+                }
+                else{
+                    $('#message').html('<b>You are not eligible to visit this page. Please contact system administrator for further assistant</b>');
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
     },
 
     mounted() {
@@ -653,13 +974,18 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
 
+       
+        this.loadScreenDetails();
+        this.getOrgList();
         this.getLevel();
+        this.getLevel1();
+        this.getLocation1();
         this.getLocation();
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();
+        this.loadactivedzongkhagList1();
         // this.checkPendingApplication();
 
     },

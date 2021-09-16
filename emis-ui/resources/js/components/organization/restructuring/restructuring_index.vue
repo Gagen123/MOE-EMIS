@@ -11,7 +11,8 @@
                         {{ item.screen_name}}
                     </router-link>
                 </li>
-
+            </ul>
+            <ul class="nav nav-pills mb-3 developemntEnv" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1">
                     <router-link to="/name_change_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Change In Name
@@ -124,10 +125,15 @@ export default {
             });
         },
     },
-    mounted(){
+    async mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
+
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
 }
 </script>

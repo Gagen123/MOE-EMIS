@@ -270,46 +270,6 @@ class BifurcationController extends Controller
         $response_data->bifurcation = $bifurcation;
         $response_data->attachments= ApplicationAttachments::where('ApplicationDetailsId',$response_data->id)->get();
 
-        // $response_data=Bifurcation::where('applicationNo',$appNo)->first();
-        // $response_data->application_date=date_format(Carbon::parse($response_data->created_at), 'Y-m-d h:i:s');
-        // $response_data->new1Level=Level::where('id',$response_data->new1Level)->first()->name;
-        // $response_data->new2Level=Level::where('id',$response_data->new2Level)->first()->name;
-        // $response_data->new1Location=Location::where('id',$response_data->new1Location)->first()->name;
-        // $response_data->new2Location=Location::where('id',$response_data->new2Location)->first()->name;
-        // if($response_data->new1ParentSchool!=null && $response_data->new2ParentSchool!=""){
-        //     $response_data->parent_school1=OrganizationDetails::where('id',$response_data->new1ParentSchool)->first()->name;
-        // }
-
-        // if($response_data->new2ParentSchool!=null && $response_data->new2ParentSchool!=""){
-        //     $response_data->parent_school2=OrganizationDetails::where('id',$response_data->new2ParentSchool)->first()->name;
-        // }
-
-        // // $response_data->proprietor=ApplicationProprietorDetails::where('applicationId',$response_data->id)->get();
-        // $class1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->groupBy('classId')->get();
-        // $stream1=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation1')->where('streamId','<>',null)->get();
-        // foreach($class1 as $cls){
-        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        // }
-        // $response_data->class_det_1=$class1;
-        // if($stream1!="" && sizeof($stream1)>0){
-        //     foreach($stream1 as $sec){
-        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        //     }
-        //     $response_data->strm_set_1=$stream1;
-        // }
-
-        // $class2=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation2')->groupBy('classId')->get();
-        // $stream2=ApplicationClassStream::where('ApplicationDetailsId',$response_data->id)->where('foreignKeyFor','Bifurcation2')->where('streamId','!=',null)->get();
-        // foreach($class2 as $cls){
-        //     $cls->class_name=Classes::where('id',$cls->classId)->first()->class;
-        // }
-        // $response_data->class_det_2=$class2;
-        // if($stream2!="" && sizeof($stream2)>0){
-        //     foreach($stream2 as $sec){
-        //         $sec->section_name=Stream::where('id',$sec->streamId)->first()->stream;
-        //     }
-        //     $response_data->strm_set_2=$stream2;
-        // }
         return $this->successResponse($response_data);
     }
     /**
@@ -347,44 +307,128 @@ class BifurcationController extends Controller
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
 
-    /**
+/**
      * to update after approving/rejecting
      */
 
     public function updateBifurcationDetails(Request $request){
+        if($request->status=="Approved"){
+            $response_data = OrganizationDetails::where('id', $request->ParentOrganizationId)->first();
+                $data =[
+                    'id'                         =>   $response_data->id,
+                    'name'                       =>   $response_data->name,
+                    'code'                       =>   $response_data->code,
+                    'organizationType'           =>   $response_data->organizationType,
+                    'zestAgencyCode'             =>   $response_data->zestAgencyCode,
+                    'yearOfEstablishment'        =>   $response_data->yearOfEstablishment,
+                    'category'                   =>   $response_data->category,
+                    'levelId'                    =>   $response_data->levelId,
+                    'dzongkhagId'                =>   $response_data->dzongkhagId,
+                    'gewogId'                    =>   $response_data->gewogId,
+                    'chiwogId'                   =>   $response_data->chiwogId,
+                    'locationId'                 =>   $response_data->locationId,
+                    'created_by'                 =>   $request->user_id,
+                ];
+             HistoryForOrganizaitonDetail::create($data);
+                $updatedData =[
+                    'name'                        =>  $request->ParentOrgName,
+                    'updated_at'                  =>  date('Y-m-d h:i:s'),
+                    'updated_by'                  =>  $request->user_id,
+                ];
+            $response_data=OrganizationDetails::where('id', $request->ParentOrganizationId)->update($updatedData);
 
-        ///Code is copied from updateChangeBasicDetails
-        // to update the applications table
-
-        $estd =[
-            'status'                        =>   $request->status,
-            'remarks'                       =>   $request->remarks,
-            'updated_by'                    =>   $request->user_id,
-        ];
-        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
-
-        if($request->attachment_details!="" ){
-            $type="Verification";
-            if($request->status=="Approved"){
-                $type="Approval";
-            }
-            if(sizeof($request->attachment_details)>0){
-                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
-                foreach($request->attachment_details as $att){
-                    $attach =[
-                        'ApplicationDetailsId'      =>  $application_details->id,
-                        'path'                      =>  $att['path'],
-                        'user_defined_file_name'    =>  $att['user_defined_name'],
-                        'name'                      =>  $att['original_name'],
-                        'upload_type'               =>  $type,
-                        'created_by'                =>  $request->user_id,
-                    ];
-                    $doc = ApplicationAttachments::create($attach);
-                }
+        //generating the organization code
+        // $last_seq=ApplicationSequence::where('service_name','Organization Code')->first();
+        //     if($last_seq==null || $last_seq==""){
+        //         $last_seq=1;
+        //         $app_details = [
+        //             'service_name'                  =>  'Organization Code',
+        //             'last_sequence'                 =>  $last_seq,
+        //         ];
+        //         ApplicationSequence::create($app_details);
+        //     }
+        //     else{
+        //         $last_seq=$last_seq->last_sequence+1;
+        //         $app_details = [
+        //             'last_sequence'                 =>  $last_seq,
+        //         ];
+        //         ApplicationSequence::where('service_name', 'Organization Code')->update($app_details);
+        //     }
+        //         $org_code='';
+        //         if(strlen($last_seq)==1){
+        //             $org_code= $org_code.date('Y').'.'.date('m').'.000'.$last_seq;
+        //         }
+        //         else if(strlen($last_seq)==2){
+        //             $org_code= $org_code.date('Y').'.'.date('m').'.00'.$last_seq;
+        //         }
+        //         else if(strlen($last_seq)==3){
+        //             $org_code= $org_code.date('Y').'.'.date('m').'.0'.$last_seq;
+        //         }
+        //         else if(strlen($last_seq)==4){
+        //             $org_code= $org_code.date('Y').'.'.date('m').'.'.$last_seq;
+        //         }
+        //     $newOrgDet =[
+        //         'name'                       =>   $request->ProposedOrgName,
+        //         'code'                       =>   $org_code,
+        //         'organizationType'           =>   $response_data->organizationType,
+        //         'bifOrgId'                   =>   $request->ParentOrganizationId,
+        //         'levelId'                    =>   $request->ProposedOrglevelId,
+        //         'dzongkhagId'                =>   $request->ProposedOrgdzongkhagId,
+        //         'gewogId'                    =>   $request->ProposedOrgGewogName,
+        //         'locationId'                 =>   $request->ProposedOrglocationId,
+        //         'created_at'                 =>   $request->dateOfBifurcation,
+        //     ];
+        // $response_data = OrganizationDetails::create($newOrgDet);
+        
+        //updating to application details tables
+            $app_details = [
+                'status'                      =>  $request->status,
+                'remarks'                     =>  $request->remarks,
+                'updated_at'                  =>  date('Y-m-d h:i:s'),
+                'updated_by'                  =>  $request->user_id,
+            ];
+            $response_data=ApplicationDetails::where('application_no',$request->application_number)->update($app_details);
+        
+        //saving attachments
+        if(sizeof($request->attachment_details)>0){
+            $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+            foreach($request->attachment_details as $att){
+                $attach =[
+                    'ApplicationDetailsId'      =>  $application_details->id,
+                    'path'                      =>  $att['path'],
+                    'user_defined_file_name'    =>  $att['user_defined_name'],
+                    'name'                      =>  $att['original_name'],
+                    'upload_type'               =>  $request->status,
+                    'created_by'                =>  $request->user_id,
+                ];
+                $response_data = ApplicationAttachments::create($attach);
             }
         }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
 
-        $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
+        // if($request->attachment_details!="" ){
+        //     $type="Verification";
+        //     if($request->status=="Approved"){
+        //         $type="Approval";
+        //     }
+        //     if(sizeof($request->attachment_details)>0){
+        //         $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+        //         foreach($request->attachment_details as $att){
+        //             $attach =[
+        //                 'ApplicationDetailsId'      =>  $application_details->id,
+        //                 'path'                      =>  $att['path'],
+        //                 'user_defined_file_name'    =>  $att['user_defined_name'],
+        //                 'name'                      =>  $att['original_name'],
+        //                 'upload_type'               =>  $type,
+        //                 'created_by'                =>  $request->user_id,
+        //             ];
+        //             $doc = ApplicationAttachments::create($attach);
+        //         }
+        //     }
+        // }
+
+        // $app_details = ApplicationDetails::where('application_no', $request->application_number)->first();
 
         // $change_details=ApplicationEstDetailsChange::where('ApplicationDetailsId',$app_details->id)->first();
         // $org_details=OrganizationDetails::where('id',$change_details->organizationId)->first();

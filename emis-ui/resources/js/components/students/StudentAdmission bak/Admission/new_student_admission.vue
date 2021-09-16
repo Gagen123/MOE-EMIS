@@ -1350,7 +1350,7 @@ export default {
                 }
                 if(!$('#mother_occupation').attr('class').includes('select2-hidden-accessible')){
                     $('#mother_occupation').addClass('select2-hidden-accessible');
-                }
+                }level_name
 
                 if(!$('#gardain_dzongkhag').attr('class').includes('select2-hidden-accessible')){
                     $('#gardain_dzongkhag').addClass('select2-hidden-accessible');

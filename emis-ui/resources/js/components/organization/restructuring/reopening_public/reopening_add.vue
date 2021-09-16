@@ -1,10 +1,15 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="existmessage"></div>
-        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
+                </ul>
+            </div><br>
             <div class="card-header p-0 border-bottom-0">
                 <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
@@ -18,71 +23,6 @@
                 </div>
             </div>
             <div class="form-group row">
-                <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Closed School Details</h3>
-                        </div>
-                        <div class="card-body">
-                            <form class="form-horizontal">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Name:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="name">{{data.name}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Code:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.code}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Level:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{levelArray[data.levelId]}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Geo-Politically Located:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                         <span class="text-blue text-bold"> {{ data.isGeopoliticallyLocated  == 1 ? "Yes" :  "No"}}</span>
-                                    </div>
-                                </div>
-
-                                <label class="mb-0"><i><u>Other Details</u></i></label>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{dzongkhagArray[data.dzongkhagId]}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Gewog:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="gewogName">{{data.gewog}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Chiwog:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold" id="chewogName"> </span>
-                                    </div>
-                                </div>
-                                <label class="mb-0"><i><u>Class & Stream Details</u></i></label>
-                                <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 row">
-                                        <span v-for="(item, index) in  data.classes" :key="index">
-                                            <br>
-                                            <input type="checkbox" checked="true" disabled><label class="pr-4"> &nbsp;{{ classArray[item.classId] }}</label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> -->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
@@ -642,16 +582,15 @@ export default {
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
+                        formData.append('screenId', this.screenId);
+                        formData.append('SysRoleId', this.SysRoleId);
+                        formData.append('Sequence', this.Sequence);
+                        formData.append('Status_Name', this.Status_Name);
+                        formData.append('screen_name', this.screen_name);
                         formData.append('application_type', this.form.application_type);
-                        // for(let i=0;i<this.form.class.length;i++){
-                        //     formData.append('class[]', this.form.class[i]);
-                        // }
                         $("input[name='classes']:checked").each( function () {
                             formData.append('class[]', $(this).val());
                         });
-                        // for(let i=0;i<this.form.stream.length;i++){
-                        //     formData.append('stream[]', this.form.stream[i]);
-                        // }
                         $("input[name='streams']:checked").each( function () {
                             formData.append('stream[]', $(this).val());
                         });
@@ -664,7 +603,7 @@ export default {
                         // this.form.post('organization/saveReopening')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Re-Opening has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Re-Opening has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'reopening_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
@@ -718,10 +657,10 @@ export default {
             });
         },
         //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadInactiveOrgList'){
+        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                this.orgList = response.data;
+                this.orgList = response.data.data;
             });
         },
         getAttachmentType(type){
@@ -737,14 +676,37 @@ export default {
                 console.log(errors)
             });
         },
+        loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/'+'Application For Re_Opening__'+1)
+            .then(response => {
+                // let data = response.data[0];
+                let data = response.data.data;
+                if(data!=undefined && data!="NA"){
+                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
+                    this.screenId=data.screen;
+                    this.SysRoleId=data.SysRoleId;
+                    this.Sequence=data.Sequence;
+                    this.Status_Name=data.Status_Name;
+                    this.form.service_name=data.screenName;
+                }else{
+                    $('#screenPermission').show();
+                    $('#mainform').hide();
+                    $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+                }
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
+        },
     },
     created(){
+        this.loadScreenDetails();
+        this.getOrgList();
         this.getLevel();
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
 
-        this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -755,7 +717,6 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        this.getOrgList();
     },
 
     mounted(){
@@ -771,6 +732,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadScreenDetails();
         this.getAttachmentType('ForTransaction__Application_for_Re-Opening');
         this.getClass();
         this.getStream();

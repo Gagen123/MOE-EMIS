@@ -25,23 +25,46 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{form.organization_type}}</label>
+                                </div> -->
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Category:<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubCategoryDropdown(),remove_err('category')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in categoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="category"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Current Capacity:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" readonly v-model="form.currentCapacity" :class="{ 'is-invalid': form.errors.has('currentCapacity') }" @change="remove_error('currentCapacity')" class="form-control" id="currentCapacity"/>
-                                    <has-error :form="form" field="currentCapacity"></has-error>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Sub Category:<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="subCategory" id="subCategory" class="form-control editable_fields" v-model="form.subCategory" :class="{ 'is-invalid': form.errors.has('subCategory') }" @change="remove_err('subCategory')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in subCategortList" :key="index" v-bind:value="item.id">{{ item.subCategoryName }}</option>
+                                    </select>
+                                    <has-error :form="form" field="subCategory"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Capacity:<span class="text-danger">*</span></label>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <input type="text" v-model="form.proposedCapacity" :class="{ 'is-invalid': form.errors.has('proposedCapacity') }" @change="remove_error('proposedCapacity')" class="form-control" id="proposedCapacity"/>
-                                    <has-error :form="form" field="proposedCapacity"></has-error>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
+                                        <option value="">--- Please Select ---</option>
+                                        <option v-for="(item, index) in contructionTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="form" field="constructionType"></has-error>
                                 </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
+                                </div>
+                            
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -87,6 +110,9 @@ export default {
             classList:[],
             locationList:[],
             streamList:[],
+            categoryList:[],
+            subCategortList:[],
+            contructionTypeList:[],
             record_id:'',
             applicationdetailsatt:'',
             gewogArray:{},
@@ -94,6 +120,7 @@ export default {
             form: new form({
                 organizationId:'',currentCapacity:'',proposedCapacity:' ', application_type:'expension_change',
                 application_for:'Expansion', action_type:'edit', status:'Submitted',organization_type:'',
+                category: '',subCategory: '',constructionType:'',structureNo: '',
                 attachments:
                 [{
                     file_name:'',attachment:''
@@ -181,6 +208,30 @@ export default {
             axios.get(uri)
             .then(response => {
                 this.orgList = response.data.data;
+            });
+        },
+        getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.categoryList = data;
+            });
+        },
+        getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.subCategortList = data;
+            });
+        },
+        loadconstructionTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ConstructionType'){
+            axios.get(uri)
+            .then(response => {
+                 let data = response.data.data;
+                this.contructionTypeList =  data;
+            })
+            .catch(function (error) {
+                    console.log('error: '+error);
             });
         },
 
@@ -350,7 +401,10 @@ export default {
                 let response_data=response.data.data;
                 this.getorgdetials(response_data.change_details.organizationId);
                 this.form.id=response_data.change_details.id;
-                this.form.proposedCapacity=response_data.change_details.changeInDetails;
+                this.form.category=response_data.change_details.category;
+                this.form.subCategory=response_data.change_details.subCategory;
+                this.form.constructionType=response_data.change_details.constructionType;
+                this.form.structureNo=response_data.change_details.structureNo;
                 this.applicationdetailsatt=response_data.attachments;
             });
         },
@@ -373,6 +427,9 @@ export default {
     mounted() {
         this.getLocation();
         this.loadproposedBy();
+        this.getCategoryDropdown();
+        this.getSubCategoryDropdown();
+        this.loadconstructionTypeList(),
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

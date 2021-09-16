@@ -21,11 +21,16 @@ class ApplicationEstDetailsChange extends Model
         'ApplicationDetailsId',
         'organizationId',
         'change_type',
+        'category',
+        'subCategory',
+        'constructionType',
+        'structureNo',
         'proposedChange',
         'proposedLocation',
         'coLocatedParent',
         'parentSchoolId',
         'initiatedBy',
         'changeInDetails'
+
     ];
 }

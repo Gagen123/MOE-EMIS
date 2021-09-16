@@ -78,7 +78,6 @@ class ReopeningController extends Controller
             'created_by'           =>   $request['user_id'],
             'created_at'           =>   date('Y-m-d h:i:s')
         ];
-
         $establishment = ApplicationDetails::create($data);
 
         $bir = [
