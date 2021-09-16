@@ -692,6 +692,8 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
+    Route::get('/loadStaffCountDetail/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffCountDetail'])->name('loadStaffCountDetail');
+  
 
 
     //projection controller for

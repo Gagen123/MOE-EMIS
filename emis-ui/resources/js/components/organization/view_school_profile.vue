@@ -165,15 +165,15 @@
                                                  <tbody>
                                                     <tr>
                                                             <td>Male Teachers</td>
-                                                            <td></td>
+                                                            <td>{{total_Staff.Totalmale}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td>Female Teachers</td>
-                                                            <td></td>
+                                                            <td>{{total_Staff.TotalFemale}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td><b>Total</b></td>
-                                                            <td><b></b></td>
+                                                            <td><b>{{total_Staff.TOTAL}}</b></td>
                                                     </tr>
                                                     <tr>
                                                             <td></td>
@@ -181,15 +181,15 @@
                                                     </tr>
                                                     <tr>
                                                             <td>Female Special Education Teachers</td>
-                                                            <td></td>
+                                                            <td>{{isSen.femaleSen}}</td>
                                                     </tr>
                                                         <tr>
                                                             <td>Male Special Education Teachers</td>
-                                                            <td></td>
+                                                            <td>{{isSen.maleSen}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td><b>Total</b></td>
-                                                            <td><b></b></td>
+                                                            <td><b>{{isSen.totalSen}}</b></td>
                                                     </tr>
                                                     <tr>
                                                             <td></td>
@@ -206,15 +206,15 @@
                                                     </tr>
                                                     <tr>
                                                             <td>Female Counselors</td>
-                                                            <td></td>
+                                                            <td>{{counselor.Femalecounselor}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td>Male Counselors</td>
-                                                            <td></td>
+                                                            <td>{{counselor.Malecounselor}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td><b>Total</b></td>
-                                                            <td><b></b></td>
+                                                            <td><b>{{counselor.TOTALCouunselor}}</b></td>
                                                     </tr>
                                                     <tr>
                                                             <td></td>
@@ -222,15 +222,15 @@
                                                     </tr>
                                                     <tr>
                                                             <td>Female Sports Instructor</td>
-                                                            <td></td>
+                                                            <td>{{SportInstructor.FemaleSportInst}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td>Male Sports Instructors</td>
-                                                            <td></td>
+                                                            <td>{{SportInstructor.MaleSportInst}}</td>
                                                     </tr>
                                                     <tr>
                                                             <td><b>Total</b></td>
-                                                            <td><b></b></td>
+                                                            <td><b>{{SportInstructor.TotalSportsInst}}</b></td>
                                                     </tr>
                                               </tbody>
                                           </table>
@@ -336,6 +336,7 @@
                 isprofile:false,
                 std_data:false,
                 existing_details:'',
+                staff_details:'',
                 contactdetail:[],
                 loc_details:[],
                 totalGeneralStudent:0,
@@ -343,6 +344,10 @@
                 levelArray:{},
                 studentData:[],
                 studentSenData:[],
+                total_Staff:[],
+                counselor:[],
+                SportInstructor:[],
+                isSen:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
@@ -425,7 +430,7 @@
                     this.existing_details=response.data.data;
                     this.contactdetail=response.data.data.contactDetails;
                     this.loc_details=response.data.data.loc_details;
-                    
+
                    // alert(this.loc_details);
                     this.std_data=true;
                     let mapid=response.data.data.locationDetials.googleMapPath;
@@ -442,6 +447,21 @@
                     console.log("Error: "+error);
                 });
             },
+            loadDataList(org_id){
+            axios.get('loadCommons/loadStaffCountDetail/staffCount/' +org_id)
+            .then(response => {
+                    this.staff_details=response.data.data;
+                    this.total_Staff=response.data.data.total_Staff[0];
+                    this.counselor=response.data.data.counselor[0]
+                    this.isSen=response.data.data.isSen[0]   
+                    this.SportInstructor=response.data.data.SportInstructor[0];
+                })
+                .catch((error) => {
+                    console.log("Error: "+error);
+                });
+            
+        },
+
 
         },
         created(){
@@ -450,6 +470,7 @@
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
                 this.loadPriviousOrgDetails(this.$route.query.org_id);
+                this.loadDataList(this.$route.query.org_id);
             }
             else{
                 axios.get('common/getSessionDetail')
@@ -459,8 +480,10 @@
                     this.getStudentData(data['Agency_Code']);
                     this.getSenStudentData(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
+                    this.loadDataList(data['Agency_Code'])
                 }) ;
             }
+           
         }
     }
 </script>

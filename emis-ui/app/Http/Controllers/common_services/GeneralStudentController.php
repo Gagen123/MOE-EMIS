@@ -148,7 +148,7 @@ class GeneralStudentController extends Controller{
      * Load the student information e.g. no. of boys and girls
      *
      * $param takes the value such as general, SEN etc
-     */
+     */ 
 
     public function loadStudentInformation($param){
         $org_id = $this->getWrkingAgencyId();
