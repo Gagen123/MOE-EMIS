@@ -81,7 +81,7 @@
                                             <label><input  type="radio" v-model="form.category" value="3" tabindex="" id="radio4" @click="showtextbox('Yes')"/> Corporate</label>
                                         </div>
                                     </div>
-    
+
                                         <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="roadtypeno">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 invoice-col">
@@ -90,7 +90,7 @@
                                                 <label class="mb-2"> Name:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorName" class="form-control editable_fields" id="proprietorName" />
                                                 <has-error :form="form" field="proprietorName"></has-error>
-                                            
+
                                                 <label class="mb-2"> CID:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorCid" class="form-control editable_fields" id="proprietorCid" />
                                                 <has-error :form="form" field="proprietorCid"></has-error>
@@ -460,7 +460,7 @@
                     $('#gate_type_section').show();
                 }
             },
-            
+
 
         },
         mounted(){
