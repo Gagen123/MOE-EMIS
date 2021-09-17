@@ -585,7 +585,6 @@ class RestructuringController extends Controller
         $work_response_data= $this->apiService->createData('emis/organization/merger/updateMergerDetails', $estd);
         return $work_response_data;
     }
-
     public function saveClosure(Request $request){
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -654,7 +653,6 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
             ];
-            // dd($workflow_data);
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
             $notification_data=[
                 'notification_for'              =>  $request->screen_name,
@@ -670,7 +668,6 @@ class RestructuringController extends Controller
                 'action_by'                     =>  $this->userId(),
             ];
             $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
-            // dd(json_decode($response_data));
         }
 
         return $response_data;
@@ -1184,12 +1181,6 @@ class RestructuringController extends Controller
         // dd($loadOrganizationDetails,$workflowdet);
         $service_name=$loadOrganizationDetails->data->establishment_type;
         foreach($workflowdet as $work){
-            //check with screen name and then type of organization
-            // if($work->Sequence!=1 && strpos(strtolower($work->screenName),'reopening')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
-            //     $workflowstatus=$work->Status_Name;
-            //     $screen_id=$work->SysSubModuleId;
-            //     $sequence=$work->Sequence;
-            // }
             if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
@@ -1201,8 +1192,6 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
-        // dd($loadOrganizationDetails);
-        // $loadOrganizationDetails->app_stage=$workflowstatus;
         return json_encode($loadOrganizationDetails);
     }
 
@@ -1263,7 +1252,6 @@ class RestructuringController extends Controller
                 }
             }
         }
-
 
         //change the following for each type of application
 
