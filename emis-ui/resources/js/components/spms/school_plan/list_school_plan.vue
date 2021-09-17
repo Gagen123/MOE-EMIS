@@ -28,11 +28,11 @@
                             <td>{{item.implementation_status}}</td>
                             <td>
                                 <div v-if="item.school_plan_status==1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i >
-                                    View
+                                    View Detail
                                     <span v-if="access_level=='Org'">/ Update</span>
                                     <span v-else>/ Comment</span>
                                  </div>
-                                <router-link v-else :to="{name:'edit_annual_school_plan', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-edit"></i > Edit</router-link>
+                                <router-link v-else :to="{name:'edit_annual_school_plan', params: {data:item}}" class="btn btn-info btn-sm text-white"><i class="fa fa-edit"></i > Edit Draft</router-link>
                             </td>
                             
                         </tr>
@@ -102,21 +102,22 @@ export default {
         this.dt = $("#school-plan-table").DataTable({
             columnDefs: [
                 { width: 30, targets: 0},
-                { width: 100, targets: 2},
-                { width: 100, targets: 3},
+                { width: 300, targets: 1},
+                { width: 30, targets: 0},
+                { width: 63, targets: 2},
+                { width: 63, targets: 3},
                 { width: 100, targets: 4},
+                { width: 150, targets: 5},
+
             ],
         })
+
     },
     watch: {
         schoolPlans(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#school-plan-table").DataTable({
-                    columnDefs: [
-                        { width: 100, targets: 0},
-                    ],
-                })
+                this.dt = $("#school-plan-table").DataTable()
             });
         }
     }

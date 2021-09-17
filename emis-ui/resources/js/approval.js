@@ -234,7 +234,7 @@ const routes = [
                 component: require('./components/organization/restructuring/merger/merger_index.vue').default ,
                 children: [
                     { path: '/',name:'merger_index', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
-                    { path: '/bifurcation_list',name:'bifurcation_list', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
+                    { path: '/merger_list',name:'merger_list', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
                     { path: '/merger', name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
                 ]
             },

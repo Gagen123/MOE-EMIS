@@ -204,6 +204,7 @@ class AdministrationController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
         return $response_data;
     }
+   
     public function saveLeaveConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -261,6 +262,18 @@ class AdministrationController extends Controller{
     }
 
     public function saveAcademicMasters(Request $request){
+        if($request['record_type'] == 'main_subject') {
+            $rules = [
+                'name'    =>  'required',
+                'code' => 'required',
+                'status'    =>  'required',
+            ];
+            $customMessages = [
+                'name.required' => 'This field is required',
+                'code.required' => 'This field is required',
+                'status.required' => 'This field is required',
+            ];
+        }
         if($request['record_type'] == 'subject') {
             $rules = [
                 'name'                      =>  'required',
@@ -273,6 +286,7 @@ class AdministrationController extends Controller{
             $customMessages = [
                 'display_order.required' => 'This field is required',
                 'name.required' => 'This field is required',
+                'code.required' => 'This field is required',
                 'aca_sub_category_id.required' => 'This field is required',
                 'status.required' => 'This field is required',
                 'assessed_by_class_teacher.required' => 'This field is required',
@@ -284,6 +298,7 @@ class AdministrationController extends Controller{
                 'aca_sub_id' => 'required',
                 'aca_sub_category_id' => 'required',
                 'name'  =>  'required',
+                'code' => 'required',
                 'display_order' => 'required',
                 'status'    =>  'required',
             ];
@@ -291,6 +306,7 @@ class AdministrationController extends Controller{
                 'aca_sub_id.required' => 'This field is required',
                 'aca_sub_category_id.required' => 'This field is required',
                 'name.required' => 'This field is required',
+                'code.required' => 'This field is required',
                 'display_order.required' => 'This field is required',
                 'status.required' => 'This field is required',
 
@@ -342,6 +358,7 @@ class AdministrationController extends Controller{
                 'status.required'               => 'This field is required',
             ];
         }
+        
         $this->validate($request, $rules, $customMessages);
 
         $request['user_id'] = $this->userId();
@@ -434,6 +451,29 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->createData('emis/masters/saveclassSubjectAssessment', $data);
         return $response_data;
 
+    }
+    public function saveSubjectMappingForTre(Request $request){
+        $rules = [
+            'org_class_id' => 'required',
+            'data.*.org_class_id' => 'required',
+            'data.*.aca_sub_id' => 'required',
+            'data.*.aca_teacher_sub_id' => 'required',
+            'data.*.standard_hours' => 'required',
+            'data.*.standard_minutes' => 'required',
+         ];
+         $customMessages = [
+             'org_class_id.required' => 'All the fields are required',
+             'data.*.org_class_id.required' => 'All the fields are required',
+             'data.*.aca_sub_id.required' => 'All the fields are required',
+             'data.*.aca_teacher_sub_id.required' => 'All the fields are required',
+             'data.*.standard_hours.required' => 'All the fields are required',
+             'data.*.standard_minutes.required' => 'All the fields are required',
+         ];
+         $this->validate($request, $rules, $customMessages);
+         $request['user_id'] = $this->userId();
+         $data = $request->all();
+         $response_data = $this->apiService->createData('emis/masters/saveSubjectMappingForTre', $data);
+         return $response_data;
     }
     public function loadPromotionRule($class_id,$stream_id=""){
         $uri = 'emis/masters/loadPromotionRule/'.$class_id;

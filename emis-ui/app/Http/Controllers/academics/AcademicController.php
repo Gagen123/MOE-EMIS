@@ -163,7 +163,6 @@ class AcademicController extends Controller
 
     }
     public function getSubjectTeacher(Request $request){
-
         $orgId = $this->getWrkingAgencyId();
         $uri = 'emis/academics/getSubjectTeacher/'.$orgId;
 
@@ -175,8 +174,14 @@ class AcademicController extends Controller
         if($request->org_section_id !== null){
             $uri .= (('&org_section_id='.$request->org_section_id));
         }
-        $subjectTeacher = $this->apiService->listData($uri);
-        return $subjectTeacher;
+        $subjectTeacher = json_decode($this->apiService->listData($uri),true)['data'];
+        if(count($subjectTeacher['subjectMappingForTre']) > 0){
+            $aca_teacher_sub_ids = implode(",",array_column($subjectTeacher['subjectMappingForTre'],'aca_teacher_sub_id'));
+        }else{
+            $aca_teacher_sub_ids = [];
+        }
+        $staffs = json_decode($this->apiService->listData('emis/common_services/loadFewDetailsStaffListBySubject?aca_teacher_sub_ids='.$aca_teacher_sub_ids.'&orgId='.$orgId),true)['data'];
+        return (["staffs" => $staffs,'subjectTeachers' =>$subjectTeacher]);
     }
     public function saveStudentElectiveSubject(Request $request){
         $rules = [

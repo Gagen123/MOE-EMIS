@@ -16,6 +16,7 @@ class SpmAgencyInputObservation extends Migration
         Schema::create('spm_agency_input_observation', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->char('agency_input_id',36)->index();
+            $table->char('dzon_id',36)->index();
             $table->char('org_id',36)->index()->comment('schoolId');
             $table->string('observation',1000);
             $table->string('recommendation',1000);

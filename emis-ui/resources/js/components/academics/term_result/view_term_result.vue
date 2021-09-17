@@ -114,6 +114,11 @@
                         fixedColumns:   {
                             leftColumns: 2
                         },
+                        columnDefs: [
+                            { width: 50, targets: 0},
+                            { width: 200, targets: 1},
+                            { width: 100, targets: 2},
+                        ],
                         dom: 'Bfrtip',
                         buttons: [
                             'print'

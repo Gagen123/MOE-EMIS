@@ -81,28 +81,29 @@ export default {
                $('#errorId').remove()
             }
         },
-       getClassses(){
-           axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA')
-           .then(response => {
-                let formData = []
-                let classList = response.data
-                classList.forEach(item => {
-                    formData['org_class_id'] = item.org_class_id
-                    formData['org_stream_id'] = item.org_stream_id
-                    formData['org_section_id'] = item.org_section_id
-                    if(item.stream && item.section){
-                        formData['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                    }else if(item.stream){
-                        formData['class_stream_section'] = item.class+' '+item.stream
-                    }else if(item.section){
-                        formData['class_stream_section'] = item.class+' '+item.section
-                    }else{
-                        formData['class_stream_section'] = item.class
-                    }
-                    const object = {...formData}
-                    this.Classes.push(object)
+       async getClassses(){
+            let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                let classTeachers = await axios.get('academics/getClassTeacherClasss').then(response => response.data.data)
+                classTeachers.forEach((classTeacher,index) => {
+                    classSections.forEach(item => {
+                        if(classTeacher.org_class_id == item.org_class_id && (classTeacher.org_stream_id == item.org_stream_id || ((classTeacher.org_stream_id == null ||classTeacher.org_stream_id == "") && (item.org_stream_id == null || item.org_stream_id == ""))) && (classTeacher.org_section_id == item.org_section_id || ((classTeacher.org_section_id == null || classTeacher.org_section_id == "") && (item.org_section_id == null || item.org_section_id == "")))){
+                            classTeachers[index].org_class_id = item.org_class_id;
+                            classTeachers[index].org_stream_id = item.org_stream_id
+                            classTeachers[index].org_section_id = item.org_section_id
+                            classTeachers[index].OrgClassStreamId = item.OrgClassStreamId
+                            if(item.stream && item.section){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
+                            }else if(item.stream){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.stream
+                            }else if(item.section){
+                                classTeachers[index]['class_stream_section'] = item.class+' '+item.section
+                            }else{
+                                classTeachers[index]['class_stream_section'] = item.class
+                            }
+                        }
+                    })
                 });
-            })
+            this.Classes = classTeachers;
         }, 
         async loadConsolidatedResultList(){
             if($('#class_stream_section_id').val()===''){

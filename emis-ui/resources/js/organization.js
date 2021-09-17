@@ -41,6 +41,15 @@ const routes = [
                 { path: '/edit_document_type',name:'edit_document_type', component: require('./components/masters/organization_masters/document_type/edit_document_type.vue').default },
                 ]
             },
+            { path: '/notification_config_index',
+            component: require('./components/masters/organization_masters/notification_config/notification_config_index.vue').default ,
+                children: [
+                { path: '/',name:'notification_config_index', component: require('./components/masters/organization_masters/notification_config/list_notification_config.vue').default },
+                { path: '/list_notification_config',name:'list_notification_config', component: require('./components/masters/organization_masters/notification_config/list_notification_config.vue').default },
+                { path: '/create_notification_config',name:'create_notification_config', component: require('./components/masters/organization_masters/notification_config/create_notification_config.vue').default },
+                { path: '/edit_notification_config',name:'edit_notification_config', component: require('./components/masters/organization_masters/notification_config/edit_notification_config.vue').default },
+                ]
+            },
             { path: '/attachment_index',
                 component: require('./components/masters/organization_masters/attachment/attachment_index.vue').default ,
                 children:
@@ -438,6 +447,15 @@ const routes = [
                   { path: '/edit_gate_type', name:'edit_gate_type', component: require('./components/masters/organization_masters/gate_type/edit_gate_type.vue').default },
                   { path: '/list_gate_type', name:'list_gate_type', component: require('./components/masters/organization_masters/gate_type/list_gate_type.vue').default },
                 ]
+            },
+            { path: '/disaster_index',
+              component: require('./components/masters/organization_masters/disaster/disaster_index.vue').default ,
+              children:[
+                { path: '',name:'disaster_index', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
+                { path: '/disaster_add', name:'disaster_add', component: require('./components/masters/organization_masters/disaster/disaster_add.vue').default },
+                { path: '/disaster_edit', name:'disaster_edit', component: require('./components/masters/organization_masters/disaster/disaster_edit.vue').default },
+                { path: '/disaster_list', name:'disaster_list', component: require('./components/masters/organization_masters/disaster/disaster_list.vue').default },
+              ]
             },
         ]
     },

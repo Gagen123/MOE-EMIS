@@ -5,6 +5,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Models\Masters\IncomeType;
 use App\Models\Masters\FinancialInformation;
+use App\Models\Masters\NotificationConfig;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use App\Models\Masters\Service;
@@ -45,7 +46,6 @@ class OrganizationMasterController extends Controller{
             'status'            =>  $request->status,
         ];
         //  dd( $master_data);
-        
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
                 'applicableTo'              =>  implode(', ', $request->addfield_1),
@@ -99,7 +99,7 @@ class OrganizationMasterController extends Controller{
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
             $response_data = $model::create($master_data);
-            // dd($response_data);
+             
         }
 
         if($request->action_type=="edit"){
@@ -127,6 +127,8 @@ class OrganizationMasterController extends Controller{
             return $this->successResponse($model::get());
         } else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
+        }else if ($type == 'active_notification_type'){
+            return $this->successResponse($model::where('status',1)->whereNotNull('service_type')->get());
         }
         else if(strpos($type,'ForTransaction')!==false){
             // return str_replace('_',' ',explode('__',$type)[1]);
@@ -149,4 +151,50 @@ class OrganizationMasterController extends Controller{
         $response_data = IncomeType::all();
         return $response_data;
     }
+    public function saveNotificationConfigMasters(Request $request){
+        $rules = [
+            'service_id' => 'required',
+            'submitter_role_id' => 'required',
+            'notification_to_role_id' =>  'required',
+        ];
+        $customMessages = [
+            'service_id.required' => 'This field is required',
+            'submitter_role_id.required' => 'This field is required',
+            'notification_to_role_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $master_data =[
+            'id'                      =>  $request['id'],
+            'service_id'              =>  $request['service_id'],
+            'submitter_role_id'       =>  $request['submitter_role_id'],
+            'notification_to_role_id' =>  $request['notification_to_role_id'],
+            'user_id'                 =>  $request['user_id']
+        ];
+
+        if($request->action_type=="add"){
+            $master_data =$master_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = NotificationConfig::create($master_data);
+        }
+        
+        if($request->action_type=="edit"){
+            $master_data =$master_data+[
+                'updated_by'        =>  $request->user_id,
+                'updated_at'        =>  date('Y-m-d h:i:s'),
+            ];
+         
+            //Audit Trails
+            $data = NotificationConfig::find($request->id);
+            $msg_det='service_id:'.$data->service_id.'; submitter_role_id:'.$data->submitter_role_id.'; notification_to_role_id:'.$data->notification_to_role_id.'; updated_by:'.$data->updated_by.'; updated_date:'.$data->updated_at;
+            $procid=DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','master_notification_config','".$request->id."','".$msg_det."','".$request->user_id."','Edit')");
+            NotificationConfig::where('id',$request->id)->update($master_data);
+            $response_data = NotificationConfig::where('id',$request->id)->first();
+        }
+        return $response_data;
+    }
+    // public function loadNotificationConfig(){
+    //     return $this->successResponse(NotificationConfig::where('status',1))
+    // }
 }

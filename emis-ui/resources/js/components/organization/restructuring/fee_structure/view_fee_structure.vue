@@ -25,9 +25,9 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{category}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">

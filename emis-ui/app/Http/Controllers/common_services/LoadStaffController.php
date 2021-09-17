@@ -133,4 +133,13 @@ class LoadStaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/getLoginUser/'.$orgId);
         return $response_data;
     }
+    //added by saru
+    public function loadStaffCountDetail($type="",$id=""){
+        if($type=="staffCount"){
+            $id=$this->getWrkingAgencyId();
+        }
+        $response_data= $this->apiService->listData('emis/common_services/loadStaffCountDetail/'.$type.'/'.$id);
+        return $response_data;
+    }
+
 }

@@ -315,7 +315,7 @@ export default {
                         // this.form.post('organization/saveChangeBasicDetails')
                         .then((response) => {
                             if(response!=""){
-                                let message="Application for Location Change has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Application for Location Change has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'location_change_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',

@@ -104,15 +104,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
-                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
-                                    </div>
-                                </div> -->
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">

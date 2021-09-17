@@ -37,6 +37,7 @@ Route::prefix('masters')->group(function () {
     Route::get('/loadLocation', [App\Http\Controllers\AdministrationController::class, 'loadLocation'])->name('loadLocation');
 
     Route::prefix('organizationMasterController')->group(function (){
+        Route::post('/saveNotificationConfigMasters', [App\Http\Controllers\organization\OrganizationMasterController::class, 'saveNotificationConfigMasters'])->name('saveNotificationConfigMasters');
         Route::post('/saveOrganizationMaster', [App\Http\Controllers\organization\OrganizationMasterController::class, 'saveOrganizationMaster'])->name('saveOrganizationMaster');
         Route::get('/loadFinacialtype', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadFinacialtype'])->name('loadFinacialtype');
         Route::get('/loadincomeList', [App\Http\Controllers\organization\OrganizationMasterController::class, 'loadincomeList'])->name('loadincomeList');
@@ -175,7 +176,8 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveclassSubjectAssessment', [App\Http\Controllers\AdministrationController::class, 'saveclassSubjectAssessment'])->name('saveclassSubjectAssessment');
     Route::get('/loadPromotionRule/{class_id}/{stream_id?}', [App\Http\Controllers\AdministrationController::class, 'loadPromotionRule'])->name('loadPromotionRule');
     Route::post('/savePromotionRule', [App\Http\Controllers\AdministrationController::class, 'savePromotionRule'])->name('savePromotionRule');
-
+    Route::post('/saveSubjectMappingForTre', [App\Http\Controllers\AdministrationController::class, 'saveSubjectMappingForTre'])->name('saveSubjectMappingForTre');
+     
 
     //SPMS Masters
     Route::post('/saveSpmMasters', [App\Http\Controllers\spms\SpmsMasterController::class, 'saveSpmMasters'])->name('saveSpmMasters');
@@ -214,6 +216,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveprivatepublicschoolEstablishment', [App\Http\Controllers\organization\EstablishmentController::class, 'saveprivatepublicschoolEstablishment'])->name('saveprivatepublicschoolEstablishment');
     Route::get('/loaddraftApplication/{type}', [App\Http\Controllers\organization\EstablishmentController::class, 'loaddraftApplication'])->name('loaddraftApplication');
     Route::get('/loadEstablishmentApplciaiton/{record_id}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstablishmentApplciaiton'])->name('loadEstablishmentApplciaiton');
+
     /** general information route  */
     Route::post('/saveSection', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveSection'])->name('saveSection');
     Route::get('/getClassByOrganizationId/{orgId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getClassByOrganizationId'])->name('getClassByOrganizationId');
@@ -353,7 +356,7 @@ Route::prefix('organization')->group(function () {
 
     Route::get('/loadEstbDetailsForView/{appNo}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadEstbDetailsForView'])->name('loadEstbDetailsForView');
 
-    Route::post('/updateNewEstablishmentApplication', [App\Http\Controllers\organization\EstablishmentController::class, 'updateNewEstablishmentApplication'])->name('updateNewEstablishmentApplication');
+
     Route::post('/updateTeamVerification', [App\Http\Controllers\organization\EstablishmentController::class, 'updateTeamVerification'])->name('udpateTeamVerification');
     Route::get('/loadTeamVerificationList/{id}', [App\Http\Controllers\organization\EstablishmentController::class, 'loadTeamVerificationList'])->name('loadTeamVerificationList');
     Route::get('/loadProprietorDetails', [App\Http\Controllers\organization\EstablishmentController::class, 'loadProprietorDetails'])->name('loadProprietorDetails');
@@ -460,8 +463,8 @@ Route::prefix('staff')->group(function () {
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
-    
-    
+
+
 
     Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen
@@ -496,7 +499,7 @@ Route::prefix('staff')->group(function () {
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
         Route::get('/loadSecondment/{type}/{model}', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadSecondment'])->name('loadSecondment');
-        //for generating staff with leave type 
+        //for generating staff with leave type
         Route::get('/loadLeaveStaffList', [App\Http\Controllers\staff\StaffSepSecController::class, 'loadLeaveStaffList'])->name('loadLeaveStaffList');
     });
 
@@ -628,8 +631,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
 
     });
-    
-    Route::prefix('substitution')->group(function (){  
+
+    Route::prefix('substitution')->group(function (){
         Route::post('/savestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'savestaff'])->name('savestaff');
         Route::get('/loadStaff/{type}/{model}', [App\Http\Controllers\staff\SubstitutionController::class, 'loadStaff'])->name('loadStaff');
         Route::get('/loadsubstitutestaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadsubstitutestaff'])->name('loadsubstitutestaff');
@@ -689,6 +692,8 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
     Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
+    Route::get('/loadStaffCountDetail/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffCountDetail'])->name('loadStaffCountDetail');
+  
 
 
     //projection controller for
