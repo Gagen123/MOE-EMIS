@@ -317,7 +317,7 @@ export default {
                 this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
                 this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
                 if(this.form.organization_type == "public_eccd" || this.form.organization_type == "private_eccd" ){
-                   $('#level').hide();  
+                   $('#level').hide();
 
                 }
             });
