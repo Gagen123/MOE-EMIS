@@ -9,6 +9,12 @@
                     <span :class="item.screen_icon"></span> {{ item.screen_name}}
                 </router-link>
             </li>
+            <li class="nav-item pr-1" @click="activatelink('health_record_summary')">
+                <router-link to="/health_record_summary" id="health_record_summary" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <span class="fas fa-notes-medical"></span>
+                    Health Records Summary
+                </router-link>
+            </li>
             <li class="nav-item active pr-1" @click="activatelink('healthscreen')">
                 <router-link id="healthscreen" to="/std_health_screening" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fa fa-heartbeat"></span>
@@ -31,12 +37,6 @@
                 <router-link to="/std_bmi" id="bmi_link" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     <span class="fas fa-notes-medical"></span>
                     Student BMI
-                </router-link>
-            </li>
-            <li class="nav-item pr-1" @click="activatelink('endorse_health_records')">
-                <router-link to="/endorse_health_records" id="endorse_health_records" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                    <span class="fas fa-notes-medical"></span>
-                    Endorse Health Records
                 </router-link>
             </li>
         </ul>

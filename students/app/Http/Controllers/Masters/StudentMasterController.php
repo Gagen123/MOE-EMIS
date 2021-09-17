@@ -7,6 +7,7 @@ use App\Models\AdmissionValidationModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
@@ -49,7 +50,19 @@ class StudentMasterController extends Controller
             'name'  =>  'required',
         ];
 
-        $this->validate($request, $rules);
+        // $rules = [
+        //     'name' => 'required',
+        //     'code' =>  [
+        //                  'required', 
+        //                  Rule::unique('cea_award', 'Code')
+        //                         ->where('Name', $request->name)
+        //                 ]
+        // ];
+        $customMessages = [
+            'name.required' => 'This field cannot be empty'
+         ];
+
+        $this->validate($request, $rules, $customMessages);
 
         $record_type = $request['record_type'];
 

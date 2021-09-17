@@ -217,12 +217,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getHealthBmiDetails/{param}', ['uses' => 'Students\StudentHealthController@getHealthBmiDetails']);
         $router->get('/getBmiDetails/{id}', ['uses' => 'Students\StudentHealthController@getBmiDetails']);
         $router->get('/loadresult/{months}/{gender}/{bmi}', ['uses' => 'Students\StudentHealthController@loadresult']);
-
-        $router->post('/saveHealthEndorsement', ['uses' => 'Students\StudentHealthController@saveHealthEndorsement']);
-        $router->get('/loadHealthSummary/{org_id}', ['uses' => 'Students\StudentHealthController@loadHealthSummary']);
-        $router->get('/loadScreeningEndorsement/{org_id}', ['uses' => 'Students\StudentHealthController@loadScreeningEndorsement']);
-        $router->get('/loadVaccinationEndorsement/{org_id}', ['uses' => 'Students\StudentHealthController@loadVaccinationEndorsement']);
-        $router->get('/loadSupplementationEndorsement/{org_id}', ['uses' => 'Students\StudentHealthController@loadSupplementationEndorsement']);
+        
+        $router->get('/loadHealthSummary/{data}', ['uses' => 'Students\StudentHealthController@loadHealthSummary']);
 
         $router->post('/saveStudentProject', ['uses' => 'Students\StudentProjectController@saveStudentProject']);
         $router->get('/loadStudentProjects/{param}', ['uses' => 'Students\StudentProjectController@loadStudentProjects']);

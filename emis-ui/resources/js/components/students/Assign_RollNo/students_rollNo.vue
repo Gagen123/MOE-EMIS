@@ -10,6 +10,21 @@
                         <hr>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="required">Assign Order:</label>
+                                <br>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="asc" id="assign_order"/> Ascending</label>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="desc" id="assign_order"/> Descending</label>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="required">Sort By:</label>
+                                <br>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="girls" id="sort_by"/> Girls First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="boys" id="sort_by"/> Boys First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="mixed" id="sort_by"/> Mixed</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Class:</label>
                                 <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
                                     <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
@@ -80,6 +95,8 @@ export default {
             classSectionStreamList:{},
 
             student_form: new form({
+                sort_by:'',
+                assign_order:'',
                 std_class: '',
                 std_stream: '',
                 std_section: '',
@@ -195,11 +212,17 @@ export default {
                     $(".stream_selection").hide();
                 }
             }
-
+            if(id == 'assign_order'){
+                this.student_form.assign_order=$('#assign_order').val();
+            }
+            if(id == 'sort_by'){
+                this.student_form.sort_by=$('#sort_by').val();
+            }
             if(id=="std_stream"){
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
+                //let params = $('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val()+'__'+$('#assign_order').val()+'__'+$('#sort_by').val();
                 axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
                     .then((response) => {
                         this.studentList = response.data;

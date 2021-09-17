@@ -18,13 +18,14 @@ class StudentMasterController extends Controller{
 
     public function saveStudentMasters(Request $request){
 
-        $rules = [
-            'name'          =>  'required',
-        ];
-        $customMessages = [
-            'name.required' => 'This field is required',
-        ];
-        $this->validate($request, $rules, $customMessages);
+        // $rules = [
+        //     'name'          =>  'required',
+        // ];
+        // $customMessages = [
+        //     'name.required' => 'This field is required',
+        // ];
+        
+        // $this->validate($request, $rules, $customMessages);
 
         $data = $request->all();
 
@@ -134,7 +135,6 @@ class StudentMasterController extends Controller{
         //dd($request);
         $rules = [
             'name'          =>  'required',
-          //  'description'   =>  'required',
             'status'        =>  'required',
 
         ];
