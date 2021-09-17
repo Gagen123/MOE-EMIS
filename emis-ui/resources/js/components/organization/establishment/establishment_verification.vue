@@ -221,6 +221,189 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                <span id="verificationattachment1" style="display:none">
+                                    <div class="callout callout-success">
+                                        <h5><u>2. Attachments (<span id="attachment_name1"></span>)</u></h5>
+                                        <table  class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Feasibility_Study'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+                                <span v-if="feasibilityReport">
+                                    <div class="callout callout-success">
+                                        <!-- <span id="verificationattachment2" style="display:none"> -->
+                                        <h5><u>3. Attachments (Feasibility Report)</u></h5>
+                                        <table  class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='update_document' || attach.upload_type=='Update_Feasibility_Study_Report'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+                                <span id="verificationattachment3" style="display:none">
+                                    <div class="callout callout-success">
+                                        <h5><u>4. Attachments (<span id="attachment_name3"></span>)</u></h5>
+                                        <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='Update_Sector_Clearance'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+                                <span id="verificationattachment4" style="display:none">
+                                    <div class="callout callout-success">
+                                        <h5><u>5. Attachments (<span id="attachment_name4"></span>)</u></h5>
+                                        <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='Notify_for_Approval_in_Principle'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+                                <span id="verificationattachment5" style="display:none">
+                                    <div class="callout callout-success">
+                                        <h5><u>6. Attachments (<span id="attachment_name5"></span>)</u></h5>
+                                        <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='Request_for_Final_Assessment'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+                                <span id="verificationattachment6" style="display:none">
+                                    <div class="callout callout-success">
+                                        <h5><u>7. Attachments (<span id="attachment_name6"></span>)</u></h5>
+                                        <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='Notify_for_Tentative_Date_of_Final_Assessment'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
+
+                                <span v-if="final_feasibilityReport">
+                                    <div class="callout callout-success">
+                                        <!-- <span id="verificationattachment2" style="display:none"> -->
+                                        <h5><u>8. Attachments (Final Feasibility Report)</u></h5>
+                                        <table  class="table w-100 table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Attachment Name</th>
+                                                    <th>Attachment</th>
+                                                    <th>File</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
+                                                    <template v-if="attach.upload_type=='final_update_document' || attach.upload_type=='Update_Final_Assessment_Report'">
+                                                        <td>  {{attach.user_defined_file_name}}</td>
+                                                        <td>  {{attach.name}}</td>
+                                                        <td>
+                                                            <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                        </td>
+                                                    </template>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </span>
                             </div>
                         </div>
                         <hr>
@@ -231,6 +414,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="tab-pane fade tab-content-details" id="verification-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success" >
                             <h4><u>Site Visit & Verification Details</u></h4>
@@ -332,6 +516,107 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="callout callout-success" style="display:none" id="finalverificationdetials">
+                            <h4><u>Final Site Visit & Verification Details</u></h4>
+                            <div class="row form-group">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Tentative Date for Final Feasibility Study:</label>
+                                    <input type="date" name="final_tentative_date" v-model="form.final_tentative_date" id="final_tentative_date" class="form-control">
+                                    <input type="text" name="final_tentative_date_show" id="final_tentative_date_show" style="display:none" class="form-control">
+                                    <span class="text-danger" id="final_tentative_date_err"></span>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:10%">Sl#</th>
+                                                <th style="width:45%">Department</th>
+                                                <th style="width:45%">Division</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="setfinalverifyingagency">
+                                            <tr v-for='(veri, index) in form.final_verifying_agency_list' :key="index">
+                                                <td>{{index+1}}</td>
+                                                <td>
+                                                    <select v-model="veri.department" class="form-control" @change="getdivision(index,'final_org_id')" name="final_department_id" :id="'final_department_id'+index">
+                                                        <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                    </select>
+                                                    <span class="text-danger" id="final_department_id_err"></span>
+                                                </td>
+                                                <td>
+                                                    <select v-model="veri.division" class="form-control" :id="'final_org_id'+index">
+                                                    </select>
+                                                    <span class="text-danger" :id="'final_org_id_err'+index"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="5">
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                    @click="addMoreagency('final_org_id')"><i class="fa fa-plus"></i> Add More</button>
+                                                    <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                    @click="removeagency('final_org_id')"><i class="fa fa-trash"></i> Remove</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody id="getfinalverifyingagency">
+                                            <tr v-for='(veri, index) in form.updated_final_verifying_agency_list' :key="index">
+                                                <td>{{index+1}}</td>
+                                                <td>
+                                                    {{veri.department}}
+                                                </td>
+                                                <td>
+                                                    {{veri.division}}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                   <span id="final_tentative_remarks"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <span class="text-danger" id="final_verifying_agency_err"></span>
+                                </div>
+                            </div>
+                            <div id="final_verifier_team" style="display:none">
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Date for final Assessment:</label>
+                                        <input type="date" name="final_assessment_date" v-model="form.final_assessment_date" id="final_assessment_date" class="form-control">
+                                        <input type="text" name="final_assessment_date_show" id="final_assessment_date_show" style="display:none" class="form-control">
+                                        <span class="text-danger" id="final_assessment_date_err"></span>
+                                    </div>
+                                </div>
+                                <h5><u>Final Team Verification</u></h5>
+                                <div class="row form-group">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="final_showsearch">
+                                        <button type="button" @click="getEmpDetails('final_verifier_team')" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Add Staff</button>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                                        <table id="nomination-list-table" class="table table-sm table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>CID/Passport</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody v-for='(user, index) in searchProviderList' :key="index">
+                                                <tr v-if="user.type=='final_verifier_team'">
+                                                    <td> {{user.cid}}</td>
+                                                    <td> {{user.name}}</td>
+                                                    <td> {{user.email}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="callout callout-success">
                             <h4><u>Attachments</u></h4>
                             <div class="form-group row">
@@ -503,6 +788,10 @@ export default {
         }
     },
     methods:{
+         async getStaff(id){
+            let divisionId=$('#'+id).val();
+            this.staffList=await this.staffOrgwise(divisionId);
+        },
         async getAttachmentType(type){
             let data = await this.getRequiredDocument(type);
             if(data!=""){
@@ -637,7 +926,7 @@ export default {
         },
 
         shownexttab(nextclass){
-            if(nextclass=="reject" || nextclass=="update" || nextclass=="verify" || nextclass=="approve"){
+            if(nextclass=="reject" || nextclass=="update" || nextclass=="update_document"){
                 let action=true;
                 if(nextclass=="reject" && this.form.remarks==""){
                     $('#remarks_err').html('Please mention remarks');
@@ -791,6 +1080,15 @@ export default {
         },
     },
     async mounted(){
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.access_level=data.acess_level;
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
         axios.get('organizationApproval/loadEstbDetailsForVerification/'+this.$route.params.data.application_number+'/'+this.$route.params.type)
         .then((response) => {
             let data=response.data.data;
@@ -837,7 +1135,6 @@ export default {
                     this.Sequence=data.Sequence;
                     this.Status_Name=data.Status_Name;
                     $('#attname').html(data.Name);
-                    alert(data.Name.replaceAll(" ", "_"));
                     this.getAttachmentType(data.Name.replaceAll(" ", "_"));
                     this.form.update_type=data.Name.replaceAll(" ", "_");
                     $('#update_btn_level').html(data.Name);
@@ -851,6 +1148,152 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+
+            for(let i=0;i<parseInt(this.taskDet.status_id);i++){
+                $('#verificationattachment'+i).show();
+                if(i==1){
+                    $('#attachment_name'+i).html('Notify for Tentative Date of Feasibility Study');
+                    $('#attname').html('Feasibility Study Report');
+                    if(status_id==3 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
+                        this.getAttachmentType('Update_Feasibility_Study_Report');
+                    }
+                    if(status_id==7 && this.access_level=="Dzongkhag"){
+                        this.getAttachmentType('Update_Final_Assessment');
+                    }
+                }
+                if(i==3){
+                    $('#attachment_name'+i).html('Sector Clearances');
+                }
+                if(i==4){
+                    $('#attachment_name'+i).html('Notifying for approval in Principle');
+                }
+                if(i==5){
+                    $('#attachment_name'+i).html('Requesting for Final Assessment');
+                }
+                if(i==6){
+                    $('#attachment_name'+i).html('Notifying for Tentative Date of Final Assessment');
+                }
+            }
+
+            if(status_id==2){ //initially submitted
+                $('#setverifyingagency').show();
+                $('#getverifyingagency').hide();
+            }else{
+                $('#setverifyingagency').hide();
+                $('#getverifyingagency').show();
+                if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                    $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                    $('#feasibilityStudy_date_show').prop('disabled',true);
+                    $('#feasibilityStudy_date_show').show();
+                    $('#feasibilityStudy_date').hide();
+                }
+                if(status_id==3 && this.access_level=="Ministry"){ //enable the button to update team verification
+                    this.showsearch=true;
+                    $('#verifier_team').show();
+                }
+                if(status_id==8 && this.access_level=="Ministry"){ //enable the button to update team verification
+                    this.final_showsearch=true;
+                    $('#final_verifier_team').show();
+                }
+                if(status_id>3 ){
+                    $('#verifier_team').show();
+                }
+                if(status_id>8 ){
+                    $('#final_verifier_team').show();
+                }
+            }
+            if(status_id==7){ //show final verifying agencies
+                $('#finalverificationdetials').show();
+                $('#getfinalverifyingagency').hide();
+            }
+
+            $('#updateBtn').show();
+            //hide update button for deo/teo
+            if((status_id==4 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
+                $('#attacmentsection').hide();
+                $('#remarksSec').hide();
+            }
+            if((status_id==3 || status_id==4 || status_id==5 ||  status_id==7 || status_id==8 || status_id==9) && this.access_level=="Dzongkhag"){
+                $('#updateBtn').hide();
+                $('#rejectbtn').hide();
+                if(status_id==3 && !this.feasibilityReport){//show update button at deo level to update feasibility study report
+                    $('#update_document_btn').show();
+                }
+                if(status_id==3 && this.feasibilityReport){
+                    $('#attacmentsection').hide();
+                    $('#remarksSec').hide();
+                }
+                if(status_id==7 && !this.final_feasibilityReport){//show update button at deo level to update final feasibility study report
+                    $('#update_document_btn').show();
+                }
+                if(status_id==7 && this.final_feasibilityReport){
+                    $('#attacmentsection').hide();
+                    $('#remarksSec').hide();
+                }
+            }
+            if(!this.taskDet.w_config_status.toLowerCase().includes('submitted')){
+                $('#staff_type').empty();
+                let option='<option value="">--Select--</option>';
+                this.form.verifying_agency_verified_list=[];
+                this.form.updated_final_verifying_agency_list=[];
+                if(data.app_verification!=undefined){
+                    let issetfinal=false;
+                    for(let i=0;i<data.app_verification.length;i++){
+                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                            issetfinal=true;
+                        }
+                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                            $('#tentative_remarks').val(data.app_verification[i].remarks);
+                            $('#tentative_date').val(data.app_verification[i].tentativeDate);
+                            this.form.tentative_date=data.app_verification[i].tentativeDate;
+                            $('#tentative_date').hide();
+                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                $('#tentative_date_show').prop('disabled',true);
+                                $('#tentative_date_show').show();
+                            }
+                            if(data.feasibility_study_date!=null && data.feasibility_study_date!=""){
+                                $('#feasibilityStudy_date_show').val(this.reverseDate(data.feasibility_study_date));
+                                $('#feasibilityStudy_date_show').prop('disabled',true);
+                                $('#feasibilityStudy_date_show').show();
+                                $('#feasibilityStudy_date').hide();
+                            }
+                        }
+                        if(data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                            $('#finalverificationdetials').show();
+                            $('#setfinalverifyingagency').hide();
+                            $('#final_tentative_remarks').val(data.app_verification[i].remarks);
+                            $('#final_tentative_date').val(data.app_verification[i].tentativeDate);
+                            $('#final_tentative_date').hide();
+                            if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
+                                $('#final_tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
+                                $('#final_tentative_date_show').prop('disabled',true);
+                                $('#final_tentative_date_show').show();
+                            }
+
+                            if(data.final_assessment_date!=null && data.final_assessment_date!=""){
+                                $('#final_assessment_date_show').val(this.reverseDate(data.final_assessment_date));
+                                $('#final_assessment_date_show').prop('disabled',true);
+                                $('#final_assessment_date_show').show();
+                                $('#final_assessment_date').hide();
+                            }
+                            this.form.final_tentative_date=data.app_verification[i].tentativeDate;
+                        }
+                    }
+                    for(let i=0;i<data.app_verification.length;i++){
+                        if((!issetfinal || status_id>7) && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
+                            this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                        }
+                        if((issetfinal || status_id>8)&& data.app_verification[i].type!=null && data.app_verification[i].type=="Final_Assessment"){
+                            this.form.updated_final_verifying_agency_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
+                            option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
+                        }
+                    }
+                }
+                $('#staff_type').append(option);
+            }
+
             let meals="";
             if(data.org_details.isFeedingSchool==1){
                 this.isFeeding=1;
