@@ -104,6 +104,34 @@ export default {
                     console.log("Error:"+error)
                 })
             }
+            // if(type=="save"){
+            //     Swal.fire({
+            //         title: 'Are you sure you wish to submit this form ?',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Yes!',
+            //         }).then((result) =>{
+            //         if (result.isConfirmed){
+            //             this.form.post('/organization/saveSubjectMapping',this.form)
+            //             .then((response) =>{
+            //                 Toast.fire({
+            //                 icon: 'success',
+            //                 title: 'Details added successfully'
+            //             })
+            //             this.$router.push('/list_subject_offered');
+            //             })
+            //             .catch((error) => {
+            //                 Toast.fire({
+            //                     icon: 'error',
+            //                     title: 'Unexpected error occured. Try again.'
+            //                 });
+            //                 console.log("Error:"+error);
+            //             })
+            //         }
+            //     })
+            // }
 		},
         async changefunction(id){
             if($('#'+id).val()!=""){

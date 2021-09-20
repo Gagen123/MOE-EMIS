@@ -142,6 +142,7 @@ class MessManagementController extends Controller
     // Stock Received
 
     public function saveStockReceived(Request $request){
+      //  dd($request);
         $rules = [
             'dateOfreceived'          =>  'required',
             'quarter'                 =>  'required',
@@ -160,10 +161,11 @@ class MessManagementController extends Controller
             'remarks'                       =>  $request['remarks'],
             'id'                            =>  $request['id'],
             'itemList'                      =>  $request->itemList,
+            'items_received'                =>  $request->items_received,
             'user_id'                       =>  $this->userId()
 
         ];
-        dd($stockreceived);
+       // dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;
@@ -247,7 +249,7 @@ class MessManagementController extends Controller
     }
 
     public function getAvailableStocks($id="",$type=""){
-        // dd('from Ui');
+       //  dd('from Ui');
         $list = $this->apiService->listData('emis/messManagement/getAvailableStocks/'.$id.'/'.$type);
         return $list;
     }
@@ -384,21 +386,22 @@ class MessManagementController extends Controller
         $this->validate($request, $rules, $customMessages);
         $receive =[
             'organizationId'         =>  $this->getWrkingAgencyId(),
-            'dateOfreceived'         =>  $request['datdateOfreceivedeOfprocure'],
+            'dateOfreceived'         =>  $request['dateOfreceived'],
             'id'                     =>  $request['id'],
             'remarks'                =>  $request['remarks'],
             'quarter'                =>  $request['quarter'],
-            'item_id'                =>  $request['item_id'],        
-            'unit_id'                =>  $request['unit_id'],
-            'quantity'               =>  $request['quantity'],
-            'damagequantity'         =>  $request['damagequantity'],
-            'remarks'                =>  $request['remarks'],
+            // 'item_id'                =>  $request['item_id'],        
+            // 'unit_id'                =>  $request['unit_id'],
+            // 'quantity'               =>  $request['quantity'],
+            // 'damagequantity'         =>  $request['damagequantity'],
+            // 'remarks'                =>  $request['remarks'],
+            'items_received'         =>  $request->items_received,
             'user_id'                =>  $this->userId()
         ];
-      //  dd($receive);
+       // dd($receive);
       // dd($request->local_item);
         try{
-            $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcureEdit', $receive);
+            $response_data= $this->apiService->createData('emis/messManagement/saveStockReceivedEdit', $receive);
          //   dd($response_data);
             return $response_data;
         }
