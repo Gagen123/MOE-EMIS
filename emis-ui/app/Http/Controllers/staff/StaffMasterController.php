@@ -16,15 +16,15 @@ class StaffMasterController extends Controller{
     }
 
     public function saveStaffMasters(Request $request){
-        // $rules = [
-        //     'name'                  =>  'required',
-        //     'status'                =>  'required',
-        // ];
-        // $customMessages = [
-        //     'name.required'                 => 'This field is required',
-        //     'status.required'               => 'This field is required',
-        // ];
-        // $this->validate($request, $rules, $customMessages);
+        $rules = [
+            'name'                  =>  'required',
+            'status'                =>  'required',
+        ];
+        $customMessages = [
+            'name.required'                 => 'This field is required',
+            'status.required'               => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
         $request_data =[
             'id'                        =>  $request->id,
             'group_id'                  =>  $request->group_id,
