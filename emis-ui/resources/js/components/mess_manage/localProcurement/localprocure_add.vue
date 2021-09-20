@@ -160,7 +160,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
             axios.get(uri)
             .then(response => {
                 let data = response;
