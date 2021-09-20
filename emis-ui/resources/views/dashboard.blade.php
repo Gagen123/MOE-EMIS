@@ -36,6 +36,18 @@
     //load on page refresh and page load
     getNotification();
     getsideScreens();
+    let uri = 'common/getEnvValues/VUE_APP_ENV_TYPE';
+    try{
+        let env = "";
+        axios.get(uri).then(response => {
+            env =   response.data;
+            if(env=="Production"){
+                $('.developemntEnvlink').hide();
+            }
+        });
+    }catch(e){
+        console.log('error getEnvValues '+e);
+    }
     function logout(){
       Swal.fire({
         title: 'Are you sure you wish to signout?',

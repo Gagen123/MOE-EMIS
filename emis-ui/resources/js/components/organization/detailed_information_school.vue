@@ -18,7 +18,7 @@
                                         </div>
                                         <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 invoice-col">
                                             <div class="form-group row">
-                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" id='Counselling'>
                                                     <label>Has Counselling room:</label><br>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="1" tabindex=""/> Yes</label>
                                                     <label><input  type="radio" v-model="form.hasCounselingRoom" value="0" tabindex=""/> No</label>
@@ -63,32 +63,43 @@
                                          </div>
                                     </div>
                                     <hr>
-                                    <div class="row">
-                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 invoice-col">
+                                     <div class="form-group row">
+                                        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-9 invoice-col">
                                             <label class="mb-0"><i><u>Ownership Details</u></i></label>
                                         </div>
-                                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                            <label><input  type="radio" v-model="form.category" value="0" tabindex="" @click="showtextbox('Yes')"/> Public</label>
-                                            <label><input  type="radio" v-model="form.category" value="1" tabindex="" @click="showtextbox('No')"/> Private</label>
+                                        <div class="form-group row">
+                                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio1'>
+                                            <label><input  type="radio" v-model="form.category" value="0" tabindex="" id="radio1" @click="showtextbox('Yes')"/> Public</label>
                                         </div>
+                                         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio2'>
+                                            <label><input  type="radio" v-model="form.category" value="1" tabindex="" id="radio2" @click="showtextbox('No')"/> Private</label>
+                                         </div>
+                                          <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio3'>
+                                            <label><input  type="radio" v-model="form.category" value="2" tabindex="" id="radio3" @click="showtextbox('Yes')"/> NGO</label>
+                                          </div>
+                                           <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio4'>
+                                            <label><input  type="radio" v-model="form.category" value="3" tabindex="" id="radio4" @click="showtextbox('Yes')"/> Corporate</label>
+                                        </div>
+                                    </div>
+
                                         <div class="row form-group">
                                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display:none" id="roadtypeno">
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 invoice-col">
                                                     <label class="mb-0"><i><u>Proprietor Details</u></i></label>
                                                 </div>
-                                                <label class="mb-1"> Name:<i class="text-danger">*</i></label>
+                                                <label class="mb-2"> Name:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorName" class="form-control editable_fields" id="proprietorName" />
                                                 <has-error :form="form" field="proprietorName"></has-error>
 
-                                                <label class="mb-1"> CID:<i class="text-danger">*</i></label>
+                                                <label class="mb-2"> CID:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorCid" class="form-control editable_fields" id="proprietorCid" />
                                                 <has-error :form="form" field="proprietorCid"></has-error>
 
-                                                <label class="mb-1"> Phone:<i class="text-danger">*</i></label>
+                                                <label class="mb-2"> Phone:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorPhone" class="form-control editable_fields" id="proprietorPhone" />
                                                 <has-error :form="form" field="proprietorPhone"></has-error>
 
-                                                <label class="mb-1"> Email:<i class="text-danger">*</i></label>
+                                                <label class="mb-2"> Email:<i class="text-danger">*</i></label>
                                                 <input type="text" v-model="form.proprietorEmail" class="form-control editable_fields" id="proprietorEmail" />
                                                 <has-error :form="form" field="proprietorEmail"></has-error>
                                             </div>
@@ -247,6 +258,12 @@
                          $('#AspNet').hide();
                          $('#Resource').hide();
                          $('#Has_CE').hide();
+                         $('#Counselling').hide();
+                        
+                    }
+                    if(response_data.category=="public_school" ||response_data.category=="private_school" ||response_data.category=="public_ecr" ){
+                         $('#radio3').hide();
+                         $('#radio4').hide();
                     }
                     if(response_data.category=="public_school"){
                         this.category="Public School";
@@ -273,30 +290,31 @@
                     this.form.hasCE=response_data.hasCE;
                     this.form.mofCode=response_data.mofCode;
                     this.form.zestAgencyCode=response_data.zestAgencyCode;
-                    if(response_data.locationDetials!=null && response_data.locationDetials!=""){
-                        this.form.altitude=response_data.locationDetials.altitude;
-                        this.form.climate_type=response_data.locationDetials.climate_type;
-                        if(response_data.locationDetials.disasterArea!=null && response_data.locationDetials.disasterArea!=""){
-                            if(response_data.locationDetials.disasterArea.includes(',')){
-                                response_data.locationDetials.disasterArea.split(',').forEach(itm => {
+                    if(response_data.loc_details!=null && response_data.loc_details!=""){
+                        this.form.altitude=response_data.loc_details.altitude;
+                        this.form.climate_type=response_data.loc_details.climate_type;
+                        if(response_data.loc_details.disasterArea!=null && response_data.loc_details.disasterArea!=""){
+                            if(response_data.loc_details.disasterArea.includes(',')){
+                                response_data.loc_details.disasterArea.split(',').forEach(itm => {
                                     $('#dester'+itm).prop('checked',true);
                                 });
                             }else{
-                                $('#dester'+response_data.locationDetials.disasterArea).prop('checked',true);
+                                $('#dester'+response_data.loc_details.disasterArea).prop('checked',true);
                             }
                         }
-                        this.form.disasterArea=response_data.locationDetials.disasterArea;
-                        this.form.distance_from_dzo=response_data.locationDetials.distance_from_dzo;
-                        this.form.entranceGate=response_data.locationDetials.entranceGate;
-                        this.form.fencingtype=response_data.locationDetials.fencingtypeId;
-                        this.form.map_path=response_data.locationDetials.googleMapPath;
-                        if(response_data.locationDetials.googleMapPath!=null && response_data.locationDetials.googleMapPath!=""){
-                            this.populategooglemap(response_data.locationDetials.googleMapPath);
+                        this.form.disasterArea=response_data.loc_details.disasterArea;
+                        this.form.distance_from_dzo=response_data.loc_details.distance_from_dzo;
+                        this.form.entranceGate=response_data.loc_details.entranceGate;
+                        this.form.fencingtype=response_data.loc_details.fencingtypeId;
+                        this.form.map_path=response_data.loc_details.googleMapPath;
+                        if(response_data.loc_details.googleMapPath!=null && response_data.loc_details.googleMapPath!=""){
+                            this.populategooglemap(response_data.loc_details.googleMapPath);
                         }
-                        this.form.latitude=response_data.locationDetials.latitude;
-                        this.form.longitude=response_data.locationDetials.longitude;
-                        this.form.thramNo=response_data.locationDetials.thramNo;
-                        this.form.gate_type=response_data.locationDetials.gate_type;
+                        this.form.latitude=response_data.loc_details.latitude;
+                        this.form.longitude=response_data.loc_details.longitude;
+                        this.form.thramNo=response_data.loc_details.thramNo;
+                        this.form.gate_type=response_data.loc_details.gate_type;
+                        // alert(this.form.gate_type);
                     }
                     let prop=response_data.contactDetails;
                     let contactDetails=[];
@@ -441,7 +459,8 @@
                 }else{
                     $('#gate_type_section').show();
                 }
-            }
+            },
+
 
         },
         mounted(){

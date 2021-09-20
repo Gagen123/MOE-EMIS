@@ -14,6 +14,7 @@
                             <option value="Private">Private</option>
                             <option value="ECCD">ECCD</option>
                             <option value="Bifurcation">Bifurcated</option>
+                            <option value="Merger">Merger</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -201,7 +202,7 @@ export default {
                 // proprietorList:[],
                 // class_section:[],
                 // sectionList:[],
-                yearestb:'',category:'1',zestcode:'',remarks:'',
+                yearestb:'',category:'1',zestcode:'',remarks:'',establishment_type:'',
                 Applicationdetails:[]
             }),
         }
@@ -299,6 +300,9 @@ export default {
                 if(data.establishment_type!="Private ECCD" && data.establishment_type!="Public ECCD"){
                     this.orgLevel=data.org_details.levelId;
                 }
+                // if(data.establishment_type == "Bifurcation"){
+                //     this.proposedName=data.org_details.proposedName1;
+                // }
                 this.proposedName=data.org_details.proposedName;
                 this.applicant_rog_details=data.org_details;
                 this.org_class_details=data.org_class_stream;

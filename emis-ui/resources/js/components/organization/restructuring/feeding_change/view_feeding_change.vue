@@ -25,9 +25,9 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{category}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Is Feeding School(Curent):<span class="text-danger">*</span></label>

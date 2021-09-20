@@ -49,31 +49,26 @@ class StockInventoryController extends Controller
     //    }
 
     public function getInventoryList($orgId){
-     
-             $response_data = DB::select(" SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.stock_received_quantity, b.stock_issed_quantity, b.Damage_Qty, d.Available_Qty, d.procured_type
-             FROM
-             (SELECT  c.item_id, c.organizationId, c.unit_id, SUM(c.stock_received_quantity) AS stock_received_quantity
-             
-             FROM
-             (SELECT a.item_id, f.organizationId, a.unit_id, a.receivedquantity AS stock_received_quantity 
-              FROM stock_received_items a
-              LEFT JOIN stock_receiveds f ON a.stockreceivedId = f.id
-             ) c
-             GROUP BY c.item_id, c.organizationId, c.unit_id) aa
-             LEFT JOIN
-             (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
-           FROM stock_issueds  WHERE category='Central' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
-           LEFT JOIN 
-           (SELECT organizationId, item_id, procured_type, SUM(available_qty) AS Available_Qty FROM mess_transaction_table
-           WHERE procured_type = 'Central'
-           GROUP BY organizationId, item_id) d ON aa.item_id = d.item_id
-           WHERE   aa.organizationId='".$orgId."'");
-          return $this->successResponse($response_data);
-     //    }catch(Exception $e){
-     //     dd($e);
-     //    }
- 
+        $response_data = DB::select(" SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.stock_received_quantity, b.stock_issed_quantity, b.Damage_Qty, d.Available_Qty, d.procured_type
+        FROM
+        (SELECT  c.item_id, c.organizationId, c.unit_id, SUM(c.stock_received_quantity) AS stock_received_quantity
+        FROM
+        (SELECT a.item_id, f.organizationId, a.unit_id, a.receivedquantity AS stock_received_quantity 
+        FROM stock_received_items a
+        LEFT JOIN stock_receiveds f ON a.stockreceivedId = f.id
+        ) c
+        GROUP BY c.item_id, c.organizationId, c.unit_id) aa
+        LEFT JOIN
+        (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
+        FROM stock_issueds  WHERE category='Central' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+        LEFT JOIN 
+        (SELECT organizationId, item_id, procured_type, SUM(available_qty) AS Available_Qty FROM mess_transaction_table
+        WHERE procured_type = 'Central'
+        GROUP BY organizationId, item_id) d ON aa.item_id = d.item_id
+        WHERE   aa.organizationId='".$orgId."'");
+        return $this->successResponse($response_data);
     }
+    
     public function getInventoryListLocal($orgId){
      
         $response_data = DB::select(" SELECT aa.item_id, aa.organizationId, aa.unit_id, aa.Lcoal_quantity, b.stock_issed_quantity, b.Damage_Qty, d.Available_Qty, d.procured_type
@@ -84,18 +79,15 @@ class StockInventoryController extends Controller
         GROUP BY item_id, organizationId, unit_id) aa
         LEFT JOIN
         (SELECT item_id,organizationId, unit_id, SUM(quantity) AS stock_issed_quantity, SUM(damagequantity) AS Damage_Qty
-      FROM stock_issueds WHERE category='Local' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
-      LEFT JOIN 
-      (SELECT organizationId, item_id,procured_type, SUM(available_qty) AS Available_Qty FROM `mess_transaction_table` 
-      WHERE`procured_type` = 'Local'
-      GROUP BY organizationId, item_id) d ON aa.item_id = d.item_id
-      WHERE   aa.organizationId='".$orgId."'");
-     return $this->successResponse($response_data);
-//    }catch(Exception $e){
-//     dd($e);
-//    }
+        FROM stock_issueds WHERE category='Local' GROUP BY organizationId, item_id, unit_id) b ON aa.item_id=b.item_id
+        LEFT JOIN 
+        (SELECT organizationId, item_id,procured_type, SUM(available_qty) AS Available_Qty FROM `mess_transaction_table` 
+        WHERE`procured_type` = 'Local'
+        GROUP BY organizationId, item_id) d ON aa.item_id = d.item_id
+        WHERE   aa.organizationId='".$orgId."'");
+        return $this->successResponse($response_data);
 
-}
+    }
 
  
 

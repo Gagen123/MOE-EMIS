@@ -776,6 +776,9 @@ export default {
                 console.log(errors)
             });
         },
+        applyselect2(){
+
+        },
         loadestablishmentapplicationdetails(appId,type){
             axios.get('organizationApproval/loadEstbDetailsForVerification/'+appId+'/'+type)
             .then((response) => {
@@ -785,6 +788,14 @@ export default {
                 this.form.id=data.id;
                 this.search.id=data.id;
                 this.applicationdetails=data;
+
+                this.applicationOrgdetails=data.org_details;
+                this.taskDet=response.data.app_stage;
+                this.class_section=data.org_class_stream;
+                this.getteamVerificationList();
+
+                let status_id=parseInt(this.taskDet.status_id)+1;
+
                 data.attachments.forEach(element => {
                     if(element.upload_type=="update_document" || element.upload_type=="Update_Feasibility_Study_Report"){
                         this.feasibilityReport=true;
@@ -799,12 +810,6 @@ export default {
                         $('#attacmentsection').hide();
                     }
                 });
-                this.applicationOrgdetails=data.org_details;
-                this.taskDet=response.data.app_stage;
-                this.class_section=data.org_class_stream;
-                this.getteamVerificationList();
-
-                let status_id=parseInt(this.taskDet.status_id)+1;
 
                 axios.get('organizationApproval/getScreenId/'+this.taskDet.service_name+'__'+status_id)
                 .then(response => {
@@ -870,6 +875,12 @@ export default {
                     }
                     if(status_id==7 && this.access_level=="Ministry"){ //enable the button to update team verification
                         this.final_showsearch=true;
+                        $('#final_verifier_team').show();
+                    }
+                    if(status_id>3 ){
+                        $('#verifier_team').show();
+                    }
+                    if(status_id>8){
                         $('#final_verifier_team').show();
                     }
                 }
@@ -952,8 +963,7 @@ export default {
                             }
                         }
                         for(let i=0;i<data.app_verification.length;i++){
-                            if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
-                                alert('dd');
+                            if((!issetfinal || status_id>6) && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
                                 this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
                                 option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
                             }
@@ -1031,6 +1041,7 @@ export default {
             let divisionId=$('#'+id).val();
             this.staffList=await this.staffOrgwise(divisionId);
         },
+
         getEmpDetailsForsearch(){
             if($('#emp_deails_forsearch').val()==""){
                 $('#emp_deails_forsearch_err').html('Please provide this field');
@@ -1214,13 +1225,7 @@ export default {
                 }
             }
             else{
-                $('#tabhead >li >a').removeClass('active');
-                $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
-                $('.'+nextclass+' >a').addClass('active');
-                $('.'+nextclass+' >a >span').removeClass('bg-gradient-secondary text-white');
-                $('.'+nextclass+' >a').removeClass('disabled');
-                $('.tab-content-details').hide();
-                $('#'+nextclass).show().removeClass('fade');
+                this.change_tab(nextclass);
             }
         },
 

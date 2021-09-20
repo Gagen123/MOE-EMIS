@@ -357,8 +357,20 @@ class OrganizationApprovalController extends Controller{
                     }
                 }
             }
+            if($app_details->levelId!=""){
+                $lev=Level::where('id',$app_details->levelId)->first();
+                if($lev!=null && $lev!=""){
+                    $response_data->org_level=$lev->name;
+                }
+            }
             if($app_details->locationId!=""){
                 $loc=Location::where('id',$app_details->locationId)->first();
+                if($loc!=null && $loc!=""){
+                    $response_data->location_type=$loc->name;
+                }
+            }
+            if($response_data->establishment_type=="Private School" && $app_details->proposedLocation!=""){
+                $loc=Location::where('id',$app_details->proposedLocation)->first();
                 if($loc!=null && $loc!=""){
                     $response_data->location_type=$loc->name;
                 }
@@ -376,11 +388,12 @@ class OrganizationApprovalController extends Controller{
 
             $response_data->org_class_stream=
                 DB::table('application_class_stream')
-                    ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
-                    ->select('application_class_stream.*','classes.class')
-                    ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
-                    ->orderBy('classes.displayOrder')
-                    ->get();
+                ->join('classes', 'classes.id', '=', 'application_class_stream.classId')
+                ->leftjoin('streams', 'streams.id', '=', 'application_class_stream.streamId')
+                ->select('application_class_stream.*','classes.class','streams.stream')
+                ->where('application_class_stream.ApplicationDetailsId',$response_data->id)
+                ->orderBy('classes.displayOrder')
+                ->get();
 
 
         }else{ //loading for location change data

@@ -778,7 +778,7 @@ export default {
 
     },
     created(){
-        // this.loadScreenDetails();
+        this.loadScreenDetails();
         this.getLevel();
         this.getLocation();
         this.getLevel1();

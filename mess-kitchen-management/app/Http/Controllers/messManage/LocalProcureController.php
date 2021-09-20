@@ -98,8 +98,6 @@ class LocalProcureController extends Controller
        //  dd($locId);
         $response_data=LocalProcure::where('id', $locId)->first();
         return $this->successResponse($response_data);
-    
-       
     }
     public function saveLocalProcureEdit(Request $request){
        // dd($request);

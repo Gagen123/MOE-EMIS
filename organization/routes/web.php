@@ -413,7 +413,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             //route for student portal
             $router->get('/loadOrganizationDetailsbyOrgId/{id}', ['uses' => 'establishment\EstablishmentController@loadOrganizationDetailsbyOrgId']);
 
-            $router->get('/loadEstbDetailsForVerification/{appNo}', ['uses' => 'establishment\EstablishmentController@loadEstbDetailsForVerification']);
             $router->get('/loadProprietorDetails', ['uses' => 'establishment\EstablishmentController@loadProprietorDetails']);
             $router->get('/loadApprovedOrgs/{type}', ['uses' => 'establishment\EstablishmentController@loadApprovedOrgs']);
             $router->get('/loadOrgApplications/{user_id}/{type}', ['uses' => 'establishment\EstablishmentController@loadOrgApplications']);

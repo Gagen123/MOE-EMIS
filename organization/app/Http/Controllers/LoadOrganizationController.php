@@ -421,9 +421,14 @@ class LoadOrganizationController extends Controller{
             if($response_data->category=="private_school"){
                 $response_data->proprioter=OrganizationProprietorDetails::where('organizationId',$response_data->id)->first();
             }
-            $loc=Locations::where('id',$response_data->locationId)->first();
+            $loc=Location::where('id',$response_data->locationId)->first();
             if($loc!=null && $loc!=""){
                 $response_data->name=$loc->name;
+            }
+            //for transactional location details
+            $loc_det=Locations::where('organizationId',$response_data->id)->first();
+            if($loc_det!=null && $loc_det!=""){
+                $response_data->loc_details=$loc_det;
             }
 
             $contact = ContactDetails::where('organizationId',$response_data->id)->first();
@@ -565,7 +570,7 @@ class LoadOrganizationController extends Controller{
         }
 
     }
- 
+
     public function getOrgProfile($id=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){

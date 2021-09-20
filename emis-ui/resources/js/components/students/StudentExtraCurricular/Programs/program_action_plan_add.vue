@@ -10,31 +10,28 @@
                     <has-error :form="student_form" field="program"></has-error>
                 </div>
             </div>
-            <label>Plan for the Period:</label>
-            <div class="row form-group">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>From:<span class="text-danger">*</span></label>
-                    <input class="form-control" v-model="student_form.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_err('from_date')" type="date">
-                    <has-error :form="student_form" field="from_date"></has-error>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>To:<span class="text-danger">*</span></label>
-                    <input class="form-control" v-model="student_form.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_err('to_date')" type="date">
-                    <has-error :form="student_form" field="to_date"></has-error>
-                </div>
-            </div>
             <div class="card">
                 <div class="form-group row">
                     <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>
+                                    <th>From</th>
+                                    <th>To</th>
                                     <th>Activity</th>
                                     <th>Description</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr id="record1" v-for='(plan, index) in student_form.action_plan' :key="index">
+                                    <td>
+                                        <input class="form-control" v-model="plan.from_date" :class="{ 'is-invalid': student_form.errors.has('from_date') }" id="from_date" @change="remove_err('from_date')" type="date">
+                                        <has-error :student_form="form" field="title"></has-error>
+                                    </td>
+                                    <td>
+                                        <input class="form-control" v-model="plan.to_date" :class="{ 'is-invalid': student_form.errors.has('to_date') }" id="to_date" @change="remove_err('to_date')" type="date">
+                                        <has-error :student_form="form" field="title"></has-error>
+                                    </td>
                                     <td>
                                         <input type="text" name="title" id="title" class="form-control" v-model="plan.title" :class="{ 'is-invalid': student_form.errors.has('title') }" @change="remove_err('title')"/>
                                         <has-error :student_form="form" field="title"></has-error>
@@ -111,7 +108,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.programList =  data.data;
+                this.programList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -138,7 +135,7 @@ export default {
          */
         addMore: function(){
             this.count++;
-            this.student_form.action_plan.push({title:'', description:''})
+            this.student_form.action_plan.push({from_date:'', to_date:'', title:'', description:''})
         },
         /**
          * method to remove fields

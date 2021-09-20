@@ -48,18 +48,7 @@ export default {
         }
     },
     methods:{
-        loadDataList(uri='students/loadHealthSummary'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dataList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
+        
         /**
          * to load the array definitions of class, stream and section
          */

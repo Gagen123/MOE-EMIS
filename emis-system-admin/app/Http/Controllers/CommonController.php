@@ -35,7 +35,7 @@ class CommonController extends Controller{
             'user_id'                   =>  $request->user_id,
             'type'                      =>  $request->type,
         ];
-       
+
         $access_level=$data['access_level'];
         $dzo_id=$data['dzongkhag'];
         $org_id=$data['org'];
@@ -57,7 +57,7 @@ class CommonController extends Controller{
         }
         else{
             $result_data.=' t.claimed_by IS NULL AND ';
-            
+
             if(strtolower($access_level)=="dzongkhag"){
                 $result_data.=' t.user_dzo_id='.$dzo_id.' AND ';
             }
@@ -80,7 +80,8 @@ class CommonController extends Controller{
                 }
                 //show to deo for notification, once updates at eccd
                 if(strtolower($access_level)=="dzongkhag"){
-                    $result_data.='OR ( t.service_name = "Establishment of New ECCD Centre" AND t.status_id NOT IN(1,5) AND t.claimed_by <> "'.$user_id.'") ';
+                    $result_data.='OR (( t.service_name = "Establishment of New ECCD Centre" OR  t.service_name = "New Private School" OR  t.service_name = "New Public School")
+                    AND t.status_id NOT IN(1,5) AND IFNULL(t.claimed_by IS NULL, t.claimed_by <> "'.$user_id.'") ) ';
                 }
             }
             //pulling leave application

@@ -54,6 +54,15 @@ export default {
     },
     mounted(){
         this.loadDataList();
+         this.dt =  $("#disciplinary-list-table").DataTable();
+    },
+    watch:{
+        dataList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#disciplinary-list-table").DataTable();
+            });
+        },
     },
 }
 </script>

@@ -25,9 +25,9 @@
                                     </select>
                                     <has-error :form="form" field="organizationId"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                     <label>Organization Type{{category}}</label>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">
@@ -280,7 +280,7 @@ export default {
                                     });
                                 }
                                 if(response!="" && response!="No Screen"){
-                                    let message="Application for Change to Boarding details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                    let message="Application for Change in Fee details has been edited and submitted for approval. <br><b>Thank You !</b>"
                                     this.$router.push({name:'boarding_acknowledgement',params: {data:message}});
                                     Toast.fire({
                                         icon: 'success',

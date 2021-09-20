@@ -4,13 +4,15 @@
             <li class="form-inline "><h5 class="pt-1"> Facilities</h5></li>
         </ol>
         <div class="container-fluid">
-            <ul class="nav nav-pills mb-2" role="tablist">
+           <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                         <span :class="item.screen_icon"></span>
                         {{ item.screen_name}}
                     </router-link>
                 </li>
+            </ul>
+            <ul class="nav nav-pills mb-3 developemntEnv" id="mainmenu" role="tablist">
                 <template v-if="roleName.includes('ECCD')">
                     <li class="nav-item active pr-1">
                         <router-link id="eccd" to="/eccdfacilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
@@ -58,14 +60,12 @@
                         </router-link>
                     </li>
                 </template>
-
-
-                <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1">
                     <router-link id="disasters_information" to="/disasters_information" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
                         Disaster Information
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link id="trainingprogram" to="/wash" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class=""></span>
@@ -111,10 +111,14 @@ export default {
             });
         },
     },
-    mounted(){
+    async mounted(){
         let routeparam=this.$route.query.data;
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+            $('.developemntEnv').hide();
+        }
     },
     created(){
         axios.get('common/getSessionDetail')

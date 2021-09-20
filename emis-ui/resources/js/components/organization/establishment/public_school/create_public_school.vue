@@ -32,9 +32,10 @@
                         <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                         <div class="form-group row bg-gray-light mt-xl-n3">
                             <div class="col-lg-12 col-md-12 col-sm-12">
-                                <span id="screenName"></span>
+                                <span id="publicscreenName"></span>
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposal Initiated By:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
@@ -61,11 +62,11 @@
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Location Type:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
-                                <select v-model="form.locationType" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('locationType') }" class="form-control select2" name="locationType" id="locationType">
+                                <select v-model="form.proposedLocation" :class="{ 'is-invalid select2 select2-hidden-accessible':form.errors.has('proposedLocation') }" class="form-control select2" name="proposedLocation" id="proposedLocation">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in locationList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
-                                <has-error :form="form" field="locationType"></has-error>
+                                <has-error :form="form" field="proposedLocation"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -245,24 +246,29 @@ export default {
             draft_data:[],
             proposed_by_list:[],
             multiAgeIdList:[],
+
+            screenId:'',
+            SysRoleId:'',
+            Sequence:'',
+            Status_Name:'',
+
             form: new form({
                 app_id: '',
                 ap_estb_id: '',
                 initiatedBy:'',
                 proposedName:'',
                 level:'',
-                category:'',
                 dzongkhag:this.dzongkhag,
                 gewog:'',
                 chiwog:'0',
-                locationType:'',
+                proposedLocation:'',
                 geopoliticallyLocated:'0',
                 senSchool:'0',
                 isfeedingschool:'0',
                 feeding:[],
-                establishment_type:'',
+                category:'public',
+                establishment_type:'Public School',
                 status:'pending',
-                action_type:'add',
             }),
 
             file_form: new form({
@@ -385,8 +391,8 @@ export default {
             if(id=="chiwog"){
                 this.form.chiwog=$('#chiwog').val();
             }
-            if(id=="locationType"){
-                this.form.locationType=$('#locationType').val();
+            if(id=="proposedLocation"){
+                this.form.proposedLocation=$('#proposedLocation').val();
             }
         },
 
@@ -445,6 +451,12 @@ export default {
                                 formData.append('service_name', this.file_form.service_name);
                                 formData.append('proposedName', this.form.proposedName);
                                 formData.append('submit_type', nextclass);
+
+                                formData.append('screenId', this.screenId);
+                                formData.append('SysRoleId', this.SysRoleId);
+                                formData.append('Sequence', this.Sequence);
+                                formData.append('Status_Name', this.Status_Name);
+
                                 axios.post('organization/saveUploadedFiles', formData, config)
                                 .then((response) => {
                                     if(response.data!=""){
@@ -455,7 +467,7 @@ export default {
                                             });
                                         }
                                         if(response!="" && response!="No Screen"){
-                                            let res=response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                            let res=response.data.application_no+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                             this.$router.push({name:'acknowledgement_public_school',params: {data:message+res }});
                                             Toast.fire({
                                                 icon: 'success',
@@ -468,7 +480,6 @@ export default {
                                     this.applyselect2();
                                     this.change_tab('file-tab');
                                     console.log("Error:"+error);
-
                                 })
                             }
                             else{
@@ -491,7 +502,7 @@ export default {
                         meals.push($(this).val());
                     });
                     this.form.feeding=meals;
-                    this.form.post('organization/saveEstablishment',this.form)
+                    this.form.post('organization/saveprivatepublicschoolEstablishment',this.form)
                     .then((response) => {
                         if(response.data!=""){
                             this.file_form.application_number=response.data.data.applicaiton_details.application_no;
@@ -500,7 +511,7 @@ export default {
                         }
                     })
                     .catch((error) => {
-                       this.applyselect2();
+                        this.applyselect2();
                         this.change_tab('organization-tab');
                         console.log("Error:"+error)
                     })
@@ -543,7 +554,7 @@ export default {
 
                 this.getvillagelist(draft.gewogId,draft.chiwogId);
                 this.form.chiwog=draft.chiwogId;
-                this.form.locationType  =draft.estb_details.locationId;
+                this.form.proposedLocation  =draft.estb_details.locationId;
                 $('#location').val(draft.estb_details.locationId).trigger('change');
                 this.form.isfeedingschool=draft.estb_details.isFeedingSchool;
                 if(draft.estb_details.isFeedingSchool==1){
@@ -566,7 +577,7 @@ export default {
         applyselect2(){
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
-            this.applyselect2field('locationType');
+            this.applyselect2field('proposedLocation');
             this.applyselect2field('level');
             this.applyselect2field('initiatedBy');
         },
@@ -617,34 +628,29 @@ export default {
                 }));
             }
         },
-        loadScreenDetails(type){
-            this.form.establishment_type=type+' School';
-            this.form.category=type;
-            axios.get('organizationApproval/getScreenId/'+'Public School__'+1)
-            .then(response => {
-                // let data = response.data[0];
-                let data = response.data.data;
-                if(data!=undefined && data!="NA"){
-                    $('#screenName').html('<b>Creating Application for '+data.screenName+'</b>');
-                    this.screenId=data.screen;
-                    this.SysRoleId=data.SysRoleId;
-                    this.Sequence=data.Sequence;
-                    this.Status_Name=data.Status_Name;
-                    this.file_form.service_name=data.screenName;
-                }else{
-                    $('#screenPermission').show();
-                    $('#mainform').hide();
-                    $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
-                }
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
-        }
     },
 
     async mounted() {
-        this.loadScreenDetails('Public');
+        axios.get('organizationApproval/getScreenId/'+'Public School__'+1)
+        .then(response => {
+            let data = response.data.data;
+            if(data!=undefined && data!="NA"){
+                $('#publicscreenName').html('<b>Application for Establishment of '+data.screenName);
+                this.screenId=data.screen;
+                this.SysRoleId=data.SysRoleId;
+                this.Sequence=data.Sequence;
+                this.Status_Name=data.Status_Name;
+                this.file_form.service_name=data.screenName;
+            }else{
+                $('#screenPermission').show();
+                $('#mainform').hide();
+                $('#message').html('You dont have priviletes to create new application for this service. Please contact with system administrator. <br> Thank you!');
+            }
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
         this.proposed_by_list =  await this.loadproposedByList();
         this.getLevel();
 

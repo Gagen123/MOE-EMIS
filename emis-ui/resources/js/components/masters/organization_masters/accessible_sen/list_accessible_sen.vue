@@ -39,7 +39,7 @@ export default {
     },
 
     methods:{
-        loadContactList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/ClimateType'){
+        loadContactList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/Accessible'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

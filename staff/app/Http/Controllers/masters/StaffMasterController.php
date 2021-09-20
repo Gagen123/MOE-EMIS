@@ -31,6 +31,7 @@ class StaffMasterController extends Controller{
             'name.required'         => 'This field is required',
             'status.required'       => 'This field is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         $master_data = [
             'name'              =>  $request->name,
