@@ -273,8 +273,9 @@ class StudentMasterController extends Controller
             $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $data;
         }else if($param == 'program_item_central' || $param == 'program_item_local'){
-            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item', $type='Model');
+            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item_central', $type='Model');
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            
             $model = new $modelName();
             if($param == 'program_item_central'){
                 $data = $model::where('status',1)->where('Central',1)->get();
