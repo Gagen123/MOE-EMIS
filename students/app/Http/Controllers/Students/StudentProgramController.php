@@ -90,7 +90,7 @@ class StudentProgramController extends Controller
             // 'cea_programme_supporter.name AS supporter_name')
             
              ->select('cea_school_programme.*', 'cea_programme.name AS program_name',
-             'cea_programme_supporter.name AS supporter_name', )
+             'cea_programme_supporter.name AS supporter_name','cea_school_programme.id' )
             ->where('cea_school_programme.OrgOrganizationId', $org_id)
             // ->where('cea_programme.CeaProgrammeTypeId', $program_type->id)
             ->get();
@@ -156,8 +156,9 @@ class StudentProgramController extends Controller
      * Get the Program Details given a program id
      */
 
-    public function getProgramDetails($param=""){
-        $id = $param;
+    public function getProgramDetails($id=""){
+      
+      //  dd( $id);
         $response_data=CeaSchoolProgramme::where('id',$id)->first();
        // dd($response_data);
         //$response_data->roles=CeaRoleStaff::where('CeaSchoolProgrammeId',$id)->get();

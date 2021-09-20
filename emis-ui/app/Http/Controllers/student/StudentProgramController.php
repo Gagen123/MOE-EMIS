@@ -125,8 +125,8 @@ class StudentProgramController extends Controller
      *
      */
 
-     public function getProgramDetails($param=""){
-        $student_records = $this->apiService->listData('emis/students/getProgramDetails/'.$param);
+     public function getProgramDetails($id=""){
+        $student_records = $this->apiService->listData('emis/students/getProgramDetails/'.$id);
         //dd($student_records);
         return $student_records;
      }
