@@ -61,13 +61,13 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
                                     <label class="mb-0">Proposal Initiated By:</label>
-                                    <span class="text-blue text-bold">{{proposed_by_list[applicationdetails.initiated_by]}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.proposed_initiated}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type!='Public ECR'">
                                     <label class="mb-0">Level:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.org_level}}</span>
                                 </div>
@@ -109,6 +109,16 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isFeeding  == 1">
                                     <label class="mb-0">Feeding Modality: </label>
+                                    <span class="text-blue text-bold"> {{feed_details}} </span>
+                                </div>
+                            </div>
+                            <div class="form-group row" v-if="applicationdetails.establishment_type=='Public ECR'">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Is Co-located with Parent School:</label>
+                                    <span class="text-blue text-bold">{{ applicationOrgdetails.isFeedingSchool  == 1 ? "Yes" :  "No" }}</span>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" v-if="isFeeding  == 1">
+                                    <label class="mb-0">Parent School: </label>
                                     <span class="text-blue text-bold"> {{feed_details}} </span>
                                 </div>
                             </div>
@@ -453,7 +463,6 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="5">
-
                                                     <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                                     @click="addMoreagency('org_id')"><i class="fa fa-plus"></i> Add More</button>
                                                     <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
@@ -1095,7 +1104,8 @@ export default {
             this.applicationdetails=data;
             this.taskDet=response.data.app_stage;
             this.applicationOrgdetails=data.org_details;
-            if(this.applicationdetails.org_level.toLowerCase().includes('higher')){
+            // alert(this.applicationdetails.org_level);
+            if(this.applicationdetails.org_level!=undefined && this.applicationdetails.org_level.toLowerCase().includes('higher')){
                 this.streamSection=true;
             }
             if(data.attachments!=undefined && data.attachments!=""){
@@ -1247,6 +1257,7 @@ export default {
                             $('#tentative_date').val(data.app_verification[i].tentativeDate);
                             this.form.tentative_date=data.app_verification[i].tentativeDate;
                             $('#tentative_date').hide();
+                            alert(data.app_verification[i].tentativeDate+' :: '+ data.app_verification[i].tentativeDate);
                             if(data.app_verification[i].tentativeDate!=null && data.app_verification[i].tentativeDate!=""){
                                 $('#tentative_date_show').val(this.reverseDate(data.app_verification[i].tentativeDate));
                                 $('#tentative_date_show').prop('disabled',true);
