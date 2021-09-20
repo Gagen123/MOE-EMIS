@@ -74,7 +74,7 @@ export default {
 
         },
         showedit(data){
-            this.$router.push({name:'edit_student_attendance',params: {data:data}});
+            this.$router.push({name:'edit_remedial_class',params: {data:data}});
         },
 	 
     },

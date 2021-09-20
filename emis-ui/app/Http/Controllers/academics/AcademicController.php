@@ -635,5 +635,54 @@ class AcademicController extends Controller
         $response_data = $this->apiService->listData('emis/academics/getResult/'.$std_student_id);
         return $response_data;
     }
+    public function getSubjectByClass($class_id,$stream_id=""){
+        $uri = 'emis/academics/getSubjectByClass/'.$class_id;
+        if($stream_id){
+            $uri .= ('/'.$stream_id);
+         }
+        $response_data = $this->apiService->listData($uri);
+        return $response_data;
+    }
+    public function getSubjectTeacherBySubId($aca_sub_id){
+        $response_data = $this->apiService->listData('emis/academics/getSubjectTeacherBySubId/'.$aca_sub_id);
+        return $response_data;
+    }
+    public function saveRemedialClass(Request $request){
+        $rules = [
+            'org_class_id' => 'required',
+            'class_stream_section' => 'required',
+            'data.aca_sub_id'  => 'required',
+            'data.stf_staff_id'  => 'required',
+            'data.from_date'  => 'required',
+            'data.to_date'  => 'required|after_or_equal:data.from_date',
+            'data.total_hrs'  => 'required',
+            'data.time_description'  => 'required',
+            'data.std_student_id.*'  => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'class_stream_section.required' => 'This field is required',
+            'data.aca_sub_id.required' => 'This field is required',
+            'data.stf_staff_id.required' => 'This field is required',
+            'data.from_date.required' => 'This field is required',
+            'data.total_hrs.required' => 'This field is required',
+            'data.time_description.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $request['org_id'] = $this->getWrkingAgencyId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/academics/saveRemedialClass', $data);
+        return $response_data;
+    }
+    public function getRemedialClass(){
+        $orgId = $this->getWrkingAgencyId();
+        return $this->apiService->listData('emis/academics/getRemedialClass/'.$orgId);
+    }
+    public function getRemedialClassDetail($Id){
+        $orgId = $this->getWrkingAgencyId();
+        return $this->apiService->listData('emis/academics/getRemedialClassDetail/'.$orgId.'/'.$Id);
+    }
+   
 
 }

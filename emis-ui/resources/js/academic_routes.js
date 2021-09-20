@@ -144,6 +144,15 @@ const routes = [
 
                 ]
             },
+            { path:'/remedial-class', component:require('./components/academics/remedial_class/remedial_class_index.vue').default,
+                children: [
+                    { path: '', name: 'remedial-class', component: require('./components/academics/remedial_class/list_remedial_class.vue').default },
+                    { path: '/list-remedial-class', name: 'list_remedial_class', component: require('./components/academics/remedial_class/list_remedial_class.vue').default },
+                    { path: 'edit-remedial-class', name: 'edit_remedial_class', component: require('./components/academics/remedial_class/edit_remedial_class.vue').default },
+                    { path: '/create-remedial-class', name: 'create_remedial_class', component: require('./components/academics/remedial_class/create_remedial_class.vue').default },
+
+                ]
+            },
         ]
     }
 ]

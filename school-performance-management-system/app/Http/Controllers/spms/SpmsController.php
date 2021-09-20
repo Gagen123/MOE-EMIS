@@ -170,16 +170,20 @@ class SpmsController extends Controller
                     'end_date' => $request['end_date'],
                     'person_responsible' => $request['person_responsible'],
                     'implementation_status_id' => $request['implementation_status_id'],
-                    'school_plan_status' => $request['school_plan_status'],
+                    'school_plan_status_id' => $request['school_plan_status'],
                     'remarks' => $request['remarks'],
+                    'plan_date' =>   date('Y-m-d h:i:s'),
                     'created_by' =>  $request['user_id'],
                     'created_at' =>   date('Y-m-d h:i:s'),
                 ];
-                $response = SchoolPlan::create($parent_data);
+               try{ $response = SchoolPlan::create($parent_data);
 
-                if($request['school_plan_status'] == '1'){
-                    $this->insertHistory($request,$response->id);
+                if($request['school_plan_status'] == '2'){
+                    $this->insertHistory($request,$response->id,$response->implementation_status_id);
                 }
+            }catch(Exception $e){
+                dd($e);
+            }
             }
             if($request['action'] == 'edit'){
                 $rules = [
@@ -217,38 +221,46 @@ class SpmsController extends Controller
                 $data->person_responsible = $request['person_responsible'];
                 $data->implementation_status_id = $request['implementation_status_id'];
                 $data->school_plan_status = $request['school_plan_status'];
+                $data->plan_date = date('Y-m-d h:i:s');
                 $data->remarks = $request['remarks'];
                 $data->update();
                 $response = $data;
 
                 if($request['school_plan_status']=='1'){
-                    $this->insertHistory($request,$request['spm_school_plan_id']);
+                    $this->insertHistory($request,$data->id,$data->implementation_status_id);
                 }
                 
             }
             return $this->successResponse($response, Response::HTTP_CREATED);
         });
     }
-    private function insertHistory($request,$school_plan_id){
+    private function insertHistory($request,$school_plan_id,$implementation_status_id){
         $child_data = [
             'user_id' => $request['user_id'],
             'spm_school_plan_id' => $school_plan_id,
             'name' => $request['full_name'],
             'role' => $request['roles'],
-            'status_id' =>$request['implementation_status_id'] ,
+            'spm_implementation_status_id' =>$implementation_status_id,
             'organization' =>$request['organization'] ,
             'status_date' => date('Y-m-d h:i:s'),
             'remarks' => $request['remarks'],
         ];
          SchoolPlanHistory::create($child_data);
     }
-    public function getSchoolPlan($school_id){
-        $response = DB::select("SELECT DISTINCT t1.implementation_status_id,t1.id,t1.spm_domain_id,t2.name AS domain,t1.activity,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.school_plan_status 
-        FROM spm_school_plan t1 
-            JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
-            JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id 
-         WHERE t1.org_id = ?",[$school_id]);
+    public function getSchoolPlan($school_id,$view_row){
+        $query = "SELECT DISTINCT IF(t1.school_plan_status_id=1,'has_not_submit','submitted') AS submitted_status, t1.implementation_status_id,t1.id,t1.spm_domain_id,t1.plan_date,t2.name AS domain,t1.activity,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.school_plan_status_id 
+                FROM spm_school_plan t1 
+                    JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
+                    JOIN spm_implementation_status t3 ON t1.implementation_status_id = t3.id 
+                WHERE t1.org_id = ?";
+        if($view_row == 'Submitted_row'){
+            $query .= ' AND t1.school_plan_status_id = 2';
+        }
+     try{   $response = DB::select($query,[$school_id]);
         return $this->successResponse($response);
+     }catch(Exception $e){
+         dd($e);
+     }
     }
     public function saveImplementtationStatus(Request $request){
         $rules = [
@@ -277,7 +289,7 @@ class SpmsController extends Controller
             'spm_school_plan_id' => $parent_data->id,
             'name' => $request['full_name'],
             'role' => $request['roles'],
-            'status_id' =>$request['implementation_status_id'] ,
+            'spm_implementation_status_id' =>$request['implementation_status_id'] ,
             'organization' =>$request['organization'] ,
             'status_date' => date('Y-m-d h:i:s'),
             'remarks' => $request['comment'],
@@ -287,14 +299,14 @@ class SpmsController extends Controller
         return $this->successResponse($response);
     }
     public function getSchoolPlanDetails($spm_school_plan_id){
-        $schoolPlanDetail = DB::select("SELECT t1.id,t1.org_id,t1.spm_domain_id,t2.name AS domain,t1.activity,t1.objective,t1.strategy,t1.person_responsible,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.remarks FROM spm_school_plan t1 
+        $schoolPlanDetail = DB::select("SELECT t1.id,t1.org_id,t1.spm_domain_id,t1.plan_date,t2.name AS domain,t1.activity,t1.objective,t1.strategy,t1.person_responsible,t1.start_date,t1.end_date,t3.name AS implementation_status,t1.remarks FROM spm_school_plan t1 
         JOIN spm_domain t2 ON t1.spm_domain_id = t2.id 
-        JOIN spm_school_plan_status t3 ON t1.implementation_status_id = t3.id WHERE t1.id = ?",[$spm_school_plan_id]);
+        JOIN spm_implementation_status t3 ON t1.implementation_status_id = t3.id WHERE t1.id = ?",[$spm_school_plan_id]);
         return $this->successResponse($schoolPlanDetail);
     }
     public function getSchoolPlanHistory($spm_school_plan_id){
-        $schoolPlanHistory = DB::select("SELECT t1.user_id,t1.name,t1.role,t1.organization,t1.status_id,t2.name AS status,t1.status_date,t1.remarks FROM spm_school_plan_history
-             t1 JOIN spm_school_plan_status t2 ON t1.status_id = t2.id WHERE t1.spm_school_plan_id = ? ORDER BY t1.created_at",[$spm_school_plan_id]);
+        $schoolPlanHistory = DB::select("SELECT t1.user_id,t1.name,t1.role,t1.organization,t1.spm_implementation_status_id,t2.name AS status,t1.status_date,t1.remarks FROM spm_school_plan_history
+             t1 JOIN spm_implementation_status t2 ON t1.spm_implementation_status = t2.id WHERE t1.spm_school_plan_id = ? ORDER BY t1.created_at",[$spm_school_plan_id]);
         return $this->successResponse($schoolPlanHistory);
     }
     public function getDzoEMO($emo_id){

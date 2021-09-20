@@ -163,8 +163,8 @@ export default {
                 console.log(errors)
             });
         },
-        getSchoolPlanStatus(){
-             axios.get('masters/loadSpmMasters/all_school_plan_status')
+        getImplemenatationStatus(){
+             axios.get('masters/loadSpmMasters/all_implemenatation_status')
             .then(response => {
                 let data = response 
                 this.status =  data.data.data
@@ -237,7 +237,7 @@ export default {
             });
         this.getDomains()
         this.getSchoolPlanDetails()
-        this.getSchoolPlanStatus()
+        this.getImplemenatationStatus()
     }
 }
 </script>

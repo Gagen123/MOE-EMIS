@@ -12,6 +12,8 @@ use App\Http\Controllers\Controller;
 use App\Models\academics\ClassTeacher;
 use App\Models\academics\ClassTeacherHistory;
 use App\Models\academics\InstructionalDaysForSpecialCase;
+use App\Models\academics\RemedialClass;
+use App\Models\academics\RemedialClassDetail;
 use App\Models\academics\SubjectTeacher;
 use App\Models\academics\StudentAssessment;
 use App\Models\academics\ResultConsolidated;
@@ -1016,8 +1018,94 @@ class AcademicController extends Controller
         $result = DB::select('SELECT id, result,remarks  FROM aca_result_consolidated_detail WHERE std_student_id = ?',[$std_student_id]);
         return $this->successResponse($result);
     }
+    public function getSubjectByClass($class_id,$stream_id=""){
+        $query = 'SELECT t1.id AS aca_sub_id,t1.aca_sub_category_id, t1.name AS subject,t1.dzo_name AS sub_dzo_name FROM aca_subject t1 JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ?' ;
+        $params = [$class_id];
+        if($stream_id){
+          $query .= ' AND t2.org_stream_id = ?';
+          array_push($params,$stream_id);
+        }  
+        return $this->successResponse (DB::select("$query", $params)); 
+    }
+    public function getSubjectTeacherBySubId($aca_sub_id){
+        return $this->successResponse(DB::select('SELECT aca_sub_id,stf_staff_id FROM aca_class_subject_teacher WHERE aca_sub_id = ? GROUP BY aca_sub_id,stf_staff_id ',[$aca_sub_id]));
+    }
+    public function saveRemedialClass(Request $request){
+        $rules = [
+            'org_class_id' => 'required',
+            'class_stream_section' => 'required',
+            'data.aca_sub_id'  => 'required',
+            'data.stf_staff_id'  => 'required',
+            'data.from_date'  => 'required',
+            'data.to_date'  => 'required|after_or_equal:data.from_date',
+            'data.total_hrs'  => 'required',
+            'data.time_description'  => 'required',
+            'data.std_student_id.*'  => 'required',
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'This field is required',
+            'class_stream_section.required' => 'This field is required',
+            'data.aca_sub_id.required' => 'This field is required',
+            'data.stf_staff_id.required' => 'This field is required',
+            'data.from_date.required' => 'This field is required',
+            'data.total_hrs.required' => 'This field is required',
+            'data.time_description.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+    $query = 'DELETE FROM aca_remedial_classes WHERE org_class_id = ?';
+    $params =[$request['org_class_id']];
+    if($request['org_stream_id']){
+        $query .= ' AND org_stream_id = ?';
+        array_push($params,$request['org_stream_id']);
+    } 
+    if($request['org_section_id']){
+        $query .= ' AND org_section_id = ?';
+        array_push($params,$request['org_section_id']);
+    } 
+    DB::transaction(function() use($request, $query, $params) {
+        DB::delete($query, $params);
+       $remarks = isset($request['data']['remarks']) ? $request['data']['remarks'] : '';
+        $parent = [
+            'org_id' => $request['org_id'],
+            'org_class_id' => $request['org_class_id'],
+            'org_stream_id' => $request['org_stream_id'],
+            'org_section_id' => $request['org_section_id'],
+            'class_stream_section' => $request['class_stream_section'],
+            'aca_sub_id' => $request['data']['aca_sub_id'],
+            'stf_staff_id' => $request['data']['stf_staff_id'],
+            'from_date' => $request['data']['from_date'],
+            'to_date' => $request['data']['to_date'],
+            'total_no_of_hours' => $request['data']['total_hrs'],
+            'time' => $request['data']['time_description'],
+            'remarks' => $remarks,
+            'created_by' => $request['user_id'],
+            'created_at'=>   date('Y-m-d h:i:s'),
+        ];
+        $RemedialClass = RemedialClass::create($parent);
+        foreach($request['data']['std_student_id'] as $key => $value){
+            $child = [
+                'aca_remedial_class_id' => $RemedialClass->id,
+                'std_student_id' => $value,
+                'created_by' => $request['user_id'],
+                'created_at'=>   date('Y-m-d h:i:s'),
+            ];
+            RemedialClassDetail::create($child);
+        }
    
-    
-
-
+    });
+    return $this->successResponse(1, Response::HTTP_CREATED);
+    }
+    public function getRemedialClass($orgId){
+        return $this->successResponse(DB::select('SELECT t1.id,t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.aca_sub_id,t1.stf_staff_id,t1.from_date,t1.to_date,t1.total_no_of_hours,t1.time,t2.name AS subject 
+            FROM aca_remedial_classes t1 
+                JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t1.org_id = ?',[$orgId])
+            );
+    }
+    public function getRemedialClassDetail($orgId,$Id){
+       try{ return $this->successResponse(DB::select('SELECT t1.aca_remedial_class_id,t1.std_student_id FROM aca_remedial_classes_detail t1 JOIN aca_remedial_classes t2 ON t1.aca_remedial_class_id = t2.id  WHERE t2.org_id = ? AND t1.aca_remedial_class_id = ? ',[$orgId,$Id]));
+       }catch(Exception $e){
+           dd($e);
+       }
+    }
 }

@@ -176,7 +176,13 @@ class SpmsController extends Controller
         return $response_data;
     }
     public function getSchoolPlan($school_id){
-        $response_data =$this->apiService->listData('emis/spms/getSchoolPlan/'.$school_id);
+        $view_row = "";
+        if($this->getAccessLevel() == "Org"){
+            $view_row = "All";
+        }else{
+            $view_row = "Submitted_row";
+        }
+        $response_data =$this->apiService->listData('emis/spms/getSchoolPlan/'.$school_id.'/'.$view_row);
         return $response_data;
     }
    

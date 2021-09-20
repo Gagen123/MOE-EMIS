@@ -898,7 +898,11 @@ Route::prefix('academics')->group(function () {
     Route::get('/getTermsByFrequency/{frequencyId}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByFrequency'])->name('getTermsByFrequency');
     Route::post('/unlockForEditForConsolidated/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'unlockForEditForConsolidated'])->name('unlockForEditForConsolidated');
     Route::get('/getResult/{std_student_id}', [App\Http\Controllers\academics\AcademicController::class, 'getResult'])->name('getResult');
-
+    Route::get('/getSubjectTeacherBySubId/{aca_sub_id}', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectTeacherBySubId'])->name('getSubjectTeacherBySubId');
+    Route::get('/getSubjectByClass/{class_id}/{stream_id?}', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectByClass'])->name('getSubjectByClass');
+    Route::post('/saveRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'saveRemedialClass'])->name('saveRemedialClass');
+    Route::get('/getRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClass'])->name('getRemedialClass');
+    Route::get('/getRemedialClassDetail/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClassDetail'])->name('getRemedialClassDetail');
 });
 Route::prefix('spms')->group(function () {
     Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');

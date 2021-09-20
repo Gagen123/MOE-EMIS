@@ -63,7 +63,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getTermsByFrequency/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequency']);
         $router->post('/unlockForEditForConsolidated/{Id}',['uses' => 'academic\AcademicController@unlockForEditForConsolidated']);
         $router->get('/getResult/{std_student_id}',['uses' => 'academic\AcademicController@getResult']);
-
+        $router->get('/getSubjectByClass/{class_id}[/{stream_id}]',['uses' => 'academic\AcademicController@getSubjectByClass']);
+        $router->get('/getSubjectTeacherBySubId/{aca_sub_id}',['uses' => 'academic\AcademicController@getSubjectTeacherBySubId']);
+        $router->post('/saveRemedialClass',['uses' => 'academic\AcademicController@saveRemedialClass']);
+        $router->get('/getRemedialClass/{orgId}',['uses' => 'academic\AcademicController@getRemedialClass']);
+        $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
 
     });
 });

@@ -131,32 +131,31 @@ export default {
             if(this.class_stream_section_id[3] !== null && this.class_stream_section_id[3] !== ""){
                 uri += ('&sectionId='+this.class_stream_section_id[3])
             }
-            alert(uri);
-                axios.get(uri)
-                .then(response => {
-                    if(response.data.error){
-                        Swal.fire({
-                            icon: 'warning',
-                            text: response.data.error,
-                        })
-                    }else{
-                        let studentList = response.data.student
-                        let aa = []
-                        studentList.forEach((item)=>{
-                            aa['CidNo'] = item.CidNo
-                            aa['Name'] = item.Name
-                            aa['std_student_id'] = item.std_student_id
-                            aa['is_present'] = 1
-                            const obj = {...aa};
-                            this.studentList.push(obj);
-                        })
-                    }
+            axios.get(uri)
+            .then(response => {
+                if(response.data.error){
+                    Swal.fire({
+                        icon: 'warning',
+                        text: response.data.error,
+                    })
+                }else{
+                    let studentList = response.data.student
+                    let aa = []
+                    studentList.forEach((item)=>{
+                        aa['CidNo'] = item.CidNo
+                        aa['Name'] = item.Name
+                        aa['std_student_id'] = item.std_student_id
+                        aa['is_present'] = 1
+                        const obj = {...aa};
+                        this.studentList.push(obj);
+                    })
+                }
 
-                }).catch(function (error) {
-                    if(error.toString().includes("500")){
-                        $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                    }
-                });
+            }).catch(function (error) {
+                if(error.toString().includes("500")){
+                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                }
+            });
         },
         loadReasonsForAbsentList(uri = 'masters/loadAcademicMasters/all_active_reasons_for_absent'){
             axios.get(uri)

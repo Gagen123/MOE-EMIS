@@ -11,6 +11,7 @@
                 <table id="school-plan-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
+                            <th>Plan Date</th>
                             <th>Domain</th>
                             <th>Activity (What?)</th>
                             <th>Start Date</th>
@@ -21,13 +22,22 @@
                     </thead>
                     <tbody id="tbody">
                         <tr v-for="(item, index) in schoolPlans" :key="index">
+                            <td>
+                                <span v-if="item.submitted_status =='submitted'">
+                                    <strong>Submitted on {{item.plan_date}}</strong>
+                                  
+                                </span>
+                                <span v-else-if="item.submitted_status =='has_not_submit' && access_level=='Org'">
+                                    <strong>Not Submitted</strong>
+                                </span>
+                            </td>
                             <td>{{item.domain}}</td>
                             <td>{{item.activity}}</td>
                             <td>{{item.start_date}}</td>
                             <td>{{item.end_date}}</td>
                             <td>{{item.implementation_status}}</td>
                             <td>
-                                <div v-if="item.school_plan_status==1" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i >
+                                <div v-if="item.school_plan_status_id==2" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-eye"></i >
                                     View Detail
                                     <span v-if="access_level=='Org'">/ Update</span>
                                     <span v-else>/ Comment</span>
@@ -38,6 +48,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="card-footer text-right mt-2">
+                    <button type="button" @click="save('submit')" class="btn btn-flat btn-sm btn-primary"><i class="fas fa-check-circle"></i> Submit</button>
+                </div>
             </div>
         </div>
     </div>  
@@ -82,6 +95,43 @@ export default {
         showedit(data){
             this.$router.push({name:'view_annual_school_plan',params: {data:data,school_name:this.school}});
         },
+        save(action=''){
+            if(action=="submit"){
+                this.form.school_plan_status = 2
+            }
+            this.form.post('/spms/saveSchoolPlan',this.form)
+                .then(() => {
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Details added successfully'
+                })
+                Swal.fire({
+                title: 'Do you want to save activity?',
+                icon: 'question',
+                showDenyButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                denyButtonText:'No',
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        this.form.activity = ''
+                        this.form.objective = ''
+                        this.form.strategy = ''
+                        this.form.start_date = ''
+                        this.form.end_date = ''
+                        this.form.person_responsible = ''
+                        this.form.implementation_status_id = ''
+                        this.form.remarks = ''
+                    } else if (result.isDenied) {
+                        this.$router.push('/lists-annual-school-plan');
+                    }
+                })
+            })
+            .catch(() => {
+                console.log("Error.")
+            })
+		}, 
     },
     mounted(){
         axios.get('common/getSessionDetail')
@@ -100,15 +150,17 @@ export default {
                 console.log(errors)
         });
         this.dt = $("#school-plan-table").DataTable({
+              rowGroup: {
+                dataSrc: 0 
+            },
             columnDefs: [
-                { width: 30, targets: 0},
-                { width: 300, targets: 1},
-                { width: 30, targets: 0},
-                { width: 63, targets: 2},
+                {targets: 0,visible: false},
+                { width: 30, targets: 1},
+                { width: 300, targets: 2},
                 { width: 63, targets: 3},
-                { width: 100, targets: 4},
-                { width: 150, targets: 5},
-
+                { width: 63, targets: 4},
+                { width: 100, targets: 5},
+                { width: 150, targets: 6},
             ],
         })
 
@@ -117,7 +169,20 @@ export default {
         schoolPlans(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#school-plan-table").DataTable()
+                  this.dt = $("#school-plan-table").DataTable({
+                rowGroup: {
+                    dataSrc: 0 
+                        },
+                        columnDefs: [
+                            {targets: 0,visible: false},
+                            { width: 30, targets: 1},
+                            { width: 300, targets: 2},
+                            { width: 63, targets: 3},
+                            { width: 63, targets: 4},
+                            { width: 100, targets: 5},
+                            { width: 150, targets: 6},
+                        ],
+                    })
             });
         }
     }

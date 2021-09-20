@@ -84,7 +84,6 @@
             </div>
             <div class="card-footer text-right">
                 <button @click.prevent="save('draft')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save as Draft</button>
-                <button type="button" @click="save('submit')" class="btn btn-flat btn-sm btn-primary"><i class="fas fa-check-circle"></i> Submit</button>
             </div>
         </form>
     </div>     
@@ -128,8 +127,8 @@ export default {
                 }
             });
         },
-        getSchoolPlanStatus(){
-             axios.get('masters/loadSpmMasters/all_school_plan_status')
+        getImplementationStatus(){
+             axios.get('masters/loadSpmMasters/all_implemenatation_status')
             .then(response => {
                 let data = response 
                 this.status =  data.data.data
@@ -160,9 +159,6 @@ export default {
         },
 		save(action=''){
             if(action=="draft"){
-                this.form.school_plan_status = 0
-            }
-            if(action=="submit"){
                 this.form.school_plan_status = 1
             }
             this.form.post('/spms/saveSchoolPlan',this.form)
@@ -234,7 +230,7 @@ export default {
                 console.log(errors)
             });
         this.getDomains()
-        this.getSchoolPlanStatus()
+        this.getImplementationStatus()
     }
 }
 </script>
