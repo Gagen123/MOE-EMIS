@@ -14,6 +14,8 @@ class CeaProgramActionPlanDetail extends Model
     protected $fillable = [
         'id',
         'CeaProgrammeActionPlanId',
+        'FromDate',
+        'ToDate',
         'Title',
         'Description'
     ];

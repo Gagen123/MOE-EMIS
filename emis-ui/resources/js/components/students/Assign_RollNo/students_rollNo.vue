@@ -12,15 +12,15 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="required">Assign Order:</label>
                                 <br>
-                                <label><input v-model="student_form.assign_order"  type="radio" value="asc" id="assign_order"/> Ascending</label>
-                                <label><input v-model="student_form.assign_order"  type="radio" value="desc" id="assign_order"/> Descending</label>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="ASC" name="assign_order" id="assign_order1"/> Ascending</label>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="DESC" name="assign_order" id="assign_order2"/> Descending</label>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="required">Sort By:</label>
                                 <br>
-                                <label><input v-model="student_form.sort_by"  type="radio" value="girls" id="sort_by"/> Girls First</label>
-                                <label><input v-model="student_form.sort_by"  type="radio" value="boys" id="sort_by"/> Boys First</label>
-                                <label><input v-model="student_form.sort_by"  type="radio" value="mixed" id="sort_by"/> Mixed</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Female" name="sort_by"  id="sort_by1"/> Girls First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Male" name="sort_by" id="sort_by2"/> Boys First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Mixed" name="sort_by" id="sort_by3"/> Mixed</label>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -63,7 +63,7 @@
                                         <td>{{ item.Name}}</td>
                                         <td>{{ item.student_code}}</td>
                                         <td>
-                                            <input type="number" name="roll_no" class="form-control" v-model="item.roll_no"/>
+                                            <input type="number" name="roll_no" class="form-control" :value = "item.roll_no = index+1" readonly/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -222,8 +222,10 @@ export default {
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
-                //let params = $('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val()+'__'+$('#assign_order').val()+'__'+$('#sort_by').val();
-                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+                let sort_by = $("input[name='sort_by']:checked").val();
+                let assign_by = $("input[name='assign_order']:checked").val();
+                let params = $('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val()+'__'+assign_by+'__'+sort_by;
+                axios.get('/students/loadStudentBySectionForRollNo/'+params)
                     .then((response) => {
                         this.studentList = response.data;
                         this.student_form.studentList=response.data;

@@ -369,16 +369,6 @@ class StudentMasterController extends Controller
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
-
-            if($record_type=="CeaProgramItem"){
-                $additional_data = [
-                    'Central'   =>  $request['central'],
-                    'Local'     =>  $request['local'],
-                    'Unit_id'   =>  $request['unit_id'],
-                    'CeaProgrammeItemVarietyId'   =>  $request['variety'],
-                ];
-                $data = $data + $additional_data;
-            }
         }
 
         switch($record_type){
@@ -419,6 +409,19 @@ class StudentMasterController extends Controller
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeTypeId'  =>  $request['program_type'],
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
+            case "CeaProgramItem" : {
+                    $databaseModel = "CeaProgramItem";
+                    if($type =='data'){
+                        $additional_data = [
+                            'Central'   =>  $request['central'],
+                            'Local'     =>  $request['local'],
+                            'Unit_id'   =>  $request['unit_id'],
+                            'CeaProgrammeItemVarietyId'   =>  $request['variety'],
                         ];
                         $data = $data + $additional_data;
                     }
@@ -489,6 +492,14 @@ class StudentMasterController extends Controller
                         ];
                         $data = $data + $additional_data;
                     }
+                    break;
+                }
+            case "program_item_central" : {
+                    $databaseModel = "CeaProgramItem";
+                    break;
+                }
+            case "program_item_local" : {
+                    $databaseModel = "CeaProgramItem";
                     break;
                 }
             default : {

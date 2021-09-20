@@ -43,6 +43,7 @@ class GeneralStudentController extends Controller{
             'organization_id'       => $this->getWrkingAgencyId(),
             'user_id'               =>  $this->userId()
         ];
+        dd($data);
         $response_data= $this->apiService->createData('emis/students/saveStudentRollNumber',$data);
         return $response_data;
 
@@ -86,6 +87,17 @@ class GeneralStudentController extends Controller{
 
     public function loadStudentBySection($param1=""){
         $student_list = $this->apiService->listData('emis/students/loadStudentBySection/'.$param1);
+        return $student_list;
+    }
+
+    public function loadStudentBySectionForRollNo($param1=""){
+        $gender_list = json_decode($this->apiService->listData('emis/masters/loadGlobalMasters/all_gender'));
+        $data_parameters['gender_params'] = $gender_list;
+        $data_parameters['form_params'] = $param1;
+        
+        $data = http_build_query($data_parameters);
+
+        $student_list = $this->apiService->listData('emis/students/loadStudentBySectionForRollNo/'.$data);
         return $student_list;
     }
 

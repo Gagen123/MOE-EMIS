@@ -226,7 +226,7 @@ export default {
         this.dt =  $("#student-list-table").DataTable()
     },
     watch: {
-        studentList(){
+        dataList(){
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#student-list-table").DataTable()

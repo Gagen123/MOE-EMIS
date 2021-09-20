@@ -147,7 +147,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentRollNumber',['uses' => 'General\GeneralStudentController@saveStudentRollNumber']);
         $router->get('/loadBasicStudentList/{param}',['uses' => 'General\GeneralStudentController@loadBasicStudentList']);
 
-        $router->get('/loadStudentBySectionForRollNumber/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySectionForRollNumber']);
+        $router->get('/loadStudentBySectionForRollNo/{data}', ['uses' => 'General\GeneralStudentController@loadStudentBySectionForRollNo']);
         $router->get('/loadStudentBySection/{param1}', ['uses' => 'General\GeneralStudentController@loadStudentBySection']);
         $router->get('/loadStudentByType/{type}/{class_id}', ['uses' => 'General\GeneralStudentController@loadStudentByType']);
         $router->get('/loadStudentByClass/{class}', ['uses' => 'General\GeneralStudentController@loadStudentByClass']);
