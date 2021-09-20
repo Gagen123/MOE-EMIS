@@ -73,9 +73,10 @@ export default {
         .catch(function (error) {
             console.log(error);
         });
+        
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
-            $('.developemntEnv').hide();
+         $('.developemntEnv').hide();
         }
     },
 }

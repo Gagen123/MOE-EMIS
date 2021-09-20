@@ -4,14 +4,14 @@
             <li class="pl-2 form-inline "><h6 class="pt-1">Application Verification/Approval(School Merger)</h6></li>
         </ol>
         <div class="card card-primary card-outline card-outline-tabs">
-
             <div class="card-body pt-0 mt-1">
                 <div class="tab-content">
+                     <!-- Information of first organization -->
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Current Details School to be merged to:</u></label>
+                                    <label><u>Current Details School to be merged to:</u><small><i>(The details of first organization to merge from submitter)</i></small></label>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -29,16 +29,20 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="existing_details.category!='private_school' || existing_details.category!='private_eccd'">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Zest Code:</label>
                                     <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
-                                </div>
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{existing_details.category}}</span>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
+                                </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Dzongkhag:</label>
                                     <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
@@ -51,41 +55,13 @@
                                     <label>Village:</label>
                                     <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, key, index) in  existing_details.classes" :key="index">
-                                                <td>
-                                                    <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
-                                                </td>
-                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
-                                                    {{  streamArray[item.streamId]  }}
-                                                </td>
-                                                <td class="strm_clas" v-else> </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true">
-                                                </td>
-                                                <td v-else>
-                                                    <input type="checkbox" checked="true">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                            </div> -->
+                            <hr>
 
+                            <!-- Information of second organization -->
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Current Details School to be merged:</u></label>
+                                    <label><u>Current Details School to be merged:</u><small><i>(The details of second organization to merge from submitter)</i></small></label>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -103,16 +79,20 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{oldOrg2.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="oldOrg2.category!='private_school' || oldOrg2.category!='private_eccd'">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Zest Code:</label>
                                     <span class="text-blue text-bold">{{oldOrg2.zestAgencyCode}}</span>
-                                </div>
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{oldOrg2.category}}</span>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
+                                </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Dzongkhag:</label>
                                     <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
@@ -125,233 +105,211 @@
                                     <label>Village:</label>
                                     <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
+                            </div> -->
+                            <hr>
+
+                            <!-- if new organization is form -->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="displayNewOrg">
+                                <div class="form-group row" >
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label><u>New Organization Details</u><small><i>(The details of newly created organization from submitter)</i></small></label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>New Organization Name:</label>
+                                        <span class="text-blue text-bold">{{this.form.proposedName}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Level:</label>
+                                        <span class="text-blue text-bold">{{levelArray[this.form.levelId]}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Location:</label>
+                                        <span class="text-blue text-bold">{{locationArray[this.form.locationId]}}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Dzongkhag/Thromde:</label>
+                                        <span class="text-blue text-bold">{{dzoArray[this.form.Dzo]}}</span>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <label>Gewog/Demkhong:</label>
+                                        <span class="text-blue text-bold">{{gewogArray[this.form.Gewog]}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div><hr>
+                    <!-- preferences organization -->
+                    <div class="callout callout-info">
+                        <!-- organization1 -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="org1">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Preference Organization:</u><small><i>(The details of selected organization from submitter)</i></small></label>
+                                </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <table id="dynamic-table" class="table table-sm table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Classes</th>
-                                                <th class="strm_clas">Stream</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for="(item, key, index) in  oldOrg2.classes" :key="index">
-                                                <td>
-                                                    <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
-                                                </td>
-                                                <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
-                                                    {{  streamArray[item.streamId]  }}
-                                                </td>
-                                                <td class="strm_clas" v-else> </td>
-                                                <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
-                                                    <input type="checkbox" checked="true">
-                                                </td>
-                                                <td v-else>
-                                                    <input type="checkbox" checked="true">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>is SEN School:</label>
-                                    <span class="text-blue text-bold">{{oldOrg2.isSenSchool==1? 'Yes': 'No'}}</span>
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{oldOrg2.name}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{levelArray[oldOrg2.levelId]}}</span>
                                 </div>
                             </div>
-                            <div v-if="appicationDetails.application_type=='proprietor_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Proprietor Details</u></label>
-                                    </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Year of Establishment:</label>
+                                    <span class="text-blue text-bold">{{oldOrg2.yearOfEstablishment}}</span>
                                 </div>
-                                <div class="form-group row" v-if="oldOrg2.proprioter!=undefined">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{oldOrg2.proprioter.cid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{oldOrg2.proprioter.fullName}}</span>
-                                    </div>
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Zest Code:</label>
+                                    <span class="text-blue text-bold">{{oldOrg2.zestAgencyCode}}</span>
+                                </div> -->
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{oldOrg2.category}}</span>
                                 </div>
-                                <div class="form-group row" v-if="oldOrg2.proprioter!=undefined">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{oldOrg2.proprioter.phoneNo}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Mobile No:</label>
-                                        <span class="text-blue text-bold">{{oldOrg2.proprioter.mobileNo}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{oldOrg2.proprioter.email}}</span>
-                                    </div>
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
                                 </div>
                             </div>
-                            <!-- <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Classes Details</u></label>
-                                    </div>
+                            <!-- <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  existing_details.classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold">{{selected_gewog}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Village:</label>
+                                    <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
                             </div> -->
                         </div>
-                        <div class="callout callout-info">
+                            <!-- organization 2 -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="org2">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
+                                    <label><u>Preference Organization Details:</u><small><i>(The details of selected organization from submitter)</i></small></label>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Application Number:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.application_no}}</span>
+                                    <label>Name:</label>
+                                    <span class="text-blue text-bold">{{existing_details.name}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Type of Change:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.establishment_type}}</span>
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{levelArray[existing_details.levelId]}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='name_change'">
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Propose New Name:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.merger.proposedChange}}</span>
+                                    <label>Year of Establishment:</label>
+                                    <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Zest Code:</label>
+                                    <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposal Initiated Bye:</label>
-                                    <span class="text-blue text-bold">{{proposed_by_list[appicationDetails.merger.initiatedBy]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='location_type_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Location:</label>
-                                    <span class="text-blue text-bold">{{locationArray[appicationDetails.merger.proposedChange]}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='expension_change'">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Current Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.merger.proposedChange}}</span>
+                                    <label>Category:</label>
+                                    <span class="text-blue text-bold">{{existing_details.category}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Proposed Capacity:</label>
-                                    <span class="text-blue text-bold">{{appicationDetails.merger.changeInDetails}}</span>
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
                                 </div>
                             </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='feeding_change'">
+                            <!-- <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is Feeding School:</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="isfeedingschool" value="0" tabindex=""/> No</label>
+                                    <label>Dzongkhag:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
                                 </div>
-                                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                    <label class="mb-0">Feeding Modality:</label>
-                                    <label><input  type="checkbox" v-model="feeding1" id="feeding1" value="1" /> One Meal</label>
-                                    <label><input  type="checkbox" v-model="feeding2" value="2"/> Two Meals</label>
-                                    <label><input  type="checkbox" v-model="feeding3" value="3" /> Three Meals</label>
-                                </div>
-                            </div>
-                            <div class="form-group row" v-if="appicationDetails.application_type=='sen_change'">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Is SEN School:</label>
-                                    <label><input  type="radio" v-model="senSchool" value="1" tabindex=""/> Yes</label>
-                                    <label><input  type="radio" v-model="senSchool" value="0" tabindex=""/> No</label>
+                                    <label>Gewog:</label>
+                                    <span class="text-blue text-bold">{{selected_gewog}}</span>
                                 </div>
-                            </div>
-                            <div v-if="appicationDetails.application_type=='proprietor_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Proprietor Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">CID:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorCid}}</span>
-                                    </div>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <label class="mb-0">Full Name:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorName}}</span>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Phone No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorPhone}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Mobile No:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorMobile}}</span>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0">Email:</label>
-                                        <span class="text-blue text-bold">{{appicationDetails.change_prop.proprietorEmail}}</span>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div v-if="appicationDetails.application_type=='level_change'">
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label>Proposed Level:</label>
-                                        <span class="text-blue text-bold">{{levelArray[appicationDetails.merger.proposedChange]}}</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label><u>Change In Classes Details</u></label>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <span v-for="(item, index) in  appicationDetails.change_classes" :key="index">
-                                            <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <!-- <div class="row pb-2" id="team_verificationAttachment">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <h5><u>Attachments</u></h5>
-                                    <table id="participant-table" class="table w-100 table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Attachment Name</th>
-                                                <th>Attachment</th>
-                                                <th>File</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr v-for='(attach,count) in appicationDetails.attachments' :key="count+1">
-                                                <template>
-                                                    <td>{{attach.user_defined_file_name}} </td>
-                                                    <td>  {{attach.name}}</td>
-                                                    <td>
-                                                        <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
-                                                    </td>
-                                                </template>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Village:</label>
+                                    <span class="text-blue text-bold">{{selected_village}}</span>
                                 </div>
                             </div> -->
+                        </div>  
+                        
+                        <!-- new organization details -->
+                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="neworg">
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label><u>Preference Organization Details:</u><small><i>(The details of selected organization from submitter)</i></small></label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>New Organization Name:</label>
+                                    <span class="text-blue text-bold">{{this.form.proposedName}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Level:</label>
+                                    <span class="text-blue text-bold">{{levelArray[this.form.levelId]}}</span>
+                                </div>
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Location:</label>
+                                    <span class="text-blue text-bold">{{locationArray[this.form.locationId]}}</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Dzongkhag/Thromde:</label>
+                                    <span class="text-blue text-bold">{{dzoArray[this.form.Dzo]}}</span>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Gewog/Demkhong:</label>
+                                    <span class="text-blue text-bold">{{gewogArray[this.form.Gewog]}}</span>
+                                </div>
+                            </div>
+                        </div>   
+
+                        <!-- Class and streams wil display here -->
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Classes</th>
+                                            <th class="strm_clas">Stream</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(item, key, index) in  oldOrg2.classes" :key="index">
+                                            <td>
+                                                <label class="pr-4"> &nbsp;{{ calssArray[item.classId] }} </label>
+                                            </td>
+                                            <td class="strm_clas" v-if="calssArray[item.classId]=='Class 11' || calssArray[item.classId]=='XI' || calssArray[item.classId]=='Class 12' || calssArray[item.classId]=='XII'">
+                                                {{  streamArray[item.streamId]  }}
+                                            </td>
+                                            <td class="strm_clas" v-else> </td>
+                                            <td v-if="item.class=='Class 11' || item.class=='XI' || item.class=='Class 12' || item.class=='XII'">
+                                                <input type="checkbox" checked="true">
+                                            </td>
+                                            <td v-else>
+                                                <input type="checkbox" checked="true">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>    
+                        <div class="callout callout-info">
                             <div class="form-group row">
                                 <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
                                     <h5><u>Any Supporting Documents and Attachments (if applicable)</u></h5>
@@ -386,12 +344,6 @@
                                 </div>
                             </div>
                          </div>
-                        <div class="row form-group" v-if="appicationDetails.establishment_type=='Change in Name' || appicationDetails.establishment_type=='Upgrade Downgrade'">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <input type="date" class="form-control" @change="remove_error('effective_date')" v-model="form.effective_date" id="effective_date" />
-                                <span class="text-danger" id="effective_date_err"></span>
-                            </div>
-                        </div>
                         <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Remarks</label>
@@ -409,49 +361,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="tab-pane fade tab-content-details" id="class-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Previous Class Stream Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section1" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList1" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="callout callout-info">
-                            <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label><u>Application Details</u></label>
-                                </div>
-                            </div>
-                            <div class="row form-group">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-check-inline pl-4">
-                                    <span v-for="(item, index) in  class_section" :key="index">
-                                        <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ item.class_name }}</label>
-                                        <span v-for="(stm, key, index) in sectionList" :key="index" >
-                                            <span v-if="item.classId==stm.classId">
-                                                <br>
-                                                <input type="checkbox" checked="true" class="ml-4"> <label class="pr-3"> {{ stm.section_name }}</label>
-                                            </span>
-                                        </span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -484,7 +393,8 @@ export default {
             isfeedingschool:'',
             senSchool:'',
             form: new form({
-                id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',
+                id: '',applicationNo:'',actiontype:'',remarks:'',establishment_type:'',proposedName:'',
+                levelId:'',locationId:'',Dzo:'',Gewog:'',OrgType:'', class:[],stream:[],ApplicationDetailsId:'',
                 ref_docs:[],fileUpload: [],sequence:'',screen_id:'',effective_date:'',
             }),
         }
@@ -573,6 +483,8 @@ export default {
             axios.get('organization/loadMergerForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
+                this.form.org1=data.merger.OldOrganizationId;
+                this.form.org2=data.merger.OldOrganizationId2;
                 this.loadPriviousOrgDetails(data.merger.OldOrganizationId);
                 this.loadPriviousOrgDetails2(data.merger.OldOrganizationId2);
                 this.appicationDetails=data;
@@ -580,7 +492,34 @@ export default {
                 this.form.screen_id=response.data.screen_id;
                 this.form.establishment_type=data.establishment_type;
                 this.isfeedingschool=data.merger.proposedChange;
-                this.senSchool=data.merger.proposedChange;
+                this.form.proposedName=data.merger.proposedName;
+                this.form.levelId=data.merger.levelId;
+                this.form.locationId=data.merger.locationId;
+                this.form.OrgType=data.merger.OrgType;
+                this.form.Dzo=data.merger.Dzo;
+                this.form.ApplicationDetailsId=data.merger.ApplicationDetailsId;
+                this.form.Gewog=data.merger.Gewog;
+                this.form.chiwog=data.merger.chiwog;
+                this.OrgType=data.merger.OrgType;
+
+                if(this.OrgType=="org1"){
+                    $('#org1').show();
+                    $('#org2').hide();
+                    $('#neworg').hide();
+                    $('#displayNewOrg').hide();
+                    
+                }
+                if(this.OrgType=="org2"){
+                    $('#org1').hide();
+                    $('#org2').show();
+                    $('#neworg').hide();
+                    $('#displayNewOrg').hide();
+                }
+                if(this.OrgType=="newOrg"){
+                    $('#org1').hide();
+                    $('#org2').hide();
+                    $('#neworg').show();
+                }
                 if(data.change_feeding!="" && data.change_feeding!=undefined && data.change_feeding.length>0){
                     for(let i=0; i< data.change_feeding.length; i++){
                         if(i==0){
@@ -594,6 +533,7 @@ export default {
                         }
                     }
                 }
+                
                 if(response.data.app_stage.toLowerCase().includes('verifi')){
                     $('#verifyId').show();
                 }
@@ -643,6 +583,17 @@ export default {
                             formData.append('applicationNo', this.form.applicationNo);
                             formData.append('remarks', this.form.remarks);
                             formData.append('service_name', this.form.establishment_type);
+                            formData.append('org1', this.form.org1);
+                            formData.append('org2', this.form.org2);
+                            formData.append('proposedName', this.form.proposedName);
+                            formData.append('levelId', this.form.levelId);
+                            formData.append('locationId', this.form.locationId);
+                            formData.append('OrgType', this.form.OrgType);
+                            formData.append('ApplicationDetailsId', this.form.ApplicationDetailsId);
+                            formData.append('Dzo', this.form.Dzo);
+                            formData.append('Gewog', this.form.Gewog);
+                            formData.append('chiwog', this.form.chiwog);
+
                             formData.append('ref_docs[]', this.form.ref_docs);
                             for(let i=0;i<this.form.ref_docs.length;i++){
                                 formData.append('attachments[]', this.form.ref_docs[i].attach);

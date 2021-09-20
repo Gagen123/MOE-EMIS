@@ -990,73 +990,45 @@ class StudentHealthController extends Controller
     }
 
     /**
-     * Functions for Endorsing Health Records
+     * Functions for Summary of Health Records
+     * the record type is also the name of the table
+     */ 
+
+    public function loadHealthSummary($data=''){
+        //get the array from the url parameters
+        parse_str($data, $data_parameters);
+        
+        $table_name = $data_parameters['record_type'];
+        $health_type = $data_parameters['health_type'];
+        $term = $data_parameters['term'];
+        $org_id = $data_parameters['organization_id'];
+
+        $class_details = DB::table("std_student_class_stream")
+                    ->join('std_student', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                    ->select('OrgClassStreamId', 'SectionDetailsID')
+                    ->distinct('OrgClassStreamId')
+                    ->where('OrgOrganizationId', $org_id)
+                    ->get();
+                    
+        foreach($class_details as $record_details){
+            $record_details->health_status = $this->getHealthSummaryStatus($table_name, $record_details->OrgClassStreamId, $record_details->SectionDetailsID, $term);
+        }
+        return $class_details;
+    }
+
+    /**
+     * Get the status of the health summary i.e. whether checked or not
      */
-
-    public function saveHealthEndorsement(Request $request){
-        $data =[
-            'id'                            => $request->id,
-            'endorsed_by'                   => $request->endorsed_by,
-            'health_record_type'            => $request->health_record_type,
-            'organization_id'               => $request->organization_id,
-            'user_id'                       => $request->user_id
-        ];
-
-        try{
-            return $this->successResponse(
-                $this->studentservice->createData('students/saveHealthEndorsement', $data), Response::HTTP_CREATED
-            );
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
-
-    }
-
-    public function loadHealthSummary($org_id=''){
-
-    }
-
-    public function loadScreeningEndorsement($org_id=''){
-        $records = DB::table('std_health_screening_type')
-                            ->select('std_health_screening.id', 'std_health_screening.date', 'std_health_screening.class','std_student.CmnSexId',
-                                        'std_health_screening_type.name AS screening_type')
-                            ->join('std_health_screening', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
-                            ->leftjoin('std_student_health_screening', 'std_health_screening.id', '=', 'std_student_health_screening.StdHealthScreeningId')
-                            ->leftjoin('std_student', 'std_student.id', '=', 'std_student_health_screening.StdStudentId')
-                            ->groupBy('std_health_screening.StdHealthScreeningTypeId', 'std_student.CmnSexId')
-                            ->get();
-
-        for($i=0; $i<sizeof($records); $i++){
-            $screened = DB::table("std_student_health_screening")
-                        ->select( DB::raw("COUNT(CASE WHEN std_student_health_screening.screening_status = 'Not Screened' THEN 1 END) as not_screened"))
-                        ->where('StdHealthScreeningId', $records[$i]->id)
-                        ->get();
-
-            $referred = DB::table("std_student_health_screening")
-                            ->select( DB::raw("COUNT(CASE WHEN std_student_health_screening.referral_status = 'Referred' THEN 1 END) as referred"))
-                            ->where('StdHealthScreeningId', $records[$i]->id)
-                            ->get();
-
-
-            // $total_student = DB::table("std_student_class_stream")
-            //                 ->select( DB::raw("COUNT(std_student_class_stream.SectionDetailsId) as total_student"))
-            //                 ->where('SectionDetailsId', $records[$i]->section)
-            //                 ->get();
-
-            $records[$i]->not_screened = $screened[0]->not_screened;
-            $records[$i]->referred = $referred[0]->referred;
-            //$records[$i]->total_student = $total_student[0]->total_student;
-        }
-        return $this->successResponse($records);
-
-    }
-
-    public function loadVaccinationEndorsement($org_id=''){
-
-    }
-
-    public function loadSupplementationEndorsement($org_id=''){
-
+    private function getHealthSummaryStatus($table_name, $class, $section, $term){
+        $result = DB::table($table_name)
+                    ->select('id')
+                    ->where('class', $class)
+                    ->where('section', $section)
+                    ->first();
+        
+        if($result != null && $result != '')
+            return 'Done';
+        else 
+            return 'Not Done';
     }
 }

@@ -10,6 +10,21 @@
                         <hr>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="required">Assign Order:</label>
+                                <br>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="ASC" name="assign_order" id="assign_order1"/> Ascending</label>
+                                <label><input v-model="student_form.assign_order"  type="radio" value="DESC" name="assign_order" id="assign_order2"/> Descending</label>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label class="required">Sort By:</label>
+                                <br>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Female" name="sort_by"  id="sort_by1"/> Girls First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Male" name="sort_by" id="sort_by2"/> Boys First</label>
+                                <label><input v-model="student_form.sort_by"  type="radio" value="Mixed" name="sort_by" id="sort_by3"/> Mixed</label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Class:</label>
                                 <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
                                     <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
@@ -48,7 +63,7 @@
                                         <td>{{ item.Name}}</td>
                                         <td>{{ item.student_code}}</td>
                                         <td>
-                                            <input type="number" name="roll_no" class="form-control" v-model="item.roll_no"/>
+                                            <input type="number" name="roll_no" class="form-control" :value = "item.roll_no = index+1" readonly/>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -80,6 +95,8 @@ export default {
             classSectionStreamList:{},
 
             student_form: new form({
+                sort_by:'',
+                assign_order:'',
                 std_class: '',
                 std_stream: '',
                 std_section: '',
@@ -195,12 +212,20 @@ export default {
                     $(".stream_selection").hide();
                 }
             }
-
+            if(id == 'assign_order'){
+                this.student_form.assign_order=$('#assign_order').val();
+            }
+            if(id == 'sort_by'){
+                this.student_form.sort_by=$('#sort_by').val();
+            }
             if(id=="std_stream"){
                 this.student_form.std_stream=$('#std_stream').val();
             }
             if(id=="std_section"){
-                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+                let sort_by = $("input[name='sort_by']:checked").val();
+                let assign_by = $("input[name='assign_order']:checked").val();
+                let params = $('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val()+'__'+assign_by+'__'+sort_by;
+                axios.get('/students/loadStudentBySectionForRollNo/'+params)
                     .then((response) => {
                         this.studentList = response.data;
                         this.student_form.studentList=response.data;

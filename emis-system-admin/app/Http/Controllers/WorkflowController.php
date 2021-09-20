@@ -268,13 +268,21 @@ class WorkflowController extends Controller{
     }
 
     public function visitedNotification(Request $request){
-        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
-        $record_id=$notificationDetails->id;
-        $not_visited=[
-            'notification_id'           =>  $record_id,
-            'user_id'                   =>  $request->action_by,
-        ];
-        NotificationVisited::create($not_visited);
+        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)
+        ->get();
+        if($notificationDetails!=null && $notificationDetails!=""){
+            foreach($notificationDetails as $not){
+                $id=    NotificationVisited::where('notification_id',$not->id)->where('user_id',$request->action_by)->first();
+                if($id==""){
+                    $not_visited=[
+                        'notification_id'           =>  $not->id,
+                        'user_id'                   =>  $request->action_by,
+                    ];
+                    NotificationVisited::create($not_visited);
+                }
+            }
+        }
+
     }
 }
 

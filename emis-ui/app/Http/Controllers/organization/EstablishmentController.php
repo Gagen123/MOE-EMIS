@@ -34,7 +34,6 @@ class EstablishmentController extends Controller{
     public function saveprivatepublicschoolEstablishment(Request $request){
         $rules = [
             'proposedName'          =>  'required',
-            'level'                 =>  'required',
             'category'              =>  'required',
             'gewog'                 =>  'required',
             'chiwog'                =>  'required',
@@ -42,12 +41,19 @@ class EstablishmentController extends Controller{
         ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
-            'level.required'                => 'Level is required',
             'category.required'             => 'Category is required',
             'gewog.required'                => 'Gewog is required',
             'chiwog.required'               => 'Chiwog is required',
             'proposedLocation.required'     => 'Select location type',
         ];
+        if(strpos($request->establishment_type,'ECR')===false){
+            $rules = $rules+[
+                'level'                 =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'level.required'                => 'Level is required',
+            ];
+        }
         if(strpos($request->establishment_type,'Public')!==false){
             $rules = $rules+[
                 'initiatedBy'           =>  'required',
@@ -199,11 +205,6 @@ class EstablishmentController extends Controller{
         $response_data = $this->apiService->listData('emis/organization/establishment/loadEstablishmentApplciaiton/'.$record_id);
         return $response_data;
     }
-
-
-
-
-
 
     public function getClass(){
         $classInCheckbox = $this->apiService->listData('emis/organization/establishment/getClass');

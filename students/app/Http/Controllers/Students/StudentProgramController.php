@@ -535,15 +535,11 @@ class StudentProgramController extends Controller
     public function saveProgramActionPlan(Request $request){
 
         $rules = [
-            'program'            => 'required',
-            'from_date'            => 'required',
-            'to_date'           => 'required'
+            'program'            => 'required'
         ];
 
         $customMessages = [
-            'program.required'     => 'This field is required',
-            'from_date.required'  => 'This field is required',
-            'to_date.required'  => 'This field is required',
+            'program.required'     => 'This field is required'
         ];
         $this->validate($request, $rules, $customMessages);
         if($request->id!=""){
@@ -569,8 +565,6 @@ class StudentProgramController extends Controller
                 'id'                    => $request->id,
                 'OrgOrganizationId'       => 1,
                 'CeaProgrammeId'               => $request->program,
-                'FromDate'             => $request->from_date,
-                'ToDate'               => $request->to_date,
                 'action_plan'           => $request->action_plan
             ];
             $action_plan_details = $data['action_plan'];
@@ -579,6 +573,8 @@ class StudentProgramController extends Controller
             $lastInsertId = $response->id;
             foreach($action_plan_details as $key => $value){
                 $action_plan_data['CeaProgrammeActionPlanId'] = $lastInsertId;
+                $action_plan_data['FromDate'] = $value['from_date'];
+                $action_plan_data['ToDate'] = $value['to_date'];
                 $action_plan_data['Title'] = $value['title'];
                 $action_plan_data['Description'] = $value['description'];
                 $plan_response = CeaProgramActionPlanDetail::create($action_plan_data);

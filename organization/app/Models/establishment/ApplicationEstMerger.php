@@ -24,10 +24,15 @@ class ApplicationEstMerger extends Model
         'proposedName',
         'initiated_by',
         'levelId',
+        'Category',
+        'Dzo',
+        'Gewog',
+        'chiwog',
+        'OrgType',
         'locationId',
         'isGeoPoliticallyLocated',
         'isSenSchool',
         'isFeedingSchool',
-        'locationTypeId'
+        'locationTypeId',
     ];
 }

@@ -1,8 +1,15 @@
 <template>
     <div>
         <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="existmessage"></div>
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="tabhead">
+                    <a class="nav-link active" data-toggle="pill" role="tab">
+                            <span class="card-title pt-2 mb-0">
+                            <b id="screenName"></b>
+                        </span>
+                    </a>
+                </ul>
+            </div>
         </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="form-group row">
@@ -52,12 +59,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">SEN School:</label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <span class="text-blue text-bold">{{data.isSenSchool == 1 ? "Yes" :  "No"}}</span>
-                                    </div>
-                                </div> -->
                                 <label class="mb-0"><i><u>Other Details</u></i></label>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Dzongkhag:</label>
@@ -114,15 +115,6 @@
                                         <has-error :form="form" field="level1"></has-error>
                                     </div>
                                 </div>
-                                <!-- <div class="form-group row">
-                                    <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Category:<span class="text-danger">*</span></label>
-                                    <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <label><input type="radio" v-model="form.category1" value="1" tabindex="" @change="showprivatedetails('private')"/> Public</label>
-                                        <label><input type="radio" v-model="form.category1"  value="0"  tabindex="" @change="showprivatedetails('public')"/> Private</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('ngo')" value="2" tabindex=""/> Ngo</label>
-                                        <label style="display:none" class="eccd1"><input type="radio" name="category" v-model="form.category" @change="showprivatedetails('coporate')" value="3"  tabindex=""/> Coporate</label>
-                                    </div>
-                                </div> -->
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
@@ -428,7 +420,6 @@ export default {
         getCategory1(){
             let level = $('#level1 option:selected').text();
             $('.strm_clas').hide();
-            // let level = text;
             if(level.toLowerCase().includes('middle')){
                 level="10";
             }
@@ -787,11 +778,6 @@ export default {
                 $('#dzongkhag1').val(response_data.dzongkhagId).trigger('change');
                 this.getGewogList1(response_data.dzongkhagId,response_data.gewogId);
                 this.getvillagelist1(response_data.gewogId,response_data.chiwogId);
-
-                //  id: '',parent_id:'',:'', application_for:'Bifurcation',application_type:'bifurcation',action_type:'edit',
-                //   status:'Submitted',
-                // :'',:'',category1:'1',dzongkhag1:'',gewog1:'',chiwog1:'',:'',
-                // :'0',senSchool1:'0',coLocated1:'0',parentSchool1:'',class:[],stream:[],
                 this.applicationdetailsatt=response_data.attachments;
             });
         },
@@ -803,25 +789,6 @@ export default {
             });
         },
 
-        /**
-         * method to check pending status
-         */
-        /** commented after discussing with phuntsho sir. Need to verify with MOE. */
-
-        // checkPendingApplication(){
-        //     axios.get('organization/checkPendingApplication/bifurcation')
-        //     .then((response) => {
-        //         let data=response.data;
-        //         if(data!=""){
-        //             $('#mainform').hide();
-        //             $('#ApplicationUnderProcess').show();
-        //             $('#existmessage').html('You have already submitted application for basic details change <b>('+data.application_number+')</b> which is under process.');
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.log("Error: "+error);
-        //     });
-        // },
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')

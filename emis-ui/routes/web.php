@@ -749,6 +749,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadBasicStudentList/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadBasicStudentList'])->name('loadBasicStudentList');
     Route::get('/loadStudentByClass/{class}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByClass'])->name('loadStudentByClass');
     Route::get('/loadStudentBySection/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySection'])->name('loadStudentBySection');
+    Route::get('/loadStudentBySectionForRollNo/{param1}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentBySectionForRollNo'])->name('loadStudentBySectionForRollNo');
     Route::get('/loadStudentByType/{type}/{class_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'loadStudentByType'])->name('loadStudentByType');
     Route::get('/studentListByGender/{param}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'studentListByGender'])->name('studentListByGender');
     Route::get('/getStudentClassId/{std_id}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getStudentClassId'])->name('getStudentClassId');
@@ -814,12 +815,8 @@ Route::prefix('students')->group(function () {
     Route::get('/loadViewBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'loadViewBmiDetails'])->name('loadViewBmiDetails');
     Route::get('/getHealthBmiDetails/{param}', [App\Http\Controllers\student\StudentHealthController::class, 'getHealthBmiDetails'])->name('getHealthBmiDetails');
     Route::get('/getBmiDetails/{id}', [App\Http\Controllers\student\StudentHealthController::class, 'getBmiDetails'])->name('getBmiDetails');
-    //Endorse Health Record Routes
-    Route::post('/saveHealthEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'saveHealthEndorsement'])->name('saveHealthEndorsement');
-    Route::get('/loadHealthSummary', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthSummary'])->name('loadHealthSummary');
-    Route::get('/loadScreeningEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadScreeningEndorsement'])->name('loadScreeningEndorsement');
-    Route::get('/loadVaccinationEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadVaccinationEndorsement'])->name('loadVaccinationEndorsement');
-    Route::get('/loadSupplementationEndorsement', [App\Http\Controllers\student\StudentHealthController::class, 'loadSupplementationEndorsement'])->name('loadSupplementationEndorsement');
+    //Health Record Summary
+    Route::get('/loadHealthSummary/{record_type}/{type}/{term}', [App\Http\Controllers\student\StudentHealthController::class, 'loadHealthSummary'])->name('loadHealthSummary');
 
     Route::get('/loadresult/{months}/{gender}/{bmi}', [App\Http\Controllers\student\StudentHealthController::class, 'loadresult'])->name('loadresult');
 
