@@ -178,7 +178,7 @@ export default {
             form: new form({
                 organizationId:'',proposedName:'',initiatedBy:' ', application_type:'name_change',
                 application_for:'Change in Name', action_type:'add', status:'Submitted',organization_type:'',category:'',
-                // service_name:'Change in Name',
+                service_name:'Change in Name',
                 // remarks:'',
                 status:'Submitted',
                 attachments:
@@ -260,6 +260,7 @@ export default {
                         formData.append('application_for', this.form.application_for);
                         formData.append('action_type', this.form.action_type);
                         formData.append('status', this.form.status);
+                        formData.append('service_name', this.form.service_name);
                         formData.append('screenId', this.screenId);
                         formData.append('SysRoleId', this.SysRoleId);
                         formData.append('Sequence', this.Sequence);
