@@ -178,20 +178,6 @@
                                     <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{dzoArray[oldOrg2.dzongkhagId]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Gewog:</label>
-                                    <span class="text-blue text-bold">{{selected_gewog}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Village:</label>
-                                    <span class="text-blue text-bold">{{selected_village}}</span>
-                                </div>
-                            </div> -->
                         </div>
                             <!-- organization 2 -->
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="org2">
@@ -215,10 +201,6 @@
                                     <label>Year of Establishment:</label>
                                     <span class="text-blue text-bold">{{existing_details.yearOfEstablishment}}</span>
                                 </div>
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Zest Code:</label>
-                                    <span class="text-blue text-bold">{{existing_details.zestAgencyCode}}</span>
-                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Category:</label>
                                     <span class="text-blue text-bold">{{existing_details.category}}</span>
@@ -228,20 +210,6 @@
                                     <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Dzongkhag:</label>
-                                    <span class="text-blue text-bold">{{dzoArray[existing_details.dzongkhagId]}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Gewog:</label>
-                                    <span class="text-blue text-bold">{{selected_gewog}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label>Village:</label>
-                                    <span class="text-blue text-bold">{{selected_village}}</span>
-                                </div>
-                            </div> -->
                         </div>  
                         
                         <!-- new organization details -->
@@ -545,8 +513,6 @@ export default {
                 console.log("Error......"+error);
             });
         },
-
-
 
         /**
          * method to show next tab and update application accordingly
