@@ -243,7 +243,7 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                 let data = response.data;

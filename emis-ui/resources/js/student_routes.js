@@ -749,21 +749,21 @@ const routes = [
                 { path: '/std_bmi_view', name:'std_bmi_view', component: require('./components/students/StudentHealth/BMI/std_bmi_view.vue').default },
             ]
         },
-        // Endorse Records
-        { path: '/endorse_health_records',
-        component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_index.vue').default,
+        // Health Record Summary
+        { path: '/health_record_summary',
+        component: require('./components/students/StudentHealth/HealthRecords/health_records_index.vue').default,
             children: [
-                { path: '/', name:'endorse_health_records', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
-                { path: '/endorse_records_list', name:'endorse_records_list', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_list.vue').default },
-                { path: '/endorse_records_add', name:'endorse_records_add', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_add.vue').default,
+                { path: '/', name:'health_health_records', component: require('./components/students/StudentHealth/HealthRecords/health_records_list.vue').default },
+                { path: '/health_records_list', name:'health_records_list', component: require('./components/students/StudentHealth/HealthRecords/health_records_list.vue').default },
+                { path: '/health_records_add', name:'health_records_add', component: require('./components/students/StudentHealth/HealthRecords/health_records_add.vue').default,
                     children: [
-                        { path: '/endorse_vaccination', name:'endorse_vaccination', component: require('./components/students/StudentHealth/EndorseRecords/endorse_vaccination.vue').default },
-                        { path: '/endorse_supplementation', name:'endorse_supplementation', component: require('./components/students/StudentHealth/EndorseRecords/endorse_supplementation.vue').default },
-                        { path: '/endorse_screening', name:'endorse_screening', component: require('./components/students/StudentHealth/EndorseRecords/endorse_screening.vue').default },
+                        { path: '/health_vaccination', name:'health_vaccination', component: require('./components/students/StudentHealth/HealthRecords/health_vaccination.vue').default },
+                        { path: '/health_supplementation', name:'health_supplementation', component: require('./components/students/StudentHealth/HealthRecords/health_supplementation.vue').default },
+                        { path: '/health_screening', name:'health_screening', component: require('./components/students/StudentHealth/HealthRecords/health_screening.vue').default },
                     ]
                 },
-                { path: '/endorse_records_edit', name:'endorse_records_edit', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_edit.vue').default },
-                { path: '/endorse_records_view', name:'endorse_records_view', component: require('./components/students/StudentHealth/EndorseRecords/endorse_records_view.vue').default },
+                { path: '/health_records_edit', name:'health_records_edit', component: require('./components/students/StudentHealth/HealthRecords/health_records_edit.vue').default },
+                { path: '/health_records_view', name:'health_records_view', component: require('./components/students/StudentHealth/HealthRecords/health_records_view.vue').default },
             ]
         },
     ]

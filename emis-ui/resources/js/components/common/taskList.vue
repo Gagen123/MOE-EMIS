@@ -144,7 +144,7 @@
                 if(data.application_number.includes('LC-')){
                     this.$router.push({name:"location_change_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.application_number.includes('Estb') && data.service_name.includes('School')){
+                if(data.application_number.includes('Estb') && (data.service_name.includes('School') || data.service_name.includes('ECR'))){
                     this.$router.push({name:"establishment_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.application_number.includes('Mer')){

@@ -877,6 +877,12 @@ export default {
                         this.final_showsearch=true;
                         $('#final_verifier_team').show();
                     }
+                    if(status_id>3 ){
+                        $('#verifier_team').show();
+                    }
+                    if(status_id>8){
+                        $('#final_verifier_team').show();
+                    }
                 }
                 if(status_id==6){ //show final verifying agencies
                     $('#finalverificationdetials').show();
@@ -957,8 +963,7 @@ export default {
                             }
                         }
                         for(let i=0;i<data.app_verification.length;i++){
-                            if(issetfinal && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
-                                alert('dd');
+                            if((!issetfinal || status_id>6) && data.app_verification[i].type!=null && data.app_verification[i].type=="Initial_Assessment"){
                                 this.form.verifying_agency_verified_list.push({department:data.app_verification[i].department_name, division:data.app_verification[i].division_name});
                                 option+='<option value="'+data.app_verification[i].verifyingAgency+'">'+data.app_verification[i].department_name+'( '+data.app_verification[i].division_name+')</option>';
                             }

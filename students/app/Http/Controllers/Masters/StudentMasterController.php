@@ -7,6 +7,7 @@ use App\Models\AdmissionValidationModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
 use App\Models\Masters\StudentType;
@@ -49,7 +50,19 @@ class StudentMasterController extends Controller
             'name'  =>  'required',
         ];
 
-        $this->validate($request, $rules);
+        // $rules = [
+        //     'name' => 'required',
+        //     'code' =>  [
+        //                  'required', 
+        //                  Rule::unique('cea_award', 'Code')
+        //                         ->where('Name', $request->name)
+        //                 ]
+        // ];
+        $customMessages = [
+            'name.required' => 'This field cannot be empty'
+         ];
+
+        $this->validate($request, $rules, $customMessages);
 
         $record_type = $request['record_type'];
 
@@ -260,8 +273,9 @@ class StudentMasterController extends Controller
             $data = $model::where('CeaProgrammeTypeId', $program_type->id)->get();
             return $data;
         }else if($param == 'program_item_central' || $param == 'program_item_local'){
-            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item', $type='Model');
+            $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item_central', $type='Model');
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
+            
             $model = new $modelName();
             if($param == 'program_item_central'){
                 $data = $model::where('status',1)->where('Central',1)->get();
@@ -356,16 +370,6 @@ class StudentMasterController extends Controller
                 'created_by'=>$request['user_id'],
                 'created_at'=>date('Y-m-d h:i:s'),
             ];
-
-            if($record_type=="CeaProgramItem"){
-                $additional_data = [
-                    'Central'   =>  $request['central'],
-                    'Local'     =>  $request['local'],
-                    'Unit_id'   =>  $request['unit_id'],
-                    'CeaProgrammeItemVarietyId'   =>  $request['variety'],
-                ];
-                $data = $data + $additional_data;
-            }
         }
 
         switch($record_type){
@@ -406,6 +410,19 @@ class StudentMasterController extends Controller
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeTypeId'  =>  $request['program_type'],
+                        ];
+                        $data = $data + $additional_data;
+                    }
+                    break;
+                }
+            case "CeaProgramItem" : {
+                    $databaseModel = "CeaProgramItem";
+                    if($type =='data'){
+                        $additional_data = [
+                            'Central'   =>  $request['central'],
+                            'Local'     =>  $request['local'],
+                            'Unit_id'   =>  $request['unit_id'],
+                            'CeaProgrammeItemVarietyId'   =>  $request['variety'],
                         ];
                         $data = $data + $additional_data;
                     }
@@ -476,6 +493,14 @@ class StudentMasterController extends Controller
                         ];
                         $data = $data + $additional_data;
                     }
+                    break;
+                }
+            case "program_item_central" : {
+                    $databaseModel = "CeaProgramItem";
+                    break;
+                }
+            case "program_item_local" : {
+                    $databaseModel = "CeaProgramItem";
                     break;
                 }
             default : {

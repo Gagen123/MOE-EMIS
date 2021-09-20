@@ -263,6 +263,7 @@ class OrganizationApprovalController extends Controller{
                 'access_level'                  =>  $this->getAccessLevel(),
                 'action_by'                     =>  $this->userId(),
             ];
+            // dd($notification_data);
             $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         }
 
@@ -332,14 +333,14 @@ class OrganizationApprovalController extends Controller{
         $workflow=$this->insertworkflow($request,$request->applicationNo);
         if($request->update_type!="update_document" && $request->update_type!="final_update_document"){
             if($request->update_type=="Notify_for_Tentative_Date_of_Feasibility_Study" || $request->update_type=="Update_Feasibility_Study_Report" || $request->update_type=="Notify_for_Approval_in_Principle"
-            || $request->update_type=="Notify_for_Tentative_Date_of_Final_Assessment" || $request->update_type=="Update_Final_Assessment_Report" || strpos(strtolower($request->update_type),'final_approval')!==false){
+            || $request->update_type=="Notify_for_Tentative_Date_of_Final_Assessment" || $request->update_type=="Update_Final_Assessment_Report" || strpos(strtolower($request->update_type),'final_approval')!==false || strpos(strtolower($request->update_type),'approve')!==false){
                 $message='Notification for tentative date';
                 $messat_to='creater';
                 $message_type='user';
                 $link='tasklist';
                 $user_role_id=$request->created_by;
             }
-            if($request->update_type=="Request_for_Final_Assessment"){
+            if($request->update_type=="Update_Sector_Clearance" || $request->update_type=="Request_for_Final_Assessment"){
                 $seq=((int) $request->Sequence +1);
                 // dd($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
                 $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));

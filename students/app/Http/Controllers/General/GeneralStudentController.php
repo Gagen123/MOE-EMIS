@@ -95,17 +95,79 @@ class GeneralStudentController extends Controller
         return $records;
     }
 
-    public function loadStudentBySectionForRollNumber($param1){
-        $id = $param1;
-        $class_details = explode('__', $id);
+    /**
+     * Function will sort student list by name (ASC or DEC) and gender
+     */
+
+    public function loadStudentBySectionForRollNo($data){
+        //get the array from the url parameters
+        parse_str($data, $data_parameters);
+        
+        $gender_params = $data_parameters['gender_params'];
+        $gender = [];
+        foreach($gender_params as $data_values){
+            foreach($data_values as $key =>$value){
+                if($value['name'] == 'Female'){
+                    $gender['Female'] = $value['id'];
+                }
+                if($value['name'] == 'Male'){
+                    $gender['Male'] = $value['id'];
+                }
+            }
+        }
+
+        $form_params = $data_parameters['form_params'];
+
+        $form_details = explode('__', $form_params);
+
+        $gender_1 = '';
+        $gender_2 = '';
+
+        if($form_details[4] == 'Male'){
+            $gender_1 = 'Male';
+            $gender_2 = 'Female';
+        } else {
+            $gender_1 = 'Female';
+            $gender_2 = 'Male';
+        }
+        
+        if($form_details[4]== 'Mixed'){
+            $records = DB::table('std_student') 
+                        ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                        ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
+                        'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId') 
+                        ->where('std_student_class_stream.OrgClassStreamId',$form_details[0]) 
+                        ->where('std_student_class_stream.SectionDetailsId',$form_details[2])
+                        ->orderBy('std_student.Name', 'ASC')
+                        ->get();
+                        
+            return $records;
+        } else {
+            $first_record = $this->orderStudentByGender($gender[$gender_1], $form_details[0], $form_details[2], $form_details[3]);
+            $second_record = $this->orderStudentByGender($gender[$gender_2], $form_details[0], $form_details[2], $form_details[3]);
+
+            $records = $first_record->merge($second_record);
+            return $records;
+        }
+    }
+
+    /**
+     * Function to sort Students by Name based on gender
+     * 
+     * This function is used only by loadStudentBySectionForRollNo
+     */
+
+    private function orderStudentByGender($gender, $OrgClassStreamId, $SectionDetailsId, $order){
         $records = DB::table('std_student') 
-                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
-                    ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
-                    'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId',) 
-                    ->where('std_student_class_stream.OrgClassStreamId',$class_details[0]) 
-                    ->where('std_student_class_stream.SectionDetailsId',$class_details[2])
-                    ->orderBy('std_student.Name', 'asc')
-                    ->get();
+                        ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId')
+                        ->select('std_student.id AS id', 'std_student.Name', 'std_student.student_code', 'std_student.DateOfBirth',
+                        'std_student.CmnSexId', 'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId') 
+                        ->where('std_student_class_stream.OrgClassStreamId',$OrgClassStreamId) 
+                        ->where('std_student_class_stream.SectionDetailsId',$SectionDetailsId)
+                        ->where('std_student.CmnSexId', $gender)
+                        ->orderBy('std_student.Name', $order)
+                        ->get();
+                        
         return $records;
     }
 

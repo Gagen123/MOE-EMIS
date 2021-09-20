@@ -87,7 +87,7 @@ class EstablishmentController extends Controller{
                     $dataModel = 'ApplicationEstPrivate';
                     break;
                 }
-                case "public_ecr" : {
+                case "Public ECR" : {
                     $establishment_data = $this->extractPublicEstDetailsData($request, $application_details_data->id);
                     $dataModel = 'ApplicationEstPublic';
                     break;
@@ -235,7 +235,7 @@ class EstablishmentController extends Controller{
             'proposedName'                 =>  $request['proposedName'],
             'initiated_by'                 =>  $request['initiatedBy'],
             'levelId'                      =>  $request['level'],               //edited from 'level'     =>  $request['level']
-            'locationId'                   =>  $request['locationType'],        //edited from 'locationTypeId'    =>  $request['locationType'],
+            'locationId'                   =>  $request['proposedLocation'],        //edited from 'locationTypeId'    =>  $request['locationType'],
             'isGeoPoliticallyLocated'      =>  $request['geopoliticallyLocated'],
             'isSenSchool'                  =>  $request['senSchool'],
             'isFeedingSchool'              =>  $request['isfeedingschool'],

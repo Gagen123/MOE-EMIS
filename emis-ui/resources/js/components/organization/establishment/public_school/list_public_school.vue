@@ -42,15 +42,12 @@ export default {
             dateData.split("-").reverse().join("-");
             return reverse;
         },
-        loadDataList(uri='organization/loadOrgApplications/Public_School'){
+        loadDataList(uri='organizationApproval/loadOrgApplications/Public_School'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.dataList =  data.data.data;
             })
-            .catch(function (error) {
-                console.log('error loadDataList: '+error);
-            });
         },
         showedit(data){
             this.$router.push({name:'edit_public_school',params: {id:data.id}});

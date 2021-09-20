@@ -417,44 +417,18 @@ class StudentHealthController extends Controller
     }
 
     /**
-     * Functions for Endorsing health records
+     * Functions for health summary records
      */
 
-    
-    public function saveHealthEndorsement(Request $request){
-        $data =[
-            'id'                            => $request->id,
-            'endorsed_by'                   => $this->userId(),
-            'health_record_type'            => $request->health_record_type,
-            'organization_id'               => $this->getWrkingAgencyId(),
-            'user_id'                       => $this->userId()
-        ];
+    public function loadHealthSummary($record_type="", $type="", $term=""){
+        $data_parameters['record_type'] = $record_type;
+        $data_parameters['health_type'] = $type;
+        $data_parameters['term'] = $term;
+        $data_parameters['organization_id'] = $this->getWrkingAgencyId();
 
-        $response_data= $this->apiService->createData('emis/students/saveHealthEndorsement', $data);
-        return $response_data;
-    }
+        $data = http_build_query($data_parameters);
 
-    public function loadHealthSummary(){
-        $org_id = $this->getWrkingAgencyId();
-        $health_records = $this->apiService->listData('emis/students/loadHealthSummary/'.$org_id);
-        return $health_records;
-    }
-
-    public function loadScreeningEndorsement(){
-        $org_id = $this->getWrkingAgencyId();
-        $health_records = $this->apiService->listData('emis/students/loadScreeningEndorsement/'.$org_id);
-        return $health_records;
-    }
-
-    public function loadVaccinationEndorsement(){
-        $org_id = $this->getWrkingAgencyId();
-        $health_records = $this->apiService->listData('emis/students/loadVaccinationEndorsement/'.$org_id);
-        return $health_records;
-    }
-
-    public function loadSupplementationEndorsement(){
-        $org_id = $this->getWrkingAgencyId();
-        $health_records = $this->apiService->listData('emis/students/loadSupplementationEndorsement/'.$org_id);
+        $health_records = $this->apiService->listData('emis/students/loadHealthSummary/'.$data);
         return $health_records;
     }
 }
