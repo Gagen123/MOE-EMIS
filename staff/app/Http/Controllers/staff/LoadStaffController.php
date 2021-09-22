@@ -91,12 +91,7 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="orgwise" || $type=="userworkingagency"){
-            try{
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','dzo_id','village_id','comp_sub_id','elective_sub_id1','elective_sub_id2')->where('working_agency_id',$parent_id)->where('status','Created')->get());
-
-            }catch(Exception $e){
-                dd($e);
-            }
         }
         if($type=="emptype"){
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());
@@ -147,40 +142,5 @@ class LoadStaffController extends Controller{
             dd($e);
         }
     }
-    public function loadStaffCountDetail($type="", $id=""){
-        $response_data="";
-        if($type=="staffCount"){
-            $response_data=PersonalDetails::where('working_agency_id',$id)->first();
-            $response_data->total_Staff = DB::select("SELECT working_agency_id,
-                COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS Totalmale,
-                COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS TotalFemale,
-                COUNT(id) AS TOTAL
-            FROM `stf_staff`
-            WHERE `working_agency_id`= '".$id."'");
-            $response_data->counselor=DB::select("SELECT working_agency_id,
-                COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS Malecounselor,
-                COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS Femalecounselor,
-                COUNT(id) AS TOTALCouunselor
-            FROM `stf_staff`
-            WHERE `working_agency_id`= '".$id."'
-            AND `position_title_id` ='0fbfd08a-489d-4755-8bd7-a8665a2dd947'");
-            $response_data->isSen=DB::select("SELECT working_agency_id,
-                COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS maleSen,
-                COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS femaleSen,
-                COUNT(id) AS totalSen
-            FROM `stf_staff`
-            WHERE `working_agency_id`= '".$id."'
-            AND `is_sen` ='1'");
-            $response_data->SportInstructor=DB::select("SELECT working_agency_id,
-                COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS MaleSportInst,
-                COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS FemaleSportInst,
-                COUNT(id) AS TotalSportsInst
-            FROM `stf_staff`
-            WHERE `position_title_id` ='315b2020-fd17-4f0c-a643-15b603ff1f08'
-            AND `working_agency_id`= '".$id."'");
-        }
-        return $this->successResponse($response_data);
-    }
-
 
 }

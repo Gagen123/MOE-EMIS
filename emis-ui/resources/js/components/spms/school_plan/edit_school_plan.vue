@@ -76,7 +76,7 @@
                 </div>
                 <div class="row form-group ">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Remarks:<span class="text-danger">*</span></label> 
+                        <label>Remarks:</label> 
                         <textarea class="form-control form-control-sm" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" id="remarks" @change="remove_err('remarks')"></textarea>
                         <has-error :form="form" field="remarks"></has-error>
                     </div>
@@ -84,7 +84,6 @@
             </div>
             <div class="card-footer text-right">
                 <button @click.prevent="save('draft')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save as Draft</button>
-                <button type="button" @click="save('submit')" class="btn btn-flat btn-sm btn-primary"><i class="fas fa-check-circle"></i> Submit</button>
             </div>
         </form>
     </div>     
@@ -180,9 +179,6 @@ export default {
         },
 		save(action=''){
             if(action=="draft"){
-                this.form.school_plan_status = 0
-            }
-            if(action=="submit"){
                 this.form.school_plan_status = 1
             }
             this.form.post('/spms/saveSchoolPlan',this.form)
@@ -191,6 +187,7 @@ export default {
                     icon: 'success',
                     title: 'Details added successfully'
                 })
+                 this.$router.push('/lists-annual-school-plan');
             })
             .catch(() => {
                 console.log("Error.")

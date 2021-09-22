@@ -154,8 +154,7 @@ class SpmsController extends Controller
             'end_date' => 'required|after_or_equal:start_date',
             'person_responsible' => 'required',
             'implementation_status_id' => 'required',
-            'remarks' => 'required',
-        ];
+         ];
         $customMessages = [
             'spm_domain_id.required' => 'This field is required',
             'activity.required' => 'This field is required',
@@ -165,7 +164,6 @@ class SpmsController extends Controller
             'end_date.required' => 'This field is required',
             'person_responsible.required' => 'This field is required',
             'implementation_status_id.required' => 'This field is required',
-            'remarks.required' => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $request['dzon_id'] = $this->getUserDzoId();
@@ -183,6 +181,36 @@ class SpmsController extends Controller
             $view_row = "Submitted_row";
         }
         $response_data =$this->apiService->listData('emis/spms/getSchoolPlan/'.$school_id.'/'.$view_row);
+        return $response_data;
+    }
+    public function updateSchoolPlanStatusId(Request $request){
+        $rules = [
+            'data.*.submitted_status' => 'required',
+            'data.*.id' => 'required',
+            'data.*.spm_domain_id' => 'required',
+            'data.*.plan_date' => 'required',
+            'data.*.domain' => 'required',
+            'data.*.start_date'=> 'required',
+            'data.*.end_date' => 'required|after_or_equal:start_date',
+            'data.*.implementation_status' => 'required',
+            'data.*.school_plan_status_id' => 'required',
+        ];
+        $customMessages = [
+            'data.*.submitted_status.required' => 'This field is required',
+            'data.*.id.required' => 'This field is required',
+            'data.*.plan_date.required' => 'This field is required',
+            'data.*.domain.required' => 'This field is required',
+            'data.*.spm_domain_id.required' => 'This field is required',
+            'data.*.start_date.required' => 'This field is required',
+            'data.*.end_date.required' => 'This field is required',
+            'data.*.implementation_status.required' => 'This field is required',
+            'data.*.school_plan_status_id.required' => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+      
+        $response_data = $this->apiService->createData('emis/spms/updateSchoolPlanStatusId',$data);
         return $response_data;
     }
    

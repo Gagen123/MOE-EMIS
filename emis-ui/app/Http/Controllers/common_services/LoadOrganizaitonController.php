@@ -53,9 +53,6 @@ class LoadOrganizaitonController extends Controller{
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
-
-
-
     public function loadInactiveOrgList(){
         $dzo_id = $this->getUserDzoId();
         return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/'.$dzo_id);

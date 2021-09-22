@@ -647,6 +647,9 @@ class AcademicController extends Controller
         $response_data = $this->apiService->listData('emis/academics/getSubjectTeacherBySubId/'.$aca_sub_id);
         return $response_data;
     }
+    public function getSubCategNonAcademic(){
+        return $this->apiService->listData('emis/academics/getSubCategNonAcademic');
+    }
     public function saveRemedialClass(Request $request){
         $rules = [
             'org_class_id' => 'required',

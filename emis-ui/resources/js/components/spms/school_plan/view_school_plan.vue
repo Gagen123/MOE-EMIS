@@ -75,7 +75,7 @@
                                 <td>{{item.status_date}}</td>
                                 <td>{{item.status}}</td>
                                 <td>{{item.remarks}}</td>
-                                <td>{{item.role}}</td>
+                                <td>{{item.name}}, {{item.role}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -220,7 +220,7 @@ export default {
             columnDefs: [
                 { width: 70    , targets: 0},
                 { width: 150    , targets: 1},
-                { width: 80, targets: 3},
+                { width: 150, targets: 3},
             ],
             "lengthChange": false,
             "searching": false,
@@ -255,7 +255,7 @@ export default {
                     columnDefs: [
                         { width: 70, targets: 0},
                         { width: 150, targets: 1},
-                        { width: 80, targets: 3},
+                        { width: 150, targets: 3},
                     ],
                     "lengthChange": false,
                     "searching": false,

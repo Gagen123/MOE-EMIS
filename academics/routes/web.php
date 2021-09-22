@@ -68,6 +68,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveRemedialClass',['uses' => 'academic\AcademicController@saveRemedialClass']);
         $router->get('/getRemedialClass/{orgId}',['uses' => 'academic\AcademicController@getRemedialClass']);
         $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
+        $router->get('/getSubCategNonAcademic',['uses' => 'academic\AcademicController@getSubCategNonAcademic']);
 
     });
 });

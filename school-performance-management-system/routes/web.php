@@ -33,6 +33,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getSchoolDashboardData/{org_id}', ['uses' => 'spms\SpmsController@getSchoolDashboardData']);
         $router->post('/saveSchoolPlan', ['uses' => 'spms\SpmsController@saveSchoolPlan']);
         $router->get('/getSchoolPlan/{school_id}/{view_row}', ['uses' => 'spms\SpmsController@getSchoolPlan']);
+        $router->post('/updateSchoolPlanStatusId', ['uses' => 'spms\SpmsController@updateSchoolPlanStatusId']);
         $router->post('/saveImplementtationStatus', ['uses' => 'spms\SpmsController@saveImplementtationStatus']);
         $router->get('/getSchoolPlanDetails/{spm_school_plan_id}', ['uses' => 'spms\SpmsController@getSchoolPlanDetails']);
         $router->get('/getSchoolPlanHistory/{spm_school_plan_id}', ['uses' => 'spms\SpmsController@getSchoolPlanHistory']);

@@ -832,10 +832,11 @@ class AcademicController extends Controller
                         FROM (
                             SELECT t1.std_student_id,t1.aca_promotion_sub_group_id,SUM(t1.passed)>=IF(t1.aca_promotion_sub_group_id=0,COUNT(t1.aca_sub_id),t1.aca_promotion_sub_group_id) as passed
                             FROM (
-                                SELECT t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,(IF(t7.input_type=1,SUM(t4.score),ROUND(AVG(t4.score)))>=t6.pass_score) AS passed
+                                SELECT t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,IF(t7.input_type=1,(SUM(IF(t5.aca_assmnt_type=0,t4.score,0))/SUM(IF(t5.aca_assmnt_type=0,t51.weightage,0)))*100>=t6.pass_score AND (SUM(IF(t5.aca_assmnt_type=1,t4.score,0))/SUM(IF(t5.aca_assmnt_type=1,t51.weightage,0)))*100>=t6.pass_score,ROUND(AVG(t4.score))>=t6.pass_score) AS passed
                                 FROM (aca_student_assessment t3 
                                     JOIN aca_student_assessment_detail t4 ON t3.id = t4.aca_student_assmt_id 
                                     JOIN aca_assessment_area t5 ON t4.aca_assmt_area_id=t5.id)
+                                    JOIN (SELECT aca_assmt_area_id,SUM(weightage) AS weightage  FROM aca_class_subject_assessment WHERE org_class_id = ? AND (org_stream_id IS NULL OR org_stream_id = ?) GROUP BY aca_assmt_area_id) t51 ON t5.id = t51.aca_assmt_area_id
                                     JOIN aca_class_subject t6 ON t5.aca_sub_id = t6.aca_sub_id AND t3.org_class_id = t6.org_class_id AND (t3.org_stream_id = t6.org_stream_id OR (t3.org_stream_id is null AND t6.org_stream_id IS NULL))
                                     JOIN aca_rating_type t7 ON t6.aca_rating_type_id=t7.id
                                     JOIN aca_promotion_rule t8 ON t5.aca_sub_id = t8.aca_sub_id AND t3.org_class_id = t8.org_class_id AND (t3.org_stream_id = t8.org_stream_id OR (t3.org_stream_id is null AND t8.org_stream_id IS NULL))
@@ -846,7 +847,7 @@ class AcademicController extends Controller
                         ) t0
                         GROUP BY t0.std_student_id";
 
-                    $pass_fail_param = [$orgId,$request->org_class_id];
+                    $pass_fail_param = [$request->org_class_id,$request->org_stream_id,$orgId,$request->org_class_id];
                     if($request->org_stream_id){
                         $pass_fail_query .= ' AND t6.org_stream_id = ?';
                         array_push($pass_fail_param, $request->org_stream_id);
@@ -1015,7 +1016,7 @@ class AcademicController extends Controller
         }
     }
     public function getResult($std_student_id){
-        $result = DB::select('SELECT id, result,remarks  FROM aca_result_consolidated_detail WHERE std_student_id = ?',[$std_student_id]);
+        $result = DB::select('SELECT result,remarks  FROM aca_result_consolidated_detail WHERE std_student_id = ?',[$std_student_id]);
         return $this->successResponse($result);
     }
     public function getSubjectByClass($class_id,$stream_id=""){
@@ -1095,6 +1096,10 @@ class AcademicController extends Controller
    
     });
     return $this->successResponse(1, Response::HTTP_CREATED);
+    }
+    public function getSubCategNonAcademic(){
+        $sub_categ_non_academic = env('SUB_CATEG_NON_ACADEMIC');
+        return $this->successResponse(DB::select('SELECT t2.name,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.aca_sub_category_id = ?',[$sub_categ_non_academic]));
     }
     public function getRemedialClass($orgId){
         return $this->successResponse(DB::select('SELECT t1.id,t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.aca_sub_id,t1.stf_staff_id,t1.from_date,t1.to_date,t1.total_no_of_hours,t1.time,t2.name AS subject 

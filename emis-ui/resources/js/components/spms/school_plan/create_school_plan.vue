@@ -76,7 +76,7 @@
                 </div>
                 <div class="row form-group ">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Remarks:<span class="text-danger">*</span></label> 
+                        <label>Remarks:</label> 
                         <textarea class="form-control form-control-sm" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" id="remarks" @change="remove_err('remarks')"></textarea>
                         <has-error :form="form" field="remarks"></has-error>
                     </div>

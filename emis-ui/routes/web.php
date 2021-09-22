@@ -904,6 +904,7 @@ Route::prefix('academics')->group(function () {
     Route::post('/saveRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'saveRemedialClass'])->name('saveRemedialClass');
     Route::get('/getRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClass'])->name('getRemedialClass');
     Route::get('/getRemedialClassDetail/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClassDetail'])->name('getRemedialClassDetail');
+    Route::get('/getSubCategNonAcademic', [App\Http\Controllers\academics\AcademicController::class, 'getSubCategNonAcademic'])->name('getSubCategNonAcademic');
 });
 Route::prefix('spms')->group(function () {
     Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');
@@ -912,6 +913,7 @@ Route::prefix('spms')->group(function () {
     Route::post('/saveEvaluation', [App\Http\Controllers\spms\SpmsController::class, 'saveEvaluation'])->name('saveEvaluation');
     Route::get('/getSchoolDashboardData', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolDashboardData'])->name('getSchoolDashboardData');
     Route::post('/saveSchoolPlan', [App\Http\Controllers\spms\SpmsController::class, 'saveSchoolPlan'])->name('saveSchoolPlan');
+    Route::post('/updateSchoolPlanStatusId', [App\Http\Controllers\spms\SpmsController::class, 'updateSchoolPlanStatusId'])->name('updateSchoolPlanStatusId');
     Route::get('/getSchoolPlan/{school_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlan'])->name('getSchoolPlan');
     Route::post('/saveImplementtationStatus', [App\Http\Controllers\spms\SpmsController::class, 'saveImplementtationStatus'])->name('saveImplementtationStatus');
     Route::get('/getSchoolPlanDetails/{spm_school_plan_id}', [App\Http\Controllers\spms\SpmsController::class, 'getSchoolPlanDetails'])->name('getSchoolPlanDetails');

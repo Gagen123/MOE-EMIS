@@ -42,7 +42,7 @@
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
                                 <td>{{index3 + 1}}</td>
                                 <td>
-                                    <router-link :to="{name:'final_result_subject_columns'}">{{ item3.Name }}</router-link>
+                                    <router-link :to="{ name: 'final_result_subject_columns', params: {data:item3}}" >{{ item3.Name }}</router-link>
                                 </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
                                     <span v-if="!(consolidatedResultList[index3][item4['aca_assmt_term_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']] === undefined) && !(consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']] === undefined)">
@@ -139,9 +139,9 @@
                     scrollCollapse: true,
                     paging:         false,
                     searching: false,
-                    fixedColumns:   {
-                        leftColumns: 2
-                    },
+                    // fixedColumns:   {
+                    //     leftColumns: 1
+                    // },
                     columnDefs: [
                         { width: 50, targets: 0},
                         { width: 200, targets: 1},
