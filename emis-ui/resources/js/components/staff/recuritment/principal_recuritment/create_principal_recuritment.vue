@@ -344,7 +344,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Principal Recruitment__'+1)
+            axios.get('organizationApproval/getScreenId/Principal Recuritment__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){

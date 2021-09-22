@@ -140,6 +140,7 @@ class RestructuringController extends Controller
         // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         if($request->action_type!="edit"){
+            
             $appNo=json_decode($response_data)->data->application_no;
             $status=0;
             $status= $status+1;

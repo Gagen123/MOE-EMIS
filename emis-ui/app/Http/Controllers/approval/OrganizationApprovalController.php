@@ -310,7 +310,6 @@ class OrganizationApprovalController extends Controller{
             $org_status="Updated Final Assessment Report";
             $request->Status_Name=$org_status;
         }
-
         $estd =[
             'status'                       =>   $org_status,
             'application_number'           =>   $request->applicationNo,

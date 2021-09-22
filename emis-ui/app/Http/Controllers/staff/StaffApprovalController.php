@@ -84,6 +84,7 @@ class StaffApprovalController extends Controller
             //pulling the role id for next verifier or approval 
             $seq=((int) $request->Sequence +1);
             $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            dd( $next_roleId);
             $role_id=$next_roleId[0]->SysRoleId;
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/savePrincipalApproval', $principalApproval_data);
             $appNo=json_decode($response_data)->application_no;
