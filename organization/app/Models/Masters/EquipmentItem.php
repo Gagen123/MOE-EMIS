@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class EquipmentItem extends Model
 {
     use HasFactory, Uuid;
-    protected $table="equipment_items";
+    protected $table="master_equipment_items"; 
 
     /**
      * The attributes that are mass assignable.
