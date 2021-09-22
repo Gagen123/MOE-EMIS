@@ -89,7 +89,6 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-
         }
     },
     methods: {
@@ -184,7 +183,6 @@
                     this.$router.push({name:"open_staff_recruitment_verification",params:{data:data,type:actiontype}});
                 }
             }
-
         }
     },
     mounted(){
@@ -195,15 +193,15 @@
         this.loadowntask();
     },
     watch:{
-        commonTaskList() {
+        commonTaskList(){
             this.dt.destroy();
-            this.$nextTick(() => {
+            this.$nextTick(() =>{
                 this.dt =  $("#common-task-table").DataTable()
             });
         },
-        myTaskList() {
+        myTaskList(){
             this.dt1.destroy();
-            this.$nextTick(() => {
+            this.$nextTick(() =>{
                 this.dt =  $("#own-task-table").DataTable()
             });
         }

@@ -42,15 +42,15 @@
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Dzongkhag:</label>
-                                        <input type="text" readonly :value="dzongkhagArray[organization_details.dzongkhagId]"  class="form-control" id="proposedName"/>
+                                        <input type="text" readonly :value="organization_details.dzongkhag"  class="form-control" id="proposedName"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Gewog:</label>
-                                        <input type="text" readonly  class="form-control" id="gewogid"/>
+                                        <input type="text" readonly :value="organization_details.gewog"  class="form-control" id="gewogid"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Village:</label>
-                                        <input type="text" readonly class="form-control" id="vilageId"/>
+                                        <input type="text" readonly :value="organization_details.chewog"  class="form-control" id="vilageId"/>
                                     </div>
                                 </div>
 
@@ -125,9 +125,6 @@ export default {
             streamList:[],
             category:'',
             levelArray:{},
-            dzongkhagArray:{},
-            gewogArray:{},
-            villageArray:{},
             locationArray:{},
             calssArray:{},
             streamArray:{},
@@ -281,8 +278,6 @@ export default {
                  this.form.organization_type=response.data.data.category; //this is required to check the screen while submitting
                 this.organization_details=response.data.data;
                 this.category=this.organization_details.category.replace('_', " ").charAt(0).toUpperCase()+ this.organization_details.category.replace('_', " ").slice(1);
-                this.getGewogList(response.data.data.dzongkhagId,response.data.data.gewogId);
-                this.getvillagelist(response.data.data.gewogId,response.data.data.chiwogId);
             });
         },
 
@@ -338,32 +333,6 @@ export default {
             });
         },
 
-        getGewogList(dzongkhag,gewogId){
-            let uri = 'masters/all_active_dropdowns/dzongkhag/'+dzongkhag;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.gewogArray[data[i].id] = data[i].name;
-                }
-                $('#gewogid').val(this.gewogArray[gewogId]);
-            });
-        },
-
-        getvillagelist(gewogId,vil_id){
-            let uri = 'masters/all_active_dropdowns/gewog/'+gewogId;
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.villageArray[data[i].id] = data[i].name;
-                }
-                $('#vilageId').val(this.villageArray[vil_id])
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
         getLocation(uri = '/organization/getLocationInDropdown'){
             axios.get(uri)
             .then(response => {

@@ -10,7 +10,7 @@ class Accessible extends Model
 {
     //
     use HasFactory, Uuid;
-    protected $table="accessible_type";
+    protected $table="master_accessible_type";
     protected $fillable = [
         'id','name', 'description','code',
          'status','created_by','updated_by','created_at','updated_at'
