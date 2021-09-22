@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ServiceProvider extends Model
 {
     use HasFactory, Uuid;
-    protected $table="service_providers";
+    protected $table="master_service_providers";  
     /**
      * The attributes that are mass assignable.
      *

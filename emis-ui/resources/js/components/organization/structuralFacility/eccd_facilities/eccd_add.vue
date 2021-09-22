@@ -449,6 +449,34 @@ export default {
                     console.log("Error......")
                 })
             }
+            // if(type=="save"){
+            //     Swal.fire({
+            //         title: 'Are you sure you wish to submit this form ?',
+            //         icon: 'warning',
+            //         showCancelButton: true,
+            //         confirmButtonColor: '#3085d6',
+            //         cancelButtonColor: '#d33',
+            //         confirmButtonText: 'Yes!',
+            //         }).then((result) =>{
+            //         if (result.isConfirmed){
+            //             this.form.post('/organization/saveEccd',this.form)
+            //             .then((response) =>{
+            //                 Toast.fire({
+            //                 icon: 'success',
+            //                 title: 'Details added successfully'
+            //             })
+            //             this.$router.push('/eccd_list');
+            //             })
+            //             .catch((error) => {
+            //                 Toast.fire({
+            //                     icon: 'error',
+            //                     title: 'Unexpected error occured. Try again.'
+            //                 });
+            //                 console.log("Error:"+error);
+            //             })
+            //         }
+            //     })
+            // }
 		},
 
         getFacilityDropdown(uri = '/organization/getFacilityInDropdown'){

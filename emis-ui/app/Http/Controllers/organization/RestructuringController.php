@@ -287,16 +287,13 @@ class RestructuringController extends Controller
         $screen_id="";
         $sequence="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
-        // dd($loadOrganizationDetails);
         // dd($this->apiService->listData('emis/organization/changeDetails/loadChangeDetailForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->establishment_type;//pulled category from existing organization details to match the data for verification
-        // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
+            // dd($workflowdet);
             //check with screen name and then type of organization
-            // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
-            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
+            if($work->Sequence!=1 ||$work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -339,7 +336,6 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
-        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         $files = $request->attachments;
@@ -487,9 +483,8 @@ class RestructuringController extends Controller
         $sequence="";
         $workflowstatus="";
         $workflowdet=json_decode($this->apiService->listData('system/getcurrentworkflowstatus/'.json_decode($updated_data)->data->screen_id.'/'.$this->getRoleIds('roleIds')));
-        // dd($workflowdet);
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
-        //dd($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
+        // dd($this->apiService->listData('emis/organization/merger/loadMergerForVerification/'.$appNo));
         $service_name=$loadOrganizationDetails->data->category;//pulled category from existing organization details to match the data for verification
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
@@ -504,6 +499,7 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->app_stage=$workflowstatus;
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
+            
         }
         // dd($loadOrganizationDetails);
         // $loadOrganizationDetails->app_stage=$workflowstatus;
@@ -534,7 +530,6 @@ class RestructuringController extends Controller
             'working_agency_id' =>$this->getWrkingAgencyId(),
             'action_by'         =>$this->userId(),
         ];
-        // dd($workflow_data);
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
 
         $files = $request->attachments;
@@ -622,12 +617,12 @@ class RestructuringController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
         $closure =[
-            'organizationId'    =>$request['organizationId'],
-            'reason'            =>$request['reason'],
-            'remark'            =>$request['remark'],
-            'id'                =>$request['id'],
-            'attachment_details'       =>$attachment_details,
-            'user_id'           =>$this->userId()
+            'organizationId'             =>$request['organizationId'],
+            'reason'                     =>$request['reason'],
+            'remark'                     =>$request['remark'],
+            'id'                         =>$request['id'],
+            'attachment_details'         =>$attachment_details,
+            'user_id'                    =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/organization/closure/saveClosure', $closure);
         $appNo=json_decode($response_data)->data->application_no;
@@ -694,7 +689,7 @@ class RestructuringController extends Controller
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
-            if($work->Sequence!=1 && strpos(strtolower($work->screenName),'closure')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            if($work->Sequence!=1 || strpos(strtolower($work->screenName),'closure')!==false){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -945,8 +940,8 @@ class RestructuringController extends Controller
         $service_name=$loadOrganizationDetails->data->establishment_type;
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
-            //check with screen name and then type of organization
-            // if($work->Sequence!=1 && strpos(strtolower($work->screenName),'merge')!==false && $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+            // check with screen name and then type of organization
+            // if($work->Sequence!=1 || $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
             //     $workflowstatus=$work->Status_Name;
             //     $screen_id=$work->SysSubModuleId;
             //     $sequence=$work->Sequence;
@@ -1181,7 +1176,7 @@ class RestructuringController extends Controller
         // dd($loadOrganizationDetails,$workflowdet);
         $service_name=$loadOrganizationDetails->data->establishment_type;
         foreach($workflowdet as $work){
-            if($work->Sequence!=1 && strtolower($work->screenName)==strtolower($service_name)){
+            if($work->Sequence!=1 || strtolower($work->screenName)==strtolower($service_name)){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;

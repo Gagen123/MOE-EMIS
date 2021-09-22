@@ -67,6 +67,7 @@
     setInterval(function(){
         getNotification();
     }, 50000);
+
     function getNotification(){
         axios.get('common/getNotification')
         .then(response => {
@@ -171,18 +172,18 @@
                         workmenu=workmenu+'</li>';
                     });
                 }
-                $('#sidebars').append(workmenu);
+                $('#sidebarworkflow').html(workmenu);
             }
         });
     }
 
-    $('#mainmenu >li >a').addClass('border-bot text-body');
-    $('#mainmenu >li >ul >li >a').addClass('border-bot text-body');
-    $('#mainmenu >li >ul >li >ul >li >a').addClass('border-bot text-body');
+    $('.mainmenu >li >a').addClass('border-bot text-body');
+    $('.mainmenu >li >ul >li >a').addClass('border-bot text-body');
+    $('.mainmenu >li >ul >li >ul >li >a').addClass('border-bot text-body');
     function afterclick(){
-        $('#mainmenu >li >a').addClass('border-bot text-body');
-        $('#mainmenu >li >ul >li >a').addClass('border-bot text-body');
-        $('#mainmenu >li >ul >li >ul >li >a').addClass('border-bot text-body');
+        $('.mainmenu >li >a').addClass('border-bot text-body');
+        $('.mainmenu >li >ul >li >a').addClass('border-bot text-body');
+        $('.mainmenu >li >ul >li >ul >li >a').addClass('border-bot text-body');
     }
     </script>
 </html>

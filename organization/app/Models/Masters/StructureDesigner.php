@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StructureDesigner extends Model
 {
     use HasFactory, Uuid;
-    protected $table="structure_designers";
+    protected $table="master_structure_designers";
     /**
      * The attributes that are mass assignable.
      *

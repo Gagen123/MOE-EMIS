@@ -194,7 +194,7 @@ export default {
         /**
          * method to get item in dropdown
          */
-        loadActiveItemList(uri="masters/loadActiveStudentMasters/CeaProgramItem_local"){
+        loadActiveItemList(uri="masters/loadActiveStudentMasters/program_item_local"){
            axios.get(uri)
            .then(response => {
                let data = response;
@@ -204,7 +204,7 @@ export default {
                console.log("Error......"+error)
            });
         },
-        loadCentralItem(uri="masters/loadActiveStudentMasters/CeaProgramItem_central"){
+        loadCentralItem(uri="masters/loadActiveStudentMasters/program_item_central"){
             axios.get(uri)
             .then(response => {
                let data = response;
@@ -300,6 +300,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 data= response.data.available_qty;
+                alert(response.data.available_qty);
                 if(data!=0){
                     $('#avqty'+index).html(data);
                     $('#avqtyinput'+index).val(data);

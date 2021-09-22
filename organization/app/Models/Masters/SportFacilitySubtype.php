@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class SportFacilitySubtype extends Model
 {
     use HasFactory, Uuid;
-    protected $table="sport_facility_subtypes";
+    protected $table="master_sport_facility_subtypes";
 
     /**
      * The attributes that are mass assignable.

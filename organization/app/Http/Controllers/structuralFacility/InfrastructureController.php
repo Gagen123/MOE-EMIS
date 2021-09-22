@@ -52,7 +52,7 @@ class InfrastructureController extends Controller
      * method to get subCategory in dropdown by category
      */
     public function getSubCategoryInDropdown($categoryId){
-        $equi = DB::table('structure_sub_categories as a')
+        $equi = DB::table('master_structure_sub_categories as a')
             ->select('a.id as id', 'a.name as subCategoryName')
             ->where('structureCategory','=',$categoryId)
             ->get();

@@ -33,28 +33,7 @@
                                 <label class="text-blue text-bold">{{form.year}}</label>
                             </div><br>
                         </div>
-                        <div class="form-group row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
-                                <div class="row form-group">
-                                    <label>Merge To School/ECR/ECCD 1:</label>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <input type="radio" name="org1" v-model="form.newOrgType" value="org1" id="org1" @click="showOrg('org1')">
-                                    </div>
-                                </div>
-                                <div class="row form-group">
-                                    <label>Merge To School/ECR/ECCD 2:</label>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <input type="radio" name="org2" v-model="form.newOrgType" value="org2" id="org2" @click="showOrg('org2')">
-                                    </div>
-                                </div>  
-                                <div class="row form-group">
-                                    <label>Merge To New Organization: &nbsp;&nbsp;&nbsp;</label>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showOrg('newOrg')" checked>
-                                    </div>
-                                </div>  
-                            </div> 
-                        </div>
+                        
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Select the School to be merged to:<span class="text-danger">*</span></label>
@@ -193,6 +172,29 @@
                             </div>
                            
                         </div>
+                        <div class="row form-group">
+                           <label><u>Organization Merge Preference:</u><br><small><i>(Check the radio button before redirecting next unless if you want to create new organization)</i></small></label><br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" >
+                                <div class="row form-group">
+                                    <label>Merge To School/ECR/ECCD 1:</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="org1" v-model="form.newOrgType" value="org1" id="org1" @click="showNewOrg('org1')">
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label>Merge To School/ECR/ECCD 2:</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="org2" v-model="form.newOrgType" value="org2" id="org2" @click="showNewOrg('org2')">
+                                    </div>
+                                </div>  
+                                <div class="row form-group">
+                                    <label>Merge To New Organization: &nbsp;&nbsp;&nbsp;</label>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showNewOrg('newOrg')" checked>
+                                    </div>
+                                </div>  
+                            </div> 
+                        </div>
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -242,7 +244,7 @@
                                         <label>Gewog:</label>
                                         <span class="text-blue text-bold" id="mergerGewog1">{{org1_details.gewog}}</span>
                                     </div>
-                                </div>
+                                </div>   
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                         <label>Chiwog:</label>
@@ -263,9 +265,8 @@
                                         <span class="text-blue text-bold" id="mergerSen1">{{org1_details.isSenSchool  == 1 ? "Yes" :  "No"}}</span>
                                     </div>
                                 </div>
-                            </div>
                         </div>
-                        
+                    </div>
                         <!-- when selecting second organization -->
                         <div class="card card-primary card-outline" id="organization2">
                             <div class="card-body">
@@ -331,7 +332,7 @@
                             </div>
                         </div>
                         <!-- when they want to create new organization -->
-                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" id="organization3">
+                        <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" id="organization3" >
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
                                     <h3 class="card-title">Create New Organization</h3>
@@ -619,7 +620,7 @@ export default {
                 this.locationList1 = data;
             });
         },
-        showOrg:function(type){
+        showNewOrg:function(type){
             if(type=="org1"){
                 $('#organization1').show();
                 $('#organization2').hide();
@@ -636,22 +637,6 @@ export default {
                 $('#organization3').show();
             }
         },
-        showprivatedetails(type){
-            if(type=='private'){
-                $('#privatedetails').show();
-            }
-            else{
-                $('#privatedetails').hide();
-            }
-        },
-        show_parent_school_details(param){
-            if(param){
-                $('#parentDetails').show();
-            }
-            else{
-                $('#parentDetails').hide();
-            }
-        } ,
         loadProprietorDetails(){
             axios.get('organization/loadProprietorDetails')
             .then((response) => {
@@ -881,7 +866,7 @@ export default {
                 });
             }
             else{
-                if(this.form.orgId2!="" && this.form.orgId1!="" && this.form.newOrgType!=""){
+                if(this.form.orgId2!="" && this.form.orgId1!=""){
                     this.change_tab(nextclass);
                 }
                 else{

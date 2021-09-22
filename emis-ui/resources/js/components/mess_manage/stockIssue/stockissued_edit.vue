@@ -137,9 +137,9 @@ export default {
          * method to get item in dropdown
          */
         loadActiveItemList(type){
-          let uri="masters/loadActiveStudentMasters/CeaProgramItem_local";
+          let uri="masters/loadActiveStudentMasters/program_item_local";
           if(type=="Central"){
-              uri="masters/loadActiveStudentMasters/CeaProgramItem_central";
+              uri="masters/loadActiveStudentMasters/program_item_central";
           }
            axios.get(uri)
            .then(response => {
