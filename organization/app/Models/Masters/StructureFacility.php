@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StructureFacility extends Model
 {
     use HasFactory, Uuid;
-    protected $table="structure_facility";
+    protected $table="master_structure_facility"; 
 
     /**
      * The attributes that are mass assignable.

@@ -176,7 +176,7 @@ class SportController extends Controller
      * Check and fix
      */
     public function getSubFacilityDropdown($id){
-        $equi = DB::table('sport_facility_subtypes as a')
+        $equi = DB::table('master_sport_facility_subtypes as a')
             ->select('a.id as id', 'a.name as typeName')
             //->where('sportFacilityId','=',$id)
             ->get();

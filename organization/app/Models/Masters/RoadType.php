@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class RoadType extends Model
 {
     use HasFactory, Uuid;
-    protected $table="road_types";
+    protected $table="master_road_types";
     /**
      * The attributes that are mass assignable.
      *

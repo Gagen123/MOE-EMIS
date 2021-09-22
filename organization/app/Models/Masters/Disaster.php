@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Disaster extends Model
 {
     use HasFactory, Uuid;
-    protected $table="disaster";
+    protected $table="master_disaster";
     /**
      * The attributes that are mass assignable.
      *
