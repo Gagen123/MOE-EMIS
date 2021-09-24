@@ -1,20 +1,28 @@
 <template>
     <div>
         <form class="bootbox-form" id="dzongkhagId">
-            <div class="card-body">
+              <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>transfer Type1:<span class="text-danger">*</span></label> 
-                        <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text"></textarea>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <label>Type:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text"/>
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                     </div>
+                </div>  
+               
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">status:</label>
+                        <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status" type="radio" value="1" /> Active</label>
-                        <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>          
+                </div>        
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -31,7 +39,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
-                code:'001',
+                code:'',
                 status:'',
                 record_type:'transfer_type',
                 action_type:'edit',
@@ -51,7 +59,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStaffMasters',this.form)
+                this.form.post('staff/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -68,6 +76,7 @@ export default {
     created() {
         this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
+        this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
     },
     

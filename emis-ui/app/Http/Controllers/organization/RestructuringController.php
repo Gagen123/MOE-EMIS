@@ -305,8 +305,15 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
-        // dd($loadOrganizationDetails);
-        // $loadOrganizationDetails->app_stage=$workflowstatus;
+        //removing the notification after visted
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
     public function loadPriviousOrgDetails($orgId=""){
@@ -502,8 +509,15 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->sequence=$sequence;
             
         }
-        // dd($loadOrganizationDetails);
-        // $loadOrganizationDetails->app_stage=$workflowstatus;
+        //update notification
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
 
@@ -701,8 +715,15 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
-        // dd($loadOrganizationDetails);
-        // $loadOrganizationDetails->app_stage=$workflowstatus;
+        //update notification
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
 
@@ -958,8 +979,15 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
-        // dd($loadOrganizationDetails);
-        // $loadOrganizationDetails->app_stage=$workflowstatus;
+        //update notification
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
 
@@ -1188,6 +1216,15 @@ class RestructuringController extends Controller
             $loadOrganizationDetails->screen_id=$screen_id;
             $loadOrganizationDetails->sequence=$sequence;
         }
+         //update notification
+            $notification_data=[
+                'notification_appNo'            =>  $appNo,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($loadOrganizationDetails);
     }
 
