@@ -234,7 +234,7 @@ export default {
                 this.form.app_stage=data.sequence;
                 this.form.application_no=data.data.application_no;
                 this.attachments=data.data.attachments;
-                if(response.data.app_stage.toLowerCase().includes('verifi')){
+                if(response.data.app_stage.toLowerCase().includes('verify')){
                     $('#verifyId').show();
                 }
                 if(response.data.app_stage.toLowerCase().includes('approve')){
