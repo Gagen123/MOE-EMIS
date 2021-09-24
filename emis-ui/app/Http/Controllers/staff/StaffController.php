@@ -16,7 +16,7 @@ class StaffController extends Controller{
         $this->apiService = $apiService;
     }
     public function getEmployeeDetials($emp_type="",$emp_id=""){
-        $person = json_decode($this->apiService->listData('getEmployeeDetials/'. $emp_type.'/'.$emp_id));
+        $person = json_decode($this->apiService->listData('ta/'. $emp_type.'/'.$emp_id));
         // dd($person->data->hasdata);
         if($person->data->hasdata){
             $response_data = $person->data->employee[0];
