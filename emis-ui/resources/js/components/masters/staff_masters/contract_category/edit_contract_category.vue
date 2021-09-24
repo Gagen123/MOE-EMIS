@@ -8,7 +8,12 @@
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_err('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Code:</label>
+                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <has-error :form="form" field="description"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Description:</label>
                         <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
                         <has-error :form="form" field="description"></has-error>
@@ -36,6 +41,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                code:'',
                 description:'',
                 status:'',
                 model:'ContractCategory',
