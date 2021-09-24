@@ -15,12 +15,12 @@ trait ServiceHelper
         $client = new Client([
             'base_uri' => $this->baseUri,
         ]);
-        // try{
+        try{
             $response = $client->request($method, $requestUrl, ['form_params' => $formParams, 'headers' => $headers]);
             return $response->getBody()->getContents();
-        // }catch(\Exception $e){
-        //     return $e->getResponse()->getBody()->getContents();
-        // }
+        }catch(\Exception $e){
+            return $e->getResponse()->getBody()->getContents();
+        }
     }
 
 }

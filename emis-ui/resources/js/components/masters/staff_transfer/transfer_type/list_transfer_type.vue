@@ -5,6 +5,7 @@
                 <tr>
                     <th >SL#</th>
                     <th >Type</th>
+                    <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th> 
@@ -14,6 +15,7 @@
                 <tr v-for="(item, index) in transferList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
