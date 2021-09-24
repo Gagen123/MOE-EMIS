@@ -11,7 +11,7 @@
                     </router-link>
                 </li>
             </ul>
-            <ul class="nav nav-pills mb-2 development" role="tablist">
+            <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
                 <li class="nav-item active pr-1">
                     <router-link to="/apply_leave" id="responsibilities" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
@@ -35,21 +35,20 @@ export default {
     },
     methods: {
 		getmenus(){
-            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+
         },
     },
     async mounted() {
         let routeparam=this.$route.query.data;
-        this.menu_id=routeparam;
-        this.getmenus();
+        let uri = 'get_screens_on_submodules/submodule/'+routeparam;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
             $('.developemntEnv').hide();
