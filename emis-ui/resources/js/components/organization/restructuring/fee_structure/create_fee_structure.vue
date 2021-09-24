@@ -387,7 +387,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Change in Fee Structure'+1)
+            axios.get('organizationApproval/getScreenId/Change in Fee Structure__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
