@@ -1,6 +1,6 @@
 <div class="sidebar">
     <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" id="mainmenu" data-widget="treeview" role="menu" data-accordion="false">
+        <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent mainmenu" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
                 <a href="dashboard" class="nav-link pt-1 pb-1">
                     <i class=" nav-icon fas fa-tachometer-alt"></i>
@@ -16,8 +16,8 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    <li class="nav-item" id="dzongkhagmaster">
-                        <router-link to="/global_master" class="nav-link pt-1 pb-1" onclick="afterclick()">
+                    <li class="nav-item">
+                        <router-link to="/global_master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-globe nav-icon"></i>
                             Common Masters
                         </router-link>
@@ -31,49 +31,40 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="approval">
+                            <li class="nav-item">
                                 <router-link to="/org_approvalMaster_link" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    Approval Master
+                                    Approval
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="structure">
+                            <li class="nav-item">
                                 <router-link to="/org_structureMaster_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-building nav-icon"></i>
-                                    Structure Master
+                                    Structure
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="furniture&equiment">
+                            <li class="nav-item">
                                 <router-link to="/org_furNequiMaster_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-server nav-icon"></i>
-                                    Furniture & Equipment Master
+                                    Furniture & Equipment
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="facility">
+                            <li class="nav-item">
                                 <router-link to="/org_facilityMaster_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-gamepad nav-icon"></i>
-                                    Facility & other Master
+                                    Facility & other
                                 </router-link>
                             </li>
-                            <li class="nav-item has-treeview" id="otherOrg">
+                            <li class="nav-item has-treeview">
                                 <router-link to="/org_otherMaster_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    other Master
+                                    others
                                 </router-link>
                             </li>
                         </ul>
                     </li>
 
-                    <!-- <li class="nav-item has-treeview" id="org_master">
-
-                        <router-link to="/OrganizationMasterIndex" class="nav-link">
-                            <i class="nav-icon fas fa-database"></i>
-                            <p>
-                                Organization Masters
-                            </p>
-                        </router-link>
-                    </li> -->
-                    <li class="nav-item has-treeview" id="staff_master">
+                    <li class="nav-item has-treeview">
                         <a href="#" class="nav-link pt-1 pb-1">
                             <i class="nav-icon fas fa-database"></i>
                             <p>
@@ -82,25 +73,25 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="dzongkhagmaster">
+                            <li class="nav-item">
                                 <router-link to="/staff_link" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
                                     Staff
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="dzongkhagmaster">
+                            <li class="nav-item">
                                 <router-link to="/qualification_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
                                     Qualification
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="dzongkhagmaster">
+                            <li class="nav-item">
                                 <router-link to="/position_directory_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
                                     Position Directory
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="dzongkhagmaster">
+                            <li class="nav-item">
                                 <router-link to="/transfer_master_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
                                     Staff Transfer
@@ -109,7 +100,7 @@
                             <li class="nav-item has-treeview" id="staff_master">
                                 <router-link to="/staff_award_index" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-users nav-icon"></i>
-                                    Staff Service Master
+                                    Staff Service
                                 </router-link>
                             </li>
                             <li class="nav-item has-treeview" id="staff_master">
@@ -118,13 +109,13 @@
                                     HR Development (Training)
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="management_body_link">
+                            <li class="nav-item">
                                 <router-link to="/management_body_link" class="nav-link">
                                     <i class="nav-icon fas fa-mail-bulk"></i>
-                                    Management Body Master
+                                    Management Body
                                 </router-link>
                             </li>
-                            <li class="nav-item" id="leave_index">
+                            <li class="nav-item">
                                 <router-link to="/leave_index" class="nav-link">
                                     <i class="nav-icon fas fa-mail-bulk"></i>
                                     Leave & Others
@@ -132,7 +123,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item has-treeview" id="studentmaster">
+                    <li class="nav-item has-treeview">
                         <a href="#" class="nav-link pt-1 pb-1">
                             <i class="nav-icon fas fa-user-graduate"></i>
                             <p>
@@ -141,7 +132,7 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="validation_and_others">
+                            <li class="nav-item">
                                 <router-link to="/validation_and_others" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
                                     Validation Rules & Others
@@ -149,31 +140,31 @@
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="studentServices">
+                            <li class="nav-item">
                                 <router-link to="/StudentServicesMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Non-Academics Master
+                                    Non-Academics
                                 </router-link>
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="studentadmission">
+                            <li class="nav-item">
                                 <router-link to="/studentAdmissionMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Admission Master
+                                    Admission
                                 </router-link>
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="studentHealth">
+                            <li class="nav-item">
                                 <router-link to="/StudentHealthMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Health Master
+                                    Health
                                 </router-link>
                             </li>
                         </ul>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item" id="studentCea">
+                            <li class="nav-item">
                                 <router-link to="/StudentCeaMasterIndex" class="nav-link pt-1 pb-1">
                                     <i class="fa fa-angle-double-right nav-icon"></i>
                                     Programs & Clubs
@@ -181,21 +172,20 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item has-treeview" id="academicmaster">
+                    <li class="nav-item has-treeview">
                         <router-link to="/academic-master" class="nav-link pt-1 pb-1">
                             <i class="fa fa-book nav-icon"></i>
                             Academic Masters
                         </router-link>
                     </li>
-                    <li class="nav-item has-treeview" id="academicmaster">
+                    <li class="nav-item has-treeview">
                         <router-link to="/spms-master" class="nav-link pt-1 pb-1">
                         <i class="nav-icon fas fa-chart-bar"></i>
                             SPMS Masters
                         </router-link>
                     </li>
                 </ul>
-            <!--academic-->
-
+            </li>
             {{-- @if(session('User_Details')!=null)
                 @foreach (session('User_Details')['modules'] as $mod)
                     @if($mod['module_route']!=null || $mod['module_route']!="")
@@ -289,8 +279,9 @@
                 @endforeach
             @endif --}}
             <span id="sidebars"></span>
-        </ul>
-            <ul class="developemntEnvlink nav nav-pills nav-sidebar flex-column nav-child-indent" id="mainmenu" data-widget="treeview" role="menu" data-accordion="false">
+            <span id="sidebarworkflow"></span>
+
+            <span id="developemntEnvlink">
                 <br>
                 <br>
                 <hr>
@@ -303,7 +294,7 @@
                     </router-link>
                 </li>
 
-                <li class="nav-item has-treeview" id="approval">
+                <li class="nav-item has-treeview" id="organization">
                     <a href="#" class="nav-link pt-1 pb-1">
                         <i class="nav-icon fas fa-save"></i>
                         <p>
@@ -481,6 +472,7 @@
                             </router-link>
                         </li>
                         <li class="nav-item" id="management_body" onclick="setclass('organizationlink','','management_body')">
+                        <!-- <li class="nav-item" id="track_application"> -->
                             <router-link to="/management_body" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
@@ -489,6 +481,7 @@
                             </router-link>
                         </li>
                         <li class="nav-item" id="projection_index" onclick="setclass('organizationlink','','projection_index')">
+                        <!-- <li class="nav-item" id="track_application"> -->
                             <router-link to="/projection_index" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
@@ -554,6 +547,14 @@
                                 </p>
                             </router-link>
                         </li>
+                        {{-- <li class="nav-item has-treeview" id="staff_self_update">
+                            <router-link to="/staff_self_update" class="nav-link pt-1 pb-1">
+                                <p>
+                                <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Self Service
+                                </p>
+                            </router-link>
+                        </li> --}}
                         <li class="nav-item" id="staff_services_index">
                             <router-link to="/staff_services_index" class="nav-link">
                                 <p>
@@ -646,6 +647,7 @@
                                 </p>
                             </router-link>
                         </li>
+
                         <li class="nav-item" id="programs">
                             <router-link to="/student_programs_clubs" class="nav-link">
                                 <p>
@@ -803,14 +805,6 @@
                     </ul>
                 </li>
 
-                <li class="nav-item" id="tre">
-                    <router-link to="/tre" class="nav-link">
-                        <p>
-                            <i class="fas fa-users-cog nav-icon"></i>
-                        TRE
-                        </p>
-                    </router-link>
-                </li>
                 <li class="nav-item" id="track_application">
                     <router-link to="/track_application" class="nav-link">
                         <p>
@@ -827,13 +821,14 @@
                         </p>
                     </router-link>
                 </li>
-                <li class="nav-item" id="select_system">
-                    <a href="{{route('select_system') }}" class="nav-link text-white">
-                        <i class="nav-icon fa fa-sign-out-alt pr-4"></i>
-                        <p>Select System</p>
-                    </a>
-                </li>
+            </span>
 
+            <li class="nav-item" id="select_system">
+                <a href="{{route('select_system') }}" class="nav-link text-white">
+                    <i class="nav-icon fa fa-sign-out-alt pr-4"></i>
+                    <p>Select System</p>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

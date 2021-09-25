@@ -389,7 +389,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Applications for Change to Boarding__'+1)
+            axios.get('organizationApproval/getScreenId/Change to Boarding__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){

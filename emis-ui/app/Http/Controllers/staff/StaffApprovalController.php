@@ -84,6 +84,7 @@ class StaffApprovalController extends Controller
             //pulling the role id for next verifier or approval 
             $seq=((int) $request->Sequence +1);
             $next_roleId=json_decode($this->apiService->listData('system/getRolesWorkflow/submittedTo/'.$request->screenId.'__'.$seq));
+            // dd( $next_roleId);
             $role_id=$next_roleId[0]->SysRoleId;
             $response_data= $this->apiService->createData('emis/staff/staffRecruitmentController/savePrincipalApproval', $principalApproval_data);
             $appNo=json_decode($response_data)->application_no;
@@ -145,7 +146,7 @@ class StaffApprovalController extends Controller
         foreach($workflowdet as $work){
             //check with screen name and then type of organization
             // dd(strtolower($work->screenName),$work->Establishment_type,$service_name);
-            if($work->Sequence!=1 && $work->screenName==$service_name){
+            if($work->Sequence!=1 || $work->screenName==$service_name){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
                 $sequence=$work->Sequence;
@@ -155,9 +156,18 @@ class StaffApprovalController extends Controller
             $PrincipalApprovalDetails->app_stage=$workflowstatus;
             $PrincipalApprovalDetails->screen_id=$screen_id;
             $PrincipalApprovalDetails->sequence=$sequence;
+
+            // dd($PrincipalApprovalDetails->app_stage,$PrincipalApprovalDetails->screen_id,$PrincipalApprovalDetails->sequence);
         }
-        // dd($PrincipalApprovalDetails);
-        // $PrincipalApprovalDetails->app_stage=$workflowstatus;
+       //update notification
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+    $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return json_encode($PrincipalApprovalDetails);
     }
     //updating the principal application during the approval process

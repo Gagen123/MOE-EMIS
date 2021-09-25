@@ -165,12 +165,11 @@ export default {
         /**
          * method to remove error
          */
-          remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
+        remove_err(field_id){
+        if($('#'+field_id).val()!=""){
+            $('#'+field_id).removeClass('is-invalid');
+        }
         },
-
 
         //getOrgList(uri = '/organization/getOrgList'){
         getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
@@ -308,7 +307,6 @@ export default {
                     console.log('error: '+error);
             });
         },
-
         applyselect2(){
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
@@ -357,7 +355,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Application For Expansion__'+1)
+            axios.get('organizationApproval/getScreenId/Expansion__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
