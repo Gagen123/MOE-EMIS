@@ -280,7 +280,7 @@
                                             <th>Total Male Teacher</th>
                                             <th>12</th>
                                         </tr>
-                                         <tr>
+                                         <tr>  
                                             <th>Total FeMale Teacher</th>
                                             <th>10</th>
                                         </tr>
@@ -331,6 +331,7 @@
     export default {
         data(){
             return{
+             
                 orgDetails:'',
                 genderArray:{},
                 isprofile:false,
@@ -369,7 +370,7 @@
                     this.orgDetails=data.orgName+' '+data.level;
                     if(data.logo_path!=""){
                         this.isprofile=true;
-                    }
+                    } 
 
                 })
                 .catch(errors =>{
