@@ -755,7 +755,7 @@ const routes = [
         },
       ]
     },
-
+    { path: '/school_details_update',  name:'school_details_update',component: require('./components/organization/school_details_update.vue').default },
 
     //New Routes for Connectivity
     // { path: '/restructuringnew_index',

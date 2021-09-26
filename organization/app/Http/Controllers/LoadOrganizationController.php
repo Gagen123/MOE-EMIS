@@ -18,8 +18,10 @@ use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
-use App\Models\DepartmentModel;
+use App\Models\DepartmentModel; 
 use App\Models\generalInformation\Projection;
+use App\Models\generalInformation\OrganizationCompoundDetail;
+use App\Models\generalInformation\ConnectivityModel;
 use App\Models\Masters\Location;
 use Exception;
 
@@ -434,6 +436,14 @@ class LoadOrganizationController extends Controller{
             if($contact!=null && $contact!=""){
                 $response_data->contactDetails=$contact;
             }
+            $compound = OrganizationCompoundDetail::where('organizationId',$response_data->id)->first();
+            if($compound!=null && $compound!=""){
+                $response_data->compoundDetails=$compound;
+            }
+            $connectivity = ConnectivityModel::where('organizationId',$response_data->id)->first();
+            if($connectivity!=null && $connectivity!=""){
+                $response_data->connectivityDetails=$connectivity;
+            }
 
         }
         if($type=="Headquarterbyid"){
@@ -595,7 +605,7 @@ class LoadOrganizationController extends Controller{
                 }
              }
              if($type=="Org"){
-                $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+                $org_det=OrganizationDetails::where('id',$id)->first();
                 $orgName=$org_det->name;
                 if($org_det->levelId!=null && $org_det->levelId!=""){
                     $level=Level::where('id',$org_det->levelId)->first();

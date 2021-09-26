@@ -360,18 +360,39 @@
             }
         },
         methods:{
-            getorgProfile(rogId){
-                axios.get('organization/getOrgProfile/'+rogId)
+            // getorgProfile(rogId){
+            //     axios.get('organization/getOrgProfile/'+rogId)
+            //     .then(response => {
+            //         let data = response.data.data;
+            //         this.form.vission=data.vission;
+            //         this.form.mission=data.mission;
+            //         this.form.profile_path=data.logo_path;
+            //         this.orgDetails=data.orgName+' '+data.level;
+            //         if(data.logo_path!=""){
+            //             this.isprofile=true;
+            //         } 
+
+            //     })
+            //     .catch(errors =>{
+            //         console.log(errors)
+            //     });
+            // },
+            getorgProfile(rogId,type){
+                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
+                    this.form.objective=data.objective;
+                    this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
-                    this.orgDetails=data.orgName+' '+data.level;
+                    this.orgDetails=data.orgName;
+                    if(data.level!=undefined && data.level!=null && data.level!=""){
+                        this.orgDetails=data.orgName+' '+data.level;
+                    }
                     if(data.logo_path!=""){
                         this.isprofile=true;
-                    } 
-
+                    }
                 })
                 .catch(errors =>{
                     console.log(errors)
