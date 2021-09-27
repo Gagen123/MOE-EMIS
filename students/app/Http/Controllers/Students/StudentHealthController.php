@@ -127,7 +127,7 @@ class StudentHealthController extends Controller
 
     public function loadSupplementationRecords($param=""){
 
-        $id =$param;
+        parse_str($param, $class_details);
 
         $records = DB::table('std_health_supplementation')
                     ->select('std_health_supplementation.id', 'std_health_supplementation.StdHealthTermId','std_health_supplementation.date',
@@ -137,6 +137,8 @@ class StudentHealthController extends Controller
                     ->leftjoin('std_student_health_supplementation', 'std_health_supplementation.id', '=', 'std_student_health_supplementation.StdHealthSupplementationId')
                     ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_supplementation.section')
                     ->join('std_health_supplementation_type', 'std_health_supplementation_type.id', '=', 'std_health_supplementation.StdHealthSupplementationTypeId')
+                    ->whereIn('std_health_supplementation.class',$class_details['org_class_stream_id']) 
+                    ->whereIn('std_health_supplementation.section',$class_details['section_id'])
                     ->groupBy('std_student_class_stream.SectionDetailsId', 'std_health_supplementation.date', 'std_student_class_stream.SectionDetailsId')
                     ->get();
 
@@ -318,7 +320,7 @@ class StudentHealthController extends Controller
 
     public function listScreeningSummary($param=""){
 
-        $id =$param;
+        parse_str($param, $class_details);
 
         $records = DB::table('std_health_screening_type')
                             ->select('std_health_screening.id', 'std_health_screening.date', 'std_health_screening.class',
@@ -326,6 +328,8 @@ class StudentHealthController extends Controller
                             ->join('std_health_screening', 'std_health_screening.StdHealthScreeningTypeId', '=', 'std_health_screening_type.id')
                             ->leftjoin('std_student_health_screening', 'std_health_screening.id', '=', 'std_student_health_screening.StdHealthScreeningId')
                             ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_screening.section')
+                            ->whereIn('std_health_screening.class',$class_details['org_class_stream_id']) 
+                            ->whereIn('std_health_screening.section',$class_details['section_id'])
                             ->groupBy('std_health_screening.class', 'std_health_screening.StdHealthScreeningTypeId', 'std_health_screening.date',
                                             'std_student_class_stream.SectionDetailsId')
                             ->get();
@@ -612,6 +616,8 @@ class StudentHealthController extends Controller
     }
 
     public function loadBmiSummary($param=""){
+        parse_str($param, $class_details);
+        
         // $records = DB::table('std_health_bmi')
         //         ->join('std_health_term', 'std_health_bmi.StdHealthTermId', '=', 'std_health_term.id')
         //         ->join('std_student', 'std_health_bmi.StdStudentId', '=', 'std_student.id')
@@ -619,7 +625,9 @@ class StudentHealthController extends Controller
         //         ->select('std_health_bmi.*', 'std_health_term.name AS term', 'std_student_class_stream.OrgClassStreamId AS class', 'std_student_class_stream.SectionDetailsId AS section')
         //         ->groupBy('std_health_bmi.StdHealthTermId', 'std_student_class_stream.SectionDetailsId')
         //         ->get();
-        $records = StudentBmiSummery::where('created_by',$param)->get();
+        $records = StudentBmiSummery::whereIn('class_id',$class_details['org_class_stream_id'])
+                            ->whereIn('section_id',$class_details['section_id'])
+                            ->get();
         return $this->successResponse($records);
     }
 
@@ -914,7 +922,7 @@ class StudentHealthController extends Controller
     }
 
     public function loadVaccinationRecords($param=""){
-        $org_id =$param;
+        parse_str($param, $class_details);
 
         $records = DB::table('std_health_vaccination')
                     ->select('std_health_vaccination.id', 'std_health_vaccination.dose',
@@ -923,7 +931,9 @@ class StudentHealthController extends Controller
                     ->leftjoin('std_student_vaccination', 'std_health_vaccination.id', '=', 'std_student_vaccination.StdHealthVaccinationId')
                     ->leftjoin('std_student_class_stream', 'std_student_class_stream.SectionDetailsId', '=', 'std_health_vaccination.section')
                     ->join('std_vaccine_type', 'std_vaccine_type.id', '=', 'std_health_vaccination.StdVaccineTypeId')
-                    ->groupBy('std_student_class_stream.SectionDetailsId', 'std_student_class_stream.SectionDetailsId')
+                    ->whereIn('std_health_vaccination.class',$class_details['org_class_stream_id']) 
+                    ->whereIn('std_health_vaccination.section',$class_details['section_id'])
+                    ->groupBy('std_health_vaccination.StdVaccineTypeId','std_student_class_stream.SectionDetailsId', 'std_student_class_stream.SectionDetailsId')
                     ->get();
 
         return $this->successResponse($records);

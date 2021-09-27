@@ -90,8 +90,18 @@ class StudentScoutController extends Controller
 
     public function loadScoutMembers($orgId){
         $orgId = $this->getWrkingAgencyId();
-        $user_id = $this->userId();
-        $scout_members = $this->apiService->listData('emis/students/loadScoutMembers/'.$orgId.'/'.$user_id);
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
+        $scout_members = $this->apiService->listData('emis/students/loadScoutMembers/'.$param);
         return $scout_members;
     }
 
@@ -101,8 +111,18 @@ class StudentScoutController extends Controller
 
     public function listScoutMembers(){
         $orgId = $this->getWrkingAgencyId();
-        $user_id = $this->userId();
-        $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$orgId.'/'.$user_id);
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
+        $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$param);
         return $scout_members;
     }
 
@@ -146,8 +166,18 @@ class StudentScoutController extends Controller
 
     public function loadScoutsBadge(){
         $orgId = $this->getWrkingAgencyId();
-        $user_id = $this->userId();
-        $scout_members = $this->apiService->listData('emis/students/loadScoutsBadge/'.$orgId.'/'.$user_id);
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
+        $scout_members = $this->apiService->listData('emis/students/loadScoutsBadge/'.$param);
         return $scout_members;
     }
 }

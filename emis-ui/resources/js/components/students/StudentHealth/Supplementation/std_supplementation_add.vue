@@ -25,25 +25,11 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Class:</label>
-                        <select v-model="student_form.std_class" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_class') }" @change="aboveClass10()"  class="form-control select2" name="std_class" id="std_class">
-                            <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                        <label class="mb-0.5">Class & Section:<i class="text-danger">*</i></label>
+                        <select v-model="student_form.class_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class_section') }" class="form-control select2" name="class_section" id="class_section" >
+                            <option v-for="(item, index) in classSection" :key="index" v-bind:value="[item.org_class_stream_id, item.org_stream_id, item.org_section_id]">{{ item.class_stream_section}}</option>
                         </select>
-                        <has-error :form="student_form" field="std_class"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 stream_selection" style="display:none">
-                        <label>Streams:</label>
-                        <select v-model="student_form.std_stream" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_stream') }" class="form-control select2" name="std_stream" id="std_stream">
-                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.stream_id">{{ item.stream }}</option>
-                        </select>
-                        <has-error :form="student_form" field="std_stream"></has-error>
-                    </div> 
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 section_selection" style="display:none">
-                        <label>Section:</label>
-                        <select v-model="student_form.std_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('std_section') }" class="form-control select2" name="std_section" id="std_section">
-                            <option v-for="(item, index) in sectionList" :key="index" v-bind:value="item.section_id">{{ item.section }}</option>
-                        </select>
-                        <has-error :form="student_form" field="std_section"></has-error>
+                        <has-error :form="student_form" field="class_section"></has-error>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -99,8 +85,9 @@ export default {
             streamList:[],
             byClass:[],
             studentList:[],
+            classSection:[],
 
-            id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            id:'2',
 
             student_form: new form({
                 term_id: '',
@@ -115,6 +102,13 @@ export default {
     },
 
     methods: {
+        getClassTeacher(){
+            axios.get('academics/getClassTeacherClasss')
+            .then(response =>{
+                let data = response.data.data
+                this.classSection = data;
+            })
+        },
         loadActiveTermList(uri="masters/loadActiveStudentMasters/HealthTerm"){
             axios.get(uri)
             .then(response => {
@@ -222,27 +216,38 @@ export default {
                 this.student_form.date='';
             }
             if(type=="save"){
-                this.student_form.std_screened=[];
-                let screenedArray=[];
-                let oTable = $('#student-list-table').dataTable({
-                    stateSave: true,
-                    destroy: true,
-                });
-                $("input[name='screened']:not(:checked)",oTable.fnGetNodes()).each( function () {
-                    screenedArray.push($(this).val());
-                });
-                this.student_form.std_screened=screenedArray;
-                
-                this.student_form.post('/students/addSupplementationRecords',this.student_form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/std_supplementation_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.student_form.std_screened=[];
+                        let screenedArray=[];
+                        let oTable = $('#student-list-table').dataTable({
+                            stateSave: true,
+                            destroy: true,
+                        });
+                        $("input[name='screened']:not(:checked)",oTable.fnGetNodes()).each( function () {
+                            screenedArray.push($(this).val());
+                        });
+                        this.student_form.std_screened=screenedArray;
+                        
+                        this.student_form.post('/students/addSupplementationRecords',this.student_form)
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push('/std_supplementation_list');
+                        })
+                        .catch(() => {
+                            console.log("Error......")
+                        })
+                    }
                 })
             }
         },
@@ -258,33 +263,56 @@ export default {
             if(id=="supplementation"){
                 this.student_form.supplementation=$('#supplementation').val();
             }
-            if(id=="std_class"){
-                this.student_form.std_class=$('#std_class').val();
-                let class_selected = $("#std_class").val();
-                this.getStreamList();
-                this.getSectionList();
-                if(class_selected == 11 || class_selected == 12){
-                    $(".stream_selection").show();
-                    $(".section_selection").show();
-                }else{
-                    $(".section_selection").show();
-                    $(".stream_selection").hide();
-                }
-            }
+            // if(id=="std_class"){
+            //     this.student_form.std_class=$('#std_class').val();
+            //     let class_selected = $("#std_class").val();
+            //     this.getStreamList();
+            //     this.getSectionList();
+            //     if(class_selected == 11 || class_selected == 12){
+            //         $(".stream_selection").show();
+            //         $(".section_selection").show();
+            //     }else{
+            //         $(".section_selection").show();
+            //         $(".stream_selection").hide();
+            //     }
+            // }
 
-            if(id=="std_stream"){
-                this.student_form.std_stream=$('#std_stream').val();
-            }
-            if(id=="std_section"){
-                axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+            // if(id=="std_stream"){
+            //     this.student_form.std_stream=$('#std_stream').val();
+            // }
+            // if(id=="std_section"){
+            //     axios.get('/students/loadStudentBySection/'+$('#std_class').val()+'__'+$('#std_stream').val()+'__'+$('#std_section').val())
+            //         .then((response) => {
+            //             this.studentList = response.data;  
+            //     })
+            //     .catch(() => {
+            //         consoele.log("Error:"+e)
+            //     });
+
+            //     this.student_form.std_section=$('#std_section').val();
+            // }
+            if(id=="class_section"){
+               this.studentList = [];
+               var classVals = $('#class_section').val().split(',');
+               let class_id = classVals[0];
+               let stream_id = classVals[1];
+               let section_id = classVals[2];
+               
+               this.student_form.std_class = classVals[0];
+               this.student_form.std_stream = classVals[1];
+               this.student_form.std_section = classVals[2];
+                
+               let route = class_id+'__'+stream_id+'__'+section_id;
+               if(stream_id == ''){
+                   route = class_id+'__'+"NULL"+'__'+section_id;
+               }
+               axios.get('/students/loadStudentBySection/'+route)
                     .then((response) => {
                         this.studentList = response.data;  
                 })
                 .catch(() => {
                     consoele.log("Error:"+e)
                 });
-
-                this.student_form.std_section=$('#std_section').val();
             }
             
         },
@@ -324,6 +352,7 @@ export default {
             this.changefunction(id);
         });
         this.loadClassList();
+        this.getClassTeacher();
         this.loadGenderArrayList();
         this.loadActiveTermList();
         this.loadActiveSupplementationList();

@@ -18,8 +18,10 @@ use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
-use App\Models\DepartmentModel;
+use App\Models\DepartmentModel; 
 use App\Models\generalInformation\Projection;
+use App\Models\generalInformation\OrganizationCompoundDetail;
+use App\Models\generalInformation\ConnectivityModel;
 use App\Models\Masters\Location;
 use Exception;
 
@@ -79,15 +81,15 @@ class LoadOrganizationController extends Controller{
             } else{
                 $class_name = $category;
                 $response_data = DB::table('organization_details')
-                                    ->join('organization_projections','organization_projections.organizationId', '=', 'organization_details.id')
-                                    ->join('organization_class_streams','organization_class_streams.id', '=', 'organization_projections.class')
-                                    ->join('classes','classes.id', '=', 'organization_class_streams.classId')
-                                    ->select('organization_details.id AS id','organization_details.name AS name', 'classes.class AS class')
-                                    ->whereIn('organization_details.category',['private_school','public_school'])
-                                    ->where('organization_projections.ProjectionNo','>', '0')
-                                    ->where('organization_details.dzongkhagId','=', $id)
-                                    ->where('classes.class','LIKE', $class_name)
-                                    ->get();
+                    ->join('organization_projections','organization_projections.organizationId', '=', 'organization_details.id')
+                    ->join('organization_class_streams','organization_class_streams.id', '=', 'organization_projections.class')
+                    ->join('classes','classes.id', '=', 'organization_class_streams.classId')
+                    ->select('organization_details.id AS id','organization_details.name AS name', 'classes.class AS class')
+                    ->whereIn('organization_details.category',['private_school','public_school'])
+                    ->where('organization_projections.ProjectionNo','>', '0')
+                    ->where('organization_details.dzongkhagId','=', $id)
+                    ->where('classes.class','LIKE', $class_name)
+                    ->get();
                 return $this->successResponse($response_data);
             }
         }
@@ -360,7 +362,6 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadOrgDetails($type="", $id=""){
-
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
            $response_data=OrganizationDetails::where('id',$id)->first();
@@ -434,6 +435,14 @@ class LoadOrganizationController extends Controller{
             $contact = ContactDetails::where('organizationId',$response_data->id)->first();
             if($contact!=null && $contact!=""){
                 $response_data->contactDetails=$contact;
+            }
+            $compound = OrganizationCompoundDetail::where('organizationId',$response_data->id)->first();
+            if($compound!=null && $compound!=""){
+                $response_data->compoundDetails=$compound;
+            }
+            $connectivity = ConnectivityModel::where('organizationId',$response_data->id)->first();
+            if($connectivity!=null && $connectivity!=""){
+                $response_data->connectivityDetails=$connectivity;
             }
 
         }
@@ -571,19 +580,43 @@ class LoadOrganizationController extends Controller{
 
     }
 
-    public function getOrgProfile($id=""){
+    // public function getOrgProfile($id=""){
+    //     $response_data =OrgProfile::where('org_id',$id)->first();
+    //     if($response_data!=null && $response_data!=""){
+    //         $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+    //         $orgName=$org_det->name;
+    //         if($org_det->levelId!=null && $org_det->levelId!=""){
+    //             $level=Level::where('id',$org_det->levelId)->first();
+    //             if($level!=null && $level!=""){
+    //                 $orgName=$orgName.' '.$level->name;
+    //             }
+    //         }
+    //         $response_data->orgName=$orgName;
+    //     }
+    //     return $this->successResponse($response_data);
+    // }
+    public function getOrgProfile($id="", $type=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){
-            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
-            $orgName=$org_det->name;
-            if($org_det->levelId!=null && $org_det->levelId!=""){
-                $level=Level::where('id',$org_det->levelId)->first();
-                if($level!=null && $level!=""){
-                    $orgName=$orgName.' '.$level->name;
+            if($type=="Ministry"){
+                $org_det=HeadQuaterDetails::where('id',$id)->first();
+                if($org_det!=null && $org_det!=""){
+                    $response_data->orgName=$org_det->agencyName;
                 }
-            }
-            $response_data->orgName=$orgName;
+             }
+             if($type=="Org"){
+                $org_det=OrganizationDetails::where('id',$id)->first();
+                $orgName=$org_det->name;
+                if($org_det->levelId!=null && $org_det->levelId!=""){
+                    $level=Level::where('id',$org_det->levelId)->first();
+                    if($level!=null && $level!=""){
+                        $orgName=$orgName.' '.$level->name;
+                    }
+                }
+                $response_data->orgName=$orgName;
+             }
         }
+       
         return $this->successResponse($response_data);
     }
 
@@ -598,11 +631,10 @@ class LoadOrganizationController extends Controller{
 
     public function getClassById($id=""){
         $response_data = DB::table('organization_class_streams')
-                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.id', 'classes.class AS class')
-                    ->where('organization_class_streams.id', $id)
-                    ->first();
-
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.id', 'classes.class AS class')
+            ->where('organization_class_streams.id', $id)
+            ->first();
         return $this->successResponse($response_data);
     }
 
@@ -612,12 +644,12 @@ class LoadOrganizationController extends Controller{
 
     public function getOrgClassStream($org_id){
         $response_data = DB::table('organization_class_streams')
-                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
-                    ->where('organizationId', $org_id)
-                    ->orderBy('classes.displayOrder', 'asc')
-                    ->groupBy('organization_class_streams.classId') //added by Tshewang as required only class
-                    ->get();
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
+            ->where('organizationId', $org_id)
+            ->orderBy('classes.displayOrder', 'asc')
+            ->groupBy('organization_class_streams.classId') //added by Tshewang as required only class
+            ->get();
 
         return $this->successResponse($response_data);
     }
@@ -629,10 +661,10 @@ class LoadOrganizationController extends Controller{
     public function getOrgClassStreambyId($id){
 
         $response_data = DB::table('organization_class_streams')
-                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
-                    ->where('organization_class_streams.id', $id)
-                    ->first();
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.*', 'classes.class AS class', 'classes.displayOrder')
+            ->where('organization_class_streams.id', $id)
+            ->first();
 
         return $this->successResponse($response_data);
     }
@@ -643,12 +675,11 @@ class LoadOrganizationController extends Controller{
 
     public function getOrgClassStreamByOrg($org_id, $class_name){
         $response_data = DB::table('organization_class_streams')
-                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.id')
-                    ->where('organization_class_streams.organizationId', $org_id)
-                    ->where('classes.class', 'LIKE', $class_name)
-                    ->first();
-
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.id')
+            ->where('organization_class_streams.organizationId', $org_id)
+            ->where('classes.class', 'LIKE', $class_name)
+            ->first();
         return $this->successResponse($response_data);
     }
 
@@ -663,11 +694,11 @@ class LoadOrganizationController extends Controller{
     public function loadStreamList($id){
 
         $response_data = DB::table('organization_class_streams')
-                    ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
-                    ->select('organization_class_streams.*', 'classes.class AS class')
-                    ->where('organizationId', $id)
-                    ->where('streamId', '<>', 'NULL')
-                    ->get();
+            ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
+            ->select('organization_class_streams.*', 'classes.class AS class')
+            ->where('organizationId', $id)
+            ->where('streamId', '<>', 'NULL')
+            ->get();
 
         return $this->successResponse($response_data);
          // $cls_id="";

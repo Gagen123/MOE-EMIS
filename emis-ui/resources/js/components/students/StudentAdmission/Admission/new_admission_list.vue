@@ -150,16 +150,16 @@ export default {
 
             }
         },
-        loadStudentList(param){
-            this.stdList =[];
-            let uri="";
-            uri='students/admission/loadStudentList/transfered';
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.stdList = data.data;
-            });
-        },
+        // loadStudentList(param){
+        //     this.stdList =[];
+        //     let uri="";
+        //     uri='students/admission/loadStudentList/transfered';
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response.data;
+        //         this.stdList = data.data;
+        //     });
+        // },
         loadStudentAdmissionList(param){
             this.newAdmissionList =[];
             let uri="";
@@ -186,7 +186,7 @@ export default {
     mounted() {
         this.loadAllActiveMasters('all_active_gender');
         this.dt = $("#list-student-left").DataTable();
-        this.loadStudentList('session');
+        // this.loadStudentList('session');
         this.loadStudentAdmissionList('session');
         // $("#list-student-left").DataTable({
         //     "responsive": true,

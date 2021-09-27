@@ -7,8 +7,8 @@
         <div class="card card-primary card-outline" id="mainform">
             <div class="card-header">
                 <span class="fa-pull-right">
-                    <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure_list')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-primary btn-flat text-white btn-xs" @click="showadprocess('closure')"><i class="fa fa-list"></i> Close Organization</button>
+                    <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('closure_list')"><i class="fa fa-list"></i> List</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('closure')"><i class="fa fa-list"></i> Close Organization</button>
                 </span>
             </div>
             <div class="card-body">

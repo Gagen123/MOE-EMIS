@@ -51,9 +51,9 @@
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ student.student_code}}</td>
                                     <td>{{ student.Name}}</td>
-                                        <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}}
+                                        <!-- <input type="hidden" name="student_id" class="form-control" v-model="student_form.std_id[index]=student.id">{{ student.StdStudentId}} -->
                                     <td>
-                                        <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_reported[index]"/>
+                                        <input type="checkbox" name="screened" class="form-control-input screencheck" v-model="student_form.std_reported[index]" :value="student.id" />
                                     </td>
                                 </tr>
                             </tbody>
@@ -92,8 +92,6 @@ export default {
                 std_id: [],
                 std_reported:[]
             }),
-
-            
         }
     },
 
@@ -181,7 +179,8 @@ export default {
             if(type=="save"){
                 this.student_form.std_reported=[];
                 let screenedArray=[];
-                $("input[name='screened']:checked").each( function () {
+                //$("input[name='height']:not(:checked)",oTable.fnGetNodes()).each( function () {
+                $("input[name='screened']:not(:checked)").each( function () {
                     screenedArray.push($(this).val());
                 });
                 this.student_form.std_reported=screenedArray;
@@ -272,8 +271,8 @@ export default {
         });
         
         this.loadClassList();
-        this.loadSectionList();
-        this.loadStreamList();
+        //this.loadSectionList();
+        //this.loadStreamList();
     },
     
 }

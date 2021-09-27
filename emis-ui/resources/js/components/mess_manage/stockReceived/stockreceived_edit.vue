@@ -27,7 +27,7 @@
                                   <th>Item</th>
                                   <th>Unit</th>
                                   <th>Quantity Receive</th>
-                                  <th>Damage Quantity</th>
+                                  <!-- <th>Damage Quantity</th> -->
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -47,9 +47,9 @@
                                     <td>
                                         <input type="number" name="quantity" class="form-control" v-model="item.quantity"/>
                                     </td>
-                                     <td>
+                                     <!-- <td>
                                         <input type="damagequantity" name="quantity" class="form-control" v-model="item.damagequantity"/>
-                                    </td>
+                                    </td> -->
                                     <!-- <td>
                                         <select name="unit" id="unit" class="form-control editable_fields" v-model="item.unit">
                                             <option v-for="(item, index) in unitList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
@@ -102,7 +102,7 @@ export default {
                  id: '', dateOfreceived: '', quarter: '', remarks: '',
                  items_received:
                 [{
-                    item:'',quantity:'',unit_id:'', remarks:'', damagequantity:'',
+                    item:'',quantity:'',unit_id:'', remarks:'', 
                 }],
             })
         }
@@ -122,7 +122,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
         },
 
         /**
@@ -279,7 +279,8 @@ export default {
                     quantity:data.stockreceived[i].receivedquantity,
                     unit_id:data.stockreceived[i].unit_id,
                     remarks:data.stockreceived[i].remarks,
-                    damagequantity:data.stockreceived[i].damagequantity});
+                    // damagequantity:data.stockreceived[i].damagequantity
+                    });
                 }
                 this.count=data.length;
 
