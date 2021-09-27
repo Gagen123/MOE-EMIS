@@ -444,6 +444,9 @@ Route::prefix('organization')->group(function () {
     //Projection Route
     Route::get('/loadeducationCenter/{type}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadeducationCenter'])->name('loadeducationCenter');
 
+    //Annual Data Submission Route
+    Route::post('/saveAnnualData', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveAnnualData'])->name('saveAnnualData');
+
 });
 Route::prefix('questionAnswerController')->group(function () {
     Route::post('/saveQuestionaries', [App\Http\Controllers\question_answer\QuestionAnswerController::class, 'saveQuestionaries'])->name('saveQuestionaries');
