@@ -56,6 +56,18 @@ class StudentHealthController extends Controller
     }
 
     public function loadSupplementationRecords($param=""){
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
         $student_records = $this->apiService->listData('emis/students/loadSupplementationRecords/'.$param);
         return $student_records;
     }
@@ -137,7 +149,18 @@ class StudentHealthController extends Controller
     }
 
     public function listScreeningSummary($param=""){
-        $param = $this->getWrkingAgencyId();
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
         $student_records = $this->apiService->listData('emis/students/listScreeningSummary/'.$param);
         return $student_records;
     }
@@ -270,7 +293,19 @@ class StudentHealthController extends Controller
     }
 
     public function loadBmiSummary(){
-        $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$this->userId());
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
+        $student_records = $this->apiService->listData('emis/students/loadBmiSummary/'.$param);
         return $student_records;
     }
 
@@ -395,7 +430,18 @@ class StudentHealthController extends Controller
      */
 
     public function loadVaccinationRecords(){
-        $param = $this->getWrkingAgencyId();
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
         $student_records = $this->apiService->listData('emis/students/loadVaccinationRecords/'.$param);
         return $student_records;
     }

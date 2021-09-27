@@ -761,7 +761,12 @@ class StudentAdmissionController extends Controller
     }
 
     public function getStudentDetails($std_id=""){
-        if(strpos($std_id,'-')){
+        if(strpos($std_id,'mission')){
+            $response_data=std_admission::where('id',explode('_',$std_id)[1])->first();
+            if($response_data!="" && $response_data!=null){
+                $response_data->parents=StudentGuardian::where('StdStudentId',$response_data->id)->get();
+            }
+        } else if(strpos($std_id,'-')){
             $response_data=Std_Students::where('student_code',explode('-',$std_id)[1])->first();
             if(empty($response_data)){
                 $response_data=Std_Students::where('CidNo',explode('-',$std_id)[1])->first();
@@ -786,6 +791,7 @@ class StudentAdmissionController extends Controller
         }
         return $this->successResponse($response_data);
     }
+    
     public function getAllStudentCid(){
         $response_data=Std_Students::select('CidNo')->get();
         return $this->successResponse($response_data);

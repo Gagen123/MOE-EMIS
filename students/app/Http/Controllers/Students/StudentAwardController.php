@@ -84,8 +84,10 @@ class StudentAwardController extends Controller
                 'recordtype'        =>  $request->recordtype, 
                 //'user_id'           => $this->user_id() 
             ];
+                
             $response_data = CeaStudentAward::create($data);
          }
+
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     //     if($request->actiontype=="add"){
@@ -119,13 +121,15 @@ class StudentAwardController extends Controller
 
     public function loadStudentAwards($param=""){
 
-        $id =$param;
+        parse_str($param, $class_details);
 
         $awards = DB::table('cea_student_award')
                 ->join('std_student', 'cea_student_award.StdStudentId', '=', 'std_student.id')
+                ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                 ->join('cea_award', 'cea_student_award.CeaAwardId', '=', 'cea_award.id')
                 ->select('cea_student_award.*', 'std_student.Name','std_student.student_code','cea_award.name AS award_name')
-                ->where('std_student.OrgOrganizationId', $id)
+                ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                 ->get();
         
         return $this->successResponse($awards);

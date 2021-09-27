@@ -69,7 +69,18 @@ class StudentResponsibilityController extends Controller
     }
 
     public function loadStudentResponsibilities($param=""){
-        $param = $this->getWrkingAgencyId();
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
         $student_roles = $this->apiService->listData('emis/students/loadStudentResponsibilities/'.$param);
         return $student_roles;
     }

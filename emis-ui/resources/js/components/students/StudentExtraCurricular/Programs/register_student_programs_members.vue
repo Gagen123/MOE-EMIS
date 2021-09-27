@@ -3,6 +3,15 @@
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Class & Section:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.class_section" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('class_section') }" class="form-control select2" name="class_section" id="class_section" >
+                        <option v-for="(item, index) in classSection" :key="index" v-bind:value="[item.org_class_stream_id, item.org_stream_id, item.org_section_id]">{{ item.class_stream_section}}</option>
+                    </select>
+                    <has-error :form="student_form" field="class_section"></has-error>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Student:<i class="text-danger">*</i></label>
                     <select v-model="student_form.student" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('student') }" class="form-control select2" name="student" id="student">
                         <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
@@ -65,7 +74,8 @@ export default {
             roleList:[],
             programList:[],
             roles: [],
-            // id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            classSection:[],
+            id:'2',
             // type:programmem,
 
             student_form: new form({
@@ -73,48 +83,29 @@ export default {
                 program: '',
                 date: '',
                 role: [],
-                date: '',
                 responsibilities:'',
             }),
         }
     },
     methods: {
-        //need to get the organisation id and pass it as a parameter
-        loadStudentList(uri='students/loadStudentList/' +this.id){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.studentList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         getClassTeacher(){
             axios.get('academics/getClassTeacherClasss')
             .then(response =>{
                 let data = response.data.data
-                data.forEach((item)=>{
-                    this.classId = item.org_class_id
-                    if(item.org_stream_id != null){
-                        this.streamId = item.org_stream_id;
-                    }else if(item.org_section_id != null){
-                        this.sectionId = item.org_section_id;
-                    }else{
-                        this.classId = item.org_class_id
-                    }
-                    this.OrgClassStreamId = item.org_class_stream_id;
-                    this.orgId = item.org_id;
-                    this.getStudentBasedOnTeacherClassSect();
-                })
+                this.classSection = data;
             })
         },
-        getStudentBasedOnTeacherClassSect(){
-            axios.get("common/getStudentList/"+ this.orgId +'/'+ this.OrgClassStreamId)
-            .then(response => {
-                this.studentList = response.data;
-            })
-        },
+        // loadStudentList(uri='students/loadStudentList/' +this.id){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         this.studentList =  data.data.data;
+        //     })
+        //     .catch(function (error) {
+        //         console.log("Error......"+error)
+        //     });
+        // },
+        
         loadActiveProgramList(uri='students/listStudentPrograms/'+this.id){
             axios.get(uri)
             .then(response => {
@@ -164,16 +155,27 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
-                this.student_form.post('/students/saveProgramMembers',this.student_form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/student_programs_members');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.student_form.post('/students/saveProgramMembers',this.student_form)
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push('/student_programs_members');
+                        })
+                        .catch(() => {
+                            console.log("Error......")
+                        })
+                    }
                 })
             }
 		},
@@ -188,6 +190,25 @@ export default {
             }
             if(id=="program"){
                 this.student_form.program=$('#program').val();
+            }
+            if(id=="class_section"){
+               this.studentList = [];
+               var classVals = $('#class_section').val().split(',');
+               let class_id = classVals[0];
+               let stream_id = classVals[1];
+               let section_id = classVals[2];
+                               
+               let route = class_id+'__'+stream_id+'__'+section_id;
+               if(stream_id == ''){
+                   route = class_id+'__'+"NULL"+'__'+section_id;
+               }
+               axios.get('/students/loadStudentBySection/'+route)
+                    .then((response) => {
+                        this.studentList = response.data;  
+                })
+                .catch(() => {
+                    consoele.log("Error:"+e)
+                });
             }
         },
     },
@@ -204,7 +225,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadStudentList();
+        
         this.getClassTeacher();
         this.loadActiveProgramList();
         this.loadActiveRolesList();
