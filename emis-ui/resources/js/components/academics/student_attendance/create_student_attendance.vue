@@ -33,7 +33,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item, index) in studentList" :key="index">
-                                <td>{{ index + 1 }}</td>
+                                <td>{{ item.roll_no }}</td>
                                 <td>
                                     <input v-model='studentList[index].std_student_id' type="hidden">
                                     {{ item.Name }}
@@ -146,6 +146,7 @@ export default {
                         aa['Name'] = item.Name
                         aa['std_student_id'] = item.std_student_id
                         aa['is_present'] = 1
+                        aa['roll_no'] = item.roll_no
                         const obj = {...aa};
                         this.studentList.push(obj);
                     })

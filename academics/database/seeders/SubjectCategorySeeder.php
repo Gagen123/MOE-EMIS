@@ -20,6 +20,7 @@ class SubjectCategorySeeder extends Seeder
             [
                 'id' => 'aad4fd53-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Academic',
+                'code' => '',
                 'dzo_name'=> '',
                 'display_order'=>'1',
                 'status' => '1',
@@ -29,6 +30,7 @@ class SubjectCategorySeeder extends Seeder
             [
                 'id' => 'b8d29a44-b8c7-11eb-b80d-b07b2586b8c6',
                 'name' => 'Non-Academic',
+                'code' => '',
                 'dzo_name'=> '',
                 'display_order'=>'2',
                 'status' => '1',

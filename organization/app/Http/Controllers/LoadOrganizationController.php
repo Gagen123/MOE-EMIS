@@ -360,7 +360,7 @@ class LoadOrganizationController extends Controller{
     }
 
     public function loadOrgDetails($type="", $id=""){
-
+        try{ 
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
            $response_data=OrganizationDetails::where('id',$id)->first();
@@ -440,7 +440,9 @@ class LoadOrganizationController extends Controller{
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();
         }
-        return $this->successResponse($response_data);
+      return $this->successResponse($response_data);}catch(Exception $e){
+           dd($e);
+       }
     }
 
     public function loadHeaquarterList($type="", $id=""){

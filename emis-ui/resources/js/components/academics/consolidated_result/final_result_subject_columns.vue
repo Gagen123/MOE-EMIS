@@ -22,11 +22,10 @@
                             <th >Qualities</th>
                             <th >Level</th>
                             <td colspan="3" rowspan="2">
-                                <strong>Name of the School : </strong> {{school}} <br>
-                                <strong>Gewog : </strong> <span class="mr-4"> Saling </span> 
-                                <strong>Dungkhag/Thromde :  </strong> 
-                                <span class="fw-normal"> </span> <br>        
-                                <strong>Dzongkhag :  </strong> <span> Mongar </span> <br> 
+                                <strong>Name of the School : </strong> {{organizations.name}} <br>
+                                <strong>Gewog : </strong> <span class="mr-4"> {{organizations.gewog}} </span> 
+                                <strong>Dungkhag/Thromde :  </strong> <span class="fw-normal"> {{organizations.dungkhag}}</span> <br>        
+                                <strong>Dzongkhag :  </strong> <span> {{organizations.dzongkhag}} </span> <br> 
                             </td>
                         </tr>
                         <!-- <tr>
@@ -66,7 +65,7 @@
 export default {
     data(){
         return{
-            school:[],
+            organizations:'',
             subCategNonAcademics:[],
             org_id:'',
             dt:''
@@ -81,8 +80,7 @@ export default {
         getSchoolName(){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+this.org_id)
             .then(response => {
-                let data = response.data.data;
-                this.school=data['name'];
+                this.organizations=response.data.data;
             })
             .catch(errors => {
                 console.log(errors)

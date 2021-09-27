@@ -231,9 +231,8 @@
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
         this.sectionId=this.$route.params.data.org_section_id;
-        this.class_stream_section=this.$route.params.data.class_stream_section;
-        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
-
+        this.class_stream_section=this.$route.params.class_stream_section[4];
+        this.OrgClassStreamId=this.$route.params.class_stream_section[0];
     },
 }
 </script>

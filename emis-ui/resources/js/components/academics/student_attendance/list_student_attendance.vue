@@ -44,20 +44,25 @@ export default {
         },
         async loadClassStreamSection(){
              try{
+                let org_stream_id = null 
+                let org_section_id = null
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
                 let studentsAttendance = await axios.get('academics/loadStudentAttendance').then(response => response.data.data)
                 studentsAttendance.forEach((attendance,index) => {
                     classSections.forEach(item => {
-                        if(attendance.org_class_id == item.org_class_id && (attendance.org_stream_id == item.org_stream_id || (attendance.org_stream_id == null && item.org_stream_id == null)) && (attendance.org_section_id == item.org_section_id || (attendance.org_section_id == null && item.org_section_id == null))){
-                            if(item.stream && item.section){
-                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                            }else if(item.stream){
-                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.stream
-                            }else if(item.section){
-                                studentsAttendance[index]['class_stream_section'] = item.class+' '+item.section
+                         org_stream_id = (item.org_stream_id == "") ? null : item.org_stream_id
+                         org_section_id = (item.org_section_id == "") ? null : item.org_section_id
+
+                         console.log(org_section_id+':'+attendance.org_section_id)
+                        if(attendance.org_class_id == item.org_class_id && 
+                        (attendance.org_stream_id == org_stream_id || (attendance.org_stream_id == null && org_stream_id == null)) && 
+                        (attendance.org_section_id == org_section_id || (attendance.org_section_id == null && org_section_id == null))){
+                            studentsAttendance[index]['class_stream_section'] = item.class
+                            if(item.stream){
+                                studentsAttendance[index]['class_stream_section'] += item.stream
                             }
-                            else{
-                                studentsAttendance[index]['class_stream_section'] = item.class
+                            if(item.section){
+                                studentsAttendance[index]['class_stream_section'] += item.section
                             }
                             studentsAttendance[index]['OrgClassStreamId'] = item.OrgClassStreamId
                             // studentsAttendance[index]['aca_absence_reason_id'] = item.aca_absence_reason_id
@@ -66,6 +71,7 @@ export default {
                     })
                 });
                 this.classStremSectionList = studentsAttendance
+                console.log(studentsAttendance)
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -74,7 +80,7 @@ export default {
 
         },
         showedit(data){
-            this.$router.push({name:'edit_remedial_class',params: {data:data}});
+            this.$router.push({name:'edit_student_attendance',params: {data:data}});
         },
 	 
     },
