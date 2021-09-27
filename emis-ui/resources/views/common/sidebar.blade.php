@@ -281,7 +281,7 @@
             <span id="sidebars"></span>
             <span id="sidebarworkflow"></span>
 
-            <span class="developemntEnvlink">
+            <span class="developemntEnvlink mainmenu">
                 <br>
                 <br>
                 <hr>
@@ -291,6 +291,12 @@
                     <router-link to="/academic" class="nav-link pt-1 pb-1">
                         <i class="nav-icon fas fa-book"></i>
                             Academics
+                    </router-link>
+                </li>
+                <li class="nav-item has-treeview" id="academic">
+                    <router-link to="/happiness_index" class="nav-link pt-1 pb-1">
+                        <i class="nav-icon fas fa-book"></i>
+                            Happiness Index
                     </router-link>
                 </li>
 
@@ -489,7 +495,7 @@
                                 </p>
                             </router-link>
                         </li>
-                        
+
                         <li class="nav-item" id="school_details_update" onclick="setclass('organizationlink','','school_details_update')">
                         <!-- <li class="nav-item" id="track_application"> -->
                             <router-link to="/school_details_update" class="nav-link">
