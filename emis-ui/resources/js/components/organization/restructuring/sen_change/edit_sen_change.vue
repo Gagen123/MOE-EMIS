@@ -200,14 +200,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
-
+    
         /**
          * method to show next and previous tab
          */
@@ -360,7 +353,8 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -373,7 +367,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicationDetials();
     }

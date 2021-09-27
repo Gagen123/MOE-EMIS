@@ -25,10 +25,10 @@
                                         </select>
                                         <has-error :form="form" field="organizationId"></has-error>
                                     </div>
-                                     <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
+                                     <!-- <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
                                         <label>Organization Type:</label>
                                         <input type="text" readonly :value="form.organization_type"  class="form-control" id="organization_type"/>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">
@@ -218,17 +218,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-                 $('#orgType').hide();
-            });
-        },
-        /**
-         * method to show next and previous tab
-         */
+
         shownexttab(nextclass){
             if(nextclass=="final-tab"){
                 Swal.fire({
@@ -457,11 +447,11 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
         this.loadactivedzongkhagList();
         this.loadproposedBy();
-        this.getOrgList();
         this.getLevel();
         this.getLocation();
         this.getClass();
