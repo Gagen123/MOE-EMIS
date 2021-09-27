@@ -24,7 +24,8 @@ class SchoolPlan extends Model
         'end_date',
         'person_responsible',
         'implementation_status_id',
-        'school_plan_status',
+        'school_plan_status_id',
+        'plan_date',
         'remarks',
         'created_by'
     ];

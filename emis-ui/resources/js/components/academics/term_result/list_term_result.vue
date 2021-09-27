@@ -48,13 +48,13 @@
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEdit(item.std_assmt_id)"><i class="fa fa-unlock-alt"></i > Undo Finalize </div>
                                 </div>
                                 <div v-else-if="item.is_subject_teacher && !item.finalized" class="ml-2 btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-default text-white" width="500" @click="showedit(item)">
+                                    <div class="btn btn-info btn-sm btn-default text-white" width="500" @click="showedit('edit_term_result',item)">
                                         <span v-if="item.std_assmt_id"><i class="fas fa-edit"></i > Edit</span>
                                         <span v-else><i class="fas fa-plus"></i > Add</span>
                                     </div>
                                 </div>
                                 <div v-if="item.std_assmt_id" class="ml-2 mt-1 btn-group btn-group-sm">
-                                    <router-link :to="{name:'view_term_result', params: {data:item,classes:class_stream_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_term_result',item)"> <i class="fas fa-eye"></i > View</div>
                                 </div>
                               
                             </td>
@@ -106,13 +106,13 @@ export default {
                 }
              }   
            },
-        showedit(data){
-            this.$router.push({name:'edit_term_result',params: {data:data,class_stream_section:this.class_stream_section_id}});
+        showedit(route,data){
+            this.$router.push({name:route,params: {data:data,class_stream_section:this.class_stream_section_id}});
         },
         getTerms(){
             this.terms=[];
             let uri = 'academics/getTermsByClass/'+this.class_stream_section_id[1]
-            if(this.class_stream_section_id[2] !== null){
+            if(this.class_stream_section_id[2]){
                 uri += ('/'+this.class_stream_section_id[2])
             }
             axios.get(uri).then((response)=>{
@@ -129,30 +129,8 @@ export default {
             if(this.class_stream_section_id[3] !== null){
                 uri += ('&org_section_id='+this.class_stream_section_id[3])
             }
-            let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
             axios.get(uri).then(response=>{
-                let data = response.data.data
-                data.forEach((item,index)=>{
-                    classSections.forEach(item1 => {
-                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || (item.org_stream_id == null && item1.org_stream_id == null)) && (item.org_section_id == item1.org_section_id || (item.org_section_id == null && item1.org_section_id == null))){
-                            if(item1.stream && item1.section){
-                                 data[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
-                            }else if(item1.stream){
-                                data[index]['class_stream_section'] = item1.class+' '+item1.stream
-                            }else if(item1.section){
-                                data[index]['class_stream_section'] = item1.class+' '+item1.section
-                            }
-                            else{
-                                data[index]['class_stream_section'] = item1.class
-                            }
-                            data[index]['OrgClassStreamId'] = item1.OrgClassStreamId
-                        
-                        }
-
-                    })
-
-                })
-                this.TermsResultList = data
+                this.TermsResultList =  response.data
             })
         },
         unlockForEdit(Id){

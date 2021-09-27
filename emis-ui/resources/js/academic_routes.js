@@ -144,6 +144,28 @@ const routes = [
 
                 ]
             },
+            { path:'/remedial-class', component:require('./components/academics/remedial_class/remedial_class_index.vue').default,
+                children: [
+                    { path: '', name: 'remedial-class', component: require('./components/academics/remedial_class/list_remedial_class.vue').default },
+                    { path: '/list-remedial-class', name: 'list_remedial_class', component: require('./components/academics/remedial_class/list_remedial_class.vue').default },
+                    { path: 'edit-remedial-class', name: 'edit_remedial_class', component: require('./components/academics/remedial_class/edit_remedial_class.vue').default },
+                    { path: '/create-remedial-class', name: 'create_remedial_class', component: require('./components/academics/remedial_class/create_remedial_class.vue').default },
+
+                ]
+            },
+            { path:'/publish-result', component:require('./components/academics/consolidated_result/consolidated_result_index.vue').default,
+            children: [
+                { path: '', name:'publish-result', component:require('./components/academics/consolidated_result/list_consolidated_result.vue').default},
+                { path: '/list-publish-result', name: 'list_publish_result', component: require('./components/academics/consolidated_result/list_consolidated_result.vue').default },
+                { path: '/view-publish-result', name: 'view_publish_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
+                { path: '/edit-publish-result',name:'edit_publish_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
+                { path: '/view-publish-result', name: 'view_detail_publish_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
+                { path: '/progress-report-col', name: 'final_result_subject_columns', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
+                { path: '/progress-report-row', name: 'final_result_subject_rows', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
+
+            ]
+        },
+            
         ]
     }
 ]

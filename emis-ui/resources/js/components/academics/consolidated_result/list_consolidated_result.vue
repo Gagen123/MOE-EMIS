@@ -5,7 +5,7 @@
                 <label>Class:<span class="text-danger">*</span></label> 
                 <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="loadConsolidatedResultList(); remove_err('class_stream_section_id')">
                     <option selected="selected" value="">---Select---</option>
-                    <option selected v-for="(item, index) in Classes" :key="index" :value="[item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                    <option selected v-for="(item, index) in Classes" :key="index" :value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                         {{ item.class_stream_section }}
                     </option>
                 </select> 
@@ -42,16 +42,16 @@
                             </td>
                             <td>
                                 <div v-if="item.is_class_teacher && item.subject_teachers_finalized && !item.class_teacher_finalized" class="btn-group btn-group-sm">
-                                    <router-link :to="{name:'edit_consolidated_result', params: {data:item}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('edit_consolidated_result',item)"> <i class="fas fa-edit"></i > Edit</div>
                                 </div>
                                 <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEditForConsolidated(item.aca_assmt_term_id)"><i class="fa fa-unlock-alt mr-1"></i > Undo Finalize </div>
                                 </div>
                                  <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('',item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
                                 </div>
                                 <div class="btn-group btn-group-sm">
-                                    <router-link :to="{name:'view_consolidated_result', params: {data:item,classes:class_stream_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fa fa-eye"></i > View</router-link>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_consolidated_result',item)"> <i class="fas fa-eye"></i > View</div>
                                 </div>
                             </td>
                         </tr>
@@ -110,12 +110,12 @@ export default {
                 this.errorMessage = "This field is required"
             }
             let uri = 'academics/loadConsolidatedResultList'
-            uri += ('?org_class_id='+this.class_stream_section_id[0])
-           if(this.class_stream_section_id[1] !== null){
-                    uri += ('&org_stream_id='+this.class_stream_section_id[1])
+            uri += ('?org_class_id='+this.class_stream_section_id[1])
+           if(this.class_stream_section_id[2] !== null){
+                    uri += ('&org_stream_id='+this.class_stream_section_id[2])
             }
-            if(this.class_stream_section_id[2] !== null){
-                uri += ('&org_section_id='+this.class_stream_section_id[2])
+            if(this.class_stream_section_id[3] !== null){
+                uri += ('&org_section_id='+this.class_stream_section_id[3])
             }
             try{
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
@@ -146,8 +146,8 @@ export default {
                 }
              }   
            },
-        showedit(data){
-            this.$router.push({name:'edit_consolidated_result',params: {data:data}});
+        showedit(route,data){
+            this.$router.push({name:route,params: {data:data,class_stream_section:this.class_stream_section_id}});
         },
         unlockForEditForConsolidated (Id){
             Swal.fire({

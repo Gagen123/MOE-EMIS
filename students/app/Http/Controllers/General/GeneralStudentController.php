@@ -282,13 +282,13 @@ class GeneralStudentController extends Controller
     }
 
     public function getStudents($org_id,Request $request){
-        $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.CidNo, t2.OrgClassStreamId, t2.SectionDetailsId
-        FROM std_student t1 
-        LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ?";
+        $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name,t2.roll_no, t1.CidNo, t3.OrgClassStreamId, t3.SectionDetailsId FROM std_student t1 
+            JOIN student_rollnumbers t2 ON t1.id = t2.std_id 
+            JOIN std_student_class_stream t3 ON t1.id = t3.StdStudentId WHERE t1.OrgOrganizationId = ? AND t3.OrgClassStreamId = ?";
         $params = [$org_id,$request->OrgClassStreamId];
 
         if($request->sectionId){
-            $query .= ' AND t2.SectionDetailsId = ?';
+            $query .= ' AND t3.SectionDetailsId = ?';
             array_push($params,$request->sectionId);
         }
   

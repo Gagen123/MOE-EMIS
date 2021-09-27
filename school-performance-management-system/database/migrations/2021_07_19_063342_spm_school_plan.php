@@ -26,12 +26,16 @@ class SpmSchoolPlan extends Migration
             $table->date('end_date')->index();
             $table->string('person_responsible',255);
             $table->integer('implementation_status_id')->index();
-            $table->unsignedTinyInteger('school_plan_status')->nullable();
+            $table->unsignedTinyInteger('school_plan_status_id')->nullable()->default(1)->index();
             $table->string('remarks',500)->unique();
             $table->char('created_by',36);
+            $table->date('plan_date')->index();
             $table->timestamps();
 
-            $table->foreign('implementation_status_id')->references('id')->on('spm_school_plan_status');
+
+            $table->foreign('school_plan_status_id')->references('id')->on('spm_school_plan_status');
+            $table->foreign('implementation_status_id')->references('id')->on('spm_implementation_status');
+
 
         });
     }

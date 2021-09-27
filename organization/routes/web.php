@@ -206,6 +206,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->post('/saveSubjectMapping', 'generalInformation\ClassMappingController@saveSubjectMapping');
         $router->get('/getSubjectMapping/{org_id}', ['uses' => 'generalInformation\ClassMappingController@getSubjectMapping']);
+        $router->get('/getOptionalSubjectOrgWise/{orgId}', ['uses' => 'generalInformation\ClassMappingController@getOptionalSubjectOrgWise']);
 
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
