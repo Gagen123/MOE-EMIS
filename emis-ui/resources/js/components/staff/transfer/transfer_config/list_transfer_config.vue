@@ -65,11 +65,11 @@ export default {
             this.TransferConfigurationList();
         },
        watch: {
-            dataLists(){
-                this.$nextTick(() => {
-                    this.dt =  $("#transfer_config_list").DataTable()
-                });
-            }
+        dataLists(){
+            this.$nextTick(() => {
+                this.dt =  $("#transfer_config_list").DataTable()
+            });
+        }
         },
 }
 </script>
