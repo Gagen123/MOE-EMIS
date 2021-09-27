@@ -795,5 +795,35 @@ class GeneralInfoController extends Controller
         return $response_data;
         
     }
+    public function saveAnnualData(Request $request){
+        // $rules = [
+        //     'year'          =>  'required',
+        //     'date'          =>  'required',
+        //     'location'      =>  'required',
+        //     'number'        =>  'required',
+        // ];
+        // $customMessages = [
+        //     'year.required'         => 'Type is required',
+        //     'item.required'         => 'Item is required',
+        //     'location.required'     => 'Location/Use is required',
+        //     'number.required'       => 'Number is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
+        $data =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'year'                      =>  $request['year'],
+         //   'date'                      =>  $request['date'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
+        ];
+       // dd($data);
+        // try{
+            $response_data= $this->apiService->createData('emis/organization/saveAnnualData', $data);
+            return $response_data;
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
+    }
 
 }

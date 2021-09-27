@@ -58,7 +58,18 @@
                                                 Detained
                                             </span>
                                         </span>
-                                        <span v-else>
+                                       <span v-else-if="item4.input_type==0" :class="{'text-danger underline' :
+                                            consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']
+                                            < consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['pass_score']}"
+                                        >
+                                            {{ratings.find(rating => rating.aca_rating_type_id == consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['aca_rating_type_id'] && rating.score == consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']).name}}
+                                       </span>
+                                       <span v-else 
+                                            :class="{'text-danger underline' : (item4.input_type==1
+                                            && ((consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['score']
+                                                    / areas.find(areaItem => areaItem.aca_assmt_term_id == item4['aca_assmt_term_id'] && areaItem.aca_assmt_area_id == item4['aca_assmt_area_id']).weightage)*100) 
+                                                    < consolidatedResultList[index3][item4['aca_assmt_term_id']][item4['aca_sub_id']][item4['aca_assmt_area_id']]['pass_score'])}"
+                                        >
                                             {{consolidatedResultList[index3][item4["aca_assmt_term_id"]][item4["aca_sub_id"]][item4["aca_assmt_area_id"]]['score']}}
                                        </span>
                                     </span>                                  
@@ -71,8 +82,8 @@
 
             <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize</button>
-                <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button>
+                <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize & Submit for Approval </button>
+                <!-- <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button> -->
             </div>
             <footer v-if="assessmentAreaCode.length">
                 <ul class="list-inline">
@@ -95,6 +106,7 @@
             terms:[],
             subjects:[],
             areas:[],
+            ratings:[],
             assessmentAreaCode:[],
             form: new form({
                 class_stream_section:'',
@@ -132,6 +144,7 @@
                 this.subjects = consolidatedResult.subjects
                 this.areas = consolidatedResult.areas
                 this.consolidatedResultList = consolidatedResult.results
+                this.ratings = consolidatedResult.ratings
             }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
@@ -235,17 +248,6 @@
     },
     mounted(){ 
         this.loadConsolidatedResult()
-        //  this.dt =  $("#edit-table").DataTable({
-        //     scrollY:        "300px",
-        //     scrollX:        true,
-        //     scrollCollapse: true,
-        //     paging:         false,
-        //     searching: false,
-        //     fixedColumns:   {
-        //         leftColumns: 2
-        //     },
-        //     destroy: true,
-        // });
     },
     created() {
         console.log(this.$route.params)
@@ -253,20 +255,10 @@
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;
         this.form.org_section_id=this.$route.params.data.org_section_id;
-        this.form.class_stream_section=this.$route.params.data.class_stream_section;
-        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+        this.form.class_stream_section=this.$route.params.class_stream_section[4];
+        this.OrgClassStreamId=this.$route.params.class_stream_section[0];
 
     },
-     watch: {
-        consolidatedResultList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#promotion-rule-edit-table").DataTable({
-                     destroy: true,
-                })
-            });
-        }
-    }
 }
 </script>
 <style scoped>
@@ -278,4 +270,7 @@
 
     
 table.DTFC_Cloned thead,table.DTFC_Cloned tfoot{background-color:white}div.DTFC_Blocker{background-color:white}div.DTFC_LeftWrapper table.dataTable,div.DTFC_RightWrapper table.dataTable{margin-bottom:0;z-index:2}div.DTFC_LeftWrapper table.dataTable.no-footer,div.DTFC_RightWrapper table.dataTable.no-footer{border-bottom:none}table.dataTable.display tbody tr.DTFC_NoData{background-color:transparent}div.DTFC_LeftBodyLiner{overflow-x: hidden}
+.underline {
+  text-decoration: underline;
+}
 </style>
