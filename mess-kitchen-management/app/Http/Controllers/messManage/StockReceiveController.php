@@ -29,9 +29,7 @@ class StockReceiveController extends Controller{
                 'updated_by'               =>  $request->user_id,
                 'created_at'               =>  date('Y-m-d h:i:s')
             ];
-           // dd($stockreceive);
             $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
-         //   $stockreceivedId = $stcrcv->id;
             DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
             foreach ($request->input('items_received') as  $i=> $facility){
               //  dd($facility);
@@ -45,21 +43,20 @@ class StockReceiveController extends Controller{
                 if(isset($facility['quantity'])){
                     $quantity=$facility['quantity'];
                 }
-                $damagequantity="";
-                if(isset($facility['damagequantity'])){
-                    $damagequantity=$facility['damagequantity'];
-                }
+                // $damagequantity="";
+                // if(isset($facility['damagequantity'])){
+                //     $damagequantity=$facility['damagequantity'];
+                // }
                 $receiveditem = array(
                     'stockreceivedId'               =>  $request->id,
                     'item_id'                       =>  $facility['item'],
                     'receivedquantity'              =>  $quantity,
                     'unit_id'                       =>  $facility['unit_id'],
                     'remarks'                       =>  $remarks,
-                    'damagequantity'                =>  $damagequantity,
+                    // 'damagequantity'                =>  $damagequantity,
                     'updated_by'                    =>  $request->user_id,
                     'created_at'                    =>  date('Y-m-d h:i:s')
                 );
-               // dd($receiveditem);
                 $stcrcv = StockReceivedItem::create($receiveditem);
             }
             return $this->successResponse($stcrcv, Response::HTTP_CREATED);
@@ -75,10 +72,8 @@ class StockReceiveController extends Controller{
                 'created_by'               =>  $request->user_id,
                 'created_at'               =>  date('Y-m-d h:i:s')
             ];
-           // dd($stockreceive);
             $stcrcv = StockReceived::create($stockreceive);
             $stockreceivedId = $stcrcv->id;
-             //dd($request->input('itemList'));
             foreach ($request->input('itemList') as  $i=> $facility){
              //   dd($facility);
                // $itm_id=explode('_',$facility['item'])[0];
@@ -91,34 +86,77 @@ class StockReceiveController extends Controller{
                 if(isset($facility['quantity'])){
                     $quantity=$facility['quantity'];
                 }
-                $damagequantity=0;
-                if(isset($facility['damagequantity'])){
-                    $damagequantity=$facility['damagequantity'];
-                }
+                // $damagequantity=0;
+                // if(isset($facility['damagequantity'])){
+                //     $damagequantity=$facility['damagequantity'];
+                // }
                 $receiveditem = array(
                     'stockreceivedId'              =>  $stockreceivedId,
                     'item_id'                      =>  $facility['id'],
                     'receivedquantity'             =>  $quantity,
                     'unit_id'                      =>  $facility['Unit_id'],
                     'remarks'                      =>  $remarks,
-                    'damagequantity'               =>  $damagequantity,
+                    // 'damagequantity'               =>  $damagequantity,
                     'created_by'                   =>  $request->user_id,
                     'created_at'                   =>  date('Y-m-d h:i:s')
                 );
                // dd( $receiveditem);
                 StockReceivedItem::create($receiveditem);
-
                 $checkitem=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
                 ->where('organizationId',$request['organizationId'])->first();
                 if($checkitem!=null && $checkitem!=""){
-                    $qty=$quantity-$facility['damagequantity']+$checkitem->available_qty;
+                    $qty=$quantity+$checkitem->available_qty;
                     $update_data=[
                         'available_qty' => $qty,
-                        'updated_by'    =>$request->user_id,
-                        'updated_at'    =>  date('Y-m-d h:i:s'),
+                        'updated_by'    => $request->user_id,
+                        'updated_at'    => date('Y-m-d h:i:s'),
                     ];
                     TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')->update($update_data);
                 }
+
+
+
+                // $current_stock_data= DB::table('stock_received_items as sri')
+                // ->join('stock_receiveds as sr', 'sr.id', '=','sri.stockreceivedId')
+                // ->select('sri.item_id', 'sri.receivedquantity', 'sr.organizationId')
+                // ->where('sri.stockreceivedId',$request->id)
+                // ->where('sr.organizationId', $request['organizationId'])->first();
+                // $current_stock_data=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
+                // ->where('organizationId',$request['organizationId'])->first();
+               
+                // if($current_stock_data!=null && $current_stock_data!=""){
+                //     $current_stock_qty=   $current_stock_data->quantity;
+                //     $request_qty=  $request->quantity;
+                //     if($request_qty > $current_stock_qty){
+                //         $qty_diff = $request_qty-$current_stock_qty;
+                //         $qty_to_update_stock=  $current_stock_qty+ $qty_diff;
+                //         $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
+                //         ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
+                //         $stock_qty= $curr_tr_data->available_qty;
+                //         $update_tr_qty=  $stock_qty+ $qty_diff;
+                //         $tr_data=[
+                //             'available_qty'  => $update_tr_qty,
+                //             'updated_by'     => $request->user_id,
+                //             'updated_at'     =>  date('Y-m-d h:i:s'),
+                //         ];
+                //      //   dd($tr_data);
+                //         $stcrcv= TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
+                //     }else {
+                //         $qty_diff = $current_stock_qty -$request_qty;
+                //         $qty_to_update_stock= $current_stock_qty-$qty_diff;
+                //         $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
+                //         ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
+                //         $stock_qty= $curr_tr_data->available_qty;
+                //         $update_tr_qty=  $stock_qty-$qty_diff;
+                //         $tr_data=[
+                //             'available_qty' => $update_tr_qty,
+                //             'updated_by'    => $request->user_id,
+                //             'updated_at'    =>  date('Y-m-d h:i:s'),
+                //         ];
+                //       // dd( $tr_data);
+                //         $stcrcv=TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
+                //     }
+                // }
                 else{
                     $create_data=[
                         'procured_type'  =>'Central',
@@ -128,7 +166,7 @@ class StockReceiveController extends Controller{
                         'created_by'     =>$request->user_id,
                         'created_at'     =>  date('Y-m-d h:i:s'),
                     ];
-                    TransactionTable::create($create_data);
+                    $stcrcv=TransactionTable::create($create_data);
                 }
 
             }
@@ -268,112 +306,5 @@ class StockReceiveController extends Controller{
     //        return $this->successResponse($stckrcv, Response::HTTP_CREATED);
     //       // return($stckrcv);
     //    }
-    public function saveLocalProcureEdit(Request $request){
-        $id = $request->id;
-        if($id != null){
-            $stockreceive = [
-                'dateOfreceived'           =>  $request['dateOfreceived'],
-                'quarter_id'               =>  $request['quarter'],
-                'organizationId'           =>  $request['organizationId'],
-                'remarks'                  =>  $request['remarks'],
-                'id'                       =>  $request['id'],
-                'updated_by'               =>  $request->user_id,
-                'created_at'               =>  date('Y-m-d h:i:s')
-            ];
-            $stcrcv = StockReceived::where('id', $id)->update($stockreceive);
-
-            DB::table('stock_received_items')->where('stockreceivedId', $request->id)->delete();
-            foreach ($request->input('itemList') as  $i=> $facility){
-             //   $itm_id=explode('_',$facility['item'])[0];
-              //  $unitid=explode('_',$facility['item'])[1];
-                $remarks="";
-                if(isset($facility['remarks'])){
-                    $remarks=$facility['remarks'];
-                }
-                $quantity=0;
-                if(isset($facility['quantity'])){
-                    $quantity=$facility['quantity'];
-                }
-                $damagequantity="";
-                if(isset($facility['damagequantity'])){
-                    $damagequantity=$facility['damagequantity'];
-                }
-                $receiveditem = array(
-                    'stockreceivedId'               =>  $request->id,
-                    'item_id'                       =>  $facility['Name'],
-                    'receivedquantity'              =>  $quantity,
-                    'unit_id'                       =>  $facility['Unit_id'],
-                    'remarks'                       =>  $remarks,
-                    'damagequantity'                =>  $damagequantity,
-                    'updated_by'                    =>  $request->user_id,
-                    'created_at'                    =>  date('Y-m-d h:i:s')
-                );
-                $stcrcv = StockReceivedItem::create($receiveditem);
-            }
-            return $this->successResponse($stcrcv, Response::HTTP_CREATED);
-        }
-        // dd($request);
-         $current_stock_data=LocalProcure::where('id', $request->id)->where('organizationId',$request->organizationId)->first();
-        // dd($current_stock_data);
-         if($current_stock_data!=null && $current_stock_data!=""){
-             $current_stock_qty=   $current_stock_data->quantity;
-             $request_qty=  $request->quantity;
-             if($request_qty > $current_stock_qty){
-                 $qty_diff = $request_qty-$current_stock_qty;
-                 $qty_to_update_stock=  $current_stock_qty+ $qty_diff;
-                 $stock_data=[
-                 //    'organizationId'     => $request->organizationId,
-                     'quantity'           => $qty_to_update_stock,
-                    // 'damagequantity' => $request->damagequantity,
-                     'dateOfprocure'      => $request->dateOfprocure,
-                     'food_source'        => $request->source,
-                     // 'item_id'            => $request->item_id, 
-                     // 'unit_id'            => $request->unit_id,
-                     'amount'             => $request->amount,
-                     'remark'             => $request->remark,
-                    // 'user_id'            =>  $this->userId()
-                 ];
-               // dd($stock_data);
-                 $update_Issue= LocalProcure::where('item_id', $request->item_id)->update($stock_data);
-                 $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
-                 ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
-                 $stock_qty= $curr_tr_data->available_qty;
-                 $update_tr_qty=  $stock_qty+ $qty_diff;
-                 $tr_data=[
-                     'available_qty'  => $update_tr_qty,
-                     'updated_by'     => $request->user_id,
-                     'updated_at'     =>  date('Y-m-d h:i:s'),
-                 ];
-              //   dd($tr_data);
-                 $update_Issue= TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
-                
-             }else{
-                 $qty_diff = $current_stock_qty -$request_qty;
-                 $qty_to_update_stock= $current_stock_qty-$qty_diff;
-                // dd( $qty_to_update_stock);
-                 $stock_data=[
-                     'quantity'           => $qty_to_update_stock,
-                     'food_source'        => $request->source,
-                     'dateOfprocure'      => $request->dateOfprocure,
-                     'amount'             => $request->amount,
-                     'remark'             => $request->remark
-                 ];
-                // dd($stock_data);
-                 $update_Issue= LocalProcure::where('item_id', $current_stock_data->item_id)->where('organizationId',$current_stock_data->organizationId)->update($stock_data);
-                 $curr_tr_data=TransactionTable::where('organizationId',$current_stock_data->organizationId)
-                 ->where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->first();
-                 $stock_qty= $curr_tr_data->available_qty;
-                 $update_tr_qty=  $stock_qty-$qty_diff;
-                 $tr_data=[
-                     'available_qty' => $update_tr_qty,
-                     'updated_by'    => $request->user_id,
-                     'updated_at'    =>  date('Y-m-d h:i:s'),
-                 ];
-               // dd( $tr_data);
-                 $update_Issue=TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type','Local')->update($tr_data);
-            }
-             
-        }
-        return $this->successResponse($update_Issue);
-    }
+    
 }

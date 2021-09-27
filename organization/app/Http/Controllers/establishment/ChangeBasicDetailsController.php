@@ -545,10 +545,8 @@ class ChangeBasicDetailsController extends Controller
                 }
             }
         }
-
         return $changeDetails;
     }
-
     private function extractChangeInStreamData($request, $applicationDetailsId){
         $changeDetails =[];
         if($request['stream']!=""){
@@ -569,13 +567,11 @@ class ChangeBasicDetailsController extends Controller
      */
     private function checkStreamExists($classId){
         $data = DB::table('class_stream_mappings')
-                ->select('streamId', 'classId')
-                ->where('classId', $classId)
-                ->get()
-                ->toArray();
-
+            ->select('streamId', 'classId')
+            ->where('classId', $classId)
+            ->get()
+            ->toArray();
         return $data;
-
     }
 
     /**
@@ -589,7 +585,6 @@ class ChangeBasicDetailsController extends Controller
                 ->toArray();
 
         return $data;
-
     }
 
     private function extractChangeInPropreitorData($request, $applicationDetailsId){

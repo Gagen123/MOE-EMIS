@@ -41,6 +41,12 @@
                                             <textarea v-model="form.vission" class="form-control" id="vission"></textarea>
                                         </div>
                                     </div>
+                                    <div  v-if="access_level === 'Ministry'"  class= "form-group row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <label>Objective</label>
+                                            <textarea v-model="form.objective" class="form-control" id="vission"></textarea>
+                                        </div>
+                                    </div>
                                     <hr>
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -60,8 +66,10 @@
 <script>
     export default {
         data(){
-            return{
+            return{ 
+                access_level:'',
                 orgDetails:'',
+                objective:false,
                 isprofile:false,
                 form: new form({
                     org_id: '',
@@ -69,6 +77,8 @@
                     vission: '',
                     mission:'',
                     profile_path:'',
+                    objective:'',
+                    
                 })
             }
         },
@@ -76,15 +86,20 @@
             onChangeFileUpload(e){
                 this.form.attachments = e.target.files[0];
             },
-            getorgProfile(rogId){
-                axios.get('organization/getOrgProfile/'+rogId)
+           
+            getorgProfile(rogId,type){
+                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
+                    this.form.objective=data.objective;
                     this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
-                    this.orgDetails=data.orgName+' '+data.level;
+                    this.orgDetails=data.orgName;
+                    if(data.level!=undefined && data.level!=null && data.level!=""){
+                        this.orgDetails=data.orgName+' '+data.level;
+                    }
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
@@ -105,6 +120,7 @@
                 formData.append('profile_path', this.form.profile_path);
                 formData.append('mission', this.form.mission);
                 formData.append('attachments', this.form.attachments);
+                formData.append('type', this.form.type);
                 axios.post('organization/udpateOrgProfile',formData, config)
                 .then((response) => {
                     Toast.fire({
@@ -127,6 +143,9 @@
                 let data = response.data.data;
                 this.form.org_id=data['Agency_Code'];
                 this.getorgProfile(data['Agency_Code']);
+                this.access_level = data['acess_level'];
+                
+               
             })
             .catch(errors =>{
                 console.log(errors)

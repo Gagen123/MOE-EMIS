@@ -12,7 +12,7 @@
             </div>
             <div class="card">
                 <div class="form-group row">
-                    <div class="card-body col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                    <div class="card-body col-lg-12 col-md-12 col-sm-8 col-xs-12">
                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                             <thead>
                                 <tr>

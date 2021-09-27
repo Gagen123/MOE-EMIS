@@ -150,19 +150,14 @@ class StudentProjectController extends Controller
             $data =[
                 'id'                    => $request->id,
                 'StdStudentId'          => $request->student,
-                'CaeProjectId'          => $request->project,
+                'CeaProjectId'          => $request->project,
                 'Task'                  => $request->task,
                 'created_by'            => $request->user_id,
                 'created_at'            =>  date('Y-m-d h:i:s')
     
                 //'user_id'        => $this->user_id() 
             ];
-            try{
-                $response_data = CeaProjectMember::create($data);
-                } catch(\Illuminate\Database\QueryException $ex){
-                    dd($ex->getMessage());
-                    // Note any method of class PDOException can be called on $ex.
-                }
+            $response_data = CeaProjectMember::create($data);
            
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -173,14 +168,16 @@ class StudentProjectController extends Controller
      */
 
     public function listProjectMembers($param){
-        
-        $org_id = $param;
+        parse_str($param, $class_details);
+
         $records = DB::table('cea_project_membership')
                 ->join('cea_project', 'cea_project.id', '=', 'cea_project_membership.CeaProjectId')
                 ->join('std_student', 'cea_project_membership.StdStudentId', '=', 'std_student.id')
-                ->select('cea_project.name AS project_name', 'std_student.Name AS student_name','std_student.student_code AS student_code',
-                            'cea_project_membership.Task AS Task')
-                ->where('std_student.OrgOrganizationId', $org_id)
+                ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
+                ->select('cea_project.name AS project_name', 'cea_project_membership.*','std_student.Name AS student_name',
+                            'std_student.student_code AS student_code', 'cea_project_membership.Task AS Task')
+                ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                 ->get();
 
         return $this->successResponse($records);

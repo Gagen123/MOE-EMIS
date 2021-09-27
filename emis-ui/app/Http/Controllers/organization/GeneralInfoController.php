@@ -400,20 +400,25 @@ class GeneralInfoController extends Controller
             $path=$file_store_path.'/'.$file_name;
         }
         $org_details =[
-            'org_id'            =>  $request['org_id'],
+            'org_id'            =>  $this->getWrkingAgencyId(),
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
             'attachments'       =>  $path,
-            'user_id'           =>  $this->userId() 
+            'type'              =>  $request['type'],
+            'objective'         =>  $request['objective'],
+            'user_id'           =>  $this->userId(),
+            'access_level'      =>  $this->getAccessLevel(),
         ];
-        // dd($org_details);
+       // dd( $org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
 
-    public function getOrgProfile($id = ""){
-       // dd($id);
-        $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
+    public function getOrgProfile($type="",$id=""){
+        // dd($id);
+        $type=$this->getAccessLevel();
+        //dd($type);
+        $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id.'/'.$type);
         return $org_details;
     }
 

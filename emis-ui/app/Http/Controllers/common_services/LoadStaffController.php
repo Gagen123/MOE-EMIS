@@ -117,7 +117,7 @@ class LoadStaffController extends Controller{
         //type=orgwise, parent_id=?: to list with dzongkhag id
         if($type=="orgwise"){
             $param=$parent_id;
-        }
+        } 
         $response_data= $this->apiService->listData('emis/common_services/loadFewDetailsStaffList/'.$type.'/'.$param);
         return $response_data;
     }

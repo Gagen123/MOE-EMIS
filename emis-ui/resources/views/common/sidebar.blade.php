@@ -489,6 +489,16 @@
                                 </p>
                             </router-link>
                         </li>
+                        
+                        <li class="nav-item" id="school_details_update" onclick="setclass('organizationlink','','school_details_update')">
+                        <!-- <li class="nav-item" id="track_application"> -->
+                            <router-link to="/school_details_update" class="nav-link">
+                                <p>
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Annual Detail Update
+                                </p>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-header"></li>

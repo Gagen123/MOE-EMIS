@@ -34,27 +34,19 @@
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                 <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
                                 <p class="text-muted">
-                                    An educated and enlightened society of GNH, built and sustained on the unique Bhutanese values of tha dam-tsig ley gju-drey.<br>
+                                    {{form.mission}}
                                 </p>
 
                                 <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
                                 <p class="text-muted">
-                                    Develop sound educational policies that enable the creation of a knowledge-based GNH society.<br>
-                                    Provide equitable, inclusive and quality education and lifelong learning opportunities to all children and harness their full potential to become productive citizens.<br>
-                                    Equip all children with appropriate knowledge, skills and values to cope with the challenges of the 21st century.    <br>                       
+                                    {{form.vission}}
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <div class="card-body p-0">
                                     <strong><i class="fas fa-file-alt mr-1"></i> Objectives</strong>
-                                    <p class="text-muted">
-                                        The Ministry of Education presently is focused on achieving the following Objectives:<br>
-                                        To improve relevance and quality of education<br>
-                                        To improve access to and sustainability of education<br>
-                                        To strengthen youth development programme and services<br>
-                                        To enhance adult literacy and lifelong learning<br>
-                                        To ensure full utilization of budget<br>
-                                        To enable effective and efficient ICT Service delivery.  <br>                       
+                                     <p class="text-muted">
+                                        {{form.objective}}
                                     </p>
                                 </div>
                             </div>
@@ -181,24 +173,47 @@
                     attachments:'',
                     vission: '',
                     mission:'',
+                    objective:'',
                     profile_path:'',
                 }) 
             }
         },
         methods:{
-            getorgProfile(rogId){
-                axios.get('organization/getOrgProfile/'+rogId)
+            // getorgProfile(rogId){
+            //     axios.get('organization/getOrgProfile/'+rogId)
+            //     .then(response => {
+            //         let data = response.data.data;
+            //         this.form.vission=data.vission;
+            //         this.form.mission=data.mission;
+            //         this.form.objective=data.objective;
+            //         this.form.profile_path=data.logo_path;
+            //         this.orgDetails=data.orgName+' '+data.level;
+            //         if(data.logo_path!=""){
+            //             this.isprofile=true;
+            //         }
+            //     })    
+            //     .catch(errors =>{ 
+            //         console.log(errors)
+            //     });
+            // },
+            getorgProfile(rogId,type){
+                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
+                    this.form.objective=data.objective;
+                    this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
-                    this.orgDetails=data.orgName+' '+data.level;
+                    this.orgDetails=data.orgName;
+                    if(data.level!=undefined && data.level!=null && data.level!=""){
+                        this.orgDetails=data.orgName+' '+data.level;
+                    }
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
                 });
             },

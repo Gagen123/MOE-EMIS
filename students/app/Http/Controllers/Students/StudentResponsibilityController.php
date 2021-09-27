@@ -92,13 +92,15 @@ class StudentResponsibilityController extends Controller
 
     public function loadStudentResponsibilities($param=""){
 
-        $id =$param;
+        parse_str($param, $class_details);
 
         $roles = DB::table('std_role_student')
                 ->join('std_student', 'std_role_student.StdStudentId', '=', 'std_student.id')
+                ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                 ->join('std_role', 'std_role_student.StdRoleId', '=', 'std_role.id')
                 ->select('std_role_student.*', 'std_student.Name','std_student.OrgOrganizationId','std_role.name AS role_name')
-                ->where('std_student.OrgOrganizationId', $id)
+                ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                 ->get();
 
         return $this->successResponse($roles);
