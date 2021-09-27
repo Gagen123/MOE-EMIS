@@ -96,15 +96,18 @@ class StudentDisciplinaryRecordController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);  
     }
     public function loadStudentRecords($param=""){
+        parse_str($param, $class_details);
 
         $records = DB::table('std_student_disciplinary')
                 ->join('std_student', 'std_student_disciplinary.StdStudentId', '=', 'std_student.id')
+                ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                 ->join('std_disciplinary_action_type', 'std_student_disciplinary.StdDisciplinaryActionTypeId', '=', 'std_disciplinary_action_type.id')
                 ->join('std_disciplinary_offence_type', 'std_student_disciplinary.StdDisciplinaryOffenceTypeId', '=', 'std_disciplinary_offence_type.id')
                 ->join('std_disciplinary_severity', 'std_student_disciplinary.StdDisciplinarySeverityId', '=', 'std_disciplinary_severity.id')
                 ->select('std_student_disciplinary.*', 'std_student.Name','std_disciplinary_action_type.name AS action_type', 
                             'std_disciplinary_offence_type.name AS offence_type', 'std_disciplinary_severity.name AS severity')
-                ->where('std_student.OrgOrganizationId', $param)
+                ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                 ->get();
         
         return $this->successResponse($records);

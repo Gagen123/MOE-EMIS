@@ -4,7 +4,17 @@ const routes = [
         component: require('./components/masters/staff_masters/staff_master_index.vue').default,
         children:[
             {path: '/',name:'staff_link', component: require('./components/masters/staff_masters/staff_master_list.vue').default },
-            { path: '/marital_status',
+            { path: '/contract_category',
+                component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
+                children:[
+                    { path: '/',name:'marital_status', component: require('./components/masters/staff_masters/marital_status/list_marital_status.vue').default },
+                    { path: '/list_marital_status',name:'list_marital_status', component: require('./components/masters/staff_masters/marital_status/list_marital_status.vue').default },
+                    { path: '/create_marital_status',name:'create_marital_status', component: require('./components/masters/staff_masters/marital_status/create_marital_status.vue').default },
+                    { path: '/edit_marital_status', name:'edit_marital_status', component: require('./components/masters/staff_masters/marital_status/edit_marital_status.vue').default },
+                ],
+            },
+            //route for general master
+            { path: '/contract_category',
                 component: require('./components/masters/staff_masters/marital_status/marital_status_index.vue').default,
                 children:[
                     { path: '/',name:'marital_status', component: require('./components/masters/staff_masters/marital_status/list_marital_status.vue').default },

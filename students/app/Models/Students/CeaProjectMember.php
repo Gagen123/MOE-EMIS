@@ -15,7 +15,7 @@ class CeaProjectMember extends Model
     protected $fillable = [
         'id',
         'StdStudentId',
-        'CaeProjectId',
+        'CeaProjectId',
         'Task',
         'created_by',
         'created_at',

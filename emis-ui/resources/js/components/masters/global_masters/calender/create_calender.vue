@@ -33,6 +33,21 @@
                                 <template >
                                     <option value="Inter Transfer">Transfer Appeal</option>
                                 </template>
+                                <template >
+                                    <option value="Admission (General)">Admission (General)</option>
+                                </template>
+                                <template >
+                                    <option value="Admission (XI)">Admission (XI)</option>
+                                </template>
+                                <template >
+                                    <option value="Admission (XI-Sci)">Admission (XI-Sci)</option>
+                                </template>
+                                <template >
+                                    <option value="Admission (XI-Com)">Admission (XI-Com)</option>
+                                </template>
+                                <template >
+                                    <option value="Admission (XI-Arts)">Admission (XI-Arts)</option>
+                                </template>
                         </select>
                         <has-error :form="form" field="type"></has-error>
                     </div>

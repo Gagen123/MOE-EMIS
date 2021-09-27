@@ -157,7 +157,8 @@ class HomeController extends Controller{
                 // Session::put('role_workflow', $role_workflow);
 
                 if($user->org_organization_id!=null){
-                    $org_profile= json_decode($this->apiService->listData('emis/common_services/getOrgProfile/'.$user->org_organization_id));
+                    $type=$this->getAccessLevel();
+                    $org_profile= json_decode($this->apiService->listData('emis/common_services/getOrgProfile/'.$user->org_organization_id.'/'.$type));
                     // dd( $org_profile);
                     if($org_profile!=null && $org_profile!="" && $org_profile!="null"){
                         $org_profile=$org_profile->data;
