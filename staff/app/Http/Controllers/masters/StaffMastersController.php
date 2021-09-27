@@ -47,6 +47,7 @@ class StaffMastersController extends Controller{
         $this->audit_database = config('services.constant.auditdb');
     }
     public function saveStaffMasters(Request $request){
+        dd($request);
         $response_data=[];
         if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"){
             if($request->actiontype=="add"){
@@ -137,6 +138,7 @@ class StaffMastersController extends Controller{
             if($request->actiontype=="add"){
                 $data = [
                     'name'       =>  $request['name'],
+                    'code'       =>  $request['code'],
                     'status'     =>  $request['status'],
                     'created_by' =>  $request['user_id'],
                     'created_at' =>  date('Y-m-d h:i:s'),
@@ -149,6 +151,7 @@ class StaffMastersController extends Controller{
 
                 $data = [
                     'name'       =>  $request['name'],
+                    'code'       =>  $request['code'],
                     'status'     =>  $request['status'],
                     'created_by' =>  $request['user_id'],
                     'created_at' =>  date('Y-m-d h:i:s'),

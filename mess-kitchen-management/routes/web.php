@@ -53,7 +53,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->get('/loadStockReceiveView/{StockReceivedID}', ['uses' => 'messManage\StockReceiveController@loadStockReceiveView']);
             $router->get('/loadStockReceivedDetails/{id}', ['uses' => 'messManage\StockReceiveController@loadStockReceivedDetails']);
             $router->post('/approvereject', 'messManage\StockReceiveController@approvereject');
-           $router->get('/getStockReceivedDetails/{stkId}', 'messManage\StockReceiveController@getStockReceivedDetails');
+            $router->get('/getStockReceivedDetails/{stkId}', 'messManage\StockReceiveController@getStockReceivedDetails');
+            $router->post('/saveStockReceivedEdit', 'messManage\StockReceiveController@saveStockReceivedEdit');
             //just added
 
         });

@@ -89,7 +89,6 @@
         return{
             commonTaskList:[],
             myTaskList:[],
-
         }
     },
     methods: {
@@ -156,7 +155,7 @@
                 if(data.application_number.includes('Ch')){
                     this.$router.push({name:"change_basic_details_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Closure')){
+                if(data.application_number.includes('Cls')){
                     this.$router.push({name:"closure_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Intra Transfer')){
@@ -171,7 +170,7 @@
                 if(data.service_name.includes('Leave')){
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.service_name.includes('Reopen')){
+                if(data.application_number.includes('Reopen')){
                     this.$router.push({name:"reopening_verification",params:{data:data,type:actiontype}});
                 }
                  if(data.application_number.includes('Recu')){
@@ -184,7 +183,6 @@
                     this.$router.push({name:"open_staff_recruitment_verification",params:{data:data,type:actiontype}});
                 }
             }
-
         }
     },
     mounted(){
@@ -195,15 +193,15 @@
         this.loadowntask();
     },
     watch:{
-        commonTaskList() {
+        commonTaskList(){
             this.dt.destroy();
-            this.$nextTick(() => {
+            this.$nextTick(() =>{
                 this.dt =  $("#common-task-table").DataTable()
             });
         },
-        myTaskList() {
+        myTaskList(){
             this.dt1.destroy();
-            this.$nextTick(() => {
+            this.$nextTick(() =>{
                 this.dt =  $("#own-task-table").DataTable()
             });
         }

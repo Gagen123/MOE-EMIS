@@ -677,7 +677,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/'+'Application For Re_Opening__'+1)
+            axios.get('organizationApproval/getScreenId/'+'Re_Opening__'+1)
             .then(response => {
                 // let data = response.data[0];
                 let data = response.data.data;

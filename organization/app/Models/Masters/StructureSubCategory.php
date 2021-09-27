@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class StructureSubCategory extends Model
 {
     use HasFactory, Uuid;
-    protected $table="structure_sub_categories";
+    protected $table="master_structure_sub_categories";
 
     /**
      * The attributes that are mass assignable.

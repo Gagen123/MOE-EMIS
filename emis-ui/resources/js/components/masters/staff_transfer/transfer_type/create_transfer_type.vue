@@ -3,12 +3,18 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                         <label>Type:<span class="text-danger">*</span></label> 
-                        <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text"></textarea>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text"/>
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                     </div>
                 </div>  
+               
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
@@ -32,6 +38,7 @@ export default {
             form: new form({
                 id: '',
                 name: '',
+                code:'',
                 status: 1,
                 record_type:'transfer_type',
                 action_type:'add',
@@ -50,7 +57,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStaffMasters',this.form)
+                this.form.post('staff/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',

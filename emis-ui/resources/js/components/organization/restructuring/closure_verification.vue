@@ -93,11 +93,11 @@
 
                             </div>
                             <div class="form-group row" v-if="closuredetails!=''">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Reason for Closure:</label>
                                     <span class="text-blue text-bold">{{closuredetails.remarksForClosure}}</span>
                                 </div>
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Remarks for Closure:</label>
                                     <span class="text-blue text-bold">{{closuredetails.remark}}</span>
                                 </div>
@@ -181,7 +181,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
                                 <button class="btn btn-primary" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-dark" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-dark" @click="shownexttab('approve')" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                             </div>
                         </div>
                     </div>

@@ -213,11 +213,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {
         $router->get('/loadStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadStaffList']);
+        $router->get('/loadtaffByOrg/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadtaffByOrg']);
         $router->get('/loadFewDetailsStaffList/{type}/{parent_id}', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffList']);
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
         $router->get('/loadFewDetailsStaffListBySubject', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffListBySubject']);
         $router->get('/loadStaffCountDetail/{type}/{id}', ['uses' => 'staff\LoadStaffController@loadStaffCountDetail']);
-
 
     });
 

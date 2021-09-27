@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class ContactType extends Model
 {
     use HasFactory, Uuid;
-    protected $table="contact_types";
+    protected $table="master_contact_types";
     /**
      * The attributes that are mass assignable.
      *

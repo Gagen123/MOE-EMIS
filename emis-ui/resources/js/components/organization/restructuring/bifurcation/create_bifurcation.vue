@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="ApplicationUnderProcess">
-           <div class="card-header p-0 border-bottom-0">
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <a class="nav-link active" data-toggle="pill" role="tab">
                             <span class="card-title pt-2 mb-0">
@@ -9,9 +9,7 @@
                         </span>
                     </a>
                 </ul>
-            </div>
-        </div>
-        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+            </div><br>
             <div class="card-header p-0 border-bottom-0">
                 <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
@@ -738,7 +736,7 @@ export default {
         },
         //loading the screen id
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Application For Bifurcation__'+1)
+            axios.get('organizationApproval/getScreenId/Bifurcation__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){

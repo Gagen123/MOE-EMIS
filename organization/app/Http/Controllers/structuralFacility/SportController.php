@@ -30,8 +30,8 @@ class SportController extends Controller
      */
     public function loadSport($orgId=""){
         $loadSport = DB::table('sports as a')
-            ->join('sport_facility_type as b', 'a.facility', '=', 'b.id')
-            ->join('sport_facility_subtypes as c', 'c.id', '=', 'a.type')
+            ->join('master_sport_facility_type as b', 'a.facility', '=', 'b.id')
+            ->join('master_sport_facility_subtypes as c', 'c.id', '=', 'a.type')
             ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facility',
             'c.name as type', 'a.yearOfEstablishment as yearOfEstablishment',
             'a.status as status','a.number as number','a.accessibleToDisabled as accessibleToDisabled',
@@ -176,7 +176,7 @@ class SportController extends Controller
      * Check and fix
      */
     public function getSubFacilityDropdown($id){
-        $equi = DB::table('sport_facility_subtypes as a')
+        $equi = DB::table('master_sport_facility_subtypes as a')
             ->select('a.id as id', 'a.name as typeName')
             //->where('sportFacilityId','=',$id)
             ->get();

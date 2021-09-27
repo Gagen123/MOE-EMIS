@@ -72,16 +72,16 @@ class LoadStaffController extends Controller{
         if($type=="staffDzongkhagwise"){
             return $this->successResponse(PersonalDetails::where('status','Created')->where('dzo_id',$parent_id)->get());
         }
+    }
 
-
-
-        // if($type=="allRegContract"){
-        //     $emp_type=[];
-        //     foreach(explode(',',$parent_id) as $emp){
-        //         array_push($emp_type,$emp);
-        //     }
-        //     return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
-        // }
+    public function loadtaffByOrg($type="",$parent_id=""){
+        if($type=="Principle"){
+            return $this->successResponse(PersonalDetails::where('isPrincipal',1)->where('working_agency_id',$parent_id)->first());
+        }
+        if($type=="DEO"){
+            $query="SELECT s.email,s.alternative_email,s.name,m.name AS positions FROM stf_staff s JOIN master_stf_position_title m ON s.position_title_id=m.id WHERE s.dzo_id=".$parent_id." AND (LOWER(REPLACE(m.name,' ','')) LIKE '%dzongkhageducationofficer%' OR LOWER(m.name) LIKE '%deo%') ";
+            return $this->successResponse(DB::select($query));
+        }
     }
     public function loadFewDetailsStaffList($type="",$parent_id=""){
         if($type=="allstaff"){

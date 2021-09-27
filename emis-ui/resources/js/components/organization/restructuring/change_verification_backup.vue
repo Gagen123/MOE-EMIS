@@ -310,7 +310,7 @@ export default {
             appicationDetailsForm:new form({
                 id:'',organizationId:'',appName:'',appLevel:'',appCategory:'',appDzongkhag:'',appGewog:'',
                 appChiwog:'',appLocationType:'',appGeoLocated:'',appSenSchool:'', appParentSchool:'',
-                appCoLocatedParent:'',appCid:'',appFullName:'',appPhoneNo:'',appEmail:'',
+                appCoLocatedParent:'',appCid:'',appFullName:'',appPhoneNo:'',appEmail:'',screen_id:'',
             }),
             form: new form({
                 id: '',applicationNo:'',actiontype:'',remarks:''
@@ -356,6 +356,7 @@ export default {
             axios.get('organization/loadChangeDetailForVerification/'+appId+'/'+type)
             .then((response) => {
                 let data=response.data.data;
+                  this.form.screen_id=data.screen_id;
                 // this.appicationDetailsForm.organizationId       =   data.organizationId;
                 // this.appicationDetailsForm.applicationNo        =   data.applicationNo;
                 // this.appicationDetailsForm.appName              =   data.proposedName;

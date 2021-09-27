@@ -464,7 +464,7 @@ export default {
             }
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Application For Upgrade__'+1)
+            axios.get('organizationApproval/getScreenId/Upgrade__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
