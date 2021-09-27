@@ -449,9 +449,8 @@ class LoadOrganizationController extends Controller{
         if($type=="Headquarterbyid"){
             $response_data=HeadQuaterDetails::where('id',$id)->select('id','agencyName AS name','dzongkhagId')->first();
         }
-      return $this->successResponse($response_data);}catch(Exception $e){
-           dd($e);
-       }
+      return $this->successResponse($response_data);
+
     }
 
     public function loadHeaquarterList($type="", $id=""){

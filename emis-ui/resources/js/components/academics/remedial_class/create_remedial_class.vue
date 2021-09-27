@@ -62,7 +62,7 @@
                     <table id="student-table" class="table table-sm table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>Select</th>
+                                <th style="min-width:3em; max-width:5em;">Select</th>
                                 <th>Roll No.</th>
                                 <th>Name</th>
                             </tr>

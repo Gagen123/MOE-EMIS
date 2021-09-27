@@ -159,8 +159,9 @@ class HomeController extends Controller{
                 if($user->org_organization_id!=null){
                     $org_profile= json_decode($this->apiService->listData('emis/common_services/getOrgProfile/'.$user->org_organization_id));
                     // dd( $org_profile);
+                    // return $org_profile;
                     if($org_profile!=null && $org_profile!="" && $org_profile!="null"){
-                        $org_profile=$org_profile->data;
+                        // dd($org_profile=$org_profile->data);
                         Session::put('org_profile', $org_profile);
                     }
                 }
