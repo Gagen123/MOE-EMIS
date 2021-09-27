@@ -13,6 +13,7 @@ class TransferType extends Model
     protected $fillable = [
         'id',
         'name',
+        'code',
         'status',
         'created_by',
         'created_at',

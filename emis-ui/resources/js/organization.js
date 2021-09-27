@@ -653,6 +653,7 @@ const routes = [
     },
 
     { path: '/mission_vission',name:'mission_vission', component: require('./components/organization/organization_profile_update.vue').default },
+    { path: '/mission_vission_dept',name:'mission_vission_dept', component: require('./components/organization/department_profile_update.vue').default },
     { path: '/organization_list',name:'organization_list', component: require('./components/organization/organization_list.vue').default },
     { path: '/view_organization_profile',name:'view_organization_profile', component: require('./components/organization/view_organization_profile.vue').default },
     { path: '/view_dzongkhag_profile',name:'view_dzongkhag_profile', component: require('./components/organization/view_dzongkhag_profile.vue').default },
@@ -754,7 +755,7 @@ const routes = [
         },
       ]
     },
-
+    { path: '/school_details_update',  name:'school_details_update',component: require('./components/organization/school_details_update.vue').default },
 
     //New Routes for Connectivity
     // { path: '/restructuringnew_index',

@@ -134,16 +134,17 @@ class StudentScoutController extends Controller
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
-    public function loadScoutMembers($orgId="", $user_id=""){
-
+    public function loadScoutMembers($param=""){
+        parse_str($param, $class_details);
         $roles = DB::table('cea_scout_membership')
                     ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
                     ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
                     ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                     ->select('cea_scout_membership.*', 'cea_scout_section.name AS scout_name', 'std_student.name as student_name', 
                                 'std_student.student_code as student_code')
-                    ->where('std_student.OrgOrganizationId', $orgId)
-                    ->where('cea_scout_membership.created_by', $user_id)
+                    ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                    ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                     ->get();
         return $this->successResponse($roles);
     }
@@ -152,16 +153,19 @@ class StudentScoutController extends Controller
      * list the scout members (in drop down) to award badges
      */
 
-    public function listScoutMembers($orgId="", $user_id=""){
+    public function listScoutMembers($param=""){
+
+        parse_str($param, $class_details);
 
         $roles = DB::table('cea_scout_membership')
                     ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
                     ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
                     ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                     ->select('cea_scout_membership.CeaScoutSectionId', 'std_student.name as student_name', 
                                 'std_student.student_code as student_code','std_student.id as StdStudentId')
-                    ->where('std_student.OrgOrganizationId', $orgId)
-                    ->where('cea_scout_membership.created_by', $user_id)
+                    ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                    ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                     ->get();
         return $this->successResponse($roles);
     }
@@ -221,16 +225,18 @@ class StudentScoutController extends Controller
      * List of Scout Badges
      */
 
-    public function loadScoutsBadge($orgId="", $user_id=""){
+    public function loadScoutsBadge($param=""){
+        parse_str($param, $class_details);
 
         $badges = DB::table('std_scout_proficiency_badges')
                     ->join('cea_scout_proficiency_badges', 'cea_scout_proficiency_badges.id', '=', 'std_scout_proficiency_badges.CeaScoutProficiencyBadgeId')
                     ->join('std_student', 'std_scout_proficiency_badges.StdStudentId', '=', 'std_student.id')
+                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                     ->join('cea_scout_membership', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
                     ->select('std_scout_proficiency_badges.*', 'cea_scout_proficiency_badges.name AS badge_name', 'std_student.name as student_name', 
                                 'std_student.student_code as student_code', 'cea_scout_membership.CeaScoutSectionId')
-                    ->where('std_student.OrgOrganizationId', $orgId)
-                    // ->where('cea_scout_membership.created_by', $user_id)
+                    ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                    ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                     ->get();
         return $this->successResponse($badges);
     }

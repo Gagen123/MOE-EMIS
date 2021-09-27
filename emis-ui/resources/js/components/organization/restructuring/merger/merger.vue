@@ -187,10 +187,10 @@
                                         <input type="radio" name="org2" v-model="form.newOrgType" value="org2" id="org2" @click="showNewOrg('org2')">
                                     </div>
                                 </div>  
-                                <div class="row form-group">
+                                <div class="row form-group" >
                                     <label>Merge To New Organization: &nbsp;&nbsp;&nbsp;</label>
-                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showNewOrg('newOrg')" checked>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
+                                        <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showNewOrg('newOrg')">
                                     </div>
                                 </div>  
                             </div> 
@@ -626,12 +626,12 @@ export default {
                 $('#organization2').hide();
                 $('#organization3').hide();
             }
-            if(type=="org2"){
+            else if(type=="org2"){
                  $('#organization1').hide();
                 $('#organization2').show();
                 $('#organization3').hide();
             }
-            if(type=="newOrg" ){
+            else {
                 $('#organization1').hide();
                 $('#organization2').hide();
                 $('#organization3').show();
@@ -918,7 +918,7 @@ export default {
         },
 
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Application For Merger__'+1)
+            axios.get('organizationApproval/getScreenId/Merger__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){

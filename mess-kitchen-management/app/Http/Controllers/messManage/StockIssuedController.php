@@ -177,6 +177,7 @@ class StockIssuedController extends Controller
                 
                 $tr_data=[
                     'available_qty'  => $update_tr_qty,
+                    'differenceqty'  => $qty_diff,
                     'updated_by'     => $request->user_id,
                     'updated_at'     =>  date('Y-m-d h:i:s'),
                 ];

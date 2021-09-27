@@ -15,6 +15,8 @@ class OrgProfile extends Model{
         'mission',
         'vission',
         'logo_path',
+        'objective',
+        'access_level',
         'created_by',
         'created_at',
         'updated_by',

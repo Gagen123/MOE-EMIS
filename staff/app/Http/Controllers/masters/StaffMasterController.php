@@ -5,6 +5,7 @@ namespace App\Http\Controllers\masters;
 use App\Http\Controllers\Controller;
 use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\StaffMajorGrop;
+use App\Models\staff_masters\TransferType;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -20,6 +21,23 @@ class StaffMasterController extends Controller{
     }
 
     public function saveStaffMasters(Request $request){
+        if($request['record_type']=="transfer_type"){
+            $data = [
+                'id'         =>  $request['id'],
+                'name'       =>  $request['name'],
+                'code'       =>  $request['code'],
+                'status'     =>  $request['status'],
+                'created_by' =>  $request['user_id'],
+                'created_at' =>  date('Y-m-d h:i:s'),
+            ];
+            if($request->action_type=="add"){
+                $response_data = TransferType::create($data);
+            }
+            else if($request->action_type=="edit"){
+                $response_data=TransferType::where('id', $request->id)->update($data);
+            }
+            return $response_data;
+        }
         $modelName = "App\\Models\\staff_masters\\"."$request->model";
         $model = new $modelName();
         $response_data="";
@@ -76,7 +94,7 @@ class StaffMasterController extends Controller{
             // dd( $master_data);
             $response_data = $model::create($master_data);
         }
-
+    
         if($request->action_type=="edit"){
             if($request->model=="PositionTitle" || $request->model=="ChildGroup"){
                 unset($master_data['group_id']);

@@ -38,9 +38,9 @@ class StaffMasterController extends Controller{
             'status'                    =>  $request->status,
             'model'                     =>  $request->model,
             'action_type'               =>  $request->action_type,
+            'record_type'               =>  $request->record_type,
             'user_id'                   =>  $this->userId()
         ];
-    //    dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request_data);
         return $response_data;
     }

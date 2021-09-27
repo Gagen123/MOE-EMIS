@@ -1,13 +1,13 @@
 <template>
     <div>
         <div class="card card-primary card-outline card-outline-tabs" >
-            <div class="card-header p-0 border-bottom-0">
+             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
-                    <a class="nav-link active" data-toggle="pill" role="tab">
-                            <span class="card-title pt-2 mb-0">
-                            <b id="screenName"></b>
-                        </span>
-                    </a>
+                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                             <span id="screenName"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -343,8 +343,8 @@ export default {
                 console.log(errors)
             });
         },
-        loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Principal Recruitment__'+1)
+         loadScreenDetails(){
+            axios.get('organizationApproval/getScreenId/Principal Recuritment__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
@@ -399,9 +399,12 @@ export default {
             data.forEach((item => {
                 this.form.attachments.push({file_name:item.name, file_upload:''})
             }));
+    },
+      created() {
         this.loadScreenDetails();
         this.loadDataList();
-    }
+
+    },
     
 }
 </script>

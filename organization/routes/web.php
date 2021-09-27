@@ -523,7 +523,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
-        $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
+        $router->get('/getOrgProfile/{id}/{type}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
         $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
     });

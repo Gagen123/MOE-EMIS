@@ -60,7 +60,7 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-        mounted(){
+        created(){
             this.loadroleList();
             this.TransferConfigurationList();
         },

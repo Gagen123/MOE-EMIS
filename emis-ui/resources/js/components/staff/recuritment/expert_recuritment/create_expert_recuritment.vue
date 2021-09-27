@@ -263,7 +263,7 @@ export default {
             });
         },
         loadScreenDetails(){
-            axios.get('organizationApproval/getScreenId/Expatriate Recruitment__'+1)
+            axios.get('organizationApproval/getScreenId/Expatriate Recuritment__'+1)
             .then(response => {
                 let data = response.data.data;
                 if(data!=undefined && data!="NA"){
