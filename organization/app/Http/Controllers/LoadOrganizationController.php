@@ -615,7 +615,7 @@ class LoadOrganizationController extends Controller{
                     }
                 }
                 $response_data->orgName=$orgName;
-             }
+            }
         }
        
         return $this->successResponse($response_data);

@@ -494,6 +494,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateReopeningDetails', 'restructuring\ReopeningController@updateReopeningDetails');
 
         });
+        $router->post('/saveAnnualData', 'establishment\ChangeBasicDetailsController@saveAnnualData');
 
     });
 

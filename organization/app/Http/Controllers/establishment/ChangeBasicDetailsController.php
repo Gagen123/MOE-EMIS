@@ -5,7 +5,7 @@ namespace App\Http\Controllers\establishment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponser;
+use App\Traits\ApiResponser;   
 use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\establishment\ApplicationClassStream;
@@ -27,6 +27,7 @@ use App\Models\OrganizationClassStreamHistory;
 use App\Models\OrganizationSectionHistory;
 use App\Models\generalInformation\SectionDetails;
 use App\Models\restructuring\Bifurcation;
+use App\Models\establishment\Organization_AnnualData;
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -1403,5 +1404,37 @@ class ChangeBasicDetailsController extends Controller
         ];
         $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
         return $change_details;
+    }
+    public function saveAnnualData(Request $request){
+        $id = $request->id;
+        if( $id != null){
+            $data = [
+                'organizationId'            =>  $request['organizationId'],
+                'id'                        =>  $id,
+                'year'                      =>  $request['year'],
+                'status'                    =>  'Submitted',
+                'date'                      =>  date('Y-m-d'),
+                'updated_by'                =>  $request->user_id,
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+       // dd($data);
+        $dt = Organization_AnnualData::where('id',$id)->update($data);
+        // dd($dt);
+        return $this->successResponse($dt, Response::HTTP_CREATED);
+        }else{
+            $data = [
+                'organizationId'            =>  $request['organizationId'],
+                'year'                      =>  $request['year'],
+                'status'                    =>  'Submitted',
+                'date'                      =>  date('Y-m-d'),
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s'),
+               
+            ];
+            $dt = Organization_AnnualData::create($data);
+            // dd($dt);
+            return $this->successResponse($dt, Response::HTTP_CREATED);
+        }
+        
     }
 }

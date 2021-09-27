@@ -77,7 +77,6 @@
                     mission:'',
                     profile_path:'',
                     objective:'',
-                    type:'department',
                 })
             }
         },
