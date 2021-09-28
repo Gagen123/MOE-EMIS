@@ -478,9 +478,9 @@
                     this.isSen=response.data.data.isSen[0]   
                     this.SportInstructor=response.data.data.SportInstructor[0];
                 })
-                .catch((error) => {
-                    console.log("Error: "+error);
-                });
+            .catch((error) => {
+                console.log("Error: "+error);
+            });
             
         },
 
