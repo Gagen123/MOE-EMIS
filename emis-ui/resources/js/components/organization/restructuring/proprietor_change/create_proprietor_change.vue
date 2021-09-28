@@ -254,14 +254,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
         getDetailsbyCID(fieldId){
             axios.get('getpersonbycid/'+ $('#'+fieldId).val())
             .then(response => {
@@ -506,11 +498,11 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
         this.loadactivedzongkhagList();
         this.getLevel();
-        this.getOrgList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

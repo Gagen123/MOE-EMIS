@@ -15,6 +15,7 @@ class LoadOrganizaitonController extends Controller{
         $this->apiService = $apiService;
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+        // dd($type,$id);
         //if Ministry then give entire list
         // $access_level = $this->getAccessLevel();
         // if($access_level == 'Ministry'){//&& $type!="dzongkhagwise" && $type!="gewoggwise"  this line is taken out

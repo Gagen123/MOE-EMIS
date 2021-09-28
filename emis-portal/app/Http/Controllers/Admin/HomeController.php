@@ -75,15 +75,15 @@ class HomeController extends Controller
     public function save_new_registration(Request $request){
         if($request->registrationType==1){
             $rules = [
-                'name'          =>  'required',
-                'contact'   =>  'required',
-                'email'          =>  'required',
-                'password1'        =>  'required',
+                'name'            =>  'required',
+                'contact'         =>  'required',
+                'email'           =>  'required',
+                'password1'       =>  'required',
             ];
             $customMessages = [
-                'name.required' => 'Student Name field is required',
-                'contact.required' => 'Contact Field is required',
-                'email.after'             => 'Email is required',
+                'name.required'      => 'Student Name field is required',
+                'contact.required'   => 'Contact Field is required',
+                'email.after'        => 'Email is required',
                 'password1.required' => 'Password is required',
 
             ];
@@ -91,8 +91,8 @@ class HomeController extends Controller
         }
         if($request->registrationType==2){
             $rules = [
-                'student_code'          =>  'required',
-                'dob'   =>  'required',
+                'student_code'      =>  'required',
+                'dob'               =>  'required',
             ];
             $customMessages = [
                 'student_code.required' => 'Student code is required',
@@ -110,7 +110,6 @@ class HomeController extends Controller
             $this->validate($request, $rules,$customMessages);
         }
         $response_data=$this->apiService->createData('save_new_registration', $request->all());
-      
         if(json_decode($response_data)->id!=null && json_decode($response_data)->id!=""){
 
             return view('userlogin',['Invalid'=>'Thank you for registering with MOE, You may login with your email and password to proceed further.']);

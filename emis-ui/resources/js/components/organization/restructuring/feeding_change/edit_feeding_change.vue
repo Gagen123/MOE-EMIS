@@ -117,7 +117,7 @@
 export default {
     data(){
         return{
-            orgList:'',
+            orgList:[],
             classList:[],
             streamList:[],
             existing_details:'',
@@ -217,14 +217,6 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.locationList = data;
-            });
-        },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
             });
         },
 
@@ -418,7 +410,8 @@ export default {
 
     },
 
-    mounted() {
+   async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -432,7 +425,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
         this.record_id=this.$route.params.data.application_no;
         this.loadApplicationDetials();
     }

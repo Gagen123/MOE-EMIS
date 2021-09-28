@@ -146,16 +146,6 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-           
-
-        },
-
         /**
          * method to show next and previous tab
          */
@@ -314,7 +304,9 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
+        this.loadScreenDetails();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -327,8 +319,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+
         this.getAttachmentType('ForTransaction__Application_for_Change_in_SEN');
-        this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -341,8 +333,7 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        this.loadScreenDetails();
-        this.getOrgList();
+       
     }
 }
 </script>
