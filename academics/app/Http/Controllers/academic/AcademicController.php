@@ -1126,4 +1126,7 @@ class AcademicController extends Controller
         dd($e);
     }
     }
+    public function getTermsByFrequencyId($frequencyId) {
+        return $this->successResponse(DB::select("SELECT id,name,dzo_name FROM aca_assessment_term WHERE aca_assmt_frequency_id = ?",$frequencyId));
+    }
 }

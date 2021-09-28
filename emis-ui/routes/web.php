@@ -908,6 +908,8 @@ Route::prefix('academics')->group(function () {
     Route::get('/getRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClass'])->name('getRemedialClass');
     Route::get('/getRemedialClassDetail/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClassDetail'])->name('getRemedialClassDetail');
     Route::get('/getSubCategNonAcademic', [App\Http\Controllers\academics\AcademicController::class, 'getSubCategNonAcademic'])->name('getSubCategNonAcademic');
+    Route::get('/getTermsByFrequencyId/{frequencyId}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByFrequencyId'])->name('getTermsByFrequencyId');
+
 });
 Route::prefix('spms')->group(function () {
     Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');

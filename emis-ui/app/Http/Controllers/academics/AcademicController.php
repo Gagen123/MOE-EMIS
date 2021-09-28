@@ -620,6 +620,9 @@ class AcademicController extends Controller
         $orgId = $this->getWrkingAgencyId();
         return $this->apiService->listData('emis/academics/getRemedialClassDetail/'.$orgId.'/'.$Id);
     }
+    public function getTermsByFrequencyId($frequencyId){
+        return $this->apiService->listData('emis/academics/getTermsByFrequencyId/'.$frequencyId);
+    }
     private function getElectiveSubjects($classId, $streamId=""){
         $uri = 'emis/academics/getElectiveSubjects/'.$classId;
         if($streamId){

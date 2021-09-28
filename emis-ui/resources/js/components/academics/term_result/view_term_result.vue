@@ -18,20 +18,16 @@
                         <thead>
                             <tr>
                                 <th>Roll No.
-                                    <!-- <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span> -->
                                 </th> 
                                 <th>Name 
                                     <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span>
                                 </th>
-                                <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
-
                                  <th v-for="(item, index) in assessmentAreaList" :key="index">
-                                       <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
-                                            {{item.assessment_area}} 
-                                            <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
-                                            <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
-                                        </span>
-                                  
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
+                                        {{item.assessment_area}} 
+                                        <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
+                                        <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                    </span>
                                 </th>
                                 <th v-if="totalWeightage>=1">
                                     Total 

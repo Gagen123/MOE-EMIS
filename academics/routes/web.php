@@ -69,6 +69,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getRemedialClass/{orgId}',['uses' => 'academic\AcademicController@getRemedialClass']);
         $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
         $router->get('/getSubCategNonAcademic',['uses' => 'academic\AcademicController@getSubCategNonAcademic']);
-
+        $router->get('/getTermsByFrequencyId/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequencyId']);
     });
 });
