@@ -599,7 +599,7 @@ class LoadOrganizationController extends Controller{
     public function getOrgProfile($id="", $type=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){
-            if($type=="Ministry"){
+            if($type=="Ministry" || "Dzongkhag"){
                 $org_det=HeadQuaterDetails::where('id',$id)->first();
                 if($org_det!=null && $org_det!=""){
                     $response_data->orgName=$org_det->agencyName;
