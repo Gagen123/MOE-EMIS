@@ -251,15 +251,6 @@ export default {
                 }
             });
         },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/school/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-                this.form.levelId = response.data.data.levelId;
-            });
-        },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
@@ -503,9 +494,9 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
-        this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();
         this.getStream();

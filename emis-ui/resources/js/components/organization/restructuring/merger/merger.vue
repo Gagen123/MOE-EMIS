@@ -511,13 +511,6 @@ export default {
         /**
          * method to get current school unbder current user
          */
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
         getOrgDetails(id,fieldId){
             let getdet=true;
             if(fieldId=="orgId2" && id==this.form.orgId1){
@@ -596,23 +589,7 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-        getLevel1(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList1 = data;
-            });
-        },
-        loadactivedzongkhagList1(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.dzongkhagList1 =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
+    
         getLocation1(uri = '/organization/getLocationInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -653,17 +630,6 @@ export default {
         },
 
         /**
-         * method to get level in dropdown
-         */
-        getLevel(uri = '/organization/getLevelInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.levelList = data;
-            });
-        },
-
-        /**
          * method to get location in dropdown
          */
         getLocation(uri = '/organization/getLocationInDropdown'){
@@ -697,16 +663,6 @@ export default {
         /**
          * method to get active dzongkhag list
          */
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.dzongkhagList =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -943,7 +899,13 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted(){
+        this.orgList =await this.orgListUnderUserDzongkhag();
+        this.dzongkhagList= await this.loadactivedzongkhags();
+        this.dzongkhagList1= await this.loadactivedzongkhags();
+        this.levelList= await this.loadLevelList();
+        this.levelList1= await this.loadLevelList();
+        
         let currentdate = new Date();
         let current_year =(currentdate.getFullYear());
         this.form.year=current_year;
@@ -959,18 +921,14 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
-       
         this.loadScreenDetails();
-        this.getOrgList();
         this.getLevel();
         this.getLevel1();
         this.getLocation1();
         this.getLocation();
         this.getClass();
         this.getStream();
-        this.loadactivedzongkhagList();
-        this.loadactivedzongkhagList1();
+       
         // this.checkPendingApplication();
 
     },

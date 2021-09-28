@@ -173,14 +173,6 @@ export default {
             }
         },
 
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
-
         /**
          * method to show next and previous tab
          */
@@ -414,12 +406,12 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
         this.getLocation();
         this.loadproposedBy();
         this.loadactivedzongkhagList();
-        this.getOrgList();
         this.getLevel();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
