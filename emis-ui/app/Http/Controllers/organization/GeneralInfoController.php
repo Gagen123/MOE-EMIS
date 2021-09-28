@@ -377,7 +377,6 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
-
         $this->validate($request, [
             'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
         ],
@@ -404,12 +403,12 @@ class GeneralInfoController extends Controller
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
             'attachments'       =>  $path,
-            'type'              =>  $request['type'],
+           // 'type'              =>  $request['type'],
             'objective'         =>  $request['objective'],
             'user_id'           =>  $this->userId(),
             'access_level'      =>  $this->getAccessLevel(),
         ];
-       // dd( $org_details);
+        //dd( $org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
