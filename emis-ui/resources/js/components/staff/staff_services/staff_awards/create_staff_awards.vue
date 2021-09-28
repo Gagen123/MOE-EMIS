@@ -55,7 +55,7 @@
                     <has-error :form="award_form" field="award_category"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Aardw Type:<span class="text-danger">*</span></label>
+                    <label>Award Type:<span class="text-danger">*</span></label>
                      <select v-model="award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
                         <option v-for="(item, index) in awardTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
