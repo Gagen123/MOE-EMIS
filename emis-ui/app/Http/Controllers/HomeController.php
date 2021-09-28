@@ -163,7 +163,8 @@ class HomeController extends Controller{
                     // return $org_profile;
                     if($org_profile!=null && $org_profile!="" && $org_profile!="null"){
                         // dd($org_profile=$org_profile->data);
-                        Session::put('org_profile', $org_profile);
+                        Session::put('org_profile', $org_profile->data);
+
                     }
                 }
                 return redirect()->route('dashboard');

@@ -581,45 +581,45 @@ class LoadOrganizationController extends Controller{
 
     }
 
-    // public function getOrgProfile($id=""){
-    //     $response_data =OrgProfile::where('org_id',$id)->first();
-    //     if($response_data!=null && $response_data!=""){
-    //         $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
-    //         $orgName=$org_det->name;
-    //         if($org_det->levelId!=null && $org_det->levelId!=""){
-    //             $level=Level::where('id',$org_det->levelId)->first();
-    //             if($level!=null && $level!=""){
-    //                 $orgName=$orgName.' '.$level->name;
-    //             }
-    //         }
-    //         $response_data->orgName=$orgName;
-    //     }
-    //     return $this->successResponse($response_data);
-    // }
-    public function getOrgProfile($id="", $type=""){
+    public function getOrgProfile($id=""){
         $response_data =OrgProfile::where('org_id',$id)->first();
         if($response_data!=null && $response_data!=""){
-            if($type=="Ministry"){
-                $org_det=HeadQuaterDetails::where('id',$id)->first();
-                if($org_det!=null && $org_det!=""){
-                    $response_data->orgName=$org_det->agencyName;
+            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+            $orgName=$org_det->name;
+            if($org_det->levelId!=null && $org_det->levelId!=""){
+                $level=Level::where('id',$org_det->levelId)->first();
+                if($level!=null && $level!=""){
+                    $orgName=$orgName.' '.$level->name;
                 }
-             }
-             if($type=="Org"){
-                $org_det=OrganizationDetails::where('id',$id)->first();
-                $orgName=$org_det->name;
-                if($org_det->levelId!=null && $org_det->levelId!=""){
-                    $level=Level::where('id',$org_det->levelId)->first();
-                    if($level!=null && $level!=""){
-                        $orgName=$orgName.' '.$level->name;
-                    }
-                }
-                $response_data->orgName=$orgName;
             }
+            $response_data->orgName=$orgName;
         }
-       
         return $this->successResponse($response_data);
     }
+    // public function getOrgProfile($id="", $type=""){
+    //     $response_data =OrgProfile::where('org_id',$id)->first();
+    //     if($response_data!=null && $response_data!=""){
+    //         if($type=="Ministry"){
+    //             $org_det=HeadQuaterDetails::where('id',$id)->first();
+    //             if($org_det!=null && $org_det!=""){
+    //                 $response_data->orgName=$org_det->agencyName;
+    //             }
+    //          }
+    //          if($type=="Org"){
+    //             $org_det=OrganizationDetails::where('id',$id)->first();
+    //             $orgName=$org_det->name;
+    //             if($org_det->levelId!=null && $org_det->levelId!=""){
+    //                 $level=Level::where('id',$org_det->levelId)->first();
+    //                 if($level!=null && $level!=""){
+    //                     $orgName=$orgName.' '.$level->name;
+    //                 }
+    //             }
+    //             $response_data->orgName=$orgName;
+    //         }
+    //     }
+       
+    //     return $this->successResponse($response_data);
+    // }
 
     public function getClassByType($type=""){
         return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();
