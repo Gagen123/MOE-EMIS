@@ -193,5 +193,21 @@ class ClassMappingController extends Controller
             dd($e);
         }
     }
+    public function getOptionalSubjectOrgWise($orgId,Request $request){
+        $query = "SELECT subjectId AS aca_sub_id FROM organization_class_subject WHERE organizationId = ? AND classId = ?";
+        $params = [$orgId,$request->classId];
+        $stream = $request->streamId == null ? "" : $request->streamId;
+        $section = $request->sectionId == null ? "" : $request->sectionId;
+        if($stream != ""){
+            $query .= ' AND streamId = ?';
+            array_push($params,$stream);
+        }
+        if($section != ""){
+            $query .= ' AND sectionId = ?';
+            array_push($params,$section);
+        }
+        $response_data = DB::select($query,$params);
+        return $response_data;
+    }
 
 }

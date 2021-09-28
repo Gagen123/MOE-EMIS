@@ -20,13 +20,13 @@ class SpmSchoolPlanHistory extends Migration
             $table->string('name',255);
             $table->string('role',100);
             $table->string('organization',255);
-            $table->integer('status_id');
+            $table->integer('spm_implementation_status_id');
             $table->date('status_date')->index();
             $table->string('remarks',500);
             $table->timestamps();
 
             $table->foreign('spm_school_plan_id')->references('id')->on('spm_school_plan');
-            $table->foreign('status_id')->references('id')->on('spm_school_plan_status');
+            $table->foreign('spm_implementation_status_id')->references('id')->on('spm_implementation_status');
 
         });
     }

@@ -15,6 +15,7 @@ class LoadOrganizaitonController extends Controller{
         $this->apiService = $apiService;
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+        // dd($type,$id);
         //if Ministry then give entire list
         // $access_level = $this->getAccessLevel();
         // if($access_level == 'Ministry'){//&& $type!="dzongkhagwise" && $type!="gewoggwise"  this line is taken out
@@ -53,9 +54,6 @@ class LoadOrganizaitonController extends Controller{
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
-
-
-
     public function loadInactiveOrgList(){
         $dzo_id = $this->getUserDzoId();
         return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/'.$dzo_id);

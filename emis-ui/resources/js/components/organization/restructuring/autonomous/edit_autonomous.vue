@@ -127,7 +127,6 @@ export default {
     data(){
         return{
             organization_details:'',
-            proposed_by_list:[],
             orgList:'',
             classList:[],
             locationList:[],
@@ -225,14 +224,6 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');
             }
-        },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
         },
 
         /**
@@ -356,17 +347,6 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.proposed_by_list =  data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
-        },
-
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
@@ -453,11 +433,10 @@ export default {
 
     },
 
-    mounted() {
+     async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.getLocation();
-        this.loadproposedBy();
         this.loadactivedzongkhagList();
-        this.getOrgList();
         this.getLevel();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();

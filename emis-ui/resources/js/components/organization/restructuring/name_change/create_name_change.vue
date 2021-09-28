@@ -324,17 +324,11 @@ export default {
             });
         },
 
-        loadactivedzongkhagList(uri="masters/loadGlobalMasters/all_active_dzongkhag"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
+       async loadactivedzongkhagList(){
+                let data= await this.loadactivedzongkhags();
                 for(let i=0;i<data.length;i++){
                     this.dzongkhagArray[data[i].id] = data[i].name;
                 }
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
         },
 
         getGewogList(dzongkhag,gewogId){

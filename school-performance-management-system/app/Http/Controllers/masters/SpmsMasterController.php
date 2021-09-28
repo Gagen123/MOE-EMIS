@@ -359,8 +359,8 @@ class SpmsMasterController extends Controller
              WHERE t1.status = 1 ORDER BY t1.created_at');
             return $this->successResponse($ratings);
         }
-        if($param =='all_school_plan_status'){
-            $school_paln_status = DB::select('SELECT id, name FROM spm_school_plan_status');
+        if($param =='all_implemenatation_status'){
+            $school_paln_status = DB::select('SELECT id, name FROM spm_implementation_status');
             return $this->successResponse($school_paln_status);
         }
     }

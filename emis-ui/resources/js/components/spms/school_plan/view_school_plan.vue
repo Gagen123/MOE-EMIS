@@ -75,7 +75,7 @@
                                 <td>{{item.status_date}}</td>
                                 <td>{{item.status}}</td>
                                 <td>{{item.remarks}}</td>
-                                <td>{{item.role}}</td>
+                                <td>{{item.name}}, {{item.role}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -171,8 +171,8 @@ export default {
               console.log("Error"+error)
             });
         },
-        getSchoolPlanStatus(){
-             axios.get('masters/loadSpmMasters/all_school_plan_status')
+        getImplementationStatus(){
+             axios.get('masters/loadSpmMasters/all_implemenatation_status')
             .then(response => {
                 let data = response 
                 this.status =  data.data.data
@@ -220,12 +220,12 @@ export default {
             columnDefs: [
                 { width: 70    , targets: 0},
                 { width: 150    , targets: 1},
-                { width: 80, targets: 3},
+                { width: 150, targets: 3},
             ],
             "lengthChange": false,
             "searching": false,
         })
-        this.getSchoolPlanStatus()
+        this.getImplementationStatus()
         this.getSchoolPlanDetails()
         this.getSchoolPlanHistory()
         axios.get('common/getSessionDetail')
@@ -255,7 +255,7 @@ export default {
                     columnDefs: [
                         { width: 70, targets: 0},
                         { width: 150, targets: 1},
-                        { width: 80, targets: 3},
+                        { width: 150, targets: 3},
                     ],
                     "lengthChange": false,
                     "searching": false,
