@@ -6,8 +6,8 @@
                     <th >SL#</th>
                     <th >Name</th>
                     <th >Description</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
