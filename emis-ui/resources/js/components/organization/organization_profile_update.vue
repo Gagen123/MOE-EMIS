@@ -119,8 +119,9 @@
                 formData.append('vission', this.form.vission);
                 formData.append('profile_path', this.form.profile_path);
                 formData.append('mission', this.form.mission);
+                formData.append('objective', this.form.objective);
                 formData.append('attachments', this.form.attachments);
-                formData.append('type', this.form.type);
+                // formData.append('type', this.form.type);
                 axios.post('organization/udpateOrgProfile',formData, config)
                 .then((response) => {
                     Toast.fire({

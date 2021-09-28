@@ -17,11 +17,11 @@ class StaffMasterController extends Controller{
 
     public function saveStaffMasters(Request $request){
         $rules = [
-            'name'                  =>  'required',
+            // 'name'                  =>  'required',
             'status'                =>  'required',
         ];
         $customMessages = [
-            'name.required'                 => 'This field is required',
+            // 'name.required'                 => 'This field is required',
             'status.required'               => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
