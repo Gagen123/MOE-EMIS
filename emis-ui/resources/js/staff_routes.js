@@ -189,6 +189,16 @@ const routes = [
                 { path: '/edit_position_level_master', name:'edit_position_level_master', component: require('./components/masters/staff_position_directory/position_level/edit_position_level.vue').default },
                 ],
             },
+
+            { path: '/position_sub_level_master',
+                component: require('./components/masters/staff_position_directory/position_sub_level_master/position_sub_level_master_index.vue').default,
+                children:[
+                { path: '/',name:'position_sub_level_master', component: require('./components/masters/staff_position_directory/position_sub_level_master/list_position_sub_level_master.vue').default },
+                { path: '/list_position_sub_level_master',name:'list_position_sub_level_master', component: require('./components/masters/staff_position_directory/position_sub_level_master/list_position_sub_level_master.vue').default },
+                { path: '/create_position_sub_level_master',name:'create_position_sub_level_master', component: require('./components/masters/staff_position_directory/position_sub_level_master/create_position_sub_level_master.vue').default },
+                { path: '/edit_position_sub_level_master', name:'edit_position_sub_level_master', component: require('./components/masters/staff_position_directory/position_sub_level_master/edit_position_sub_level_master.vue').default },
+                ],
+            },
             { path: '/superstructure',
                 component: require('./components/masters/staff_position_directory/superstructure/superstructure_index.vue').default,
                 children:[
