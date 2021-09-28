@@ -135,7 +135,7 @@ class LoadStaffController extends Controller{
     }
     //added by saru
     public function loadStaffCountDetail($type="",$id=""){
-        if($type=="staffCount"){
+        if($type=="staffCount" || $type=="staffCountMinistry"){
             $id=$this->getWrkingAgencyId();
         }
         $response_data= $this->apiService->listData('emis/common_services/loadStaffCountDetail/'.$type.'/'.$id);
