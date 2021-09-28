@@ -9,7 +9,7 @@
     </div>
     <div v-if="access_level === 'Ministry'">
         <view-department-profile></view-department-profile>
-        <department-profile-update></department-profile-update>
+      
     </div>
     <div v-if="access_level === 'Dzongkhag'">
         <view-dzongkhag-profile></view-dzongkhag-profile>
