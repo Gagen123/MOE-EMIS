@@ -825,5 +825,31 @@ class GeneralInfoController extends Controller
         //     return $e;
         // }
     }
+    public function loadOrgDataSubmissionList($type="",$id=""){
+        //if Ministry then give entire list
+        // $access_level = $this->getAccessLevel();
+        $param="";
+        //type=allorganizationList: to list entire organization Data Submission List
+        if($type=="allorganizationDataList"){
+            $param=$id;
+        }
+
+        //type=userdzongkhagwise: to list with dzongkhag id from user login
+        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" || $type=="school"){
+            $param=$this->getUserDzoId();
+        }
+
+        //type=userworkingagency: to list with working agency from user login
+        if($type=="userworkingagency"){
+            $param=$this->getWrkingAgencyId();
+        }
+        //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
+        if($type=="dzongkhagwise"){
+            $param=$id;
+        }
+
+        // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
+    }
 
 }

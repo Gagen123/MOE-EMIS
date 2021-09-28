@@ -78,8 +78,8 @@ export default {
         loadeditpage(item){
             this.$router.push({name:"view_organization_profile",query:{org_id:item.id}});
         },
-        loadOrganizationList(type){
-             axios.get('loadCommons/loadOrgList/'+type)
+        loadOrgDataSubmissionList(type){
+             axios.get('organization/loadOrgDataSubmissionList/'+type)
             .then((response) => {
                 this.data_list=response.data.data;
             })
@@ -87,8 +87,8 @@ export default {
                 console.log("Error:"+error);
             });
         }
-
-    },
+  
+    }, 
     mounted(){
         this.getLevel();
         this.loaddzongkhagList();
@@ -97,13 +97,13 @@ export default {
         .then(response => {
             let data = response.data.data;
             if(data['acess_level']=="Org"){
-                this.loadOrganizationList('userworkingagency/allData');
+                this.loadOrgDataSubmissionList('userworkingagency/allData');
             }
             if(data['acess_level']=="Dzongkhag"){
-                this.loadOrganizationList('userdzongkhagwise/allData');
+                this.loadOrgDataSubmissionList('userdzongkhagwise/allData');
             }
             if(data['acess_level']=="Ministry"){
-                this.loadOrganizationList('allorganizationList/allData');
+                this.loadOrgDataSubmissionList('allorganizationDataList/allData');
             }
         })
         .catch(errors => {
