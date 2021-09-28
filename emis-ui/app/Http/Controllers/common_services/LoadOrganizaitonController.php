@@ -49,7 +49,7 @@ class LoadOrganizaitonController extends Controller{
         if($type=="private" || $type=="SEN"|| $type=="tertiary" || $type=="ECR" || $type=="eccd" || $type=="School" || $type=="all_eccds"){
             $param=$id;
         }
-
+ 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }

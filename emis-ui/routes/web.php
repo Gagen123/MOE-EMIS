@@ -446,6 +446,7 @@ Route::prefix('organization')->group(function () {
 
     //Annual Data Submission Route
     Route::post('/saveAnnualData', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveAnnualData'])->name('saveAnnualData');
+    Route::get('/loadOrgDataSubmissionList/{type}/{parent_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrgDataSubmissionList'])->name('loadOrgDataSubmissionList');
 
 });
 Route::prefix('questionAnswerController')->group(function () {
