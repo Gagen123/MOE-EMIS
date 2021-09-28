@@ -76,7 +76,7 @@ export default {
             .catch(function (error) {
                 console.log('err: '+error);
             });
-        },
+        }, 
         loadeditpage(item){
             this.$router.push({name:"view_organization_profile",query:{org_id:item.id}});
         },
