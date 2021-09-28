@@ -125,6 +125,7 @@ class LoadStaffController extends Controller{
         }
 
     }
+    
     // method by Chimi Thinley to get Staff by array of aca_teacher_sub_ids
     public function loadFewDetailsStaffListBySubject(Request $request){
         try{

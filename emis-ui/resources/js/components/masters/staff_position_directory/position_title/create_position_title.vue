@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Major Group:<span class="text-danger">*</span></label>
                         <select class="form-control select2" id="group_id" v-model="form.group_id" :class="{ 'is-invalid': form.errors.has('group_id') }">
                             <option v-for="(item, index) in groupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -16,7 +16,7 @@
                             <option v-for="(item, index) in subgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="sub_group_id"></has-error>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position Level:<span class="text-danger">*</span></label>
                          <select class="form-control select2" id="position_level_id" v-model="form.position_level_id" :class="{ 'is-invalid': form.errors.has('position_level_id') }">
@@ -24,13 +24,13 @@
                         </select>
                         <has-error :form="form" field="position_level_id"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position Title:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Description:</label>
                         <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
