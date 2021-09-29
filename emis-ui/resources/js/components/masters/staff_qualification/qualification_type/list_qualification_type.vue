@@ -22,8 +22,6 @@
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                        <!-- <a v-if="item.status==  1" href="#" @click="changestatus(item.id,'0')" class="btn btn-danger btn-sm btn-flat text-white"><i class="fas fa-times"></i> Deactivate</a>
-                        <a v-if="item.status==  0" href="#" @click="changestatus(item.id,'1')" class="btn btn-primary btn-sm btn-flat text-white"><i class="fas fa-check"></i> Activate</a> -->
                     </td>
                 </tr>
             </tbody>
@@ -40,7 +38,6 @@ export default {
     },
     methods:{
         loadqualificationtype(uri = 'staff/loadStaffMasters/all/QualificationType'){
-        // loadqualificationtype(uri = 'masters/loadStaffMasters/all_qualification_tpe_List'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -53,7 +50,6 @@ export default {
         showedit(data){
             this.$router.push({name:'edit_qualification_type',params: {data:data}});
         },
-
     },
     mounted(){
         this.loadqualificationtype();
@@ -63,7 +59,9 @@ export default {
         qualificationTypeList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
+                this.dt =  $("#working-agency-table").DataTable();
+                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
             });
         }
     },

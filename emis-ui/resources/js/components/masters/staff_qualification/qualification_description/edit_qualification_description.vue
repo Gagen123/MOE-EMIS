@@ -4,8 +4,8 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Qualification Type :<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <label>Qualification Description:<span class="text-danger">*</span></label>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_err('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
@@ -13,7 +13,7 @@
                         <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
@@ -37,14 +37,14 @@
 export default {
     data() {
         return {
-            groupList:[],
+            count:10,
             form: new form({
                 id: '',
                 name: '',
+                 description:'',
                 code:'',
                 status:'',
-                description:'',
-                model:'QualificationType',
+                model:'QualificationDescription',
                 action_type:'edit',
             })
         }
@@ -55,7 +55,6 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
@@ -69,10 +68,10 @@ export default {
                         icon: 'success',
                         title: 'Details updated successfully'
                     })
-                    this.$router.push('/list_qualification_type');
+                    this.$router.push('/list_qualification_description');
                 })
                 .catch(() => {
-                    console.log("Error......")
+                    console.log("Error.")
                 })
             }
 		},

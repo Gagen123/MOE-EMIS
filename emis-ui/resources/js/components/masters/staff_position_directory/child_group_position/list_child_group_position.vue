@@ -66,7 +66,9 @@ export default {
         positiontitleList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#position_title_table").DataTable()
+                this.dt =  $("#position_title_table").DataTable();
+                $("#position_title_table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
             });
         }
     },

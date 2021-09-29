@@ -63,7 +63,9 @@ export default {
         data_list(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
+                this.dt =  $("#working-agency-table").DataTable();
+                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
             });
         }
     },

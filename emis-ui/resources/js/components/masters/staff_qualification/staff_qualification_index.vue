@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Staff Qualification Masters</h6></li>
         </ol>
@@ -11,20 +11,40 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link to="/qualification_description" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Description/Category
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qualification Type
+                       Field/Type
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_level'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qualification Level
+                       Degree/Level
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_qualification'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Qualification
+                       Qualification/Subject
                     </router-link>
-                </li> 
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/qualification_institute" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Institute
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/doner_agency" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Doner Agency
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link to="/project_doner_agency" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Project Doner Agency
+                    </router-link>
+                </li>
             </ul>
             <router-view></router-view>
         </div>
@@ -46,9 +66,9 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
-            .catch(function (error) { 
+            .catch(function (error) {
             });
         },
         populate_pate(data,action){
@@ -60,7 +80,7 @@ export default {
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
     },
-    
+
 }
 </script>
 

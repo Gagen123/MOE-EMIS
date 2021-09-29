@@ -4,7 +4,16 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Qualification Type :<span class="text-danger">*</span></label>
+                        <label>Doner Agency:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="doner_agency" v-model="form.doner_agency" :class="{ 'is-invalid': form.errors.has('doner_agency') }">
+                            <option v-for="(item, index) in donerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="doner_agency"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Project Doner Agency :<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -37,14 +46,15 @@
 export default {
     data() {
         return {
-            groupList:[],
+            donerList:[],
             form: new form({
                 id: '',
+                doner_agency:'',
                 name: '',
                 code:'',
                 status:'',
                 description:'',
-                model:'QualificationType',
+                model:'ProjectDonerAgency',
                 action_type:'edit',
             })
         }
@@ -54,6 +64,16 @@ export default {
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
+        },
+        loaddoneragencylist(uri = 'staff/loadStaffMasters/active/DonerAgency'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.donerList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error......"+error)
+            });
         },
 
 		formaction: function(type){
@@ -69,15 +89,38 @@ export default {
                         icon: 'success',
                         title: 'Details updated successfully'
                     })
-                    this.$router.push('/list_qualification_type');
+                    this.$router.push('/list_project_doner_agency');
                 })
                 .catch(() => {
                     console.log("Error......")
                 })
             }
 		},
+        changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="doner_agency"){
+                this.form.doner_agency=$('#doner_agency').val();
+            }
+        },
     },
     created() {
+        this.loaddoneragencylist();
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
+
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        this.form.doner_agency=this.$route.params.data.doner_agency_id;
         this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
         this.form.code=this.$route.params.data.code;

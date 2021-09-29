@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Qualification Type :<span class="text-danger">*</span></label>
+                        <label>Doner Agency :<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -44,7 +44,7 @@ export default {
                 code:'',
                 status:'',
                 description:'',
-                model:'QualificationType',
+                model:'DonerAgency',
                 action_type:'edit',
             })
         }
@@ -69,7 +69,7 @@ export default {
                         icon: 'success',
                         title: 'Details updated successfully'
                     })
-                    this.$router.push('/list_qualification_type');
+                    this.$router.push('/list_doner_agency');
                 })
                 .catch(() => {
                     console.log("Error......")

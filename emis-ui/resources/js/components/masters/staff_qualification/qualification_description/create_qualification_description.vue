@@ -1,10 +1,10 @@
 <template>
     <div>
-        <form class="bootbox-form" id="dzongkhagId">
+        <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Qualification Type :<span class="text-danger">*</span></label>
+                        <label>Qualification Description:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
@@ -19,10 +19,10 @@
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
-                        <label class="required">status:</label>
+                        <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status" type="radio" value="1" /> Active</label>
-                        <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
                 </div>
             </div>
@@ -37,15 +37,14 @@
 export default {
     data() {
         return {
-            groupList:[],
             form: new form({
                 id: '',
                 name: '',
                 code:'',
-                status:'',
                 description:'',
-                model:'QualificationType',
-                action_type:'edit',
+                status: 1,
+                model:'QualificationDescription',
+                action_type:'add',
             })
         }
     },
@@ -55,11 +54,9 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
-                this.form.code='';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -67,23 +64,15 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details updated successfully'
+                        title: 'Details added successfully'
                     })
-                    this.$router.push('/list_qualification_type');
+                    this.$router.push('/list_qualification_description');
                 })
                 .catch(() => {
-                    console.log("Error......")
+                    console.log("Error.")
                 })
             }
 		},
     },
-    created() {
-        this.form.name=this.$route.params.data.name;
-        this.form.status=this.$route.params.data.status;
-        this.form.code=this.$route.params.data.code;
-        this.form.description=this.$route.params.data.description;
-        this.form.id=this.$route.params.data.id;
-    },
-
 }
 </script>
