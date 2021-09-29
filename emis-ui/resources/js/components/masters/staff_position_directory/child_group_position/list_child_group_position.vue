@@ -6,7 +6,8 @@
                     <th >SL#</th>
                     <th >Group Name</th>
                     <th >Sub Group Name</th>
-                    <th >Position Level</th>
+                    <th >Child Group Name</th>
+                    <th >Super Structure</th>
                     <th >Position Title</th>
                     <th >Description</th>
                     <th >Status</th>
@@ -18,10 +19,11 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in positiontitleList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.majorgroup}}</td>
-                    <td>{{ item.submajorgroup.name}}</td>
-                    <td>{{ item.p_level ? item.p_level : "" }}</td>
-                    <td>{{ item.name}}</td>
+                    <td>{{ item.groupname}}</td>
+                    <td>{{ item.subgroupname}}</td>
+                    <td>{{ item.childgroupname}}</td>
+                    <td>{{ item.superstructure}}</td>
+                    <td>{{ item.positionTitle}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
@@ -43,7 +45,7 @@ export default {
         }
     },
     methods:{
-        loadpositionTitleList(uri = 'staff/loadStaffMasters/PositionTitle/PositionTitle'){
+        loadpositionTitleList(uri = 'staff/loadStaffMasters/all/ChildGroupPosition'){
         // loadpositionTitleList(uri = 'masters/loadStaffMasters/all_position_title_List'){
             axios.get(uri)
             .then(response => {

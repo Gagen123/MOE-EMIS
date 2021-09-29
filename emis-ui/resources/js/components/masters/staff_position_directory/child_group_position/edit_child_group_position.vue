@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="bootbox-form" id="dzongkhagId">
+        <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -18,18 +18,27 @@
                         <has-error :form="form" field="sub_group_id"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Position Level:<span class="text-danger">*</span></label>
-                         <select class="form-control select2" id="position_level_id" v-model="form.position_level_id" :class="{ 'is-invalid': form.errors.has('position_level_id') }">
-                            <option v-for="(item, index) in positionLevelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        <label>Child Group Name:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="child_group_id" v-model="form.child_group_id" :class="{ 'is-invalid': form.errors.has('child_group_id') }">
+                            <option v-for="(item, index) in childgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
-                        <has-error :form="form" field="position_level_id"></has-error>
+                        <has-error :form="form" field="child_group_id"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position Title:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
-                        <has-error :form="form" field="name"></has-error>
+                        <select class="form-control select2" id="position_title" v-model="form.position_title" :class="{ 'is-invalid': form.errors.has('position_title') }">
+                            <option v-for="(item, index) in positionTitleList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="position_title"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Super Structure:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="superstructure_id" v-model="form.superstructure_id" :class="{ 'is-invalid': form.errors.has('superstructure_id') }">
+                            <option v-for="(item, index) in superstructureList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="superstructure_id"></has-error>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Description:</label>
@@ -38,7 +47,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.code" readonly :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -62,17 +71,22 @@ export default {
         return {
             groupList:[],
             subgroupList:[],
-            positionLevelList:[],
+            childgroupList:[],
+            positionTitleList:[],
+            superstructureList:[],
             form: new form({
                 id: '',
+                name:'NA',
                 group_id:'',
                 sub_group_id:'',
                 position_level_id:'',
-                name: '',
+                child_group_id:'',
+                superstructure_id:'',
+                position_title:'',
                 code:'',
-                status: 1,
                 description:'',
-                model:'PositionTitle',
+                status:1,
+                model:'ChildGroupPosition',
                 action_type:'edit',
             })
         }
@@ -83,7 +97,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadMajorGroupList(uri = 'staff/loadStaffMasters/all/StaffMajorGrop'){
+        loadMajorGroupList(uri = 'staff/loadStaffMasters/active/StaffMajorGrop'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -104,20 +118,44 @@ export default {
                 console.log("Error: ."+error)
             });
         },
-        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
+
+        getChildGroup(id){
+            let uri="staff/loadStaffMasters/byparent__sub_group_id__"+id+"/ChildGroup";
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.positionLevelList =  data.data.data;
+                this.childgroupList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error: ."+error)
+            });
+        },
+
+        loadPositiontitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.positionTitleList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error: "+error)
             });
         },
+
+        getSurstructureList(uri = 'staff/loadStaffMasters/active/SuperStructure'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.superstructureList =  data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error: "+error)
+            });
+        },
+
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
-                this.form.code='';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -125,7 +163,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details updated successfully'
+                        title: 'Details added successfully'
                     })
                     this.$router.push('/list_child_group_position');
                 })
@@ -146,17 +184,26 @@ export default {
             }
             if(id=="sub_group_id"){
                 this.form.sub_group_id=$('#sub_group_id').val();
+                this.getChildGroup($('#sub_group_id').val());
             }
             if(id=="position_level_id"){
                 this.form.position_level_id=$('#position_level_id').val();
             }
-
+            if(id=="position_title"){
+                this.form.position_title=$('#position_title').val();
+            }
+            if(id=="superstructure_id"){
+                this.form.superstructure_id=$('#superstructure_id').val();
+            }
+            if(id=="child_group_id"){
+                this.form.child_group_id=$('#child_group_id').val();
+            }
         },
     },
-    created() {
+    mounted(){
         this.loadMajorGroupList();
-        this.loadPositionLevelList();
-
+        this.loadPositiontitleList();
+        this.getSurstructureList();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -168,16 +215,19 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.form.group_id=this.$route.params.data.submajorgroup.group_id;
-        this.form.sub_group_id=this.$route.params.data.submajorgroup.id;
-        this.getSubGroup(this.$route.params.data.submajorgroup.group_id);
-        this.form.position_level_id=this.$route.params.data.position_level_id;
-        this.form.name=this.$route.params.data.name;
+
+        this.form.group_id=this.$route.params.data.groupid;
+        this.getSubGroup(this.$route.params.data.groupid);
+        this.form.sub_group_id=this.$route.params.data.subgroupid;
+        this.getChildGroup(this.$route.params.data.subgroupid);
+        this.form.child_group_id=this.$route.params.data.child_group_id;
+
+        this.form.position_title=this.$route.params.data.position_title_id;
+        this.form.superstructure_id=this.$route.params.data.superstructure_id;
         this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
     },
-
 }
 </script>

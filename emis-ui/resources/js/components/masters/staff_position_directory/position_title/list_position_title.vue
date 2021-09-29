@@ -4,8 +4,8 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Group Name</th>
-                    <th >Sub Group Name</th>
+                    <!-- <th >Group Name</th>
+                    <th >Sub Group Name</th> -->
                     <th >Position Level</th>
                     <th >Position Title</th>
                     <th >Description</th>
@@ -18,8 +18,8 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in positiontitleList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.majorgroup}}</td>
-                    <td>{{ item.submajorgroup.name}}</td>
+                    <!-- <td>{{ item.majorgroup}}</td>
+                    <td>{{ item.submajorgroup.name}}</td> -->
                     <td>{{ item.p_level ? item.p_level : "" }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
