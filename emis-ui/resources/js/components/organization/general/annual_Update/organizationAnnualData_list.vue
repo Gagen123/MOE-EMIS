@@ -40,7 +40,7 @@
             <li class="form-inline "><h6 class="pt-1">List of Organization</h6></li>
         </ol>
         <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
-            <span class="fa-pull-right pr-2">
+            <span class="fa-pull-right pr-2" v-if="list">
                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpagelist()"> <span class="fa fa-list"></span> LIST</a>
             </span>
         </div>
@@ -98,6 +98,7 @@ export default {
             levelList:[],
             showdiv:false,
             levelId:'',
+            list:false
 
         }
     },
@@ -221,8 +222,7 @@ export default {
             if(data['acess_level']=="Ministry"){
                 this.loadOrgDataSubmissionList('allorganizationDataList/allData');
                 this.showdiv=true;
-                
-                
+                this.list=true;
             }
         })
         .catch(errors => {
