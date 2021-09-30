@@ -36,7 +36,7 @@ class LoadOrganizationController extends Controller{
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)->wherein('category',['public_school','public_eccd','public_ecr'])
             ->where('status','1')
-            ->select( 'id','name','levelId','dzongkhagId')->get();
+            ->select( 'id','name','levelId','dzongkhagId','category','code')->get();
         }
         if($type=="all_eccds_dzogkhag_wise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','like','%eccd%')->get();
@@ -67,7 +67,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::all();
             }
             else{        // dd($request);
-                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
+                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId','category','code')->get();
             }
         }
         if(strpos($type,'admission_dzongkhagwise')!==false){
