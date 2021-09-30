@@ -66,15 +66,8 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadworkingagencyList(uri = 'masters/loadStaffMasters/all_active_staff_major_groupList'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.groupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
+        async loadworkingagencyList(){
+            this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         },
 		formaction: function(type){
             if(type=="reset"){

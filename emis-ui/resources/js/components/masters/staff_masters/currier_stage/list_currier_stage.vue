@@ -37,15 +37,8 @@ export default {
         }
     },
     methods:{
-        loaddataList(uri = 'staff/loadStaffMasters/all/CureerStage'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.cureerList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error:'+error);
-            });
+        async loaddataList(){
+            this.cureerList =  await this.loadstaffMasters('all','CureerStage');
         },
         showedit(data){
             this.$router.push({name:'edit_currier_stage',params: {data:data}});
@@ -58,12 +51,7 @@ export default {
     },
     watch: {
         cureerList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

@@ -53,6 +53,12 @@ export default {
     },
     mounted(){
         this.loaddataList();
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        dataList() {
+            this.applydatatable('working-agency-table');
+        }
     },
 }
 </script>

@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Qualification Type</th>
+                    <!-- <th >Qualification Type</th> -->
                     <th >Qualification Level</th>
                     <th >Qualification</th>
                     <th >Description</th>
@@ -17,7 +17,7 @@
             <tbody>
                 <tr v-for="(item, index) in qualificationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.quialificationtype.name}}</td>
+                    <!-- <td>{{ item.quialificationtype.name}}</td> -->
                     <td>{{ item.quialificationlevel.name}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
@@ -41,21 +41,12 @@ export default {
         }
     },
     methods:{
-        loadqualifictionList(uri = 'staff/loadStaffMasters/Qualification/Qualification'){
-        // loadqualifictionList(uri = 'masters/loadStaffMasters/all_qualification_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.qualificationList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error:'+error);
-            });
+        async loadqualifictionList(){
+            this.qualificationList =  await this.loadstaffMasters('Qualification','Qualification');
         },
         showedit(data){
             this.$router.push({name:'edit_staff_qualification',params: {data:data}});
         },
-
     },
     mounted(){
         this.loadqualifictionList();
@@ -63,12 +54,7 @@ export default {
     },
     watch: {
         qualificationList(val) {
-            this.dt.destroy();
-            this.$nextTick(() =>{
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

@@ -37,15 +37,8 @@ export default {
         }
     },
     methods:{
-       loaddataList(uri = 'staff/loadStaffMasters/all/SecondmentMaster'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.dataList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loaddataList(){
+            this.dataList =  await this.loadstaffMasters('all','SecondmentMaster');
         },
         showedit(data){
             this.$router.push({name:'edit_secondment',params: {data:data}});
@@ -58,10 +51,7 @@ export default {
     },
     watch: {
         dataList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

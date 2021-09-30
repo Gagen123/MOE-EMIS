@@ -50,6 +50,7 @@ import tre from "./tre";
 
 require('./common');
 require('./projectionCommon');
+require('./staffcommondata');
 
 var allRoutes = [];
 allRoutes = allRoutes.concat(commonroutes,moduleRoutes2,questionroutes,staff,organization,student_routes,mess_manage_routes,academic_routes,spms_routes,dietary,projection_indicator_routes,approval,tre);
@@ -102,6 +103,7 @@ axios.interceptors.response.use(function (response) {
   }
   return Promise.reject(error);
 });
+
 const app = new Vue({
     el: '#app',
     router,

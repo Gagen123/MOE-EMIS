@@ -45,13 +45,8 @@ export default {
         }
     },
     methods:{
-        loadpositionTitleList(uri = 'staff/loadStaffMasters/all/ChildGroupPosition'){
-        // loadpositionTitleList(uri = 'masters/loadStaffMasters/all_position_title_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positiontitleList =  data.data.data;
-            })
+        async loadpositionTitleList(){
+            this.positiontitleList =  await this.loadstaffMasters('all','ChildGroupPosition');
         },
         showedit(data){
             this.$router.push({name:'edit_child_group_position',params: {data:data}});
@@ -64,12 +59,7 @@ export default {
     },
     watch: {
         positiontitleList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#position_title_table").DataTable();
-                $("#position_title_table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('position_title_table');
         }
     },
 }

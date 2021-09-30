@@ -39,20 +39,12 @@ export default {
         }
     },
     methods:{
-        loaddataList(uri = 'staff/loadStaffMasters/all/MaritalStatus'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.maritalList =  data.data.data;
-            })
-            .catch(function (error) {
-               console.log('error: '+error);
-            });
+        async loaddataList(){
+            this.maritalList =  await this.loadstaffMasters('all','MaritalStatus');
         },
         showedit(data){
             this.$router.push({name:'edit_marital_status',params: {data:data}});
         },
-
     },
     mounted(){
         this.loaddataList();
@@ -60,12 +52,7 @@ export default {
     },
     watch: {
         maritalList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

@@ -37,15 +37,8 @@ export default {
         }
     },
     methods:{
-        loadqualificationtype(uri = 'staff/loadStaffMasters/all/QualificationType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.qualificationTypeList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error:'+error);
-            });
+        async loadqualificationtype(){
+            this.qualificationTypeList =  await this.loadstaffMasters('all','QualificationType');
         },
         showedit(data){
             this.$router.push({name:'edit_qualification_type',params: {data:data}});
@@ -57,12 +50,7 @@ export default {
     },
     watch: {
         qualificationTypeList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }
