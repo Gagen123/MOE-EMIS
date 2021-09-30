@@ -70,5 +70,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
         $router->get('/getSubCategNonAcademic',['uses' => 'academic\AcademicController@getSubCategNonAcademic']);
 
+        //Emis portal used for pulling the result of the student
+        $router->get('/LoadResultByStudentId/{std_id}',['uses' => 'academic\AcademicController@LoadResultByStudentId']);
+
+
     });
 });
