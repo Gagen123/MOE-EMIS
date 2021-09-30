@@ -25,7 +25,7 @@ class LoadOrganizaitonController extends Controller{
         $param="";
         //type=allorganizationList: to list entire organization
         if($type=="allorganizationList"){
-            $param=$id;
+            $param=$id; 
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
@@ -36,7 +36,7 @@ class LoadOrganizaitonController extends Controller{
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
-        }
+        } 
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
             $param=$id;

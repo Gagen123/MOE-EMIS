@@ -39,15 +39,8 @@ export default {
         }
     },
     methods:{
-        loadworkingagencyList(uri = 'staff/loadStaffMasters/joinall__StaffSubMajorGrop__sub_group_id/ChildGroup'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.suggroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadworkingagencyList(){
+            this.suggroupList =  await this.loadstaffMasters('joinall__StaffSubMajorGrop__sub_group_id','ChildGroup');
         },
         showedit(data){
             this.$router.push({name:'edit_childgroup',params: {data:data}});
@@ -60,10 +53,7 @@ export default {
     },
     watch: {
         suggroupList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

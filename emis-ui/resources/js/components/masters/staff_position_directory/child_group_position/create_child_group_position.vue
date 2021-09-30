@@ -97,60 +97,20 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadMajorGroupList(uri = 'staff/loadStaffMasters/active/StaffMajorGrop'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.groupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadMajorGroupList(){
+            this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         },
-        getSubGroup(id){
-            let uri="staff/loadStaffMasters/byparent__group_id__"+id+"/StaffSubMajorGrop";
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subgroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: ."+error)
-            });
+        async getSubGroup(id){
+            this.subgroupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
         },
-
-        getChildGroup(id){
-            let uri="staff/loadStaffMasters/byparent__sub_group_id__"+id+"/ChildGroup";
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.childgroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: ."+error)
-            });
+        async getChildGroup(id){
+            this.childgroupList =  await this.loadstaffMasters('byparent__sub_group_id__'+id,'ChildGroup');
         },
-
-        loadPositiontitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positionTitleList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: "+error)
-            });
+        async loadPositiontitleList(){
+            this.positionTitleList =  await this.loadstaffMasters('active','PositionTitle');
         },
-
-        getSurstructureList(uri = 'staff/loadStaffMasters/active/SuperStructure'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.superstructureList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error: "+error)
-            });
+        async getSurstructureList(){
+            this.superstructureList =  await this.loadstaffMasters('active','SuperStructure');
         },
 
 		formaction: function(type){

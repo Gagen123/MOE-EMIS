@@ -10,6 +10,11 @@ class QualificationDetails extends Model{
     public $timestamps = false;
     protected $fillable = [
         'id',
+        'category',
+        'doner_id',
+        'project_doner_id',
+        'field_id',
+        'degree_id',
         'personal_id',
         'description',
         'qualification',
@@ -18,7 +23,9 @@ class QualificationDetails extends Model{
         'first_subject',
         'second_subject',
         'country',
+        'institute_id',
         'startdate',
+        'remarks',
         'enddate',
         'created_by',
         'updated_by',

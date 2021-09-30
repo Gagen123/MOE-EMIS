@@ -211,6 +211,7 @@ export default {
         },
         loaddata(){
             // department
+          
             let dzongkhag_id=$('#dzongkhag_id').val();
             let organization_type=$('#organization_type').val();
             let org_id=$('#org_id').val();

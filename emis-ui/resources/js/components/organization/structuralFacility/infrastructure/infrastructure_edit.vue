@@ -51,7 +51,7 @@
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
                                  <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
                                 <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
-                                v-model="yr.consYear" >
+                                v-model="yr.yearofconstructinNo" >
                               
                             </div>
                         </div>
@@ -186,6 +186,7 @@ export default {
             subCategortList:[],
             facilityList:[],
             designerList:[],
+         //   facilityDetails:[],
             contructionTypeList:[],
             users: [],
             form: new form({
@@ -345,8 +346,8 @@ export default {
         getInfrastructureDetails(infraId){
             axios.get('organization/getInfrastructureDetails/'+infraId)
             .then((response) => {  
+               // alert(JSON.stringify(response.data));
                 let data=response.data.data;
-
                 this.form.category              =    data.categoryId;
                 this.getSubCategoryDropdown();
                 this.form.subCategory           =    data.subCategoryId;
@@ -361,11 +362,12 @@ export default {
                 this.form.presentCondition      =    data.presentCondition;
                 this.form.design                =    data.design;
                 this.form.id                    =    data.id;
-
-                let yr=data.infra.yearofconstructinNo.split(',');
+               
+                let yr=data.yearofconstructinNo.split(',');
                 this.form.yearofconstructinNo=[];
                 for(let i=0;i<yr.length;i++){
                     this.form.yearofconstructinNo.push({yearofconstructinNo:yr[i]});
+                      alert(yr[i]);
                 }
                 let prop=data.facility;
                 let facilityDetails=[];
@@ -377,7 +379,6 @@ export default {
                     accessibleDisabled:prop[i].noAccessibleToDisabled,
                     internetConnection:prop[i].noWithInternetConnection});
                 }
-
                 this.count=data.length;
                 this.form.users=facilityDetails;
                 

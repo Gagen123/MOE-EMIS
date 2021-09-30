@@ -25,6 +25,8 @@ class StaffMasterController extends Controller{
             'status.required'               => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
+
+        $request['user_id'] = $this->userId();
         $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request->all());
         return $response_data;
     }

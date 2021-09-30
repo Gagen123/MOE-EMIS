@@ -757,6 +757,7 @@ const routes = [
     },
     { path: '/school_details_update',  name:'school_details_update',component: require('./components/organization/general/annual_Update/school_details_update.vue').default },
     { path: '/school_details_acknowledgement',  name:'school_details_acknowledgement',component: require('./components/organization/general/annual_Update/annual_acknowledgement.vue').default },
+    { path: '/organizationAnnualData_list',  name:'organizationAnnualData_list',component: require('./components/organization/general/annual_Update/organizationAnnualData_list.vue').default },
 
     //New Routes for Connectivity
     // { path: '/restructuringnew_index',

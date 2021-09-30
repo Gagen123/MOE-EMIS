@@ -27,9 +27,9 @@ $cyan: #6cb2eb;
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba(48, 47, 49, 0.9) 
-                // url('../img/loading_icon.gif') 
-                50% 50% 
+    background: rgba(48, 47, 49, 0.9)
+                // url('../img/loading_icon.gif')
+                50% 50%
                 no-repeat;
 }
 //Grid
@@ -102,12 +102,12 @@ $cyan: #6cb2eb;
     50% {
       opacity: 0.5;
     }
-  }  
+  }
 
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
    body.request_loading {
-    overflow: hidden;   
+    overflow: hidden;
 }
 
 /* Anytime the body has the loading class, our
@@ -115,4 +115,6 @@ $cyan: #6cb2eb;
 body.request_loading .modal_loadming {
     display: block;
 }
+
+
 

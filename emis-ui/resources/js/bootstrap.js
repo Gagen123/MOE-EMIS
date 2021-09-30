@@ -18,11 +18,9 @@ try {
     require('./select2.full.min.js');
     require('./dataTables.buttons.min.js');
     require('./dataTables.buttons.print.min.js');
-
-
-    
-    
-} catch (e) {} 
+    require('./jquery.plugin.js');
+    require('./jquery.datepick.js');
+} catch (e) {}
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests

@@ -36,16 +36,8 @@ export default {
         }
     },
     methods:{
-        loadcoursemodeList(uri = 'staff/loadStaffMasters/all/CourseMode'){
-        // loadcoursemodeList(uri = 'masters/loadStaffMasters/all_coursemode_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.coursemodeList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log('error: '+error);
-            });
+        async loadcoursemodeList(){
+            this.coursemodeList =  await this.loadstaffMasters('all','CourseMode');
         },
         showedit(data){
             this.$router.push({name:'edit_course_mode',params: {data:data}});
@@ -53,6 +45,12 @@ export default {
     },
     mounted(){
         this.loadcoursemodeList();
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        coursemodeList() {
+            this.applydatatable('working-agency-table');
+        }
     },
 }
 </script>
