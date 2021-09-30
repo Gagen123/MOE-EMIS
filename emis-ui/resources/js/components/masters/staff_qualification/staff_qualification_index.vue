@@ -11,7 +11,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/qualification_description" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link to="/qualification_category" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Description/Category
                     </router-link>
                 </li>

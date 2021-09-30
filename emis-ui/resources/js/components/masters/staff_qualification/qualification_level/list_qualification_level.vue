@@ -37,23 +37,12 @@ export default {
         }
     },
     methods:{
-        loadqualificationLevelList(uri = 'staff/loadStaffMasters/all/QualificationLevel'){
-        // loadqualificationLevelList(uri = 'masters/loadStaffMasters/all_qualification_level_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.qualificationLevelList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
+        async loadqualificationLevelList(){
+            this.qualificationLevelList =  await this.loadstaffMasters('all','QualificationLevel');
         },
         showedit(data){
             this.$router.push({name:'edit_qualification_level',params: {data:data}});
         },
-
     },
     mounted(){
         this.loadqualificationLevelList();
@@ -61,12 +50,7 @@ export default {
     },
     watch: {
         qualificationLevelList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

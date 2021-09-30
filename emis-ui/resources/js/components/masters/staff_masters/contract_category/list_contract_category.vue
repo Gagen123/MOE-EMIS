@@ -39,15 +39,8 @@ export default {
         }
     },
     methods:{
-        loaddataList(uri = 'staff/loadStaffMasters/all/ContractCategory'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.dataList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log('error: '+error);
-            });
+        async loadworkingagencyList(){
+            this.dataList =  await this.loadstaffMasters('all','ContractCategory');
         },
         showedit(data){
             this.$router.push({name:'edit_contract_category',params: {data:data}});
@@ -57,16 +50,10 @@ export default {
     mounted(){
         this.loaddataList();
         this.dt =  $("#working-agency-table").DataTable();
-        $("#working-agency-table >tbody >tr >td ").addClass('p-1');
     },
     watch: {
         dataList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

@@ -6,7 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff_masters\ChildGroup;
+use App\Models\staff_masters\ChildGroupPosition;
+use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\StaffSubMajorGrop;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -101,9 +105,30 @@ class LoadStaffController extends Controller{
         if($type=="by_id"){
             $staff_det=PersonalDetails::where('id',$id)->first();
             if($staff_det!=null && $staff_det!=""){
-                $position=PositionTitle::where('id',$staff_det->position_title_id)->first();
-                if($position!=null && $position!=""){
-                    $staff_det->position_title_name=$position->name;
+                //mapping of the position tile, superstructure and childgroup
+                $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+                if($positions!=null && $positions!=""){
+                    //get position title from mapping
+                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                    if($posi!=null && $posi!=""){
+                        $staff_det->position_title_name=$posi->name;
+                        //get position level from position title
+                        $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                        if($posiLev!=null && $posiLev!=""){
+                            $staff_det->positionlevel=$posiLev->name;
+                        }
+                    }
+
+                    //to get MOG, used for eding staff details
+                    $child=ChildGroup::where('id',$positions->child_group_id)->first();
+                    if($child!=null && $child!=""){
+                        $staff_det->childgroup=$child->name;
+                        //to get MOG, used for eding staff details to identify teacher in school
+                        $submajorgrp=StaffSubMajorGrop::where('id', $child->sub_group_id)->first();
+                        if($submajorgrp!=null && $submajorgrp!=""){
+                            $staff_det->subgroup=$submajorgrp->name;
+                        }
+                    }
                 }
             }
             return $this->successResponse($staff_det);
@@ -125,7 +150,7 @@ class LoadStaffController extends Controller{
         }
 
     }
-    
+
     // method by Chimi Thinley to get Staff by array of aca_teacher_sub_ids
     public function loadFewDetailsStaffListBySubject(Request $request){
         try{
@@ -185,10 +210,10 @@ class LoadStaffController extends Controller{
                     COUNT(id) AS TOTAL
                 FROM `stf_staff`
                 WHERE `working_agency_id`= '".$id."'");
-               
-                
+
+
             }
-                
+
         return $this->successResponse($response_data);
     }
 

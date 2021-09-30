@@ -4,15 +4,16 @@ namespace App\Http\Controllers\masters;
 
 use App\Http\Controllers\Controller;
 use App\Models\staff_masters\ChildGroup;
+use App\Models\staff_masters\ChildGroupPosition;
 use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\StaffMajorGrop;
+use App\Models\staff_masters\StaffSubMajorGrop;
 use App\Models\staff_masters\SuperStructure;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 
 class StaffMasterController extends Controller{
     use ApiResponser;
@@ -200,6 +201,34 @@ class StaffMasterController extends Controller{
         else if($type=="StaffSubMajorGrop"){
             return $this->successResponse($model::with('majorgroup')->get());
         }
+        if($type=="all_active_position_title_with_level"){
+            $positions=ChildGroupPosition::where('status', 1)->get();
+            if($positions!=null && $positions!="" && sizeof($positions)>0){
+                foreach($positions as $pos){
+                    $posi=PositionTitle::where('id',$pos['position_title_id'])->first();
+                    if($posi!=null && $posi!=""){
+                        $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                        $pos->positionTitle=$posi->name;
+                        if($posiLev!=null && $posiLev!=""){
+                            $pos->positionlevel=$posiLev->name;
+                        }
+                    }
+                    $sup=SuperStructure::where('id',$pos['superstructure_id'])->first();
+                    if($sup!=null && $sup!=""){
+                        $pos->superstructure=$sup->name;
+                    }
+                    $child=ChildGroup::where('id',$pos['child_group_id'])->first();
+                    if($child!=null && $child!=""){
+                        $pos->childgroup=$child->name;
+                        $submajorgrp=StaffSubMajorGrop::where('id', $child->sub_group_id)->first();
+                        if($submajorgrp!=null && $submajorgrp!=""){
+                            $pos->subgroup=$submajorgrp->name;
+                        }
+                    }
+                }
+            }
+            return $this->successResponse($positions);
+        }
         else if($type=="PositionTitle"){
             $response_data=$model::with('submajorgroup')->get();
             if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
@@ -219,6 +248,28 @@ class StaffMasterController extends Controller{
 
         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
+        }
+    }
+
+    public function loadStaffMastersbyId($model="",$id=""){
+        if($model=="PositionTitle"){
+            $positions=ChildGroupPosition::where('id', $id)->first();
+            if($positions!=null && $positions!=""){
+                $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                if($posi!=null && $posi!=""){
+                    $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                    $positions->positionTitle=$posi->name;
+                    if($posiLev!=null && $posiLev!=""){
+                        $positions->positionlevel=$posiLev->name;
+                    }
+                }
+            }
+            return $this->successResponse($positions);
+        }else{
+            $modelName = "App\\Models\\staff_masters\\"."$model";
+            $model = new $modelName();
+            $data=$model::where('id',$id)->first();
+            return $this->successResponse($data);
         }
     }
 }

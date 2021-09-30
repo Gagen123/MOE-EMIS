@@ -3,14 +3,13 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Qualification Type:<span class="text-danger">*</span></label>
                         <select class="form-control" id="qualification_type" v-model="form.qualification_type" :class="{ 'is-invalid': form.errors.has('qualification_type') }">
                             <option v-for="(item, index) in qualificationtypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="qualification_type"></has-error>
-                    </div>
-
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Qualification Level:<span class="text-danger">*</span></label>
                         <select class="form-control" id="qualification_level" v-model="form.qualification_level" :class="{ 'is-invalid': form.errors.has('qualification_level') }">

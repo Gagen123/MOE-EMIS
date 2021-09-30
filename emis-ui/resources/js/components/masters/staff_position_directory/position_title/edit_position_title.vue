@@ -83,36 +83,14 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadMajorGroupList(uri = 'staff/loadStaffMasters/all/StaffMajorGrop'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.groupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadMajorGroupList(){
+            this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         },
-        getSubGroup(id){
-            let uri="staff/loadStaffMasters/byparent__group_id__"+id+"/StaffSubMajorGrop";
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subgroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: ."+error)
-            });
+        async getSubGroup(id){
+            this.subgroupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
         },
-        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positionLevelList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: "+error)
-            });
+        async loadPositionLevelList(){
+            this.positionLevelList =  await this.loadstaffMasters('active','PositionLevel');
         },
 		formaction: function(type){
             if(type=="reset"){

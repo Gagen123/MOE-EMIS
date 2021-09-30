@@ -41,16 +41,8 @@ export default {
         }
     },
     methods:{
-        loadworkingagencyList(uri = 'staff/loadStaffMasters/StaffSubMajorGrop/StaffSubMajorGrop'){
-        // loadworkingagencyList(uri = 'masters/loadStaffMasters/all_sub_major_groupList'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.suggroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadworkingagencyList(){
+            this.suggroupList =  await this.loadstaffMasters('StaffSubMajorGrop','StaffSubMajorGrop');
         },
         showedit(data){
             this.$router.push({name:'edit_sub_major_group_master',params: {data:data}});
@@ -63,12 +55,7 @@ export default {
     },
     watch: {
         suggroupList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable();
-                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
-                $(".paginate_button").addClass('small');
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

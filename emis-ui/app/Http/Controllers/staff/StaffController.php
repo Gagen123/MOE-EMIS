@@ -71,43 +71,10 @@ class StaffController extends Controller{
             );
         }
         $this->validate($request, $rules,$customMessages);
-        $personal_details =[
-            'personal_id'       =>  $request->personal_id,
-            'emp_type'          =>  $request->emp_type,
-            'contract_category' =>  $request->contract_category,
-            'cid_work_permit'   =>  $request->cid_work_permit,
-            'emp_id'            =>  $request->emp_id,
-            'name'              =>  $request->name,
-            'organization_type' =>  $request->organization_type,
-            'sex_id'            =>  $request->sex_id,
-            'marital_status'    =>  $request->marital_status,
-            'dob'               =>  $request->dob,
-            'issen'             =>  $request->issen,
-            'country_id'        =>  $request->country_id,
-            'p_dzongkhag'       =>  $request->p_dzongkhag,
-            'p_gewog'           =>  $request->p_gewog,
-            'p_village_id'      =>  $request->p_village_id,
-            'dzo_id'            =>  $request->dzongkhag,
-            'geowg_id'          =>  $request->gewog,
-            'village_id'        =>  $request->village_id,
-            'address'           =>  $request->address,
-            'contact_number'    =>  $request->contact_number,
-            'email'             =>  $request->email,
-            'alternative_email' =>  $request->alternative_email,
-            'remarks'           =>  $request->remarks,
-            'position_title'    =>  $request->position_title,
-            'working_agency_id' =>  $request->working_agency_id,
-            'comp_sub'          =>  $request->comp_sub,
-            'elective_sub1'     =>  $request->elective_sub1,
-            'elective_sub2'     =>  $request->elective_sub2,
-            'initial_appointment_date' =>  $request->initial_appointment_date,
-            'currier_stage'     =>  $request->currier_stage,
-            'emp_file_code'     =>  $request->emp_file_code,
-            'status'            =>  $request->status,
-            'user_id'           =>$this->userId()
-        ];
+
+        $request['user_id'] = $this->userId();
         // dd( $personal_details);
-        $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $personal_details);
+        $response_data= $this->apiService->createData('emis/staff/savePersonalDetails', $request->all());
         return $response_data;
     }
     public function loaddraftpersonalDetails(Request $request,$type=""){
@@ -122,7 +89,9 @@ class StaffController extends Controller{
     public function savequalificationDetails(Request $request){
         $rules = [
             'description'      =>  'required',
-            'qualification'    =>  'required',
+            'doner_agency'     =>  'required',
+            'field'            =>  'required',
+            'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
             'firstsub'         =>  'required',
@@ -132,7 +101,9 @@ class StaffController extends Controller{
         ];
         $customMessages = [
             'description.required'        => 'This field is required',
-            'qualification.required'      => 'This field is required',
+            'doner_agency.required'       => 'This field is required',
+            'field.required'              => 'This field is required',
+            'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
             'firstsub.required'           => 'This field is required',
@@ -142,24 +113,8 @@ class StaffController extends Controller{
         ];
         $this->validate($request, $rules,$customMessages);
 
-        $qualification_details =[
-            'personal_id'                       =>  $request->personal_id,
-            'qualification_id'                  =>  $request->qualification_id,
-            'action_type'                       =>  $request->action_type,
-            'description'                       =>  $request->description,
-            'qualification'                     =>  $request->qualification,
-            'coursemode'                        =>  $request->coursemode,
-            'coursetitle'                       =>  $request->coursetitle,
-            'firstsub'                          =>  $request->firstsub,
-            'secondsub'                         =>  $request->secondsub,
-            'country'                           =>  $request->country,
-            'startdate'                         =>  $request->startdate,
-            'enddate'                           =>  $request->enddate,
-            'status'                            =>  $request->status,
-            'user_id'                           =>  $this->userId()
-        ];
-        // dd($qualification_details);
-        $response_data= $this->apiService->createData('emis/staff/savequalificationDetails', $qualification_details);
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/savequalificationDetails', $request->all());
         return $response_data;
     }
 
