@@ -496,6 +496,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         });
         $router->post('/saveAnnualData', 'establishment\ChangeBasicDetailsController@saveAnnualData');
         $router->get('/loadOrgDataSubmissionList/{type}/{id}', 'establishment\ChangeBasicDetailsController@loadOrgDataSubmissionList');
+        $router->get('/loadOrgDataSubmissionListMinistry/{dzongkhag_id}/{levelId}', 'establishment\ChangeBasicDetailsController@loadOrgDataSubmissionListMinistry');
     });
 
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {

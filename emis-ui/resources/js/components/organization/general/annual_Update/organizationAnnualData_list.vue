@@ -9,7 +9,7 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body pb-0 mb-0" style="display:none"  v-if="access_level === 'Ministry' || 'Dzongkhag'" >
+            <div class="card-body pb-0 mb-0" style="display:none">
                 <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="dzosection">
                         <label class="mb-0">Dzongkhag: <i class="text-danger">*</i></label>
@@ -23,7 +23,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                         <label class="mb-0">Level: <i class="text-danger">*</i></label>
                         <select class="form-control select2" id="levelId" v-model="levelId">
-                            <option value="ALL"> --Select--</option>
+                            <option value="ALL"> ALL</option>
                             <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <span class="text-danger" id="level_type_err"></span>
@@ -39,6 +39,11 @@
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">List of Organization</h6></li>
         </ol>
+        <div class="card-header pb-1 mb-0 pt-0 mt-0"> 
+            <span class="fa-pull-right pr-2">
+                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpagelist()"> <span class="fa fa-list"></span> LIST</a>
+            </span>
+        </div>
         <section class="content">
         <div class="container-fluid">
             <div class="card card-primary card-outline">
@@ -118,10 +123,14 @@ export default {
             .catch(function (error) {
                 console.log('err: '+error);
             });
-        },
+        }, 
         loadeditpage(item){
             this.$router.push({name:"school_details_update",query:{org_id:item.id}});
         },
+        loadeditpagelist(){
+            location.reload();
+        },
+       
         loadOrgDataSubmissionList(type){
              axios.get('organization/loadOrgDataSubmissionList/'+type)
             .then((response) => {
@@ -142,14 +151,17 @@ export default {
                 this.orgList = [];
                 this.orgList=await this.schoolList($('#dzongkhag_id').val());
             }
-             if(id=="levelId"){
-             //   this.levelList = []
-                this.form.levelId=$('#levelId').val();
-               // this.levelList=this.getlevel($('#levelId').val());
-                
-              
+            //  if(id=="levelId"){
+            //  //   this.levelList = []
+            //     this.form.levelId=$('#levelId').val();
+            //    // this.levelList=this.getlevel($('#levelId').val());
+            // }
+            if(id=="levelId"){
+                this.levelId= $('#levelId').val();
             }
-          
+            if(id=="dzongkhag_id"){
+                this.dzongkhag_id= $('#dzongkhag_id').val();
+            }
             // if(id=="org_id"){
             //     this.staffList = [];
             //     this.staffList=await this.staffOrgwise($('#org_id').val());
@@ -157,21 +169,15 @@ export default {
         },
      
         loaddata(){
-            let dzongkhag_id=$('#dzongkhag_id').val();
-            let levelId=$('#levelId').val();
-            let url="organization/loadOrgDataSubmissionListMinistry/";
-            if(levelId=="ALL"){//selct organization
-            
-                url+='alldatalist/'+dzongkhag_id;
-            }else{
-                url+='/selectedOrgData'+levelId;
-            }
-            
-            axios.get(url)
+            //this.data_list=[];
+            let levelId = $('#levelId').val();
+            let dzongkhag_id = $('#dzongkhag_id').val();
+            let uri="organization/loadOrgDataSubmissionListMinistry/"+this.dzongkhag_id+"/"+this.levelId;
+            axios.get(uri)
             .then((response) => {
-              
-                this.data_list =  response.data.data;
-             })
+               this.data_list=response.data.data;
+            })
+             
             .catch((error) => {
                 console.log("Error."+error);
             });
@@ -181,6 +187,7 @@ export default {
     async mounted(){
         this.getLevel();
         this.dzongkhagList= await this.loadactivedzongkhags();
+        //this.loaddata();
         //this.dt =  $("#register-table").DataTable();
         // 
         $('.select2').select2();
@@ -198,7 +205,6 @@ export default {
 
     },
     created(){
-       
         this.loaddzongkhagList();
         this.dt =  $("#register-table").DataTable();
       
@@ -210,7 +216,7 @@ export default {
             }
             if(data['acess_level']=="Dzongkhag"){
                 this.loadOrgDataSubmissionList('userdzongkhagwise/allData');
-                this.showdiv=true;
+               
             }
             if(data['acess_level']=="Ministry"){
                 this.loadOrgDataSubmissionList('allorganizationDataList/allData');
@@ -223,7 +229,7 @@ export default {
             console.log(errors)
         });
         // workingAgency
-        this.loaddata();
+   
 
     },
     watch: {
