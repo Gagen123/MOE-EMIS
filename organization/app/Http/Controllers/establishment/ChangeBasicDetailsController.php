@@ -1437,4 +1437,32 @@ class ChangeBasicDetailsController extends Controller
         }
         
     }
+    public function loadOrgDataSubmissionList($type="", $id=""){
+       // dd($type);
+        $response_data="";
+        if($type=="userworkingagency"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE a.organizationId = '".$id."' ");
+        }
+        
+        if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$id."' ");
+        }
+
+        if($type=="allorganizationDataList"){
+            if($id=="allData"){
+                $response_data=DB::SELECT("SELECT b.dzongkhagId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+                LEFT JOIN `organization_details` b ON a.organizationId = b.id
+                LEFT JOIN `level` l ON b.levelId = l.id");
+            }
+           
+        }
+      //  dd($response_data);
+        return $this->successResponse($response_data);
+    }
 }

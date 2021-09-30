@@ -41,7 +41,7 @@
                                             <textarea v-model="form.vission" class="form-control" id="vission"></textarea>
                                         </div>
                                     </div>
-                                    <div  v-if="access_level === 'Ministry' || 'Dzongkhag'"  class= "form-group row">
+                                    <div  v-if="access_level === 'Ministry' || access_level === 'Dzongkhag'"  class= "form-group row">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             <label>Objective</label>
                                             <textarea v-model="form.objective" class="form-control" id="vission"></textarea>
