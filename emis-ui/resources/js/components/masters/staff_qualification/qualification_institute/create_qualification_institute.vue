@@ -1,28 +1,28 @@
 <template>
     <div>
-        <form class="bootbox-form" id="dzongkhagId">
+        <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Qualification Description:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_err('dzongkhag_name')" type="text">
+                        <label>Institute Name:<span class="text-danger">*</span></label>
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label>
-                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
-                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Code:<span class="text-danger">*</span></label>
-                        <input class="form-control" readonly v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">status:</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status" type="radio" value="1" /> Active</label>
-                        <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
                 </div>
             </div>
@@ -37,15 +37,15 @@
 export default {
     data() {
         return {
-            count:10,
+            groupList:[],
             form: new form({
                 id: '',
                 name: '',
-                 description:'',
                 code:'',
-                status:'',
-                model:'QualificationDescription',
-                action_type:'edit',
+                status: 1,
+                description:'',
+                model:'Institute',
+                action_type:'add',
             })
         }
     },
@@ -58,7 +58,7 @@ export default {
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
-                this.form.code='';
+                this.code='';
                 this.form.status= 1;
             }
             if(type=="save"){
@@ -66,22 +66,15 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details updated successfully'
+                        title: 'Details added successfully'
                     })
-                    this.$router.push('/list_qualification_description');
+                    this.$router.push('/list_qualification_institute');
                 })
                 .catch(() => {
-                    console.log("Error.")
+                    console.log("Error......")
                 })
             }
 		},
-    },
-    created() {
-        this.form.name=this.$route.params.data.name;
-        this.form.status=this.$route.params.data.status;
-        this.form.code=this.$route.params.data.code;
-        this.form.description=this.$route.params.data.description;
-        this.form.id=this.$route.params.data.id;
     },
 
 }

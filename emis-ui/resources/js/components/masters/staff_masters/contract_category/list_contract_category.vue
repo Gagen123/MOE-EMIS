@@ -1,12 +1,13 @@
 <template>
-    <div class="card-body">
+    <div class="card-body table-responsive">
         <table id="working-agency-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
-                    <th >Status</th>
                     <th >Description</th>
+                    <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
@@ -15,8 +16,9 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
-                    <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.description}}</td>
+                    <td>{{ item.code}}</td>
+                    <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -33,6 +35,7 @@ export default {
     data(){
         return{
             dataList:[],
+            dt:'',
         }
     },
     methods:{
@@ -53,6 +56,18 @@ export default {
     },
     mounted(){
         this.loaddataList();
+        this.dt =  $("#working-agency-table").DataTable();
+        $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+    },
+    watch: {
+        dataList() {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt =  $("#working-agency-table").DataTable();
+                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
+            });
+        }
     },
 }
 </script>

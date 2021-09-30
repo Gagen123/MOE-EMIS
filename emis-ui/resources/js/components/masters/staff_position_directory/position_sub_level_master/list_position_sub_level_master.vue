@@ -6,8 +6,8 @@
                     <th >SL#</th>
                     <th >Name</th>
                     <th >Description</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
@@ -62,7 +62,9 @@ export default {
         positionLevelList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
+                this.dt =  $("#working-agency-table").DataTable();
+                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
             });
         }
     },

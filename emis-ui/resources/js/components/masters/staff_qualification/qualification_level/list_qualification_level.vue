@@ -5,9 +5,9 @@
                 <tr>
                     <th >SL#</th>
                     <th >Qualification Level</th>
+                    <th >description</th>
                     <th >Status</th>
                     <th >Code</th>
-                    <th >description</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
@@ -16,9 +16,9 @@
                 <tr v-for="(item, index) in qualificationLevelList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.description }}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.description }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -63,7 +63,9 @@ export default {
         qualificationLevelList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
+                this.dt =  $("#working-agency-table").DataTable();
+                $("#working-agency-table >tbody >tr >td ").addClass('p-1');
+                $(".paginate_button").addClass('small');
             });
         }
     },

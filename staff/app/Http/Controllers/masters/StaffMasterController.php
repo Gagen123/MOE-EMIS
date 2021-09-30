@@ -100,6 +100,12 @@ class StaffMasterController extends Controller{
                 'superstructure_id'   =>  $request->superstructure_id,
             ];
         }
+
+        if(isset($request->doner_agency)){
+            $master_data = $master_data+[
+                'doner_agency_id'   =>  $request->doner_agency,
+            ];
+        }
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
