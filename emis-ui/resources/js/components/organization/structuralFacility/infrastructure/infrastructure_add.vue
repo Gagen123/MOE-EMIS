@@ -52,7 +52,6 @@
                                  <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
                                 <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
                                 v-model="yr.consYear" >
-                              
                             </div>
                         </div>
                     </div>

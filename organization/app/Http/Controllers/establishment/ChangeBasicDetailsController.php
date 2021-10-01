@@ -1406,22 +1406,9 @@ class ChangeBasicDetailsController extends Controller
         return $change_details;
     }
     public function saveAnnualData(Request $request){
-        $id = $request->id;
-        if( $id != null){
-            $data = [
-                'organizationId'            =>  $request['organizationId'],
-                'id'                        =>  $id,
-                'year'                      =>  $request['year'],
-                'status'                    =>  'Submitted',
-                'date'                      =>  date('Y-m-d'),
-                'updated_by'                =>  $request->user_id,
-                'updated_at'                =>  date('Y-m-d h:i:s')
-            ];
-       // dd($data);
-        $dt = Organization_AnnualData::where('id',$id)->update($data);
-        // dd($dt);
-        return $this->successResponse($dt, Response::HTTP_CREATED);
-        }else{
+        $dt="";
+        $orgId = $request['organizationId'];
+        Organization_AnnualData::where('organizationId', $orgId)->delete();
             $data = [
                 'organizationId'            =>  $request['organizationId'],
                 'year'                      =>  $request['year'],
@@ -1433,8 +1420,7 @@ class ChangeBasicDetailsController extends Controller
             ];
             $dt = Organization_AnnualData::create($data);
             // dd($dt);
-            return $this->successResponse($dt, Response::HTTP_CREATED);
-        }
+        return $this->successResponse($dt, Response::HTTP_CREATED);
         
     }
     public function loadOrgDataSubmissionList($type="", $id=""){
