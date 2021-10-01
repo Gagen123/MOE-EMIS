@@ -38,7 +38,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{index1 + 1}}<input type="hidden" :value="totalScore = 0"></td>
+                                <td>{{item1.roll_no}}<input type="hidden" :value="totalScore = 0"></td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">

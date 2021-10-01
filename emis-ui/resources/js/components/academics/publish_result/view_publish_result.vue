@@ -19,7 +19,7 @@
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
                                 </th>
-                                
+                                <th v-if="approved == 0" rowspan="3">Action</th>
                             </tr>
                             <tr>
                                 <template v-for="(item1,index1) in subjects">
@@ -43,7 +43,7 @@
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
                                 <td>{{index3 + 1}}</td>
                                 <td>
-                                    <router-link :to="{ name: 'final_result_subject_columns', params: {data:item3}}" >{{ item3.Name }}</router-link>
+                                    {{ item3.Name }}
                                 </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
                                     <span v-if="item4['aca_sub_id']=='remarks'">
@@ -74,33 +74,36 @@
                                        </span>
                                     </span>                                  
                                 </td> 
+                                <td v-if="approved == 0">
+                                    <div class="btn-group btn-group-sm">
+                                        <router-link :to="{ name: 'edit_publish_result', params: {student:item3,aca_term_id:form.aca_assmt_term_id,org_class_id:form.org_class_id,org_stream_id:form.org_stream_id,org_section_id:form.org_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
+                                    </div> 
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
-            <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
-                <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize & Submit for Approval </button>
-                <!-- <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button> -->
+            <div>
+                 <div v-if="approved == 0" class="card-footer text-right">
+                    <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('approve')"><i class="fa fa-check"></i> Approve </button>
+                </div>
+                <div>
+                    <ul class="list-inline">
+                        <strong>Abbreviations:</strong>
+                        <li v-for ="(item,index) in assessmentAreaCode" :key="index" class="list-inline-item">
+                            <small class="text-justify">  <b>{{item.code}}  </b>- {{ item.name }}</small>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <footer v-if="assessmentAreaCode.length">
-                <ul class="list-inline">
-                    <strong>Abbreviations:</strong>
-                    <li v-for ="(item,index) in assessmentAreaCode" :key="index" class="list-inline-item">
-                        <small class="text-justify">  <b>{{item.code}}  </b>- {{ item.name }}</small>
-                    </li>
-                </ul>
-            </footer>
         </form>
     </div>  
-
 </template>
  <script>
  export default {
     data(){
-           return{
+           return {
             consolidatedResultList:[],
             instructional_days:'',
             terms:[],
@@ -109,6 +112,7 @@
             ratings:[],
             assessmentAreaCode:[],
             form: new form({
+                id:'',
                 class_stream_section:'',
                 aca_assmt_term_id:'',
                 org_class_id:'',
@@ -117,6 +121,7 @@
                 remarks:[]
 
             }),
+            approved:0
         }
       
     },
@@ -170,45 +175,14 @@
         areasPerTerm(term_id){
            return this.areas.filter(item=>item.aca_assmt_term_id == term_id).length
         },
-         areasPerSubject(sub_id){
+        areasPerSubject(sub_id){
             return this.areas.filter(item=>item.aca_sub_id == sub_id).length
         },
         save(action=""){
-            this.consolidatedResultList.forEach(item=>{
-                if(item[this.form.aca_assmt_term_id].remarks.area_total.score){
-                    this.form.remarks[item.std_student_id] = item[this.form.aca_assmt_term_id].remarks.area_total.score
-                }
-            })
-            if(action == "finalize"){
-                let finalize = { finalize:1 }
-                const newForm = Object.assign(this.form,finalize)
+            if(action == "approve"){
+                let approve = 1;
                 Swal.fire({
-                    title: 'You cannot edit the result after finalizing. Are you sure you want to finalize?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes',
-                    }).then((result) => {
-                        if(result.isConfirmed) {
-                            axios.post('/academics/saveConsolidatedResut', this.form)
-                                .then(() => {
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Data saved successfully.'
-                                    })
-                                    this.$router.push('/list-consolidated-result');
-                                })
-                                .catch(function(error){
-                                this.errors = error;
-                            });
-                        }
-                    })
-            }else if(action == "publish") {
-                let publish = { publish:1 }
-                const newForm = Object.assign(this.form,publish)
-                Swal.fire({
-                title: ' Are you sure you want to publish?',
+                title: 'Are you sure you want approve?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -216,13 +190,13 @@
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/saveConsolidatedResut', this.form)
+                        axios.post('/academics/updateStatus/'+this.id,{approve})
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',
-                                    title: 'Data saved successfully.'
+                                    title: 'Successfully approved.'
                                 })
-                                this.$router.push('/list-consolidated-result');
+                                this.$router.push('/list-publish-result')
                             })
                             .catch(function(error){
                             this.errors = error;
@@ -230,33 +204,20 @@
                     }
                 })
             }
-            else{
-            
-                axios.post('/academics/saveConsolidatedResut', this.form)
-                    .then(() => {
-                        Toast.fire({
-                            icon: 'success',
-                            title: 'Data saved successfully.'
-                        })
-                        this.$router.push('/list-consolidated-result');
-                    })
-                    .catch(function(error){
-                    this.errors = error;
-                });
-            }
         }
     },
     mounted(){ 
         this.loadConsolidatedResult()
     },
     created() {
-        console.log(this.$route.params)
+        this.id=this.$route.params.data.aca_result_consolidated_id;
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;
         this.form.org_section_id=this.$route.params.data.org_section_id;
-        this.form.class_stream_section=this.$route.params.class_stream_section[4];
-        this.OrgClassStreamId=this.$route.params.class_stream_section[0];
+        this.form.class_stream_section=this.$route.params.data.class_stream_section;
+        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+        this.approved=this.$route.params.data.approved;
 
     },
 }

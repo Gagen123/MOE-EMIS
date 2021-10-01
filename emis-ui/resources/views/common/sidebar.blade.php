@@ -449,7 +449,7 @@
                             <router-link to="/subject_offered" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Subject Offered
+                                   Optional Subjects Offered
                                 </p>
                             </router-link>
                         </li>

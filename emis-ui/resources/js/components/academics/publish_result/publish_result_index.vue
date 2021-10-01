@@ -6,8 +6,8 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="card">
                             <div class="card-header bg-white pt-2 pb-1 text-right">
-                                <label class="fa-pull-left">Consolidated Result</label>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_consolidated_result')"><i class="fa fa-list"></i> List</button>
+                                <label class="fa-pull-left">Approve & Publish Result</label>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('list_publish_result')"><i class="fa fa-list"></i> List</button>
                             </div>
                             <div class="card-body pb-1 mb-0 pt-1 mt-0">  
                                 <router-view></router-view> 

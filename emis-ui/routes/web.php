@@ -227,6 +227,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveClassMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveClassMapping'])->name('saveClassMapping');
     Route::get('/loadOrganizationByDzoId/{dzo_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrganizationByDzoId'])->name('loadOrganizationByDzoId');
     Route::get('/getCurrentClassStream/{school_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getCurrentClassStream'])->name('getCurrentClassStream');
+    Route::get('/getCurrentClassStream/{school_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getCurrentClassStream'])->name('getCurrentClassStream');
 
     //routes for furniture
     Route::post('/saveFurniture', [App\Http\Controllers\organization\FurnitureController::class, 'saveFurniture'])->name('saveFurniture');
@@ -909,7 +910,11 @@ Route::prefix('academics')->group(function () {
     Route::get('/getRemedialClass', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClass'])->name('getRemedialClass');
     Route::get('/getRemedialClassDetail/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'getRemedialClassDetail'])->name('getRemedialClassDetail');
     Route::get('/getSubCategNonAcademic', [App\Http\Controllers\academics\AcademicController::class, 'getSubCategNonAcademic'])->name('getSubCategNonAcademic');
-    Route::get('/getTermsByFrequencyId/{frequencyId}', [App\Http\Controllers\academics\AcademicController::class, 'getTermsByFrequencyId'])->name('getTermsByFrequencyId');
+    Route::get('/getTermsForPublish', [App\Http\Controllers\academics\AcademicController::class, 'getTermsForPublish'])->name('getTermsForPublish');
+    Route::get('/loadConsolidatedResultListForPublish/{termId}', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultListForPublish'])->name('loadConsolidatedResultListForPublish');
+    Route::get('/getConsolidatedResultForEdit/{stdId}/{termId}/{subId}', [App\Http\Controllers\academics\AcademicController::class, 'getConsolidatedResultForEdit'])->name('getConsolidatedResultForEdit');
+    Route::post('/updateStatus/{Id?}', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::get('/getSubjectOfTerm', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectOfTerm'])->name('getSubjectOfTerm');
 
 });
 Route::prefix('spms')->group(function () {

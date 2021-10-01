@@ -27,6 +27,9 @@
                                 <span v-if="item.pubblished">
                                     <strong>Published</strong> on {{ item.published_date }}
                                 </span>
+                                <span v-else-if="item.approved">
+                                    <strong>Approved</strong> on {{ item.approved_date }}
+                                </span>
                                 <span v-else-if="item.class_teacher_finalized">
                                     <strong>Consolidated and finalized by class teacher</strong> on {{ item.class_teacher_finalized_date }} 
                                 </span>
@@ -45,11 +48,11 @@
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('edit_consolidated_result',item)"> <i class="fas fa-edit"></i > Edit</div>
                                 </div>
                                 <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEditForConsolidated(item.aca_assmt_term_id)"><i class="fa fa-unlock-alt mr-1"></i > Undo Finalize </div>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEditForConsolidated(item.aca_result_consolidated_id)"><i class="fa fa-unlock-alt mr-1"></i > Undo Finalize </div>
                                 </div>
-                                 <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
+                                 <!-- <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('',item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
-                                </div>
+                                </div> -->
                                 <div class="btn-group btn-group-sm">
                                     <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_consolidated_result',item)"> <i class="fas fa-eye"></i > View</div>
                                 </div>
@@ -106,45 +109,46 @@ export default {
             this.Classes = classTeachers;
         }, 
         async loadConsolidatedResultList(){
-            if($('#class_stream_section_id').val()===''){
-                this.errorMessage = "This field is required"
-            }
-            let uri = 'academics/loadConsolidatedResultList'
-            uri += ('?org_class_id='+this.class_stream_section_id[1])
-           if(this.class_stream_section_id[2] !== null){
-                    uri += ('&org_stream_id='+this.class_stream_section_id[2])
-            }
-            if(this.class_stream_section_id[3] !== null){
-                uri += ('&org_section_id='+this.class_stream_section_id[3])
-            }
-            try{
-                let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
-                studentsConsolidatedResult.forEach((item,index) => {
-                    classSections.forEach(item1 => {
-                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || ((item.org_stream_id == null || item.org_stream_id == "") && (item1.org_stream_id == null || item.org_stream_id == ""))) && (item.org_section_id == item1.org_section_id || ((item.org_section_id == null || item.org_section_id == "") && (item1.org_section_id == null || item.org_section_id == "")))){
-                            studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
-                            if(item1.stream && item1.section){
-                                 studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
-                            }else if(item1.stream){
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
-                            }else if(item1.section){
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
-                            }
-                            else{
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class
-                            }
-                            studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
-                        }
+            if($('#class_stream_section_id').val() !=''){
+                let uri = 'academics/loadConsolidatedResultList'
+                uri += ('?org_class_id='+this.class_stream_section_id[1])
+                if(this.class_stream_section_id[2] !== null){
+                            uri += ('&org_stream_id='+this.class_stream_section_id[2])
+                    }
+                    if(this.class_stream_section_id[3] !== null){
+                        uri += ('&org_section_id='+this.class_stream_section_id[3])
+                    }
+                    try{
+                        let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
+                        let studentsConsolidatedResult = await axios.get(uri).then(response => {return response.data.data})
+                        studentsConsolidatedResult.forEach((item,index) => {
+                            classSections.forEach(item1 => {
+                                if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || ((item.org_stream_id == null || item.org_stream_id == "") && (item1.org_stream_id == null || item.org_stream_id == ""))) && (item.org_section_id == item1.org_section_id || ((item.org_section_id == null || item.org_section_id == "") && (item1.org_section_id == null || item.org_section_id == "")))){
+                                    studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
+                                    if(item1.stream && item1.section){
+                                        studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
+                                    }else if(item1.stream){
+                                        studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
+                                    }else if(item1.section){
+                                        studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
+                                    }
+                                    else{
+                                        studentsConsolidatedResult[index]['class_stream_section'] = item1.class
+                                    }
+                                    studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
+                                }
+                            })
                     })
-            })
-            this.studentConsolidatedResultList = studentsConsolidatedResult
-           
-            }catch(e){
-                if(e.toString().includes("500")){
-                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-             }   
+                    this.studentConsolidatedResultList = studentsConsolidatedResult
+                
+                    }catch(e){
+                        if(e.toString().includes("500")){
+                        $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                        }
+                    }  
+             }else{
+                 this.errorMessage = "This field is required"
+             } 
            },
         showedit(route,data){
             this.$router.push({name:route,params: {data:data,class_stream_section:this.class_stream_section_id}});

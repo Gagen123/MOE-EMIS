@@ -1,20 +1,13 @@
 <template>
     <div>
         <div class="form-group row">
-           <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label>Assessment Frequency:<span class="text-danger">*</span></label> 
-                <select v-model="aca_assmt_frequency_id" class="form-control select2" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="getTerms(); remove_err('aca_assmt_frequency_id')"> 
-                    <option selected="selected" value="">---Select---</option>
-                    <option v-for="(item, index) in assesmentFrequencyList" :key="index" :value="item.id">{{ item.name }}</option>
-                </select>
-                <span id= "errorId" class="text-anger">{{ errorMessage }}</span>
-            </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label>Term:<span class="text-danger">*</span></label> 
                 <select class="form-control form-control-sm select2" id="aca_term_id" v-model="aca_term_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="loadConsolidatedResultForPublish(); remove_err('aca_term_id')">
                     <option selected="selected" value="">---Select---</option>
-                    <option selected v-for="(item1, index1) in terms" :key="index1" :value="item1.id">
-                        {{ item.class_stream_section }}
+                    <option v-for="(item1, index1) in terms" :key="index1" :value="item1.id">
+                        {{ item1.name }}
+                        <span v-if="item1.dzo_name">{{item1.dzo_name}}</span>
                     </option>
                 </select> 
                 <span id= "errorId" class="text-danger">{{ errorMessage }}</span>
@@ -29,40 +22,40 @@
                         </tr>
                     </thead>
                     <tbody id="tbody">
-                        <!-- <tr v-for="(item, index) in studentConsolidatedResultList" :key="index">
-                            <td>{{ item.term }}</td>
+                        <tr v-for="(item, index) in studentConsolidatedResultList" :key="index">
+                            <td>{{ item.class_stream_section }}</td>
                             <td>
                                 <span v-if="item.pubblished">
                                     <strong>Published</strong> on {{ item.published_date }}
                                 </span>
+                                 <span v-else-if="item.approved">
+                                    <strong>Approved</strong> on {{ item.approved_date }}
+                                </span>
                                 <span v-else-if="item.class_teacher_finalized">
-                                    <strong>Consolidated and finalized by class teacher</strong> on {{ item.class_teacher_finalized_date }} 
-                                </span>
-                                <span v-else-if="item.aca_assmt_term_id && item.subject_teachers_finalized">
-                                    <strong>Finalized by subject teachers</strong> on {{ item.subject_teachers_finalized_date }} 
-                                </span>
-                                <span v-else-if="!item.aca_assmt_term_id">
-                                    <strong>Under process with class teacher</strong>  
-                                </span>
-                                <span v-else>
-                                    <strong>Under process with subject teachers</strong>
+                                    <strong>Consolidated and submitted by class teacher</strong> on {{ item.class_teacher_finalized_date }} 
                                 </span>
                             </td>
                             <td>
-                                <div v-if="item.is_class_teacher && item.subject_teachers_finalized && !item.class_teacher_finalized" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('edit_consolidated_result',item)"> <i class="fas fa-edit"></i > Edit</div>
-                                </div>
-                                <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEditForConsolidated(item.aca_assmt_term_id)"><i class="fa fa-unlock-alt mr-1"></i > Undo Finalize </div>
-                                </div>
-                                 <div v-if="item.is_class_teacher && item.class_teacher_finalized && !item.published" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('',item)"><i class="fas fa-cloud-upload-alt"></i > Publish</div>
-                                </div>
+                                <span v-if="item.class_teacher_finalized && !item.approved">
+                                    <div  class="btn-group btn-group-sm">
+                                        <button class="btn btn-info btn-sm btn-flat text-white" to="" @click="updateStatus('approve',item.aca_result_consolidated_id)"><i class="fa fa-unlock-alt mr-1"></i > Approve </button>
+                                    </div> 
+                                </span>
+                                 <!-- <div v-if="item.approved && !item.published" class="btn-group btn-group-sm">
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="updateStatus('approve',item.aca_result_consolidated_id)"><i class="fas fa-cloud-upload-alt"></i > Publish </div>
+                                </div> -->
                                 <div class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_consolidated_result',item)"> <i class="fas fa-eye"></i > View</div>
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_publish_result',item)"> <i class="fas fa-eye"></i > 
+                                        <span v-if="item.approved">
+                                            View
+                                        </span>
+                                        <span v-else>
+                                            View/Edit
+                                        </span>
+                                    </div>
                                 </div>
                             </td>
-                        </tr> -->
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -75,7 +68,6 @@ export default {
         return {
             aca_assmt_frequency_id:'',
             aca_term_id:'',
-            Classes:[],
             terms:[],
             studentConsolidatedResultList:[],
             errorMessage:'',
@@ -90,48 +82,33 @@ export default {
                $('#errorId').remove()
             }
         },
-        getAssessmentFrequencyList(uri = 'masters/loadAcademicMasters/all_assessment_frequency'){
-            axios.get(uri)
-            .then(response =>{
-                this.assesmentFrequencyList = response.data.data;
-            })
-            .catch(function (error){
-                 if(error.toString().includes("500")){
-                  $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            })
-        },
         getTerms(){
-            if(this.aca_assmt_frequency_id != ""){
-                axios.get('academics/getTermsByFrequencyId/'+this.aca_assmt_frequency_id)
-                .then((response)=>{
-                    this.terms = response.data.data
-                }).catch(function (error){
-                    console.log(error)
-                })
-            }else{
-                this.errorMessage = "This field is required";
-            }
+            axios.get('academics/getTermsForPublish')
+            .then((response)=>{
+                this.terms = response.data.data
+            }).catch(function (error){
+                console.log(error)
+            })
         },
         async loadConsolidatedResultForPublish(){
             if(this.aca_term_id !=''){
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => { return response.data})
-                let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultForPublish/'+this.aca_term_id).then(response => {return response.data.data})
+                let studentsConsolidatedResult = await axios.get('academics/loadConsolidatedResultListForPublish/'+this.aca_term_id).then(response => {return response.data.data})
                 studentsConsolidatedResult.forEach((item,index) => {
                     classSections.forEach(item1 => {
-                        if(item.org_class_id == item1.org_class_id && (item.org_stream_id == item1.org_stream_id || ((item.org_stream_id == null || item.org_stream_id == "") && (item1.org_stream_id == null || item.org_stream_id == ""))) && (item.org_section_id == item1.org_section_id || ((item.org_section_id == null || item.org_section_id == "") && (item1.org_section_id == null || item.org_section_id == "")))){
-                            studentsConsolidatedResult[index].result_consolidated_id = item.result_consolidated_id
-                            if(item1.stream && item1.section){
-                                 studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
-                            }else if(item1.stream){
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.stream
-                            }else if(item1.section){
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class+' '+item1.section
+                        const stream_id = item.org_stream_id == "" ? null : item.org_stream_id
+                        const section_id = item.org_section_id == "" ? null : item.org_section_id
+                        const stream_id1 = item1.org_stream_id == "" ? null : item1.org_stream_id
+                        const section_id1 = item1.org_section_id == "" ? null : item1.org_section_id
+                        if(item.org_class_id == item1.org_class_id && (stream_id == stream_id1 || (stream_id == null && stream_id1 == null)) && (section_id == section_id1 || (section_id == null && section_id1 == null))){
+                            studentsConsolidatedResult[index]['class_stream_section'] = item1.class
+                            if(item1.stream){
+                                studentsConsolidatedResult[index]['class_stream_section'] += (' '+ item1.stream);
                             }
-                            else{
-                                studentsConsolidatedResult[index]['class_stream_section'] = item1.class
+                            if(item1.section){
+                                studentsConsolidatedResult[index]['class_stream_section'] += (' '+ item1.section);
                             }
-                            studentsConsolidatedResult[index].OrgClassStreamId = item1.OrgClassStreamId
+                            studentsConsolidatedResult[index]['OrgClassStreamId'] = item1.OrgClassStreamId;
                         }
                     })
             })
@@ -142,11 +119,15 @@ export default {
             }  
         },
         showedit(route,data){
-            this.$router.push({name:route,params: {data:data,class_stream_section:this.class_stream_section_id}});
+            this.$router.push({name:route,params: {data:data}});
         },
-        unlockForEditForConsolidated (Id){
-            Swal.fire({
-                title: 'Are you sure you want to unlock for editing?',
+        //Status like Approve, Publich
+        updateStatus(action = "",Id = ""){
+            let not_published = this.studentConsolidatedResultList.filter(item => item.published == 0)
+            if(action == "approve"){
+                let approve = 1;
+                Swal.fire({
+                title: 'Are you sure you want approve?',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -154,19 +135,42 @@ export default {
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/unlockForEditForConsolidated/'+Id)
+                        axios.post('/academics/updateStatus/'+Id,{approve})
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',
-                                    title: 'Result unlocked for editing by class teacher.'
+                                    title: 'Successfully approved.'
                                 })
-                                this.$router.push('/list-consolidated-result');
                             })
                             .catch(function(error){
                             this.errors = error;
                         });
                     }
-            })
+                })
+            }else{
+                Swal.fire({
+                title: 'Are you sure you want approve?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                }).then((result) => {
+                    if(result.isConfirmed) {
+                        axios.post('/academics/updateStatus/',not_published)
+                            .then(() => {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Successfully published.'
+                                })
+                            })
+                            .catch(function(error){
+                            this.errors = error;
+                        });
+                    }
+                })
+            }
+           
         }
     },
     mounted(){ 
@@ -183,12 +187,16 @@ export default {
         const event = new Event("change", { bubbles: true, cancelable: true });
         e.params.data.element.parentElement.dispatchEvent(event);
         });
-        this.getAssessmentFrequencyList()
         this.dt = $("#consolidated-result-table").DataTable({
             "order": [[ 0, "asc" ]],
             "lengthChange": false,
             "searching": false,
+            columnDefs: [
+                { width: 100, targets: 0},
+            ],
         })
+        this.getTerms()
+
     },
     watch: {
         studentConsolidatedResultList(val) {
@@ -198,7 +206,11 @@ export default {
                 "order": [[ 0, "asc" ]],
                 "lengthChange": false,
                 "searching": false,
+                columnDefs: [
+                    { width: 100, targets: 0},
+                ],
                 })
+                
             });
         }
     }

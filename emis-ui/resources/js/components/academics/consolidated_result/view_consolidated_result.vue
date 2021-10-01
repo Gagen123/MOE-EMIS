@@ -41,9 +41,9 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{index3 + 1}}</td>
+                                <td>{{item3.roll_no}}</td>
                                 <td>
-                                    <router-link :to="{ name: 'final_result_subject_columns', params: {data:item3}}" >{{ item3.Name }}</router-link>
+                                   {{ item3.Name }}
                                 </td>
                                  <td v-for="(item4,index4) in areas" :key="index4" :class="{'text-right':(item4.input_type==1)}">
                                     <span v-if="item4['aca_sub_id']=='remarks'">
@@ -78,12 +78,6 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
-                <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-                <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize & Submit for Approval </button>
-                <!-- <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary" @click="save('publish')"><i class="fa fa-cloud-upload-alt"></i> Publish</button> -->
             </div>
             <footer v-if="assessmentAreaCode.length">
                 <ul class="list-inline">
@@ -250,7 +244,6 @@
         this.loadConsolidatedResult()
     },
     created() {
-        console.log(this.$route.params)
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;

@@ -101,6 +101,7 @@ class AcademicController extends Controller
         return $this->apiService->listData($uri);
     }
     public function getTermsByClass($classId,$streamId=""){
+        
         $uri = 'emis/academics/getTermsByClass/'.$classId;
         if($streamId){
            $uri .= ('/'.$streamId);
@@ -620,8 +621,32 @@ class AcademicController extends Controller
         $orgId = $this->getWrkingAgencyId();
         return $this->apiService->listData('emis/academics/getRemedialClassDetail/'.$orgId.'/'.$Id);
     }
-    public function getTermsByFrequencyId($frequencyId){
-        return $this->apiService->listData('emis/academics/getTermsByFrequencyId/'.$frequencyId);
+    public function getTermsForPublish(){
+        $orgId = $this->getWrkingAgencyId();
+        return $this->apiService->listData('emis/academics/getTermsForPublish/'.$orgId);
+    }
+    public function loadConsolidatedResultListForPublish($termId){
+        $orgId = $this->getWrkingAgencyId();
+        return $this->apiService->listData('emis/academics/loadConsolidatedResultListForPublish/'.$orgId.'/'.$termId);
+    }
+    public function getConsolidatedResultForEdit($stdId,$termId,$subId){
+        $orgId = $this->getWrkingAgencyId();
+        return $this->apiService->listData('emis/academics/getConsolidatedResultForEdit/'.$orgId.'/'.$stdId.'/'.$termId.'/'.$subId);
+    }
+    public function updateStatus(Request $request, $Id =''){
+        $data = $request->all();
+        return $this->apiService->createData('emis/academics/updateStatus/'.$Id,$data);
+    }
+    public function getSubjectOfTerm(Request $request){
+        $orgId = $this->getWrkingAgencyId();
+        $uri = 'emis/academics/getSubjectOfTerm?org_id='.$orgId.'&aca_term_id='.$request['aca_term_id'].'&org_class_id='.$request['org_class_id'];
+        if($request['org_stream_id']){
+            $uri .= ('&org_stream_id='.$request['org_stream_id']);
+        }
+        if($request['org_section_id']){
+            $uri .= ('&org_section_id='.$request['org_section_id']);
+        }
+        return $this->apiService->listData($uri);
     }
     private function getElectiveSubjects($classId, $streamId=""){
         $uri = 'emis/academics/getElectiveSubjects/'.$classId;

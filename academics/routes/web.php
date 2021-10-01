@@ -69,6 +69,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getRemedialClass/{orgId}',['uses' => 'academic\AcademicController@getRemedialClass']);
         $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
         $router->get('/getSubCategNonAcademic',['uses' => 'academic\AcademicController@getSubCategNonAcademic']);
-        $router->get('/getTermsByFrequencyId/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequencyId']);
+        $router->get('/getTermsForPublish/{orgId}',['uses' => 'academic\AcademicController@getTermsForPublish']);
+        $router->get('/loadConsolidatedResultListForPublish/{orgId}/{termId}',['uses' => 'academic\AcademicController@loadConsolidatedResultListForPublish']);
+        $router->get('/getConsolidatedResultForEdit/{orgId}/{stdId}/{termId}/{subId}',['uses' => 'academic\AcademicController@getConsolidatedResultForEdit']);
+        $router->get('/getSubjectOfTerm',['uses' => 'academic\AcademicController@getSubjectOfTerm']);
+        $router->post('/updateStatus/{Id}',['uses' => 'academic\AcademicController@updateStatus']);
+
     });
 });
