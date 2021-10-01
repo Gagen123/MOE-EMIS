@@ -1,5 +1,9 @@
 <template>
     <div>
+        <div class="callout callout-danger" style="display:none" id="warning">
+            <h5 class="bg-gradient-danger">Please Note!</h5>
+            <div id="message"></div>
+        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
@@ -40,19 +44,21 @@
                                     <label class="text-primary">{{std_admission_details.DateOfBirth}}</label>
                                 </div>
                             </div>
-                            <label>Present School Details: </label>
-                            <div class="row form-group">
-                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                                    <label class="required" >Class : </label>
-                                    <label class="text-primary">{{ }}</label>
-                                </div>
-                                <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
-                                    <label class="required" >School : </label>
-                                    <label class="text-primary"><span id="gewogid"></span>{{std_admission_details.organization_name}}</label>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                                    <label class="required" >Dzongkhag :</label>
-                                    <label class="text-primary"><span id="vilageId"></span> {{dzongkhagArray[std_admission_details.organization_dzo]}}</label>
+                            <div v-if="is_student">
+                                <label>Present School Details: </label>
+                                <div class="row form-group">
+                                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                        <label class="required" >Class : </label>
+                                        <label class="text-primary">{{ this.std_present_class }}</label>
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                                        <label class="required" >School : </label>
+                                        <label class="text-primary"><span id="gewogid"></span>{{ this.std_present_school}}</label>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                        <label class="required" >Dzongkhag :</label>
+                                        <label class="text-primary"><span id="vilageId"></span> {{dzongkhagArray[this.std_present_dzo]}}</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +101,15 @@
                     </div>
                     <div class="tab-pane fade tab-content-details" id="details-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <br>
-                        <dt>Class Details</dt>
+                        <div class="row form-group">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <label>Class:<span class="text-danger">*</span></label>
+                                <select v-model="class_form.class" :class="{ 'is-invalid select2 select2-hidden-accessible': class_form.errors.has('class') }"  class="form-control select2" name="class" id="class">
+                                    <option v-for="(item, index) in classList" :key="index" v-bind:value="item.id">{{ item.class }}</option>
+                                </select>
+                                <has-error :form="class_form" field="class"></has-error>
+                            </div>
+                        </div>
                         <hr>
                         <table id="sen-student-list-table" class="table table-bordered text-sm table-hover">
                             <tbody>
@@ -174,7 +188,13 @@ export default {
         return{
             student_id:'',
             student_code:'',
+            is_transferred:'0',
+            is_student:false,
+            std_present_class:'',
+            std_present_school:'',
+            std_present_dzo:'',
             std_admission_details:'',
+            std_class:'',
             parents_details:[],
             genderArray:{},
             dzongkhagArray:{},
@@ -195,6 +215,7 @@ export default {
             orgid:'',
             class_form: new form({
                 student_id:'',
+                class:'',
                 disability:'',
                 special_benifit:[],
                 scholarship:[],
@@ -281,7 +302,9 @@ export default {
             if(std_code == null){
                 uri = '/students/admission/getStudentDetails/admission_'+std_id;
             } else{
+                this.is_student = true;
                 uri = '/students/admission/getStudentDetails/'+std_id;
+                this.checkTransferStatus(std_id);
             }
 			axios.get(uri)
 			.then(response => {
@@ -289,9 +312,39 @@ export default {
                 if(data != ""){
                     this.std_admission_details = data;
                     this.parents_details = data.parents;
+                    this.class_form.class = data.admission_class.class_id;
+                    alert(data.admission_class.class_id);
+                    $('#class').val(data.admission_class.class_id).trigger('change');
+                    $('#class').prop('disabled',true);
+                    this.getStudentSchoolDetails(data.class.OrgClassStreamId);
                 }
 			});
 		},
+        getStudentSchoolDetails(OrgClassStreamId){
+            let uri = '/organization/getStudentSchoolDetails/'+ OrgClassStreamId;
+            try{
+                axios.get(uri).then(response => {
+                    let data= response.data.data;
+                    //have to check whether the student passed or failed
+                    this.std_present_class = data[0].class;
+                    this.std_present_school = data[0].name;
+                    this.std_present_dzo = data[0].dzongkahgId;
+                    // let index = this.class_array.indexOf(this.std_present_class);
+                    // index++;
+                    // this.std_class=this.class_array[index];
+                    // this.classList.forEach(element => {
+                    //     //need to check pass or fail
+                    //     if(element.class === this.std_class){
+                    //         this.class_form.class = element.id;
+                    //         $('#class').val(element.id).trigger('change');
+                    //         $('#class').prop('disabled',true);
+                    //     }
+                    // });
+                });
+            }catch(e){
+                console.log('error loadactivedzongkhags '+e);
+            }
+        },
         loadClassList(uri="loadCommons/getOrgClassStream"){
             axios.get(uri)
             .then(response => {
@@ -302,6 +355,23 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        checkTransferStatus(std_id){
+            uri = '/students/admission/getTransferDetails/'+std_id;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                if(data != ""){
+                    this.is_transferred = '1';
+                } else {
+                    $('#warning').show();
+                    $('#message').html('Student has not taken Transfer Certificate from previously attended school. <br> Thank you!');
+                }
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+
         /**
          * method to show next and previous tab
          */

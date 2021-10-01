@@ -525,5 +525,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getOrgProfile/{id}/{type}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
         $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
+        $router->get('/getStudentSchoolDetails/{OrgClassId}', ['uses' => 'LoadOrganizationController@getStudentSchoolDetails']);
     });
 });

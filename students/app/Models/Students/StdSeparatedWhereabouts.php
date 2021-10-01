@@ -15,6 +15,7 @@ class StdSeparatedWhereabouts extends Model
         'id',
         'OrgOrganizationId',
         'StdStudentId',
+        'StdDropoutCaseTypeId',
         'LeavingDate',
         'CurrentAddress',
         'CurrentEngagement'

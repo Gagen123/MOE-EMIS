@@ -227,6 +227,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveClassMapping', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveClassMapping'])->name('saveClassMapping');
     Route::get('/loadOrganizationByDzoId/{dzo_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrganizationByDzoId'])->name('loadOrganizationByDzoId');
     Route::get('/getCurrentClassStream/{school_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getCurrentClassStream'])->name('getCurrentClassStream');
+    Route::get('/getStudentSchoolDetails/{OrgClassId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'getStudentSchoolDetails'])->name('getStudentSchoolDetails');
 
     //routes for furniture
     Route::post('/saveFurniture', [App\Http\Controllers\organization\FurnitureController::class, 'saveFurniture'])->name('saveFurniture');
@@ -712,6 +713,7 @@ Route::prefix('students')->group(function () {
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
         Route::get('/getStudentDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getStudentDetails'])->name('getStudentDetails');
         Route::get('/getstudentGuardainClassDetails/{cid}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('validateStudentCid');
+        Route::get('/getTransferDetails/{std_id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getTransferDetails'])->name('getTransferDetails');
         Route::get('/getstudentGuardainClassDetails/{std_id}/{type}', [App\Http\Controllers\student\StudentAdmissionController::class, 'getstudentGuardainClassDetails'])->name('getstudentGuardainClassDetails');
         Route::post('/saveNewTransferStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveNewTransferStudent'])->name('saveNewTransferStudent');
         Route::post('/studentAdmissionupdate', [App\Http\Controllers\student\StudentAdmissionController::class, 'studentAdmissionupdate'])->name('studentAdmissionupdate');
