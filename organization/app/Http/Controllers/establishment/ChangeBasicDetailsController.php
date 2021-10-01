@@ -1406,22 +1406,9 @@ class ChangeBasicDetailsController extends Controller
         return $change_details;
     }
     public function saveAnnualData(Request $request){
-        $id = $request->id;
-        if( $id != null){
-            $data = [
-                'organizationId'            =>  $request['organizationId'],
-                'id'                        =>  $id,
-                'year'                      =>  $request['year'],
-                'status'                    =>  'Submitted',
-                'date'                      =>  date('Y-m-d'),
-                'updated_by'                =>  $request->user_id,
-                'updated_at'                =>  date('Y-m-d h:i:s')
-            ];
-       // dd($data);
-        $dt = Organization_AnnualData::where('id',$id)->update($data);
-        // dd($dt);
-        return $this->successResponse($dt, Response::HTTP_CREATED);
-        }else{
+        $dt="";
+        $orgId = $request['organizationId'];
+        Organization_AnnualData::where('organizationId', $orgId)->delete();
             $data = [
                 'organizationId'            =>  $request['organizationId'],
                 'year'                      =>  $request['year'],
@@ -1433,8 +1420,69 @@ class ChangeBasicDetailsController extends Controller
             ];
             $dt = Organization_AnnualData::create($data);
             // dd($dt);
-            return $this->successResponse($dt, Response::HTTP_CREATED);
+        return $this->successResponse($dt, Response::HTTP_CREATED);
+        
+    }
+    public function loadOrgDataSubmissionList($type="", $id=""){
+       // dd($type);
+        $response_data="";
+        if($type=="userworkingagency"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE a.organizationId = '".$id."' ");
         }
         
+        if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$id."' ");
+        }
+
+        if($type=="allorganizationDataList"){
+            if($id=="allData"){
+                $response_data=DB::SELECT("SELECT b.dzongkhagId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+                LEFT JOIN `organization_details` b ON a.organizationId = b.id
+                LEFT JOIN `level` l ON b.levelId = l.id");
+            }
+           
+        }
+        if ($type=="alldzongkhagdata"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$id."' ");
+        }
+        // else{
+        //     $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+        //     LEFT JOIN `organization_details` b ON a.organizationId = b.id
+        //     LEFT JOIN `level` l ON b.levelId = l.id
+        //     WHERE b.dzongkhagId = '".$id."' AND l.id = '".$type."'");
+        // }
+      //  dd($response_data);
+        return $this->successResponse($response_data);
+    }
+
+    public function loadOrgDataSubmissionListMinistry($dzongkhag_id="", $levelId=""){
+         //dd($levelId);
+         $response_data="";
+        if($levelId=="ALL"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$dzongkhag_id."' ");
+        }
+        else{
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$dzongkhag_id."'
+            AND l.id = '".$levelId."' ");
+
+        } 
+         
+       //  dd($response_data);
+         return $this->successResponse($response_data);
     }
 }

@@ -34,6 +34,7 @@
         "vue-progressbar": "^0.7.5",
         "vue-router": "^3.4.9",
         "vue-select": "^3.11.2",
+        "vuejs-datatable": "^2.0.0-alpha.7",
         "vuejs-datepicker": "^1.6.2"
     }
 }

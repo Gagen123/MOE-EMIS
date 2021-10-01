@@ -445,9 +445,10 @@ Route::prefix('organization')->group(function () {
     //Projection Route
     Route::get('/loadeducationCenter/{type}', [App\Http\Controllers\common_services\LoadOrganizaitonController::class, 'loadeducationCenter'])->name('loadeducationCenter');
 
-    //Annual Data Submission Route
+    //Annual Data Submission Route 
     Route::post('/saveAnnualData', [App\Http\Controllers\organization\GeneralInfoController::class, 'saveAnnualData'])->name('saveAnnualData');
     Route::get('/loadOrgDataSubmissionList/{type}/{parent_id}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrgDataSubmissionList'])->name('loadOrgDataSubmissionList');
+    Route::get('/loadOrgDataSubmissionListMinistry/{dzongkhag_id}/{levelId}', [App\Http\Controllers\organization\GeneralInfoController::class, 'loadOrgDataSubmissionListMinistry'])->name('loadOrgDataSubmissionListMinistry');
 
 });
 Route::prefix('questionAnswerController')->group(function () {

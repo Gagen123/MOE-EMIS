@@ -18,7 +18,7 @@ use App\Models\Masters\Classes;
 use App\Models\generalInformation\Locations;
 use App\Models\OrganizationFeedingDetails;
 use App\Models\ContactDetails;
-use App\Models\DepartmentModel; 
+use App\Models\DepartmentModel;
 use App\Models\generalInformation\Projection;
 use App\Models\generalInformation\OrganizationCompoundDetail;
 use App\Models\generalInformation\ConnectivityModel;
@@ -36,7 +36,7 @@ class LoadOrganizationController extends Controller{
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)->wherein('category',['public_school','public_eccd','public_ecr'])
             ->where('status','1')
-            ->select( 'id','name','levelId','dzongkhagId')->get();
+            ->select( 'id','name','levelId','dzongkhagId','category','code')->get();
         }
         if($type=="all_eccds_dzogkhag_wise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','like','%eccd%')->get();
@@ -67,7 +67,7 @@ class LoadOrganizationController extends Controller{
                 $response_data=OrganizationDetails::all();
             }
             else{        // dd($request);
-                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId')->get();
+                $response_data=OrganizationDetails::select( 'id','name','levelId','dzongkhagId','category','code')->get();
             }
         }
         if(strpos($type,'admission_dzongkhagwise')!==false){
@@ -365,12 +365,12 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
            $response_data=OrganizationDetails::where('id',$id)->first();
-            if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!=""){
+            if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!="" && $response_data->levelId!="ECCD" && $response_data->levelId!="ECR"){
                 $level=Level::where('id',$response_data->levelId)->first();
                 // $response_data->level=$level;
                 $response_data->name=$response_data->name.' '.$level->name;
             }
-            if($response_data!=null && $response_data->parentSchoolId!=null && $response_data->parentSchoolId!=""){
+            if($response_data!=null && $response_data->parentSchoolId!=null && $response_data->parentSchoolId!="" && $response_data->parentSchoolId!="0"){
                 $parent=OrganizationDetails::where('id',$response_data->parentSchoolId)->first();
                 if($parent!=null && $parent!=""){
                     $response_data->parentSchoolName=$parent->name;
@@ -493,8 +493,10 @@ class LoadOrganizationController extends Controller{
         else{
             $section = DB::select('SELECT t1.id AS OrgClassStreamId, t1.organizationId AS org_id, t1.classId AS org_class_id, t1.streamId AS org_stream_id,
             t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1
-            JOIN classes t2 ON t1.classId = t2.id LEFT JOIN streams t3 ON t1.streamId = t3.id
-            LEFT JOIN section_details t4 ON t1.id = t4.classSectionId WHERE t1.organizationId  = ?', [$id]);
+            JOIN classes t2 ON t1.classId = t2.id
+            LEFT JOIN streams t3 ON t1.streamId = t3.id
+            LEFT JOIN section_details t4 ON t1.id = t4.classSectionId 
+            WHERE t1.organizationId  = ?', [$id]);
             return $section;
         }
 
@@ -581,45 +583,45 @@ class LoadOrganizationController extends Controller{
 
     }
 
-    public function getOrgProfile($id=""){
-        $response_data =OrgProfile::where('org_id',$id)->first();
-        if($response_data!=null && $response_data!=""){
-            $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
-            $orgName=$org_det->name;
-            if($org_det->levelId!=null && $org_det->levelId!=""){
-                $level=Level::where('id',$org_det->levelId)->first();
-                if($level!=null && $level!=""){
-                    $orgName=$orgName.' '.$level->name;
-                }
-            }
-            $response_data->orgName=$orgName;
-        }
-        return $this->successResponse($response_data);
-    }
-    // public function getOrgProfile($id="", $type=""){
+    // public function getOrgProfile($id=""){
     //     $response_data =OrgProfile::where('org_id',$id)->first();
     //     if($response_data!=null && $response_data!=""){
-    //         if($type=="Ministry"){
-    //             $org_det=HeadQuaterDetails::where('id',$id)->first();
-    //             if($org_det!=null && $org_det!=""){
-    //                 $response_data->orgName=$org_det->agencyName;
+    //         $org_det=OrganizationDetails::where('id',$response_data->org_id)->first();
+    //         $orgName=$org_det->name;
+    //         if($org_det->levelId!=null && $org_det->levelId!=""){
+    //             $level=Level::where('id',$org_det->levelId)->first();
+    //             if($level!=null && $level!=""){
+    //                 $orgName=$orgName.' '.$level->name;
     //             }
-    //          }
-    //          if($type=="Org"){
-    //             $org_det=OrganizationDetails::where('id',$id)->first();
-    //             $orgName=$org_det->name;
-    //             if($org_det->levelId!=null && $org_det->levelId!=""){
-    //                 $level=Level::where('id',$org_det->levelId)->first();
-    //                 if($level!=null && $level!=""){
-    //                     $orgName=$orgName.' '.$level->name;
-    //                 }
-    //             }
-    //             $response_data->orgName=$orgName;
     //         }
+    //         $response_data->orgName=$orgName;
     //     }
-       
     //     return $this->successResponse($response_data);
     // }
+    public function getOrgProfile($id="", $type=""){
+        $response_data =OrgProfile::where('org_id',$id)->first();
+        if($response_data!=null && $response_data!=""){
+            if($type=="Ministry" || "Dzongkhag"){
+                $org_det=HeadQuaterDetails::where('id',$id)->first();
+                if($org_det!=null && $org_det!=""){
+                    $response_data->orgName=$org_det->agencyName;
+                }
+             }
+             if($type=="Org"){
+                $org_det=OrganizationDetails::where('id',$id)->first();
+                $orgName=$org_det->name;
+                if($org_det!=null && $org_det->levelId!=null && $org_det->levelId!="" && $org_det->levelId!="ECCD" && $org_det->levelId!="ECR"){
+                    $level=Level::where('id',$org_det->levelId)->first();
+                    if($level!=null && $level!=""){
+                        $orgName=$orgName.' '.$level->name;
+                    }
+                }
+                $response_data->orgName=$orgName;
+            }
+        }
+
+        return $this->successResponse($response_data);
+    }
 
     public function getClassByType($type=""){
         return Classes::where('status',1)->where('category',$type)->orderBy('displayOrder', 'asc')->get();

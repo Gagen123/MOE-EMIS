@@ -1,5 +1,5 @@
 <template>
-    <div> 
+    <div>
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h6 class="pt-1">Staff Services Masters</h6></li>
         </ol>
@@ -10,14 +10,14 @@
                        {{ item.screen_name}}
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_award_category_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Service Category Master
+                       Staff Award Category Master
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_award_type_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Staff Service Type Master
+                       Staff Award Type Master
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -61,7 +61,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.menubar =  data.data;  
+                this.menubar =  data.data;
             })
         },
         populate_pate(data,action){
@@ -73,7 +73,7 @@ export default {
         this.sub_mod_id=routeparam;
         this.getmenus(routeparam);
     },
-    
+
 }
 </script>
 

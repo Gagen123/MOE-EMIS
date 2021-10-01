@@ -15,18 +15,7 @@
                        Super Structure
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'childgroup'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Child Group
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'child_group_position'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Child Group Position
-                    </router-link>
-                </li>
-
-                <li class="nav-item active pr-1">
+                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'major_group_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Staff Major Group
                     </router-link>
@@ -37,13 +26,30 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'childgroup'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Child Group
+                    </router-link>
+                </li>
+
+                <li class="nav-item active pr-1">
                     <router-link :to="{name: 'position_level_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Position Level
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'position_sub_level_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Position Sub Level
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link :to="{name: 'position_title_master'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Position Title
+                    </router-link>
+                </li>
+
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'child_group_position'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Child Group Position
                     </router-link>
                 </li>
             </ul>

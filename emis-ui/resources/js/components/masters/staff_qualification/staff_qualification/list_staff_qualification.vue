@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th >SL#</th>
-                    <th >Qualification Type</th>
+                    <!-- <th >Qualification Type</th> -->
                     <th >Qualification Level</th>
                     <th >Qualification</th>
                     <th >Description</th>
@@ -17,7 +17,7 @@
             <tbody>
                 <tr v-for="(item, index) in qualificationList" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.quialificationtype.name}}</td>
+                    <!-- <td>{{ item.quialificationtype.name}}</td> -->
                     <td>{{ item.quialificationlevel.name}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
@@ -26,8 +26,6 @@
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                        <!-- <a v-if="item.status==  1" href="#" @click="changestatus(item.id,'0')" class="btn btn-danger btn-sm btn-flat text-white"><i class="fas fa-times"></i> Deactivate</a>
-                        <a v-if="item.status==  0" href="#" @click="changestatus(item.id,'1')" class="btn btn-primary btn-sm btn-flat text-white"><i class="fas fa-check"></i> Activate</a> -->
                     </td>
                 </tr>
             </tbody>
@@ -43,32 +41,20 @@ export default {
         }
     },
     methods:{
-        loadqualifictionList(uri = 'staff/loadStaffMasters/Qualification/Qualification'){
-        // loadqualifictionList(uri = 'masters/loadStaffMasters/all_qualification_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.qualificationList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error:'+error);
-            });
+        async loadqualifictionList(){
+            this.qualificationList =  await this.loadstaffMasters('Qualification','Qualification');
         },
         showedit(data){
             this.$router.push({name:'edit_staff_qualification',params: {data:data}});
         },
-
     },
     mounted(){
         this.loadqualifictionList();
-        this.dt =  $("#working-agency-table").DataTable()
+        this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
         qualificationList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

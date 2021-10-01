@@ -377,7 +377,6 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
-
         $this->validate($request, [
             'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
         ],
@@ -404,12 +403,12 @@ class GeneralInfoController extends Controller
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
             'attachments'       =>  $path,
-            'type'              =>  $request['type'],
+           // 'type'              =>  $request['type'],
             'objective'         =>  $request['objective'],
             'user_id'           =>  $this->userId(),
             'access_level'      =>  $this->getAccessLevel(),
         ];
-       // dd( $org_details);
+        //dd( $org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
@@ -826,30 +825,41 @@ class GeneralInfoController extends Controller
         // }
     }
     public function loadOrgDataSubmissionList($type="",$id=""){
+        // dd($type);
         //if Ministry then give entire list
         // $access_level = $this->getAccessLevel();
         $param="";
+      
         //type=allorganizationList: to list entire organization Data Submission List
         if($type=="allorganizationDataList"){
             $param=$id;
+           
         }
-
         //type=userdzongkhagwise: to list with dzongkhag id from user login
-        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" || $type=="school"){
+        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" ){
             $param=$this->getUserDzoId();
+           
         }
 
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
+           
         }
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
             $param=$id;
+           
         }
 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
-        return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/organization/loadOrgDataSubmissionList/'.$type.'/'.$param);
+    }
+    public function loadOrgDataSubmissionListMinistry($dzongkhag_id="", $levelId=""){
+      //  dd($dzongkhag_id);
+        $response_data= $this->apiService->listData('emis/organization/loadOrgDataSubmissionListMinistry/'.$dzongkhag_id.'/'.$levelId);
+        return $response_data;
+         
     }
 
 }

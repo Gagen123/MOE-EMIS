@@ -75,5 +75,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getSubjectOfTerm',['uses' => 'academic\AcademicController@getSubjectOfTerm']);
         $router->post('/updateStatus/{Id}',['uses' => 'academic\AcademicController@updateStatus']);
 
+        //Emis portal used for pulling the result of the student
+        $router->get('/LoadResultByStudentId/{std_id}',['uses' => 'academic\AcademicController@LoadResultByStudentId']);
+
+
     });
 });

@@ -110,7 +110,7 @@
                                                 </tr>
                                                 <tr>
                                                     <td style="width:15%">Marital Status:</td>
-                                                    <td style="width:35%" class="text-bold">{{ marital_statusList[response_data.marital_status] }}</td>
+                                                    <td style="width:35%" class="text-bold">{{ response_data.maritalstatus }}</td>
                                                     <td style="width:15%">Nationality:</td>
                                                     <td style="width:35%" class="text-bold">{{ countryList[response_data.country_id] }}</td>
                                                 </tr>
@@ -164,31 +164,38 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-four-education" role="tabpanel" aria-labelledby="custom-tabs-four-education-tab">
-                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                                         <table id="training-table" class="table table-sm table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Desciption</th>
-                                                    <th>Qualification</th>
-                                                    <th>Course Mode/Type</th>
-                                                    <th>Course Title</th>
+                                                    <th>Category/ Desciption</th>
+                                                    <th>Doner Agency</th>
+                                                    <th>Project Doner Agency</th>
+                                                    <th>Field/Typ</th>
+                                                    <th>Degree/level</th>
                                                     <th>First Subject</th>
                                                     <th>Second subject</th>
+                                                    <th>Course Mode/Type</th>
+                                                    <th>Course Title</th>
                                                     <th>Country</th>
+                                                    <th>Institute</th>
                                                     <th>Start Date</th>
                                                     <th>End Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <tr v-for="(item, index) in staff_qualification_list" :key="index">
-                                                    <td>{{ item.description.name}}</td>
-                                                    <td>{{ item.qualification.name}}</td>
-                                                    <td>{{ item.coursemode.name}}</td>
+                                                    <td>{{ item.categoryname}}</td>
+                                                    <td>{{ item.doneragencyname}}</td>
+                                                    <td>{{ item.projectdoneragencyname}}</td>
+                                                    <td>{{ item.fieldname}}</td>
+                                                    <td>{{ item.degreename}}</td>
+                                                    <td>{{ item.sub1name}}</td>
+                                                    <td>{{ item.sub2name}}</td>
+                                                    <td>{{ item.coursemodename}}</td>
                                                     <td>{{ item.coursetitle}}</td>
-                                                    <td>{{ item.first_subject.name}}</td>
-                                                    <td v-if="item.second_subject!=null">{{ item.second_subject.name}}</td>
-                                                    <td v-else></td>
                                                     <td>{{ item.country.country_name}}</td>
+                                                    <td>{{ item.institutename}}</td>
                                                     <td>{{ item.startdate}}</td>
                                                     <td>{{ item.enddate}}</td>
                                                 </tr>
@@ -287,7 +294,6 @@ export default {
             grand_total:0,
             qualification_tbl_row_count:0,
             sex_Array:{},
-            marital_statusList:[],
             countryList:[],
             dzongkhagList:{},
             villageList1:{},
@@ -379,18 +385,6 @@ export default {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
                     this.sex_Array[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.leg(error);
-            });
-        },
-        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.marital_statusList[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
@@ -531,7 +525,6 @@ export default {
     },
 
     mounted() {
-        this.loadactivemaritalList();
         this.loadactivesex_idList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();

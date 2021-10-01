@@ -505,6 +505,14 @@
                                 </p>
                             </router-link>
                         </li>
+                        <li class="nav-item" id="organizationAnnualData_list" onclick="setclass('organizationlink','','organizationAnnualData_list')">
+                            <router-link to="/organizationAnnualData_list" class="nav-link">
+                                <p>
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Submitted Data List
+                                </p>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-header"></li>
@@ -782,6 +790,14 @@
                             </router-link>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item" id="tre">
+                    <router-link to="/tre" class="nav-link">
+                        <p>
+                            <i class="fa fa-search nav-icon"></i>
+                            TRE
+                        </p>
+                    </router-link>
                 </li>
 
                 <li class="nav-header"></li>

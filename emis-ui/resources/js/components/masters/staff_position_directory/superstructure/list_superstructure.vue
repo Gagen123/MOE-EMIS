@@ -39,16 +39,8 @@ export default {
         }
     },
     methods:{
-        loadworkingagencyList(uri = 'staff/loadStaffMasters/all/SuperStructure'){
-        // loadworkingagencyList(uri = 'masters/loadStaffMasters/all_staff_major_data_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.data_list =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadworkingagencyList(){
+            this.data_list =  await this.loadstaffMasters('all','SuperStructure');
         },
         showedit(data){
             this.$router.push({name:'edit_superstructure',params: {data:data}});
@@ -61,10 +53,7 @@ export default {
     },
     watch: {
         data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

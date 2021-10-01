@@ -25,23 +25,9 @@ class StaffMasterController extends Controller{
             'status.required'               => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $request_data =[
-            'id'                        =>  $request->id,
-            'group_id'                  =>  $request->group_id,
-            'sub_group_id'              =>  $request->sub_group_id,
-            'position_level_id'         =>  $request->position_level_id,
-            'name'                      =>  $request->name,
-            'qualification_type'        =>  $request->qualification_type,
-            'qualification_level'       =>  $request->qualification_level,
-            'description'               =>  $request->description,
-            'code'                      =>  $request->code,
-            'status'                    =>  $request->status,
-            'model'                     =>  $request->model,
-            'action_type'               =>  $request->action_type,
-            'record_type'               =>  $request->record_type,
-            'user_id'                   =>  $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request_data);
+
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request->all());
         return $response_data;
     }
 

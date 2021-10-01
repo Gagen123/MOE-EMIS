@@ -513,13 +513,6 @@ export default {
                 console.log("Error in getting organization:"+error);
             });
         },
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
@@ -558,7 +551,8 @@ export default {
             });
         },
     },
-    mounted(){
+    async mounted(){
+        this.orgList =await this.orgListUnderUserDzongkhag();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -574,7 +568,6 @@ export default {
         this.loadScreenDetails();
         this.getLevel();
         this.getLocation();
-        this.getOrgList();
         this.getClass();
         this.getStream();
         this.loadactivedzongkhagList();

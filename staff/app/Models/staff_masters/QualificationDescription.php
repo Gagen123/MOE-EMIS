@@ -7,7 +7,7 @@ use App\Traits\Uuid;
 
 class QualificationDescription extends Model{
     use HasFactory, Uuid;
-    protected $table="master_qualification_description";
+    protected $table="master_qualification_category";
     public $timestamps = false;
     protected $fillable = [
         'id',

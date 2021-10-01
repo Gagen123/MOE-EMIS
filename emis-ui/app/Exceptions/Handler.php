@@ -56,32 +56,31 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        // dd($request);
-        // if ($exception instanceof HttpException) {
-        //     $code = $exception->getStatusCode();
-        //     $message = Response::$statusTexts[$code];
+        if ($exception instanceof HttpException) {
+            $code = $exception->getStatusCode();
+            $message = Response::$statusTexts[$code];
 
-        //     return response($message, $code);
-        // }
+            return response($message, $code);
+        }
 
-        // if ($exception instanceof ModelNotFoundException) {
-        //     $model = strtolower(class_basename($exception->getModel()));
+        if ($exception instanceof ModelNotFoundException) {
+            $model = strtolower(class_basename($exception->getModel()));
 
-        //     return response("Does not exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
-        // }
+            return response("Does not exist any instance of {$model} with the given id", Response::HTTP_NOT_FOUND);
+        }
 
-        // if ($exception instanceof AuthorizationException) {
-        //     return response($exception->getMessage(), Response::HTTP_FORBIDDEN);
-        // }
+        if ($exception instanceof AuthorizationException) {
+            return response($exception->getMessage(), Response::HTTP_FORBIDDEN);
+        }
 
-        // if ($exception instanceof AuthenticationException) {
-        //     return response($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
-        // }
+        if ($exception instanceof AuthenticationException) {
+            return response($exception->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
 
-        // if ($exception instanceof ValidationException) {
-        //     $errors = $exception->validator->errors()->getMessages();
-        //     return response($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
-        // }
+        if ($exception instanceof ValidationException) {
+            $errors = $exception->validator->errors()->getMessages();
+            return response($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         if ($exception instanceof ClientException) {
             $message = $exception->getResponse()->getBody();
@@ -93,10 +92,9 @@ class Handler extends ExceptionHandler
         }
 
         if (env('APP_DEBUG', true)) {
-            return parent::render($request, $exception);
+            return response($exception->getResponse()->getBody()->getContents(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            // return parent::render($request, $exception);
         }
-
         return response('Unexpected error. Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
-
     }
 }

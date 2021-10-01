@@ -26,12 +26,12 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-lg-4 col-md-4 col-sm-4">
+                                    <!-- <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Org Type:</label>
                                         <span class="text-blue text-bold">
                                             {{category}}
                                         </span>
-                                    </div>
+                                    </div> -->
                                     <div class="col-lg-4 col-md-4 col-sm-4">
                                         <label>Level:</label>
                                          <span class="text-blue text-bold">{{levelArray[organization_details.levelId]}}</span>
@@ -313,13 +313,6 @@ export default {
             });
         },
 
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
 
         getorgdetials(org_id){
             this.form.organizationId=org_id;
@@ -572,7 +565,8 @@ export default {
 
     },
 
-    mounted() {
+   async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();
