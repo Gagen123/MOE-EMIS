@@ -50,19 +50,17 @@ export default {
                 let studentsAttendance = await axios.get('academics/loadStudentAttendance').then(response => response.data.data)
                 studentsAttendance.forEach((attendance,index) => {
                     classSections.forEach(item => {
-                         org_stream_id = (item.org_stream_id == "") ? null : item.org_stream_id
-                         org_section_id = (item.org_section_id == "") ? null : item.org_section_id
-
-                         console.log(org_section_id+':'+attendance.org_section_id)
+                        org_stream_id = (item.org_stream_id == "") ? null : item.org_stream_id
+                        org_section_id = (item.org_section_id == "") ? null : item.org_section_id
                         if(attendance.org_class_id == item.org_class_id && 
                         (attendance.org_stream_id == org_stream_id || (attendance.org_stream_id == null && org_stream_id == null)) && 
                         (attendance.org_section_id == org_section_id || (attendance.org_section_id == null && org_section_id == null))){
                             studentsAttendance[index]['class_stream_section'] = item.class
                             if(item.stream){
-                                studentsAttendance[index]['class_stream_section'] += item.stream
+                                studentsAttendance[index]['class_stream_section'] += (' '+item.stream);
                             }
                             if(item.section){
-                                studentsAttendance[index]['class_stream_section'] += item.section
+                                studentsAttendance[index]['class_stream_section'] += (' ' +item.section);
                             }
                             studentsAttendance[index]['OrgClassStreamId'] = item.OrgClassStreamId
                             // studentsAttendance[index]['aca_absence_reason_id'] = item.aca_absence_reason_id
