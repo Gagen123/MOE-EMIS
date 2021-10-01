@@ -36,17 +36,11 @@
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
                                       <td>                          
-                                        <input type="number" name="number" class="form-control" id="number"  v-model="item.number" @change="getfields('number')"/>
+                                        <input type="number" name="number" class="form-control" id="number"  v-model="item.number"/>
                                   </td>
-                                  <td v-for='(yr, index) in item.yearoffacility' :key="index">                          
+                                  <td>                          
                                         <input type="text" name="yoe" id= "yoe" class="form-control" v-model="item.yoe"/>
                                   </td>
-                                   <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
-                                 <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
-                                <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
-                             </div>
-                        </div>
                                   <td>
                                         <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
                                             <option value="">--- Please Select ---</option>
