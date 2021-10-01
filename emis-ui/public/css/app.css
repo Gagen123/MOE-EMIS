@@ -42473,7 +42473,3 @@ a.text-dark:focus {
   border-bottom: 1px solid #cacabc;
 }
 
-.popupDatepicker {
-  z-index: 99999 !important;
-}
-

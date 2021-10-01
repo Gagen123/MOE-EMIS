@@ -63,11 +63,37 @@ class LoadStaffController extends Controller{
             if(strpos($parent_id,'SEN')!==false){
                 return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('is_sen',1)->get());
             }else{
-                return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get());
+                $personal=PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get();
+                if($personal!=null && $personal!="" && sizeof($personal)>0){
+                    foreach($personal as $per){
+                        $positions=ChildGroupPosition::where('id', $per->position_title_id)->first();
+                        if($positions!=null && $positions!=""){
+                            //get position title from mapping
+                            $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                            if($posi!=null && $posi!=""){
+                                $per->position_title_name=$posi->name;
+                            }
+                        }
+                    }
+                }
+                return $this->successResponse($personal);
             }
         }
         if($type=="allPrivateStaff"){
-            return $this->successResponse(PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get());
+            $personal=PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get();
+            if($personal!=null && $personal!="" && sizeof($personal)>0){
+                foreach($personal as $per){
+                    $positions=ChildGroupPosition::where('id', $per->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        //get position title from mapping
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $per->position_title_name=$posi->name;
+                        }
+                    }
+                }
+            }
+            return $this->successResponse($personal);
         }
 
         if($type=="staffOrgwise" || $type=="staffSchoolwise"){
@@ -123,7 +149,7 @@ class LoadStaffController extends Controller{
                     $child=ChildGroup::where('id',$positions->child_group_id)->first();
                     if($child!=null && $child!=""){
                         $staff_det->childgroup=$child->name;
-                        //to get MOG, used for eding staff details to identify teacher in school
+                        //to get subMOG, used for eding staff details to identify teacher in school
                         $submajorgrp=StaffSubMajorGrop::where('id', $child->sub_group_id)->first();
                         if($submajorgrp!=null && $submajorgrp!=""){
                             $staff_det->subgroup=$submajorgrp->name;
