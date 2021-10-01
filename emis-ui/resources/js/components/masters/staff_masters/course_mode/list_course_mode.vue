@@ -6,8 +6,8 @@
                     <th >SL#</th>
                     <th >Course Mode</th>
                     <th >Code</th>
-                    <th >Status</th>
                     <th >Description</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
@@ -17,8 +17,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
-                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
