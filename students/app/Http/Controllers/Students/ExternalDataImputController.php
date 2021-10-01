@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\ExternalData\AbroadStudentDetails;
 use App\Models\ExternalData\RubCollegeDetails;
 use App\Models\ExternalData\RubStaffDetails;
-use Illuminate\Support\Facades\DB;
 use App\Models\ExternalData\RubStudentDetails;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;

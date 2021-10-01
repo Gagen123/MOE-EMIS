@@ -5,8 +5,8 @@
                 <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label>  
-                        <input class="form-control editable_fields" name="dateOfrelease" id="dateOfrelease" type="date" 
-                        v-model="form.dateOfrelease" :class="{ 'is-invalid': form.errors.has('dateOfrelease') }" @change="remove_err('dateOfrelease')">
+                        <input class="form-control popupDatepicker" name="dateOfrelease" id="dateOfrelease" type="text" 
+                        :class="{ 'is-invalid': form.errors.has('dateOfrelease') }" @change="remove_err('dateOfrelease')"  autocomplete="off" >
                         <has-error :form="form" field="dateOfrelease"></has-error>
                     </div>
                     <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -207,6 +207,7 @@ export default {
             }
           
             if(type=="save"){
+                this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfrelease').val());
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
@@ -214,6 +215,7 @@ export default {
                 }
                 let formData = new FormData();
                 formData.append('dateOfrelease', this.form.dateOfrelease);
+               
             //    formData.append('dzongkhag', this.form.dzongkhag);
                 // alert(this.form.attachments);
             //    formData.append('organizaiton', this.form.organizaiton);

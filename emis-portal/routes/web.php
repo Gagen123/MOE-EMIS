@@ -87,6 +87,16 @@ use Illuminate\Support\Facades\Route;
         Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });
 
+    // Result view route
+    Route::prefix('results')->group(function () {
+        Route::get('/loadClassStreamSection/{type}/{parent_id}', [App\Http\Controllers\ResultViewController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
+        Route::get('/loadClassBySubjectTeacher', [App\Http\Controllers\ResultViewController::class, 'loadClassBySubjectTeacher'])->name('loadClassBySubjectTeacher');
+        Route::get('/loadStudentAssessmentList', [App\Http\Controllers\ResultViewController::class, 'loadStudentAssessmentList'])->name('loadStudentAssessmentList');
+        Route::get('/LoadResultByStudentId/{std_id}', [App\Http\Controllers\ResultViewController::class, 'LoadResultByStudentId'])->name('LoadResultByStudentId');
+        
+        // Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
+    });
+
     //Leadership selection and feedback routes
 
     Route::prefix('recruitmentFeedbackController')->group(function () {

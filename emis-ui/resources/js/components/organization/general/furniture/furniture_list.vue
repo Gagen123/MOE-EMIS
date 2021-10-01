@@ -6,8 +6,8 @@
                     <th>SL#</th>
                     <th>Type</th>
                     <th>Item</th>
-                    <th>Usable</th>
-                    <th>Not Usable</th>
+                    <th>Usable No.</th>
+                    <th>Not Usable No.</th>
                     <!-- <th>Received Date</th>
                     <th>Life Expectancy</th> -->
                     <th>Action</th> 

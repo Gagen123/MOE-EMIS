@@ -19,66 +19,64 @@
                         <div class="card-header p-0 border-bottom-0">
                             <ul class="nav nav-tabs border-primary" id="custom-tabs-four-tab" role="tablist">
                                 <li class="nav-item border-left border-right">
-                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Basic Details</a>
+                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Mission & Vision</a>
                                 </li>
                                 <li class="nav-item border-left border-right">
-                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Other Information</a>
+                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Objectives</a>
                                 </li>
-                                
+                                <li class="nav-item border-left border-right">
+                                    <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill" href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages" aria-selected="false">Staff Information</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content" id="custom-tabs-four-tabContent">
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
-                                    <!-- The basic information of dzongkhag -->
+                                <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
+                                <p class="text-muted">
+                                    {{form.mission}}
+                                </p>
+
+                                <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
+                                <p class="text-muted">
+                                    {{form.vission}}
+                                </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <div class="card-body p-0">
-                                    <strong><i class="fas fa-users mr-1"></i> Staff</strong>
-                                        <div class="card-body p-0">
-                                            <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Total Male Teacher</th>
-                                                    <th>12</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total FeMale Teacher</th>
-                                                    <th>10</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Total Teaching Staff</td>
-                                                    <td>8</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Total Non Teaching Staff</td>
-                                                    <td>12</td>
-                                                </tr>
-                                            </tbody>
-                                            </table>
-                                        </div>
-                                        <hr>
-                                        <strong><i class="fas fa-graduation-cap mr-1"></i> Students</strong>
-                                        <div class="card-body p-0">
-                                            <table class="table table-sm">
-                                            <thead>
-                                                <tr>
-                                                    <th>Total Male Student</th>
-                                                    <th>360</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total Female Student</th>
-                                                    <th>155</th>
-                                                </tr>
-                                            </thead>
-                                            
-                                            </table>
-                                        </div>
+                                    <strong><i class="fas fa-file-alt mr-1"></i> Objectives</strong>
+                                     <p class="text-muted">
+                                        {{form.objective}}
+                                    </p>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
+                                <strong><i class="fas fa-users mr-1"></i> Staff</strong>
+                                <div class="card-body p-0">
+                                    <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Total Male Staff</th>
+                                            <th>{{StaffMinistry.Totalmale}}</th>
+                                        </tr>
+                                         <tr>
+                                            <th>Total Female Staff</th>
+                                            <th>{{StaffMinistry.TotalFemale}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                                <hr>
                                 
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
@@ -150,43 +148,60 @@
     export default {
         data(){
             return{
+                access_level:'',
                 orgDetails:'',
                 isprofile:false,
                 existing_details:'',
                 levelArray:{},
+                staff_details:'',
+                StaffMinistry:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
                     vission: '',
                     mission:'',
+                    objective:'',
                     profile_path:'',
                 }) 
             }
         },
         methods:{
-            getorgProfile(rogId){
-                axios.get('organization/getOrgProfile/'+rogId)
+            // getorgProfile(rogId){
+            //     axios.get('organization/getOrgProfile/'+rogId)
+            //     .then(response => {
+            //         let data = response.data.data;
+            //         this.form.vission=data.vission;
+            //         this.form.mission=data.mission;
+            //         this.form.objective=data.objective;
+            //         this.form.profile_path=data.logo_path;
+            //         this.orgDetails=data.orgName+' '+data.level;
+            //         if(data.logo_path!=""){
+            //             this.isprofile=true;
+            //         }
+            //     })    
+            //     .catch(errors =>{ 
+            //         console.log(errors)
+            //     });
+            // },
+            getorgProfile(rogId,type){
+                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
+                    this.form.objective=data.objective;
+                    this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
-                    this.orgDetails=data.orgName+' '+data.level;
+                    this.orgDetails=data.orgName;
+                    if(data.level!=undefined && data.level!=null && data.level!=""){
+                        this.orgDetails=data.orgName+' '+data.level;
+                    }
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
-                });
-            },
-            getLevel(uri = '/organization/getLevelInDropdown'){
-                axios.get(uri)
-                .then(response => {
-                    let data = response.data;
-                    for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
-                    }
                 });
             },
             loadPriviousOrgDetails(org_id){
@@ -200,22 +215,68 @@
                     console.log("Error: "+error);
                 });
             },
-           
+            loadDataList(org_id){
+                axios.get('loadCommons/loadStaffCountDetail/staffCountMinistry/' +org_id)
+                .then(response => {
+                  
+                        this.staff_details=response.data.data;
+                        this.StaffMinistry=response.data.data.StaffMinistry[0];
+                        // this.counselor=response.data.data.counselor[0]
+                        // this.isSen=response.data.data.isSen[0]   
+                        // this.SportInstructor=response.data.data.SportInstructor[0];
+                    })
+                .catch((error) => {
+                    console.log("Error: "+error);
+                });
+                
+            },
+            loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        this.genderArray[data[i].id] = data[i].name;
+                    }
+                })
+            },
         },
-        mounted(){
-            this.getLevel();
+        created(){
+            this.loadGenderArrayList();
+
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
                 this.loadPriviousOrgDetails(this.$route.query.org_id);
+                this.loadDataList(this.$route.query.org_id);
+                
             }
             else{
                 axios.get('common/getSessionDetail')
                 .then(response =>{
                     let data = response.data.data;
+                    this.access_level = data['acess_level'];
                     this.getorgProfile(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
+                    this.loadDataList(data['Agency_Code']);
                 }) ;
             }
-        }
+        },
+        // created(){
+        //     this.loadGenderArrayList();
+        //     if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
+        //         this.getorgProfile(this.$route.query.org_id);
+        //         this.loadPriviousOrgDetails(this.$route.query.org_id);
+        //         this.loadDataList(this.$route.query.org_id);
+        //     }
+        //     else{
+        //         axios.get('common/getSessionDetail')
+        //         .then(response =>{
+        //             let data = response.data.data;
+        //             this.getorgProfile(data['Agency_Code']);
+        //             this.loadPriviousOrgDetails(data['Agency_Code']);
+        //             this.loadDataList(data['Agency_Code'])
+        //         }) ;
+        //     }
+           
+        // }
     }
 </script>

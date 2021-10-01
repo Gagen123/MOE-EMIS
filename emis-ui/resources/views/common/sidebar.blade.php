@@ -281,7 +281,7 @@
             <span id="sidebars"></span>
             <span id="sidebarworkflow"></span>
 
-            <span id="developemntEnvlink">
+            <span class="developemntEnvlink mainmenu">
                 <br>
                 <br>
                 <hr>
@@ -291,6 +291,12 @@
                     <router-link to="/academic" class="nav-link pt-1 pb-1">
                         <i class="nav-icon fas fa-book"></i>
                             Academics
+                    </router-link>
+                </li>
+                <li class="nav-item has-treeview" id="academic">
+                    <router-link to="/happiness_index" class="nav-link pt-1 pb-1">
+                        <i class="nav-icon fas fa-book"></i>
+                            Happiness Index
                     </router-link>
                 </li>
 
@@ -443,7 +449,7 @@
                             <router-link to="/subject_offered" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Subject Offered
+                                   Optional Subjects Offered
                                 </p>
                             </router-link>
                         </li>
@@ -489,13 +495,21 @@
                                 </p>
                             </router-link>
                         </li>
-                        
+
                         <li class="nav-item" id="school_details_update" onclick="setclass('organizationlink','','school_details_update')">
                         <!-- <li class="nav-item" id="track_application"> -->
                             <router-link to="/school_details_update" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
                                     Annual Detail Update
+                                </p>
+                            </router-link>
+                        </li>
+                        <li class="nav-item" id="organizationAnnualData_list" onclick="setclass('organizationlink','','organizationAnnualData_list')">
+                            <router-link to="/organizationAnnualData_list" class="nav-link">
+                                <p>
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Submitted Data List
                                 </p>
                             </router-link>
                         </li>
@@ -776,6 +790,14 @@
                             </router-link>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item" id="tre">
+                    <router-link to="/tre" class="nav-link">
+                        <p>
+                            <i class="fa fa-search nav-icon"></i>
+                            TRE
+                        </p>
+                    </router-link>
                 </li>
 
                 <li class="nav-header"></li>

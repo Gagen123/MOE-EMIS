@@ -16,13 +16,8 @@ class SchoolPlanStatusSeeder extends Seeder
     {
         DB::table('spm_school_plan_status')->insert([
             [
-                'id' => '0',
-                'name' => 'Not Started',
-                'created_by' => 'D'
-            ],
-            [
                 'id' => '1',
-                'name' => 'In Progress',
+                'name' => 'Draft',
                 'created_by' => 'D'
             ],
             [

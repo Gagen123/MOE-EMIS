@@ -1217,4 +1217,5 @@ class EstablishmentController extends Controller{
         }
         return $this->successResponse($response_data);
     }
+    
 }

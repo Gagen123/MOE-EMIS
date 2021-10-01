@@ -47,9 +47,14 @@
                      Consolidated Result
                     </router-link>
                 </li>
-                  <li class="nav-item active pr-1" @click="activatelink('sub_assmt_area')">
-                    <router-link id="sub_assmt_area" to="/subject-assessment-area-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                      Publish Result
+                <li class="nav-item active pr-1" @click="activatelink('publish_result')">
+                    <router-link id="publish_result" to="/publish-result" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                     Approve & Publish Result
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1" @click="activatelink('remedial_class')">
+                    <router-link id="remedial_class" to="/remedial-class" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                      Remedial Class
                     </router-link>
                 </li>
             </ul>

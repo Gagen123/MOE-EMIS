@@ -13,6 +13,7 @@ class SecondmentMaster extends Model{
         'name',
         'status',
         'description',
+        'code',
         'created_by',
         'created_at',
         'updated_by',

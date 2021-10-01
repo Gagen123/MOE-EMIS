@@ -12,6 +12,7 @@ class ContractCategory extends Model{
         'id',
         'name',
         'status',
+        'code',
         'description',
         'created_by',
         'created_at',

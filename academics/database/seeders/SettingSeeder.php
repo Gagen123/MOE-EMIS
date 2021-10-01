@@ -15,19 +15,11 @@ class SettingSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('aca_setting')->insert([
-            [
-                'id' => '1',
-                'description' => 'Assessment area format in result',
-                'value'=>'1',
-                'description_of_value' => '1 - Code/abbreviation 2 - Name',
-            ],
-            [
-                'id' => '2',
-                'description' => 'In result, show upto postion',
-                'value'=>'3',
-                'description_of_value' => 'The position depends on the value',
-            ],
-        ]);
+        DB::statement("
+            INSERT INTO `aca_setting` (`id`, `description`, `value`, `description_of_value`) VALUES
+                (1, 'Assessment area format in result', '1', '1 - Code/abbreviation 2 - Name'),
+                (2, 'In result, show upto postion', '3', 'The position depends on the value'),
+                (3, 'Minimum attendance in percentage required for students', '90', '');
+            ");
     }
 }

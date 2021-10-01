@@ -20,4 +20,7 @@ class ChildGroup extends Model{
         'updated_by',
         'updated_at'
     ];
+    public function submajorgroup(){
+        return $this->belongsTo(StaffSubMajorGrop::class, 'sub_group_id')->select('id','group_id','name');
+    }
 }

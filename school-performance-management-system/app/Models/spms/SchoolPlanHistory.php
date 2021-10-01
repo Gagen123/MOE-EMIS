@@ -18,7 +18,7 @@ class SchoolPlanHistory extends Model
         'name',
         'role',
         'organization',
-        'status_id',
+        'implementation_status_id',
         'status_date',
         'remarks',
     ];

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\staff;
 
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
-use App\Models\staff\CareerStage;
 use App\Models\staff\DocumentDetails;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -13,10 +12,23 @@ use App\Models\staff\QualificationDetails;
 use App\Models\staff\TransferApplication;
 use App\Models\staff\Nomination;
 use App\Models\staff\StaffHistory;
-use App\Models\staff\TransferWindow;
 use App\Models\staff_leadership\LeadershipApplication;
 use App\Models\staff_leadership\LeadershipDetails;
+use App\Models\staff_masters\ChildGroup;
+use App\Models\staff_masters\ChildGroupPosition;
+use App\Models\staff_masters\CourseMode as Staff_mastersCourseMode;
+use App\Models\staff_masters\DonerAgency;
+use App\Models\staff_masters\Institute;
+use App\Models\staff_masters\MaritalStatus;
+use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\ProjectDonerAgency;
+use App\Models\staff_masters\Qualification;
+use App\Models\staff_masters\QualificationDescription;
+use App\Models\staff_masters\QualificationLevel;
+use App\Models\staff_masters\QualificationType;
+use App\Models\staff_masters\StaffSubMajorGrop;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class StaffController extends Controller{
@@ -65,7 +77,7 @@ class StaffController extends Controller{
             'emp_id'                =>  $request->emp_id,
             'name'                  =>  $request->name,
             'sex_id'                =>  $request->sex_id,
-            'dob'                   =>  $request->dob,
+            'dob'                   =>  Carbon::parse($request->dob)->format('Y-m-d'),
             'is_sen'                =>  $sen,
             'merital_status'        =>  $request->marital_status,
             'country_id'            =>  $request->country_id,
@@ -73,19 +85,20 @@ class StaffController extends Controller{
             'p_dzongkhag'           =>  $request->p_dzongkhag,
             'p_gewog'               =>  $request->p_gewog,
             'p_village'             =>  $request->p_village_id,
-            'dzo_id'                =>  $request->dzo_id,
-            'geowg_id'              =>  $request->geowg_id,
+            'dzo_id'                =>  $request->dzongkhag,
+            'geowg_id'              =>  $request->gewog,
             'village_id'            =>  $request->village_id,
             'address'               =>  $request->address,
             'contact_no'            =>  $request->contact_number,
             'email'                 =>  $request->email,
             'alternative_email'     =>  $request->alternative_email,
             'position_title_id'     =>  $request->position_title,
+            'position_sub_level_id' =>  $request->position_sub_level,
             'working_agency_id'     =>  $request->working_agency_id,
             'comp_sub_id'           =>  $request->comp_sub[0],
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
-            'initial_appointment_date' =>  $request->initial_appointment_date,
+            'initial_appointment_date' =>  Carbon::parse($request->initial_appointment_date)->format('Y-m-d'),
             'cureer_stagge_id'      =>  $request->currier_stage,
             'employee_code'         =>  $request->emp_file_code,
             'remarks'               =>  $request->remarks,
@@ -148,31 +161,49 @@ class StaffController extends Controller{
 
     public function savequalificationDetails(Request $request){
         $response_data=[];
-        if($request->personal_id==""){
-            $rules = [
-                'description'      =>  'required',
-                'qualification'    =>  'required',
-                'coursemode'       =>  'required',
-                'coursetitle'      =>  'required',
-                'firstsub'         =>  'required',
-                'country'          =>  'required',
-                'startdate'        =>  'required',
-                'enddate'          =>  'required'
-            ];
-            $this->validate($request, $rules);
-        }
+        $rules = [
+            'description'      =>  'required',
+            'doner_agency'     =>  'required',
+            'field'            =>  'required',
+            'degree'           =>  'required',
+            'coursemode'       =>  'required',
+            'coursetitle'      =>  'required',
+            'firstsub'         =>  'required',
+            'country'          =>  'required',
+            'startdate'        =>  'required',
+            'enddate'          =>  'required'
+        ];
+        $customMessages = [
+            'description.required'        => 'This field is required',
+            'doner_agency.required'       => 'This field is required',
+            'field.required'              => 'This field is required',
+            'degree.required'             => 'This field is required',
+            'coursemode.required'         => 'This field is required',
+            'coursetitle.required'        => 'This field is required',
+            'firstsub.required'           => 'This field is required',
+            'country.required'            => 'Country field is required',
+            'startdate.required'          => 'This field is required',
+            'enddate.required'            => 'This field is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
         $data =[
             'personal_id'           =>  $request->personal_id,
-            'description'           =>  $request->description,
-            'qualification'         =>  $request->qualification,
-            'coursemode'            =>  $request->coursemode,
-            'coursetitle'           =>  $request->coursetitle,
+            'category'              =>  $request->description,
+            'doner_id'              =>  $request->doner_agency,
+            'project_doner_id'      =>  $request->project_doner_agency,
+            'field_id'              =>  $request->field,
+            'degree_id'             =>  $request->degree,
             'first_subject'         =>  $request->firstsub,
             'second_subject'        =>  $request->secondsub,
+            'coursemode'            =>  $request->coursemode,
+            'coursetitle'           =>  $request->coursetitle,
             'country'               =>  $request->country,
+            'institute_id'          =>  $request->institute,
             'startdate'             =>  $request->startdate,
             'enddate'               =>  $request->enddate,
             'status'                =>  $request->status,
+            'remarks'               =>  $request->remarks,
+
         ];
         if($request->status=="Pending"){
             $data=array_merge($data,
@@ -203,7 +234,49 @@ class StaffController extends Controller{
         return $this->successResponse(QualificationDetails::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get());
     }
     public function loadStaffQualification($staff_id=""){
-        return $this->successResponse(QualificationDetails::where('personal_id',$staff_id)->where('status','Created')->get());
+        $qualification=QualificationDetails::where('personal_id',$staff_id)->get();
+        if($qualification!=null && $qualification!="" && sizeof($qualification)>0){
+            foreach($qualification as $qua){
+                $category=QualificationDescription::where('id',$qua->category)->first();
+                if($category!=null && $category!=""){
+                    $qua->categoryname=$category->name;
+                }
+                $doner=DonerAgency::where('id',$qua->doner_id)->first();
+                if($doner!=null && $doner!=""){
+                    $qua->doneragencyname=$doner->name;
+                }
+                $projectdoner=ProjectDonerAgency::where('id',$qua->project_doner_id)->first();
+                if($projectdoner!=null && $projectdoner!=""){
+                    $qua->projectdoneragencyname=$projectdoner->name;
+                }
+                $field=QualificationType::where('id',$qua->field_id)->first();
+                if($field!=null && $field!=""){
+                    $qua->fieldname=$field->name;
+                }
+                $degree=QualificationLevel::where('id',$qua->degree_id)->first();
+                if($degree!=null && $degree!=""){
+                    $qua->degreename=$degree->name;
+                }
+                $sub1=Qualification::where('id',$qua->first_subject)->first();
+                if($sub1!=null && $sub1!=""){
+                    $qua->sub1name=$sub1->name;
+                }
+                $sub2=Qualification::where('id',$qua->second_subject)->first();
+                if($sub2!=null && $sub2!=""){
+                    $qua->sub2name=$sub2->name;
+                }
+                $coursemode=Staff_mastersCourseMode::where('id',$qua->coursemode)->first();
+                if($coursemode!=null && $coursemode!=""){
+                    $qua->coursemodename=$coursemode->name;
+                }
+                $institute=Institute::where('id',$qua->institute_id)->first();
+                if($institute!=null && $institute!=""){
+                    $qua->institutename=$institute->name;
+                }
+            }
+        }
+
+        return $this->successResponse($qualification);
     }
 
     public function savenominationDetails(Request $request){
@@ -453,9 +526,39 @@ class StaffController extends Controller{
     public function viewStaffProfile($id=""){
         $staff_det=PersonalDetails::where('id',$id)->first();
         if($staff_det!=null && $staff_det!=""){
-            $position=PositionTitle::where('id',$staff_det->position_title_id)->first();
-            if($position!=null && $position!=""){
-                $staff_det->position_title_name=$position->name;
+            $merital=MaritalStatus::where('id',$staff_det->merital_status)->first();
+            if($merital!=null && $merital!=""){
+                $staff_det->maritalstatus=$merital->name;
+            }
+            // $position=PositionTitle::where('id',$staff_det->position_title_id)->first();
+            // if($position!=null && $position!=""){
+            //     $staff_det->position_title_name=$position->name;
+            // } //commented by tshewang
+
+            //mapping of the position tile, superstructure and childgroup
+            $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+            if($positions!=null && $positions!=""){
+                //get position title from mapping
+                $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                if($posi!=null && $posi!=""){
+                    $staff_det->position_title_name=$posi->name;
+                    //get position level from position title
+                    $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                    if($posiLev!=null && $posiLev!=""){
+                        $staff_det->positionlevel=$posiLev->name;
+                    }
+                }
+
+                //to get MOG, used for eding staff details
+                $child=ChildGroup::where('id',$positions->child_group_id)->first();
+                if($child!=null && $child!=""){
+                    $staff_det->childgroup=$child->name;
+                    //to get MOG, used for eding staff details to identify teacher in school
+                    $submajorgrp=StaffSubMajorGrop::where('id', $child->sub_group_id)->first();
+                    if($submajorgrp!=null && $submajorgrp!=""){
+                        $staff_det->subgroup=$submajorgrp->name;
+                    }
+                }
             }
         }
         return $this->successResponse($staff_det);

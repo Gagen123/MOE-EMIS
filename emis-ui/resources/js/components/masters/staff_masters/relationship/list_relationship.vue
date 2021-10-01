@@ -6,9 +6,9 @@
                     <th >SL#</th>
                     <th >Relationship</th>
                     <th >Code</th>
+                    <th>Description</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                     <th>Description</th>
                     <th >Action</th>
                 </tr>
             </thead>
@@ -17,8 +17,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.description }}</td>
+                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -39,20 +39,12 @@ export default {
         }
     },
     methods:{
-        loaddataList(uri = 'staff/loadStaffMasters/all/Relationship'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.relationshipList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loaddataList(){
+            this.relationshipList =  await this.loadstaffMasters('all','Relationship');
         },
         showedit(data){
             this.$router.push({name:'edit_relationship',params: {data:data}});
         },
-
     },
     mounted(){
         this.loaddataList();
@@ -60,10 +52,7 @@ export default {
     },
     watch: {
         relationshipList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

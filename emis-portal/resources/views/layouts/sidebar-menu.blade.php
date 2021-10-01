@@ -78,6 +78,13 @@
                 </router-link>
             </li>
         @endif
+        <!-- Result view menu -->
+        <li class="nav-item">
+            <router-link to="/result" class="nav-link">
+                <i class="fa fa-user nav-icon"></i>
+                <p>View Result</p>
+            </router-link>
+        </li>
         <li class="nav-item">
             <a href="#" onclick="logout()" class="nav-link">
                 <i class="fa fa-sign-out-alt nav-icon"></i>Sign out

@@ -31,7 +31,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{index1 + 1}}</td>
+                                <td>{{item1.roll_no}}</td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
@@ -203,15 +203,15 @@
         created() {
             this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
             this.aca_sub_id = this.$route.params.data.aca_sub_id
-            this.classId=this.$route.params.data.org_class_id;
-            this.streamId=this.$route.params.data.org_stream_id;
-            this.sectionId=this.$route.params.data.org_section_id;
-            this.class_stream_section=this.$route.params.data.class_stream_section;
+            this.classId=this.$route.params.class_stream_section[1];
+            this.streamId=this.$route.params.class_stream_section[2];
+            this.sectionId=this.$route.params.class_stream_section[3];
+            this.class_stream_section=this.$route.params.class_stream_section[4];
             this.subject=this.$route.params.data.sub_name;
             this.sub_dzo_name=this.$route.params.data.sub_dzo_name;
             this.term=this.$route.params.data.term_name;
             this.term_dzo_name=this.$route.params.data.term_dzo_name;
-            this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+            this.OrgClassStreamId=this.$route.params.class_stream_section[0];
 
         },
   

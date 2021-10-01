@@ -15,6 +15,7 @@ class LoadOrganizaitonController extends Controller{
         $this->apiService = $apiService;
     }
     public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+        // dd($type,$id);
         //if Ministry then give entire list
         // $access_level = $this->getAccessLevel();
         // if($access_level == 'Ministry'){//&& $type!="dzongkhagwise" && $type!="gewoggwise"  this line is taken out
@@ -24,7 +25,7 @@ class LoadOrganizaitonController extends Controller{
         $param="";
         //type=allorganizationList: to list entire organization
         if($type=="allorganizationList"){
-            $param=$id;
+            $param=$id; 
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
@@ -35,7 +36,7 @@ class LoadOrganizaitonController extends Controller{
         //type=userworkingagency: to list with working agency from user login
         if($type=="userworkingagency"){
             $param=$this->getWrkingAgencyId();
-        }
+        } 
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
         if($type=="dzongkhagwise"){
             $param=$id;
@@ -49,13 +50,10 @@ class LoadOrganizaitonController extends Controller{
         if($type=="private" || $type=="SEN"|| $type=="tertiary" || $type=="ECR" || $type=="eccd" || $type=="School" || $type=="all_eccds"){
             $param=$id;
         }
-
+ 
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
         return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
     }
-
-
-
     public function loadInactiveOrgList(){
         $dzo_id = $this->getUserDzoId();
         return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/'.$dzo_id);

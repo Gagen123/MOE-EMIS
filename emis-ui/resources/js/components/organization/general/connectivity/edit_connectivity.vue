@@ -131,13 +131,24 @@
                        <has-error :form="form" field="connectionsharedtype"></has-error>
                     </div>
                     <br><br>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                    <!-- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Internet Accessible to:</label><br>
                         <label  v-for="(item, index) in  internetAccessibleList" :key="index" class="pr-4">
                             <input  type="checkbox" name="internetAccessible" v-model="form.internetAccessible" :value="item.id"/> 
                             {{item.name}}
                         </label>
+                    </div> -->
+                  
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
+                        <label>Internet Accessible to:</label><br>
+                        <label  v-for="(item, index) in  internetAccessibleList" :key="index" class="pr-4">
+                            <input  type="checkbox" name="internetAccessible" v-model="form.internetAccessible" :value="item.id" :id="'accessible'+item.id"/> 
+                            {{item.name}}
+                        </label>
                     </div>
+               
+
+                    
                   
                </div>
                <!-- <div class="form-group row">
@@ -324,7 +335,12 @@ export default {
         updateconnectivity(){
                 this.form.post('organization/saveConnectivityDetails')
                 .then((response) => {
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'Detail is Updated Successfully'
+                    })
                     this.loadexsitingDetails();
+                    this.$router.push('/edit_connectivity');
                    // alert(response);
                 })
                 .catch(function (error) {

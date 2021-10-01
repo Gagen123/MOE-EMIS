@@ -6,8 +6,8 @@
                     <th >SL#</th>
                     <th >Name</th>
                     <th >Description</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
                 </tr>
@@ -39,16 +39,8 @@ export default {
         }
     },
     methods:{
-        loadpositionLevelList(uri = 'staff/loadStaffMasters/all/PositionLevel'){
-        // loadpositionLevelList(uri = 'masters/loadStaffMasters/all_position_level_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.positionLevelList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadpositionLevelList(){
+            this.positionLevelList =  await this.loadstaffMasters('all','PositionLevel');
         },
         showedit(data){
             this.$router.push({name:'edit_position_level_master',params: {data:data}});
@@ -60,10 +52,7 @@ export default {
     },
     watch: {
         positionLevelList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

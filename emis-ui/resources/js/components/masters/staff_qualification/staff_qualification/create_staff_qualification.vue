@@ -3,14 +3,13 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Qualification Type:<span class="text-danger">*</span></label>
                         <select class="form-control" id="qualification_type" v-model="form.qualification_type" :class="{ 'is-invalid': form.errors.has('qualification_type') }">
                             <option v-for="(item, index) in qualificationtypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="qualification_type"></has-error>
-                    </div>
-
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Qualification Level:<span class="text-danger">*</span></label>
                         <select class="form-control" id="qualification_level" v-model="form.qualification_level" :class="{ 'is-invalid': form.errors.has('qualification_level') }">
@@ -25,17 +24,17 @@
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label>
-                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>

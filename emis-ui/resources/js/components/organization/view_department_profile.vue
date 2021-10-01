@@ -56,43 +56,28 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Total Male Teacher</th>
-                                            <th>12</th>
+                                            <th>Total Male Staff</th>
+                                            <th>{{StaffMinistry.Totalmale}}</th>
                                         </tr>
                                          <tr>
-                                            <th>Total FeMale Teacher</th>
-                                            <th>10</th>
+                                            <th>Total Female Staff</th>
+                                            <th>{{StaffMinistry.TotalFemale}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Total Teaching Staff</td>
-                                            <td>8</td>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Total Non Teaching Staff</td>
-                                            <td>12</td>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                     </table>
                                 </div>
                                 <hr>
-                                <strong><i class="fas fa-graduation-cap mr-1"></i> Students</strong>
-                                <div class="card-body p-0">
-                                    <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Total Male Student</th>
-                                            <th>360</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Total Female Student</th>
-                                            <th>155</th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    </table>
-                                </div>
+                                
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
                                 <div class="card-body p-0">
@@ -168,6 +153,8 @@
                 isprofile:false,
                 existing_details:'',
                 levelArray:{},
+                staff_details:'',
+                StaffMinistry:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
@@ -217,15 +204,6 @@
                     console.log(errors)
                 });
             },
-            getLevel(uri = '/organization/getLevelInDropdown'){
-                axios.get(uri)
-                .then(response => {
-                    let data = response.data;
-                    for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
-                    }
-                });
-            },
             loadPriviousOrgDetails(org_id){
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
@@ -237,13 +215,39 @@
                     console.log("Error: "+error);
                 });
             },
-           
+            loadDataList(org_id){
+                axios.get('loadCommons/loadStaffCountDetail/staffCountMinistry/' +org_id)
+                .then(response => {
+                  
+                        this.staff_details=response.data.data;
+                        this.StaffMinistry=response.data.data.StaffMinistry[0];
+                        // this.counselor=response.data.data.counselor[0]
+                        // this.isSen=response.data.data.isSen[0]   
+                        // this.SportInstructor=response.data.data.SportInstructor[0];
+                    })
+                .catch((error) => {
+                    console.log("Error: "+error);
+                });
+                
+            },
+            loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        this.genderArray[data[i].id] = data[i].name;
+                    }
+                })
+            },
         },
-        mounted(){
-            this.getLevel();
+        created(){
+            this.loadGenderArrayList();
+
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
                 this.loadPriviousOrgDetails(this.$route.query.org_id);
+                this.loadDataList(this.$route.query.org_id);
+                
             }
             else{
                 axios.get('common/getSessionDetail')
@@ -252,8 +256,27 @@
                     this.access_level = data['acess_level'];
                     this.getorgProfile(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
+                    this.loadDataList(data['Agency_Code']);
                 }) ;
             }
-        }
+        },
+        // created(){
+        //     this.loadGenderArrayList();
+        //     if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
+        //         this.getorgProfile(this.$route.query.org_id);
+        //         this.loadPriviousOrgDetails(this.$route.query.org_id);
+        //         this.loadDataList(this.$route.query.org_id);
+        //     }
+        //     else{
+        //         axios.get('common/getSessionDetail')
+        //         .then(response =>{
+        //             let data = response.data.data;
+        //             this.getorgProfile(data['Agency_Code']);
+        //             this.loadPriviousOrgDetails(data['Agency_Code']);
+        //             this.loadDataList(data['Agency_Code'])
+        //         }) ;
+        //     }
+           
+        // }
     }
 </script>

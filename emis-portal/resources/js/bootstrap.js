@@ -13,7 +13,11 @@ try {
     require('bootstrap');
     require('admin-lte');
     require('./jquery.dataTables.min.js');
+    require('./fiexedcolums.dataTables.fixedCloumns.min.js');
+    require('./rowgroup.dataTables.rowGroup.min.js');
     require('./select2.full.min.js');
+    require('./dataTables.buttons.min.js');
+    require('./dataTables.buttons.print.min.js');
 } catch (e) {}
 
 /**
