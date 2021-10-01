@@ -46,7 +46,7 @@
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school1" >
-                <div class="card card-success card-outline">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title">Basic Detail</h3>
                         <div class="card-tools">
@@ -85,7 +85,7 @@
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Equipment & Furniture</h3>
+                        <h3 class="card-title">Equipment</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                 <i class="fas fa-minus" ></i>
@@ -98,25 +98,62 @@
                             <thead>
                                 <tr>
                                     <th>Sl No.</th>
-                                    <th>Location/Use</th>
                                     <th>Type</th>
                                     <th>Item</th>
-                                    <th>Number</th>
+                                    <th>No. of Usable Item</th>
+                                    <th>No. Not Usable Item</th>
+
                                 </tr>
                             </thead>
                             <tr v-for="(item, index) in equipmentList" :key="index">
                                 <td>{{ index + 1 }}</td>
                                 <td>{{ item.type}}</td>
                                 <td>{{ item.item}}</td>
-                                <td>{{ item.location}}</td>
-                                <td>{{ item.number}}</td>
+                                <td>{{ item.usable}}</td>
+                                <td>{{ item.notusable}}</td>
                             </tr>
                         </table>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Furniture</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus" ></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm fa-pull-right" type="button" @click="editFurnitureList()"> Edit &nbsp;&nbsp; </button>
+                    </div>
+                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <table id="equipment-table" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sl No.</th>
+                                    <th>Type</th>
+                                    <th>Item</th>
+                                    <th>No. of Usable Item</th>
+                                    <th>No. Not Usable Item</th>
+                                </tr>
+                            </thead>
+                            <tr v-for="(item, index) in furnitureList" :key="index">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ item.type}}</td>
+                                <td>{{ item.item}}</td>
+                                <td>{{ item.usable}}</td>
+                                <td>{{ item.notusable}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school1" >
-                    <div class="card card-success card-outline">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Sport Facility</h3>
                             <div class="card-tools">
@@ -146,8 +183,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="form-group row">
             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
                 <div class="card card-primary card-outline">
                     <div class="card-header">
@@ -178,6 +213,55 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">Connectivity Detail</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus" ></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-primary btn-sm fa-pull-right" type="button" @click="editConnectivity()"> Edit &nbsp;&nbsp; </button>
+                    </div>
+                    <div class="card-body">
+                        <input type="hidden" class="form-control" id="organizationId" v-model="form.organizationId"/>
+                        <div class="form-group row"> 
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
+                                <label>Nearest Road Type :</label>
+                                <span class="text-blue text-bold" id="ownership">{{connectivityDetails.road_typeyes}}</span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Connected to Road::</label>
+                                <span class="text-blue text-bold" id="fencing">{{connectivityDetails.connectedtoroad ==1 ? "Yes" : "No"}}</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Internet Connection:</label>
+                                <span class="text-blue text-bold" id="schiwog">{{connectivityDetails.connectedtointernet ==1 ? "Yes" : "No"}}</span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Electricity:</label>
+                                <span class="text-blue text-bold" id="schiwog">{{connectivityDetails.electricity ==1 ? "Yes" : "No"}}</span>
+                            </div> 
+                        </div>
+                        <!-- <div class="form-group row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Play Ground Area:</label>
+                                <span class="text-blue text-bold" id="schiwog">{{contactdetail.website}}</span>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <label>Agricultural Area:</label>
+                                <span class="text-blue text-bold" id="schiwog">{{contactdetail.facebookLink}}</span>
+                            </div> 
+                        </div> -->
+                        
                     </div>
                 </div>
             </div>
@@ -228,89 +312,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <h3 class="card-title">Section</h3>
-                    <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus" ></i>
-                            </button>
-                        </div>
-                        <button class="btn btn-primary btn-sm fa-pull-right" type="button" @click="editSection()"> Edit &nbsp;&nbsp; </button>
-                    </div>
-                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <table id="structure-table" class="table text-center table-sm table-bordered table-striped">
-                            <thead>
-                                <tr>  
-                                    <th>Sl No.</th>
-                                    <th>Class</th>
-                                    <th>Stream</th>
-                                    <th>Section</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(item, index) in sectionList" :key="index">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ class_array[item.classId] }}</td>
-                                    <td>{{ stream_array[item.streamId]}}</td>
-                                    <td>{{ item.section}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> -->
-        </div>
-        <div class="form-group row">
-            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school2" >
-                <div class="card card-primary card-outline">
-                    <div class="card-header">
-                        <h3 class="card-title">Connectivity Detail</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus" ></i>
-                            </button>
-                        </div>
-                        <button class="btn btn-primary btn-sm fa-pull-right" type="button" @click="editConnectivity()"> Edit &nbsp;&nbsp; </button>
-                    </div>
-                    <div class="card-body">
-                        <input type="hidden" class="form-control" id="organizationId" v-model="form.organizationId"/>
-                        <div class="form-group row"> 
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
-                                <label>Nearest Road Type :</label>
-                                <span class="text-blue text-bold" id="ownership">{{connectivityDetails.road_typeyes}}</span>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Connected to Road::</label>
-                                <span class="text-blue text-bold" id="fencing">{{connectivityDetails.connectedtoroad ==1 ? "Yes" : "No"}}</span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Internet Connection:</label>
-                                <span class="text-blue text-bold" id="schiwog">{{connectivityDetails.connectedtointernet ==1 ? "Yes" : "No"}}</span>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Electricity:</label>
-                                <span class="text-blue text-bold" id="schiwog">{{connectivityDetails.electricity ==1 ? "Yes" : "No"}}</span>
-                            </div> 
-                        </div>
-                        <!-- <div class="form-group row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Play Ground Area:</label>
-                                <span class="text-blue text-bold" id="schiwog">{{contactdetail.website}}</span>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Agricultural Area:</label>
-                                <span class="text-blue text-bold" id="schiwog">{{contactdetail.facebookLink}}</span>
-                            </div> 
-                        </div> -->
-                        
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="row form-group fa-pull-right">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -332,6 +333,8 @@ export default {
             equipmentList:[],
             connectivityDetails:[],
             sportList:[],
+            furnitureList:[],
+            equipmentList:[],
             fence_list:[],
             compoundDetails:[],
             infrastructureList:[],
@@ -352,17 +355,33 @@ export default {
         /**
          * method to load equipment list
          */
-        loadEquipmentList(uri = 'organization/loadEquipment/'+this.form.organizationId){
+        loadEquipmentList(uri = 'organization/loadEquipment'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 this.equipmentList =  data.data;
             })
             .catch(function (error) {
+
+            });
+        },
+        loadFurnitureList(uri = 'organization/loadFurniture'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.furnitureList =  data.data;
+            })
+            .catch(function (error) {
                 if(error.toString().includes("500")){
                     $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                 }
             });
+            setTimeout(function(){
+                $("#furniture-table").DataTable({
+                    "responsive": true,
+                    "autoWidth": true,
+                }); 
+            }, 300);  
         },
 
         /**
@@ -505,8 +524,11 @@ export default {
         /**
          * method to redirect to equipment list
          */
-         editEquipmentList: function(){
-            this.$router.push("/equipment_list")
+        editEquipmentList: function(){
+            this.$router.push("/equipment_index")
+        },
+        editFurnitureList: function(){
+            this.$router.push("/furniture_index")
         },
 
         /**
@@ -658,6 +680,8 @@ export default {
         this.loadEquipmentList();
         this.loadSportList();
         this.loadInfrastructureList();
+        this.loadFurnitureList();
+        this.loadEquipmentList();
         // this.getSectionDetails(this.$route.query.data);
         this.loadexsitingDetails();
         this.loadfencingList();
