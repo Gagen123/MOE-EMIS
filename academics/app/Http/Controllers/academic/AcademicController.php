@@ -1133,8 +1133,7 @@ class AcademicController extends Controller
             FROM aca_result_consolidated AS a 
             JOIN aca_result_consolidated_detail AS b
             ON a.id = b.aca_result_consolidated_id
-            WHERE b.std_student_id = ?',[$std_id])
-            );
+            WHERE b.std_student_id = ?',[$std_id]));
        
     }
 }
