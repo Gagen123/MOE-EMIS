@@ -4,6 +4,7 @@ try {
             $('.popupDatepicker').datepick({
                 dateFormat: 'dd/mm/yyyy',
             });
+            $('.popupDatepicker').css('z-index',' 99999 !important; ');
         },
         methods: {
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id

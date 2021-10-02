@@ -130,6 +130,7 @@ class StudentAdmissionRelatedController extends Controller
             'id'               => $request->id,
             'date'             => $request->date,
             'student'             => $request->student,
+            'dropout'             => $request->dropout,
             'last_class_attended'             => $request->last_class_attended,
             'action_type'       => $request->action_type,
             'reasons'            => $request->reasons,

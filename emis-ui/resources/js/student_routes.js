@@ -351,6 +351,14 @@ const routes = [
         { path: '/spbenefit_edit', name:'spbenefit_edit', component: require('./components/masters/student_masters/spbenefit/spbenefit_edit.vue').default },
       ]
     },
+    { path: '/dropout_type', component: require('./components/masters/student_masters/dropout/dropout_type_index.vue').default ,
+      children: [
+        { path: '', name:'dropout_type', component: require('./components/masters/student_masters/dropout/dropout_type_list.vue').default },
+        { path: '/dropout_type_list', name:'dropout_type_list', component: require('./components/masters/student_masters/dropout/dropout_type_list.vue').default },
+        { path: '/dropout_type_add', name:'dropout_type_add', component: require('./components/masters/student_masters/dropout/dropout_type_add.vue').default },
+        { path: '/dropout_type_edit', name:'dropout_type_edit', component: require('./components/masters/student_masters/dropout/dropout_type_edit.vue').default },
+      ]
+    },
     // { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
     //   children: [
     //     { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },

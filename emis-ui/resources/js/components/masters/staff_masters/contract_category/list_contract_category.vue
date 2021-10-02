@@ -5,8 +5,8 @@
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
-                    <th >Description</th>
                     <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th>
@@ -16,8 +16,8 @@
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
-                    <td>{{ item.description}}</td>
                     <td>{{ item.code}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -52,7 +52,7 @@ export default {
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        dataList() {
+        dataList(){
             this.applydatatable('working-agency-table');
         }
     },

@@ -11,6 +11,7 @@ class SeperationMaster extends Model{
     protected $fillable = [
         'id',
         'name',
+        'code',
         'status',
         'description',
         'created_by',
@@ -19,4 +20,3 @@ class SeperationMaster extends Model{
         'updated_at'
     ];
 }
- 

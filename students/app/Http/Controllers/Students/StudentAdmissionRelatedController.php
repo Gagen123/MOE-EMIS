@@ -157,14 +157,14 @@ class StudentAdmissionRelatedController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'               => $request->id,
-            'OrgOrganizationId' => $request->working_agency_id,
-            'LeaveingDate'             => $request->date,
-            'StdStudentId'             => $request->student,
-            'last_class_attended'             => $request->last_class_attended,
-            'action_type'       => $request->action_type,
-            'CurrentEngagement'    => $request->current_engagement,
-            'CurrentAddress'       => $request->current_address
+            'OrgOrganizationId'         => $request->working_agency_id,
+            'LeaveingDate'              => $request->date,
+            'StdStudentId'              => $request->student,
+            'StdDropoutCaseTypeId'      => $request->dropout,
+            'last_class_attended'       => $request->last_class_attended,
+            'action_type'               => $request->action_type,
+            'CurrentEngagement'         => $request->current_engagement,
+            'CurrentAddress'            => $request->current_address
         ];
 
         if($request->action_type=="add"){
@@ -177,12 +177,15 @@ class StudentAdmissionRelatedController extends Controller
             // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
 
             $app_data = [
-                'StdStudentId' => $request['student'],
-                'awarded_by'    =>  $request['award_given_by'],
-                'CeaAwardId'     =>  $request['award_type_id'],
-                'Place'             =>  $request['place'],
-                'AwardDate'              =>  $request['date'],
-                'Remarks'           =>  $request['remarks'],
+                'id'                        => $request->id,
+                'OrgOrganizationId'         => $request->working_agency_id,
+                'LeaveingDate'              => $request->date,
+                'StdStudentId'              => $request->student,
+                'StdDropoutCaseTypeId'      => $request->dropout,
+                'last_class_attended'       => $request->last_class_attended,
+                'action_type'               => $request->action_type,
+                'CurrentEngagement'         => $request->current_engagement,
+                'CurrentAddress'            => $request->current_address
             ];
 
             StdSeparatedWhereabouts::where('id', $request['id'])->update($app_data);

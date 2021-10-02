@@ -912,9 +912,7 @@ export default {
 
         showaddmodal(type){
             if(type=="qualification-modal"){
-                $('.popupDatepicker').datepick({
-                    dateFormat: 'dd/mm/yyyy',
-                });
+                $('.popupDatepicker').css('z-index',' 99999 !important; ');
                 this.qualification_form.action_type='add';
                 $('#description').val('').trigger('change');
                 $('#qualification').val('').trigger('change');
@@ -940,7 +938,6 @@ export default {
             $('#'+type).modal('show');
         },
         shownominationedit(item){
-
             this.nomination_form.action_type='edit';
             this.nomination_form.nomination_id=item.id;
             $('#nomi_cid').val(item.nomi_cid);
@@ -977,34 +974,42 @@ export default {
             });
             this.qualification_form.action_type='edit';
             this.qualification_form.qualification_id=item.id;
-            $('#description').val(item.description.id).trigger('change');
-            this.qualification_form.description=item.description.id;
 
-            $('#qualification').val(item.qualification.id).trigger('change');
-            this.qualification_form.qualification=item.qualification.id;
+            $('#description').val(item.category).trigger('change');
+            this.qualification_form.description=item.category;
 
-            $('#coursemode').val(item.coursemode.id).trigger('change');
-            this.qualification_form.coursemode=item.coursemode.id;
+            $('#doner_agency').val(item.doner_id).trigger('change');
+            this.qualification_form.project_doner_agency=item.doner_id;
+            $('#doner_agency').val(item.project_doner_id).trigger('change');
+            this.qualification_form.project_doner_agency=item.project_doner_id;
 
+            $('#field').val(item.field_id).trigger('change');
+            this.qualification_form.field=item.field_id;
+            $('#degree').val(item.degree_id).trigger('change');
+            this.qualification_form.degree=item.degree_id;
+
+            $('#firstsub').val(item.first_subject).trigger('change');
+            this.qualification_form.first_subject=item.first_subject;
+            $('#secondsub').val(item.second_subject).trigger('change');
+            this.qualification_form.second_subject=item.second_subject;
+
+            $('#coursemode').val(item.coursemode).trigger('change');
+            this.qualification_form.coursemode=item.coursemode;
             $('#coursetitle').val(item.coursetitle);
             this.qualification_form.coursetitle=item.coursetitle;
 
             $('#country').val(item.country.id).trigger('change');
             this.qualification_form.country=item.country.id;
-
-            $('#firstsub').val(item.first_subject.id).trigger('change');
-            this.qualification_form.first_subject=item.first_subject.id;
-
-            if(item.second_subject!=null){
-                $('#secondsub').val(item.second_subject.id).trigger('change');
-                this.qualification_form.second_subject=item.second_subject.id;
-            }
+            $('#institute').val(item.institute_id).trigger('change');
+            this.qualification_form.institute=item.institute_id;
 
             $('#startdate').val(item.startdate);
             this.qualification_form.startdate=item.startdate;
             $('#enddate').val(item.enddate);
-
             this.qualification_form.enddate=item.enddate;
+
+            $('#remarks').val(item.remarks);
+            this.qualification_form.remarks=item.remarks;
             $('.select2').select2({
                 theme: 'bootstrap4'
             });
@@ -1014,7 +1019,7 @@ export default {
         addMore: function(type){
             if(type=="qualification"){
                 this.qualification_form.startdate=this.formatYYYYMMDD($('#startdate').val());
-                this.qualification_form.enddate=this.formatYYYYMMDD($('#enddate').val());;
+                this.qualification_form.enddate=this.formatYYYYMMDD($('#enddate').val());
                 this.qualification_form.post('staff/savequalificationDetails')
                 .then((response) => {
                     Toast.fire({
@@ -1452,7 +1457,6 @@ export default {
                 if(gewog_id!=""){
                     this.personal_form.p_gewog=gewog_id;
                     $('#p_gewog').val(gewog_id).trigger('change');
-                    $('#p_gewog').prop('disabled',true);
                 }
             })
             .catch(function (error){
@@ -1520,7 +1524,6 @@ export default {
                 if(vilageid!=""){
                     this.personal_form.p_village_id=vilageid;
                     $('#p_village_id').val(vilageid).trigger('change');
-                    $('#p_village_id').prop('disabled',true);
                 }
             })
             .catch(function (error){
@@ -1755,10 +1758,7 @@ export default {
 
                 this.personal_form.p_dzongkhag=data.p_dzongkhag;
                 $('#p_dzongkhag').val(data.p_dzongkhag).trigger('change');
-                $('#p_dzongkhag').prop('disabled',true);
 
-                $('#cid_work_permit').prop('disabled',true);
-                $('#name').prop('disabled',true);
                 this.getPgewoglist(data.p_dzongkhag,data.p_gewog);
                 this.getPvillagelist(data.p_gewog,data.p_village);
 
