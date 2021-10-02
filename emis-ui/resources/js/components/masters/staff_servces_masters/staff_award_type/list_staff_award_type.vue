@@ -49,9 +49,7 @@ export default {
                 this.subjectList =  data.data.data;
             })
             .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
+                console.log('error in list staff master award type: '+error);
             });
         },
         showedit(data){

@@ -346,6 +346,14 @@ class GeneralInfoController extends Controller
         return $itemList;
     }
 
+    /**
+     * Get the student school details based on OrgClassId
+     */
+    public function getStudentSchoolDetails($OrgClassId = ""){
+         $itemList = $this->apiService->listData('emis/organization/getStudentSchoolDetails/'.$OrgClassId);
+         return $itemList;
+     }
+
     public function getClassByOrganizationId($orgId = ""){
         $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
         return $itemList;

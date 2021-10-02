@@ -41,7 +41,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item3, index3) in consolidatedResultList" :key="index3">
-                                <td>{{index3 + 1}}</td>
+                                <td>{{item3.roll_no}}</td>
                                 <td>
                                     {{ item3.Name }}
                                 </td>
@@ -174,9 +174,10 @@
             return this.areas.filter(item=>item.aca_sub_id == sub_id).length
         },
         save(action=""){
+            const aca_assmt_term_id = this.form.aca_assmt_term_id ? this.form.aca_assmt_term_id : 'final-result'
             this.consolidatedResultList.forEach(item=>{
-                if(item[this.form.aca_assmt_term_id].remarks.area_total.score){
-                    this.form.remarks[item.std_student_id] = item[this.form.aca_assmt_term_id].remarks.area_total.score
+                if(item[aca_assmt_term_id].remarks.area_total.score){
+                    this.form.remarks[item.std_student_id] = item[aca_assmt_term_id].remarks.area_total.score
                 }
             })
             if(action == "finalize"){
@@ -204,34 +205,7 @@
                             });
                         }
                     })
-            }else if(action == "publish") {
-                let publish = { publish:1 }
-                const newForm = Object.assign(this.form,publish)
-                Swal.fire({
-                title: ' Are you sure you want to publish?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes',
-                }).then((result) => {
-                    if(result.isConfirmed) {
-                        axios.post('/academics/saveConsolidatedResut', this.form)
-                            .then(() => {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Data saved successfully.'
-                                })
-                                this.$router.push('/list-consolidated-result');
-                            })
-                            .catch(function(error){
-                            this.errors = error;
-                        });
-                    }
-                })
-            }
-            else{
-            
+            }else{
                 axios.post('/academics/saveConsolidatedResut', this.form)
                     .then(() => {
                         Toast.fire({

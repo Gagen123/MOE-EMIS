@@ -1,12 +1,13 @@
 <template>
-    <div class="card-body">
+    <div class="card-body ">
         <table id="transfer-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
                     <th >Name</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Description</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th >Action</th> 
                 </tr>
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -31,36 +33,25 @@ export default {
     data(){
         return{
             transferList:[],
+            dt:'',
         }
     },
     methods:{
-       loadworkingagencyList(uri = 'masters/loadStaffMasters/all_transfer'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.transferList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
+        async loadworkingagencyList(){
+            this.transferList =  await this.loadstaffMasters('all','TransferReason');
         },
         showedit(data){
-            this.$router.push({name:'edit_transfer_reason',params: {data:data}});
+              this.$router.push({name:'edit_transfer_reason',params: {data:data}});
         },
         
     },
-    mounted(){ 
+    mounted(){
         this.loadworkingagencyList();
-        this.dt =  $("#transfer-table").DataTable()
+        this.dt =  $("#transfer-table").DataTable();
     },
     watch: {
         transferList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#transfer-table").DataTable()
-            });
+            this.applydatatable('#transfer-table');
         }
     },
 }

@@ -5,12 +5,17 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Reason:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" autocomplete="off"></textarea>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" autocomplete="off">
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -36,8 +41,9 @@ export default {
                 id: '',
                 name: '',
                 code:'',
+                description:'',
                 status: 1,
-                record_type:'transfer_reason',
+                model:'TransferReason',
                 action_type:'add',
             })
         }
@@ -54,7 +60,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.form.post('/masters/saveStaffMasters',this.form)
+                this.form.post('staff/saveStaffMasters',this.form)
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
