@@ -779,6 +779,22 @@ class LoadOrganizationController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    /**
+     * Get the student school details based on OrgClassId
+     */
+
+    public function getStudentSchoolDetails($OrgClassId = ""){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('organization_details', 'organization_details.id', '=', 'organization_class_streams.organizationId')
+                    ->join('classes', 'classes.id', '=', 'organization_class_streams.classId')
+                    ->select('organization_details.id AS id', 'organization_details.name AS name', 'organization_details.dzongkhagId AS dzongkhagId',
+                                    'classes.class AS class')
+                    ->where('organization_class_streams.id', $OrgClassId)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
     // /**
     //  * the get Arrays fetches the list of classes, streams and sections in an array
     //  * this is for display the name of the class, stream and section

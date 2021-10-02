@@ -24,6 +24,15 @@
                     <has-error :form="student_form" field="date"></has-error>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Dropout Case Type:<i class="text-danger">*</i></label>
+                    <select v-model="student_form.dropout" :class="{ 'is-invalid select2 select2-hidden-accessible': student_form.errors.has('dropout') }" class="form-control select2" name="dropout" id="dropout">
+                        <option v-for="(item, index) in dropoutList" :key="index" v-bind:value="item.id">{{ item.Name }} </option>
+                    </select>
+                    <has-error :form="student_form" field="dropout"></has-error>
+                </div> 
+            </div>
             <div class="form-group row">
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                     <label class="mb-0.5">Reasons for Leaving:</label>
@@ -57,11 +66,13 @@ export default {
     data(){
         return {
             studentList:[],
-            org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
+            dropoutList:[],
+            org_id:'2',
 
             student_form: new form({
                 id:'',
                 student: '',
+                dropout:'',
                 last_class_attended: '',
                 date: '',
                 current_address: '',
@@ -74,12 +85,22 @@ export default {
     methods: {
         //need to get the organisation id and pass it as a parameter
         
-        loadStudentList(uri='students/loadStudentWhereabouts/'+this.org_id){
+        loadStudentList(uri='students/loadStudentTransfers/'+this.org_id){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 console.log(data);
                 this.studentList =  data.data.data;
+            })
+            .catch(function (error) {
+                console.log("Error......"+error)
+            });
+        },
+        loadDropoutList(uri = 'masters/loadStudentMasters/DropoutType'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                this.dropoutList =  data.data.data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
@@ -123,6 +144,9 @@ export default {
             if(id=="award_type_id"){
                 this.student_form.award_type_id=$('#award_type_id').val();
             }
+            if(id=="dropout"){
+                this.student_form.dropout=$('#dropout').val();
+            }
         },
     },
      mounted() {
@@ -140,6 +164,7 @@ export default {
         });
 
         this.loadStudentList();
+        this.loadDropoutList();
     },
     
 }
