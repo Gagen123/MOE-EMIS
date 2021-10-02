@@ -39,13 +39,12 @@ export default {
         }
     },
     methods:{
-        async loadworkingagencyList(){
+        async loaddataList(){
             this.dataList =  await this.loadstaffMasters('all','ContractCategory');
         },
         showedit(data){
             this.$router.push({name:'edit_contract_category',params: {data:data}});
         },
-
     },
     mounted(){
         this.loaddataList();
