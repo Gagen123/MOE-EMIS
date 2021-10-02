@@ -8,7 +8,7 @@
                     <th>Code</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <!-- <th>Created Date</th> -->
+                    <th>Created Date</th> 
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -19,6 +19,7 @@
                     <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.created_at}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>

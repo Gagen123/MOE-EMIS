@@ -13,8 +13,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
                 </div>          
             </div>

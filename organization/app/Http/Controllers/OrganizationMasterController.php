@@ -30,6 +30,17 @@ class OrganizationMasterController extends Controller{
             // 'description'   =>  'required',
             'status'        =>  'required',
         ];
+        if($request->action_type=="edit"){
+            $rules = $rules+[
+                                    //for update, unique:table,column,idColumn
+                'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+            ];
+        }else{
+            $rules = $rules+[
+                                //for create, unique:table,column
+                'code'          =>  'unique:'.$model->getTable(),
+            ];
+        }
         $customMessages = [
             'name.required'         => 'This field is required',
             'code.required'         => 'This field is required',
@@ -41,11 +52,16 @@ class OrganizationMasterController extends Controller{
         //name,description and status should be common to all models. respective model should be passed from ui.
         $master_data = [
             'name'              =>  $request->name,
-            'code'              =>  $request->code,       
+          //  'code'              =>  $request->code,       
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
         //  dd( $master_data);
+        if(isset($request->code)){
+            $master_data = $master_data+[
+                'code'   =>  $request->code,
+            ];
+        }
         if($request->model=="DocumentType"){
             $master_data =$master_data+[
                 'applicableTo'              =>  implode(', ', $request->addfield_1),

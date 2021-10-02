@@ -122,7 +122,7 @@ class MessManagementController extends Controller
             'local_item'             =>  $request->local_item,
             'user_id'                =>  $this->userId()
         ];
-       //  dd($localprocure);
+       // dd($localprocure);
       // dd($request->local_item);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveLocalProcure', $localprocure);
@@ -165,7 +165,7 @@ class MessManagementController extends Controller
             'user_id'                       =>  $this->userId()
 
         ];
-       // dd($stockreceived);
+        //dd($stockreceived);
         try{
             $response_data= $this->apiService->createData('emis/messManagement/saveStockReceived', $stockreceived);
             return $response_data;

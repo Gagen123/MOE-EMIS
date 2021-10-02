@@ -7,6 +7,7 @@
                     <th>Class</th>
                     <th>Streams</th>
                     <th>Action</th> 
+
                 </tr>
             </thead>
             <tbody id="tbody">

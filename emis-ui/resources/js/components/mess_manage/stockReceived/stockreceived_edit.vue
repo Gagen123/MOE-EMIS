@@ -3,10 +3,10 @@
         <form class="bootbox-form" id="stockReceivedId">
             <div class="card-body">
                 <div class="form-group row">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of stock Received:<span class="text-danger">*</span></label>
-                        <input class="form-control editable_fields" name="dateOfreceived" id="dateOfreceived" type="date"
-                        v-model="form.dateOfreceived" :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Date of stock Received:<span class="text-danger">*</span></label>  
+                        <input class="form-control popupDatepicker" name="dateOfreceived" id="dateOfreceived" type="text" 
+                        :class="{ 'is-invalid': form.errors.has('dateOfreceived') }" @change="remove_err('dateOfreceived')"  autocomplete="off" >
                         <has-error :form="form" field="dateOfreceived"></has-error>
                     </div>
 
@@ -133,6 +133,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
+                this.form.dateOfreceived=this.formatYYYYMMDD($('#dateOfreceived').val());
                 this.form.itemList=this.itemList;
                 alert(this.form.itemList);
                 this.form.post('/mess_manage/saveStockReceived',this.form)
@@ -265,7 +266,9 @@ export default {
             axios.get('mess_manage/getStockReceivedDetails/'+stkId)
             .then((response) => {
                 let data=response.data.data;
-                this.form.dateOfreceived        =    data.dateOfreceived;
+              //  this.form.dateOfreceived        =    data.dateOfreceived;
+                this.form.dateOfrelease         = this.formatDateToddmmyyyy(data.dateOfreceived);
+                $('#dateOfreceived').val(this.formatDateToddmmyyyy(data.dateOfreceived));
                 this.form.quarter               =    data.quarter_id;
                 $('#quarter').val(data.quarter_id).trigger('change');
                 this.loadActiveQuarterList();

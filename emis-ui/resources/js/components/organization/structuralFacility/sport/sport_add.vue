@@ -35,12 +35,13 @@
                                         <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
-                                      <td>                          
-                                        <input type="number" name="number" class="form-control" id="number"  v-model="item.number"/>
+                                      <td>                            
+                                        <input type="number" name="number" class="form-control" id="number"  v-model="item.number" @change="getfields('number')"/>
                                   </td>
-                                  <td>                          
-                                        <input type="text" name="yoe" id= "yoe" class="form-control" v-model="item.yoe"/>
+                                  <td v-for='(yr, index) in item.yoe' :key="index">   yearofconstructinNo                       
+                                        <input type="text" name="yearofconstructinNo" id= "yearofconstructinNo" class="form-control" v-model="item.yearofconstructinNo"/>
                                   </td>
+                            
                                   <td>
                                         <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
                                             <option value="">--- Please Select ---</option>
@@ -152,9 +153,9 @@ export default {
         },
 
         getfields(id){
-            this.form.yoe=[];
+            this.item.yoe=[];
             for(let i=0;i<$('#'+id).val();i++){
-                this.form.yoe.push({yoe:''});
+                this.item.yoe.push({yearofconstructinNo:''});
             }
         },
 
