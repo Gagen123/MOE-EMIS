@@ -52,7 +52,7 @@ export default {
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        dataList() {
+        dataList(){
             this.applydatatable('working-agency-table');
         }
     },
