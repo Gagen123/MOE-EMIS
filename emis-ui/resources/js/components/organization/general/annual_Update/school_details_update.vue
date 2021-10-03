@@ -599,6 +599,47 @@ export default {
                 console.log("Error......"+error)
             });
         },
+        loadtransferwindow(){
+            axios.get('masters/loadGlobalMasters/data_submission')
+           .then((response) => {
+                let data=response.data.data[0];
+                 if(data!=null){
+                    this.form.transferwindow_id=data.id;
+                    this.form.t_from_date=data.from_date;
+                    this.form.t_to_date=data.to_date;
+                    this.form.t_year=data.year;
+                    this.form.t_remarks=data.remarks;
+                    this.form.t_id=data.id;
+                    let todate=new Date(data.to_date);
+                    let formdate = new Date();
+                    // One day in milliseconds
+                    const oneDay = 1000 * 60 * 60 * 24;
+                    // Calculating the time difference between two dates
+                    let diffInTime = todate.getTime() - formdate.getTime();
+                    //consider last day
+                    diffInTime=diffInTime+oneDay;
+                    // Calculating the no. of days between two dates
+                    const diffInDays =(diffInTime / oneDay);
+                    if(diffInDays<=5 && diffInDays>0){
+                        this.t_warning_message="Only "+Math.ceil(diffInDays)+" day(s) left to apply";
+                        this.t_warning=true;
+                    }
+                    else if(diffInDays<=0){
+                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#invalidsection').show();
+                        $('#t_form_details').hide();
+                    }
+                }
+                else{
+                    $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');
+                    $('#invalidsection').show();
+                    $('#t_form_details').hide();
+                }
+             })
+            .catch((error) => {
+                console.log("Error."+error);
+            });
+        },
         AnnualDetail: function(type){
             if(this.form.rolename=="Principal"){
 
