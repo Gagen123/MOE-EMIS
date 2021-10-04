@@ -31,7 +31,9 @@
                        Marital Status
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
+                <!--
+                    COMMENTED BY TSHEWANG as this are use in no where
+                    <li class="nav-item active pr-1">
                     <router-link to="/subject_area_masters" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Subject Area
                     </router-link>
@@ -40,29 +42,25 @@
                     <router-link to="/teaching_subjects" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Subjects
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1">
                     <router-link to="/currier_stage" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Career Stage
                     </router-link>
                 </li>
+
                 <li class="nav-item active pr-1">
-                    <router-link to="/qualification_description" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       Qualification Description
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link to="/course_mode" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'CourseMode', query: {data: 'dynamidId', model:'CourseMode' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Course Mode
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/seperation" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'SeperationMaster', query: {data: 'dynamidId', model:'SeperationMaster' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Seperation
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/secondment" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'SecondmentMaster', query: {data: 'dynamidId', model:'SecondmentMaster' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Secondment
                     </router-link>
                 </li>

@@ -26,7 +26,7 @@ class PositionTitle extends Model{
     public function submajorgroup(){
         return $this->belongsTo(StaffSubMajorGrop::class, 'sub_group_id')->select('id','group_id','name');
     }
-    public function level() {
+    public function level(){
         return $this->belongsTo(PositionLevel::class, 'position_level_id')->select('id','name');
     }
 

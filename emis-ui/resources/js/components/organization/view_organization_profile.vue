@@ -5,9 +5,11 @@
     </ol>
     <div v-if="access_level === 'Org'">
         <view-school-profile></view-school-profile>
+    
     </div>
     <div v-if="access_level === 'Ministry'">
         <view-department-profile></view-department-profile>
+      
     </div>
     <div v-if="access_level === 'Dzongkhag'">
         <view-dzongkhag-profile></view-dzongkhag-profile>
@@ -18,12 +20,16 @@
 import ViewSchoolProfile from './view_school_profile.vue'
 import ViewDepartmentProfile from './view_department_profile.vue'
 import ViewDzongkhagProfile from './view_dzongkhag_profile.vue'
+import DepartmentProfileUpdate from './department_profile_update.vue'
+
 
     export default {
         components: {
             ViewSchoolProfile,
             ViewDepartmentProfile,
-            ViewDzongkhagProfile
+            ViewDzongkhagProfile,
+            DepartmentProfileUpdate,
+            
         },
         data(){
             return{

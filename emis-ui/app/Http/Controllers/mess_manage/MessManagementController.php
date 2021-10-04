@@ -89,7 +89,7 @@ class MessManagementController extends Controller
             'id'                       =>  $request['id'],
             'user_id'                  =>  $this->userId()
         ];
-       // dd($foodrelease);
+       //dd($foodrelease);
        $response_data= $this->apiService->createData('emis/messManagement/saveFoodRelease', $foodrelease);
        //dd($response_data);
        return $response_data;

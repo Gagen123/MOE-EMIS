@@ -76,26 +76,11 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadMajorGroupList(uri = 'staff/loadStaffMasters/active/StaffMajorGrop'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.groupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadMajorGroupList(){
+            this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         },
-        getSubGroup(id){
-            let uri="staff/loadStaffMasters/byparent__group_id__"+id+"/StaffSubMajorGrop";
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.subgroupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error: ."+error)
-            });
+        async getSubGroup(id){
+            this.groupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
         },
 		formaction: function(type){
             if(type=="reset"){

@@ -204,7 +204,7 @@ class AdministrationController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
         return $response_data;
     }
-   
+
     public function saveLeaveConfigMasters(Request $request){
         $rules=[];
         $customMessages =[];
@@ -251,11 +251,11 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
-
-    public function loadStaffMasters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
-        return $global_masters;
-    }
+    //commented by tshewang to fix master data
+    // public function loadStaffMasters($param=""){
+    //     $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
+    //     return $global_masters;
+    // }
     public function loadStaffDropdownMasters($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/'.$model."/".$parent_id);
         return $response_data;
@@ -332,12 +332,12 @@ class AdministrationController extends Controller{
         }
         if($request['record_type'] == 'reason_for_absent') {
             $rules = [
-               
+
                 'name'              =>  'required',
                 'status'            =>  'required',
             ];
             $customMessages = [
-               
+
                 'name.required'                 => 'This field is required',
                 'status.required'               => 'This field is required',
             ];
@@ -358,12 +358,12 @@ class AdministrationController extends Controller{
                 'status.required'               => 'This field is required',
             ];
         }
-        
+
         $this->validate($request, $rules, $customMessages);
 
         $request['user_id'] = $this->userId();
         $data = $request->all();
-      
+
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
     }
@@ -948,7 +948,7 @@ class AdministrationController extends Controller{
 
         $class =[
             'classStream'  =>  $request['classStream'],
-           
+
             'status'  =>  $request['status'],
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()

@@ -171,7 +171,18 @@ class StudentProgramController extends Controller
     */
 
     public function listProgramMembers($param=""){
-        $param = $this->getWrkingAgencyId();
+        $orgId = $this->getWrkingAgencyId();
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
         $student_records = $this->apiService->listData('emis/students/listProgramMembers/'.$param);
         return $student_records;
     }
@@ -184,14 +195,12 @@ class StudentProgramController extends Controller
 
         $rules = [
             'student'                 => 'required',
-            'club'                    => 'required',
-            'responsibilities'        => 'required',
+            'club'                    => 'required'
         ];
 
         $customMessages = [
             'student.required'          => 'This field is required',
-            'club.required'             => 'This field is required',
-            'responsibilities.required' => 'This field is required',
+            'club.required'             => 'This field is required'
         ];
 
         $this->validate($request, $rules, $customMessages);
@@ -235,7 +244,18 @@ class StudentProgramController extends Controller
 
     public function listClubMembers($param=""){
         $orgId = $this->getWrkingAgencyId();
-        $student_records = $this->apiService->listData('emis/students/listClubMembers/'.$orgId);
+        $staffId = $this->staffId();
+        $class_teacher_class =  $this->apiService->listData('emis/academics/getClassTeacherClasss/'.$orgId.'/'.$staffId);
+        $data_parameters = [];
+        foreach(json_decode($class_teacher_class) as $details){
+            foreach($details as $value){
+                $data_parameters['org_class_stream_id'][] = $value->org_class_stream_id;
+                $data_parameters['stream_id'][] =  $value->org_stream_id;
+                $data_parameters['section_id'][] = $value->org_section_id;
+            }
+        }
+        $param = http_build_query($data_parameters);
+        $student_records = $this->apiService->listData('emis/students/listClubMembers/'.$param);
         return $student_records;
     }
 

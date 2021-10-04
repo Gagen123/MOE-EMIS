@@ -63,6 +63,20 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getTermsByFrequency/{frequencyId}',['uses' => 'academic\AcademicController@getTermsByFrequency']);
         $router->post('/unlockForEditForConsolidated/{Id}',['uses' => 'academic\AcademicController@unlockForEditForConsolidated']);
         $router->get('/getResult/{std_student_id}',['uses' => 'academic\AcademicController@getResult']);
+        $router->get('/getSubjectByClass/{class_id}[/{stream_id}]',['uses' => 'academic\AcademicController@getSubjectByClass']);
+        $router->get('/getSubjectTeacherBySubId/{aca_sub_id}',['uses' => 'academic\AcademicController@getSubjectTeacherBySubId']);
+        $router->post('/saveRemedialClass',['uses' => 'academic\AcademicController@saveRemedialClass']);
+        $router->get('/getRemedialClass/{orgId}',['uses' => 'academic\AcademicController@getRemedialClass']);
+        $router->get('/getRemedialClassDetail/{orgId}/{Id}',['uses' => 'academic\AcademicController@getRemedialClassDetail']);
+        $router->get('/getSubCategNonAcademic',['uses' => 'academic\AcademicController@getSubCategNonAcademic']);
+        $router->get('/getTermsForPublish/{orgId}',['uses' => 'academic\AcademicController@getTermsForPublish']);
+        $router->get('/loadConsolidatedResultListForPublish/{orgId}/{termId}',['uses' => 'academic\AcademicController@loadConsolidatedResultListForPublish']);
+        $router->get('/getConsolidatedResultForEdit/{orgId}/{stdId}/{termId}/{subId}',['uses' => 'academic\AcademicController@getConsolidatedResultForEdit']);
+        $router->get('/getSubjectOfTerm',['uses' => 'academic\AcademicController@getSubjectOfTerm']);
+        $router->post('/updateStatus/{Id}',['uses' => 'academic\AcademicController@updateStatus']);
+
+        //Emis portal used for pulling the result of the student
+        $router->get('/LoadResultByStudentId/{std_id}',['uses' => 'academic\AcademicController@LoadResultByStudentId']);
 
 
     });

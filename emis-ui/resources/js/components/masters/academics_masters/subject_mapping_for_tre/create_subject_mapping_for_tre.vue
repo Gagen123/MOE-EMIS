@@ -85,22 +85,22 @@ export default {
                     uri += ('&org_stream_id='+this.org_stream_id)
             }
             try{
-                let classSubjects = await axios.get(uri).then(response => response.data.subjectTeachers)
-                classSubjects["classSubjects"].forEach((finalSubjectTeacher,index) => {
-                    classSubjects["classSubjects"][index].aca_teacher_sub_id = '';
-                    classSubjects["classSubjects"][index].standard_hours = 0;
-                    classSubjects["classSubjects"][index].standard_minutes = 0;
-                    classSubjects["subjectMappingForTre"].forEach(subjectMapping => {
+                let data = await axios.get(uri).then(response => response.data)
+                data.classSubjects.forEach((finalSubjectTeacher,index) => {
+                    data.classSubjects[index].aca_teacher_sub_id = '';
+                    data.classSubjects[index].standard_hours = 0;
+                    data.classSubjects[index].standard_minutes = 0;
+                    data.subjectMappingForTre.forEach(subjectMapping => {
                         if(finalSubjectTeacher.aca_sub_id == subjectMapping.aca_sub_id && finalSubjectTeacher.org_class_id == subjectMapping.org_class_id
                          && (finalSubjectTeacher.org_stream_id == subjectMapping.org_stream_id || ((finalSubjectTeacher.org_stream_id == null 
                          || finalSubjectTeacher.org_stream_id == "") && (subjectMapping.org_stream_id == null)|| subjectMapping.org_stream_id == ""))){
-                            classSubjects["classSubjects"][index].aca_teacher_sub_id = subjectMapping.aca_teacher_sub_id
-                            classSubjects["classSubjects"][index].standard_hours = subjectMapping.standard_hours;
-                            classSubjects["classSubjects"][index].standard_minutes = subjectMapping.standard_minutes;
+                            data.classSubjects[index].aca_teacher_sub_id = subjectMapping.aca_teacher_sub_id
+                            data.classSubjects[index].standard_hours = subjectMapping.standard_hours;
+                            data.classSubjects[index].standard_minutes = subjectMapping.standard_minutes;
                         }
                     });
                 });
-                this.classSubjects = classSubjects["classSubjects"];
+                this.classSubjects = data.classSubjects;
              }catch(e){
                 if(e.toString().includes("500")){
                   $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');

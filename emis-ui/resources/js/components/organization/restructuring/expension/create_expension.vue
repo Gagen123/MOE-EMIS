@@ -122,10 +122,8 @@
 export default {
     data(){
         return{
-            proposed_by_list:[],
             orgList:'',
             classList:[],
-            locationList:[],
             streamList:[],
             categoryList:[],
             subCategortList:[],
@@ -170,15 +168,6 @@ export default {
             $('#'+field_id).removeClass('is-invalid');
         }
         },
-
-        //getOrgList(uri = '/organization/getOrgList'){
-        getOrgList(uri = 'loadCommons/loadOrgList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                this.orgList = response.data.data;
-            });
-        },
-
         /**
          * method to show next and previous tab
          */
@@ -324,23 +313,6 @@ export default {
                 $('#locationType').addClass('select2-hidden-accessible');
             }
         },
-        loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.proposed_by_list =  data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
-        },
-        getLocation(uri = '/organization/getLocationInDropdown'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data;
-                this.locationList = data;
-            });
-        },
         getAttachmentType(type){
             this.form.attachments=[];
             axios.get('masters/organizationMasterController/loadOrganizaitonmasters/'+type+'/DocumentType')
@@ -381,13 +353,12 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
+        this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
         this.getCategoryDropdown();
         this.getSubCategoryDropdown();
         this.loadconstructionTypeList(),
-        this.getLocation();
-        this.loadproposedBy();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -400,7 +371,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.getOrgList();
         this.getAttachmentType('ForTransaction__Application_for_Expansion');
         axios.get('common/getSessionDetail')
         .then(response => {

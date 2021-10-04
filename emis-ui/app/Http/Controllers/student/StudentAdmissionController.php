@@ -442,6 +442,11 @@ class StudentAdmissionController extends Controller{
         return $student_list;
     }
 
+    public function getTransferDetails($std_id=""){
+        $student_list = $this->apiService->listData('emis/students/admission/getTransferDetails/'.$std_id);
+        return $student_list;
+    }
+
     public function getstudentGuardainClassDetails($std_id="",$type=""){
         $student_list = $this->apiService->listData('emis/students/admission/getstudentGuardainClassDetails/'.$std_id.'/'.$type);
         return $student_list;

@@ -34,27 +34,19 @@
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                 <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
                                 <p class="text-muted">
-                                    An educated and enlightened society of GNH, built and sustained on the unique Bhutanese values of tha dam-tsig ley gju-drey.<br>
+                                    {{form.mission}}
                                 </p>
 
                                 <strong><i class="fas fa-file-alt mr-1"></i> Vision</strong>
                                 <p class="text-muted">
-                                    Develop sound educational policies that enable the creation of a knowledge-based GNH society.<br>
-                                    Provide equitable, inclusive and quality education and lifelong learning opportunities to all children and harness their full potential to become productive citizens.<br>
-                                    Equip all children with appropriate knowledge, skills and values to cope with the challenges of the 21st century.    <br>                       
+                                    {{form.vission}}
                                 </p>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
                                 <div class="card-body p-0">
                                     <strong><i class="fas fa-file-alt mr-1"></i> Objectives</strong>
-                                    <p class="text-muted">
-                                        The Ministry of Education presently is focused on achieving the following Objectives:<br>
-                                        To improve relevance and quality of education<br>
-                                        To improve access to and sustainability of education<br>
-                                        To strengthen youth development programme and services<br>
-                                        To enhance adult literacy and lifelong learning<br>
-                                        To ensure full utilization of budget<br>
-                                        To enable effective and efficient ICT Service delivery.  <br>                       
+                                     <p class="text-muted">
+                                        {{form.objective}}
                                     </p>
                                 </div>
                             </div>
@@ -64,43 +56,28 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Total Male Teacher</th>
-                                            <th>12</th>
+                                            <th>Total Male Staff</th>
+                                            <th>{{StaffMinistry.Totalmale}}</th>
                                         </tr>
                                          <tr>
-                                            <th>Total FeMale Teacher</th>
-                                            <th>10</th>
+                                            <th>Total Female Staff</th>
+                                            <th>{{StaffMinistry.TotalFemale}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Total Teaching Staff</td>
-                                            <td>8</td>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Total Non Teaching Staff</td>
-                                            <td>12</td>
+                                            <td>Total Support Staff</td>
+                                            <td></td>
                                         </tr>
                                     </tbody>
                                     </table>
                                 </div>
                                 <hr>
-                                <strong><i class="fas fa-graduation-cap mr-1"></i> Students</strong>
-                                <div class="card-body p-0">
-                                    <table class="table table-sm">
-                                    <thead>
-                                        <tr>
-                                            <th>Total Male Student</th>
-                                            <th>360</th>
-                                        </tr>
-                                        <tr>
-                                            <th>Total Female Student</th>
-                                            <th>155</th>
-                                        </tr>
-                                    </thead>
-                                    
-                                    </table>
-                                </div>
+                                
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel" aria-labelledby="custom-tabs-four-settings-tab">
                                 <div class="card-body p-0">
@@ -176,39 +153,55 @@
                 isprofile:false,
                 existing_details:'',
                 levelArray:{},
+                staff_details:'',
+                StaffMinistry:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
                     vission: '',
                     mission:'',
+                    objective:'',
                     profile_path:'',
                 }) 
             }
         },
         methods:{
-            getorgProfile(rogId){
-                axios.get('organization/getOrgProfile/'+rogId)
+            // getorgProfile(rogId){
+            //     axios.get('organization/getOrgProfile/'+rogId)
+            //     .then(response => {
+            //         let data = response.data.data;
+            //         this.form.vission=data.vission;
+            //         this.form.mission=data.mission;
+            //         this.form.objective=data.objective;
+            //         this.form.profile_path=data.logo_path;
+            //         this.orgDetails=data.orgName+' '+data.level;
+            //         if(data.logo_path!=""){
+            //             this.isprofile=true;
+            //         }
+            //     })    
+            //     .catch(errors =>{ 
+            //         console.log(errors)
+            //     });
+            // },
+            getorgProfile(rogId,type){
+                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;
                     this.form.mission=data.mission;
+                    this.form.objective=data.objective;
+                    this.form.org_id=data.org_id;
                     this.form.profile_path=data.logo_path;
-                    this.orgDetails=data.orgName+' '+data.level;
+                    this.orgDetails=data.orgName;
+                    if(data.level!=undefined && data.level!=null && data.level!=""){
+                        this.orgDetails=data.orgName+' '+data.level;
+                    }
                     if(data.logo_path!=""){
                         this.isprofile=true;
                     }
-                })    
-                .catch(errors =>{ 
+                })
+                .catch(errors =>{
                     console.log(errors)
-                });
-            },
-            getLevel(uri = '/organization/getLevelInDropdown'){
-                axios.get(uri)
-                .then(response => {
-                    let data = response.data;
-                    for(let i=0;i<data.length;i++){
-                        this.levelArray[data[i].id] = data[i].name; 
-                    }
                 });
             },
             loadPriviousOrgDetails(org_id){
@@ -222,13 +215,39 @@
                     console.log("Error: "+error);
                 });
             },
-           
+            loadDataList(org_id){
+                axios.get('loadCommons/loadStaffCountDetail/staffCountMinistry/' +org_id)
+                .then(response => {
+                  
+                        this.staff_details=response.data.data;
+                        this.StaffMinistry=response.data.data.StaffMinistry[0];
+                        // this.counselor=response.data.data.counselor[0]
+                        // this.isSen=response.data.data.isSen[0]   
+                        // this.SportInstructor=response.data.data.SportInstructor[0];
+                    })
+                .catch((error) => {
+                    console.log("Error: "+error);
+                });
+                
+            },
+            loadGenderArrayList(uri="masters/loadGlobalMasters/all_gender"){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        this.genderArray[data[i].id] = data[i].name;
+                    }
+                })
+            },
         },
-        mounted(){
-            this.getLevel();
+        created(){
+            this.loadGenderArrayList();
+
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
                 this.getorgProfile(this.$route.query.org_id);
                 this.loadPriviousOrgDetails(this.$route.query.org_id);
+                this.loadDataList(this.$route.query.org_id);
+                
             }
             else{
                 axios.get('common/getSessionDetail')
@@ -237,8 +256,27 @@
                     this.access_level = data['acess_level'];
                     this.getorgProfile(data['Agency_Code']);
                     this.loadPriviousOrgDetails(data['Agency_Code']);
+                    this.loadDataList(data['Agency_Code']);
                 }) ;
             }
-        }
+        },
+        // created(){
+        //     this.loadGenderArrayList();
+        //     if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
+        //         this.getorgProfile(this.$route.query.org_id);
+        //         this.loadPriviousOrgDetails(this.$route.query.org_id);
+        //         this.loadDataList(this.$route.query.org_id);
+        //     }
+        //     else{
+        //         axios.get('common/getSessionDetail')
+        //         .then(response =>{
+        //             let data = response.data.data;
+        //             this.getorgProfile(data['Agency_Code']);
+        //             this.loadPriviousOrgDetails(data['Agency_Code']);
+        //             this.loadDataList(data['Agency_Code'])
+        //         }) ;
+        //     }
+           
+        // }
     }
 </script>

@@ -27,7 +27,7 @@
                                   <th>Item</th>
                                   <th>Unit</th>
                                   <th>Quantity Receive</th>
-                                  <th>Damage Quantity</th>
+                                  <!-- <th>Damage Quantity</th> -->
                                   <th>Remarks</th>
                               </tr>
                            </thead>
@@ -46,11 +46,12 @@
                                         <input type="number" name="quantity" class="form-control" v-model="item.quantity" value="0"/>
                                     </td>
                                     <td>
+                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks" >
+                                    </td>
+                                    <!-- <td>
                                         <input type="number" name="damagequantity" class="form-control" v-model="item.damagequantity" value="0"/>
                                     </td>
-                                    <td>
-                                       <input type="text" name="remarks" class="form-control" v-model="item.remarks">
-                                    </td>
+                                  -->
                                 </tr>
                              <!-- <tr>
                                   <td colspan=7>
@@ -113,7 +114,7 @@ export default {
             this.form.remarks= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
+            this.form.items_received.push({item:'',quantity:'',unit:'',remarks:''})
         },
 
         /**
@@ -183,7 +184,7 @@ export default {
         /**
          * method to get unit in dropdown
          */
-       loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
+        loadActiveUnitList(uri="masters/loadActiveStudentMasters/CeaProgramMeasurement"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -228,7 +229,7 @@ export default {
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-                item:'',quantity:'',unit:'',remarks:'', damagequantity:''})
+                item:'',quantity:'',unit:'',remarks:'' })
         },
         /**
          * method to remove fields

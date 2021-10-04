@@ -40,15 +40,15 @@
             <div class="row form-group">
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <label class="required" >Class : </label>
-                    <label class="text-primary">{{ }}</label>
+                    <label class="text-primary">{{ this.std_present_class }}</label>
                 </div>
                 <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
                     <label class="required" >School : </label>
-                    <label class="text-primary"><span id="gewogid"></span>{{std_admission_details.organization_name}}</label>
+                    <label class="text-primary"><span id="gewogid"></span>{{ this.std_present_school}}</label>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                     <label class="required" >Dzongkhag :</label>
-                    <label class="text-primary"><span id="vilageId"></span> {{dzongkhagArray[std_admission_details.organization_dzo]}}</label>
+                    <label class="text-primary"><span id="vilageId"></span> {{dzongkhagArray[this.std_present_dzo]}}</label>
                 </div>
             </div>
         </div>
@@ -105,6 +105,10 @@ export default {
         return{
             student_id:'',
             student_code:'',
+            std_class:'',
+            std_present_class:'',
+            std_present_school:'',
+            std_present_dzo:'',
             std_admission_details:'',
             parents_details:[],
             genderArray:{},
@@ -118,6 +122,8 @@ export default {
             std_gewog_list:[],
             std_villageList:[],
             motherTongueList:[],
+             //prefedined an array of the classes
+            class_array:['PP', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'],
             student_form: new form({
                 id:'',
                 admission_type:'',
@@ -210,6 +216,8 @@ export default {
                     this.std_admission_details = data;
                     this.parents_details = data.parents;
                     this.student_form.student_id = data.id;
+                    let OrgClassStreamId = data.class.OrgClassStreamId;
+                    this.getStudentSchoolDetails(OrgClassStreamId);
                 } else {
                     Swal.fire({
                     text: "Student with request CID/Student Code was not found",
@@ -222,6 +230,31 @@ export default {
                 }
 			});
 		},
+        getStudentSchoolDetails(OrgClassStreamId){
+            let uri = '/organization/getStudentSchoolDetails/'+ OrgClassStreamId;
+            try{
+                axios.get(uri).then(response => {
+                    let data= response.data.data;
+                    //have to check whether the student passed or failed
+                    this.std_present_class = data[0].class;
+                    this.std_present_school = data[0].name;
+                    this.std_present_dzo = data[0].dzongkahgId;
+                    let index = this.class_array.indexOf(this.std_present_class);
+                    index++;
+                    this.std_class=this.class_array[index];
+                    this.classList.forEach(element => {
+                        //need to check pass or fail
+                        if(element.class === this.std_class){
+                            this.student_form.class = element.id;
+                            $('#class').val(element.id).trigger('change');
+                            $('#class').prop('disabled',true);
+                        }
+                    });
+                });
+            }catch(e){
+                console.log('error loadactivedzongkhags '+e);
+            }
+        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -254,17 +287,21 @@ export default {
         this.loadAllActiveMasters('active_mother_tongue');
         this.getdzongkhagList();
         this.loadGenderList();
+        this.loadClassList();
       
-        $('.select2').select2();
+        $('.select2').select2({
+        theme: 'bootstrap4'
+        });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
+        });
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
         });
         
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadClassList();
-        
     }
 }
 </script>

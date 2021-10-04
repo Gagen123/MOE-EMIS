@@ -60,16 +60,16 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-        mounted(){
+        created(){
             this.loadroleList();
             this.TransferConfigurationList();
         },
        watch: {
-            dataLists(){
-                this.$nextTick(() => {
-                    this.dt =  $("#transfer_config_list").DataTable()
-                });
-            }
+        dataLists(){
+            this.$nextTick(() => {
+                this.dt =  $("#transfer_config_list").DataTable()
+            });
+        }
         },
 }
 </script>

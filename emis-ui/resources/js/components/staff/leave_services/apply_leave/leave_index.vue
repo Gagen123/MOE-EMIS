@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="card card-primary card-outline">
-            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white"> 
+            <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white">
                 <span class="card-title">
                     <b>Leave</b>
                 </span>
@@ -10,8 +10,8 @@
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_leave')" id="addleavebtn"><i class="fa fa-plus"></i> Apply Leave</button>
                 </span>
             </div>
-            <div class="card-body pb-1 mb-0 pt-1 mt-0">  
-                <router-view></router-view> 
+            <div class="card-body pb-1 mb-0 pt-1 mt-0">
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -19,14 +19,14 @@
 <script>
 export default {
     data(){
-        return{ 
+        return{
             access_level:'',
             screen_id:'',
             privileges:'',
             list:'NA',
             deleteopt:'NA',
             editopt:'NA',
-        } 
+        }
     },
     methods: {
        showadprocess(type){
@@ -37,7 +37,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                this.privileges =  data.data; 
+                this.privileges =  data.data;
                 for(let i=0;i<data.data.length;i++){
                     if(data.data[i].action_name.toLowerCase().includes('add') && (data.data[i].Organization==1 || data.data[i].Dzongkhag==1 || data.data[i].National==1)){
                         $('#addleavebtn').show();
@@ -64,10 +64,8 @@ export default {
                     }
                 }
             })
-            .catch(function (error){ 
-                if(error.toString().includes("500")){
-                    $('#errormsg').html('Server down. Please try later');
-                }
+            .catch(function (error){
+                console.log(error);
             });
         }
     },
@@ -75,13 +73,13 @@ export default {
         this.screen_id=this.$route.query.data;
         // $('#addleavebtn').hide();
         // $('#listleavebtn').hide();
-        // this.getprivileges();  
+        // this.getprivileges();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
             this.access_level=data['acess_level'];
-        })    
-        .catch(errors => { 
+        })
+        .catch(errors => {
             console.log(errors)
         });
     },

@@ -17,8 +17,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
-                    <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.code}}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -39,16 +39,8 @@ export default {
         }
     },
     methods:{
-        loadworkingagencyList(uri = 'staff/loadStaffMasters/all/SuperStructure'){
-        // loadworkingagencyList(uri = 'masters/loadStaffMasters/all_staff_major_data_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.data_list =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log('error: '+error);
-            });
+        async loadworkingagencyList(){
+            this.data_list =  await this.loadstaffMasters('all','SuperStructure');
         },
         showedit(data){
             this.$router.push({name:'edit_superstructure',params: {data:data}});
@@ -61,10 +53,7 @@ export default {
     },
     watch: {
         data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+            this.applydatatable('working-agency-table');
         }
     },
 }

@@ -556,7 +556,6 @@ export default {
                     let formdate = new Date();
                     // One day in milliseconds
                     const oneDay = 1000 * 60 * 60 * 24;
-
                     // Calculating the time difference between two dates
                     const diffInTime = todate.getTime() - formdate.getTime();
 

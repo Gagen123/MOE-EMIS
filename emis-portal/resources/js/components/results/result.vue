@@ -1,293 +1,167 @@
 <template>
-  <div>
-    <div class="col-8 center">
-      <div class="card card-success card-outline">
-        <div class="content-header pt-1 pb-0">
-          <div class="container-fluid">
-            <div class="row mb-2">
-              <div class="col-sm-6">
-                <h5><b>Fill the details to view your Results</b></h5>
-              </div>
-            </div>
-          </div>
-        </div>
-        <hr />
+<div class="container-fluid">
+    <div class="card card-primary card-outline">
+           <table class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <tr class="bg-cyan">
+                  <td colspan="2"><b>View Results</b></td>
+              </tr>
+           </table>
         <div class="card-body">
-          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8 center">
-            <label class="col-md-8"
-              >Dzongkhag/Thromde:<span class="text-danger"> *</span></label
-            >
-            <select
-              name="approachRoad"
-              id="approachRoad"
-              class="form-control editable_fields"
-              @change="approachRoadIsNoRoad()"
-            >
-              <option value="">--- Please Select ---</option>
-              <option value="1">Thimphu</option>
-              <option value="2">Punakha</option>
-              <option value="3">Wangdue</option>
-            </select>
-          </div>
-
-          <hr />
-          <div class="col-lg-6 col-md-3 col-sm-3 col-xs-8 center">
-            <label class="col-md-8"
-              >School:<span class="text-danger"> *</span></label
-            >
-            <select
-              name="approachRoad"
-              id="approachRoad"
-              class="form-control editable_fields"
-              @change="approachRoadIsNoRoad()"
-            >
-              <option value="">--- Please Select ---</option>
-              <option value="1">YHSS</option>
-              <option value="2">MHSS</option>
-              <option value="3">Pelkil HSS</option>
-            </select>
-          </div>
-          <hr />
-          <div class="col-lg-6 col-md-3 col-sm-3 col-xs-8 center">
-            <label class="col-md-8"
-              >Class:<span class="text-danger"> *</span></label
-            >
-            <select
-              name="approachRoad"
-              id="approachRoad"
-              class="form-control editable_fields"
-              @change="approachRoadIsNoRoad()"
-            >
-              <option value="">--- Please Select ---</option>
-              <option value="1">PP</option>
-              <option value="2">1</option>
-              <option value="3">2</option>
-              <option value="3">3</option>
-              <option value="3">10</option>
-            </select>
-          </div>
-          <hr />
-          <div class="col-lg-6 col-md-3 col-sm-3 col-xs-8 center">
-            <label class="col-md-8"
-              >Section:<span class="text-danger"> *</span></label
-            >
-            <select
-              name="approachRoad"
-              id="approachRoad"
-              class="form-control editable_fields"
-              @change="approachRoadIsNoRoad()"
-            >
-              <option value="">--- Please Select ---</option>
-              <option value="1">A</option>
-              <option value="2">B</option>
-              <option value="3">C</option>
-            </select>
-          </div>
-          <hr />
-
-          <div class="col-lg-6 col-md-3 col-sm-3 col-xs-8 center">
-            <label class="col-md-8"
-              >Student Code:<span class="text-danger"> *</span></label
-            >
-            <input
-              v-model="form.cid_no"
-              type="number"
-              name="cid_no"
-              placeholder="Student Number"
-              autofocus="autofocus"
-              class="form-control"
-              :class="{ 'is-invalid': form.errors.has('cid_no') }"
-              @keyup.enter="getInstructorDetailsbyCID()"
-              data-toggle="tooltip"
-              data-placement="top"
-              title="Tooltip on top"
-            />
-          </div>
-          <hr />
-          <div class="row form-group">
-            <div class="col-12">
-              <button
-                type="button"
-                @click="submitform()"
-                id="btnsave"
-                class="btn btn-flat btn-success"
-              >
-                <i class="fa fa-save"></i> View result
-              </button>
+          <div class="form-group row">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Year:<span class="text-danger">*</span></label> 
+                  <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms(); getTermResult();">
+                      <option value=""> --Select--</option>
+                      <option v-for="(item, index) in classList" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                          {{ item.class_stream_section }} 
+                      </option>
+                  </select> 
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Class:<span class="text-danger">*</span></label> 
+                  <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms(); getTermResult();">
+                      <option value=""> --Select--</option>
+                      <option v-for="(item, index) in classList" :key="index" v-bind:value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
+                          {{ item.class_stream_section }} 
+                      </option>
+                  </select> 
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <label>Term:<span class="text-danger">*</span></label> 
+                  <select class="form-control select2" id="aca_assmt_term_id" v-model="aca_assmt_term_id"  @change="getTermResult()">
+                      <option value=""> --Select--</option>
+                      <option v-for="(item, index) in terms" :key="index" v-bind:value="item.id">
+                          {{ item.name }} <span v-if="item.term_dzo_name">( {{ item.term_dzo_name }} )</span>
+                      </option>
+                  </select> 
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
+                <table id="result-term-table" class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                        <th>Term</th>
+                        <th>Result Status</th> 
+                        <th>Action</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <!-- <tr v-for="(item, index) in TermsResultList" :key="index">
+                            <td>{{ item.sub_name }} <span v-if="item.sub_dzo_name">( {{ item.sub_dzo_name }} )</span></td>
+                            <td>
+                                <span v-if="item.finalized"><strong>Finalized</strong> by
+                                    <span v-if="item.assessed_by_class_teacher">class</span>
+                                    <span v-else>subject</span> teacher on {{item.finalized_date}}
+                                </span>
+                                <span v-else-if="item.std_assmt_id"><strong>Under process</strong> with 
+                                    <span v-if="item.assessed_by_class_teacher">class</span>
+                                    <span v-else>subject</span> teacher
+                                </span>
+                                <span v-else><strong>Not added</strong></span>
+                            </td>
+                            <td>
+                                 <div v-if="item.finalized && item.is_class_teacher" class="ml-2 btn-group btn-group-sm">
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="unlockForEdit(item.std_assmt_id)"><i class="fa fa-unlock-alt"></i > Undo Finalize </div>
+                                </div>
+                                <div v-else-if="item.is_subject_teacher && !item.finalized" class="ml-2 btn-group btn-group-sm">
+                                    <div class="btn btn-info btn-sm btn-default text-white" width="500" @click="showedit('edit_term_result',item)">
+                                        <span v-if="item.std_assmt_id"><i class="fas fa-edit"></i > Edit</span>
+                                        <span v-else><i class="fas fa-plus"></i > Add</span>
+                                    </div>
+                                </div>
+                                <div v-if="item.std_assmt_id" class="ml-2 mt-1 btn-group btn-group-sm">
+                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit('view_term_result',item)"> <i class="fas fa-eye"></i > View</div>
+                                </div>
+                            </td>
+                        </tr> -->
+                    </tbody>
+                </table>
             </div>
           </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 </template>
-
 <script>
-import VueTagsInput from "@johmun/vue-tags-input";
-
 export default {
-  components: {
-    VueTagsInput,
-  },
-  data() {
-    return {
-      editmode: false,
-      products: {},
-      form: new form({
-        id: "",
-        category: "",
-        name: "",
-        description: "",
-        tags: [],
-        photo: "",
-        category_id: "",
-        price: "",
-        photoUrl: "",
-      }),
-      categories: [],
-
-      tag: "",
-      autocompleteItems: [],
-    };
-  },
-  methods: {
-    getResults(page = 1) {
-      this.$Progress.start();
-
-      axios
-        .get("api/product?page=" + page)
-        .then(({ data }) => (this.products = data.data));
-
-      this.$Progress.finish();
+    data(){
+        return{
+            ResultLists:[],
+        }
     },
-    loadProducts() {
-      // if(this.$gate.isAdmin()){
-      axios.get("api/product").then(({ data }) => (this.products = data.data));
-      // }
+    methods:{
+        LoadResultByStudentId(std_id){
+          axios.get('results/LoadResultByStudentId/' +std_id)
+                .then(response => {
+                  if(response.data.data!="" && response.data.data!=null){
+                    let data = response.data.data;
+                    this.ResultLists=data;
+                  }
+                  else{
+                    Swal.fire({
+                      text: "Your result is not pubished yet, Please wait until it is publish from concern person!",
+                      icon: 'warning',
+                      confirmButtonColor: '#3085d6',
+                      cancelButtonColor: '#d33',
+                      confirmButtonText: 'Okay!',
+                      })
+                  }
+                });
+        },
     },
-    loadCategories() {
-      axios
-        .get("/api/category/list")
-        .then(({ data }) => (this.categories = data.data));
-    },
-    loadTags() {
-      axios
-        .get("/api/tag/list")
-        .then((response) => {
-          this.autocompleteItems = response.data.data.map((a) => {
-            return { text: a.name, id: a.id };
-          });
-        })
-        .catch(() => console.warn("Oh. Something went wrong"));
-    },
-    editModal(product) {
-      this.editmode = true;
-      this.form.reset();
-      $("#addNew").modal("show");
-      this.form.fill(product);
-    },
-    newModal() {
-      this.editmode = false;
-      this.form.reset();
-      $("#addNew").modal("show");
-    },
-    createProduct() {
-      this.$Progress.start();
-
-      this.form
-        .post("api/product")
-        .then((data) => {
-          if (data.data.success) {
-            $("#addNew").modal("hide");
-
-            Toast.fire({
-              icon: "success",
-              title: data.data.message,
-            });
-            this.$Progress.finish();
-            this.loadProducts();
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: "Some error occured! Please try again",
-            });
-
-            this.$Progress.failed();
-          }
-        })
-        .catch(() => {
-          Toast.fire({
-            icon: "error",
-            title: "Some error occured! Please try again",
-          });
+    mounted(){ 
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
         });
-    },
-    updateProduct() {
-      this.$Progress.start();
-      this.form
-        .put("api/product/" + this.form.id)
-        .then((response) => {
-          // success
-          $("#addNew").modal("hide");
-          Toast.fire({
-            icon: "success",
-            title: response.data.message,
-          });
-          this.$Progress.finish();
-          //  Fire.$emit('AfterCreate');
-
-          this.loadProducts();
+        $('.select2').select2().
+        on("select2:select", e => {
+            const event = new Event("change", { bubbles: true, cancelable: true });
+            e.params.data.element.parentElement.dispatchEvent(event);
         })
-        .catch(() => {
-          this.$Progress.fail();
+        .on("select2:unselect", e => {
+        const event = new Event("change", { bubbles: true, cancelable: true });
+        e.params.data.element.parentElement.dispatchEvent(event);
         });
+        
+        this.dt = $("#result-term-table").DataTable({
+            "order": [[ 0, "asc" ]],
+            "lengthChange": false,
+            "searching": false,
+        })
+        // session data
+        axios.get('getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            this.cid=data['std_id'];
+            this.code=data['std_code'];
+            this.type=data['user_type'];
+            this.email=data['email'];
+            this.name=data['full_name'];
+            this.contact=data['phone_number'];
+            this.LoadResultByStudentId(this.cid);
+            if(data['user_type']!="Parent" && data['user_type']!="Feedback" && data['user_type']!="Leadership"){
+                this.is_student=true;
+            }
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
+
     },
-    deleteProduct(id) {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        // Send request to the server
-        if (result.value) {
-          this.form
-            .delete("api/product/" + id)
-            .then(() => {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
-              // Fire.$emit('AfterCreate');
-              this.loadProducts();
-            })
-            .catch((data) => {
-              Swal.fire("Failed!", data.message, "warning");
+    created(){
+    },
+    watch: {
+        TermsResultList(val) {
+            this.dt.destroy();
+            this.$nextTick(() => {
+                this.dt = $("#result-term-table").DataTable({
+                    "order": [[ 0, "asc" ]],
+                    "lengthChange": false,
+                    "searching": false,
+                })
             });
         }
-      });
-    },
-  },
-  mounted() {},
-  created() {
-    this.$Progress.start();
-
-    this.loadProducts();
-    this.loadCategories();
-    this.loadTags();
-
-    this.$Progress.finish();
-  },
-  filters: {
-    truncate: function (text, length, suffix) {
-      return text.substring(0, length) + suffix;
-    },
-  },
-  computed: {
-    filteredItems() {
-      return this.autocompleteItems.filter((i) => {
-        return i.text.toLowerCase().indexOf(this.tag.toLowerCase()) !== -1;
-      });
-    },
-  },
-};
+    }
+        
+}
 </script>

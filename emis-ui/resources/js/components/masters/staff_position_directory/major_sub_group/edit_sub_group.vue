@@ -26,7 +26,7 @@
                 <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
-                        <input class="form-control" readonly v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -66,15 +66,8 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadworkingagencyList(uri = 'masters/loadStaffMasters/all_active_staff_major_groupList'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.groupList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
+        async loadworkingagencyList(){
+            this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         },
 		formaction: function(type){
             if(type=="reset"){

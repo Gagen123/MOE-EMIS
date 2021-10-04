@@ -206,6 +206,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->group(['prefix' => 'organization'], function () use ($router){
         $router->post('/saveSubjectMapping', 'generalInformation\ClassMappingController@saveSubjectMapping');
         $router->get('/getSubjectMapping/{org_id}', ['uses' => 'generalInformation\ClassMappingController@getSubjectMapping']);
+        $router->get('/getOptionalSubjectOrgWise/{orgId}', ['uses' => 'generalInformation\ClassMappingController@getOptionalSubjectOrgWise']);
 
         $router->get('/getOrgList/{dzo_id}', ['uses' => 'establishment\EstablishmentController@getOrgList']);
         $router->get('/getClassByOrg/{id}', ['uses' => 'establishment\EstablishmentController@getClassByOrg']);
@@ -493,7 +494,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/updateReopeningDetails', 'restructuring\ReopeningController@updateReopeningDetails');
 
         });
-
+        $router->post('/saveAnnualData', 'establishment\ChangeBasicDetailsController@saveAnnualData');
+        $router->get('/loadOrgDataSubmissionList/{type}/{id}', 'establishment\ChangeBasicDetailsController@loadOrgDataSubmissionList');
+        $router->get('/loadOrgDataSubmissionListMinistry/{dzongkhag_id}/{levelId}', 'establishment\ChangeBasicDetailsController@loadOrgDataSubmissionListMinistry');
     });
 
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
@@ -522,8 +525,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
         $router->get('/loadHeaquarterList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadHeaquarterList']);
-        $router->get('/getOrgProfile/{id}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
+        $router->get('/getOrgProfile/{id}/{type}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
         $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
+        $router->get('/getStudentSchoolDetails/{OrgClassId}', ['uses' => 'LoadOrganizationController@getStudentSchoolDetails']);
     });
 });

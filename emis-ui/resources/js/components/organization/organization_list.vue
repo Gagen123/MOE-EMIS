@@ -57,7 +57,6 @@ export default {
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
             .then(response => {
-              
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
                    
@@ -76,7 +75,7 @@ export default {
             .catch(function (error) {
                 console.log('err: '+error);
             });
-        },
+        }, 
         loadeditpage(item){
             this.$router.push({name:"view_organization_profile",query:{org_id:item.id}});
         },

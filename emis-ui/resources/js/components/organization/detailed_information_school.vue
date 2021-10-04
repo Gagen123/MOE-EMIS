@@ -53,13 +53,13 @@
                                                     <label><input  type="radio" v-model="form.hasCE" value="0" tabindex=""/> No</label>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
+                                            <!-- <div class="form-group row">
                                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Distance from Dzongkhag HQ (km):</label><br>
                                                     <input type="number" v-model="form.distance_from_dzo" class="form-control editable_fields" id="distance_from_dzo" />
                                                     <has-error :form="form" field="distance_from_dzo"></has-error>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                          </div>
                                     </div>
                                     <hr>
@@ -68,16 +68,16 @@
                                             <label class="mb-0"><i><u>Ownership Details</u></i></label>
                                         </div>
                                         <div class="form-group row">
-                                        <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio1'>
+                                       <div class="form-check form-check-inline" id='radio1'>
                                             <label><input  type="radio" v-model="form.category" value="0" tabindex="" id="radio1" @click="showtextbox('Yes')"/> Public</label>
                                         </div>
-                                         <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio2'>
+                                        <div class="form-check form-check-inline" id='radio2'>
                                             <label><input  type="radio" v-model="form.category" value="1" tabindex="" id="radio2" @click="showtextbox('No')"/> Private</label>
-                                         </div>
-                                          <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio3'>
+                                        </div>
+                                        <div class="form-check form-check-inline" id='radio3'>
                                             <label><input  type="radio" v-model="form.category" value="2" tabindex="" id="radio3" @click="showtextbox('Yes')"/> NGO</label>
-                                          </div>
-                                           <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3" id='radio4'>
+                                        </div>
+                                        <div class="form-check form-check-inline" id='radio4'>
                                             <label><input  type="radio" v-model="form.category" value="3" tabindex="" id="radio4" @click="showtextbox('Yes')"/> Corporate</label>
                                         </div>
                                     </div>

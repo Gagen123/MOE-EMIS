@@ -18,20 +18,16 @@
                         <thead>
                             <tr>
                                 <th>Roll No.
-                                    <!-- <span v-if="term_dzo_name && sub_dzo_name"> ( སློབ་ཕྲུག་གི་གསང་ཡིག )</span> -->
                                 </th> 
                                 <th>Name 
                                     <span v-if="term_dzo_name && sub_dzo_name"> ( མིང་། )</span>
                                 </th>
-                                <!-- <th v-for="(item,index) in assessmentAreaList" :key="index">{{item.assessment_area}}</th> -->
-
                                  <th v-for="(item, index) in assessmentAreaList" :key="index">
-                                       <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
-                                            {{item.assessment_area}} 
-                                            <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
-                                            <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
-                                        </span>
-                                  
+                                    <span class="d-inline-block" tabindex="0" data-toggle="tooltip" :title="item.name">
+                                        {{item.assessment_area}} 
+                                        <span v-if="item.assmt_area_dzo_name"> ( {{item.assmt_area_dzo_name}} ) </span>
+                                        <span v-if="item.input_type==1"> ({{item.weightage}}%)</span>
+                                    </span>
                                 </th>
                                 <th v-if="totalWeightage>=1">
                                     Total 
@@ -42,7 +38,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr v-for="(item1, index1) in  studentAssessmentList" :key="index1">
-                                <td>{{index1 + 1}}<input type="hidden" :value="totalScore = 0"></td>
+                                <td>{{item1.roll_no}}<input type="hidden" :value="totalScore = 0"></td>
                                 <td>{{ item1.Name }}</td>
                                 <td v-for="(item2, index2) in assessmentAreaList" :key="index2" :class="{'text-right':(item2.input_type==1)}">
                                     <span v-if="!(studentAssessmentList[index1][item2.aca_assmt_area_id] === undefined)">
@@ -143,17 +139,17 @@
     },
 
     created() {
-        this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
-        this.aca_sub_id = this.$route.params.data.aca_sub_id
-        this.classId=this.$route.params.data.org_class_id;
-        this.streamId=this.$route.params.data.org_stream_id;
-        this.sectionId=this.$route.params.data.org_section_id;
-        this.class_stream_section=this.$route.params.data.class_stream_section;
-        this.subject=this.$route.params.data.sub_name;
-        this.sub_dzo_name=this.$route.params.data.sub_dzo_name;
-        this.term=this.$route.params.data.term_name;
-        this.term_dzo_name=this.$route.params.data.term_dzo_name;
-        this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
+            this.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
+            this.aca_sub_id = this.$route.params.data.aca_sub_id
+            this.classId=this.$route.params.class_stream_section[1];
+            this.streamId=this.$route.params.class_stream_section[2];
+            this.sectionId=this.$route.params.class_stream_section[3];
+            this.class_stream_section=this.$route.params.class_stream_section[4];
+            this.subject=this.$route.params.data.sub_name;
+            this.sub_dzo_name=this.$route.params.data.sub_dzo_name;
+            this.term=this.$route.params.data.term_name;
+            this.term_dzo_name=this.$route.params.data.term_dzo_name;
+            this.OrgClassStreamId=this.$route.params.class_stream_section[0];
 
     },
     mounted(){ 

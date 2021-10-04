@@ -1,19 +1,23 @@
 <template>
-    <div class="card-body">
-        <table id="transfer_type" class="table table-bordered text-sm table-striped">
+    <div class="card-body overflow-auto">
+        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th >SL#</th>
-                    <th >Type</th>
-                    <th >Status</th>
-                    <th >Created Date</th>
-                    <th >Action</th> 
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Name</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:10%">Status</th>
+                    <th style="width:20%">Created Date</th>
+                    <th style="width:10%">Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in transferList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
+                    <td>{{ item.code}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
@@ -28,36 +32,28 @@
 export default {
     data(){
         return{
-            transferList:[], 
+            data_list:[],
             dt:'',
         }
     },
     methods:{
-        loadtransferTypeList(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.transferList =  data.data.data;
-            })
-            .catch(function (error) {
-            });
+        async loadworkingagencyList(){
+            this.data_list =  await this.loadstaffMasters('all','TransferType');
         },
         showedit(data){
-            this.$router.push({name:'edit_transfer_type',params: {data:data}});
+              this.$router.push({name:'edit_transfer_type',params: {data:data}});
         },
+        
     },
-    mounted(){ 
-        this.loadtransferTypeList();
-        this.dt =  $("#transfer_type").DataTable()
-
+    mounted(){
+        this.loadworkingagencyList();
+        this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        transferList(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#transfer_type").DataTable()
-            });
+        data_list(val) {
+            this.applydatatable('working-agency-table');
         }
     },
 }
 </script>
+

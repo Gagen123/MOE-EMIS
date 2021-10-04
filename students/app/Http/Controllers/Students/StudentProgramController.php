@@ -194,14 +194,7 @@ class StudentProgramController extends Controller
             'Responsibility'        => $request->responsibilities,
             'Status'                => $request->status
         ];
-        try{
-            $response_data=CeaProgrammeMembership::where('id', $id)->update($data);
-
-            } catch(\Illuminate\Database\QueryException $ex){
-                dd($ex->getMessage());
-                // Note any method of class PDOException can be called on $ex.
-            }
-        // $response_data = CeaProgrammeMembership::where('id', $id)->update($data);
+        $response_data = CeaProgrammeMembership::where('id', $id)->update($data);
     }
       else {
         $rules = [
@@ -225,6 +218,7 @@ class StudentProgramController extends Controller
             'Responsibility'        => $request->responsibilities,
             'Status'                => $request->status
         ];
+        
         $response_data = CeaProgrammeMembership::create($data);
       }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -252,14 +246,16 @@ class StudentProgramController extends Controller
     */
 
     public function listProgramMembers($param=""){
-        $org_id = $param;
-
+        parse_str($param, $class_details);
+        
         $response_data = DB::table('cea_programme_membership')
                             ->join('cea_programme', 'cea_programme_membership.CeaProgrammeId', '=', 'cea_programme.id')
                             ->join('std_student', 'cea_programme_membership.StdStudentId', '=', 'std_student.id')
+                            ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                             ->select('cea_programme_membership.*', 'cea_programme.name AS program_name',
                                 'std_student.Name AS student_name', 'std_student.student_code AS student_code')
-                            ->where('std_student.OrgOrganizationId', $org_id)
+                            ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                            ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                             ->get();
 
         return $this->successResponse($response_data);
@@ -275,14 +271,12 @@ class StudentProgramController extends Controller
         if( $id != null && $id!= null){
         $rules = [
               'student'                    => 'required',
-              'club'                       => 'required',
-              'responsibilities'           => 'required',
+              'club'                       => 'required'
           ];
 
           $customMessages = [
               'student.required'           => 'This field is required',
-              'club.required'               => 'This field is required',
-              'responsibilities.required'  => 'This field is required',
+              'club.required'               => 'This field is required'
           ];
           $this->validate($request, $rules, $customMessages);
 
@@ -299,14 +293,12 @@ class StudentProgramController extends Controller
         else{
             $rules = [
                 'student'                    => 'required',
-                'club'                       => 'required',
-                'responsibilities'           => 'required',
+                'club'                       => 'required'
             ];
 
             $customMessages = [
                 'student.required'           => 'This field is required',
-                'club.required'              => 'This field is required',
-                'responsibilities.required'  => 'This field is required',
+                'club.required'              => 'This field is required'
             ];
             $this->validate($request, $rules, $customMessages);
 
@@ -354,13 +346,15 @@ class StudentProgramController extends Controller
     */
 
     public function listClubMembers($param=""){
-        $org_id = $param;
+        parse_str($param, $class_details);
         $response_data = DB::table('cea_club_membership')
                             ->leftjoin('cea_programme', 'cea_club_membership.CeaProgrammeId', '=', 'cea_programme.id')
                             ->leftjoin('std_student', 'cea_club_membership.StdStudentId', '=', 'std_student.id')
+                            ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
                             ->select('cea_club_membership.*', 'cea_programme.name AS program_name',
                                 'std_student.Name AS student_name', 'std_student.student_code AS student_code')
-                            ->where('std_student.OrgOrganizationId', $org_id)
+                            ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                            ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
                             ->get();
 
         return $this->successResponse($response_data);

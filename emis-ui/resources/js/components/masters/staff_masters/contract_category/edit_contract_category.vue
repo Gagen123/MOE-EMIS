@@ -4,21 +4,21 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Seperation:<span class="text-danger">*</span></label>
+                        <label>Name:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_err('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:</label>
-                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
-                        <has-error :form="form" field="description"></has-error>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label>
-                        <input class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" type="text">
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" ></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4">
+                        <label>Code:</label>
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4">
                         <label class="required">status:</label>
                         <br>
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
@@ -79,6 +79,7 @@ export default {
     created() {
         this.form.name=this.$route.params.data.name;
         this.form.status=this.$route.params.data.status;
+        this.form.code=this.$route.params.data.code;
         this.form.description=this.$route.params.data.description;
         this.form.id=this.$route.params.data.id;
     },

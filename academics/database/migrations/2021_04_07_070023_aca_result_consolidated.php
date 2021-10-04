@@ -23,6 +23,8 @@ class AcaResultConsolidated extends Migration
             $table->string('class_stream_section',100);
             $table->unsignedTinyInteger('finalized')->nullable()->default(0)->index();
             $table->dateTime('finalized_date')->nullable();
+            $table->unsignedTinyInteger('approved')->nullable()->default(0)->index();
+            $table->dateTime('approved_date')->nullable();
             $table->unsignedTinyInteger('published')->nullable()->default(0)->index();
             $table->dateTime('published_date')->nullable();
             $table->string('created_by',36)->index();

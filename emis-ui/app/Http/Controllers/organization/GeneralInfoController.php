@@ -346,6 +346,14 @@ class GeneralInfoController extends Controller
         return $itemList;
     }
 
+    /**
+     * Get the student school details based on OrgClassId
+     */
+    public function getStudentSchoolDetails($OrgClassId = ""){
+         $itemList = $this->apiService->listData('emis/organization/getStudentSchoolDetails/'.$OrgClassId);
+         return $itemList;
+     }
+
     public function getClassByOrganizationId($orgId = ""){
         $itemList = $this->apiService->listData('emis/organization/section/getClassByOrganizationId/'.$orgId);
         return $itemList;
@@ -377,7 +385,6 @@ class GeneralInfoController extends Controller
 
 
     public function udpateOrgProfile(Request $request){
-
         $this->validate($request, [
             'attachments' => 'mimes:jpeg,png,bmp,tiff |max:4096',
         ],
@@ -400,20 +407,25 @@ class GeneralInfoController extends Controller
             $path=$file_store_path.'/'.$file_name;
         }
         $org_details =[
-            'org_id'            =>  $request['org_id'],
+            'org_id'            =>  $this->getWrkingAgencyId(),
             'vission'           =>  $request['vission'],
             'mission'           =>  $request['mission'],
             'attachments'       =>  $path,
-            'user_id'           =>  $this->userId() 
+           // 'type'              =>  $request['type'],
+            'objective'         =>  $request['objective'],
+            'user_id'           =>  $this->userId(),
+            'access_level'      =>  $this->getAccessLevel(),
         ];
-        // dd($org_details);
+        //dd( $org_details);
         $response_data= $this->apiService->createData('emis/organization/udpateOrgProfile', $org_details);
         return $response_data;
     }
 
-    public function getOrgProfile($id = ""){
-       // dd($id);
-        $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id);
+    public function getOrgProfile($type="",$id=""){
+        // dd($id);
+        $type=$this->getAccessLevel();
+        //dd($type);
+        $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id.'/'.$type);
         return $org_details;
     }
 
@@ -789,6 +801,73 @@ class GeneralInfoController extends Controller
         $response_data= $this->apiService->listData('emis/organization/getcurrentSenDetails/'.$orgId);
         return $response_data;
         
+    }
+    public function saveAnnualData(Request $request){
+        // $rules = [
+        //     'year'          =>  'required',
+        //     'date'          =>  'required',
+        //     'location'      =>  'required',
+        //     'number'        =>  'required',
+        // ];
+        // $customMessages = [
+        //     'year.required'         => 'Type is required',
+        //     'item.required'         => 'Item is required',
+        //     'location.required'     => 'Location/Use is required',
+        //     'number.required'       => 'Number is required',
+        // ];
+        // $this->validate($request, $rules, $customMessages);
+        $data =[
+            'organizationId'            =>  $this->getWrkingAgencyId(),
+            'year'                      =>  $request['year'],
+         //   'date'                      =>  $request['date'],
+            'id'                        =>  $request['id'],
+            'user_id'                   =>  $this->userId()
+        ];
+       // dd($data);
+        // try{
+            $response_data= $this->apiService->createData('emis/organization/saveAnnualData', $data);
+            return $response_data;
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
+    }
+    public function loadOrgDataSubmissionList($type="",$id=""){
+        // dd($type);
+        //if Ministry then give entire list
+        // $access_level = $this->getAccessLevel();
+        $param="";
+      
+        //type=allorganizationList: to list entire organization Data Submission List
+        if($type=="allorganizationDataList"){
+            $param=$id;
+           
+        }
+        //type=userdzongkhagwise: to list with dzongkhag id from user login
+        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" ){
+            $param=$this->getUserDzoId();
+           
+        }
+
+        //type=userworkingagency: to list with working agency from user login
+        if($type=="userworkingagency"){
+            $param=$this->getWrkingAgencyId();
+           
+        }
+        //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
+        if($type=="dzongkhagwise"){
+            $param=$id;
+           
+        }
+
+        // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/organization/loadOrgDataSubmissionList/'.$type.'/'.$param);
+    }
+    public function loadOrgDataSubmissionListMinistry($dzongkhag_id="", $levelId=""){
+      //  dd($dzongkhag_id);
+        $response_data= $this->apiService->listData('emis/organization/loadOrgDataSubmissionListMinistry/'.$dzongkhag_id.'/'.$levelId);
+        return $response_data;
+         
     }
 
 }

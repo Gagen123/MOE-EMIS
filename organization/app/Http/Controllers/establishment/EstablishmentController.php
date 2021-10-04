@@ -951,20 +951,32 @@ class EstablishmentController extends Controller{
             'org_id'        =>  $request->org_id,
             'mission'       =>  $request->mission,
             'vission'       =>  $request->vission,
+           
+           // 'objective'     =>  $request->objective,
         ];
+        //dd($org_data);
         if($request->attachments!=""){
             $org_data=$org_data+[
                 'logo_path'     =>  $request->attachments];
         }
+        if($request->objective!=""){
+            $org_data =$org_data+[
+                'objective'              =>  $request->objective,
+            ];
+          //  dd($request->objective);
+        }
+      
         if($org_det==null || $org_det==""){
             $org_data=$org_data+[
                 'created_by'    =>  $request->user_id,
+                'access_level'  =>  $request->access_level,
                 'created_at'    =>  date('Y-m-d h:i:s')];
             OrgProfile::create($org_data);
         }
         else{
             $org_data=$org_data+[
                 'updated_by'    =>  $request->user_id,
+                'access_level'  =>  $request->access_level,
                 'updated_at'    =>  date('Y-m-d h:i:s')];
             OrgProfile::where('org_id',$request->org_id)->update($org_data);
         }
@@ -1205,4 +1217,5 @@ class EstablishmentController extends Controller{
         }
         return $this->successResponse($response_data);
     }
+    
 }

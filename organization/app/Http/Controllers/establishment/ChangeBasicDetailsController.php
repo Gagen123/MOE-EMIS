@@ -5,7 +5,7 @@ namespace App\Http\Controllers\establishment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use App\Traits\ApiResponser;
+use App\Traits\ApiResponser;   
 use App\Models\establishment\ApplicationDetails;
 use App\Models\establishment\ApplicationProprietorDetails;
 use App\Models\establishment\ApplicationClassStream;
@@ -27,6 +27,7 @@ use App\Models\OrganizationClassStreamHistory;
 use App\Models\OrganizationSectionHistory;
 use App\Models\generalInformation\SectionDetails;
 use App\Models\restructuring\Bifurcation;
+use App\Models\establishment\Organization_AnnualData;
 use Illuminate\Support\Facades\DB;
 
 class ChangeBasicDetailsController extends Controller
@@ -545,10 +546,8 @@ class ChangeBasicDetailsController extends Controller
                 }
             }
         }
-
         return $changeDetails;
     }
-
     private function extractChangeInStreamData($request, $applicationDetailsId){
         $changeDetails =[];
         if($request['stream']!=""){
@@ -569,13 +568,11 @@ class ChangeBasicDetailsController extends Controller
      */
     private function checkStreamExists($classId){
         $data = DB::table('class_stream_mappings')
-                ->select('streamId', 'classId')
-                ->where('classId', $classId)
-                ->get()
-                ->toArray();
-
+            ->select('streamId', 'classId')
+            ->where('classId', $classId)
+            ->get()
+            ->toArray();
         return $data;
-
     }
 
     /**
@@ -589,7 +586,6 @@ class ChangeBasicDetailsController extends Controller
                 ->toArray();
 
         return $data;
-
     }
 
     private function extractChangeInPropreitorData($request, $applicationDetailsId){
@@ -1408,5 +1404,85 @@ class ChangeBasicDetailsController extends Controller
         ];
         $change_details=OrganizationDetails::where('id',$change_details->organizationId)->update($org_update_data);
         return $change_details;
+    }
+    public function saveAnnualData(Request $request){
+        $dt="";
+        $orgId = $request['organizationId'];
+        Organization_AnnualData::where('organizationId', $orgId)->delete();
+            $data = [
+                'organizationId'            =>  $request['organizationId'],
+                'year'                      =>  $request['year'],
+                'status'                    =>  'Submitted',
+                'date'                      =>  date('Y-m-d'),
+                'created_by'                =>  $request->user_id,
+                'created_at'                =>  date('Y-m-d h:i:s'),
+               
+            ];
+            $dt = Organization_AnnualData::create($data);
+            // dd($dt);
+        return $this->successResponse($dt, Response::HTTP_CREATED);
+        
+    }
+    public function loadOrgDataSubmissionList($type="", $id=""){
+       // dd($type);
+        $response_data="";
+        if($type=="userworkingagency"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE a.organizationId = '".$id."' ");
+        }
+        
+        if($type=="dzongkhagwise" || $type=="userdzongkhagwise"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$id."' ");
+        }
+
+        if($type=="allorganizationDataList"){
+            if($id=="allData"){
+                $response_data=DB::SELECT("SELECT b.dzongkhagId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+                LEFT JOIN `organization_details` b ON a.organizationId = b.id
+                LEFT JOIN `level` l ON b.levelId = l.id");
+            }
+           
+        }
+        if ($type=="alldzongkhagdata"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$id."' ");
+        }
+        // else{
+        //     $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+        //     LEFT JOIN `organization_details` b ON a.organizationId = b.id
+        //     LEFT JOIN `level` l ON b.levelId = l.id
+        //     WHERE b.dzongkhagId = '".$id."' AND l.id = '".$type."'");
+        // }
+      //  dd($response_data);
+        return $this->successResponse($response_data);
+    }
+
+    public function loadOrgDataSubmissionListMinistry($dzongkhag_id="", $levelId=""){
+         //dd($levelId);
+         $response_data="";
+        if($levelId=="ALL"){
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$dzongkhag_id."' ");
+        }
+        else{
+            $response_data=DB::SELECT("SELECT b.dzongkhagId, a.organizationId, b.name, l.name AS LEVEL, a.status, a.date FROM `organization_annualdata` a 
+            LEFT JOIN `organization_details` b ON a.organizationId = b.id
+            LEFT JOIN `level` l ON b.levelId = l.id
+            WHERE b.dzongkhagId = '".$dzongkhag_id."'
+            AND l.id = '".$levelId."' ");
+
+        } 
+         
+       //  dd($response_data);
+         return $this->successResponse($response_data);
     }
 }

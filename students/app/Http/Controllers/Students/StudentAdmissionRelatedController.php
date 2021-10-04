@@ -53,12 +53,8 @@ class StudentAdmissionRelatedController extends Controller
 
         unset($data['std_reported']);
 
-        foreach($std_unreported as $index => $unreported){
-            if($unreported == 'on'){
-                $StdStudentId = $student_id[$index];
+        foreach($std_unreported as $index => $StdStudentId){
                 $response_data = $this->updateStudentStatus('reporting', $StdStudentId);
-            }
-
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -72,7 +68,7 @@ class StudentAdmissionRelatedController extends Controller
                 ->select('std_student.Name', 'std_student.id', 'std_student.student_code', 
                         'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
                 ->where('OrgOrganizationId', $org_id)
-                ->where('IsRejoined', '1')
+                ->where('IsRejoined', '0')
                 ->get();
 
         return $this->successResponse($students);
@@ -161,14 +157,14 @@ class StudentAdmissionRelatedController extends Controller
         $this->validate($request, $rules, $customMessages);
 
         $data =[
-            'id'               => $request->id,
-            'OrgOrganizationId' => $request->working_agency_id,
-            'LeaveingDate'             => $request->date,
-            'StdStudentId'             => $request->student,
-            'last_class_attended'             => $request->last_class_attended,
-            'action_type'       => $request->action_type,
-            'CurrentEngagement'    => $request->current_engagement,
-            'CurrentAddress'       => $request->current_address
+            'OrgOrganizationId'         => $request->working_agency_id,
+            'LeaveingDate'              => $request->date,
+            'StdStudentId'              => $request->student,
+            'StdDropoutCaseTypeId'      => $request->dropout,
+            'last_class_attended'       => $request->last_class_attended,
+            'action_type'               => $request->action_type,
+            'CurrentEngagement'         => $request->current_engagement,
+            'CurrentAddress'            => $request->current_address
         ];
 
         if($request->action_type=="add"){
@@ -181,12 +177,15 @@ class StudentAdmissionRelatedController extends Controller
             // $procid=DB::select("CALL system_db.emis_audit_proc('".$this->database."','master_working_agency','".$request['id']."','".$msg_det."','".$request->input('user_id')."','Edit')");
 
             $app_data = [
-                'StdStudentId' => $request['student'],
-                'awarded_by'    =>  $request['award_given_by'],
-                'CeaAwardId'     =>  $request['award_type_id'],
-                'Place'             =>  $request['place'],
-                'AwardDate'              =>  $request['date'],
-                'Remarks'           =>  $request['remarks'],
+                'id'                        => $request->id,
+                'OrgOrganizationId'         => $request->working_agency_id,
+                'LeaveingDate'              => $request->date,
+                'StdStudentId'              => $request->student,
+                'StdDropoutCaseTypeId'      => $request->dropout,
+                'last_class_attended'       => $request->last_class_attended,
+                'action_type'               => $request->action_type,
+                'CurrentEngagement'         => $request->current_engagement,
+                'CurrentAddress'            => $request->current_address
             ];
 
             StdSeparatedWhereabouts::where('id', $request['id'])->update($app_data);
@@ -271,7 +270,7 @@ class StudentAdmissionRelatedController extends Controller
         }
         if($type == 'reporting'){
             $app_data = [
-                'IsRejoined' => '1',
+                'IsRejoined' => '0',
             ];
         }
         Student::where('id', $student_id)->update($app_data);
