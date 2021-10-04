@@ -29,6 +29,17 @@ class LoadOrganizationController extends Controller{
         date_default_timezone_set('Asia/Dhaka');
     }
 
+    //GET ORGANIZATION DETAILS BY DZO ID AND LEVEL ID USED IN REPORT
+    public function getOrgByDzoLevel($dzoId,$levelId){
+        $response_data = DB::table('organization_details')
+                ->select('id', 'name')
+                ->where('dzongkhagId',$dzoId)
+                ->where('levelId',$levelId)
+                ->where('status',1)
+                ->get();
+        return $response_data;
+    }
+
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
