@@ -1,15 +1,15 @@
 <template>
-    <div>
+    <div class="card-body overflow-auto">
         <table id="location-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>Location</th>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Created Date</th> 
-                    <th>Action</th> 
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Location</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:10%">Status</th>
+                    <th style="width:25%">Created Date</th> 
+                    <th style="width:10%">Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">

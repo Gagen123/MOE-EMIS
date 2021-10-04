@@ -1,17 +1,17 @@
 <template>
-    <div class="card-body">
+    <div class="card-body overflow-auto">
         <table id="org-masters-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>Dzongkhag</th>
-                    <th>Department</th>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Type</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-                    <th>Action</th>
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Dzongkhag</th>
+                    <th style="width:20%">Department</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:20%">Type</th>
+                    <th style="width:20%">Status</th>
+                    <th style="width:20%">Created At</th>
+                    <th style="width:10%">Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">

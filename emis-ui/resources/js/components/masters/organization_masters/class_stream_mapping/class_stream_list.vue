@@ -1,12 +1,12 @@
 <template>
-    <div>
+    <div class="card-body overflow-auto">
         <table id="class-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>Class</th>
-                    <th>Streams</th>
-                    <th>Action</th> 
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Class</th>
+                    <th style="width:20%">Streams</th>
+                    <th style="width:10%">Action</th> 
 
                 </tr>
             </thead>

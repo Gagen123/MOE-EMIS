@@ -1,16 +1,16 @@
 <template>
-    <div>
+    <div class="card-body overflow-auto">
         <table id="service-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th>SL#</th>
-                    <th>Service Type</th>
-                    <th>Service Provider</th>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Created At </th>
-                    <th>Action</th> 
+                    <th style="width:5%">SL#</th>
+                    <th style="width:15%">Service Type</th>
+                    <th style="width:15%">Service Provider</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:10%">Status</th>
+                    <th style="width:25%">Created At </th>
+                    <th style="width:10%">Action</th> 
                 </tr>
             </thead>
             <tbody id="tbody">

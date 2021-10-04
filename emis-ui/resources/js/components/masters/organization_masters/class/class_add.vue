@@ -62,19 +62,19 @@ export default {
                 this.form.description= '';
                 this.form.status= 1;
             }
-            if(type=="save"){
-                this.form.post('masters/',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Class is added successfully'
-                    })
-                    this.$router.push('/class_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
-                })
-            }
+            // if(type=="save"){
+            //     this.form.post('masters/saveClass',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Class is added successfully'
+            //         })
+            //         this.$router.push('/class_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......")
+            //     })
+            // }
             if(type=="save"){
                 Swal.fire({
                     title: 'Are you sure you wish to submit this form ?',
