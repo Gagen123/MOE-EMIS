@@ -26,24 +26,28 @@ class OrganizationMasterController extends Controller{
         $response_data="";
         $rules = [
             'name'          =>  'required',
-            'code'          =>  'required',
-            // 'description'   =>  'required',
+         //   'code'          =>  'required',
             'status'        =>  'required',
         ];
         if($request->action_type=="edit"){
             $rules = $rules+[
                                     //for update, unique:table,column,idColumn
                 'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+                'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
             ];
         }else{
             $rules = $rules+[
                                 //for create, unique:table,column
-                'code'          =>  'unique:'.$model->getTable(),
+                'code'          =>  'unique:'.$model->getTable().',code',
+            ];
+            $rules = $rules+[
+                //for create, unique:table,column
+                'name'          =>  'unique:'.$model->getTable().',name,'.$request->name.',code,'.$request->code,
             ];
         }
         $customMessages = [
             'name.required'         => 'This field is required',
-            'code.required'         => 'This field is required',
+            'code.required'         => 'This code is already taken. please choose another one',
             // 'description.required'  => 'This field is required',
             'status.required'       => 'This field is required',
         ];

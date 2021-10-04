@@ -234,7 +234,7 @@
                         <div class="form-group row"> 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
                                 <label>Nearest Road Type :</label>
-                                <span class="text-blue text-bold" id="ownership">{{connectivityDetails.road_typeyes}}</span>
+                                <span class="text-blue text-bold" id="ownership">{{roadTypeList[connectivityDetails.road_typeyes]}}</span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Connected to Road::</label>
@@ -339,10 +339,8 @@ export default {
             compoundDetails:[],
             infrastructureList:[],
             sectionList:[],
+            roadTypeList:[],
             form: new form({
-              //  organizationId:'',
-             //   landOwnership:'',
-             //   compoundFencing:'',
                 id:'',
                 rolename:'',
                 year: new Date().getFullYear(),
@@ -577,26 +575,30 @@ export default {
                 console.log(errors)
             });
         },
-        // loadfencingList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         this.fence_list =  data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log('error: '+error);
-        //     });
-        // },
+      
         loadfencingList(uri='masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.fence_list[data.data.data[i].id] = data.data.data[i].Name;
+                    this.fence_list[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
+            });
+        },
+        loadRoadTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/RoadType'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.roadTypeList[data.data.data[i].id] = data.data.data[i].name;
+                }
+               // this.roadTypeList =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
             });
         },
         loadtransferwindow(){
@@ -642,8 +644,6 @@ export default {
         },
         AnnualDetail: function(type){
             if(this.form.rolename=="Principal"){
-
-            
             if(type=="final-tab"){
                 Swal.fire({
                     title: 'Are you sure you wish to submit this form ?',
@@ -654,29 +654,40 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) =>{
                     if (result.isConfirmed){
-                        this.form.post('organization/saveAnnualData',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                      //  this.$router.push('/school_details_acknowledgement');
-                        if(response!="" && response!=null){
-                            let message="Your Annual Detail has been Submitted Successfully ";
-                            this.$router.push({name:'school_details_acknowledgement',params: {data:message}});
-                            Toast.fire({
+                        if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
+                            this.form.post('organization/saveAnnualData',this.form)
+                            .then((response) =>{
+                                Toast.fire({
                                 icon: 'success',
-                                title: 'Annual details is saved successfully'
-                            });
+                                title: 'Details added successfully'
+                            })
+                         //  this.$router.push('/school_details_acknowledgement');
+                            if(response!="" && response!=null){
+                                let message="Your Annual Detail has been Submitted Successfully ";
+                                this.$router.push({name:'school_details_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Annual details is saved successfully'
+                                });
+                            }
+                            })
+                            .catch((error) => {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected error occured. Try again.'
+                                });
+                                console.log("Error:"+error);
+                            })
                         }
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
+                        else{
+                        Swal.fire({
+                            text: "Time period for applying intra transfer is closed for the moment!",
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Okay!',
+                            })
+                        }
                        
                     }
                 })
@@ -716,10 +727,10 @@ export default {
             }) ;
         }
     },
-
-     mounted(){
+    mounted(){
         this.loadEquipmentList();
         this.loadSportList();
+        this.loadRoadTypeList();
         this.loadInfrastructureList();
         this.loadFurnitureList();
         this.loadEquipmentList();
@@ -729,9 +740,5 @@ export default {
         this.date = this.printDate();
         
     },
-    // created(){
-    //     this.form.year=this.$route.params.data.year;
-    //     this.form.id=this.$route.params.data.id;
-    // }
 }
 </script>

@@ -344,9 +344,11 @@ class StudentProgramController extends Controller
     /*
     * Function is to load the student Programs Action Plan
     */
-
+ 
     public function loadProgramActionPlan($param=""){
         $student_records = $this->apiService->listData('emis/students/loadProgramActionPlan/'.$param);
         return $student_records;
     }
+
+    
 }
