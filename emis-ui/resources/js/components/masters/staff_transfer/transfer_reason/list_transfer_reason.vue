@@ -1,19 +1,19 @@
 <template>
-    <div class="card-body ">
-        <table id="transfer-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body overflow-auto">
+        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th >SL#</th>
-                    <th >Name</th>
-                    <th >Code</th>
-                    <th >Description</th>
-                    <th >Status</th>
-                    <th >Created Date</th>
-                    <th >Action</th> 
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Name</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:10%">Status</th>
+                    <th style="width:20%">Created Date</th>
+                    <th style="width:10%">Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in transferList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
@@ -32,13 +32,13 @@
 export default {
     data(){
         return{
-            transferList:[],
+            data_list:[],
             dt:'',
         }
     },
     methods:{
         async loadworkingagencyList(){
-            this.transferList =  await this.loadstaffMasters('all','TransferReason');
+            this.data_list =  await this.loadstaffMasters('all','TransferReason');
         },
         showedit(data){
               this.$router.push({name:'edit_transfer_reason',params: {data:data}});
@@ -47,12 +47,13 @@ export default {
     },
     mounted(){
         this.loadworkingagencyList();
-        this.dt =  $("#transfer-table").DataTable();
+        this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        transferList(val) {
-            this.applydatatable('#transfer-table');
+        data_list(val) {
+            this.applydatatable('working-agency-table');
         }
     },
 }
 </script>
+

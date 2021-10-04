@@ -50,17 +50,17 @@
                 </li>
 
                 <li class="nav-item active pr-1">
-                    <router-link to="/course_mode" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'CourseMode', query: {data: 'dynamidId', model:'CourseMode' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Course Mode
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/seperation" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'SeperationMaster', query: {data: 'dynamidId', model:'SeperationMaster' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Seperation
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
-                    <router-link to="/secondment" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link :to="{name: 'SecondmentMaster', query: {data: 'dynamidId', model:'SecondmentMaster' } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Secondment
                     </router-link>
                 </li>

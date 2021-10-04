@@ -39,42 +39,71 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-
-
     /**
      * method to save or update student masters data
     */
 
     public function saveStudentMasters(Request $request){
+        $modelName = "App\\Models\\Masters\\"."$request->model";
+        $model = new $modelName();
+        $response_data="";
         $rules = [
-            'name'  =>  'required',
+            'name'          =>  'required',
+            'status'        =>  'required',
+            'code'          =>  'required',
         ];
-
-        // $rules = [
-        //     'name' => 'required',
-        //     'code' =>  [
-        //                  'required', 
-        //                  Rule::unique('cea_award', 'Code')
-        //                         ->where('Name', $request->name)
-        //                 ]
-        // ];
+        if($request->action_type=="edit"){
+            $rules = $rules+[
+                //for update, unique:table,column,idColumn
+                'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+            ];
+        }else{
+            $rules = $rules+[
+                //for create, unique:table,column
+                'code'          =>  'unique:'.$model->getTable().',code',
+            ];
+        }
         $customMessages = [
-            'name.required' => 'This field cannot be empty'
-         ];
+            'name.required'         => 'This field is required',
+            'status.required'       => 'This field is required',
+            'code.required'         => 'This field is required',
 
+        ];
+        if($request->action_type=="edit"){
+            $customMessages = $customMessages+[
+                'code.unique'           => 'This code is already taken. please choose another one',
+            ];
+        }else{
+            $customMessages = $customMessages+[
+                'code.unique'           => 'This code is already taken. please choose another one',
+            ];
+        }
         $this->validate($request, $rules, $customMessages);
-
-        $record_type = $request['record_type'];
-
-        $data = $this->extractRequestInformation($request, $record_type, $type='data');
-        $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
-
+        $master_data = [
+            'Name'              =>  $request->name,
+            'Description'       =>  $request->description,
+            'Status'            =>  $request->status,
+            'Code'              =>  $request->code,
+        ];
         if($request->action_type=="add"){
-            $response_data = $this->insertData($data, $databaseModel);
+            $master_data =$master_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $response_data = $model::create($master_data);
         }
-        else if($request->action_type=="edit"){
-            $response_data = $this->updateData($request,$data, $databaseModel);
-        }
+
+        // $record_type = $request['record_type'];
+
+        // $data = $this->extractRequestInformation($request, $record_type, $type='data');
+        // $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
+
+        // if($request->action_type=="add"){
+        //     $response_data = $this->insertData($data, $databaseModel);
+        // }
+        // else if($request->action_type=="edit"){
+        //     $response_data = $this->updateData($request,$data, $databaseModel);
+        // }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }

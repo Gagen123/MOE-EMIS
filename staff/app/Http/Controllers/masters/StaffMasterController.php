@@ -31,24 +31,34 @@ class StaffMasterController extends Controller{
         $rules = [
             'name'          =>  'required',
             'status'        =>  'required',
+            'code'          =>  'required',
         ];
         if($request->action_type=="edit"){
             $rules = $rules+[
-                                    //for update, unique:table,column,idColumn
+                //for update, unique:table,column,idColumn
                 'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
             ];
         }else{
             $rules = $rules+[
-                                //for create, unique:table,column
-                'code'          =>  'unique:'.$model->getTable(),
+                //for create, unique:table,column
+                'code'          =>  'unique:'.$model->getTable().',code',
             ];
         }
         $customMessages = [
             'name.required'         => 'This field is required',
             'status.required'       => 'This field is required',
-            'code.unique'           => 'This code is already taken. please choose another one',
-        ];
+            'code.required'         => 'This field is required',
 
+        ];
+        if($request->action_type=="edit"){
+            $customMessages = $customMessages+[
+                'code.unique'           => 'This code is already taken. please choose another one',
+            ];
+        }else{
+            $customMessages = $customMessages+[
+                'code.unique'           => 'This code is already taken. please choose another one',
+            ];
+        }
         $this->validate($request, $rules, $customMessages);
         $master_data = [
             'name'              =>  $request->name,

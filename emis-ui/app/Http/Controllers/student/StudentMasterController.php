@@ -17,16 +17,6 @@ class StudentMasterController extends Controller{
     }
 
     public function saveStudentMasters(Request $request){
-
-        // $rules = [
-        //     'name'          =>  'required',
-        // ];
-        // $customMessages = [
-        //     'name.required' => 'This field is required',
-        // ];
-        
-        // $this->validate($request, $rules, $customMessages);
-
         $data = $request->all();
 
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
