@@ -100,8 +100,8 @@ class StudentMasterController extends Controller{
         return $student_masters;
     }
 
-    public function loadStudentMasters($param=""){
-        $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
+    public function loadStudentMasters($type="",$model=""){
+        $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$type."/".$model);
         return $student_masters;
     }
 

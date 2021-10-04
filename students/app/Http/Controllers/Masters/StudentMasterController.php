@@ -220,48 +220,92 @@ class StudentMasterController extends Controller
      * method to list students masters
     */
 
-    public function loadStudentMasters($param=""){
-        $orginal_param=$param;
-        if(strpos($param,'_Active')){
-            $param=str_replace('_Active','',$param);
-        }
-
-        if($param == 'program_name' || $param == 'club_name'){
-            $model_name = 'CeaProgram';
-        } else {
-            $model_name = $param;
-        }
-
-        $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
-        $modelName = "App\\Models\\Masters\\"."$databaseModel";
-
+    public function loadStudentMasters($type="",$model=""){
+        $mod=$model;
+        $modelName = "App\\Models\\Masters\\"."$model";
         $model = new $modelName();
-
-        if($param == 'program_name'){
-            $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
-            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
-            return $this->successResponse($response_data);
-
-        } elseif($param == 'club_name'){
-            $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
-            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
-            return $this->successResponse($response_data);
-
-        } elseif(strpos($orginal_param,'_Active')){
-            //change from param to $orginal_param as param value is changing above
-            return $this->successResponse($model::where('status',1)->get());
-
-        } elseif($param == 'StudentAwardType'){
-            return $this->successResponse(StudentAwardType::all());
-
-        } elseif($param == 'CeaProgramType'){
-            return $this->successResponse(CeaProgramType::all());
-
-        } else {
-            return $this->successResponse($model::all());
+        if($type == 'all'){
+            if($mod=="ChildGroupPosition"){
+                $response_data=$model::get();
+                return $this->successResponse($response_data);
+            }else{
+                return $this->successResponse($model::get());
+            }
         }
-
+        else if(strpos($type,'joinall')!==false){
+            $response_data=$model::get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $data){
+                    $submod=explode('__',$type)[1];
+                    $sub_det="App\\Models\\staff_masters\\"."$submod";
+                    $submodel = new $sub_det();
+                    $data->sub_det=$submodel::where('id',$data[explode('__',$type)[2]])->first();
+                }
+            }
+            return $this->successResponse($response_data);
+        }
+        else if($type == 'active'){
+            return $this->successResponse($model::where('status',1)->get());
+        }
+        else if(strpos($type,'byparent')!==false){
+            // dd(explode('__',$type)[1]);
+            return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
+        }
+        else if($type=="Qualification"){
+            return $this->successResponse($model::with('quialificationtype','quialificationlevel')->get());
+        }
+        else if($type=="StaffSubMajorGrop"){
+            return $this->successResponse($model::with('majorgroup')->get());
+        }
+        else if($type == 'active'){
+            return $this->successResponse($model::where('status',1)->get());
+        }
+        
     }
+
+    // old code of phuntsho sir to load student master
+    // public function loadStudentMasters($param=""){
+    //     $orginal_param=$param;
+    //     if(strpos($param,'_Active')){
+    //         $param=str_replace('_Active','',$param);
+    //     }
+
+    //     if($param == 'program_name' || $param == 'club_name'){
+    //         $model_name = 'CeaProgram';
+    //     } else {
+    //         $model_name = $param;
+    //     }
+
+    //     $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
+    //     $modelName = "App\\Models\\Masters\\"."$databaseModel";
+
+    //     $model = new $modelName();
+
+    //     if($param == 'program_name'){
+    //         $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
+    //         $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
+    //         return $this->successResponse($response_data);
+
+    //     } elseif($param == 'club_name'){
+    //         $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
+    //         $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
+    //         return $this->successResponse($response_data);
+
+    //     } elseif(strpos($orginal_param,'_Active')){
+    //         //change from param to $orginal_param as param value is changing above
+    //         return $this->successResponse($model::where('status',1)->get());
+
+    //     } elseif($param == 'StudentAwardType'){
+    //         return $this->successResponse(StudentAwardType::all());
+
+    //     } elseif($param == 'CeaProgramType'){
+    //         return $this->successResponse(CeaProgramType::all());
+
+    //     } else {
+    //         return $this->successResponse($model::all());
+    //     }
+
+    // }
 
 //GET TEACHER POSITION TITLE FOR REPORT
 
