@@ -31,34 +31,31 @@ class StaffMasterController extends Controller{
         $rules = [
             'name'          =>  'required',
             'status'        =>  'required',
-            'code'          =>  'required',
         ];
         if($request->action_type=="edit"){
             $rules = $rules+[
                 //for update, unique:table,column,idColumn
                 'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+                'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
             ];
         }else{
             $rules = $rules+[
                 //for create, unique:table,column
                 'code'          =>  'unique:'.$model->getTable().',code',
+                // 'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
+            ];
+
+            $rules = $rules+[
+                //for create, unique:table,column
+                'name'          =>  'unique:'.$model->getTable().',name,'.$request->name.',code,'.$request->code,
             ];
         }
         $customMessages = [
             'name.required'         => 'This field is required',
             'status.required'       => 'This field is required',
-            'code.required'         => 'This field is required',
-
+            'code.unique'           => 'This code is already taken. please choose another one',
+            // 'name.unique'           => 'This code and name combination is already taken. please choose another one',
         ];
-        if($request->action_type=="edit"){
-            $customMessages = $customMessages+[
-                'code.unique'           => 'This code is already taken. please choose another one',
-            ];
-        }else{
-            $customMessages = $customMessages+[
-                'code.unique'           => 'This code is already taken. please choose another one',
-            ];
-        }
         $this->validate($request, $rules, $customMessages);
         $master_data = [
             'name'              =>  $request->name,
@@ -259,6 +256,19 @@ class StaffMasterController extends Controller{
         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }
+        
+    }
+    public function getTeacherPositionTitle(){
+        $result_data = DB::select('SELECT
+            A.id,
+            B.name
+            FROM master_child_group_position AS A
+            JOIN master_stf_position_title AS B
+            ON A.position_title_id = B.id
+            WHERE B.status = 1
+            AND (B.code = 0130 OR B.code = 0131 OR B.code = 0139 OR B.code = 0140 OR B.code = 0141)
+            AND A.status = 1');
+        return $result_data;
     }
 
     public function loadStaffMastersbyId($model="",$id=""){

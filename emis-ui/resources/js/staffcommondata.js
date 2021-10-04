@@ -1,7 +1,6 @@
 try {
     Vue.mixin({
         methods: {
-            
             applydatatable(id){
                 this.dt.destroy();
                 this.$nextTick(() => {
@@ -18,6 +17,30 @@ try {
                     console.log('error loadLevelList '+e);
                 }
             },
+            submitstaffmaster(list_route){
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('staff/saveStaffMasters',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/'+list_route);
+                        })
+                        .catch((error) => {
+                            console.log("Error:"+e);
+                        })
+                    }
+                })
+            }
         },
     })
 

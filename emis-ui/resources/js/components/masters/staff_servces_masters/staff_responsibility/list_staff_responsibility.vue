@@ -4,19 +4,21 @@
             <table id="working-agency-table" class="table table-bordered text-sm table-striped">
                 <thead>
                     <tr>
-                        <th >SL#</th>
-                        <th >Responsibility</th>
-                        <th >Code</th>
-                        <th >Status</th>
-                        <th >Created Date</th>
-                        <th >Action</th> 
-                    </tr>
+                        <th style="width:5%">SL#</th>
+                        <th style="width:20%">Name</th>
+                        <th style="width:10%">Code</th>
+                        <th style="width:25%">Description</th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:20%">Created Date</th>
+                        <th style="width:10%">Action</th>
+                    </tr> 
                 </thead>
                 <tbody id="tbody">
                     <tr v-for="(item, index) in dataList" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ item.name}}</td>
                         <td>{{ item.code}}</td>
+                        <td>{{ item.description}}</td>
                         <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                         <td>{{ item.created_at }}</td>
                         <td>
@@ -26,7 +28,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -37,30 +39,17 @@ export default {
         }
     },
     methods:{
-       loadsubjectList(uri = 'masters/loadStaffMasters/all_staff_responsibility_List'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.dataList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
         showedit(data){
             this.$router.push({name:'edit_staff_responsibility',params: {data:data}});
         },
     },
-    mounted(){ 
-        this.loadsubjectList();
-        this.dt =  $("#working-agency-table").DataTable()
-    }, 
+    async mounted(){
+        this.dataList =  await this.loadstaffMasters('all','StaResponsiblity');
+        this.dt =  $("#working-agency-table").DataTable();
+    },
     watch: {
-        dataList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+        dataList(){
+            this.applydatatable('working-agency-table');
         }
     },
 }

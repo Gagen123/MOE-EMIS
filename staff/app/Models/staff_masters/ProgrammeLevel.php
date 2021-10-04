@@ -1,18 +1,15 @@
 <?php
 
 namespace App\Models\staff_masters;
-
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
-use Illuminate\Database\Eloquent\Model;
-class StaffAwardType extends Model
-{
+class ProgrammeLevel extends Model{
     use HasFactory, Uuid;
-    protected $table="master_staff_award_type";
+    protected $table="master_programme_level";
     public $timestamps = false;
     protected $fillable = [
         'id',
-        // 'parent_id',
         'name',
         'description',
         'code',
@@ -22,9 +19,4 @@ class StaffAwardType extends Model
         'updated_by',
         'updated_at'
     ];
-
-    // public function category() {
-    //     return $this->belongsTo(StaffAwardCategory::class, 'parent_id');
-    // }
-
 }

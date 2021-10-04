@@ -50,40 +50,36 @@ class StudentMasterController extends Controller
         $rules = [
             'name'          =>  'required',
             'status'        =>  'required',
-            'code'          =>  'required',
         ];
         if($request->action_type=="edit"){
             $rules = $rules+[
                 //for update, unique:table,column,idColumn
                 'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+                'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
             ];
         }else{
             $rules = $rules+[
                 //for create, unique:table,column
                 'code'          =>  'unique:'.$model->getTable().',code',
+                // 'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
+            ];
+
+            $rules = $rules+[
+                //for create, unique:table,column
+                'name'          =>  'unique:'.$model->getTable().',name,'.$request->name.',code,'.$request->code,
             ];
         }
         $customMessages = [
             'name.required'         => 'This field is required',
             'status.required'       => 'This field is required',
-            'code.required'         => 'This field is required',
-
+            'code.unique'           => 'This code is already taken. please choose another one',
+            // 'name.unique'           => 'This code and name combination is already taken. please choose another one',
         ];
-        if($request->action_type=="edit"){
-            $customMessages = $customMessages+[
-                'code.unique'           => 'This code is already taken. please choose another one',
-            ];
-        }else{
-            $customMessages = $customMessages+[
-                'code.unique'           => 'This code is already taken. please choose another one',
-            ];
-        }
         $this->validate($request, $rules, $customMessages);
         $master_data = [
-            'Name'              =>  $request->name,
-            'Description'       =>  $request->description,
-            'Status'            =>  $request->status,
-            'Code'              =>  $request->code,
+            'name'              =>  $request->name,
+            'description'       =>  $request->description,
+            'status'            =>  $request->status,
         ];
         if($request->action_type=="add"){
             $master_data =$master_data+[
@@ -93,8 +89,8 @@ class StudentMasterController extends Controller
             $response_data = $model::create($master_data);
         }
 
+        //old code of phuntsho sir
         // $record_type = $request['record_type'];
-
         // $data = $this->extractRequestInformation($request, $record_type, $type='data');
         // $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
 
@@ -267,6 +263,7 @@ class StudentMasterController extends Controller
 
     }
 
+//GET TEACHER POSITION TITLE FOR REPORT
 
     /**
      * method to list students masters of active records for dropdown
