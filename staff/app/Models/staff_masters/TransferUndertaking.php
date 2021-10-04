@@ -12,6 +12,8 @@ class TransferUndertaking extends Model{
     protected $fillable = [
         'id',
         'name',
+        'code',
+        'description',
         'status',
         'created_by',
         'created_at',

@@ -231,8 +231,6 @@ class AdministrationController extends Controller{
         }
     }
     public function loadGlobalMasters($param=""){
-        // dd("inside system admin serices");
-
         if($param=="transfer_appeal"){
             return $this->successResponse(Calender::where('type','Transfer Appeal')->get());
         }

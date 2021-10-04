@@ -256,6 +256,19 @@ class StaffMasterController extends Controller{
         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }
+
+    }
+    public function getTeacherPositionTitle(){
+        $result_data = DB::select('SELECT
+            A.id,
+            B.name
+            FROM master_child_group_position AS A
+            JOIN master_stf_position_title AS B
+            ON A.position_title_id = B.id
+            WHERE B.status = 1
+            AND (B.code = 0130 OR B.code = 0131 OR B.code = 0139 OR B.code = 0140 OR B.code = 0141)
+            AND A.status = 1');
+        return $result_data;
     }
 
     public function loadStaffMastersbyId($model="",$id=""){

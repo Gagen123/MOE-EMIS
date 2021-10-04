@@ -1,11 +1,5 @@
 try {
     Vue.mixin({
-        mounted(){
-            $('.popupDatepicker').datepick({
-                dateFormat: 'dd/mm/yyyy',
-            });
-            $('.popupDatepicker').css('z-index',' 99999 !important; ');
-        },
         methods: {
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
             checkminmax: function (id, type,num,btnid) {
@@ -27,31 +21,6 @@ try {
                 dateData.split("-").reverse().join("-");
                 return reverse;
             },
-
-            formatDateToddmmyyyy(dateData){
-                let formatteddate = new Date(dateData);
-                let month=formatteddate.getMonth()+1;
-                if(month.toString().length==1){
-                    month='0'+month;
-                }
-                //formatting the date to dd/mm/yyyy
-                let curr_date=formatteddate.getDate()+'/'+month+'/'+formatteddate.getFullYear();
-                return curr_date;
-            },
-
-            formatYYYYMMDD(dateData){
-                dateData=dateData.replaceAll('/', '-');
-                dateData=dateData.split("-").reverse().join("-");
-                let formatteddate = new Date(dateData.replaceAll('/', '-'));
-                let month=formatteddate.getMonth()+1;
-                if(month.toString().length==1){
-                    month='0'+month;
-                }
-                //formatting the date to yyyy-mm-dd
-                let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
-                return curr_date;
-            },
-
 
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
