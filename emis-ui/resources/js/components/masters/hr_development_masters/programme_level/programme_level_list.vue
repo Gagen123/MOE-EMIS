@@ -1,65 +1,56 @@
 <template>
-    <div class="card-body">
-        <table id="dzongkhag-table" class="table table-bordered text-sm table-striped">
-            <thead>
-                <tr>
-                    <th >SL#</th>
-                    <th >Programme Level</th>
-                    <th >Code</th>
-                    <th >Status</th>
-                    <th >Created At</th>
-                    <th >Action</th> 
-                </tr>
-            </thead>
-            <tbody id="tbody">
-                <tr v-for="(item, index) in programmeLevelList" :key="index">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.code}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
-                    <td>
-                        <div class="btn-group btn-group-sm">
+    <div>
+        <div class="card-body">
+            <table id="working-agency-table" class="table table-bordered text-sm table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:5%">SL#</th>
+                        <th style="width:20%">Name</th>
+                        <th style="width:10%">Code</th>
+                        <th style="width:25%">Description</th>
+                        <th style="width:10%">Status</th>
+                        <th style="width:20%">Created Date</th>
+                        <th style="width:10%">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                    <tr v-for="(item, index) in dataList" :key="index">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ item.name}}</td>
+                        <td>{{ item.code}}</td>
+                        <td>{{ item.description}}</td>
+                        <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                        <td>{{ item.created_at }}</td>
+                        <td>
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>      
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            programmeLevelList:[], 
+            dataList:[],
+            dt:''
         }
     },
     methods:{
-        loadreprogrammeLevelList(uri = 'masters/loadHrDevelopmentMastersData/all_programme_level_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.programmeLevelList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#dzongkhag-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                }); 
-            }, 3000);  
-        },
         showedit(data){
             this.$router.push({name:'edit_programme_level',params: {data:data}});
         },
     },
-    mounted(){
-        this.loadreprogrammeLevelList();
+    async mounted(){
+        this.dataList =  await this.loadstaffMasters('all','ProgrammeLevel');
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        dataList(){
+            this.applydatatable('working-agency-table');
+        }
     },
 }
 </script>

@@ -67,6 +67,5 @@ export default {
         this.form.code=this.$route.params.data.code;
         this.form.id=this.$route.params.data.id;
     },
-
 }
 </script>

@@ -11,7 +11,7 @@
                         <th style="width:10%">Status</th>
                         <th style="width:20%">Created Date</th>
                         <th style="width:10%">Action</th>
-                    </tr>
+                    </tr> 
                 </thead>
                 <tbody id="tbody">
                     <tr v-for="(item, index) in dataList" :key="index">
