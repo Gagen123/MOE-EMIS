@@ -5,7 +5,7 @@
                 <tr>
                     <th style="width:5%">SL#</th>
                     <th style="width:20%">Program Type</th>
-                    <!-- <th style="width:25%">Description</th> -->
+                    <th style="width:10%">Code</th>
                     <th style="width:25%">Description</th>
                     <th style="width:10%">Status</th>
                     <th style="width:25%">Created At </th>
