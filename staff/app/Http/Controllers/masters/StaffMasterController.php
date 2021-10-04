@@ -256,7 +256,7 @@ class StaffMasterController extends Controller{
         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }
-        
+
     }
     public function getTeacherPositionTitle(){
         $result_data = DB::select('SELECT
