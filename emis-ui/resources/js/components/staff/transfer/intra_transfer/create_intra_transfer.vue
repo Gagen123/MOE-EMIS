@@ -421,43 +421,43 @@ export default {
             if(this.form.transfer_list=="" || this.form.transfer_list== null){
                 if(nextclass=="undertaking-tab"){
                     if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
-                            let formData = new FormData();
-                                formData.append('type_id', this.form.type_id);
-                                formData.append('transferwindow_id', this.form.transferwindow_id);
-                                formData.append('name', this.form.name);
-                                formData.append('staff_id', this.form.staff_id);
-                                formData.append('reason_id', this.form.reason_id);
-                                formData.append('description', this.form.description);
-                                formData.append('transferType', this.form.transferType);
+                        let formData = new FormData();
+                            formData.append('type_id', this.form.type_id);
+                            formData.append('transferwindow_id', this.form.transferwindow_id);
+                            formData.append('name', this.form.name);
+                            formData.append('staff_id', this.form.staff_id);
+                            formData.append('reason_id', this.form.reason_id);
+                            formData.append('description', this.form.description);
+                            formData.append('transferType', this.form.transferType);
 
-                            axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
-                            .then((response) =>{
-                                if(response!="" && response!="No Screen"){
-                                    this.form.id=response.data.data.id;
-                                    this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Application for Transfer has been submitted for further action'
-                                    });
-                                }
-                            })
-                            .catch((error) => {
-                                console.log("Errors:"+error)
-                            });
-                            this.change_tab(nextclass);
+                        axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
+                        .then((response) =>{
+                            if(response!="" && response!="No Screen"){
+                                this.form.id=response.data.data.id;
+                                this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application for Transfer has been submitted for further action'
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            console.log("Errors:"+error)
+                        });
+                        this.change_tab(nextclass);
                     }
-                        else{
-                        Swal.fire({
-                            text: "Time period for applying intra transfer is closed for the moment!",
-                            icon: 'error',
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Okay!',
-                            })
+                    else{
+                    Swal.fire({
+                        text: "Time period for applying intra transfer is closed for the moment!",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        })
                     }
                 }
                 
-            else if(nextclass=="final-tab"){
+                else if(nextclass=="final-tab"){
                 if(this.validated_final_form()){
                     Swal.fire({
                         text: "Are you sure you wish to submit for further approval ?",

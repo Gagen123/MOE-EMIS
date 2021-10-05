@@ -473,7 +473,8 @@ export default {
             axios.get('mess_manage/getFoodReleaseDetails/' +foodrelId)
             .then((response) => {
                 let data=response.data.data;
-                this.form.dateOfrelease         =    data.dateOfrelease;
+                this.form.dateOfrelease         = this.formatDateToddmmyyyy(data.dateOfrelease);
+                $('#dateOfrelease').val(this.formatDateToddmmyyyy(data.dateOfrelease));
                 // this.form.dzongkhag             =    data.dzongkhag_id;
                 // $('#dzongkhag').val(data.dzongkhag_id).trigger('change');
                 // this.loadactivedzongkhagList();

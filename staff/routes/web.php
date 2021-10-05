@@ -22,6 +22,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMasterController@saveStaffMasters']);
             $router->get('/loadStaffMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadStaffMasters']);
             $router->get('/loadStaffMastersbyId/{model}/{id}', ['uses' => 'masters\StaffMasterController@loadStaffMastersbyId']);
+            $router->get('/getTeacherPositionTitle', ['uses' => 'masters\StaffMasterController@getTeacherPositionTitle']);
         });
 
         $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);

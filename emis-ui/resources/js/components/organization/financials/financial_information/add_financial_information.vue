@@ -11,7 +11,7 @@
                     <has-error :form="form" field="financialInformationId"></has-error>
                 </div> 
             </div>
-            <div class="row">
+            <div class="row"> 
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="mb-1">Amount:<i class="text-danger">*</i></label>

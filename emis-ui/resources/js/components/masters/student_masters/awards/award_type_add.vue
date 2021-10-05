@@ -46,7 +46,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                record_type:'StudentAwardType',
+                model:'StudentAwardType',
                 action_type:'add',
             })
         }

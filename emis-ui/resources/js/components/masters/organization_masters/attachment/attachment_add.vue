@@ -5,7 +5,7 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Attachment Name:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.attachmentName" :class="{ 'is-invalid': form.errors.has('attachmentName') }" id="attachmentName" @change="remove_err('attachmentName')" type="text" tabindex="1" autofocus="true">
+                    <input class="form-control" v-model="form.attachmentName" :class="{ 'is-invalid': form.errors.has('attachmentName') }" id="attachmentName" @change="remove_err('attachmentName')" type="text">
                     <has-error :form="form" field="attachmentName"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -15,14 +15,14 @@
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="required">Status:</label>
                     <br>
-                    <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
-                    <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
+                    <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                    <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                 </div>
             </div>          
         </div>
         <div class="card-footer text-right">
-            <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
-            <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
+            <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" ><i class="fa fa-redo"></i> Reset</button>
+            <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save</button>
         </div>
     </form>
     </div>
@@ -55,17 +55,45 @@ export default {
                 this.form.description= '';
                 this.form.status= 1;
             }
+            // if(type=="save"){
+            //     this.form.post('masters/saveAttachment',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Attachment is added successfully'
+            //         })
+            //         this.$router.push('/attachment_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......")
+            //     })
+            // }
             if(type=="save"){
-                this.form.post('masters/saveAttachment',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Attachment is added successfully'
-                    })
-                    this.$router.push('/attachment_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('masters/saveAttachment',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/attachment_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},

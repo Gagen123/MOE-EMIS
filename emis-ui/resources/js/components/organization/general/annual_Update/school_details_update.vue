@@ -234,7 +234,7 @@
                         <div class="form-group row"> 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
                                 <label>Nearest Road Type :</label>
-                                <span class="text-blue text-bold" id="ownership">{{connectivityDetails.road_typeyes}}</span>
+                                <span class="text-blue text-bold" id="ownership">{{roadTypeList[connectivityDetails.road_typeyes]}}</span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                 <label>Connected to Road::</label>
@@ -339,10 +339,8 @@ export default {
             compoundDetails:[],
             infrastructureList:[],
             sectionList:[],
+            roadTypeList:[],
             form: new form({
-              //  organizationId:'',
-             //   landOwnership:'',
-             //   compoundFencing:'',
                 id:'',
                 rolename:'',
                 year: new Date().getFullYear(),
@@ -577,32 +575,75 @@ export default {
                 console.log(errors)
             });
         },
-        // loadfencingList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
-        //     axios.get(uri)
-        //     .then(response => {
-        //         let data = response;
-        //         this.fence_list =  data;
-        //     })
-        //     .catch(function (error) {
-        //         console.log('error: '+error);
-        //     });
-        // },
+      
         loadfencingList(uri='masters/organizationMasterController/loadOrganizaitonmasters/active/FencingType'){
             axios.get(uri)
             .then(response => {
                 let data = response;
                 for(let i=0;i<data.data.data.length;i++){
-                    this.fence_list[data.data.data[i].id] = data.data.data[i].Name;
+                    this.fence_list[data.data.data[i].id] = data.data.data[i].name;
                 }
             })
             .catch(function (error) {
                 console.log("Error......"+error)
             });
         },
+        loadRoadTypeList(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/all/RoadType'){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.roadTypeList[data.data.data[i].id] = data.data.data[i].name;
+                }
+               // this.roadTypeList =  data;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+        },
+        loadtransferwindow(){
+            axios.get('masters/loadGlobalMasters/data_submission')
+           .then((response) => {
+                let data=response.data.data[0];
+                 if(data!=null){
+                    this.form.transferwindow_id=data.id;
+                    this.form.t_from_date=data.from_date;
+                    this.form.t_to_date=data.to_date;
+                    this.form.t_year=data.year;
+                    this.form.t_remarks=data.remarks;
+                    this.form.t_id=data.id;
+                    let todate=new Date(data.to_date);
+                    let formdate = new Date();
+                    // One day in milliseconds
+                    const oneDay = 1000 * 60 * 60 * 24;
+                    // Calculating the time difference between two dates
+                    let diffInTime = todate.getTime() - formdate.getTime();
+                    //consider last day
+                    diffInTime=diffInTime+oneDay;
+                    // Calculating the no. of days between two dates
+                    const diffInDays =(diffInTime / oneDay);
+                    if(diffInDays<=5 && diffInDays>0){
+                        this.t_warning_message="Only "+Math.ceil(diffInDays)+" day(s) left to apply";
+                        this.t_warning=true;
+                    }
+                    else if(diffInDays<=0){
+                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#invalidsection').show();
+                        $('#t_form_details').hide();
+                    }
+                }
+                else{
+                    $('#err_message').html('<b>Sorry!</b><br> System cannot find a valid Transfer configuration. Might be the tranfer period is over for this year or might not yet reach for the period');
+                    $('#invalidsection').show();
+                    $('#t_form_details').hide();
+                }
+             })
+            .catch((error) => {
+                console.log("Error."+error);
+            });
+        },
         AnnualDetail: function(type){
             if(this.form.rolename=="Principal"){
-
-            
             if(type=="final-tab"){
                 Swal.fire({
                     title: 'Are you sure you wish to submit this form ?',
@@ -613,29 +654,40 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) =>{
                     if (result.isConfirmed){
-                        this.form.post('organization/saveAnnualData',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                      //  this.$router.push('/school_details_acknowledgement');
-                        if(response!="" && response!=null){
-                            let message="Your Annual Detail has been Submitted Successfully ";
-                            this.$router.push({name:'school_details_acknowledgement',params: {data:message}});
-                            Toast.fire({
+                        if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
+                            this.form.post('organization/saveAnnualData',this.form)
+                            .then((response) =>{
+                                Toast.fire({
                                 icon: 'success',
-                                title: 'Annual details is saved successfully'
-                            });
+                                title: 'Details added successfully'
+                            })
+                         //  this.$router.push('/school_details_acknowledgement');
+                            if(response!="" && response!=null){
+                                let message="Your Annual Detail has been Submitted Successfully ";
+                                this.$router.push({name:'school_details_acknowledgement',params: {data:message}});
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Annual details is saved successfully'
+                                });
+                            }
+                            })
+                            .catch((error) => {
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected error occured. Try again.'
+                                });
+                                console.log("Error:"+error);
+                            })
                         }
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
+                        else{
+                        Swal.fire({
+                            text: "Time period for applying intra transfer is closed for the moment!",
+                            icon: 'error',
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Okay!',
+                            })
+                        }
                        
                     }
                 })
@@ -675,10 +727,10 @@ export default {
             }) ;
         }
     },
-
-     mounted(){
+    mounted(){
         this.loadEquipmentList();
         this.loadSportList();
+        this.loadRoadTypeList();
         this.loadInfrastructureList();
         this.loadFurnitureList();
         this.loadEquipmentList();
@@ -688,9 +740,5 @@ export default {
         this.date = this.printDate();
         
     },
-    // created(){
-    //     this.form.year=this.$route.params.data.year;
-    //     this.form.id=this.$route.params.data.id;
-    // }
 }
 </script>

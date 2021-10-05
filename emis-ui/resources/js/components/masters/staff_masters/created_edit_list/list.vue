@@ -6,7 +6,7 @@
                     <th style="width:5%">SL#</th>
                     <th style="width:20%">Name</th>
                     <th style="width:10%">Code</th>
-                    <th style="width:25%">Description</th>
+                    <th style="width:25%">Description</th> 
                     <th style="width:10%">Status</th>
                     <th style="width:20%">Created Date</th>
                     <th style="width:10%">Action</th>

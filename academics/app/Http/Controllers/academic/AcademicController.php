@@ -1177,16 +1177,19 @@ class AcademicController extends Controller
     }catch(Exception $e){
         dd($e);
     }
+<<<<<<< HEAD
+}
+=======
     }
     
+>>>>>>> ffdf0c14288b8b7bf4b72250195d55f8a8e0830e
 
     //Written by gagen to pull the result into the emis portal
     public function LoadResultByStudentId($std_id){
         return $this->successResponse(DB::select('SELECT a.org_class_id, a.org_stream_id, a.org_stream_id, a.class_stream_section,a.published, b.std_student_id, b.result AS result 
             FROM aca_result_consolidated AS a 
             JOIN aca_result_consolidated_detail AS b
-            ON a.id = b.aca_result_consolidated_id
+            ON a.id = b.aca_result_consolidated_id 
             WHERE b.std_student_id = ?',[$std_id]));
-       
     }
 }
