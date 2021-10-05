@@ -24,8 +24,8 @@
                 </table>       
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" ><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -58,17 +58,45 @@ export default {
                 this.form.className= '';
                 this.form.status= 1;
             }
+            // if(type=="save"){
+            //     this.form.post('masters/saveClass',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Class details is updated successfully'
+            //         })
+            //         this.$router.push('/class_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......")
+            //     })
+            // }
             if(type=="save"){
-                this.form.post('masters/saveClassStreamMapping',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Class is added successfully'
-                    })
-                    this.$router.push('/class_stream_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('masters/saveClassStreamMapping',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/class_stream_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},

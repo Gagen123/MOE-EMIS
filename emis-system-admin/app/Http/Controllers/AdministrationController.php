@@ -299,6 +299,9 @@ class AdministrationController extends Controller{
         if($param=="active_calender"){
             return $this->successResponse(Calender::where('status','1')->get());
         }
+        if($param=="data_submission"){
+            return $this->successResponse(Calender::where('type','Annual Data Submission')->get());
+        }
 
     }
     public function load_dropdown($model="",$parent_id=""){

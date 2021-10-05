@@ -803,4 +803,5 @@ class StudentMasterController extends Controller
     public function loadActiveFoodSourceMaster(){
          return FoodSourceType::where('status',1)->get();
     }
+    
 }

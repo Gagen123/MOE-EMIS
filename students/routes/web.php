@@ -263,6 +263,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
         $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
         $router->get('/loadInventoryDetials/{param}', ['uses' => 'Students\StudentProgramController@loadInventoryDetials']);
+       
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
 
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);

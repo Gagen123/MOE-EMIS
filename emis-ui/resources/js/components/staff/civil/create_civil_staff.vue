@@ -1370,7 +1370,7 @@ export default {
                     this.loadqualication(data.id);
 
                     this.qualification_form.personal_id=data.id;
-                    this.nomination_form.personal_id=data.id;
+                    this.nomination_form.personal_id=data.id; 
                     this.personal_form.emp_type=data.emp_type_id;
                     this.personal_form.emp_id=data.emp_id;
                     this.personal_form.cid_work_permit=data.cid_work_permit;

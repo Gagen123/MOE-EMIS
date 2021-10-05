@@ -20,26 +20,27 @@
                           <thead>
                               <tr>
                                   <th>Type of facilities<span class="text-danger">*</span></th>
-                                  <th >No. of Facilities<span class="text-danger">*</span></th>
-                                  <th>Year of establishment{{index+1}}:<span class="text-danger">*</span></th>
-                                  <th >support By<span class="text-danger">*</span></th>
+                                  <th>No. of Facilities<span class="text-danger">*</span></th>
+                                  <th>Year of establishment<span class="text-danger">*</span></th>
+                                  <th>support By<span class="text-danger">*</span></th>
                                   <th id='sizeAndarea1'>Area/Size</th>
                                   <th>Accessible to SEN<span class="text-danger">*</span></th>
                                   <th>Sports type</th>
                                   <th>Status<span class="text-danger">*</span></th>
                               </tr>
                            </thead>
-                           <tbody> 
+                           <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>
                                         <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
-                                      <td>                          
-                                        <input type="number" name="number" class="form-control" id="number"  v-model="item.number"/>
+                                  </td>
+                                   <td>                          
+                                        <input type="number" name="number" class="form-control" v-model="item.number"/>
                                   </td>
                                   <td>                          
-                                        <input type="text" name="yoe" id= "yoe" class="form-control" v-model="item.yoe"/>
+                                        <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
                                   </td>
                                   <td>
                                         <select name="support"  class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" v-model="item.support">
@@ -101,12 +102,11 @@ export default {
             supportList:[],
             facilitySubList:[],
             items_received: [],
-           
             form: new form({
                  id: '',facility:'',
                   items_received:
                 [{
-                    type:'', yoe:[],number:'', access:'',area:'', status:'',sportstype:'',support:'',
+                    type:'',yoe:'',number:'', access:'',area:'', status:'',sportstype:'',support:'',
                 }], 
             })
         }
@@ -145,16 +145,10 @@ export default {
                 })
             }
 		},
+
         applyselect(){
             if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
                 $('#quarter').addClass('select2-hidden-accessible');
-            }
-        },
-
-        getfields(id){
-            this.form.yoe=[];
-            for(let i=0;i<$('#'+id).val();i++){
-                this.form.yoe.push({yoe:''});
             }
         },
 
@@ -166,6 +160,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+
         getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/' +this.form.facility){
             axios.get(uri)
             .then(response => {
@@ -177,6 +172,7 @@ export default {
         /**
          * method to get quarter in dropdown
          */
+        
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -188,6 +184,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
+
         /**
          * method to get unit in dropdown
          */

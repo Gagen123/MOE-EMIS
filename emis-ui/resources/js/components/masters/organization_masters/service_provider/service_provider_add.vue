@@ -6,7 +6,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Service Type:<span class="text-danger">*</span></label> 
                         <!-- <input class="form-control" v-model="form.serviceType" :class="{ 'is-invalid': form.errors.has('serviceType') }" id="serviceType" @change="remove_err('serviceType')" type="text" tabindex="1" autofocus="true"> -->
-                        <select v-model="form.serviceType" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('serviceType') }" @change="remove_err('serviceType')" tabindex="1">
+                        <select v-model="form.serviceType" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('serviceType') }" @change="remove_err('serviceType')" >
                             <option value="">--- Please Select ---</option>
                             <option value="1">Internet</option>
                             <option value="2">Telephone</option>
@@ -16,12 +16,12 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Service Provider:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" >
                         <has-error :form="form" field="name"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" tabindex="1" autofocus="true">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" >
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -31,14 +31,14 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1"/> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
                 </div>          
             </div>
             <div class="card-footer text-right">
-                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" tabindex="5"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" tabindex="4"><i class="fa fa-save"></i> Save</button>
+                <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger" ><i class="fa fa-redo"></i> Reset</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary" ><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
