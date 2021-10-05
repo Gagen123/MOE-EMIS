@@ -14,7 +14,8 @@ class CounsellingAgeRange extends Model
 
     protected $fillable = [
         'id',
-        'Name', 
+        'Name',
+        'Code', 
         'Description',
         'Code',
         'Status',

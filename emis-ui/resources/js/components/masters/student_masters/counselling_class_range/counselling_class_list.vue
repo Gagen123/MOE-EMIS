@@ -1,65 +1,59 @@
 <template>
-    <div>
-        <table id="class-range-table" class="table table-bordered text-sm table-striped">
+    <div class="card-body overflow-auto">
+        <table id="working-agency-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
-                    <th >SL#</th>
-                    <th >Class Range</th>
-                    <th >Code</th>
-                    <th >Description</th>
-                    <th >Status</th>
-                    <th >Action</th>
+                    <th style="width:5%">SL#</th>
+                    <th style="width:20%">Name</th>
+                    <th style="width:10%">Code</th>
+                    <th style="width:25%">Description</th>
+                    <th style="width:10%">Status</th>
+                    <th style="width:20%">Created Date</th>
+                    <th style="width:10%">Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
-                <tr v-for="(item, index) in counsellingList" :key="index">
+                <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
                     <td>{{ item.Code}}</td>
-                    <td>{{ item.Description }}</td>
-                    <td>{{ item.Status==  1 ? "Inactive" : "Active" }}</td>
+                    <td>{{ item.Description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.created_at }}</td>
                     <td>
-                        <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                        </div>
+                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
+    </div>      
 </template>
 <script>
 export default {
     data(){
         return{
-            counsellingList:[],
+            data_list:[],
+            dt:'',
         }
     },
     methods:{
-        loadcounsellingList(uri = 'masters/loadStudentMasters/CounsellingClassRange'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.counsellingList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="5" class="text-center text-danger text-bold">Seems this server is down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#class-range-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                });
-            }, 3000);
+        async loadworkingagencyList(){
+            this.data_list =  await this.loadStudentMasters('all','CounsellingClassRange');
         },
         showedit(data){
-            this.$router.push({name:'counselling_class_edit',params: {data:data}});
+              this.$router.push({name:'counselling_class_edit',params: {data:data}});
         },
+        
     },
     mounted(){
-        this.loadcounsellingList();
+        this.loadworkingagencyList();
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        data_list(val) {
+            this.applydatatable('working-agency-table');
+        }
     },
 }
 </script>
+

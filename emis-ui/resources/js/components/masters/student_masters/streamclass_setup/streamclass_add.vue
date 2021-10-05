@@ -5,10 +5,10 @@
                 <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Streams:<span class="text-danger">*</span></label> 
-                         <select v-model="form.streamId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('streamId') }" class="form-control select2" name="streamId" id="streamId">
-                            <option value=""> -- Select-- </option>
-                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{ item.stream }}</option>
-                        </select>
+                            <select v-model="form.streamId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('streamId') }" class="form-control select2" name="streamId" id="streamId">
+                                <option value=""> -- Select-- </option>
+                                <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{ item.stream }}</option>
+                            </select>
                         <has-error :form="form" field="streamId"></has-error>
                         <span class="text-danger" id="streamId"></span>
                     </div>
