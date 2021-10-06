@@ -78,6 +78,7 @@ class StudentMasterController extends Controller
                 'Code'              =>  $request->code,
                 'Description'       =>  $request->description,
                 'Status'            =>  $request->status,
+                'created_by'        =>  $request->userId,
             ];
         if($request->model=="StudentAwards"){
             $master_data = [
