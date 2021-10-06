@@ -258,7 +258,7 @@
                          $('#AspNet').hide();
                          $('#Resource').hide();
                          $('#Has_CE').hide();
-                         $('#Counselling').hide();
+                         $('#Counselling').hide(); 
                         
                     }
                     if(response_data.category=="public_school" ||response_data.category=="private_school" ||response_data.category=="public_ecr" ){

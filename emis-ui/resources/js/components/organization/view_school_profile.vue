@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
-                                <div class="card-body p-0">
+                                <div class="card-body ">
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
                                             <table class="table table-sm">
@@ -50,10 +50,37 @@
                                                       </tr>
                                                   </thead>
                                                 <tbody>
-                                                  <tr>
-                                                     <td>Levels</td>
-                                                     <td>{{levelArray[existing_details.levelId]}}</td>
-                                                   </tr>
+                                                    <span v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')" >
+                                                        <tr>
+                                                            <td >Levels</td> <br><br>
+                                                            <td >{{levelArray[existing_details.levelId]}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>MOF Code</td>
+                                                            <td>{{existing_details.mofCode}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Has Counselling room</td>
+                                                            <td>{{existing_details.hasCounselingRoom =='1'? 'yes':'No'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Has CE</td>
+                                                            <td>{{existing_details.hasCE =='1'? 'yes':'No'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Has Feeding School</td>
+                                                            <td>{{existing_details.isFeedingSchool =='1'? 'yes':'No'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Is Resource Center</td>
+                                                            <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Is an Inclusive School</td>
+                                                            <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
+                                                        </tr>
+
+                                                    </span>
                                                    <tr>
                                                         <td>Year of Establishment</td>
                                                         <td>{{existing_details.yearOfEstablishment}}</td>
@@ -62,10 +89,7 @@
                                                       <td>RCSC/ZEST Code</td>
                                                      <td>{{existing_details.zestAgencyCode}}</td>
                                                   </tr>
-                                                  <tr>
-                                                     <td>MOF Code</td>
-                                                     <td>{{existing_details.mofCode}}</td>
-                                                 </tr>
+                                                 
                                                  <tr>
                                                      <td>Organization Code</td>
                                                      <td>{{existing_details.code}}</td>
@@ -74,30 +98,12 @@
                                                       <td>Has Shift System</td>
                                                      <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
                                                    </tr>
-                                                   <tr>
-                                                     <td>Has Counselling room</td>
-                                                     <td>{{existing_details.hasCounselingRoom =='1'? 'yes':'No'}}</td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td>Has CE</td>
-                                                      <td>{{existing_details.hasCE =='1'? 'yes':'No'}}</td>
-                                                   </tr>
-                                                   <tr>
-                                                       <td>Has Feeding School</td>
-                                                       <td>{{existing_details.isFeedingSchool =='1'? 'yes':'No'}}</td>
-                                                  </tr>
                                                   <tr>
                                                        <td>GeoPolitically Located</td>
                                                        <td>{{existing_details.isGeoPoliticallyLocated =='1'? 'yes':'No'}}</td>
                                                   </tr>
-                                                  <tr>
-                                                     <td>Is Resource Center</td>
-                                                     <td>{{existing_details.isResourceCenter =='1'? 'yes':'No'}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>Is an Inclusive School</td>
-                                                       <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
-                                                  </tr>
+                                                 
+                                                
                                                    <tr>
                                                        <td>Category</td>
                                                        <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'private_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
@@ -179,6 +185,7 @@
                                                             <td></td>
                                                             <td></td>
                                                     </tr>
+                                                    <span v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')">
                                                     <tr>
                                                             <td>Female Special Education Teachers</td>
                                                             <td>{{isSen.femaleSen}}</td>
@@ -232,6 +239,7 @@
                                                             <td><b>Total</b></td>
                                                             <td><b>{{SportInstructor.TotalSportsInst}}</b></td>
                                                     </tr>
+                                                    </span>
                                               </tbody>
                                           </table>
                                         </div>
@@ -315,9 +323,6 @@
                                     </table>
                                 </div>
                             </div> -->
-
-
-
                             </div>
                         </div>
                     </div>
@@ -486,7 +491,7 @@
 
 
         },
-        created(){
+        mounted(){
             this.getLevel();
             this.loadGenderArrayList();
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){
