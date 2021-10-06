@@ -61,7 +61,7 @@ export default {
                 supporter:'',
                 remarks:'',
                 assigned_staff: [],
-                record_type:'add'
+                record_type:'edit'
             }),
         }
     },
