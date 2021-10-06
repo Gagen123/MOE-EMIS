@@ -291,6 +291,10 @@ export default {
 
     async mounted() {
         this.getAttachmentType('ForTransaction__Application_for_Principal_Recruitment');
+        let data = await this.getRequiredDocument("Attachment_For_Expatriate_Recruitment");
+        data.forEach((item => {
+            this.form.attachments.push({file_name:item.name, file_upload:''})
+        }));
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -302,10 +306,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        let data = await this.getRequiredDocument("Attachment_For_Expatriate_Recruitment");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+
+       
     },
      created() {
          this.loadScreenDetails();

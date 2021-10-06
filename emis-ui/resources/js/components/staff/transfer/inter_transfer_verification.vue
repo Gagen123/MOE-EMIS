@@ -250,7 +250,6 @@ export default {
                 }],
                 ref_docs:[],
                 remarks:'',
-
                 actiontype:'',
             }),
         }
