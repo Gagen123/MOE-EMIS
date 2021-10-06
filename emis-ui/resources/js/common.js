@@ -1,6 +1,12 @@
 try {
     Vue.mixin({
         methods: {
+            mounted(){
+                $('.popupDatepicker').datepick({
+                    dateFormat: 'dd/mm/yyyy',
+                });
+                $('.popupDatepicker').css('z-index',' 99999 !important; ');
+            },
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
             checkminmax: function (id, type,num,btnid) {
                 if(type=='min' && parseInt($('#'+id).val())<num){
