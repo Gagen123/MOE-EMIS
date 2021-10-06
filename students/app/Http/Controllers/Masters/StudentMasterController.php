@@ -10,14 +10,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
-use App\Models\Masters\StudentType;
-use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\OffenceType;
 use App\Models\Masters\DisciplinaryActionTaken;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\SubjectMarks;
 use App\Models\Masters\CeaRole;
-use App\Models\Masters\VaccineType;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaProgramItem;
@@ -55,7 +52,7 @@ class StudentMasterController extends Controller
             $rules = $rules+[
                 //for update, unique:table,column,idColumn
                 'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
-                'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
+                // 'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
             ];
         }else{
             $rules = $rules+[
@@ -76,18 +73,122 @@ class StudentMasterController extends Controller
             // 'name.unique'           => 'This code and name combination is already taken. please choose another one',
         ];
         $this->validate($request, $rules, $customMessages);
-        $master_data = [
-            'name'              =>  $request->name,
-            'description'       =>  $request->description,
-            'status'            =>  $request->status,
-        ];
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+            ];
+        if($request->model=="StudentAwards"){
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'CeaAwardTypeId'    =>  $request->award_type_id,
+                'CeaProgrammeId'    =>  $request->program_id,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+            ];
+        }
+        if($request->model=="VaccineType"){
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+                'vaccineFor'       =>  $request->vaccineFor,
+            ];
+        }
+        if($request->model=="CeaProgram"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaProgrammeTypeId'       =>  $request->program_type,
+            ];
+        }
+        if($request->model=="CeaProgramItemVariety"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'UnitId'                   =>  $request->unit_id,
+            ];
+        }
+        
+        if($request->model=="CeaRole"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'AssignedTo'               =>  $request->assigned_to,
+                'CeaProgrammeId'           =>  $request->program,
+            ];
+        }
+        if($request->model=="CeaTraining"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaTrainingTypeId'        =>  $request->training_type_id,
+                'CeaProgrammeId'           =>  $request->program_id,
+            ];
+        }
+        if($request->model=="CeaProgramItem"){
+            $master_data = [
+                'Name'                          =>  $request->name,
+                'Code'                          =>  $request->code,
+                'Description'                   =>  $request->description,
+                'Status'                        =>  $request->status,
+                'CeaProgrammeItemVarietyId'     =>  $request->variety,
+                'Central'                       =>  $request->central,
+                'Local'                         =>  $request->local,
+                'Unit_id'                       =>  $request->unit_id,
+            ];
+        }
+        
+        if($request->model=="CeaScoutSectionLevel" || $request->model=="CeaScoutBadge" ){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaScoutSectionId'        =>  $request->scout_type,
+            ];
+        }
+        
+        if($request->model=="OffenceType"|| $request->model=="DisciplinaryActionTaken"){
+            $master_data = [
+                'Name'                   =>  $request->name,
+                'Code'                   =>  $request->code,
+                'StdDisciplinarySeverity'=>  $request->offence_severity_id,
+                'Description'            =>  $request->description,
+                'Status'                 =>  $request->status,
+            ];
+        }
         if($request->action_type=="add"){
-            $master_data =$master_data+[
+            $Finalmaster_data =$master_data+[
                 'created_by'        =>  $request->user_id,
                 'created_at'        =>  date('Y-m-d h:i:s'),
             ];
-            $response_data = $model::create($master_data);
+            try{
+                $response_data = $model::create($Finalmaster_data);
+            } catch(\Illuminate\Database\QueryException $ex ){
+                dd($ex);
+            }
+            
         }
+        if($request->action_type=="edit"){
+            $Finalmaster_data =$master_data+[
+                'updated_by'        =>  $request->user_id,
+                'updated_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $model::where('id',$request->id)->update($Finalmaster_data);
+        }
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
 
         //old code of phuntsho sir
         // $record_type = $request['record_type'];
@@ -100,7 +201,7 @@ class StudentMasterController extends Controller
         // else if($request->action_type=="edit"){
         //     $response_data = $this->updateData($request,$data, $databaseModel);
         // }
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
+        
 
     }
 

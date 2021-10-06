@@ -15,10 +15,10 @@
             <tbody id="tbody">
                 <tr v-for="(item, index) in data_list" :key="index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ item.name}}</td>
-                    <td>{{ item.code}}</td>
-                    <td>{{ item.description}}</td>
-                    <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.Name}}</td>
+                    <td>{{ item.Code}}</td>
+                    <td>{{ item.Description}}</td>
+                    <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.created_at }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -38,7 +38,7 @@ export default {
     },
     methods:{
         async loadworkingagencyList(){
-            this.data_list =  await this.loadstaffMasters('all','StudentAwardType');
+            this.data_list =  await this.loadStudentMasters('all','StudentAwardType');
         },
         showedit(data){
               this.$router.push({name:'award_type_edit',params: {data:data}});
