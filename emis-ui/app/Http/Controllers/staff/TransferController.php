@@ -207,6 +207,7 @@ class TransferController extends Controller{
 
     }
     public function loadtrainsferDetails($appNo="",$type=""){
+        
         $workflowstatus="";
         $screen_id="";
         $sequence="";
@@ -220,7 +221,7 @@ class TransferController extends Controller{
         $response_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
         if($response_data!=null){
             foreach($response_data as $work){
-                if($loadTransferDetails->data->transfer_type_id==$work->transfer_type_id && $updated_data->data->status_id==$work->sequence){
+                if($loadTransferDetails->data->transfer_type_id==$work->transfer_type_id || $updated_data->data->status_id==$work->sequence){
                     if($work->authority_type_id==10){
                         $loadTransferDetails->data->app_seq_no=$work->authority_type_id;
                     }

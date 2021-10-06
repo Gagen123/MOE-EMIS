@@ -818,7 +818,7 @@ class StaffMastersController extends Controller{
                     'authority_type_id'     =>  $rol['authority'],
                     'role_id'               =>  $rol['role'],
                 );
-                $action_Id= TransferConfigDetails::create($data);
+                $config_det= TransferConfigDetails::create($data);
             }
         }
         if($request['action_type']=="edit"){
@@ -835,7 +835,7 @@ class StaffMastersController extends Controller{
                     'authority_type_id'     =>  $rol['authority'],
                     'role_id'               =>  $rol['role'],
                 );
-                $action_Id= TransferConfigDetails ::create($data);
+                $config_det= TransferConfigDetails ::create($data);
             }
         }
         return $this->successResponse($config_det, Response::HTTP_CREATED);
