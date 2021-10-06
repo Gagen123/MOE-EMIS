@@ -50,9 +50,9 @@
                                                       </tr>
                                                   </thead>
                                                 <tbody>
-                                                    <span v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')" >
+                                                    <template v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')" >
                                                         <tr>
-                                                            <td >Levels</td> <br><br>
+                                                            <td >Levels</td>
                                                             <td >{{levelArray[existing_details.levelId]}}</td>
                                                         </tr>
                                                         <tr>
@@ -80,28 +80,27 @@
                                                             <td>{{existing_details.isSenSchool =='1'? 'yes':'No'}}</td>
                                                         </tr>
 
-                                                    </span>
-                                                   <tr>
+                                                    </template>
+                                                    <tr>
                                                         <td>Year of Establishment</td>
                                                         <td>{{existing_details.yearOfEstablishment}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                      <td>RCSC/ZEST Code</td>
-                                                     <td>{{existing_details.zestAgencyCode}}</td>
-                                                  </tr>
-                                                 
-                                                 <tr>
-                                                     <td>Organization Code</td>
-                                                     <td>{{existing_details.code}}</td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td>Has Shift System</td>
-                                                     <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
-                                                   </tr>
-                                                  <tr>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>RCSC/ZEST Code</td>
+                                                        <td>{{existing_details.zestAgencyCode}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Organization Code</td>
+                                                        <td>{{existing_details.code}}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Has Shift System</td>
+                                                        <td>{{existing_details.hasShiftSystem =='1'? 'yes':'No'}}</td>
+                                                    </tr>
+                                                    <tr>
                                                        <td>GeoPolitically Located</td>
                                                        <td>{{existing_details.isGeoPoliticallyLocated =='1'? 'yes':'No'}}</td>
-                                                  </tr>
+                                                    </tr>
                                                  
                                                 
                                                    <tr>
@@ -155,7 +154,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!--- modified code  -->
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
                                 <div class="card-body p-0">
@@ -163,87 +161,82 @@
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
                                             <table class="table table-sm">
                                                 <thead class="bg-info">
-                                                     <tr>
-                                                         <th>Staff Information</th>
-                                                         <th></th>
-                                                      </tr>
-                                                  </thead>
-                                                 <tbody>
                                                     <tr>
-                                                            <td>Male Teachers</td>
-                                                            <td>{{total_Staff.Totalmale}}</td>
+                                                        <th>Staff Information</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Male Teachers</td>
+                                                        <td>{{total_Staff.Totalmale}}</td>
                                                     </tr>
                                                     <tr>
-                                                            <td>Female Teachers</td>
-                                                            <td>{{total_Staff.TotalFemale}}</td>
+                                                        <td>Female Teachers</td>
+                                                        <td>{{total_Staff.TotalFemale}}</td>
                                                     </tr>
                                                     <tr>
-                                                            <td><b>Total</b></td>
-                                                            <td><b>{{total_Staff.TOTAL}}</b></td>
+                                                        <td><b>Total</b></td>
+                                                        <td><b>{{total_Staff.TOTAL}}</b></td>
                                                     </tr>
                                                     <tr>
-                                                            <td></td>
-                                                            <td></td>
+                                                        <td></td>
+                                                        <td></td>
                                                     </tr>
-                                                    <span v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')">
-                                                    <tr>
+                                                    <template v-if="existing_details.category!=undefined && !existing_details.category.toLowerCase().includes('eccd')">
+                                                        <tr>
                                                             <td>Female Special Education Teachers</td>
                                                             <td>{{isSen.femaleSen}}</td>
-                                                    </tr>
+                                                        </tr>
                                                         <tr>
                                                             <td>Male Special Education Teachers</td>
                                                             <td>{{isSen.maleSen}}</td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td><b>Total</b></td>
                                                             <td><b>{{isSen.totalSen}}</b></td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td></td>
                                                             <td></td>
-                                                    </tr>
-                                                   
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td><b>Total Support Staff(Both Male & Female)</b></td>
                                                             <td><b></b></td>
-                                                    </tr>
-                                                    <tr>
-                                                            <td></td>
-                                                            <td></td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                       
+                                                        <tr>
                                                             <td>Female Counselors</td>
                                                             <td>{{counselor.Femalecounselor}}</td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td>Male Counselors</td>
                                                             <td>{{counselor.Malecounselor}}</td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td><b>Total</b></td>
                                                             <td><b>{{counselor.TOTALCouunselor}}</b></td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td></td>
                                                             <td></td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td>Female Sports Instructor</td>
                                                             <td>{{SportInstructor.FemaleSportInst}}</td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td>Male Sports Instructors</td>
                                                             <td>{{SportInstructor.MaleSportInst}}</td>
-                                                    </tr>
-                                                    <tr>
+                                                        </tr>
+                                                        <tr>
                                                             <td><b>Total</b></td>
                                                             <td><b>{{SportInstructor.TotalSportsInst}}</b></td>
-                                                    </tr>
-                                                    </span>
+                                                        </tr>
+                                                    </template>
                                               </tbody>
                                           </table>
                                         </div>
-
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-10">
                                             <table class="table table-sm">
                                                 <thead class="bg-info">
