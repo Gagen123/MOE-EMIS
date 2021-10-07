@@ -18,7 +18,7 @@
                         <tr v-for="(item, index) in leave_list" :key="index">
                             <td>{{ item.application_number}}</td>
                             <td>{{ item.staff_name}}</td>
-                            <td>{{ leavetypeList[item.leave_type_id]}}</td>
+                            <td>{{ item.leave_details.name}}</td>
                             <td>{{ item.no_days}}</td>
                             <td>{{ item.date_of_application}}</td>
                             <td>{{ item.status}}</td>
@@ -52,32 +52,17 @@ export default {
                console.log('Error: '+error);
             });
         },
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.leavetypeList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
         loadeditpage(item){
             this.$router.push({name:"edit_leave",params:{data:item}});
         }
     },
-    mounted(){this.loadleaveTypeList();
+    mounted(){
         this.getallLeaves();
         this.dt = $("#responsible-table").DataTable();
     },
     watch: {
         leave_list(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#responsible-table").DataTable()
-            });
+            this.applydatatable('responsible-table');
         }
     },
 }

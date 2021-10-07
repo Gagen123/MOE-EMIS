@@ -21,6 +21,18 @@
                         <span v-html="role.AuthorityType"></span>
                     </td>
                 </tr>
+                <tr v-for='(role, index) in privateworkflow' :key="'public'+index">
+                    <td>Public School Workflow</td>
+                    <td>
+                        <span v-html="role.AuthorityType"></span>
+                    </td>
+                </tr>
+                <tr v-for='(role, index) in privateworkflow' :key="'ecr'+index">
+                    <td>ECR Workflow</td>
+                    <td>
+                        <span v-html="role.AuthorityType"></span>
+                    </td>
+                </tr>
             </tbody>
         </table>
     </div>
