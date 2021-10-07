@@ -914,7 +914,8 @@ Route::prefix('academics')->group(function () {
     Route::get('/getTermsForPublish', [App\Http\Controllers\academics\AcademicController::class, 'getTermsForPublish'])->name('getTermsForPublish');
     Route::get('/loadConsolidatedResultListForPublish/{termId}', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultListForPublish'])->name('loadConsolidatedResultListForPublish');
     Route::get('/getConsolidatedResultForEdit/{stdId}/{termId}/{subId}', [App\Http\Controllers\academics\AcademicController::class, 'getConsolidatedResultForEdit'])->name('getConsolidatedResultForEdit');
-    Route::post('/updateStatus/{Id?}', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateStatus', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateResult', [App\Http\Controllers\academics\AcademicController::class, 'updateResult'])->name('updateResult');
     Route::get('/getSubjectOfTerm', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectOfTerm'])->name('getSubjectOfTerm');
 
 });
