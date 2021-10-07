@@ -175,6 +175,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveStudentClassAllocation',['uses' => 'Students\StudentClassController@saveStudentClassAllocation']);
         $router->get('/loadStudentClassAllocations/{param}',['uses' => 'Students\StudentClassController@loadStudentClassAllocations']);
 
+        //pulling role,responsibilites,studentId by passing OrgClassStreamId
+        $router->get('/LoadStdIdAwardResponsibilites/{orgClassStreamId}',['uses' => 'Students\StudentClassController@LoadStdIdAwardResponsibilites']);
+
         $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
         $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);
 
