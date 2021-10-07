@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\masters;
 
 use App\Http\Controllers\Controller;
+use App\Models\staff_master_config\LeaveConfiguration;
+use App\Models\staff_master_config\LeaveConfigurationDetials;
 use App\Models\staff_masters\ChildGroup;
 use App\Models\staff_masters\ChildGroupPosition;
 use App\Models\staff_masters\PositionLevel;
@@ -114,6 +116,16 @@ class StaffMasterController extends Controller{
                 'doner_agency_id'   =>  $request->doner_agency,
             ];
         }
+        if(isset($request->category)){
+            $master_data = $master_data+[
+                'category'   =>  $request->category,
+            ];
+        }
+        if(isset($request->no_days)){
+            $master_data = $master_data+[
+                'no_days'   =>  $request->no_days,
+            ];
+        }
         if($request->action_type=="add"){
             $master_data =$master_data+[
                 'created_by'        =>  $request->user_id,
@@ -153,6 +165,7 @@ class StaffMasterController extends Controller{
         $modelName = "App\\Models\\staff_masters\\"."$model";
         $model = new $modelName();
         if($type == 'all'){
+
             if($mod=="ChildGroupPosition"){
                 $response_data=$model::get();
                 if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
@@ -291,5 +304,100 @@ class StaffMasterController extends Controller{
             $data=$model::where('id',$id)->first();
             return $this->successResponse($data);
         }
+    }
+
+
+    //save leave type configuration
+    public function saveConfigMasters(Request $request){
+        $modelName = "App\\Models\\staff_master_config\\"."$request->model";
+        $model = new $modelName();
+        if($request->model=="LeaveConfiguration"){
+            $rules = [
+                'leave_type_id' =>  'required',
+                'role_id'       =>  'required',
+            ];
+            $customMessages = [
+                'leave_type_id.required' => 'This field is required',
+                'role_id.required' => 'This field is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
+
+        $data = [];
+        if(isset($request->leave_type_id)){
+            $data = $data+[
+                'leave_type_id'   =>  $request->leave_type_id,
+            ];
+        }
+        if(isset($request->role_id)){
+            $data = $data+[
+                'submitter_role_id'   =>  $request->role_id,
+            ];
+        }
+        if($request->action_type=="add"){
+            $data =$data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $config_det = $model::create($data);
+            if($request->model=="LeaveConfiguration"){
+                foreach ($request->role_action_mapp as $rol){
+                    $data = array(
+                        'leave_config_id'       =>  $config_det->id,
+                        'sequence'              =>  $rol['sequence'],
+                        'authority_type_id'     =>  $rol['authority'],
+                        'role_id'               =>  $rol['role'],
+                    );
+                    LeaveConfigurationDetials::create($data);
+                }
+            }
+        }
+
+        if($request['action_type']=="edit"){
+            $data =$data +[
+                'updated_by'                =>  $request['user_id'],
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            //Audit Trails
+            $curr_data = $model::find($request->id);
+            if($request->model=="LeaveConfiguration"){
+                $msg_det='leave_type_id:'.$curr_data->leave_type_id.', submitter_role_id:'.$curr_data->submitter_role_id;
+                $configdata = LeaveConfigurationDetials::where('leave_config_id',$request['id'])->get();
+                foreach($configdata as $con){
+                    $msg_det=$msg_det.'; configDeta: leave_config_id:'.$con['leave_config_id'].', sequence'.$con['sequence'].', authority_type_id'.$con['authority_type_id'].', role_id:'.$con['role_id'];
+                }
+            }
+            DB::select("CALL ".$this->audit_database.".emis_audit_proc('".$this->database."','".$request->model."','".$request->id."','".$msg_det."','".$request->user_id."','Edit')");
+            $model::where('id',$request->id)->update($data);
+            $config_det = $model::where('id',$request->id)->first();
+            if($request->model=="LeaveConfiguration"){
+                LeaveConfigurationDetials::where('leave_config_id',$request->id)->delete();
+                foreach ($request->role_action_mapp as $rol){
+                    $data = array(
+                        'leave_config_id'       =>  $request->id,
+                        'sequence'              =>  $rol['sequence'],
+                        'authority_type_id'     =>  $rol['authority'],
+                        'role_id'               =>  $rol['role'],
+                    );
+                    LeaveConfigurationDetials::create($data);
+                }
+            }
+        }
+        return $this->successResponse($config_det, Response::HTTP_CREATED);
+    }
+
+    public function loadConfigMasters($type="",$model=""){
+        $mod=$model;
+        $modelName = "App\\Models\\staff_master_config\\"."$model";
+        if($mod=="LeaveConfiguration"){
+            $response_data=$modelName::with('leaveDetails')->get();
+            return $this->successResponse($response_data);
+        }
+        if($mod=="loadLeaveConfigDetails"){
+            $data=LeaveConfiguration::where('id',$type)->first();
+            $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$type)->get();
+            return $this->successResponse($data);
+        }
+        return $this->successResponse($modelName::get());
     }
 }

@@ -156,15 +156,8 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.leavetypeList =  data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+        async loadleaveTypeList(){
+            this.leavetypeList = await this.loadstaffMasters('active','LeaveType');
         },
         calculateNoDays(){
             if($('#from_date').val()==""){
@@ -301,12 +294,12 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 console.log(data);
-                if(data!=""){
+                if(data!=null && data!="null" && data!=""){
                     //need to handle for multiple role later, for now it will take for first role at the index 0
                     this.total_leave_apply=' ('+data.leave_details.category+')';
                     this.actual_leave_avail=data.leave_details.no_days;
                     this.leave_balance=data.leave_details.no_days;
-                    // this.form.submitted_to=data.next_role_id.role_id;
+                    this.form.submitted_to=data.submitted_to;
                     $('#form_details').show();
                     $('#applyId').show();
                     this.getApprovedLeaveCount();
@@ -385,12 +378,7 @@ export default {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         let currdate=currentdate.getFullYear()+'-'+currentdate.getMonth() + 1+'-'+currentdate.getDate();
-        // if(fromDate<=currdate && todate>=currdate){
 
-        // }
-        // else{
-        //     errormessfge
-        // }
         this.current_date=currentdate.getDate()+'/'+currentdate.toLocaleString('default', { month: 'long' })+'/'+currentdate.getFullYear();
         this.form.date_of_application=currentdate.getFullYear()+'-'+('0' + (currentdate.getMonth() + 1)).slice(-2)+'-'+('0' + currentdate.getDate()).slice(-2);
         $('.select2').select2();
