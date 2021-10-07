@@ -765,6 +765,7 @@ class StudentAdmissionController extends Controller
             $response_data=std_admission::where('id',explode('_',$std_id)[1])->first();
             if($response_data!="" && $response_data!=null){
                 $response_data->parents=StudentGuardian::where('StdStudentId',$response_data->id)->get();
+                $response_data->admission_class=StudentAdmissionSchool::where('StdAdmissionsId',$response_data->id)->select('class_id')->first();
             }
         } else if(strpos($std_id,'-')){
             $response_data=Std_Students::where('student_code',explode('-',$std_id)[1])->first();
@@ -773,21 +774,30 @@ class StudentAdmissionController extends Controller
             }
             if($response_data!="" && $response_data!=null){
                 $response_data->parents=StudentGuardianDetails::where('StdStudentId',$response_data->id)->get();
+                $response_data->class=DB::table('std_student_class_stream')
+                                        ->where('StdStudentId', $response_data->id)
+                                        ->first();
+                $response_data->admission_class=StudentAdmissionSchool::where('StdAdmissionsId',$response_data->id)->select('class_id')->first();
             }
         } else if(strpos($std_id,'_')){
             $response_data=std_admission::where('id',explode('_',$std_id)[1])->first();
             if($response_data!="" && $response_data!=null){
                 $response_data->parents=StudentGuardian::where('StdStudentId',$response_data->id)->get();
+                $response_data->admission_class=StudentAdmissionSchool::where('StdAdmissionsId',$response_data->id)->select('class_id')->first();
             }
         }
         else{
             $response_data=Std_Students::where('id',$std_id)->first();
             if($response_data!="" && $response_data!=null){
                 $response_data->parents=StudentGuardianDetails::where('StdStudentId',$response_data->id)->get();
+                $response_data->admission_class=StudentAdmissionSchool::where('StdAdmissionsId',$response_data->id)->select('class_id')->first();
             }
         }
         if($response_data!=null && $response_data!="" && $response_data->id!=""){
             $response_data->classDetails= StudentClassDetails::where('StdStudentId',$response_data->id)->first();
+            $response_data->class=DB::table('std_student_class_stream')
+                                        ->where('StdStudentId', $response_data->id)
+                                        ->first();
         }
         return $this->successResponse($response_data);
     }
@@ -805,7 +815,14 @@ class StudentAdmissionController extends Controller
             return $this->successResponse($response_data1);
         }
         return $this->successResponse($response_data);
+    }
 
+    public function getTransferDetails($std_id=""){
+        $response_data = DB::table('std_student')
+            ->join('std_is_transferred', 'std_student.id', '=', 'std_is_transferred.StdStudentId')
+            ->where('std_student.id', $std_id)
+            ->get();
+        return $this->successResponse($response_data);
     }
 
     public function getstudentGuardainClassDetails($std_id="",$type=""){

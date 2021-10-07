@@ -5,14 +5,12 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Program Name:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Program Type:<span class="text-danger">*</span></label>
-                        <select v-model="form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type">
+                        <select v-model="form.program_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program_type') }" class="form-control select2" name="program_type" id="program_type" >
                         <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                     </select>
                     <has-error :form="form" field="program_type"></has-error>
@@ -21,14 +19,14 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" autocomplete="off">
                         <has-error :form="form" field="code"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" id="description" type="text" autocomplete="off"/>
                     </div>
                 </div> 
                 <div class="row form-group">
@@ -60,7 +58,7 @@ export default {
                 code:'',
                 description:'',
                 status: 1,
-                record_type:'CeaProgram',
+                model:'CeaProgram',
                 action_type:'edit',
             })
         }
@@ -97,33 +95,8 @@ export default {
                 this.form.description='';
                 this.form.status= 1;
             }
-            if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/program_name_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+           if(type=="save"){
+                this.submitstudentmaster('program_name_list');
             }
 		},
     },
@@ -154,3 +127,4 @@ export default {
 
 }
 </script>
+

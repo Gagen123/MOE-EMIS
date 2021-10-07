@@ -31,6 +31,17 @@ class LoadOrganizationController extends Controller{
         date_default_timezone_set('Asia/Dhaka');
     }
 
+    //GET ORGANIZATION DETAILS BY DZO ID AND LEVEL ID USED IN REPORT
+    public function getOrgByDzoLevel($dzoId,$levelId){
+        $response_data = DB::table('organization_details')
+                ->select('id', 'name')
+                ->where('dzongkhagId',$dzoId)
+                ->where('levelId',$levelId)
+                ->where('status',1)
+                ->get();
+        return $response_data;
+    }
+
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
@@ -331,7 +342,7 @@ class LoadOrganizationController extends Controller{
                 GROUP BY classId
                 ORDER BY c.displayOrder;");
             } else {
-                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                $response_data = DB::select("SELECT c.class AS Class, c.displayOrder,
                 COUNT(class) AS No_of_Section
                 FROM `organization_class_streams` a
                 LEFT JOIN classes c ON c.id=a.classId
@@ -779,6 +790,22 @@ class LoadOrganizationController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    /**
+     * Get the student school details based on OrgClassId
+     */
+
+    public function getStudentSchoolDetails($OrgClassId = ""){
+        $response_data = DB::table('organization_class_streams')
+                    ->join('organization_details', 'organization_details.id', '=', 'organization_class_streams.organizationId')
+                    ->join('classes', 'classes.id', '=', 'organization_class_streams.classId')
+                    ->select('organization_details.id AS id', 'organization_details.name AS name', 'organization_details.dzongkhagId AS dzongkhagId',
+                                    'classes.class AS class')
+                    ->where('organization_class_streams.id', $OrgClassId)
+                    ->get();
+
+        return $this->successResponse($response_data);
+    }
+
     // /**
     //  * the get Arrays fetches the list of classes, streams and sections in an array
     //  * this is for display the name of the class, stream and section
@@ -826,4 +853,13 @@ class LoadOrganizationController extends Controller{
         $response_data = DB::select("SELECT t1.dzongkhagId,COUNT(t1.id) AS no_of_schools FROM organization_details t1 JOIN level t2 ON t1.levelId = t2.id GROUP BY t1.dzongkhagId");
         return $response_data;
     }
+
+    //method by gagen for pulling orgClassStreamId For academic purpose
+    public function LoadStdIdAwardResponsibilites($class_id){
+        $response_data = DB::table('organization_class_streams')
+            ->select('id AS orgClassStreamId')
+            ->where('classId',$class_id)->get();
+        return $response_data;
+    }
+
 }

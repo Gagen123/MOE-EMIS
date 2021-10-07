@@ -51,26 +51,34 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel" aria-labelledby="custom-tabs-four-messages-tab">
-                                <strong><i class="fas fa-users mr-1"></i> Staff</strong>
+                                <!-- <strong><i class="fas fa-users mr-1"></i> Staff</strong> -->
                                 <div class="card-body p-0">
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Total Male Staff</th>
-                                            <th>{{StaffMinistry.Totalmale}}</th>
+                                            <th><b> Staff Detail</b></th>
+                                            <th></th>
                                         </tr>
-                                         <tr>
+                                         <!-- <tr>
                                             <th>Total Female Staff</th>
                                             <th>{{StaffMinistry.TotalFemale}}</th>
-                                        </tr>
+                                        </tr> -->
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Total Support Staff</td>
+                                            <td>Total Female Staff</td>
+                                            <td>{{StaffMinistry.TotalFemale}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Male Staff</td>
+                                            <td>{{StaffMinistry.Totalmale}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Support Staff Male</td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Total Support Staff</td>
+                                            <td>Total Support Staff Female</td>
                                             <td></td>
                                         </tr>
                                     </tbody>

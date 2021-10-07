@@ -4,11 +4,17 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="">Date of Procurement:<span class="text-danger">*</span></label>  
+                        <input class="form-control popupDatepicker" name="dateOfprocure" id="dateOfprocure" type="text" 
+                        :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')"  autocomplete="off" >
+                        <has-error :form="form" field="dateOfprocure"></has-error>
+                    </div>
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label>
                         <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
                         v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
                         <has-error :form="form" field="dateOfprocure"></has-error>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -113,6 +119,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
+                    this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfprocure').val());
                     this.form.post('/mess_manage/saveLocalProcure',this.form)
                     .then(() => {
                     Toast.fire({
@@ -192,8 +199,8 @@ export default {
             let itemval=$('#'+type+index).val();
             $('#measurement_unit'+index).html(this.unitArray[itemval.split('_')[1]]);
         },
-
-        loadActiveFoodSourceMaster(uri = 'masters/loadActiveFoodSourceMaster'){
+ 
+        loadActiveFoodSourceMaster(uri = 'masters/loadActiveStudentMasters/FoodSourceType'){
             axios.get(uri)
             .then(response =>{
                 let data = response;

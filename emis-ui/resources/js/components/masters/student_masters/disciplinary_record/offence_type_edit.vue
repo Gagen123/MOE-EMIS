@@ -50,7 +50,6 @@ export default {
     data() {
         return {
             offenceSeverity:[],
-
             form: new form({
                 id: '',
                 name: '',
@@ -58,7 +57,7 @@ export default {
                 code:'',
                 description: '',
                 status: 1,
-                record_type:'OffenceType',
+                model:'OffenceType',
                 action_type:'edit',
             })
         }
@@ -68,16 +67,6 @@ export default {
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
             }
-        },
-        loadActiveOffenceList(uri="masters/loadActiveStudentMasters/OffenceSeverity"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.offenceSeverity =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
         },
         async changefunction(id){
             if($('#'+id).val()!=""){
@@ -95,37 +84,13 @@ export default {
                 this.form.description='';
                 this.form.status= 1;
             }
-            if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/offence_type_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+             if(type=="save"){
+                this.submitstudentmaster('offence_type_list');
             }
 		}, 
     },
-    mounted(){
+    async mounted(){
+        this.offenceSeverity =await this.loadActiveOffenceList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -138,18 +103,19 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveOffenceList();
     },
-    created() {
+    created(){
         this.form.id=this.$route.params.data.id;
         this.form.name=this.$route.params.data.Name;
         this.form.description=this.$route.params.data.Description;
         this.form.code=this.$route.params.data.Code;
         this.form.offence_severity_id=this.$route.params.data.StdDisciplinarySeverity;
-    },
+
+    }
     
 }
 </script>
 
 
 
+ 

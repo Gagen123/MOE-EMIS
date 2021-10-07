@@ -4,9 +4,9 @@
             <div class="card-body">
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="">Date of Procurement:<span class="text-danger">*</span></label>
-                        <input class="form-control editable_fields" name="dateOfprocure" id="dateOfprocure" type="date"
-                        v-model="form.dateOfprocure" :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')">
+                        <label class="">Date of Procurement:<span class="text-danger">*</span></label>  
+                        <input class="form-control popupDatepicker" name="dateOfprocure" id="dateOfprocure" type="text" 
+                        :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')"  autocomplete="off" >
                         <has-error :form="form" field="dateOfprocure"></has-error>
                     </div>
                 </div>
@@ -105,6 +105,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
+                    this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfprocure').val());
                     this.form.post('/mess_manage/saveLocalProcureEdit',this.form)
                     .then(() => {
                     Toast.fire({
@@ -180,7 +181,9 @@ export default {
             axios.get('mess_manage/localProcureEditList/' +locId)
             .then((response) =>{
                 let data=response.data.data;
-                this.form.dateOfprocure         = data.dateOfprocure;
+              //  this.form.dateOfprocure         = data.dateOfprocure;
+                this.form.dateOfrelease         = this.formatDateToddmmyyyy(data.dateOfprocure);
+                $('#dateOfprocure').val(this.formatDateToddmmyyyy(data.dateOfprocure));
                 this.form.id                    = data.id;
                 this.form.item_id               = data.item_id;
                 this.form.unit_id               = data.unit_id;

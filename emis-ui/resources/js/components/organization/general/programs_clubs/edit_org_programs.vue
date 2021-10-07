@@ -61,7 +61,7 @@ export default {
                 supporter:'',
                 remarks:'',
                 assigned_staff: [],
-                record_type:'add'
+                record_type:'edit'
             }),
         }
     },
@@ -155,11 +155,21 @@ export default {
             .then((response) => {  
             // alert(JSON.stringify(response.data.data));
                 let data=response.data.data;
+                
                 this.student_form.id= data.id;
                //  alert(this.student_form.id);
                // this.student_form.name= data.StdStudentId;
-               this.student_form.program_type=data.CeaProgrammeTypeId;
-               $('#program_type').val(data.CeaProgrammeTypeId).trigger('change');
+                this.student_form.program_type=data.CeaProgrammeTypeId;
+                $('#program_type').val(data.CeaProgrammeTypeId).trigger('change');
+                let type="";
+                if($('#program_type option:selected').text().toLowerCase().includes('program')){
+                    type='program_name';
+                }
+                if($('#program_type option:selected').text().toLowerCase().includes('club')){
+                    type='club_name';
+                }
+               // alert($('#program_type option:selected').text()+':'+type);
+                this.loadActiveProgramList(type);
                 this.student_form.program= data.CeaProgrammeId;
                 $('#program').val(data.CeaProgrammeId).trigger('change');
                 this.student_form.year = data.EstablishmentYear;
@@ -191,7 +201,7 @@ export default {
     },
     created(){
         this.loadActiveProgramTypeList();
-        this.loadActiveProgramList();
+        
         this.loadActiveSupportList();
         this.getStudentProgramDetails(this.$route.params.data.id);
     }

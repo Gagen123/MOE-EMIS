@@ -40,15 +40,19 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Applicantion Number:</label><br>
                                     <span class="text-blue text-bold">{{response_data.aplication_number}}</span>
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                     <label class="mb-0">Transfer Reason:</label><br>
-                                    <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
-                                </div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Transfer Reason:</label><br>
+                                <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
+                             </div>
+                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Transfer Type:</label><br>
+                                <span class="text-blue text-bold">{{form.transferType}}</span>
                             </div>
+                          </div>
                         </div>
                          <div class="callout callout-success">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -230,6 +234,7 @@ export default {
                 application_no:'',
                 staff_id: '',
                 status_id:'',
+                status:'',
                 service_name:'',
                 applicant_name:'',
                 transfer_reason_id:'',
@@ -250,7 +255,6 @@ export default {
                 }],
                 ref_docs:[],
                 remarks:'',
-
                 actiontype:'',
             }),
         }
@@ -263,6 +267,7 @@ export default {
                 this.response_data=data;
                 this.gettransferconfig(data.transfer_window_id);
                 this.form.id=data.id;
+                this.form.status=data.status;
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;

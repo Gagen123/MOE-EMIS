@@ -34,8 +34,8 @@ class StudentProgramController extends Controller
 
     public function saveStudentProgram(Request $request){
         $rules = [
-            'program'            => 'required',
-            'supporter'            => 'required',
+            'program'               => 'required',
+            'supporter'             => 'required',
            // 'year'            => 'required'
         ];
 
@@ -596,6 +596,7 @@ class StudentProgramController extends Controller
         return $this->successResponse($records);
 
     }
+    
 }
 
 

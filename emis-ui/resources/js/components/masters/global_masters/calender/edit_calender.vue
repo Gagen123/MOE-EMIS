@@ -33,7 +33,10 @@
                                 <template >
                                     <option value="Transfer Appeal">Transfer Appeal</option>
                                 </template>
-                        </select>
+                                <template >
+                                    <option value="Annual Data Submission">Annual Data Submission</option>
+                                </template>
+                        </select> 
                         <has-error :form="form" field="type"></has-error>
                     </div>
                 </div>

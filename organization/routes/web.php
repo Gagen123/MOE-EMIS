@@ -501,6 +501,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
     $router->group(['prefix' => 'loadOrganization'], function () use ($router) {
         $router->get('/loadOrgList/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgList']);
+        //GET ORG BY DZO AND LEVEL ID USED IN REPORT
+        $router->get('/LoadStdIdAwardResponsibilites/{class_id}', ['uses' => 'LoadOrganizationController@LoadStdIdAwardResponsibilites']);
+
+        //Loading OrgClassStreamId for academic //gagen
+        $router->get('/getOrgByDzoLevel/{dzoId}/{levelId}', ['uses' => 'LoadOrganizationController@getOrgByDzoLevel']);
+
         $router->get('/loadParentSchoolList/{orgId}', ['uses' => 'LoadOrganizationController@loadParentSchoolList']);
         $router->get('/loadClassSize/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassSize']);
         $router->get('/loadProjection/{classid}', ['uses' => 'LoadOrganizationController@loadProjection']);
@@ -528,5 +534,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getOrgProfile/{id}/{type}', ['uses' => 'LoadOrganizationController@getOrgProfile']);
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
         $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
+        $router->get('/getStudentSchoolDetails/{OrgClassId}', ['uses' => 'LoadOrganizationController@getStudentSchoolDetails']);
     });
 });

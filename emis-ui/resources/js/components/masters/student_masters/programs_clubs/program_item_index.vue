@@ -9,8 +9,8 @@
                                 <span class="card-title pt-2 mb-0">
                                         <b>Items Produced by Various Programs</b>
                                 </span>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('ProgramItemList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('ProgramItemAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('program_item_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('program_item_add')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>

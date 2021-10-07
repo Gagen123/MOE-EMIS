@@ -48,6 +48,9 @@
                                 <template >
                                     <option value="Admission (XI-Arts)">Admission (XI-Arts)</option>
                                 </template>
+                                <template >
+                                    <option value="Annual Data Submission">Annual Data Submission</option>
+                                </template>
                         </select>
                         <has-error :form="form" field="type"></has-error>
                     </div>

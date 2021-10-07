@@ -16,6 +16,7 @@ class CeaRole extends Model
         'CeaProgrammeId',
         'Name',
         'AssignedTo',
+        'Description',
         'Remarks', 
         'Code',
         'Status'

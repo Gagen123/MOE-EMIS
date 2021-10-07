@@ -7,6 +7,7 @@ try {
             $('.popupDatepicker').css('z-index',' 99999 !important; ');
         },
         methods: {
+            
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
             checkminmax: function (id, type,num,btnid) {
                 if(type=='min' && parseInt($('#'+id).val())<num){
@@ -27,7 +28,6 @@ try {
                 dateData.split("-").reverse().join("-");
                 return reverse;
             },
-
             formatDateToddmmyyyy(dateData){
                 let formatteddate = new Date(dateData);
                 let month=formatteddate.getMonth()+1;
@@ -51,14 +51,12 @@ try {
                 let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
                 return curr_date;
             },
-
-
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
                     $('#'+id).addClass('select2-hidden-accessible');
                 }
             },
-
+            
             remove_error(field_id){
                 if($('#'+field_id).val()!=""){
                     $('#'+field_id).removeClass('is-invalid');

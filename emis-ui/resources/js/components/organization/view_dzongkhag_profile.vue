@@ -56,21 +56,29 @@
                                     <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Total Male Staff</th>
-                                            <th>{{StaffMinistry.Totalmale}}</th>
+                                            <th>Staff Detail</th>
+                                            <th></th>
                                         </tr>
-                                         <tr>
+                                         <!-- <tr>
                                             <th>Total Female Staff</th>
                                             <th>{{StaffMinistry.TotalFemale}}</th>
-                                        </tr>
+                                        </tr> -->
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Total Support Staff</td>
+                                            <td>Total Male Staff</td>
+                                            <td>{{StaffDzongkhag.Totalmale}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Female Staff</td>
+                                            <td>{{StaffDzongkhag.TotalFemale}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Total Support Staff Male</td>
                                             <td></td>
                                         </tr>
                                         <tr>
-                                            <td>Total Support Staff</td>
+                                            <td>Total Support Staff Female</td>
                                             <td></td>
                                         </tr>
                                     </tbody>
@@ -154,7 +162,8 @@
                 existing_details:'',
                 levelArray:{},
                 staff_details:'',
-                StaffMinistry:[],
+               // StaffMinistry:[],
+                StaffDzongkhag:[],
                 form: new form({
                     org_id: '',
                     attachments:'',
@@ -216,11 +225,11 @@
                 });
             },
             loadDataList(org_id){
-                axios.get('loadCommons/loadStaffCountDetail/staffCountMinistry/' +org_id)
+                axios.get('loadCommons/loadStaffCountDetail/staffCountDzongkhag/' +org_id)
                 .then(response => {
                   
                         this.staff_details=response.data.data;
-                        this.StaffMinistry=response.data.data.StaffMinistry[0];
+                        this.StaffDzongkhag=response.data.data.StaffDzongkhag[0];
                         // this.counselor=response.data.data.counselor[0]
                         // this.isSen=response.data.data.isSen[0]   
                         // this.SportInstructor=response.data.data.SportInstructor[0];

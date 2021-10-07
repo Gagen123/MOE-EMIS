@@ -229,42 +229,46 @@ class StaffServicesController extends Controller{
                 'dzongkhag'                 =>  $this->getUserDzoId(),
                 'user_id'                   =>  $this->userId()
             ];
+            // dd($staff_data);
             $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
             // dd($response_data);
-            $appNo=json_decode($response_data)->data->application_number;
-            // dd($this->getRoleIds('roleIds'), $appRole_id[0]->SysRoleId,$request->staff_id);
-            $workflow_data=[
-                'db_name'               =>  $this->database_name,
-                'table_name'            =>  $this->leave_table_name,
-                'service_name'          =>  $this->service_name,
-                'application_number'    =>  $appNo,
-                'screen_id'             =>  $appNo,
-                'status_id'             =>  1,
-                'app_role_id'           =>  $appRole_id[0]->SysRoleId,
-                'record_type_id'        =>  $request->leave_type_id,
-                'remarks'               =>  $request->remarks,
-                'user_dzo_id'           =>  $this->getUserDzoId(),
-                'access_level'          =>  $this->getAccessLevel(),
-                'working_agency_id'     =>  $this->getWrkingAgencyId(),
-                'action_by'             =>  $this->userId(),
-            ];
-            // dd($workflow_data);
-            $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-            // $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveSubmittedRole/'.));
-            $notification_data=[
-                'notification_for'              =>  'Leave Application',
-                'notification_appNo'            =>  $appNo,
-                'notification_message'          =>  '',
-                'notification_type'             =>  'role',
-                'notification_access_type'      =>  'all',
-                'call_back_link'                =>  'tasklist',
-                'user_role_id'                  =>  $request->submitted_to,
-                'dzo_id'                        =>  $this->getUserDzoId(),
-                'working_agency_id'             =>  $this->getWrkingAgencyId(),
-                'access_level'                  =>  $this->getAccessLevel(),
-                'action_by'                     =>  $this->userId(),
-            ];
-            $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            if($request->action_type=="create"){
+                $appNo=json_decode($response_data)->data->application_number;
+                // dd($this->getRoleIds('roleIds'), $appRole_id[0]->SysRoleId,$request->staff_id);
+                $workflow_data=[
+                    'db_name'               =>  $this->database_name,
+                    'table_name'            =>  $this->leave_table_name,
+                    'service_name'          =>  $this->service_name,
+                    'application_number'    =>  $appNo,
+                    'screen_id'             =>  $appNo,
+                    'status_id'             =>  1,
+                    'app_role_id'           =>  $appRole_id[0]->SysRoleId,
+                    'record_type_id'        =>  $request->leave_type_id,
+                    'remarks'               =>  $request->remarks,
+                    'user_dzo_id'           =>  $this->getUserDzoId(),
+                    'access_level'          =>  $this->getAccessLevel(),
+                    'working_agency_id'     =>  $this->getWrkingAgencyId(),
+                    'action_by'             =>  $this->userId(),
+                ];
+                // dd($workflow_data);
+                $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+                // $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveSubmittedRole/'.));
+                $notification_data=[
+                    'notification_for'              =>  'Leave Application',
+                    'notification_appNo'            =>  $appNo,
+                    'notification_message'          =>  '',
+                    'notification_type'             =>  'role',
+                    'notification_access_type'      =>  'all',
+                    'call_back_link'                =>  'tasklist',
+                    'user_role_id'                  =>  $request->submitted_to,
+                    'dzo_id'                        =>  $this->getUserDzoId(),
+                    'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                    'access_level'                  =>  $this->getAccessLevel(),
+                    'action_by'                     =>  $this->userId(),
+                ];
+                // dd($notification_data);
+                $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            }
             return $work_response_data;
         }
         else{

@@ -17,18 +17,7 @@ class StudentMasterController extends Controller{
     }
 
     public function saveStudentMasters(Request $request){
-
-        // $rules = [
-        //     'name'          =>  'required',
-        // ];
-        // $customMessages = [
-        //     'name.required' => 'This field is required',
-        // ];
-        
-        // $this->validate($request, $rules, $customMessages);
-
         $data = $request->all();
-
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
 
@@ -110,8 +99,8 @@ class StudentMasterController extends Controller{
         return $student_masters;
     }
 
-    public function loadStudentMasters($param=""){
-        $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
+    public function loadStudentMasters($type="",$model=""){
+        $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$type."/".$model);
         return $student_masters;
     }
 
@@ -193,5 +182,6 @@ class StudentMasterController extends Controller{
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveFoodSourceMaster');
          return $student_masters;
     }
+    
 
 }

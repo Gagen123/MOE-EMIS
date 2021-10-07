@@ -205,15 +205,8 @@ export default {
                 }
             });
         },
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.leavetypeList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+        async loadleaveTypeList(){
+            this.leavetypeList = await this.loadstaffMasters('active','LeaveType');
         },
         loadstaff(){
             let uri = 'loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
