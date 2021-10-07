@@ -853,4 +853,13 @@ class LoadOrganizationController extends Controller{
         $response_data = DB::select("SELECT t1.dzongkhagId,COUNT(t1.id) AS no_of_schools FROM organization_details t1 JOIN level t2 ON t1.levelId = t2.id GROUP BY t1.dzongkhagId");
         return $response_data;
     }
+
+    //method by gagen for pulling orgClassStreamId For academic purpose
+    public function LoadStdIdAwardResponsibilites($class_id){
+        $response_data = DB::table('organization_class_streams')
+            ->select('id AS orgClassStreamId')
+            ->where('classId',$class_id)->get();
+        return $response_data;
+    }
+
 }

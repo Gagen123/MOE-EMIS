@@ -1177,12 +1177,8 @@ class AcademicController extends Controller
     }catch(Exception $e){
         dd($e);
     }
-<<<<<<< HEAD
-}
-=======
     }
     
->>>>>>> ffdf0c14288b8b7bf4b72250195d55f8a8e0830e
 
     //Written by gagen to pull the result into the emis portal
     public function LoadResultByStudentId($std_id){

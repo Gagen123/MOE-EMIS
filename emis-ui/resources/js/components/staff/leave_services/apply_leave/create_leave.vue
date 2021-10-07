@@ -293,7 +293,6 @@ export default {
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
                 let data = response.data.data;
-                console.log(data);
                 if(data!=null && data!="null" && data!=""){
                     //need to handle for multiple role later, for now it will take for first role at the index 0
                     this.total_leave_apply=' ('+data.leave_details.category+')';

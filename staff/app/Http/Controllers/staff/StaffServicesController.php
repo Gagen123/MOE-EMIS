@@ -262,20 +262,22 @@ class StaffServicesController extends Controller{
         }
         if($response_data!=null && $response_data!=""){
             $det=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->get();
-            $seq='NA';
+            $submitted_to='NA';
             if($det!=null && $det!="" && sizeof($det)>0){
                 $count = 0;
+                $cong_seq=0;
                 foreach($det as $d){
                     $count++;
                     if($count==1){
-                        $seq=$d['role_id'];
+                        $cong_seq=$d['sequence'];
+                        $submitted_to=$d['role_id'];
                     }
-                    if($d['sequence']<$seq){
-                        $seq=$d['role_id'];
+                    if($d['sequence']<$cong_seq){
+                        $submitted_to=$d['role_id'];
                     }
                 }
             }
-            $response_data->submitted_to=$seq;
+            $response_data->submitted_to=$submitted_to;
         }
         return $this->successResponse($response_data);
     }
