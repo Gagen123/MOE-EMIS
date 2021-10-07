@@ -3,33 +3,39 @@
         <form class="bootbox-form" id="programRolesId">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Item Variety Name:<span class="text-danger">*</span></label>
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Unit:</label>
                         <select v-model="form.unit_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('unit_id') }" class="form-control" name="unit_id" id="unit_id">
                             <option v-for="(item, index) in measurementList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
                         </select>
                         <has-error :form="form" field="unit_id"></has-error>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" id="description" type="text" autocomplete="off"/>
+                    </div>
+                </div>
+                 <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" autocomplete="off">
+                        <has-error :form="form" field="code"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label class="pl-2"><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Code:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
-                        <has-error :form="form" field="code"></has-error>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Description:</label>
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
-                    </div>
+                   
+                    
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -51,7 +57,7 @@ export default {
                 code:'',
                 description:'',
                 status: 1,
-                record_type:'CeaProgramItemVariety',
+                model:'CeaProgramItemVariety',
                 action_type:'add',
             })
         }
@@ -62,55 +68,31 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+        loadMeasurementList(uri = 'masters/loadActiveStudentMasters/CeaProgramMeasurement'){
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    this.measurementList =  data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        },
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
                 this.form.description='';
                 this.form.status= 1;
             }
-            if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/item_variety_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+           if(type=="save"){
+                this.submitstudentmaster('item_variety_list');
             }
 		},
-        loadMeasurementList(uri = 'masters/loadActiveStudentMasters/CeaProgramMeasurement'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.measurementList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
     },
-    created() {
+    created(){
         this.loadMeasurementList();
-    },
+        //  this.measurementList =  await this.loadStudentMasters('all','CeaProgramMeasurement');
+    }
 
 }
 </script>

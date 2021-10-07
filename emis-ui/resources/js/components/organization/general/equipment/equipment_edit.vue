@@ -15,7 +15,7 @@
                         <label>Equipment Name:<span class="text-danger">*</span></label> 
                         <select name="item" class="form-control" v-model="form.item" :class="{ 'is-invalid': form.errors.has('item') }" id="item" @change="remove_err('item')">
                             <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.equipmentItem }}</option>
+                            <option v-for="(item, index) in itemList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="item"></has-error>
                     </div>

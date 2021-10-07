@@ -12,6 +12,8 @@ use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\StaffMajorGrop;
 use App\Models\staff_masters\StaffSubMajorGrop;
 use App\Models\staff_masters\SuperStructure;
+use App\Models\staff_masters\TransferConfig;
+use App\Models\staff_masters\TransferConfigDetails;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
@@ -30,6 +32,42 @@ class StaffMasterController extends Controller{
         $modelName = "App\\Models\\staff_masters\\"."$request->model";
         $model = new $modelName();
         $response_data="";
+
+        //transfer configuration code is paste here for timebeing i will change later(Gagen)
+        if($request->model=="TransferConfig"){
+            $rules = [
+                'transfer_type_id' =>  'required',
+                'role_id'          =>  'required',
+            ];
+            $customMessages = [
+                'transfer_type_id.required' => 'This field is required',
+                'role_id.required'          => 'This field is required',
+            ];
+            $data = array(
+                'transfer_type_id'          =>  $request['transfer_type_id'],
+                'submitter_role_id'         =>  $request['role_id'],
+
+            );
+            $this->validate($request, $rules,$customMessages);
+            if($request['action_type']=="add"){
+                $data =$data +[
+                    'created_by'                =>  $request['user_id'],
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                // dd($data);
+                $config_det= TransferConfig::create($data);
+                // dd($config_det);
+                foreach ($request->role_action_mapp as $rol){
+                    $data = array(
+                        'transfer_config_id'    =>  $config_det->id,
+                        'sequence'              =>  $rol['sequence'],
+                        'authority_type_id'     =>  $rol['authority'],
+                        'role_id'               =>  $rol['role'],
+                    );
+                    $config_det= TransferConfigDetails::create($data);
+                }
+            }
+        }
         $rules = [
             'name'          =>  'required',
             'status'        =>  'required',
@@ -158,6 +196,27 @@ class StaffMasterController extends Controller{
             $response_data = $model::where('id',$request->id)->first();
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+        
+        if($request['action_type']=="edit"){
+            $data =$data +[
+                'updated_by'                =>  $request['user_id'],
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            TransferConfig ::where('id',$request['id'])->update($data);
+            TransferConfigDetails ::where('transfer_config_id',$request['id'])->delete();
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'transfer_config_id'      =>  $request['id'],
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $config_det= TransferConfigDetails ::create($data);
+            }
+        }
+        return $this->successResponse($config_det, Response::HTTP_CREATED);
+
     }
 
     public function loadStaffMasters($type="",$model=""){

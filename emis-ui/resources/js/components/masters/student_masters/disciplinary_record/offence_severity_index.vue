@@ -9,8 +9,8 @@
                                 <span class="card-title pt-2 mb-0">
                                         <b>Severity of Student Discipline</b>
                                     </span>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('OffenceSeverityIndex')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('OffenceSeverityAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('offence_severity_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('offence_severity_add')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>

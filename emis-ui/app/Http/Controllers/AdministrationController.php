@@ -228,11 +228,12 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
-    //commented by tshewang to fix master data
-    // public function loadStaffMasters($param=""){
-    //     $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
-    //     return $global_masters;
-    // }
+    //commented by tshewang to fix master data 
+    //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
+    public function loadStaffMasters($param=""){
+        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
+        return $global_masters;
+    }
     public function loadStaffDropdownMasters($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/'.$model."/".$parent_id);
         return $response_data;
@@ -930,8 +931,8 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
+       // dd( $class);
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
         return $response_data;
 
     }

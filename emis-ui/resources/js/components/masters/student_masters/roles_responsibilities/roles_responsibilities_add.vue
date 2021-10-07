@@ -3,29 +3,23 @@
         <form class="bootbox-form" id="responsibilitiesId">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Roles/Responsibilities of Student:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    </div><br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" autocomplete="off"></textarea>
+                        <has-error :form="form" field="description"></has-error>
+                    </div><br>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Code:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" autocomplete="off">
                         <has-error :form="form" field="code"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Status:</label>
-                        <br>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label class="required">Status:</label><br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
@@ -48,7 +42,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                record_type:'StudentRole',
+                model:'StudentRole',
                 action_type:'add',
             })
         }
@@ -65,33 +59,8 @@ export default {
                 this.form.description='';
                 this.form.status= 1;
             }
-            if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/roles_responsibilities_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+             if(type=="save"){
+                this.submitstudentmaster('roles_responsibilities_list');
             }
 		}, 
     },

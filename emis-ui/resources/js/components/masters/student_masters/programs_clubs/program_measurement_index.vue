@@ -9,8 +9,8 @@
                                 <span class="card-title pt-2 mb-0">
                                         <b>Quantity/Measurements Used for Various Programs</b>
                                     </span>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('ProgramMeasurementList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('ProgramMeasurementAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('program_measurement_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('program_measurement_add')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>

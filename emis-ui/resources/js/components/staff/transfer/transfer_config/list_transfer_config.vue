@@ -26,8 +26,9 @@
 export default {
     data(){
         return{
-            dataLists:[],
             roleList:[],
+            dataLists:[],
+          
         }
     },
     methods:{
@@ -60,7 +61,7 @@ export default {
             this.$router.push({name:'edit_transfer_config',params: {data:data.id}});
         },
     },
-        created(){
+       async created(){
             this.loadroleList();
             this.TransferConfigurationList();
         },

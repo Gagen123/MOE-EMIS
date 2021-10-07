@@ -45,7 +45,7 @@ export default {
                 name: '',
                 description: '',
                 status: 1,
-                record_type:'OffenceSeverity',
+                model:'OffenceSeverity',
                 action_type:'edit',
             })
         }
@@ -62,32 +62,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/offence_severity_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+                this.submitstudentmaster('offence_severity_list');
             }
 		}, 
     },
@@ -97,6 +72,5 @@ export default {
         this.form.description=this.$route.params.data.Description;
         this.form.code=this.$route.params.data.Code;
     },
-    
 }
 </script>

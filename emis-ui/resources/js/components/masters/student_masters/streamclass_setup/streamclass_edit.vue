@@ -5,10 +5,10 @@
                 <div class="row form-group">
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Streams:<span class="text-danger">*</span></label> 
-                         <select v-model="form.streamId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('streamId') }" class="form-control select2" name="streamId" id="streamId">
-                            <option value=""> -- Select-- </option>
-                            <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{ item.stream }}</option>
-                        </select>
+                            <select v-model="form.streamId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('streamId') }" class="form-control select2" name="streamId" id="streamId">
+                                <option value=""> -- Select-- </option>
+                                <option v-for="(item, index) in streamList" :key="index" v-bind:value="item.id">{{ item.stream }}</option>
+                            </select>
                         <has-error :form="form" field="streamId"></has-error>
                         <span class="text-danger" id="streamId"></span>
                     </div>
@@ -19,9 +19,10 @@
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
-                                  <th >SL#</th>
+                                  <th>SL#</th>
                                   <th>Subject</th>
                                   <th>Marks<span class="text-danger">*</span></th>
+                                  <th>Grade<span class="text-danger">*</span></th>
                               </tr>
                            </thead>
                            <tbody id="tbody">
@@ -31,8 +32,11 @@
                                     {{SubjectDropdown[item.aca_sub_id]}} 
                                 </td>
                                  <td>                          
-                                        <input type="text" name="marks" class="form-control" v-model="item.marks" :class="{ 'is-invalid': form.errors.has('marks') }"/>
-                                  </td>
+                                    <input type="text" name="marks" class="form-control" v-model="item.marks" :class="{ 'is-invalid': form.errors.has('marks') }"/>
+                                 </td>
+                                 <td>                          
+                                    <input type="text" name="grade" class="form-control" v-model="item.grade" :class="{ 'is-invalid': form.errors.has('grade') }"/>
+                                 </td>
                             </tr>
                         </tbody>
                      </table>
@@ -55,13 +59,13 @@ export default {
             subjectlist:[],
             SubjectDropdown:{},
             form: new form({
-               id:'',
                subjectlist:[],
             })
         }
     },
     methods: {
         restForm(){
+            this.form.subjectlist= '';
         },
         remove_err(field_id){
             if($('#'+field_id).val()!=""){
@@ -73,7 +77,6 @@ export default {
             .then(response => {
                 let data = response.data;
                 this.streamList =  data;
-                this.getSubjectlist(data[0].id);
             })
             .catch(function (error) {
                 if(error.toString().includes("500")){
@@ -81,7 +84,6 @@ export default {
                 }
             });
         },
-        
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
@@ -103,7 +105,7 @@ export default {
                 })
             }
 		},
-         changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
@@ -111,14 +113,10 @@ export default {
             }
             if(id=="streamId"){
                 this.form.streamId=$('#streamId').val();
-                this.getSubjectlist('');
             }
          }, 
-        getSubjectlist(id){
-            let streamid=$('#streamId').val();
-            if(id!="" && streamid==null){
-                streamid=id;
-            }
+        getSubjectList(){
+            let streamid = 'X';
             let uri = 'masters/subjectlist/'+streamid;
             axios.get(uri)
             .then(response =>{
@@ -160,6 +158,8 @@ export default {
         mounted() {
             this.loadStreamList();
             this.loadsubjectList();
+            this.getSubjectList();
+
             $('[data-toggle="tooltip"]').tooltip();
             $('.select2').select2();
             $('.select2').select2({
@@ -170,12 +170,13 @@ export default {
             });
             Fire.$on('changefunction',(id)=> {
                 this.changefunction(id);
-
-            this.form.id=this.$route.params.data.id;
-            this.form.subjectlist=this.$route.params.data.streamclass;
-            this.form.streamId=this.$route.params.data.streamId;
             });
     },
+    created(){
+        this.form.id=this.$route.params.data.id;
+        this.form.subjectlist=this.$route.params.data.streamclass;
+        this.form.streamId=this.$route.params.data.streamId;
+    }
     
 }
 </script>

@@ -59,12 +59,12 @@
                     <div class="card-body">
                         <div class="form-group row">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Has Counselling Rooom:</label>
-                                <span class="text-blue text-bold" id="scode">{{contactdetail.hasCounselingRoom == 1 ? "Yes" : "No"}}</span>
+                                <label>Has Shift System:</label>
+                                <span class="text-blue text-bold" id="scode">{{contactdetail.hasShiftSystem == 1 ? "Yes" : "No"}}</span>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                <label>Is AspNet School:</label>
-                                <span class="text-blue text-bold" id="sname">{{contactdetail.isAspNetSchool == 1 ? "Yes" : "No"}}</span>
+                                <label>Is GeoPoliticallyLocated:</label>
+                                <span class="text-blue text-bold" id="sname">{{contactdetail.isGeopoliticallyLocated == 1 ? "Yes" : "No"}}</span>
                             </div>
                         </div>  
                         <div class="form-group row">

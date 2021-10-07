@@ -67,32 +67,12 @@ export default {
                 program_id:'',
                 description:'',
                 status: 1,
-                record_type:'StudentAwards',
+                model:'StudentAwards',
                 action_type:'edit',
             })
         }
     },
     methods: {
-        loadActiveAwardList(uri='masters/loadActiveStudentMasters/StudentAwardType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.awardList =  data.data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
-        loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.programList =  data.data;
-            })
-            .catch(function (error) {
-                console.log("Error......"+error)
-            });
-        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -114,40 +94,18 @@ export default {
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.code='';
                 this.form.description='';
                 this.form.status= 1;
             }
             if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/student_award_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+                this.submitstudentmaster('student_award_list');
             }
 		}, 
     },
-    mounted(){
+    async mounted(){
+        this.awardList =await this.loadActiveAwardList();
+        this.programList =await this.loadActiveProgramList();
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -160,17 +118,15 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadActiveAwardList();
-        this.loadActiveProgramList();
     },
-    created() {
-        this.form.id=this.$route.params.data.id;
+     created() {
         this.form.name=this.$route.params.data.Name;
         this.form.description=this.$route.params.data.Description;
-        this.form.status=this.$route.params.data.Status;
         this.form.code=this.$route.params.data.Code;
         this.form.award_type_id=this.$route.params.data.CeaAwardTypeId;
         this.form.program_id=this.$route.params.data.CeaProgrammeId;
+        this.form.status=this.$route.params.data.Status;
+        this.form.id=this.$route.params.data.id;
     },
     
 }
