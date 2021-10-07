@@ -304,11 +304,9 @@ export default {
             subjectList:[],
             qualificationsubjectList:[],
             subjectArray:{},
-            cureerstageList:[],
             qualificationDescription:[],
             staffqualificationlist:[],
             coursemodeList:[],
-            repationshipList:[],
             staff_nomination_list:[],
             staff_qualification_list:[],
             attachmentDetails:[],
@@ -367,18 +365,7 @@ export default {
                 console.log(error);
             });
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.cureerstageList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.leg(error);
-            });
-        },
+
         loadactivesex_idList(uri="masters/loadGlobalMasters/all_active_gender"){
             axios.get(uri)
             .then(response => {
@@ -388,20 +375,10 @@ export default {
                 }
             })
             .catch(function (error) {
-                console.leg(error);
+                console.log(error);
             });
         },
 
-        loadrelationshipList(uri="masters/loadStaffMasters/all_active_relationship_list"){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.repationshipList =  data.data.data;
-            })
-            .catch(function (error){
-                console.leg(error);
-            });
-        },
         loadactivecountryList(uri="masters/loadGlobalMasters/all_active_country"){
             axios.get(uri)
             .then(response => {
@@ -524,16 +501,13 @@ export default {
 
     },
 
-    mounted() {
+    async mounted() {
         this.loadactivesex_idList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
         this.loadAcademicMasters();
         this.loadactivesubjectList();
-        this.loadactivecureerstageList();
-        this.loadrelationshipList();
         this.loadpersonalDetails();
-
     },
 }
 </script>

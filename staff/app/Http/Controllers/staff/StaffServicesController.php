@@ -441,7 +441,10 @@ class StaffServicesController extends Controller{
     }
 
     public function loadLeaveDetails($appNo=""){
-        $leave_detials=LeaveApplication::where('application_number',$appNo)->first();
+        $leave_detials=LeaveApplication::with('leaveDetails')->where('application_number',$appNo)->first();
+        if($leave_detials!=""){
+            $leave_detials->attachment=ApplicationAttachments::where('ApplicationDetailsId',$leave_detials->id)->get();
+        }
         return $this->successResponse($leave_detials);
     }
 
