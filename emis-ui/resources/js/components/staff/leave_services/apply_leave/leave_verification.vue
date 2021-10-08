@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leave Type:</label><br>
-                        <span class="text-blue text-bold">{{leavetypeList[form.leave_type_id]}}</span>
+                        <span class="text-blue text-bold">{{form.leave_type_id}}</span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -67,7 +67,38 @@
                         <span class="text-blue text-bold">{{form.reason}}</span>
                     </div>
                 </div>
-                <Workflow :appNo="form.application_no" />
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="form-group row">
+                        <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-8">
+                            <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>File Name</th>
+                                        <th>Upload File</th>
+                                        <th>action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for='(attach,count) in applicationdetailsatt' :key="count+1" :id="'attach'+count">
+                                        <template>
+                                            <td>{{attach.user_defined_file_name}} </td>
+                                            <td>  {{attach.name}}</td>
+                                            <td>
+                                                <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                            </td>
+                                        </template>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <Workflow :appNo="form.application_number" />
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="mb-0">Remarks</label>
@@ -96,8 +127,8 @@ export default {
     },
     data(){
         return {
-            leavetypeList:{},
             genderArray:{},
+            applicationdetailsatt:[],
             positiontitleList:{},
             form: new form({
                 application_number:'',
@@ -117,18 +148,6 @@ export default {
         }
     },
     methods: {
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.leavetypeList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
         loadgenderList(uri = 'masters/loadGlobalMasters/all_active_gender'){
             axios.get(uri)
             .then(response => {
@@ -140,6 +159,12 @@ export default {
             .catch(function (error){
                console.log('Error: '+error);
             });
+        },
+        openfile(file){
+            let file_path=file.path+'/'+file.name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
         },
         loadpositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
             axios.get(uri)
@@ -216,14 +241,16 @@ export default {
             axios.get('/staff/staffServices/loadLeaveDetails/'+appNo+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
+                console.log(data);
                 this.form.date_of_application           =   data.date_of_application;
                 this.form.application_no                =   data.application_no;
                 this.form.from_date                     =   data.from_date;
                 this.form.to_date                       =   data.to_date;
                 this.form.no_days                       =   data.no_days;
-                this.form.leave_type_id                 =   data.leave_type_id;
+                // this.form.leave_type_id                 =   data.leave_type_id;
                 this.form.reason                        =   data.reason;
-                // this.form.staff_id                      =   data.staff_id;
+                // this.form.staff_id                      =   data.staff_id;leaveDetails
+                this.form.leave_type_id                 =   data.leave_details.name;
                 this.form.appName                       =   data.applicant_details.name;
                 this.form.staff_id                      =   data.applicant_details.id;
                 this.form.contact_number                =   data.applicant_details.contact_no;
@@ -235,6 +262,7 @@ export default {
                 if(data.app_seq_no==10 ){
                     $('#approveId').show();
                 }
+                this.applicationdetailsatt              =   data.attachment;
                 this.form.status_id                     =   data.app_seq_no;
                 this.form.position_title                =   data.applicant_details.position_title_id;
             })
@@ -244,7 +272,6 @@ export default {
         }
     },
     mounted(){
-        this.loadleaveTypeList();
         this.loadgenderList();
         this.loadpositionTitleList();
         this.form.application_number=this.$route.params.data.application_number;

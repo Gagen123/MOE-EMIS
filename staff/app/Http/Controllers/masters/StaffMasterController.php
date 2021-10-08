@@ -197,7 +197,7 @@ class StaffMasterController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-        
+
         if($request['action_type']=="edit"){
             $data =$data +[
                 'updated_by'                =>  $request['user_id'],
@@ -221,10 +221,11 @@ class StaffMasterController extends Controller{
 
     public function loadStaffMasters($type="",$model=""){
         $mod=$model;
-        $modelName = "App\\Models\\staff_masters\\"."$model";
-        $model = new $modelName();
+        if($type!="all_active_position_title_with_level"){
+            $modelName = "App\\Models\\staff_masters\\"."$model";
+            $model = new $modelName();
+        }
         if($type == 'all'){
-
             if($mod=="ChildGroupPosition"){
                 $response_data=$model::get();
                 if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
@@ -274,14 +275,17 @@ class StaffMasterController extends Controller{
             // dd(explode('__',$type)[1]);
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
         }
+        else if(strpos($type,'byid')!==false){
+            return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->first());
+        }
         else if($type=="Qualification"){
             return $this->successResponse($model::with('quialificationtype','quialificationlevel')->get());
         }
         else if($type=="StaffSubMajorGrop"){
             return $this->successResponse($model::with('majorgroup')->get());
         }
-        if($type=="all_active_position_title_with_level"){
-            $positions=ChildGroupPosition::where('status', 1)->get();
+        else if($type=="all_active_position_title_with_level"){
+            $positions=ChildGroupPosition::where('status', 1)->where('child_group_id', $model)->get();
             if($positions!=null && $positions!="" && sizeof($positions)>0){
                 foreach($positions as $pos){
                     $posi=PositionTitle::where('id',$pos['position_title_id'])->first();

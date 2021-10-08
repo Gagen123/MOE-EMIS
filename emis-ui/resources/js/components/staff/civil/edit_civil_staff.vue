@@ -85,6 +85,32 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Major Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.majorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('majorgroup') }" class="form-control select2" name="majorgroup" id="majorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in groupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="majorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Sub Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.submajorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('submajorgroup') }" class="form-control select2" name="submajorgroup" id="submajorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="submajorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Child Group Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.childgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('childgroup') }" class="form-control select2" name="childgroup" id="childgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in childgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="childgroup"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Position Title (Level-Superstructure):<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
                                         <option value=""> --Select--</option>
@@ -739,6 +765,9 @@ export default {
             attachmentDetails:[],
             categoryList:[],
             instituteList:[],
+            groupList:[],
+            subgroupList:[],
+            childgroupList:[],
             personal_form: new form({
                 isteaching:false,
                 organization_type:'',
@@ -750,6 +779,9 @@ export default {
                 cid_work_permit:'',
                 name:'',
                 p_address:'',
+                majorgroup:'',
+                submajorgroup:'',
+                childgroup:'',
                 position_title:'',
                 position_sub_level:'',
                 sex_id:'',
@@ -1381,9 +1413,9 @@ export default {
         async loadcontractcategory(){
             this.categoryList =  await this.loadstaffMasters('active','ContractCategory');
         },
-        async loadpositiontitleList(){
-            this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level','PositionTitle');
-        },
+        // async loadpositiontitleList(){
+        //     this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level','PositionTitle');
+        // },
         async loadrelationshipList(){
             this.repationshipList =  await this.loadstaffMasters('active','Relationship');
         },
@@ -1564,6 +1596,18 @@ export default {
                     this.personal_form.isteaching=false;
                     $('#isteaching').hide();
                 }
+            }
+            if(id=="majorgroup"){
+                this.personal_form.majorgroup=$('#majorgroup').val();
+                this.getsubmajorgroup($('#majorgroup').val());
+            }
+            if(id=="submajorgroup"){
+                this.personal_form.submajorgroup=$('#submajorgroup').val();
+                this.getchildGroup($('#submajorgroup').val());
+            }
+            if(id=="childgroup"){
+                this.personal_form.childgroup=$('#childgroup').val();
+                this.getpositiontitle($('#childgroup').val());
             }
             if(id=="position_sub_level"){
                 this.personal_form.position_sub_level=$('#position_sub_level').val();
@@ -1797,6 +1841,17 @@ export default {
             .catch((error) => {
                 console.log("Error......"+error);
             });
+        },
+        async getsubmajorgroup(id){
+            this.subgroupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
+        },
+        async getchildGroup(id){
+            this.childgroupList =  await this.loadstaffMasters('byparent__sub_group_id__'+id,'ChildGroup');
+        },
+        async getpositiontitle(id){
+            this.positiontitleList=[];
+            this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level',id);
+            // await this.loadstaffMasters('byparent__sub_group_id__'+id,'PositionTitle');
         }
     },
     mounted() {
@@ -1814,7 +1869,7 @@ export default {
         });
         this.loadactivemaritalList();
         this.loadactivesex_idList();
-        this.loadpositiontitleList();
+        // this.loadpositiontitleList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();
         this.loadcontractcategory();
