@@ -12,18 +12,25 @@
                         <has-error :form="form" field="facility"></has-error>
                     </div>
                 </div>
-                  
+                <div class="form-group row"> 
+                    <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No.of Facility:<span class="text-danger">*</span></label>
+                    <div class="col-lg-8 col-md-8 col-sm-8">
+                        <input name="no_of_facility" class="form-control" v-model="form.no_of_facility" :class="{ 'is-invalid': form.errors.has('no_of_facility') }" id="no_of_facility" @change="remove_err('no_of_facility')" type="number">
+                        <has-error :form="form" field="no_of_facility"></has-error>
+                    </div>
+                </div>
             <div class="card">
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
+                                  <th>Detail for facility:</th>
                                   <th>Type of facilities<span class="text-danger">*</span></th>
-                                  <th>No. of Facilities<span class="text-danger">*</span></th>
+                                  <!-- <th>No. of Facilities<span class="text-danger">*</span></th> -->
                                   <th>Year of establishment<span class="text-danger">*</span></th>
                                   <th>support By<span class="text-danger">*</span></th>
-                                  <th id='sizeAndarea1'>Area/Size</th>
+                                  <th>Area/Size</th>
                                   <th>Accessible to SEN<span class="text-danger">*</span></th>
                                   <th>Sports type</th>
                                   <th>Status<span class="text-danger">*</span></th>
@@ -31,14 +38,15 @@
                            </thead>
                            <tbody>
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
+                                  <td>{{index+1}}</td>
                                   <td>
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
+                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
                                   </td>
-                                   <td>                          
+                                   <!-- <td>                          
                                         <input type="number" name="number" class="form-control" v-model="item.number"/>
-                                  </td>
+                                  </td> -->
                                   <td>                          
                                         <input type="number" name="yoe" class="form-control" v-model="item.yoe"/>
                                   </td>
@@ -48,16 +56,16 @@
                                             <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                   </td>
-                                  <td id='sizeAndarea'> 
+                                  <td > 
                                         <input name="area" class="form-control" v-model="item.area"/>
                                  </td>
                                   <td>                                
-                                     <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
-                                           <option  value="">--- Please Select ---</option>
-                                                <option  value="0">yes</option>
-                                                <option value="1">no</option>
-                                            <option value="2">partial</option>
-                                     </select> 
+                                    <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
+                                        <option  value="">--- Please Select ---</option>
+                                            <option  value="0">yes</option>
+                                            <option value="1">no</option>
+                                        <option value="2">partial</option>
+                                    </select> 
                                   </td>
                                   <td>                                
                                         <label><input v-model="item.sportstype"  type="radio" value="1" /> Indoor</label>
@@ -68,14 +76,14 @@
                                         <label><input v-model="item.status"  type="radio" value="0" /> Non_Usable</label>
                                   </td>
                               </tr> 
-                             <tr>
+                             <!-- <tr>
                                   <td colspan=7> 
                                       <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore" 
                                       @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                       <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove" 
                                       @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                   </td>
-                              </tr>                                    
+                              </tr>                                     -->
                           </tbody>
                      </table>
                   </div>
@@ -103,10 +111,10 @@ export default {
             facilitySubList:[],
             items_received: [],
             form: new form({
-                 id: '',facility:'',
+                 id: '',facility:'', no_of_facility:'',
                   items_received:
                 [{
-                    type:'',yoe:'',number:'', access:'',area:'', status:'',sportstype:'',support:'',
+                    type:'',yoe:'', access:'',area:'', status:'',sportstype:'',support:'',
                 }], 
             })
         }
@@ -225,7 +233,6 @@ export default {
                     $('#sizeAndarea1').hide();
 
                 }
-
         },
         /**
          * 
@@ -263,12 +270,12 @@ export default {
                 let data=response.data.data;
                 // alert(data.length);
                 for(let i=0; i<data.length;i++){
-                    this.form.facility = data[i].facility;
-                    this.form.id       = data[i].id;
+                    this.form.facility          = data[i].facility;
+                    this.form.id                = data[i].id;
+                    this.form.no_of_facility    = data[i].number
                     this.form.items_received.push({
                         type:data[i].type,
-                        
-                        number:data[i].number,
+                        // number:data[i].number,
                         yoe:data[i].yearOfEstablishment,
                         access:data[i].accessibleToDisabled,
                         area:data[i].size,
@@ -304,26 +311,28 @@ export default {
         },
        
        
-        },
-        mounted() { 
-            $('.select2').select2();
-            $('.select2').select2({
-                theme: 'bootstrap4'
-            });
-            $('.select2').on('select2:select', function (el){
-                Fire.$emit('changefunction',$(this).attr('id')); 
-            });
-            Fire.$on('changefunction',(id)=> {
-                this.changefunction(id);
-            });
+    },
+    mounted() { 
+        $('.select2').select2();
+        $('.select2').select2({
+            theme: 'bootstrap4'
+        });
+        $('.select2').on('select2:select', function (el){
+            Fire.$emit('changefunction',$(this).attr('id')); 
+        });
+        Fire.$on('changefunction',(id)=> {
+            this.changefunction(id);
+        });
+        // this.getFacilityDropdown();
+        // this.getSupportDropdown();
+    
+    },
+    created(){
+        this.getSportsDetails(this.$route.params.data.id);
+        this.getFacilityDropdown();
+        this.getSupportDropdown();
+        this.getSubFacilityDropdown();
         
-        },
-        created(){
-            this.getSportsDetails(this.$route.params.data.id);
-            this.getFacilityDropdown();
-            this.getSupportDropdown();
-            this.getSubFacilityDropdown();
-            
-        }
+    }
 }
 </script>
