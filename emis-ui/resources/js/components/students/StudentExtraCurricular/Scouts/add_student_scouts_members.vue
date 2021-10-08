@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="alert alert-warning alert-dismissible" style="display:none" id="warning">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-exclamation-triangle"></i> Information!</h5>
+            <div id="message"></div>
+        </div>
         <form>
             <div class="form-group row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -62,6 +67,7 @@
 export default {
     data(){
         return {
+            is_classTeacher:'1',
             studentList:[],
             scoutList:[],
             scoutSectionList:[],
@@ -90,6 +96,13 @@ export default {
             .then(response =>{
                 let data = response.data.data
                 this.classSection = data;
+                if(data != null && data !=''){
+                    this.is_classTeacher='1';
+                } else {
+                    this.is_classTeacher='0';
+                    $('#warning').show();
+                    $('#message').html('User is not assigned as Class Teacher. Please assign class teacher to proceed');
+                }
             })
         },
         getStudentBasedOnTeacherClassSect(){

@@ -73,7 +73,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadConsolidatedResultListForPublish/{orgId}/{termId}',['uses' => 'academic\AcademicController@loadConsolidatedResultListForPublish']);
         $router->get('/getConsolidatedResultForEdit/{orgId}/{stdId}/{termId}/{subId}',['uses' => 'academic\AcademicController@getConsolidatedResultForEdit']);
         $router->get('/getSubjectOfTerm',['uses' => 'academic\AcademicController@getSubjectOfTerm']);
-        $router->post('/updateStatus/{Id}',['uses' => 'academic\AcademicController@updateStatus']);
+        $router->get('/getClassTeacherByclass/{orgId}',['uses' => 'academic\AcademicController@getClassTeacherByclass']);
+        $router->get('/getSubjectTeacherByclass/{orgId}',['uses' => 'academic\AcademicController@getSubjectTeacherByclass']);
+        $router->post('/updateStatus',['uses' => 'academic\AcademicController@updateStatus']);
+        $router->post('/updateResult',['uses' => 'academic\AcademicController@updateResult']);
+
 
         //Emis portal used for pulling the result of the student
         $router->get('/LoadResultByStudentId/{std_id}',['uses' => 'academic\AcademicController@LoadResultByStudentId']);

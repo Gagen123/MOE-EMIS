@@ -47,7 +47,7 @@ class LoadOrganizationController extends Controller{
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)->wherein('category',['public_school','public_eccd','public_ecr'])
             ->where('status','1')
-            ->select( 'id','name','levelId','dzongkhagId','category','code')->get();
+            ->select( 'id','name','levelId','dzongkhagId','gewogId','category','code')->get();
         }
         if($type=="all_eccds_dzogkhag_wise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','like','%eccd%')->get();
@@ -342,7 +342,7 @@ class LoadOrganizationController extends Controller{
                 GROUP BY classId
                 ORDER BY c.displayOrder;");
             } else {
-                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                $response_data = DB::select("SELECT c.class AS Class, c.displayOrder,
                 COUNT(class) AS No_of_Section
                 FROM `organization_class_streams` a
                 LEFT JOIN classes c ON c.id=a.classId

@@ -369,7 +369,6 @@ const routes = [
     // },
   ]
 },
-
 //STUDENT SEN DETAILS
 { path: '/student_sen_list',name:'student_sen_list', component: require('./components/students/Sen/sen_student_list.vue').default },
 { path: '/sen_questions',name:'sen_questions', component: require('./components/students/Sen/sen_question.vue').default },
@@ -478,9 +477,17 @@ const routes = [
     },
      //Student List and Profile Related Routes
     //  { path: '/student_profile',name:'student_profile', component: require('./components/students/Assign_RollNo/student_profile.vue').default },
-     { path: '/students_rollNo',name:'students_rollNo', component: require('./components/students/Assign_RollNo/students_rollNo.vue').default },
+    { path: '/students_rollNo',name:'students_rollNo', component: require('./components/students/Assign_RollNo/students_rollNo.vue').default },
 
-
+    //Supplementary/Private Students
+    { path: '/supplementary_student', name:'supplementary_student', component: require('./components/students/SupplementaryStudent/supplementary_student.vue').default,
+        children: [
+            { path: '/', name:'supplementary_student', component: require('./components/students/SupplementaryStudent/list_supplementary_students.vue').default },
+            { path: '/list_supplementary_students', name:'list_supplementary_students', component: require('./components/students/SupplementaryStudent/list_supplementary_students.vue').default },
+            { path: '/add_supplementary_students', name:'add_supplementary_students', component: require('./components/students/SupplementaryStudent/add_supplementary_students.vue').default },
+            { path: '/edit_supplementary_students', name:'edit_supplementary_students', component: require('./components/students/SupplementaryStudent/edit_supplementary_students.vue').default },
+        ]
+    },
     //Student Services Routes
     { path: '/student_services', component: require('./components/students/StudentServices/index.vue').default,
     children: [

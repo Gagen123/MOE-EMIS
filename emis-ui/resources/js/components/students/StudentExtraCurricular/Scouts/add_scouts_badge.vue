@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="alert alert-warning alert-dismissible" style="display:none" id="warning">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-exclamation-triangle"></i> Information!</h5>
+            <div id="message"></div>
+        </div>
         <form>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -44,6 +49,7 @@
 export default {
     data(){
         return {
+            scout_list:'1',
             memberList:[],
             badgeList:[],
             org_id:'2fea1ad2-824b-434a-a608-614a482e66c1',
@@ -64,6 +70,13 @@ export default {
             .then(response => {
                 let data = response;
                 this.memberList =  data.data.data;
+                if(data.data.data != null && data.data.data !=''){
+                    this.scout_list='1';
+                } else {
+                    this.scout_list='0';
+                    $('#warning').show();
+                    $('#message').html('There are no scouts registered in the class');
+                }
             })
             .catch(function (error) {
                 console.log("Error......"+error)

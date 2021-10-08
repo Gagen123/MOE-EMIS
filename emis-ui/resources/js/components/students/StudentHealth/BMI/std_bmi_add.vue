@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="alert alert-warning alert-dismissible" style="display:none" id="warning">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-exclamation-triangle"></i> Information!</h5>
+            <div id="message"></div>
+        </div>
        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-body">
                 <div class="form-group row">
@@ -87,6 +92,7 @@
 export default {
    data(){
         return{
+            is_classTeacher:'1',
             termList:[],
             classList:[],
             sectionList:[],
@@ -132,6 +138,13 @@ export default {
             .then(response =>{
                 let data = response.data.data
                 this.classSection = data;
+                if(data != null && data !=''){
+                    this.is_classTeacher='1';
+                } else {
+                    this.is_classTeacher='0';
+                    $('#warning').show();
+                    $('#message').html('User is not assigned as Class Teacher. Please assign class teacher to proceed');
+                }
             })
         },
         loadActiveTermList(uri="masters/loadActiveStudentMasters/HealthTerm"){

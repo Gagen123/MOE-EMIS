@@ -79,7 +79,6 @@
                     </table>
                 </div>
             </div>
-
             <div v-if="$route.name =='edit_consolidated_result'" class="card-footer text-right">
                 <button type="submit" value="save" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
                 <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('finalize')"><i class="fa fa-check"></i> Finalize & Submit for Approval </button>
@@ -224,7 +223,6 @@
         this.loadConsolidatedResult()
     },
     created() {
-        console.log(this.$route.params)
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;

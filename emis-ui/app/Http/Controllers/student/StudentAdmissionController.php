@@ -293,6 +293,34 @@ class StudentAdmissionController extends Controller{
         return $response_data;
     }
 
+    /**
+     * Save details of studen when admitting student to school
+     */
+
+    public function saveAdmitStudent(Request $request){
+        $rules = [
+            'class'                             => 'required',
+            'student_type'                      => 'required',
+            'disability'                        => 'required',
+        ];
+        $customMessages = [
+            'class.required'                    => 'This field is required',
+            'student_type.required'             => 'This field is required',
+            'disability.required'               => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+        $data = $request->all();
+
+        $response_data= $this->apiService->createData('emis/students/admission/saveAdmitStudent', $data);
+        return $response_data;
+    }
+
+    /**
+     * Cross check and delete if not used
+     * Was initially written by Tshewang
+     */
+
     public function saveStudentClassDetails(Request $request){
         $rules = [
             'class'                             => 'required',
@@ -535,5 +563,29 @@ class StudentAdmissionController extends Controller{
         $response_data= $this->apiService->createData('emis/students/admission/updateStudentTransfer', $data);
         return $response_data;
     }
+
+    /**
+     * Supplementary Student
+     */
+
+    public function saveSupplementaryStudent(Request $request){
+        $rules = [
+            'student_id'                 => 'required',
+            'retakeCA'                      => 'required',
+
+        ];
+        $customMessages = [
+            'student_id.required'         => 'This field is required',
+            'retakeCA.required'              => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $data = $request->all();
+
+        $response_data= $this->apiService->createData('emis/students/admission/saveSupplementaryStudent', $data);
+        return $response_data;
+    }
+
 
 }

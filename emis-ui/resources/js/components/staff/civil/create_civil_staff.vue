@@ -42,13 +42,14 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="contrct_type" style="display:none">
                                     <label class="mb-0.5">Contract Category:</label>
-                                    <span v-for="(cat, index) in categoryList" :key="index" >
+                                    <span v-for="(cat, index) in categoryList" :key="index">
                                         <input type="radio" @change="remove_error('nature_of_participant')" v-model="personal_form.contract_category" :class="{ 'is-invalid' :personal_form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="cat.id">
                                         <label class="pr-3"> {{cat.name }} </label>
                                     </span>
                                 </div>
                             </div>
                         </div>
+
                         <div class="callout callout-success">
                             <span class="text-blue"><label><u>Personal Detail</u></label></span>
                             <div class="form-group row">
@@ -81,6 +82,32 @@
                                         <option v-for="(item, index) in sex_idList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="sex_id"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Major Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.majorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('majorgroup') }" class="form-control select2" name="majorgroup" id="majorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in groupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="majorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Sub Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.submajorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('submajorgroup') }" class="form-control select2" name="submajorgroup" id="submajorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="submajorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Child Group Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.childgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('childgroup') }" class="form-control select2" name="childgroup" id="childgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in childgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="childgroup"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -739,6 +766,9 @@ export default {
             repationshipList:[],
             staff_nomination_list:[],
             attachmentDetails:[],
+            groupList:[],
+            subgroupList:[],
+            childgroupList:[],
 
             personal_form: new form({
                 isteaching:false,
@@ -751,6 +781,9 @@ export default {
                 contract_category:'',
                 name:'',
                 p_address:'',
+                majorgroup:'',
+                submajorgroup:'',
+                childgroup:'',
                 position_title:'',
                 position_sub_level:'',
                 sex_id:'',
@@ -1209,7 +1242,7 @@ export default {
 
         loadnomination(staff_id){
             if(staff_id!=null && staff_id!=""){
-                let uri = 'staff/loadNominations/'+staff_id;
+                let uri = 'staff/loadStaffNomination/'+staff_id;
                 axios.get(uri)
                 .then(response =>{
                     let data = response;
@@ -1370,7 +1403,7 @@ export default {
                     this.loadqualication(data.id);
 
                     this.qualification_form.personal_id=data.id;
-                    this.nomination_form.personal_id=data.id; 
+                    this.nomination_form.personal_id=data.id;
                     this.personal_form.emp_type=data.emp_type_id;
                     this.personal_form.emp_id=data.emp_id;
                     this.personal_form.cid_work_permit=data.cid_work_permit;
@@ -1649,6 +1682,20 @@ export default {
                     $('#isteaching').hide();
                 }
             }
+
+            if(id=="majorgroup"){
+                this.personal_form.majorgroup=$('#majorgroup').val();
+                this.getsubmajorgroup($('#majorgroup').val());
+            }
+            if(id=="submajorgroup"){
+                this.personal_form.submajorgroup=$('#submajorgroup').val();
+                this.getchildGroup($('#submajorgroup').val());
+            }
+            if(id=="childgroup"){
+                this.personal_form.childgroup=$('#childgroup').val();
+                this.getpositiontitle($('#childgroup').val());
+            }
+
             if(id=="position_sub_level"){
                 this.personal_form.position_sub_level=$('#position_sub_level').val();
             }
@@ -1806,11 +1853,20 @@ export default {
                 });
             }
         },
-
-
+        async getsubmajorgroup(id){
+            this.subgroupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
+        },
+        async getchildGroup(id){
+            this.childgroupList =  await this.loadstaffMasters('byparent__sub_group_id__'+id,'ChildGroup');
+        },
+        async getpositiontitle(id){
+            this.positiontitleList=[];
+            this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level',id);
+            // await this.loadstaffMasters('byparent__sub_group_id__'+id,'PositionTitle');
+        }
     },
 
-    mounted() {
+    async mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -1825,9 +1881,12 @@ export default {
         });
         $('#bhutanese_address').show();
         $('#foreign_address').hide();
+
+        this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
+
         this.loadactivemaritalList();
         this.loadactivesex_idList();
-        this.loadpositiontitleList();
+        // this.loadpositiontitleList();
         this.loadpositionsubList();
         this.loadactivecountryList();
         this.loadactivedzongkhagList();

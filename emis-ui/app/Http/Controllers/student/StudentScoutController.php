@@ -122,6 +122,9 @@ class StudentScoutController extends Controller
             }
         }
         $param = http_build_query($data_parameters);
+        if($param == ""){
+            $param = 'NULL';
+        }
         $scout_members = $this->apiService->listData('emis/students/listScoutMembers/'.$param);
         return $scout_members;
     }

@@ -72,6 +72,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
         $router->get('/viewStaffProfile/{id}', ['uses' => 'staff\StaffController@viewStaffProfile']);
+        $router->get('/getStaffName/{Id}', ['uses' => 'staff\StaffController@getStaffName']);
+        $router->get('/getPrincipal/{orgId}', ['uses' => 'staff\StaffController@getPrincipal']);
+        $router->get('/getStaffsName', ['uses' => 'staff\StaffController@getStaffsName']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);

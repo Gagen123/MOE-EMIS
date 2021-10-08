@@ -3,7 +3,7 @@
         <form @submit.prevent="save" class="bootbox-form" id="consolidated-result">
             <div class="ml-1 row form-group">
               <div class="mr-3">
-                <strong>Class: </strong> {{form.class_stream_section }}
+                <strong>Class: </strong> {{form.class }} {{form.stream }} {{form.section }}
               </div>
                <div class="mr-3">
                 <strong>Instructional Days: </strong> {{ instructional_days }}
@@ -19,7 +19,7 @@
                                 <th v-for="(item,index) in terms" :key="index" :colspan="areasPerTerm(item.aca_assmt_term_id)" class="text-center">
                                     {{item.term}}
                                 </th>
-                                <th v-if="approved == 0" rowspan="3">Action</th>
+                                <th v-if="action != 'view'" rowspan="3">Action</th>
                             </tr>
                             <tr>
                                 <template v-for="(item1,index1) in subjects">
@@ -74,10 +74,13 @@
                                        </span>
                                     </span>                                  
                                 </td> 
-                                <td v-if="approved == 0">
-                                    <div class="btn-group btn-group-sm">
-                                        <router-link :to="{ name: 'edit_publish_result', params: {student:item3,aca_term_id:form.aca_assmt_term_id,org_class_id:form.org_class_id,org_stream_id:form.org_stream_id,org_section_id:form.org_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
+                                <td v-if="action != 'view'">
+                                    <div v-if="approved == 1" class="btn-group btn-group-sm">
+                                        <router-link :to="{ name: 'edit_publish_result', params: {student:item3,aca_term_id:form.aca_assmt_term_id,org_class_id:form.org_class_id,org_stream_id:form.org_stream_id,org_section_id:form.org_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit Approved Result</router-link>
                                     </div> 
+                                     <div v-else class="btn-group btn-group-sm">
+                                        <router-link :to="{ name: 'edit_publish_result', params: {student:item3,aca_term_id:form.aca_assmt_term_id,org_class_id:form.org_class_id,org_stream_id:form.org_stream_id,org_section_id:form.org_section_id}}" class="btn btn-info btn-sm btn-flat text-white"><i class="fas fa-edit"></i > Edit</router-link>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -85,7 +88,7 @@
                 </div>
             </div>
             <div>
-                 <div v-if="approved == 0" class="card-footer text-right">
+                 <div v-if="approved && action !='view'" class="card-footer text-right">
                     <button  class="btn btn-flat btn-sm btn-primary" @click.prevent="save('approve')"><i class="fa fa-check"></i> Approve </button>
                 </div>
                 <div>
@@ -104,6 +107,7 @@
  export default {
     data(){
            return {
+            action:'',
             consolidatedResultList:[],
             instructional_days:'',
             terms:[],
@@ -113,7 +117,9 @@
             assessmentAreaCode:[],
             form: new form({
                 id:'',
-                class_stream_section:'',
+                class:'',
+                stream:'',
+                section:'',
                 aca_assmt_term_id:'',
                 org_class_id:'',
                 org_stream_id:'',
@@ -121,7 +127,7 @@
                 remarks:[]
 
             }),
-            approved:0
+            approved:false
         }
       
     },
@@ -182,7 +188,7 @@
             if(action == "approve"){
                 let approve = 1;
                 Swal.fire({
-                title: 'Are you sure you want approve?',
+                title: 'Are you sure you want approve? You cannot make changes to the result after approving.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -210,12 +216,15 @@
         this.loadConsolidatedResult()
     },
     created() {
+        this.action = this.$route.params.action
         this.id=this.$route.params.data.aca_result_consolidated_id;
         this.form.aca_assmt_term_id=this.$route.params.data.aca_assmt_term_id;
         this.form.org_class_id=this.$route.params.data.org_class_id;
         this.form.org_stream_id=this.$route.params.data.org_stream_id;
         this.form.org_section_id=this.$route.params.data.org_section_id;
-        this.form.class_stream_section=this.$route.params.data.class_stream_section;
+        this.form.class=this.$route.params.data.class;
+        this.form.stream=this.$route.params.data.stream;
+        this.form.section=this.$route.params.data.section;
         this.OrgClassStreamId=this.$route.params.data.OrgClassStreamId;
         this.approved=this.$route.params.data.approved;
 

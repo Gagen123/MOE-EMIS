@@ -40,8 +40,7 @@
                                         <input v-if="item2.input_type==1" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']" 
                                             @change="validate(index2,studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage'],'0',studentAssessmentList[index1][item2.aca_assmt_area_id]['score'])" 
                                             class="form-control form-control-sm text-right num" :id="'assmt_area_'+index2" 
-                                            type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0"
-                                            data-bs-container="body" data-bs-toggle="popover" data-bs-placement="buttom" :data-bs-content="error">
+                                            type="number" step="0.01" :max="studentAssessmentList[index1][item2.aca_assmt_area_id]['weightage']" min="0">
                                         <input v-else-if="item2.input_type==2" v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['descriptive_score']"  class="form-control form-control-sm assmt_area_des" id="assmt_area_des" type="text">
                                         <select v-else v-model="studentAssessmentList[index1][item2.aca_assmt_area_id]['score']"  class="form-control form-control-sm ditable_fields select2" :id="item1.assessment_area"> 
                                             <option selected value="null">--SELECT--</option>
@@ -147,13 +146,14 @@
                 $("#"+'assmt_area_'+index+'_err').text("The mark cannot be greater than "+max)
                 $('#save').prop('disabled',true);
                 $('#finalize').prop('disabled',true);
-            }
-            else if (score < min){
+            }else if (score < min){
                 $("#"+'assmt_area_'+index+'_err').text("The mark cannot be less than "+min)
                 $('#save').prop('disabled',true);
                 $('#finalize').prop('disabled',true);
             } else{
-                
+                $("#"+'assmt_area_'+index+'_err').remove()
+                $('#save').prop('disabled',false);
+                $('#finalize').prop('disabled',false);
             }
         },
         save(action=""){

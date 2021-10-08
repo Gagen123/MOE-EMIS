@@ -20,6 +20,7 @@ use App\Models\Students\StudentClassDetails;
 use App\Models\Students\ApplicationSequence;
 use App\Models\Students\StudentAboard;
 use App\Models\Students\StudentGuardianDetails;
+use App\Models\SupplementaryStudent;
 use Exception;
 use PDO;
 
@@ -466,7 +467,26 @@ class StudentAdmissionController extends Controller
          return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
 
+    public function saveAdmitStudent(Request $request){
+        $rules = [
+            'class'                             => 'required',
+            'student_type'                      => 'required',
+            'disability'                        => 'required',
+        ];
+        $customMessages = [
+            'class.required'                    => 'This field is required',
+            'student_type.required'             => 'This field is required',
+            'disability.required'               => 'This field is required',
+        ];
 
+        dd('MS');
+        $this->validate($request, $rules, $customMessages);
+    }
+
+    /**
+     * Verify if this function is used. If not, then delete
+     * Created by Tshewang to save the details (e.g. scholarship etc) when admitting student
+     */
 
     public function saveStudentClassDetails(Request $request){
         $rules = [
@@ -1127,4 +1147,43 @@ class StudentAdmissionController extends Controller
         return $this->successResponse($response_data);
     }
 
+    /**
+     * Supplementary Student
+     */
+
+    public function saveSupplementaryStudent(Request $request){
+        $rules = [
+            'student_id'                 => 'required',
+            'retakeCA'                      => 'required',
+
+        ];
+        $customMessages = [
+            'student_id.required'         => 'This field is required',
+            'retakeCA.required'              => 'This field is required',
+        ];
+
+        $this->validate($request, $rules, $customMessages);
+
+        $id = $request->id;
+
+        $data =[
+            'id '               => $request->id,
+            'StdStudentId '     => $request->student_id,
+            'retakeCA'          => $request->retakeCA,
+            'AcademicYear'      => date('Y'),
+            // 'created_by'        => $request->user_id,
+            // 'updated_by',
+            // 'created_at',
+            // 'updated_at'
+        ];
+
+        if( $id != null){
+            $response_data = SupplementaryStudent::where('id', $id)->update($data);
+
+        }else{                
+            $response_data = SupplementaryStudent::create($data);
+         }
+
+        return $this->successResponse($response_data, Response::HTTP_CREATED);
+    }
 }

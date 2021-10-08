@@ -434,7 +434,7 @@ class StaffController extends Controller{
     }
 
     public function loadStaffNomination($staff_id=""){
-        $nomineeDetails=Nomination::where('personal_id',$staff_id)->where('status','Created')->get();
+        $nomineeDetails=Nomination::where('personal_id',$staff_id)->get();
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
             foreach($nomineeDetails as $nom){
                 $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
@@ -562,6 +562,20 @@ class StaffController extends Controller{
             }
         }
         return $this->successResponse($staff_det);
+    }
+    //functions created by chilliquest
+    public function getStaffName($Id){
+        return $this->successResponse(DB::select("SELECT id AS stf_staff_id,name FROM stf_staff WHERE id = ?",[$Id]));
+    }
+    public function getPrincipal($orgId){
+        return $this->successResponse(DB::select("SELECT id AS stf_staff_id,name FROM stf_staff  WHERE working_agency_id = ?  AND isPrincipal = 1",[$orgId]));
+    }
+    public function getStaffsName(Request $request){
+        $staffs = DB::table('stf_staff')
+            ->selectRaw('id AS stf_staff_id,name')
+            ->whereIn('id',explode(",",$request['stf_staff_ids']))
+            ->get();
+        return $this->successResponse($staffs);
     }
 
 
