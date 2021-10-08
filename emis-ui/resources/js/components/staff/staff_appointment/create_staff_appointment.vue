@@ -7,12 +7,8 @@
                         <div class="callout callout-success">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">From Year:<i class="text-danger">*</i></label>
-                                    <input type="text" @change="remove_error('cid_work_permit')" class="form-control" name="cid_work_permit" id="cid_work_permit">
-                                </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-1">To Year:<i class="text-danger">*</i></label>
-                                    <input type="text" @change="remove_error('cid_work_permit')" class="form-control" name="cid_work_permit" id="cid_work_permit">
+                                    <label class="mb-1">Year:<i class="text-danger">*</i></label>
+                                    <input type="text"  class="form-control" name="toyear" id="toyear">
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-1">
                                     <button type="button" class="btn btn-sm btn-primary" @click="fetchstaff()"><i class="fa fa-download"></i> Fetch</button>
@@ -87,9 +83,9 @@ export default {
     },
     methods: {
         fetchstaff(){
-            let cid_empid=$('#cideid').val();
+            let year=$('#toyear').val();
             if (cid_empid!= ""){
-                axios.get('staff/getEmployeeDetials/'+ this.personal_form.emp_type+'/'+cid_empid)
+                axios.get('staff/getAppointment/'+ year)
                 .then(response => {
                     this.ciderror = '';
                     let detail = response.data;

@@ -467,6 +467,7 @@ Route::prefix('staff')->group(function () {
     Route::get('/loadConfigMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadConfigMasters'])->name('loadConfigMasters');
 
     Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
+    Route::get('/getAppointment/{year}', [App\Http\Controllers\staff\StaffController::class, 'getAppointment'])->name('getAppointment');
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');

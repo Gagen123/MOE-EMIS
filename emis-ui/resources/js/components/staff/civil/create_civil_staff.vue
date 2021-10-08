@@ -1200,7 +1200,7 @@ export default {
 
                             $('#p_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
                             $('#p_dzongkhag').prop('disabled',true);
-                            $('#dob').prop('disabled',true);
+                            // $('#dob').prop('disabled',true);
                             $('#sex_id').prop('disabled',true);
                             $('#cid_work_permit').prop('disabled',true);
                             $('#name').prop('disabled',true);
