@@ -1263,7 +1263,7 @@ export default {
                             'Submitted!',
                             'Student details has been updated successfully.',
                             'success',
-                            this.$router.push('/student_admission_list')
+                            this.$router.push('/student_new_registration')
                         );
                     })
                     .catch((error) => {

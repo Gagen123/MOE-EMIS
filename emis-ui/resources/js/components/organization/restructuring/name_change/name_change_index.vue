@@ -32,9 +32,9 @@ export default {
         .then(response => {
             let data = response.data[0].total_count;
             if(data<1){
-                // $('#screenPermission').show();
-                // $('#mainform').hide();
-                // $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
+                $('#screenPermission').show();
+                $('#mainform').hide();
+                $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
             }
         })
         .catch(errors => {

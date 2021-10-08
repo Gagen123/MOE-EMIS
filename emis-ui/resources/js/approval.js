@@ -238,7 +238,7 @@ const routes = [
                     { path: '/merger', name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
                 ]
             },
-            { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
+            // { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },
             { path: '/closure_index',
                 component: require('./components/organization/restructuring/closure/closure_index.vue').default ,
                 children: [
