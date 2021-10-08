@@ -1253,21 +1253,12 @@ class AcademicController extends Controller
     }
     //Written by gagen to pull the result into the emis portal
     public function LoadResultByStudentId($std_id){
-<<<<<<< HEAD
-        return $this->successResponse(
-            DB::select('SELECT a.org_class_id, a.org_stream_id, a.org_stream_id,a.class_stream_section,
-                a.published, b.std_student_id, b.result AS result FROM aca_result_consolidated AS a 
-                JOIN aca_result_consolidated_detail AS b ON a.id = b.aca_result_consolidated_id
-            WHERE b.std_student_id = ?',[$std_id])
-        );
-       
-=======
+     
         return $this->successResponse(DB::select('SELECT a.org_class_id, a.org_stream_id, a.org_stream_id, a.class_stream_section,a.published, b.std_student_id, b.result AS result 
             FROM aca_result_consolidated AS a 
             JOIN aca_result_consolidated_detail AS b
             ON a.id = b.aca_result_consolidated_id 
             WHERE b.std_student_id = ?',[$std_id]));
->>>>>>> d816127159ece027bc59c13d9b1830d6065c6186
     }
     private function getRating(){
        return DB::select('SELECT aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');

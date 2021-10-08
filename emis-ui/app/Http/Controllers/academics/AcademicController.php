@@ -657,8 +657,6 @@ class AcademicController extends Controller
             $pricipal = json_decode($this->apiService->listData('emis/staff/getPrincipal/'.$orgId),true)['data'];
 
             $stream_id = $request['item']['org_stream_id'] == null ? '': $request['item']['org_stream_id'];
-            $stream_id = $request['item']['org_stream_id'] == null ? '': $request['item']['org_stream_id'];
-            $stream_id = $request['item']['org_stream_id'] == null ? '': $request['item']['org_stream_id'];
             $section_id = $request['item']['org_section_id'] == null ? '': $request['item']['org_section_id'];
             
             //class_teacher
@@ -680,12 +678,12 @@ class AcademicController extends Controller
             $class = [
                 'class' => $request['item']['class'],
                 'org_class_id' => $request['item']['org_class_id'],
-                // 'stream' => $request['item']['stream'],
+                'stream' => isset($request['item']['stream']) ? $request['item']['stream'] : null,
                 'org_stream_id' => $request['item']['org_stream_id'],
-                'section' => $request['item']['section'],
+                'section' => isset($request['item']['stream']) ? $request['item']['section'] : null,
+
                 'org_section_id' => $request['item']['org_section_id'],
             ];
-            dd($class);
             $data = [
                 'orgnization' =>$organization,
                 'pricipal' =>$pricipal,
