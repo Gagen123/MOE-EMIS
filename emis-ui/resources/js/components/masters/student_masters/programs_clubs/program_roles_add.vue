@@ -3,14 +3,12 @@
         <form class="bootbox-form" id="programRolesId">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Program Roles:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="award_name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                </div>  
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Program Name:<span class="text-danger">*</span></label> 
                         <select v-model="form.program" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('program') }" class="form-control select2" name="program" id="program">
                         <option v-for="(item, index) in programList" :key="index" v-bind:value="item.id">{{ item.Name }}</option>
@@ -19,27 +17,32 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
                         <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
+                        <textarea class="form-control" v-model="form.description" id="description" type="text" autocomplete="off" />
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Assigned To:</label>
-                        <br>
-                        <label><input v-model="form.assigned_to"  type="radio" value="1" /> Staff</label>
-                        <label><input v-model="form.assigned_to"  type="radio" value="2" /> Student</label>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label>Code:<span class="text-danger">*</span></label> 
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" @change="remove_err('code')" type="text" autocomplete="off">
+                        <has-error :form="form" field="code"></has-error>
                     </div>
-                </div>  
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>           
+                </div>   
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label class="required">Assigned To:</label>
+                        <br>
+                        <label><input v-model="form.assigned_to"  type="radio" value="1" /> Staff</label>
+                        <label><input v-model="form.assigned_to"  type="radio" value="2" /> Student</label>
+                    </div>
+                </div>         
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
@@ -58,9 +61,10 @@ export default {
                 name: '',
                 program:'',
                 description:'',
+                code:'',
                 assigned_to:'',
                 status: 1,
-                record_type:'CeaRole',
+                model:'CeaRole',
                 action_type:'add',
             })
         }
@@ -98,32 +102,7 @@ export default {
                 this.form.status= 1;
             }
             if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/program_roles_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+                this.submitstudentmaster('program_roles_list');
             }
 		}, 
     },

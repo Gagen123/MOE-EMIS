@@ -3,34 +3,28 @@
         <form class="bootbox-form" id="counsellingId">
            <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Counselling Type:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" tabindex="1" autofocus="true">
+                        <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text" autocomplete="off">
                         <has-error :form="form" field="name"></has-error>
-                    </div>
-                </div> 
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    </div><br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-2">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_err('description')" autocomplete="off"></textarea>
+                        <has-error :form="form" field="description"></has-error>
+                    </div><br>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
                         <label>Code:<span class="text-danger">*</span></label> 
-                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
+                        <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text" autocomplete="off">
                         <has-error :form="form" field="code"></has-error>
                     </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Description:</label> 
-                        <textarea class="form-control" v-model="form.description" id="description" type="text"/>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Status:</label>
-                        <br>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
+                        <label class="required">Status:</label><br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
-                </div>
-           </div>
+                </div>          
+            </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
                 <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
@@ -48,7 +42,7 @@ export default {
                 description: '',
                 code:'',
                 status: 1,
-                record_type:'CounsellingType',
+                model:'CounsellingType',
                 action_type:'edit',
             })
         }
@@ -65,34 +59,8 @@ export default {
                 this.form.description='';
                 this.form.status= 1;
             }
-            
             if(type=="save"){
-                Swal.fire({
-                    title: 'Are you sure you wish to submit this form ?',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) =>{
-                    if (result.isConfirmed){
-                        this.form.post('/masters/saveStudentMasters',this.form)
-                        .then((response) =>{
-                            Toast.fire({
-                            icon: 'success',
-                            title: 'Details added successfully'
-                        })
-                        this.$router.push('/counselling_type_list');
-                        })
-                        .catch((error) => {
-                            Toast.fire({
-                                icon: 'error',
-                                title: 'Unexpected error occured. Try again.'
-                            });
-                            console.log("Error:"+error);
-                        })
-                    }
-                })
+                this.submitstudentmaster('counselling_type_list');
             }
 		}, 
     },

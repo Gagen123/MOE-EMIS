@@ -7,6 +7,7 @@
                     <th>Attachment Name</th>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Created At</th>
                     <th>Action</th> 
                 </tr>
             </thead>
@@ -16,6 +17,7 @@
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
+                    <td>{{ item.created_at}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info" @click="viewAttachmentList(item)"><i class="fas fa-edit"></i ></a>

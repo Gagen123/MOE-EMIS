@@ -35,4 +35,26 @@ class StaffMasterController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/'.$type.'/'.$model);
         return $response_data;
     }
+
+    public function saveConfigMasters(Request $request){
+        if($request->model=="LeaveConfiguration"){
+            $rules = [
+                'leave_type_id' =>  'required',
+                'role_id'       =>  'required',
+            ];
+            $customMessages = [
+                'leave_type_id.required' => 'This field is required',
+                'role_id.required' => 'This field is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveConfigMasters', $request->all());
+        return $response_data;
+    }
+
+    public function loadConfigMasters($type="",$model=""){
+        $response_data= $this->apiService->listData('emis/staff/staffMasterController/loadConfigMasters/'.$type.'/'.$model);
+        return $response_data;
+    }
 }

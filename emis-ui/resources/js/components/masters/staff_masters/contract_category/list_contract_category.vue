@@ -39,20 +39,19 @@ export default {
         }
     },
     methods:{
-        async loadworkingagencyList(){
+        async loaddataList(){
             this.dataList =  await this.loadstaffMasters('all','ContractCategory');
         },
         showedit(data){
             this.$router.push({name:'edit_contract_category',params: {data:data}});
         },
-
     },
     mounted(){
         this.loaddataList();
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        dataList() {
+        dataList(){
             this.applydatatable('working-agency-table');
         }
     },

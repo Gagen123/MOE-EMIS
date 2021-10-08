@@ -195,6 +195,7 @@ class LoadStaffController extends Controller{
         }
     }
     public function loadStaffCountDetail($type="", $id=""){
+
         $response_data="";
         $response_data=PersonalDetails::where('working_agency_id',$id)->first();
          // if($response_data!=null && $response_data!=""){
@@ -227,6 +228,28 @@ class LoadStaffController extends Controller{
                 WHERE `position_title_id` ='315b2020-fd17-4f0c-a643-15b603ff1f08'
                 AND `working_agency_id`= '".$id."'");
             }
+            // if($type=="staffCountMinistry"){
+            //     // $response_data=PersonalDetails::where('working_agency_id',$id)->first();
+
+            //     $response_data->StaffMinistry= DB::select("SELECT working_agency_id,
+            //         COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS Totalmale,
+            //         COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS TotalFemale,
+            //         COUNT(id) AS TOTAL
+            //     FROM `stf_staff`
+            //     WHERE `working_agency_id`= '".$id."'");
+            //      dd($response_data->StaffMinistry);
+            // }
+
+            if($type=="staffCountDzongkhag"){
+                // $response_data=PersonalDetails::where('working_agency_id',$id)->first();
+                // dd($response_data);
+                $response_data->StaffDzongkhag= DB::select("SELECT working_agency_id,
+                    COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS Totalmale,
+                    COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS TotalFemale,
+                    COUNT(id) AS TOTAL
+                FROM `stf_staff`
+                WHERE `working_agency_id`= '".$id."'");
+            }
             if($type=="staffCountMinistry"){
                 // $response_data=PersonalDetails::where('working_agency_id',$id)->first();
                 // dd($response_data);
@@ -236,10 +259,7 @@ class LoadStaffController extends Controller{
                     COUNT(id) AS TOTAL
                 FROM `stf_staff`
                 WHERE `working_agency_id`= '".$id."'");
-
-
             }
-
         return $this->successResponse($response_data);
     }
 

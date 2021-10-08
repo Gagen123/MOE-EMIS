@@ -47,8 +47,10 @@
                                      <label class="mb-0">Transfer Reason:</label><br>
                                     <span class="text-blue text-bold">{{reasonList[form.transfer_reason_id]}}</span>
                                 </div>
-                                <div class="form-group row">
-                            </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0">Transfer Type:</label><br>
+                                <span class="text-blue text-bold">{{form.transferType}}</span>
+                                </div>
                         </div>
                         </div>
                         <div class="callout callout-success">
@@ -85,7 +87,7 @@
                                             <td v-if="school">
                                                 <span class="text-blue text-bold">{{SchoolList[form.preference_school1]}}</span>
                                             </td>
-                                            <td id="approveSchool1" style="display:none">
+                                            <td id="approveSchool1">
                                                 <input type="radio" name="schoolApproved"  v-model="form.schoolApproved" :value="form.preference_school1" id="approvedSchool1">
                                             </td>
                                         </tr>
@@ -95,7 +97,7 @@
                                             <td v-if="school">
                                                 <span class="text-blue text-bold" >{{SchoolList[form.preference_school2]}}</span>
                                             </td>
-                                            <td id="approveSchool2" style="display:none">
+                                            <td id="approveSchool2" >
                                                 <input type="radio" v-model="form.schoolApproved" name="schoolApproved" :value="form.preference_school2" id="approvedSchool2">
                                             </td>
                                         </tr>
@@ -105,7 +107,7 @@
                                             <td v-if="school">
                                                 <span class="text-blue text-bold" >{{SchoolList[form.preference_school3]}}</span>
                                             </td>
-                                            <td id="approveSchool3" style="display:none">
+                                            <td id="approveSchool3">
                                                 <input type="radio" v-model="form.schoolApproved" :value="form.preference_school3" name="schoolApproved" id="approvedSchool3">
                                             </td>
                                         </tr>
@@ -239,7 +241,7 @@ export default {
                 this.draft_attachments=data.documents;
                 this.form.app_seq_no=data.app_seq_no;
 
-                if(this.form.app_seq_no==10 ){
+                if(this.form.status_id==2 ){
                     $('#approveId').show();
                     $('#verifyId').hide();
                     $('#approveSchool').show();
@@ -247,7 +249,7 @@ export default {
                     $('#approveSchool2').show();
                     $('#approveSchool3').show();
                 }
-                if(this.form.app_seq_no==1){
+                if(this.form.status_id==1){
                     $('#verifyId').show();
                     $('#approveId').hide();
                     $('#approveSchool').hide();
@@ -257,7 +259,7 @@ export default {
 
                 }
 
-                if( this.form.app_seq_no==1 || this.form.app_seq_no==10){
+                if( this.form.status_id || this.form.status_id==10){
                     for(let i=0;i<data.preferences.length;i++){
                         if(i==0){
                             this.form.preference_school1     =   data.preferences[i].school_id;

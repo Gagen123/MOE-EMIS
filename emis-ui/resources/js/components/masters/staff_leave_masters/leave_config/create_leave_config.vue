@@ -81,6 +81,7 @@ export default {
                 id: '',
                 leave_type_id:'',
                 role_id:'',
+                model:'LeaveConfiguration',
                 action_type:'add',
                 role_action_mapp:
                 [{
@@ -90,7 +91,7 @@ export default {
         }
     },
     methods: {
-         addMore: function(){
+        addMore: function(){
             this.count++;
             this.form.role_action_mapp.push({sequence:this.count,authority:'',role:''})
         },
@@ -101,21 +102,7 @@ export default {
                 this.form.role_action_mapp.pop();
             }
         },
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
-        loadleaveTypeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.leavetypeList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         loadroleList(uri = 'masters/getroles/allActiveRoles'){
             axios.get(uri)
             .then(response =>{
@@ -129,19 +116,7 @@ export default {
 
 		formaction: function(type){
             if(type=="save"){
-                this.form.post('/masters/saveLeaveConfigMasters',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.applyselect2();
-                    this.$router.push('/list_leave_config');
-                })
-                .catch((err) => {
-                    this.applyselect2();
-                    console.log("Error: "+err)
-                })
+                this.submitstaffmasterconfig('list_leave_config');
             }
 		},
         changefunction(id){
@@ -152,39 +127,18 @@ export default {
             }
             if(id=="leave_type_id"){
                 this.form.leave_type_id=$('#leave_type_id').val();
-                this.getLeave_details($('#role_id').val());
             }
             if(id=="role_id"){
                 this.form.role_id=$('#role_id').val();
-                this.getLeave_details();
             }
         },
-        getLeave_details(){
-            if($('#leave_type_id').val()!="" && $('#leave_type_id').val()!=null && $('#role_id').val()!="" && $('#role_id').val()!=null){
-                axios.get('masters/loadLeaveConfigMasters/'+$('#leave_type_id').val()+'/'+$('#role_id').val())
-                .then(response =>{
-                    let data = response;
-                    if(data.data.data!=null){
-                       this.$router.push({name:'edit_leave_config',params: {data:data.data.data.id}});
-                    }
-                })
-                .catch(function (error){
-                    console.log(error);
-                });
-            }
-        },
-
         applyselect2(){
-            if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
-                $('#leave_type_id').addClass('select2-hidden-accessible');
-            }
-            if(!$('#role_id').attr('class').includes('select2-hidden-accessible')){
-                $('#role_id').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('leave_type_id');
+            this.applyselect2field('role_id');
         },
 
     },
-    mounted(){
+    async mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -195,7 +149,7 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
-        this.loadleaveTypeList();
+        this.leavetypeList =  await this.loadstaffMasters('active','LeaveType');
         this.loadroleList();
     },
 }

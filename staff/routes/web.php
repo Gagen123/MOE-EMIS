@@ -22,21 +22,24 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMasterController@saveStaffMasters']);
             $router->get('/loadStaffMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadStaffMasters']);
             $router->get('/loadStaffMastersbyId/{model}/{id}', ['uses' => 'masters\StaffMasterController@loadStaffMastersbyId']);
+            $router->get('/getTeacherPositionTitle', ['uses' => 'masters\StaffMasterController@getTeacherPositionTitle']);
+
+            $router->post('/saveConfigMasters', ['uses' => 'masters\StaffMasterController@saveConfigMasters']);
+            $router->get('/loadConfigMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadConfigMasters']);
+
         });
 
-        $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
+        // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
         $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
-        $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
+        // $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
         $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMastersController@loadStaffDropdownMasters');
 
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
         $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
         $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
 
-        $router->post('/saveLeaveConfigMasters', ['uses' => 'masters\StaffMastersController@saveLeaveConfigMasters']);
         $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMastersController@saveTransferConfigMasters']);
         $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
-        $router->get('/loadAllLeaveConfigMasters','masters\StaffMastersController@loadAllLeaveConfigMasters');
         $router->get('/loadAllTransferConfigMasters','masters\StaffMastersController@loadAllTransferConfigMasters');
         $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
         $router->get('/loadTransferConfigDetails/{id}','masters\StaffMastersController@loadTransferConfigDetails');
@@ -69,6 +72,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
         $router->get('/viewStaffProfile/{id}', ['uses' => 'staff\StaffController@viewStaffProfile']);
+        $router->get('/getStaffName/{Id}', ['uses' => 'staff\StaffController@getStaffName']);
+        $router->get('/getPrincipal/{orgId}', ['uses' => 'staff\StaffController@getPrincipal']);
+        $router->get('/getStaffsName', ['uses' => 'staff\StaffController@getStaffsName']);
 
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);

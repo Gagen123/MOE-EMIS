@@ -26,7 +26,6 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveDzongkhag', [App\Http\Controllers\AdministrationController::class, 'saveDzongkhag'])->name('savedzongkhag');
     Route::get('/loadalldzongkhag', [App\Http\Controllers\AdministrationController::class, 'loadalldzongkhag'])->name('loadalldzongkhag');
 
-    Route::post('/saveLeaveConfigMasters', [App\Http\Controllers\AdministrationController::class, 'saveLeaveConfigMasters'])->name('saveLeaveConfigMasters');
     Route::post('/saveTransferConfigMasters', [App\Http\Controllers\AdministrationController::class, 'saveTransferConfigMasters'])->name('saveTransferConfigMasters');
     Route::get('/loadLeaveConfigMasters/{type}/{submitter}', [App\Http\Controllers\AdministrationController::class, 'loadLeaveConfigMasters'])->name('loadLeaveConfigMasters');
     Route::get('/loadAllTransferConfigMasters', [App\Http\Controllers\AdministrationController::class, 'loadAllTransferConfigMasters'])->name('loadAllTransferConfigMasters');
@@ -140,7 +139,7 @@ Route::prefix('masters')->group(function () {
     Route::post('/saveStreamSubject', [App\Http\Controllers\student\StudentMasterController::class, 'saveStreamSubject'])->name('saveStreamSubject');
     Route::get('/loadstreamMarks', [App\Http\Controllers\student\StudentMasterController::class, 'loadstreamMarks'])->name('loadstreamMarks');
 
-    Route::get('/loadStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
+    Route::get('/loadStudentMasters/{type}/{model}', [App\Http\Controllers\student\StudentMasterController::class, 'loadStudentMasters'])->name('loadStudentMasters');
     Route::get('/loadActiveStudentMasters/{param}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveStudentMasters'])->name('loadActiveStudentMasters');
     Route::get('/allActiveStudentDropdowns/{model}/{parent_id}', [App\Http\Controllers\student\StudentMasterController::class, 'allActiveStudentDropdowns'])->name('allActiveStudentDropdowns');
     Route::get('/loadActiveProgramLists/{typeId}', [App\Http\Controllers\student\StudentMasterController::class, 'loadActiveProgramLists'])->name('loadActiveProgramLists');
@@ -464,6 +463,8 @@ Route::get('/getworkflows/{param}/{parentId}', [App\Http\Controllers\Administrat
 Route::prefix('staff')->group(function () {
     Route::post('/saveStaffMasters', [App\Http\Controllers\staff\StaffMasterController::class, 'saveStaffMasters'])->name('saveStaffMasters');
     Route::get('/loadStaffMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadStaffMasters'])->name('loadStaffMasters');
+    Route::post('/saveConfigMasters', [App\Http\Controllers\staff\StaffMasterController::class, 'saveConfigMasters'])->name('saveConfigMasters');
+    Route::get('/loadConfigMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadConfigMasters'])->name('loadConfigMasters');
 
     Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
 
@@ -918,7 +919,8 @@ Route::prefix('academics')->group(function () {
     Route::get('/getTermsForPublish', [App\Http\Controllers\academics\AcademicController::class, 'getTermsForPublish'])->name('getTermsForPublish');
     Route::get('/loadConsolidatedResultListForPublish/{termId}', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultListForPublish'])->name('loadConsolidatedResultListForPublish');
     Route::get('/getConsolidatedResultForEdit/{stdId}/{termId}/{subId}', [App\Http\Controllers\academics\AcademicController::class, 'getConsolidatedResultForEdit'])->name('getConsolidatedResultForEdit');
-    Route::post('/updateStatus/{Id?}', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateStatus', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateResult', [App\Http\Controllers\academics\AcademicController::class, 'updateResult'])->name('updateResult');
     Route::get('/getSubjectOfTerm', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectOfTerm'])->name('getSubjectOfTerm');
 
 });

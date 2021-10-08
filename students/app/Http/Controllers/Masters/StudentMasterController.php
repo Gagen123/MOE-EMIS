@@ -10,14 +10,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Traits\ApiResponser;
 use App\Models\Masters\StudentAwards;
-use App\Models\Masters\StudentType;
-use App\Models\Masters\StudentAwardType;
 use App\Models\Masters\OffenceType;
 use App\Models\Masters\DisciplinaryActionTaken;
 use App\Models\Masters\CeaProgram;
 use App\Models\Masters\SubjectMarks;
 use App\Models\Masters\CeaRole;
-use App\Models\Masters\VaccineType;
 use App\Models\Masters\CeaProgramType;
 use App\Models\Masters\CeaScoutSection;
 use App\Models\Masters\CeaProgramItem;
@@ -39,43 +36,173 @@ class StudentMasterController extends Controller
         $this->database = config('services.constant.studentdb');
     }
 
-
-
     /**
      * method to save or update student masters data
     */
 
     public function saveStudentMasters(Request $request){
+        $modelName = "App\\Models\\Masters\\"."$request->model";
+        $model = new $modelName();
+        $response_data="";
         $rules = [
-            'name'  =>  'required',
+            'name'          =>  'required',
+            'status'        =>  'required',
         ];
+        if($request->action_type=="edit"){
+            $rules = $rules+[
+                //for update, unique:table,column,idColumn
+                'code'          =>  'unique:'.$model->getTable().',code,'.$request->id,
+                // 'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
+            ];
+        }else{
+            $rules = $rules+[
+                //for create, unique:table,column
+                'code'          =>  'unique:'.$model->getTable().',code',
+                // 'name'          =>  'unique:'.$model->getTable().',name,id,'.$request->name.',code,'.$request->code,
+            ];
 
-        // $rules = [
-        //     'name' => 'required',
-        //     'code' =>  [
-        //                  'required', 
-        //                  Rule::unique('cea_award', 'Code')
-        //                         ->where('Name', $request->name)
-        //                 ]
-        // ];
-        $customMessages = [
-            'name.required' => 'This field cannot be empty'
-         ];
-
-        $this->validate($request, $rules, $customMessages);
-
-        $record_type = $request['record_type'];
-
-        $data = $this->extractRequestInformation($request, $record_type, $type='data');
-        $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
-
-        if($request->action_type=="add"){
-            $response_data = $this->insertData($data, $databaseModel);
+            $rules = $rules+[
+                //for create, unique:table,column
+                'name'          =>  'unique:'.$model->getTable().',name,'.$request->name.',code,'.$request->code,
+            ];
         }
-        else if($request->action_type=="edit"){
-            $response_data = $this->updateData($request,$data, $databaseModel);
+        $customMessages = [
+            'name.required'         => 'This field is required',
+            'status.required'       => 'This field is required',
+            'code.unique'           => 'This code is already taken. please choose another one',
+            // 'name.unique'           => 'This code and name combination is already taken. please choose another one',
+        ];
+        $this->validate($request, $rules, $customMessages);
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+                'created_by'        =>  $request->userId,
+            ];
+        if($request->model=="StudentAwards"){
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'CeaAwardTypeId'    =>  $request->award_type_id,
+                'CeaProgrammeId'    =>  $request->program_id,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+            ];
+        }
+        if($request->model=="VaccineType"){
+            $master_data = [
+                'Name'              =>  $request->name,
+                'Code'              =>  $request->code,
+                'Description'       =>  $request->description,
+                'Status'            =>  $request->status,
+                'vaccineFor'       =>  $request->vaccineFor,
+            ];
+        }
+        if($request->model=="CeaProgram"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaProgrammeTypeId'       =>  $request->program_type,
+            ];
+        }
+        if($request->model=="CeaProgramItemVariety"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'UnitId'                   =>  $request->unit_id,
+            ];
+        }
+        
+        if($request->model=="CeaRole"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'AssignedTo'               =>  $request->assigned_to,
+                'CeaProgrammeId'           =>  $request->program,
+            ];
+        }
+        if($request->model=="CeaTraining"){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaTrainingTypeId'        =>  $request->training_type_id,
+                'CeaProgrammeId'           =>  $request->program_id,
+            ];
+        }
+        if($request->model=="CeaProgramItem"){
+            $master_data = [
+                'Name'                          =>  $request->name,
+                'Code'                          =>  $request->code,
+                'Description'                   =>  $request->description,
+                'Status'                        =>  $request->status,
+                'CeaProgrammeItemVarietyId'     =>  $request->variety,
+                'Central'                       =>  $request->central,
+                'Local'                         =>  $request->local,
+                'Unit_id'                       =>  $request->unit_id,
+            ];
+        }
+        
+        if($request->model=="CeaScoutSectionLevel" || $request->model=="CeaScoutBadge" ){
+            $master_data = [
+                'Name'                     =>  $request->name,
+                'Code'                     =>  $request->code,
+                'Description'              =>  $request->description,
+                'Status'                   =>  $request->status,
+                'CeaScoutSectionId'        =>  $request->scout_type,
+            ];
+        }
+        
+        if($request->model=="OffenceType"|| $request->model=="DisciplinaryActionTaken"){
+            $master_data = [
+                'Name'                   =>  $request->name,
+                'Code'                   =>  $request->code,
+                'StdDisciplinarySeverity'=>  $request->offence_severity_id,
+                'Description'            =>  $request->description,
+                'Status'                 =>  $request->status,
+            ];
+        }
+        if($request->action_type=="add"){
+            $Finalmaster_data =$master_data+[
+                'created_by'        =>  $request->user_id,
+                'created_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            try{
+                $response_data = $model::create($Finalmaster_data);
+            } catch(\Illuminate\Database\QueryException $ex ){
+                dd($ex);
+            }
+            
+        }
+        if($request->action_type=="edit"){
+            $Finalmaster_data =$master_data+[
+                'updated_by'        =>  $request->user_id,
+                'updated_at'        =>  date('Y-m-d h:i:s'),
+            ];
+            $model::where('id',$request->id)->update($Finalmaster_data);
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+        //old code of phuntsho sir
+        // $record_type = $request['record_type'];
+        // $data = $this->extractRequestInformation($request, $record_type, $type='data');
+        // $databaseModel=$this->extractRequestInformation($request, $record_type, $type='Model');
+
+        // if($request->action_type=="add"){
+        //     $response_data = $this->insertData($data, $databaseModel);
+        // }
+        // else if($request->action_type=="edit"){
+        //     $response_data = $this->updateData($request,$data, $databaseModel);
+        // }
+        
 
     }
 
@@ -195,49 +322,94 @@ class StudentMasterController extends Controller
      * method to list students masters
     */
 
-    public function loadStudentMasters($param=""){
-        $orginal_param=$param;
-        if(strpos($param,'_Active')){
-            $param=str_replace('_Active','',$param);
-        }
-
-        if($param == 'program_name' || $param == 'club_name'){
-            $model_name = 'CeaProgram';
-        } else {
-            $model_name = $param;
-        }
-
-        $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
-        $modelName = "App\\Models\\Masters\\"."$databaseModel";
-
+    public function loadStudentMasters($type="",$model=""){
+        $mod=$model;
+        $modelName = "App\\Models\\Masters\\"."$model";
         $model = new $modelName();
-
-        if($param == 'program_name'){
-            $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
-            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
-            return $this->successResponse($response_data);
-
-        } elseif($param == 'club_name'){
-            $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
-            $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
-            return $this->successResponse($response_data);
-
-        } elseif(strpos($orginal_param,'_Active')){
-            //change from param to $orginal_param as param value is changing above
-            return $this->successResponse($model::where('status',1)->get());
-
-        } elseif($param == 'StudentAwardType'){
-            return $this->successResponse(StudentAwardType::all());
-
-        } elseif($param == 'CeaProgramType'){
-            return $this->successResponse(CeaProgramType::all());
-
-        } else {
-            return $this->successResponse($model::all());
+        if($type == 'all'){
+            if($mod=="ChildGroupPosition"){
+                $response_data=$model::get();
+                return $this->successResponse($response_data);
+            }else{
+                return $this->successResponse($model::get());
+            }
         }
-
+        else if(strpos($type,'joinall')!==false){
+            $response_data=$model::get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $data){
+                    $submod=explode('__',$type)[1];
+                    $sub_det="App\\Models\\staff_masters\\"."$submod";
+                    $submodel = new $sub_det();
+                    $data->sub_det=$submodel::where('id',$data[explode('__',$type)[2]])->first();
+                }
+            }
+            return $this->successResponse($response_data);
+        }
+        else if($type == 'active'){
+            return $this->successResponse($model::where('status',1)->get());
+        }
+        else if(strpos($type,'byparent')!==false){
+            // dd(explode('__',$type)[1]);
+            return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
+        }
+        else if($type=="Qualification"){
+            return $this->successResponse($model::with('quialificationtype','quialificationlevel')->get());
+        }
+        else if($type=="StaffSubMajorGrop"){
+            return $this->successResponse($model::with('majorgroup')->get());
+        }
+        else if($type == 'active'){
+            return $this->successResponse($model::where('status',1)->get());
+        }
+        
     }
 
+    // old code of phuntsho sir to load student master
+    // public function loadStudentMasters($param=""){
+    //     $orginal_param=$param;
+    //     if(strpos($param,'_Active')){
+    //         $param=str_replace('_Active','',$param);
+    //     }
+
+    //     if($param == 'program_name' || $param == 'club_name'){
+    //         $model_name = 'CeaProgram';
+    //     } else {
+    //         $model_name = $param;
+    //     }
+
+    //     $databaseModel=$this->extractRequestInformation($request=NULL, $model_name, $type='Model');
+    //     $modelName = "App\\Models\\Masters\\"."$databaseModel";
+
+    //     $model = new $modelName();
+
+    //     if($param == 'program_name'){
+    //         $programid=CeaProgramType::where('Name', 'like', 'Program%')->first();
+    //         $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
+    //         return $this->successResponse($response_data);
+
+    //     } elseif($param == 'club_name'){
+    //         $programid=CeaProgramType::where('Name', 'like', 'Club%')->first();
+    //         $response_data = CeaProgram::where('CeaProgrammeTypeId', $programid->id)->get();
+    //         return $this->successResponse($response_data);
+
+    //     } elseif(strpos($orginal_param,'_Active')){
+    //         //change from param to $orginal_param as param value is changing above
+    //         return $this->successResponse($model::where('status',1)->get());
+
+    //     } elseif($param == 'StudentAwardType'){
+    //         return $this->successResponse(StudentAwardType::all());
+
+    //     } elseif($param == 'CeaProgramType'){
+    //         return $this->successResponse(CeaProgramType::all());
+
+    //     } else {
+    //         return $this->successResponse($model::all());
+    //     }
+
+    // }
+
+//GET TEACHER POSITION TITLE FOR REPORT
 
     /**
      * method to list students masters of active records for dropdown
@@ -632,4 +804,5 @@ class StudentMasterController extends Controller
     public function loadActiveFoodSourceMaster(){
          return FoodSourceType::where('status',1)->get();
     }
+    
 }

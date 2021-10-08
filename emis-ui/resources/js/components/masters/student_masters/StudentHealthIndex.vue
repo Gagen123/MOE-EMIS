@@ -25,11 +25,11 @@
                     Health Screening Endorsed By
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" @click="activatelink('vaccination_index')">
+                <!-- <li class="nav-item active pr-1" @click="activatelink('vaccination_index')">
                     <router-link to="/vaccination_index" id="vaccination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Vaccination Dosage
                     </router-link>
-                </li>
+                </li> -->
                 <li class="nav-item active pr-1" @click="activatelink('vaccination_index')">
                     <router-link to="/vaccination_index" id="vaccination_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                     Vaccination

@@ -12,8 +12,8 @@ use App\Models\staff_services\StaffResponsiblity;
 use App\Models\staff_services\StaffDisaplinary;
 use App\Models\staff_services\StaffAttendance;
 use App\Models\staff_services\StaffAttendanceDetails;
-use App\Models\staff_masters\LeaveConfiguration;
-use App\Models\staff_masters\LeaveConfigurationDetials;
+use App\Models\staff_master_config\LeaveConfiguration;
+use App\Models\staff_master_config\LeaveConfigurationDetials;
 use App\Models\staff_services\LeaveApplication;
 use App\Models\staff\ApplicationSequence;
 class StaffServicesController extends Controller{
@@ -260,6 +260,25 @@ class StaffServicesController extends Controller{
             $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->where('submitter_role_id',$role_ids)
             ->select('id','leave_type_id')->first();
         }
+        if($response_data!=null && $response_data!=""){
+            $det=LeaveConfigurationDetials::where('leave_config_id',$response_data->id)->get();
+            $submitted_to='NA';
+            if($det!=null && $det!="" && sizeof($det)>0){
+                $count = 0;
+                $cong_seq=0;
+                foreach($det as $d){
+                    $count++;
+                    if($count==1){
+                        $cong_seq=$d['sequence'];
+                        $submitted_to=$d['role_id'];
+                    }
+                    if($d['sequence']<$cong_seq){
+                        $submitted_to=$d['role_id'];
+                    }
+                }
+            }
+            $response_data->submitted_to=$submitted_to;
+        }
         return $this->successResponse($response_data);
     }
 
@@ -424,7 +443,10 @@ class StaffServicesController extends Controller{
     }
 
     public function loadLeaveDetails($appNo=""){
-        $leave_detials=LeaveApplication::where('application_number',$appNo)->first();
+        $leave_detials=LeaveApplication::with('leaveDetails')->where('application_number',$appNo)->first();
+        if($leave_detials!=""){
+            $leave_detials->attachment=ApplicationAttachments::where('ApplicationDetailsId',$leave_detials->id)->get();
+        }
         return $this->successResponse($leave_detials);
     }
 
@@ -459,7 +481,7 @@ class StaffServicesController extends Controller{
     }
 
     public function getallLeaves($staff_id=""){
-        $leave_detials=LeaveApplication::where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
+        $leave_detials=LeaveApplication::with('leaveDetails')->where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
         return $this->successResponse($leave_detials);
     }
 

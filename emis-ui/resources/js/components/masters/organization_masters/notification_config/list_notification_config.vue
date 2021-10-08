@@ -6,6 +6,7 @@
                     <th >SL#</th>
                     <th >Leave Type</th>
                     <th >Submitter</th>
+                    <th>Created At </th>
                     <th >Action</th> 
                 </tr>
             </thead>
@@ -14,6 +15,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ leavetypeList[item.leave_type_id]}}</td>
                     <td>{{ roleList[item.submitter_role_id]}}</td>
+                    <td>{{ item.created_at}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>

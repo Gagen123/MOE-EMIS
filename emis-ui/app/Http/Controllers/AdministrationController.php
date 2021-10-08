@@ -118,67 +118,68 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
-    public function saveStaffMasters(Request $request){
-        $rules=[];
-        $customMessages =[];
-        $rules = [
-            'name'  =>  'required',
-            'status'    =>  'required',
-        ];
-        $customMessages = [
-            'name.required' => 'This field is required',
-            'status.required' => 'This field is required',
-        ];
-        if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group"
-        || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level"
-        || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area"
-        || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
-        || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"
-        || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category"
-        || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
-        || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action" || $request['record_type']=="leave_type"){
-            $rules=array_merge($rules,
-                array('code'  =>  'required|numeric|digits:4',)
-            );
-            $customMessages=array_merge($customMessages,
-                array('code.required'  =>  'This field is required',
-                'code.numeric'         => 'The field must be numeric.',
-                'code.digits'          => 'The field should be of 4 digits.',)
-            );
-        }
-        if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_type" || $request['record_type']=="leave_type"){
-            $rules=array_merge($rules,
-                array('parent_field'=> 'required',)
-            );
-            $customMessages=array_merge($customMessages,
-                array('parent_field.required'=> 'This field is required',)
-            );
-        }
-        if($request['record_type']=="staff_qualification"){
-            $rules=array_merge($rules,
-                array('parent_field1'  =>  'required',)
-            );
-            $customMessages=array_merge($customMessages,
-                array('parent_field1.required'  =>  'This field is required',)
-            );
-        }
-        $this->validate($request, $rules,$customMessages);
+    //commneted by Tshewang as masters are migrated to staffmastercontroller
+    // public function saveStaffMasters(Request $request){
+    //     $rules=[];
+    //     $customMessages =[];
+    //     $rules = [
+    //         'name'  =>  'required',
+    //         'status'    =>  'required',
+    //     ];
+    //     $customMessages = [
+    //         'name.required' => 'This field is required',
+    //         'status.required' => 'This field is required',
+    //     ];
+    //     if($request['record_type']=="transfer_reason" || $request['record_type']=="mgmn_designation" || $request['record_type']=="major_group"
+    //     || $request['record_type']=="position_level" || $request['record_type']=="qualificaiton_type" || $request['record_type']=="qualificaiton_level"
+    //     || $request['record_type']=="relationship" || $request['record_type']=="marital_status" || $request['record_type']=="subject_area"
+    //     || $request['record_type']=="cureer_stage" || $request['record_type']=="qualification_description" || $request['record_type']=="course_mode"
+    //     || $request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject"
+    //     || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_category"
+    //     || $request['record_type']=="staff_award_type" || $request['record_type']=="staff_role_responsibility" || $request['record_type']=="staff_offence_type"
+    //     || $request['record_type']=="staff_offence_severity" || $request['record_type']=="staff_offence_action" || $request['record_type']=="leave_type"){
+    //         $rules=array_merge($rules,
+    //             array('code'  =>  'required|numeric|digits:4',)
+    //         );
+    //         $customMessages=array_merge($customMessages,
+    //             array('code.required'  =>  'This field is required',
+    //             'code.numeric'         => 'The field must be numeric.',
+    //             'code.digits'          => 'The field should be of 4 digits.',)
+    //         );
+    //     }
+    //     if($request['record_type']=="sub_major_group" || $request['record_type']=="position_title" || $request['record_type']=="staff_subject" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_qualification" || $request['record_type']=="staff_award_type" || $request['record_type']=="leave_type"){
+    //         $rules=array_merge($rules,
+    //             array('parent_field'=> 'required',)
+    //         );
+    //         $customMessages=array_merge($customMessages,
+    //             array('parent_field.required'=> 'This field is required',)
+    //         );
+    //     }
+    //     if($request['record_type']=="staff_qualification"){
+    //         $rules=array_merge($rules,
+    //             array('parent_field1'  =>  'required',)
+    //         );
+    //         $customMessages=array_merge($customMessages,
+    //             array('parent_field1.required'  =>  'This field is required',)
+    //         );
+    //     }
+    //     $this->validate($request, $rules,$customMessages);
 
-        $data =[
-            'name'            =>$request['name'],
-            'parent_field'    =>$request['parent_field'],
-            'parent_field1'   =>$request['parent_field1'],
-            'position_level'  =>$request['position_level'],
-            'status'          =>$request['status'],
-            'code'            =>$request['code'],
-            'actiontype'      =>$request['action_type'],
-            'id'              =>$request['id'],
-            'record_type'     =>$request['record_type'],
-            'user_id'         =>$this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
-        return $response_data;
-    }
+    //     $data =[
+    //         'name'            =>$request['name'],
+    //         'parent_field'    =>$request['parent_field'],
+    //         'parent_field1'   =>$request['parent_field1'],
+    //         'position_level'  =>$request['position_level'],
+    //         'status'          =>$request['status'],
+    //         'code'            =>$request['code'],
+    //         'actiontype'      =>$request['action_type'],
+    //         'id'              =>$request['id'],
+    //         'record_type'     =>$request['record_type'],
+    //         'user_id'         =>$this->userId()
+    //     ];
+    //     $response_data= $this->apiService->createData('emis/masters/saveStaffMasters', $data);
+    //     return $response_data;
+    // }
 
 
     public function saveTransferConfigMasters(Request $request){
@@ -205,30 +206,6 @@ class AdministrationController extends Controller{
         return $response_data;
     }
 
-    public function saveLeaveConfigMasters(Request $request){
-        $rules=[];
-        $customMessages =[];
-        $rules = [
-            'leave_type_id' =>  'required',
-            'role_id'       =>  'required',
-        ];
-        $customMessages = [
-            'leave_type_id.required' => 'This field is required',
-            'role_id.required' => 'This field is required',
-        ];
-        $this->validate($request, $rules,$customMessages);
-        $data =[
-            'id'                =>  $request['id'],
-            'leave_type_id'     =>  $request['leave_type_id'],
-            'role_id'           =>  $request['role_id'],
-            'action_type'       =>  $request['action_type'],
-            'role_action_mapp'  =>  $request['role_action_mapp'],
-            'user_id'           =>  $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/masters/saveLeaveConfigMasters', $data);
-        return $response_data;
-    }
-
     public function loadLeaveConfigMasters($type="",$submitter=""){
         $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigMasters/'.$type.'/'.$submitter);
         return $response_data;
@@ -251,11 +228,12 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
         return $response_data;
     }
-    //commented by tshewang to fix master data
-    // public function loadStaffMasters($param=""){
-    //     $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
-    //     return $global_masters;
-    // }
+    //commented by tshewang to fix master data 
+    //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
+    public function loadStaffMasters($param=""){
+        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
+        return $global_masters;
+    }
     public function loadStaffDropdownMasters($model="",$parent_id=""){
         $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/'.$model."/".$parent_id);
         return $response_data;
@@ -953,8 +931,8 @@ class AdministrationController extends Controller{
             'id'    =>  $request['id'],
             'user_id'=>$this->userId()
         ];
-
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStream', $class);
+       // dd( $class);
+        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
         return $response_data;
 
     }

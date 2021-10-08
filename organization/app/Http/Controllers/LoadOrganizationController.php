@@ -31,12 +31,23 @@ class LoadOrganizationController extends Controller{
         date_default_timezone_set('Asia/Dhaka');
     }
 
+    //GET ORGANIZATION DETAILS BY DZO ID AND LEVEL ID USED IN REPORT
+    public function getOrgByDzoLevel($dzoId,$levelId){
+        $response_data = DB::table('organization_details')
+                ->select('id', 'name')
+                ->where('dzongkhagId',$dzoId)
+                ->where('levelId',$levelId)
+                ->where('status',1)
+                ->get();
+        return $response_data;
+    }
+
     public function loadOrgList($type="", $id=""){
         $response_data="";
         if($type=="userworkingagency"){
             $response_data=OrganizationDetails::where('id',$id)->wherein('category',['public_school','public_eccd','public_ecr'])
             ->where('status','1')
-            ->select( 'id','name','levelId','dzongkhagId','category','code')->get();
+            ->select( 'id','name','levelId','dzongkhagId','gewogId','category','code')->get();
         }
         if($type=="all_eccds_dzogkhag_wise"){
             $response_data=OrganizationDetails::where('dzongkhagId',$id)->where('category','like','%eccd%')->get();
@@ -331,7 +342,7 @@ class LoadOrganizationController extends Controller{
                 GROUP BY classId
                 ORDER BY c.displayOrder;");
             } else {
-                $response_data = DB::select("SELECT  c.class AS Class, c.displayOrder,
+                $response_data = DB::select("SELECT c.class AS Class, c.displayOrder,
                 COUNT(class) AS No_of_Section
                 FROM `organization_class_streams` a
                 LEFT JOIN classes c ON c.id=a.classId
@@ -842,4 +853,13 @@ class LoadOrganizationController extends Controller{
         $response_data = DB::select("SELECT t1.dzongkhagId,COUNT(t1.id) AS no_of_schools FROM organization_details t1 JOIN level t2 ON t1.levelId = t2.id GROUP BY t1.dzongkhagId");
         return $response_data;
     }
+
+    //method by gagen for pulling orgClassStreamId For academic purpose
+    public function LoadStdIdAwardResponsibilites($class_id){
+        $response_data = DB::table('organization_class_streams')
+            ->select('id AS orgClassStreamId')
+            ->where('classId',$class_id)->get();
+        return $response_data;
+    }
+
 }

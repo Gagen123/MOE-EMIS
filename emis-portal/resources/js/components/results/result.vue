@@ -8,7 +8,7 @@
            </table>
         <div class="card-body">
           <div class="form-group row">
-            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label>Year:<span class="text-danger">*</span></label> 
                   <select class="form-control select2" id="class_stream_section_id" v-model="class_stream_section_id" @change="getTerms(); getTermResult();">
                       <option value=""> --Select--</option>
@@ -34,7 +34,7 @@
                           {{ item.name }} <span v-if="item.term_dzo_name">( {{ item.term_dzo_name }} )</span>
                       </option>
                   </select> 
-            </div> -->
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-4">
                 <table id="result-term-table" class="table table-sm table-bordered table-striped">
                     <thead>

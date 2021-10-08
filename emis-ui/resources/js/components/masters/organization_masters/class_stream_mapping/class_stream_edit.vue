@@ -13,8 +13,8 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
-                        <label><input v-model="form.status"  type="radio" value="1" tabindex="2"/> Active</label>
-                        <label><input v-model="form.status"  type="radio" value="0" tabindex="3"/> Inactive</label>
+                        <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
+                        <label><input v-model="form.status"  type="radio" value="0" /> Inactive</label>
                     </div>
                 </div>          
             </div>
@@ -50,17 +50,45 @@ export default {
                 this.form.className= '';
                 this.form.status= 1;
             }
+            // if(type=="save"){
+            //     this.form.post('masters/saveClass',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Class details is updated successfully'
+            //         })
+            //         this.$router.push('/class_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......")
+            //     })
+            // }
             if(type=="save"){
-                this.form.post('masters/saveClass',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Class details is updated successfully'
-                    })
-                    this.$router.push('/class_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.form.post('masters/saveClassStreamMapping',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/class_stream_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},

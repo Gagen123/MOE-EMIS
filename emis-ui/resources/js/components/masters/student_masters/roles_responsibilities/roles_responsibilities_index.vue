@@ -9,8 +9,8 @@
                                 <span class="card-title pt-2 mb-0">
                                         <b>List Roles and Responsibilities of Students</b>
                                     </span>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('RolesResponsibilitiesList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('RolesResponsibilitiesAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('roles_responsibilities_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('roles_responsibilities_add')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>
