@@ -841,7 +841,7 @@ class AcademicController extends Controller
                 }
                 $pass_fail = DB::select($pass_fail_query,$pass_fail_param);
             }
-            $ratings = DB::select('SELECT aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');
+            $ratings = $this->getRating();
             return $this->successResponse(["consolidatedResult"=>$consolidatedResult,"studentRank"=> $studentRank,"passFail"=>$pass_fail,"instructionalDaysForSpecialCase"=> $instructional_days_special_case, "instructionalDays"=>$instructional_days,"absentDays"=>$absent_days,'minimum_required_attendance' =>$minimum_required_attendance,'ratings'=>$ratings,'abbreviations'=>$abbreviations]);
             }catch(Exception $e){
                 dd($e);
@@ -949,6 +949,32 @@ class AcademicController extends Controller
             }
             ResultConsolidatedDetail::create($data);
         }
+    }
+    public function getClassTeacherByclass($orgId,Request $request){
+        $query = "SELECT stf_staff_id FROM aca_class_teacher WHERE org_id = ? AND org_class_id = ?";
+        $params = [$orgId,$request['org_class_id']];
+        if($request['org_stream_id'] !=''){
+            $query .= " AND org_stream_id = ?";
+            array_push($params,$request['org_stream_id']);
+        }
+        if($request['org_section_id']){
+            $query .= " AND org_section_id = ?";
+            array_push($params,$request['org_section_id']);
+        }
+        return $this->successResponse(DB::select($query,$params));
+    }
+    public function getSubjectTeacherByclass($orgId,Request $request){
+        $query = "SELECT aca_sub_id,stf_staff_id FROM aca_class_subject_teacher WHERE org_id = ? AND org_class_id = ?";
+        $params = [$orgId,$request['org_class_id']];
+        if($request['org_stream_id'] !=''){
+            $query .= " AND org_stream_id = ?";
+            array_push($params,$request['org_stream_id']);
+        }
+        if($request['org_section_id']){
+            $query .= " AND org_section_id = ?";
+            array_push($params,$request['org_section_id']);
+        }
+        return $this->successResponse(DB::select($query,$params));
     }
     private function getAssessmentAreaCode(){
        $code = DB::select('SELECT DISTINCT t1.name,t1.code FROM aca_assessment_area t1 JOIN aca_student_assessment_detail t2 ON t2.aca_assmt_area_id = t1.id  ORDER BY code');
@@ -1110,43 +1136,70 @@ class AcademicController extends Controller
     }
     public function loadConsolidatedResultListForPublish($orgId,$termId){
         return $this->successResponse(DB::select("SELECT t1.id AS aca_result_consolidated_id,
-                    t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.aca_assmt_term_id,
-                    IF(t1.finalized,1,0) AS class_teacher_finalized,
-                    DATE_FORMAT(t1.finalized_date,'%d-%m-%Y %H:%i %p') AS class_teacher_finalized_date,
-                    IF(t1.approved,1,0) AS approved,
-                    DATE_FORMAT(t1.approved_date,'%d-%m-%Y %H:%i %p') AS approved_date,
-                    IF(t1.published,1,0) AS published,
-                    DATE_FORMAT(t1.published_date,'%d-%m-%Y %H:%i %p') AS published_date
-            FROM aca_result_consolidated t1
-            WHERE t1.org_id = ? AND IFNULL(t1.aca_assmt_term_id,'final-result') = ?",[$orgId,$termId])
+                t1.org_class_id,t1.org_stream_id,t1.org_section_id,t1.aca_assmt_term_id,
+                IF(t1.finalized,1,0) AS class_teacher_finalized,
+                DATE_FORMAT(t1.finalized_date,'%d-%m-%Y %H:%i %p') AS class_teacher_finalized_date,
+                IF(t1.approved,1,0) AS approved,
+                DATE_FORMAT(t1.approved_date,'%d-%m-%Y %H:%i %p') AS approved_date,
+                IF(t1.published,1,0) AS published,
+                DATE_FORMAT(t1.published_date,'%d-%m-%Y %H:%i %p') AS published_date,
+                (DATEDIFF(CURRENT_TIMESTAMP,t1.approved_date)<=t2.value) AS can_edit_approved
+        FROM aca_result_consolidated t1 JOIN aca_setting t2 ON t2.id = 4
+        WHERE t1.org_id = ? AND IFNULL(t1.aca_assmt_term_id,'final-result') = ?",[$orgId,$termId])
         );
     }
-    // public function getConsolidatedResultForEdit($orgId,$stdId,$termId,$subId){
-    //     return $this->successResponse(DB::select("",[$orgId,$termId]);
-    // }
-    public function updateStatus(Request $request, $Id =''){
-        if($request['approve'] == 1){
-            $consolidated = DB::update('UPDATE aca_result_consolidated SET approved = 1, approved_date = CURRENT_TIMESTAMP WHERE id = ?', [$Id]);
+    public function getConsolidatedResultForEdit($orgId,$stdId,$termId,$subId){
+        $result = DB::select("SELECT t2.id,t3.name AS assmnt_area,TRIM(t2.score)+0 AS score,t2.descriptive_score,t4.input_type,t2.aca_rating_type_id,TRIM(t5.weightage)+0 AS weightage
+                FROM aca_student_assessment t1 JOIN aca_student_assessment_detail t2 ON t1.id = t2.aca_student_assmt_id 
+                    JOIN aca_assessment_area t3 ON t2.aca_assmt_area_id = t3.id 
+                    JOIN aca_rating_type t4 ON t2.aca_rating_type_id = t4.id
+                    LEFT JOIN aca_class_subject_assessment t5 ON t1.aca_sub_id = t5.aca_sub_id AND t1.aca_assmt_term_id = t5.aca_assmt_term_id AND t2.aca_assmt_area_id = t5.aca_assmt_area_id
+                    AND t1.org_class_id = t5.org_class_id AND (t1.org_stream_id = t5.org_stream_id OR (t1.org_stream_id is null AND t5.org_stream_id IS NULL))
+                WHERE t1.org_id = ? AND t2.std_student_id = ? AND t1.aca_assmt_term_id = ? AND t1.aca_sub_id = ? ORDER BY t5.display_order",[$orgId,$stdId,$termId,$subId]);
+        $ratings = $this->getRating();
+        return $this->successResponse(['result' => $result, 'ratings'=>$ratings]);
+    }
+    public function updateStatus(Request $request){
+        // dd($request);
+        if($request['action'] == 'approve'){
+            // $this->finalizedResult($request);
+            $consolidated = DB::update('UPDATE aca_result_consolidated SET approved = 1, approved_date = CURRENT_TIMESTAMP WHERE id = ?', [$request['aca_result_consolidated_id']]);
+        }elseif($request['action'] == 'publish'){
+            foreach($request['not_published'] as $key =>$value){
+                $consolidated = DB::update('UPDATE aca_result_consolidated SET published = 1, published_date = CURRENT_TIMESTAMP WHERE id = ?', [$value]);
+            }
         }
         return $this->successResponse($consolidated, Response::HTTP_CREATED);
        
     }
     public function getSubjectOfTerm(Request $request){
         $query = "SELECT DISTINCT t2.id, t2.name,t2.dzo_name FROM aca_student_assessment t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id WHERE t1.org_id = ? AND t1.org_class_id = ?";
+        $query1 = "SELECT t2.id,t2.remarks FROM aca_result_consolidated t1 
+                    JOIN aca_result_consolidated_detail t2 ON t1.id = t2.aca_result_consolidated_id
+            WHERE t1.org_id = ? AND t2.std_student_id = ? AND t1.org_class_id = ? ";
         $params = [$request['org_id'],$request['org_class_id']];
+        $params1 = [$request['org_id'],$request['std_student_id'],$request['org_class_id']];
         if(isset($request['aca_term_id']) && $request['aca_term_id'] && $request['aca_term_id'] != "null" && $request['aca_term_id'] != "final-result"){
             $query .=" AND t1.aca_assmt_term_id = ? ";
+            $query1 .=" AND t1.aca_assmt_term_id = ? ";
             array_push($params,$request['aca_term_id']);
+            array_push($params1,$request['aca_term_id']);
         }
         if(isset($request['org_stream_id'])){
             $query .=" AND t1.org_stream_id = ?";
+            $query1 .=" AND t1.org_stream_id = ?";
             array_push($params,$request['org_stream_id']);
+            array_push($params1,$request['org_stream_id']);
         }
         if(isset($request['org_section_id'])){
             $query .=" AND t1.org_section_id = ?";
+            $query1 .=" AND t1.org_section_id = ?";
             array_push($params,$request['org_section_id']);
+            array_push($params1,$request['org_section_id']);
         }
-        return $this->successResponse(DB::select($query,$params));
+        $subjects = DB::select($query,$params);
+        $remarks = DB::select($query1,$params1);
+        return $this->successResponse(['subjects' =>$subjects,'remarks'=>$remarks]);
     }
     private function saveAttendance($request){
         $org_stream_id = isset($request['org_stream_id']) ? $request['org_stream_id'] : null;
@@ -1177,19 +1230,41 @@ class AcademicController extends Controller
     }catch(Exception $e){
         dd($e);
     }
-<<<<<<< HEAD
-}
-=======
     }
-    
->>>>>>> ffdf0c14288b8b7bf4b72250195d55f8a8e0830e
-
+    public function updateResult(Request $request){
+        foreach($request['data'] as $result){
+            $data = StudentAssessmentDetail::find($result['id']);
+            $data->score = $result['score'];
+            if(array_key_exists("descriptive_score", $result)){
+                $data->descriptive_score = $result['descriptive_score'];
+            }else if(array_key_exists("score", $result)){
+                    $data->score = $result['score'];
+            }
+            $data->updated_at = date('Y-m-d h:i:s');
+            $data->updated_by = $request['user_id'];
+            $data->update();
+        }
+        $data1 = ResultConsolidatedDetail::find($request['remarks']["id"]);
+        $data1->remarks = $request['remarks']['remarks'];
+        $data1->updated_at = date('Y-m-d h:i:s');
+        $data1->updated_by = $request['user_id'];
+        $data1->update();
+        return $this->successResponse(1, Response::HTTP_CREATED);
+    }
     //Written by gagen to pull the result into the emis portal
     public function LoadResultByStudentId($std_id){
+     
         return $this->successResponse(DB::select('SELECT a.org_class_id, a.org_stream_id, a.org_stream_id, a.class_stream_section,a.published, b.std_student_id, b.result AS result 
             FROM aca_result_consolidated AS a 
             JOIN aca_result_consolidated_detail AS b
             ON a.id = b.aca_result_consolidated_id 
             WHERE b.std_student_id = ?',[$std_id]));
     }
+    private function getRating(){
+       return DB::select('SELECT aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');
+    }
+    // private function finalizedResult($request){
+    //     if($request[''])
+    // }
+   
 }

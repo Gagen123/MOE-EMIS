@@ -215,7 +215,6 @@ export default {
             orgid:'',
             class_form: new form({
                 student_id:'',
-                class:'',
                 disability:'',
                 special_benifit:[],
                 scholarship:[],
@@ -313,7 +312,6 @@ export default {
                     this.std_admission_details = data;
                     this.parents_details = data.parents;
                     this.class_form.class = data.admission_class.class_id;
-                    alert(data.admission_class.class_id);
                     $('#class').val(data.admission_class.class_id).trigger('change');
                     $('#class').prop('disabled',true);
                     this.getStudentSchoolDetails(data.class.OrgClassStreamId);
@@ -385,21 +383,21 @@ export default {
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form.post('organization/saveMerger')
-                        .then((response) => {
-                            if(response!=""){
-                                let message="Application for Merger has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                this.$router.push({name:'restr_acknowledgement',params: {data:message}});
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Merger details has been submitted for further action.'
-                                });
-                            }
+                    if (result.isConfirmed){
+                        this.class_form.post('/students/admission/saveAdmitStudent',this.class_form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err);
-                            this.applyselect2();
+                        this.$router.push('/new_student_admission');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
                         })
                     }
                 });
@@ -412,6 +410,17 @@ export default {
                 $('.'+nextclass+' >a').removeClass('disabled');
                 $('.tab-content-details').hide();
                 $('#'+nextclass).show().removeClass('fade');
+            }
+        },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="student_type"){
+                alert($('#student_type').val());
+                this.class_form.student_type=$('#student_type').val();
             }
         },
     },

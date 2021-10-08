@@ -10,11 +10,11 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created Date</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in coursemodeList" :key="index">
+                <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.category}}</td>
@@ -28,43 +28,28 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            coursemodeList:[],
+            dataList:[],
             dt:'',
         }
     },
     methods:{
-        loadcoursemodeList(uri = 'masters/loadStaffMasters/all_leave_type_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.coursemodeList =  data.data.data;
-            })
-            .catch(function (error){
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
         showedit(data){
             this.$router.push({name:'edit_leave_type',params: {data:data}});
         },
     },
-    mounted(){ 
-        this.loadcoursemodeList();
-        this.dt =  $("#working-agency-table").DataTable()
+    async mounted(){
+        this.dt =  $("#working-agency-table").DataTable();
+        this.dataList =  await this.loadstaffMasters('all','LeaveType');
     },
     watch: {
-        coursemodeList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#working-agency-table").DataTable()
-            });
+        dataList(){
+            this.applydatatable('working-agency-table');
         }
     },
 }

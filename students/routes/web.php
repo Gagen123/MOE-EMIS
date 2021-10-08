@@ -81,6 +81,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/savedetailsNotEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsNotEnrolledStd']);
             $router->post('/savedetailsEnrolledStd', ['uses' => 'Students\StudentAdmissionController@savedetailsEnrolledStd']);
             $router->post('/saveStudentClassDetails', ['uses' => 'Students\StudentAdmissionController@saveStudentClassDetails']);
+            $router->post('/saveAdmitStudent', ['uses' => 'Students\StudentAdmissionController@saveAdmitStudent']);
             $router->post('/saveorgclassDetails', ['uses' => 'Students\StudentAdmissionController@saveorgclassDetails']);
             $router->get('/deleteclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@deleteclassDetails']);
             $router->get('/getorgclassDetails/{id}',['uses' => 'Students\StudentAdmissionController@getorgclassDetails']);
@@ -116,6 +117,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->get('/loadQualificationMarks',['uses' => 'Students\StudentAdmissionController@loadQualificationMarks']);
             $router->get('/loadStudentMarks/{std_code}',['uses' => 'Students\StudentAdmissionController@loadStudentMarks']);
             $router->get('/loadAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
+            $router->post('/saveSupplementaryStudent',['uses' => 'Students\StudentAdmissionController@saveSupplementaryStudent']);
         });
 
         //Student Updates
@@ -174,6 +176,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
         $router->post('/saveStudentClassAllocation',['uses' => 'Students\StudentClassController@saveStudentClassAllocation']);
         $router->get('/loadStudentClassAllocations/{param}',['uses' => 'Students\StudentClassController@loadStudentClassAllocations']);
+
+        //pulling role,responsibilites,studentId by passing OrgClassStreamId
+        $router->get('/LoadStdIdAwardResponsibilites/{orgClassStreamId}',['uses' => 'Students\StudentClassController@LoadStdIdAwardResponsibilites']);
 
         $router->post('/saveStudentAward',['uses' => 'Students\StudentAwardController@saveStudentAward']);
         $router->get('/loadStudentAwards/{param}',['uses' => 'Students\StudentAwardController@loadStudentAwards']);

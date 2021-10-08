@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Models\staff_masters;
+namespace App\Models\staff_master_config;
+
+use App\Models\staff_masters\LeaveType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
