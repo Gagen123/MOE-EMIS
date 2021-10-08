@@ -150,6 +150,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->group(['prefix' => 'staffServices'], function () use ($router) {
             $router->post('/saveStaffAward', ['uses' => 'staff\StaffServicesController@saveStaffAward']);
             $router->get('/loadStaffAward/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffAward']);
+            $router->get('/loadStaffAwardforView/{id}', ['uses' => 'staff\StaffServicesController@loadStaffAwardforView']);
             $router->get('/deleteStaffServices/{type}/{id}', ['uses' => 'staff\StaffServicesController@deleteStaffServices']);
 
             $router->post('/saveStaffResponsibility', ['uses' => 'staff\StaffServicesController@saveStaffResponsibility']);

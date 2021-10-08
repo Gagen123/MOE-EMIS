@@ -583,6 +583,8 @@ Route::prefix('staff')->group(function () {
     Route::prefix('staffServices')->group(function (){
         Route::post('/saveStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffAward'])->name('saveStaffAward');
         Route::get('/loadStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffAward'])->name('loadStaffAward');
+        Route::get('/loadStaffAwardforView/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffAwardforView'])->name('loadStaffAwardforView');
+
         Route::get('/deleteStaffServices/{type}/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'deleteStaffServices'])->name('deleteStaffServices');
         Route::post('/saveStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffResponsibility'])->name('saveStaffResponsibility');
         Route::get('/loadStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffResponsibility'])->name('loadStaffResponsibility');

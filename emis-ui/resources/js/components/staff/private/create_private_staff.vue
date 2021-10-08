@@ -82,6 +82,32 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Major Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.majorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('majorgroup') }" class="form-control select2" name="majorgroup" id="majorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in groupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="majorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Sub Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.submajorgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('submajorgroup') }" class="form-control select2" name="submajorgroup" id="submajorgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in subgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="submajorgroup"></has-error>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Child Group Group:<i class="text-danger">*</i></label>
+                                    <select v-model="personal_form.childgroup" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('childgroup') }" class="form-control select2" name="childgroup" id="childgroup">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in childgroupList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                    <has-error :form="personal_form" field="childgroup"></has-error>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Position Title:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.position_title" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('position_title') }" class="form-control select2" name="position_title" id="position_title">
                                         <option value=""> --Select--</option>
@@ -138,7 +164,7 @@
                                     </select>
                                     <has-error :form="personal_form" field="dzongkhag"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Gewog:</label>
                                     <select v-model="personal_form.gewog" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('gewog') }" class="form-control select2" name="gewog" id="gewog">
                                         <option v-for="(item, index) in gewog_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -151,9 +177,7 @@
                                         <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
                                     <has-error :form="personal_form" field="village_id"></has-error>
-                                </div>
-                            </div>
-                            <div class="form-group row">
+                                </div> -->
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Working Agency:<i class="text-danger">*</i></label>
                                     <select v-model="personal_form.working_agency_id" @change="remove_error('working_agency_id')" :class="{ 'is-invalid select2 select2-hidden-accessible': personal_form.errors.has('working_agency_id') }" class="form-control select2" name="working_agency_id" id="working_agency_id">
@@ -446,12 +470,18 @@ export default {
             fieldList:[],
             degreeList:[],
             instituteList:[],
+            groupList:[],
+            subgroupList:[],
+            childgroupList:[],
 
             personal_form: new form({
                 personal_id: '',
                 emp_type: 'Private',
                 cid_work_permit:'',
                 name:'',
+                majorgroup:'',
+                submajorgroup:'',
+                childgroup:'',
                 position_title:'',
                 sex_id:'',
                 dob:'',
@@ -878,9 +908,9 @@ export default {
         async loadactivemaritalList(){
             this.marital_statusList =  await this.loadstaffMasters('active','MaritalStatus');
         },
-        async loadpositiontitleList(){
-            this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level','PositionTitle');
-        },
+        // async loadpositiontitleList(){
+        //     this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level','PositionTitle');
+        // },
 
         async loadactivedoneragencyList(){
             this.donerAgencyList =  await this.loadstaffMasters('active','DonerAgency');
@@ -899,6 +929,18 @@ export default {
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
+            }
+            if(id=="majorgroup"){
+                this.personal_form.majorgroup=$('#majorgroup').val();
+                this.getsubmajorgroup($('#majorgroup').val());
+            }
+            if(id=="submajorgroup"){
+                this.personal_form.submajorgroup=$('#submajorgroup').val();
+                this.getchildGroup($('#submajorgroup').val());
+            }
+            if(id=="childgroup"){
+                this.personal_form.childgroup=$('#childgroup').val();
+                this.getpositiontitle($('#childgroup').val());
             }
             if(id=="position_title"){
                 this.personal_form.position_title=$('#position_title').val();
@@ -946,7 +988,6 @@ export default {
                 this.personal_form.dzongkhag=$('#dzongkhag').val();
                 this.getgewoglist($('#dzongkhag').val());
                 this.allOrgList($('#dzongkhag').val(),'');
-
             }
             if(id=="gewog"){
                 this.personal_form.gewog=$('#gewog').val();
@@ -1082,7 +1123,7 @@ export default {
                                         }
                                     }
                                     this.personal_form.p_dzongkhag =personal_detail.dzongkhagId;
-                                    $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
+                                    $('#p_dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
                                     this.getPgewoglist(personal_detail.dzongkhagId);
                                     this.personal_form.p_gewog = personal_detail.gewogId;
                                     this.getPvillagelist(personal_detail.gewogId,personal_detail.villageSerialNo);
@@ -1092,9 +1133,9 @@ export default {
                                     $('#cid_work_permit').prop('disabled',true);
                                     $('#dob').prop('disabled',true);
                                     $('#sex_id').prop('disabled',true);
-                                    $('#dzongkhag').prop('disabled',true);
-                                    $('#gewog').prop('disabled',true);
-                                    $('#village_id').prop('disabled',true);
+                                    $('#p_dzongkhag').prop('disabled',true);
+                                    $('#p_gewog').prop('disabled',true);
+                                    $('#p_village_id').prop('disabled',true);
                                 }else{
                                     Swal.fire({
                                         html: "No data found for this CID",
@@ -1123,6 +1164,17 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
+        async getsubmajorgroup(id){
+            this.subgroupList =  await this.loadstaffMasters('byparent__group_id__'+id,'StaffSubMajorGrop');
+        },
+        async getchildGroup(id){
+            this.childgroupList =  await this.loadstaffMasters('byparent__sub_group_id__'+id,'ChildGroup');
+        },
+        async getpositiontitle(id){
+            this.positiontitleList=[];
+            this.positiontitleList =  await this.loadstaffMasters('all_active_position_title_with_level',id);
+            // await this.loadstaffMasters('byparent__sub_group_id__'+id,'PositionTitle');
+        }
     },
     async mounted() {
         $('[data-toggle="tooltip"]').tooltip();
@@ -1138,11 +1190,12 @@ export default {
             this.changefunction(id);
         });
         this.loadactivecountryList();
+        this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         this.p_dzongkhagList =await this.loadactivedzongkhags();
         this.loadactivedzongkhagList();
         this.sex_idList =  await this.loadactiveGlobalList('all_active_gender');
         this.loadactivemaritalList();
-        this.loadpositiontitleList();
+        // this.loadpositiontitleList();
         this.loadactivecureerstageList();
         this.loadactivesubjectList();
         this.loaddraftpersonalDetails();

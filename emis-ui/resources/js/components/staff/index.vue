@@ -26,6 +26,12 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link to="/staff_appointment" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-edit"></span>
+                        Staff Appointment
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link to="/substitute_staff" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-edit"></span>
                         Substitute Teacher

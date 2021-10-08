@@ -9,7 +9,7 @@
                         <th >Code</th>
                         <th >Status</th>
                         <th >Created Date</th>
-                        <th >Action</th> 
+                        <th >Action</th>
                     </tr>
                 </thead>
                 <tbody id="tbody">
@@ -26,7 +26,7 @@
                 </tbody>
             </table>
         </div>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -51,10 +51,10 @@ export default {
             this.$router.push({name:'edit_staff_award_category',params: {data:data}});
         },
     },
-    mounted(){ 
+    mounted(){
         this.loadsubjectList();
         this.dt =  $("#working-agency-table").DataTable()
-    }, 
+    },
     watch: {
         subjectList(val) {
             this.dt.destroy();
