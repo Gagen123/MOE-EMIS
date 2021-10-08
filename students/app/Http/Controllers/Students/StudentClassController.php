@@ -138,13 +138,12 @@ class StudentClassController extends Controller
         $data->updated_by = $dataRequest['created_by'];
         $data->updated_at = date('Y-m-d h:i:s');
         $data->update();
-
         return $data;
 
     }
-
     public function LoadStdIdAwardResponsibilites($orgClassStreamId){
-        return $this->successResponse(DB::select('SELECT t1.StdStudentId, t2.StdRoleId, t3.CeaAwardId
+        return $this->successResponse(
+            DB::select('SELECT t1.StdStudentId, t2.StdRoleId, t3.CeaAwardId
             FROM std_student_class_stream AS t1
             JOIN std_role_student AS t2 ON t1.StdStudentId = t2.StdStudentId
             JOIN cea_student_award AS t3 ON t1.StdStudentId = t2.StdStudentId

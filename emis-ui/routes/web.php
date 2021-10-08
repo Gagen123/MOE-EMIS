@@ -717,6 +717,7 @@ Route::prefix('students')->group(function () {
         Route::post('/saveStudentDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentDetails'])->name('saveStudentDetails');
         Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
         Route::post('/saveStudentClassDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentClassDetails'])->name('saveStudentClassDetails');
+        Route::post('/saveAdmitStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveAdmitStudent'])->name('saveAdmitStudent');
         Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentList'])->name('loadStudentList');
         Route::get('/loadStudentAdmissionList', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentAdmissionList'])->name('loadStudentAdmissionList');
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
@@ -729,6 +730,7 @@ Route::prefix('students')->group(function () {
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
         Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'deleteclassDetails'])->name('deleteclassDetails');
+        Route::post('/saveSupplementaryStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveSupplementaryStudent'])->name('saveSupplementaryStudent');
     });
 
     Route::prefix('sen')->group(function (){
@@ -919,7 +921,8 @@ Route::prefix('academics')->group(function () {
     Route::get('/getTermsForPublish', [App\Http\Controllers\academics\AcademicController::class, 'getTermsForPublish'])->name('getTermsForPublish');
     Route::get('/loadConsolidatedResultListForPublish/{termId}', [App\Http\Controllers\academics\AcademicController::class, 'loadConsolidatedResultListForPublish'])->name('loadConsolidatedResultListForPublish');
     Route::get('/getConsolidatedResultForEdit/{stdId}/{termId}/{subId}', [App\Http\Controllers\academics\AcademicController::class, 'getConsolidatedResultForEdit'])->name('getConsolidatedResultForEdit');
-    Route::post('/updateStatus/{Id?}', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateStatus', [App\Http\Controllers\academics\AcademicController::class, 'updateStatus'])->name('updateStatus');
+    Route::post('/updateResult', [App\Http\Controllers\academics\AcademicController::class, 'updateResult'])->name('updateResult');
     Route::get('/getSubjectOfTerm', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectOfTerm'])->name('getSubjectOfTerm');
 
 });

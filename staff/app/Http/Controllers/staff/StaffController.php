@@ -563,6 +563,20 @@ class StaffController extends Controller{
         }
         return $this->successResponse($staff_det);
     }
+    //functions created by chilliquest
+    public function getStaffName($Id){
+        return $this->successResponse(DB::select("SELECT id AS stf_staff_id,name FROM stf_staff WHERE id = ?",[$Id]));
+    }
+    public function getPrincipal($orgId){
+        return $this->successResponse(DB::select("SELECT id AS stf_staff_id,name FROM stf_staff  WHERE working_agency_id = ?  AND isPrincipal = 1",[$orgId]));
+    }
+    public function getStaffsName(Request $request){
+        $staffs = DB::table('stf_staff')
+            ->selectRaw('id AS stf_staff_id,name')
+            ->whereIn('id',explode(",",$request['stf_staff_ids']))
+            ->get();
+        return $this->successResponse($staffs);
+    }
 
 
 }
