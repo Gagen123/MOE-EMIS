@@ -154,19 +154,23 @@ class StudentScoutController extends Controller
      */
 
     public function listScoutMembers($param=""){
+        if($param != 'NULL'){
+            parse_str($param, $class_details);
 
-        parse_str($param, $class_details);
-
-        $roles = DB::table('cea_scout_membership')
-                    ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
-                    ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
-                    ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
-                    ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
-                    ->select('cea_scout_membership.CeaScoutSectionId', 'std_student.name as student_name', 
-                                'std_student.student_code as student_code','std_student.id as StdStudentId')
-                    ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
-                    ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
-                    ->get();
+            $roles = DB::table('cea_scout_membership')
+                        ->join('cea_scout_section', 'cea_scout_section.id', '=', 'cea_scout_membership.CeaScoutSectionId')
+                        ->join('cea_scout_section_level', 'cea_scout_section_level.id', '=', 'cea_scout_membership.CeaScoutSectionLevelId')
+                        ->join('std_student', 'cea_scout_membership.StdStudentId', '=', 'std_student.id')
+                        ->join('std_student_class_stream', 'std_student.id', '=', 'std_student_class_stream.StdStudentId') 
+                        ->select('cea_scout_membership.CeaScoutSectionId', 'std_student.name as student_name', 
+                                    'std_student.student_code as student_code','std_student.id as StdStudentId')
+                        ->whereIn('std_student_class_stream.OrgClassStreamId',$class_details['org_class_stream_id']) 
+                        ->whereIn('std_student_class_stream.SectionDetailsId',$class_details['section_id']) 
+                        ->get();
+        } else {
+            $roles =[];
+        }
+        
         return $this->successResponse($roles);
     }
 

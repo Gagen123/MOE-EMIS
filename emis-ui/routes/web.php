@@ -714,6 +714,7 @@ Route::prefix('students')->group(function () {
         Route::post('/saveStudentDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentDetails'])->name('saveStudentDetails');
         Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
         Route::post('/saveStudentClassDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentClassDetails'])->name('saveStudentClassDetails');
+        Route::post('/saveAdmitStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveAdmitStudent'])->name('saveAdmitStudent');
         Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentList'])->name('loadStudentList');
         Route::get('/loadStudentAdmissionList', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentAdmissionList'])->name('loadStudentAdmissionList');
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
@@ -726,6 +727,7 @@ Route::prefix('students')->group(function () {
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
         Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'deleteclassDetails'])->name('deleteclassDetails');
+        Route::post('/saveSupplementaryStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveSupplementaryStudent'])->name('saveSupplementaryStudent');
     });
 
     Route::prefix('sen')->group(function (){
