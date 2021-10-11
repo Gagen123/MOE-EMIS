@@ -2,7 +2,7 @@ const routes = [
 
     { path: '/org_approvalMaster_link', component: require('./components/masters/organization_masters/OrgAppMasterIndex.vue').default,
       children:[
-            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
+            { path: '/',name:'org_approvalMaster_link', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
                 { path: '/org_service_index',
                 component: require('./components/masters/organization_masters/service/service_index.vue').default ,
                 children:
@@ -66,7 +66,7 @@ const routes = [
 
     { path: '/org_structureMaster_index', component: require('./components/masters/organization_masters/OrgStructureMasterIndex.vue').default,
       children:[
-            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
+            { path: '/',name:'org_structureMaster_index', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
             { path: '/construction_type_index',
                 component: require('./components/masters/organization_masters/constructionType/constructionType_index.vue').default ,
                  children: [
@@ -140,7 +140,7 @@ const routes = [
 
     { path: '/org_furNequiMaster_index', component: require('./components/masters/organization_masters/OrgFurNequiMasterIndex.vue').default,
       children:[
-            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
+            { path: '/',name:'org_furNequiMaster_index', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
             { path: '/furnitureType_index',
             component: require('./components/masters/organization_masters/furniture_type/furniture_type_index.vue').default ,
               children: [
@@ -208,7 +208,7 @@ const routes = [
 
     { path: '/org_facilityMaster_index', component: require('./components/masters/organization_masters/OrgFacilityMasterIndex.vue').default,
       children:[
-            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
+            { path: '/',name:'org_facilityMaster_index', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
             { path: '/program_type_index',
               component: require('./components/masters/organization_masters/program_type/program_type_index.vue').default ,
                 children: [
@@ -283,7 +283,7 @@ const routes = [
 
     { path: '/org_otherMaster_index', component: require('./components/masters/organization_masters/OrgOtherMasterIndex.vue').default,
       children:[
-            { path: '/',name:'OrganizationMasterIndex', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
+            { path: '/',name:'org_otherMaster_index', component: require('./components/masters/organization_masters/OrganizationMasterGuide.vue').default},
                 { path: '/fencing_index',
                 component: require('./components/masters/organization_masters/fencing/fencing_index.vue').default ,
                 children: [
@@ -628,12 +628,13 @@ const routes = [
             { path: '/list_compound_details', name:'list_compound_details', component: require('./components/organization/general/compound_details/list_compound_details.vue').default },
           ]
         },
-        { path: '/connectivity_details', name:'connectivity_details',
-        component: require('./components/organization/general/connectivity/edit_connectivity.vue').default,
-        children:
+
+        { path: '/connectivity_details',
+            component: require('./components/organization/general/connectivity/edit_connectivity.vue').default,
+            children:
             [
                 { path: '',name:'index_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
-                { path: '',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
+                { path: '/edit_connectivity',name:'edit_connectivity', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
                 { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },
             //    { path: '/add_connectivity', name:'ConnectivityAdd', component: require('./components/organization/general/connectivity/create_connectivity.vue').default },
             //    { path: '/edit_connectivity', name:'ConnectivityEdit', component: require('./components/organization/general/connectivity/edit_connectivity.vue').default },

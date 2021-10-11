@@ -7,9 +7,8 @@
                         <tr>
                             <th>SL#</th>
                             <th>Name</th>
-                            <th>Award Category</th>
                             <th>Award Type</th>
-                            <th>Award By</th>
+                            <th>Year</th>
                             <th>Date</th>
                             <th class="pl-5 ml-5 pr-5 ml-5">Action</th>
                         </tr>
@@ -17,14 +16,13 @@
                     <tbody>
                         <tr v-for="(item, index) in staffaward_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staff.emp_id}}:{{ item.staff.name}}</td>
-                            <td>{{ item.award_category}}</td>
-                            <td>{{ item.award_type}}</td>
-                            <td>{{ item.award_given_by}}</td>
-                            <td>{{ item.date}}</td>
+                            <td>{{ item.name}} </td>
+                            <td>{{ item.awardtype}}</td>
+                            <td>{{ item.year}}</td>
+                            <td>{{ item.awarddate}}</td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm btn-flat text-white editbtn"  @click="loadeditpage(item)">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm btn-flat text-white deletebtn" @click="deleteitem(item.id)">Delete</a>
+                                <a v-if="item.type=='MOE'" href="#" class="btn btn-success btn-sm btn-flat text-white editbtn"  @click="loadeditpage(item,'edit_staff_awards')">Edit</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white deletebtn" @click="loadeditpage(item,'view_staff_awards')">View</a>
                             </td>
                         </tr>
                     </tbody>
@@ -82,10 +80,10 @@ export default {
                 }
             });
         },
-
-        loadeditpage(itme){
-            this.$router.push({name:"edit_staff_awards",params:{data:itme}});
+        loadeditpage(itme,route){
+            this.$router.push({name:route,params:{data:itme}});
         }
+
     },
     created(){
         // if(this.$route.query.deleteopt==1){
@@ -100,10 +98,7 @@ export default {
     },
     watch: {
         staffaward_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#award-table").DataTable()
-            });
+            this.applydatatable('award-table');
         }
     },
 }

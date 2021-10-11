@@ -25,7 +25,7 @@ const routes = [
             // student data import
             { path: '/student_index', component: require('./components/projection_indicator/data_import/students/student_index.vue').default,
                 children: [
-                    { path: '/', name:'Dahe_index', component: require('./components/projection_indicator/data_import/students/list_student.vue').default },
+                    { path: '/', name:'student_index', component: require('./components/projection_indicator/data_import/students/list_student.vue').default },
                     { path: '/list_student', name:'list_student', component: require('./components/projection_indicator/data_import/students/list_student.vue').default },
                     { path: '/add_student', name:'add_student', component: require('./components/projection_indicator/data_import/students/add_student.vue').default },
                     { path: '/edit_student', name:'edit_student', component: require('./components/projection_indicator/data_import/students/edit_student.vue').default },
@@ -245,7 +245,7 @@ const routes = [
                     { path: '/ecr_teacher_recur_index',name:'ecr_teacher_recur_index', component: require('./components/projection_indicator/teacher_Facilitator/teacher/ecr_index.vue').default },
                 ],
             },
-            
+
         ],
     },
     { path: '/enrollment_Projection_index',

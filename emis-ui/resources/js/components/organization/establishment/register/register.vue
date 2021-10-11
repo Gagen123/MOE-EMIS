@@ -35,7 +35,7 @@
                                 <label class="col-md-12 ">School/ECR/ECCD:<span class="text-danger">*</span></label>
                                 <select name="organizationid" id="organizationid" v-model="Applicationdetailsform.organizationid" :class="{ 'is-invalid': Applicationdetailsform.errors.has('organizationid') }" class="form-control select2">
                                     <option value="">--- Please Select ---</option>
-                                    <option v-for="(item, index) in publicorgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
+                                    <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.proposedName }}</option>
                                 </select>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-2">
@@ -252,7 +252,8 @@ export default {
             axios.get('organization/loadApprovedOrgs/'+type)
             .then((response) => {
                 let data=response.data.data;
-                alert(JSON.stringify(data))
+                // alert(JSON.stringify(data));
+               
                 // if(type=="Private"){
                 //     this.orgList   =   data;
                 // }

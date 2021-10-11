@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
+        <!-- <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-header pb-0 pt-2">
                 <h3 class="card-title"><b>Search </b></h3>
                 <div class="card-tools">
@@ -52,35 +52,37 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
-                <table id="secondment_table" class="table table-sm table-bordered table-striped">
+                <table id="seperation_table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Emp Id</th>
+                            <th>StaffID</th>
+                            <th>RefNo</th>
                             <th>Name</th>
-                            <th>Position Title</th>
+                            <!-- <th>Position Title</th> -->
                             <th>Seperation Type</th>
-                            <th>From Date</th>
+                            <th>Effective Date</th>
+                            <th>Approved Date</th>
+
                             <!-- <th>Working Agency</th> -->
-                            <th class="pr-4 pl-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in staffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staff_detials.emp_id}}</td>
-                            <td>{{ item.staff_detials.name}}</td>
-                            <td>{{ positiontitleList[item.staff_detials.position_title_id]}}</td>
-                            <td>{{ seperationList[item.seperation_id]}}</td>
-                            <td>{{ item.from_date}}</td>
+                            <td>{{ item.StaffID}}</td>
+                            <td>{{ item.RefNo}}</td>
+                            <td>{{ item.staffName}}</td>
+                            <!-- <td>{{ positiontitleList[item.staff_detials.position_title_id]}}</td> -->
+                            <td v-if="item.type!=null">{{ item.type.mastertypename }}</td>
+                            <td v-else></td>
+                            <td>{{ item.EffectiveDate}}</td>
+                            <td>{{ item.ApprovedDate}}</td>
 
                             <!-- <td>{{ item.staff_detials.working_agency}}</td> -->
-                            <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -112,7 +114,6 @@ export default {
             axios.get(uri)
             .then(response => {
                 let data = response;
-                // this.seperationList=data.data.data;
                 for(let i=0;i<data.data.data.length;i++){
                     this.seperationList[data.data.data[i].id] = data.data.data[i].name;
                 }
@@ -192,23 +193,23 @@ export default {
         }
     },
     async mounted(){
-        this.dzongkhagList= await this.loadactivedzongkhags();
-        this.loadpositionTitleList();
-        this.loadactiveSeperationListList();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
-        });
+        // this.dzongkhagList= await this.loadactivedzongkhags();
+        // this.loadpositionTitleList();
+        // this.loadactiveSeperationListList();
+        // $('.select2').select2();
+        // $('.select2').select2({
+        //     theme: 'bootstrap4'
+        // });
+        // $('.select2').on('select2:select', function (el){
+        //     Fire.$emit('changefunction',$(this).attr('id'));
+        // });
 
-        Fire.$on('changefunction',(id)=> {
-            this.changefunction(id);
-        });
-        axios.get('common/getSessionDetail')
-        .then(response =>{
-            let data = response.data.data;
+        // Fire.$on('changefunction',(id)=> {
+        //     this.changefunction(id);
+        // });
+        // axios.get('common/getSessionDetail')
+        // .then(response =>{
+        //     let data = response.data.data;
             // if(data['acess_level']=="Org"){
             //     this.loadstff('userOrgWiseCivilServent/ALL_TYPE');
             // }
@@ -219,25 +220,25 @@ export default {
             //     this.loadstff('allCivilServent/ALL_TYPE');
             //     this.showedit=true;
             // }
-            axios.get('staff/staffSepSecController/loadSecondment/all/Seperation')
-            .then((response) => {
-                this.staffList =  response.data;
-             })
-            .catch((error) => {
-                console.log("Error."+error);
-            });
-        })
-        .catch(errors => {
-            console.log(errors)
+
+            //axios.get('staff/staffSepSecController/loadSecondment/all/Seperation')
+
+        // })
+        // .catch(errors => {
+        //     console.log(errors)
+        // });
+        axios.get('staff/zest/loadSeperation')
+        .then((response) => {
+            this.staffList =  response.data.data;
+            })
+        .catch((error) => {
+            console.log("Error."+error);
         });
-        this.dt =  $("#secondment_table").DataTable()
+        this.dt =  $("#seperation_table").DataTable()
     },
     watch: {
         staffList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#secondment_table").DataTable()
-            });
+            this.applydatatable('seperation_table');
         }
     },
 

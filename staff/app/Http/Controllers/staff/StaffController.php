@@ -59,7 +59,7 @@ class StaffController extends Controller{
                     'emp_file_code'         =>  'required',)
                 );
             }
-            if($request->isteaching){
+            if(isset($request->isteaching) && $request->isteaching==true){
                 $rules= $rules+['comp_sub'              =>  'required',
                                 'elective_sub1'         =>  'required'];
             }

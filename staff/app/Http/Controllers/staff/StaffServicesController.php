@@ -16,6 +16,10 @@ use App\Models\staff_master_config\LeaveConfiguration;
 use App\Models\staff_master_config\LeaveConfigurationDetials;
 use App\Models\staff_services\LeaveApplication;
 use App\Models\staff\ApplicationSequence;
+use App\Models\staff\PersonalDetails;
+use App\Models\staff_masters\StaffAwardType;
+use App\Models\staff_services\ZestAward;
+
 class StaffServicesController extends Controller{
     use ApiResponser;
     public function __construct() {
@@ -25,7 +29,6 @@ class StaffServicesController extends Controller{
     public function saveStaffAward(Request $request){
         $rules = [
             'staff'             =>  'required',
-            'award_category'    =>  'required',
             'award_given_by'    =>  'required',
             'award_type_id'     =>  'required',
             'place'             =>  'required',
@@ -33,7 +36,6 @@ class StaffServicesController extends Controller{
         ];
         $customMessages = [
             'staff.required'            => 'This field is required',
-            'award_category.required'   => 'This field is required',
             'award_given_by.required'   => 'This field is required',
             'award_type_id.required'    => 'This field is required',
             'date.required'             => 'This field is required',
@@ -71,7 +73,77 @@ class StaffServicesController extends Controller{
     }
 
     public function loadStaffAward($user_id=""){
-        return $this->successResponse(StaffAward::where('created_by',$user_id)->get());
+        $awa=[];
+        $stf_award=ZestAward::get();
+        if($stf_award!=null && $stf_award!="" && sizeof($stf_award)>0){
+            foreach($stf_award as $aw){
+                $awa1=[];
+                $awa1['id']=$aw['ID'];
+                $awa1['year']=$aw['Year'];
+                $awa1['awarddate']=$aw['AwardDate'];
+                $awa1['type']='Zest';
+                $awa1['name']=$aw['FirstName'].' '.$aw['MiddleName'].' '.$aw['LastName'];
+                $aw->id=$aw['ID'];
+                $aw->name=$aw['FirstName'].' '.$aw['MiddleName'].' '.$aw['LastName'];
+                $type=StaffAwardType::where('id',$aw['AwardTypeID'])->first();
+                if($type!=null && $type!=""){
+                    $awa1['awardtype']=$type->name;
+                    $aw->awardtype=$type->name;
+                }
+                array_push($awa,$awa1);
+            }
+        }
+        $moeaward=StaffAward::get();
+        if($moeaward!=null && $moeaward!="" && sizeof($moeaward)>0){
+            foreach($moeaward as $aw){
+                $awa1=[];
+                $awa1['id']=$aw['id'];
+                $awa1['year']=$aw['date'];
+                $awa1['awarddate']=$aw['date'];
+                $awa1['type']='MOE';
+                $staf=PersonalDetails::where('id',$aw['staff_id'])->first();
+                if($staf!=null && $staf!=""){
+                    $awa1['name']=$staf['name'];
+                    $aw->name=$staf->name;
+                }
+                $type=StaffAwardType::where('id',$aw['award_type_id'])->first();
+                if($type!=null && $type!=""){
+                    $awa1['awardtype']=$type->name;
+                    $aw->awardtype=$type->name;
+                }
+                array_push($awa,$awa1);
+            }
+        }
+        return $this->successResponse($awa);
+    }
+
+    public function loadStaffAwardforView($id=""){
+        $type=explode('__',$id)[1];
+        $id=explode('__',$id)[0];
+        if($type=="Zest"){
+            $stf_award=ZestAward::where('ID',$id)->first();
+            if($stf_award!=null && $stf_award!=""){
+                $type=StaffAwardType::where('id',$stf_award->AwardTypeID)->first();
+                if($type!=null && $type!=""){
+                    $stf_award->awardtype=$type->name;
+                }
+                $stf_award->awardtype=$type->name;
+            }
+        }else{
+            $stf_award=StaffAward::where('id',$id)->first();
+            if($stf_award!=null && $stf_award!=""){
+                $type=StaffAwardType::where('id',$stf_award->award_type_id)->first();
+                if($type!=null && $type!=""){
+                    $stf_award->awardtype=$type->name;
+                }
+                $staf=PersonalDetails::where('id',$stf_award->staff_id)->first();
+                if($staf!=null && $staf!=""){
+                    $stf_award->name=$staf->name;
+                }
+            }
+        }
+
+        return $this->successResponse($stf_award);
     }
 
     public function deleteStaffServices($type="",$id=""){

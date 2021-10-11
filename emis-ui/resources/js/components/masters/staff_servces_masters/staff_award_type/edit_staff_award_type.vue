@@ -51,6 +51,7 @@ export default {
                 name: '',
                 code:'',
                 status: 1,
+                type:'MOE',
                 model:'StaffAwardType',
                 action_type:'edit',
             })

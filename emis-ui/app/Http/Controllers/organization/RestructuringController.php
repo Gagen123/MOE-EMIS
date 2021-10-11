@@ -325,8 +325,8 @@ class RestructuringController extends Controller
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
-            $work_status=0;
             $org_status="Rejected";
+            $work_status=0;
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
@@ -430,6 +430,7 @@ class RestructuringController extends Controller
             'newOrGewog'               =>       $request['gewog1'],
             'newOrgchiwog'             =>       $request['chiwog1'],
             'newOrgLocation'           =>       $request['location1'],
+            'proposedName'             =>       $request['proposedName'],
             'OrgType'                  =>       $request['newOrgType'],
             'id'                       =>       $request['id'],
             'user_id'                  =>       $this->userId()
@@ -526,8 +527,8 @@ class RestructuringController extends Controller
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
-            $work_status=0;
             $org_status="Rejected";
+            $work_status=0;
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
@@ -594,7 +595,7 @@ class RestructuringController extends Controller
             'user_id'                      =>   $this->userId()
         ];
         $work_response_data= $this->apiService->createData('emis/organization/merger/updateMergerDetails', $estd);
-        // return $work_response_data;
+        return $work_response_data;
     }
     public function saveClosure(Request $request){
         $files = $request->attachments;

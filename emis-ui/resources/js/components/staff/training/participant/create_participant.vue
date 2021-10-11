@@ -18,7 +18,7 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Trainig Type:</label><br>
-                                <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
+                                <span class="text-blue text-bold">{{ form.training_type}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Course Title:</label><br>
@@ -462,7 +462,7 @@ export default {
                 // }
                 else{
                     this.getParticipantDetails(data.id);
-                    this.form.training_type=data.training_type;
+                    this.form.training_type=data.training_type_name;
                     $('#training_type').val(data.training_type).trigger('change');
                     this.form.course_title=data.course_title;
                     this.form.organizer=data.organizer;

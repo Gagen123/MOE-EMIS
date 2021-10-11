@@ -28,7 +28,6 @@ class MergerController extends Controller{
     }
 
     public function saveMerger(Request $request){
-        dd($request);
         $last_seq=ApplicationSequence::where('service_name','Merger')->first();
         if($last_seq==null || $last_seq==""){
             $last_seq=1;
@@ -72,13 +71,32 @@ class MergerController extends Controller{
         ];
         
         $establishment = ApplicationDetails::create($data);
-
+        if($request->newOrgType =="newOrg"){
+            $merger_data = [
+                'ApplicationDetailsId'          =>       $establishment->id,
+                'service'                       =>       'Merger',
+                'OldOrganizationId'             =>        $request['orgId1'],
+                'OldOrganizationId2'            =>       $request['orgId2'],
+                'proposedName'                  =>       $request['newOrgName'],
+                'levelId'                       =>       $request['newOrgLevel'],
+                'Category'                      =>       $request['newOrgCategory'],
+                'Dzo'                           =>       $request['newOrgDzo'],
+                'Gewog'                         =>       $request['newOrgchiwog'],
+                'chiwog'                        =>       $request['newOrgchiwog'],
+                'locationId'                    =>       $request['newOrgLocation'],
+                'OrgType'                       =>       $request['OrgType'],
+                'created_by'                    =>       $request->user_id,
+                'status'                        =>       'Submitted',
+                'created_at'                    =>       date('Y-m-d h:i:s')
+            ];
+        }
+        else{
         $merger_data = [
             'ApplicationDetailsId'          =>       $establishment->id,
             'service'                       =>       'Merger',
             'OldOrganizationId'             =>        $request['orgId1'],
             'OldOrganizationId2'            =>       $request['orgId2'],
-            'proposedName'                  =>       $request['newOrgName'],
+            'proposedName'                  =>       $request['proposedName'],
             'levelId'                       =>       $request['newOrgLevel'],
             'Category'                      =>       $request['newOrgCategory'],
             'Dzo'                           =>       $request['newOrgDzo'],
@@ -90,6 +108,7 @@ class MergerController extends Controller{
             'status'                        =>       'Submitted',
             'created_at'                    =>       date('Y-m-d h:i:s')
         ];
+    }
 
         $merger_data = ApplicationEstMerger::create($merger_data);
         
@@ -107,30 +126,29 @@ class MergerController extends Controller{
     }
     
     public function updateMergerApplication(Request $request){
-       if($request->status=="Approved"){
         $merger =[
             'status'                       =>   $request->status,
             'remarks'                      =>   $request->remarks,
             'updated_by'                   =>   $request->user_id,
             'updated_at'                   =>   date('Y-m-d h:i:s'),
         ];
-        if(sizeof($request->attachment_details)>0){
-            $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
-            foreach($request->attachment_details as $att){
-                $attach =[
-                    'ApplicationDetailsId'      =>  $application_details->id,
-                    'path'                      =>  $att['path'],
-                    'user_defined_file_name'    =>  $att['user_defined_name'],
-                    'name'                      =>  $att['original_name'],
-                    'upload_type'               =>  $request->status,
-                    'created_by'                =>  $request->user_id,
-                ];
-                $response_data = ApplicationAttachments::create($attach);
+        $establishment= ApplicationDetails::where('application_no', $request->application_number)->update($merger);
+        if($request->attachment_details!="" ){
+            if(sizeof($request->attachment_details)>0){
+                $application_details=  ApplicationDetails::where('application_no',$request->application_number)->first();
+                foreach($request->attachment_details as $att){
+                    $attach =[
+                        'ApplicationDetailsId'      =>  $application_details->id,
+                        'path'                      =>  $att['path'],
+                        'user_defined_file_name'    =>  $att['user_defined_name'],
+                        'name'                      =>  $att['original_name'],
+                        'upload_type'               =>  $request->update_type,
+                    ];
+                    $establishment = ApplicationAttachments::create($attach);
+                }
             }
         }
-    }
-
-        $establishment = ApplicationDetails::where('application_no', $request->application_number)->update($merger);
+       
         //update the main organizaiton 
         return $this->successResponse($establishment, Response::HTTP_CREATED);
     }
