@@ -4,7 +4,7 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Emp Id:</label><br>
-                    {{emp_id}}
+                    {{emp_id}} 
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Name:</label><br>
@@ -69,7 +69,9 @@ export default {
                 this.form.remarks= '';
             }
             if(type=="save"){
+             
                 this.form.post('staff/staffUpdateController/saveStaffcareerStage')
+               
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -93,7 +95,7 @@ export default {
             }
 
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+        loadactivecureerstageList(uri="staff/loadStaffMasters/active/CureerStage"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -120,6 +122,7 @@ export default {
                 console.log('Error: '+error);
             });
         },
+        
     },
      mounted(){
         $('.select2').select2();
@@ -138,6 +141,7 @@ export default {
         this.loadpositionTitleList(this.$route.query.data.position_title_id);
         this.emp_id=this.$route.query.data.emp_id;
         this.name=this.$route.query.data.name;
+        this.form.staff_id=this.$route.query.data.id;
         this.form.id=this.$route.query.data.id;
         this.form.currier_stage=this.$route.query.data.cureer_stagge_id;
         $('#cureer_stagge_id').val(this.$route.query.data.cureer_stagge_id).trigger('change');

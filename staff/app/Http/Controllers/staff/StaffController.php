@@ -424,7 +424,9 @@ class StaffController extends Controller{
     }
 
     public function loadNominations($staff_id="",$user_id=""){
+       // dd($staff_id);
         $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
+
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
             foreach($nomineeDetails as $nom){
                 $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();

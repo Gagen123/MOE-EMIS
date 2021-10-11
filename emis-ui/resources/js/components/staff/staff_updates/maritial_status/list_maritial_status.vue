@@ -130,13 +130,22 @@ export default {
                 this.orgList=await this.schoolList($('#dzongkhag_id').val());
             }
         },
+        // async loaddata(){
+        //     this.staffList=[];
+        //     if($('#org_id').val()!="ALL"){
+        //         this.staffList=await this.staffSchoolwise($('#org_id').val());
+        //     }
+        //     if($('#dzongkhag_id').val()!="ALL" && $('#org_id').val()=='ALL'){
+        //         this.staffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
+        //     }
+        // }
         async loaddata(){
-            this.staffList=[];
+            this.substaffList=[];
             if($('#org_id').val()!="ALL"){
-                this.staffList=await this.staffSchoolwise($('#org_id').val());
+                this.substaffList=await this.staffSchoolwise($('#org_id').val());
             }
             if($('#dzongkhag_id').val()!="ALL" && $('#org_id').val()=='ALL'){
-                this.staffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
+                this.substaffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
             }
         }
     },

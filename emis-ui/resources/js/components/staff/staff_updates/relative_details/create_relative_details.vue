@@ -331,7 +331,7 @@ export default {
         //         console.log("Error:"+error)
         //     });
         // },
-        loadrelationship(uri = 'masters/loadStaffMasters/all_active_relationship_list'){
+        loadrelationship(uri = 'staff/loadStaffMasters/active/Relationship'){
             axios.get(uri)
             .then(response => {
                 let data = response;
