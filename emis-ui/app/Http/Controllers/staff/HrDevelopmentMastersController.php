@@ -53,7 +53,6 @@ class HrDevelopmentMastersController extends Controller{
 
 
     public function loadHrDevelopmentMastersData($type=""){
-       
         $response_data= $this->apiService->listData('emis/masters/loadHrDevelopmentMastersData/'.$type);
         return $response_data;
     }
