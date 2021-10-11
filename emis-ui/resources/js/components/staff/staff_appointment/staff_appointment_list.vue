@@ -42,7 +42,7 @@ export default {
             dzo_id:'',
             substaffList:[],
             genderArray:{},
-            dt:''
+            dt:'',
         }
     },
     methods: {
@@ -55,10 +55,11 @@ export default {
         axios.get('staff/zest/loadappointment')
         .then((response) => {
             this.substaffList =  response.data.data;
-            })
+        })
         .catch((error) =>{
             console.log("Error."+error);
         });
+        this.dt =  $("#data-table").DataTable();
     },
     watch: {
         substaffList(){

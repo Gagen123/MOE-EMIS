@@ -80,15 +80,17 @@ const routes = [
                     { path: '/edit_SeperationMaster', name:'edit_SeperationMaster', component: require('./components/masters/staff_masters/SeperationMaster/edit_SeperationMaster.vue').default },
                 ],
             },
-            { path: '/contract_category',
-                component: require('./components/masters/staff_masters/contract_category/contract_category_index.vue').default,
-                children:[
-                    { path: '/', name:'contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
-                    { path: '/list_contract_category',name:'list_contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
-                    { path: '/create_contract_category',name:'create_contract_category', component: require('./components/masters/staff_masters/contract_category/create_contract_category.vue').default },
-                    { path: '/edit_contract_category', name:'edit_contract_category', component: require('./components/masters/staff_masters/contract_category/edit_contract_category.vue').default },
-                ],
-            },
+
+            //duplicate route
+            // { path: '/contract_category',
+            //     component: require('./components/masters/staff_masters/contract_category/contract_category_index.vue').default,
+            //     children:[
+            //         { path: '/', name:'contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+            //         { path: '/list_contract_category',name:'list_contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+            //         { path: '/create_contract_category',name:'create_contract_category', component: require('./components/masters/staff_masters/contract_category/create_contract_category.vue').default },
+            //         { path: '/edit_contract_category', name:'edit_contract_category', component: require('./components/masters/staff_masters/contract_category/edit_contract_category.vue').default },
+            //     ],
+            // },
 
         ],
     },

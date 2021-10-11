@@ -105,7 +105,7 @@ const routes = [
                     { path: '/create-student-elective-subject',name:'create_students_elective_subject', component:require('./components/academics/students_elective_subject/create_students_elective_subject.vue').default},
                 ]
             },
-        
+
             { path:'/student-attendance', component:require('./components/academics/student_attendance/student_attendance_index.vue').default,
                 children: [
                     { path: '', name:'student-attendance', component:require('./components/academics/student_attendance/list_student_attendance.vue').default},
@@ -139,7 +139,8 @@ const routes = [
                     { path: '/view-consolidated-result', name: 'view_consolidated_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
                     { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
                     { path: '/view-detail-consolidated-result', name: 'view_detail_consolidated_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
-                    { path: '/progress-report-col', name: 'final_result_subject_columns', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
+                    //changed name: from final_result_subject_columns to progress-report-col by tshewang as it was duplicate
+                    { path: '/progress-report-col', name: 'progress-report-col', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
                     { path: '/progress-report-row', name: 'final_result_subject_rows', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
 
                 ]
@@ -161,11 +162,12 @@ const routes = [
                 { path: '/edit-publish-result',name:'edit_publish_result', component:require('./components/academics/publish_result/edit_publish_result.vue').default},
                 { path: '/view-publish-result', name: 'view_detail_publish_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
                 { path: '/progress-report-col', name: 'final_result_subject_columns', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
-                { path: '/progress-report-row', name: 'final_result_subject_rows', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
+                //changed name from final_result_subject_rows to progress-report-row by tshewang as it show duplicate routes
+                { path: '/progress-report-row', name: 'progress-report-row', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
 
             ]
         },
-            
+
         ]
     }
 ]
