@@ -694,7 +694,6 @@ export default {
     },
     created(){
         this.loadScreenDetails();
-        this.getOrgList();
         this.getLevel();
         this.getLocation();
         this.getLevel1();

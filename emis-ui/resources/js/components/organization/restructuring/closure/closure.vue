@@ -302,8 +302,6 @@ export default {
                 this.classStreamList = response.data.data;
             });
         },
-
-
         /**
          * method to get active dzongkhag list
          */
@@ -366,8 +364,6 @@ export default {
                 console.log("Error in getting villages:"+error)
             });
         },
-
-
         /**
          * method to get class in checkbox
          */
