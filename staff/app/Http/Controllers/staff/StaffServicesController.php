@@ -191,7 +191,8 @@ class StaffServicesController extends Controller{
     }
 
     public function loadStaffResponsibility($user_id=""){
-        return $this->successResponse(StaffResponsiblity::where('created_by',$user_id)->get());
+        $roles=StaffResponsiblity::with('type')->get();
+        return $this->successResponse($roles);
     }
 
     public function saveStaffDisaplinary(Request $request){
