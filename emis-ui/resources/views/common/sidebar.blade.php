@@ -631,6 +631,14 @@
                                 </p>
                             </router-link>
                         </li>
+                        <li class="nav-item" id="admission">
+                            <router-link to="/supplementary_student" class="nav-link">
+                                <p>
+                                    <i class="fa fa-angle-double-right nav-icon"></i>
+                                    Private/Supplementary
+                                </p>
+                            </router-link>
+                        </li>
                         <li class="nav-item" id="studentservices">
                             <router-link to="/update_student_details" class="nav-link">
                                 <p>

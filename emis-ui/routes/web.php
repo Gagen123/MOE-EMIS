@@ -468,11 +468,17 @@ Route::prefix('staff')->group(function () {
 
     Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
 
+    Route::prefix('zest')->group(function () {
+        Route::get('/getAppointment/{year}', [App\Http\Controllers\staff\ZestController::class, 'getAppointment'])->name('getAppointment');
+        Route::post('/saveAppointmentDetails', [App\Http\Controllers\staff\ZestController::class, 'saveAppointmentDetails'])->name('saveAppointmentDetails');
+        Route::get('/loadappointment', [App\Http\Controllers\staff\ZestController::class, 'loadappointment'])->name('loadappointment');
+
+        Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
+    });
+
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
-
-
 
     Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen
@@ -583,6 +589,8 @@ Route::prefix('staff')->group(function () {
     Route::prefix('staffServices')->group(function (){
         Route::post('/saveStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffAward'])->name('saveStaffAward');
         Route::get('/loadStaffAward', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffAward'])->name('loadStaffAward');
+        Route::get('/loadStaffAwardforView/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffAwardforView'])->name('loadStaffAwardforView');
+
         Route::get('/deleteStaffServices/{type}/{id}', [App\Http\Controllers\staff\StaffServicesController::class, 'deleteStaffServices'])->name('deleteStaffServices');
         Route::post('/saveStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'saveStaffResponsibility'])->name('saveStaffResponsibility');
         Route::get('/loadStaffResponsibility', [App\Http\Controllers\staff\StaffServicesController::class, 'loadStaffResponsibility'])->name('loadStaffResponsibility');
@@ -715,6 +723,7 @@ Route::prefix('students')->group(function () {
         Route::post('/saveStudentDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentDetails'])->name('saveStudentDetails');
         Route::post('/saveStudentGardianDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentGardianDetails'])->name('saveStudentGardianDetails');
         Route::post('/saveStudentClassDetails', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveStudentClassDetails'])->name('saveStudentClassDetails');
+        Route::post('/saveAdmitStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveAdmitStudent'])->name('saveAdmitStudent');
         Route::get('/loadStudentList/{param}', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentList'])->name('loadStudentList');
         Route::get('/loadStudentAdmissionList', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentAdmissionList'])->name('loadStudentAdmissionList');
         Route::post('/loadStudentListwithsearch', [App\Http\Controllers\student\StudentAdmissionController::class, 'loadStudentListwithsearch'])->name('loadStudentListwithsearch');
@@ -727,6 +736,7 @@ Route::prefix('students')->group(function () {
         Route::post('/updateStudentAdmission', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentAdmission'])->name('updateStudentAdmission');
         Route::post('/updateStudentTransfer', [App\Http\Controllers\student\StudentAdmissionController::class, 'updateStudentTransfer'])->name('updateStudentTransfer');
         Route::get('/deleteclassDetails/{id}', [App\Http\Controllers\student\StudentAdmissionController::class, 'deleteclassDetails'])->name('deleteclassDetails');
+        Route::post('/saveSupplementaryStudent', [App\Http\Controllers\student\StudentAdmissionController::class, 'saveSupplementaryStudent'])->name('saveSupplementaryStudent');
     });
 
     Route::prefix('sen')->group(function (){

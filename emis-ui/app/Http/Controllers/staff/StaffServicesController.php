@@ -22,7 +22,6 @@ class StaffServicesController extends Controller{
     public function saveStaffAward(Request $request){
         $rules = [
             'staff'             =>  'required',
-            'award_category'    =>  'required',
             'award_given_by'    =>  'required',
             'award_type_id'     =>  'required',
             'place'             =>  'required',
@@ -30,7 +29,6 @@ class StaffServicesController extends Controller{
         ];
         $customMessages = [
             'staff.required'            => 'This field is required',
-            'award_category.required'   => 'This field is required',
             'award_given_by.required'   => 'This field is required',
             'award_type_id.required'    => 'This field is required',
             'date.required'             => 'This field is required',
@@ -59,6 +57,11 @@ class StaffServicesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffAward/'.$this->userId());
         return $response_data;
     }
+    public function loadStaffAwardforView($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffAwardforView/'.$id);
+        return $response_data;
+    }
+
 
     public function deleteStaffServices($type="",$id=""){
         $response_data= $this->apiService->listData('emis/staff/staffServices/deleteStaffServices/'.$type.'/'.$id);

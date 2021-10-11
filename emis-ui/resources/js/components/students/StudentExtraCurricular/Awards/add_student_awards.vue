@@ -1,6 +1,11 @@
 <template>
     <div>
         <form>
+            <div class="alert alert-warning alert-dismissible" style="display:none" id="warning">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-exclamation-triangle"></i> Information!</h5>
+                <div id="message"></div>
+            </div>
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label class="mb-0.5">Class & Section:<i class="text-danger">*</i></label>
@@ -80,6 +85,7 @@
 export default {
     data(){
         return {
+            is_classTeacher:'1',
             studentList:[],
             classSection:[],
             awardList:[],
@@ -91,6 +97,7 @@ export default {
             id:'3',
 
             student_award_form: new form({
+                is_classTeacher:'1',
                 id:'',
                 class_section:'',
                 student: '',
@@ -110,19 +117,26 @@ export default {
             .then(response =>{
                 let data = response.data.data
                 this.classSection = data;
-                data.forEach((item)=>{
-                    this.classId = item.org_class_id
-                    if(item.org_stream_id != null){
-                        this.streamId = item.org_stream_id;
-                    }else if(item.org_section_id != null){
-                        this.sectionId = item.org_section_id;
-                    }else{
+                if(data != null && data !=''){
+                    data.forEach((item)=>{
                         this.classId = item.org_class_id
-                    }
-                    this.OrgClassStreamId = item.org_class_stream_id;
-                    this.orgId = item.org_id;
-                    // this.getStudentBasedOnTeacherClassSect();
-                })
+                        if(item.org_stream_id != null){
+                            this.streamId = item.org_stream_id;
+                        }else if(item.org_section_id != null){
+                            this.sectionId = item.org_section_id;
+                        }else{
+                            this.classId = item.org_class_id
+                        }
+                        this.OrgClassStreamId = item.org_class_stream_id;
+                        this.orgId = item.org_id;
+                        // this.getStudentBasedOnTeacherClassSect();
+                    })
+                } else {
+                    this.is_classTeacher=0;
+                    $('#warning').show();
+                    $('#message').html('User is not assigned as Class Teacher. Please assign class teacher to proceed');
+                }
+                
             })
         },
         loadActiveAwardTypeList(uri="masters/loadActiveStudentMasters/StudentAwardType"){

@@ -9,7 +9,7 @@
                      <th >Class</th>
                      <th >Date of Application</th>
                      <th >Decision On Behalf of Student</th>
-                     <th >Action</th>
+                     <!-- <th >Action</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -27,9 +27,9 @@
                             @click="remove('Rejected',std.StdAdmissionsSchoolsId)"><i class="fa fa-times pr-2"></i> Reject</button>
                         </template>
                     </td>
-                    <td>
+                    <!-- <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(std.id)"><span clas="fa fa-edit"></span>Veiw/Edit</a>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </table>
