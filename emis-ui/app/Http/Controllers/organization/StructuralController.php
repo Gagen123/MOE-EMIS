@@ -34,13 +34,18 @@ class StructuralController extends Controller
         $this->validate($request, $rules, $customMessages);
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
-            'id'                                    => $request['id'],
+            'id'                                    =>  $request['id'],
             'facility'                              =>  $request['facility'],
-           // 'support'                              =>  $request['support'],
+            'no_of_facility'                        =>  $request['no_of_facility'],
+            // 'yearofconstructinNo'                   =>  $request['yearofconstructinNo'],
+            // 'facilitytype'                          =>  $request['facilitytype'],
+            // 'SupportType'                           =>  $request['SupportType'],
+            // 'sizeareatype'                          =>  $request['sizeareatype'],
+            'id'                                    =>  $request['id'],
             'items_received'                        =>  $request->items_received,
             'user_id'                               =>  $this->userId()
         ];
-       // dd( $sport);
+        //dd( $sport);
         // try{
             $response_data= $this->apiService->createData('emis/organization/sport/saveSport', $sport);
             return $response_data;
@@ -87,7 +92,7 @@ class StructuralController extends Controller
     }
     
     public function loadSport(){
-        $orgId=$this->getWrkingAgencyId();
+        $orgId=$this->getWrkingAgencyId(); 
        // dd($orgId);
         $loadSport = $this->apiService->listData('emis/organization/sport/loadSport/'.$orgId);
         return $loadSport;
@@ -143,7 +148,7 @@ class StructuralController extends Controller
             'users'                     =>  $request['users'],
             'user_id'                   =>  $this->userId()
         ];
-      //  dd($infrastructure);
+        // dd($infrastructure);
         $response_data= $this->apiService->createData('emis/organization/infrastructure/saveInfrastructure', $infrastructure);
         return $response_data;
         // try{

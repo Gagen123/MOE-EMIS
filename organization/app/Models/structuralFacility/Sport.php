@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Sport extends Model
 {
     use HasFactory, Uuid;
-    protected $table="sports";
+    protected $table="organization_sports";
 
     /**
      * The attributes that are mass assignable.
@@ -17,10 +17,10 @@ class Sport extends Model
      * @var array
      */
     protected $fillable = [
-        'id', 'organizationId', 'facility', 'type',
-        'number', 'yearOfEstablishment', 'supportedBy',
-        'status', 'sportstype','size',
-        'accessibleToDisabled', 'created_by',
+        'id', 'organizationId', 'facility', 
+        'type','number','yearOfEstablishment','accessibleToDisabled','size',
+        'status','sportstype','supportedBy',
+        'created_by',
         'updated_by', 'created_at', 'updated_at'
     ];
 }

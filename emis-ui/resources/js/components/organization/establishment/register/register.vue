@@ -252,6 +252,7 @@ export default {
             axios.get('organization/loadApprovedOrgs/'+type)
             .then((response) => {
                 let data=response.data.data;
+                alert(JSON.stringify(data))
                 // if(type=="Private"){
                 //     this.orgList   =   data;
                 // }

@@ -531,6 +531,7 @@ class RestructuringController extends Controller
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
+            $work_status=10;
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -593,7 +594,7 @@ class RestructuringController extends Controller
             'user_id'                      =>   $this->userId()
         ];
         $work_response_data= $this->apiService->createData('emis/organization/merger/updateMergerDetails', $estd);
-        return $work_response_data;
+        // return $work_response_data;
     }
     public function saveClosure(Request $request){
         $files = $request->attachments;
@@ -894,7 +895,6 @@ class RestructuringController extends Controller
             'action_by'                 =>$this->userId(),
             'attachment_details'        =>   $attachment_details,
         ];
-        // dd($bifurcation);
         $response_data= $this->apiService->createData('emis/organization/bifurcation/saveBifurcation', $bifurcation);
         $appNo=json_decode($response_data)->data->application_no;
         if($request['action_type']!="edit"){
@@ -963,11 +963,11 @@ class RestructuringController extends Controller
         // dd($service_name,$workflowdet);
         foreach($workflowdet as $work){
             // check with screen name and then type of organization
-            // if($work->Sequence!=1 || $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
-            //     $workflowstatus=$work->Status_Name;
-            //     $screen_id=$work->SysSubModuleId;
-            //     $sequence=$work->Sequence;
-            // }
+            if($work->Sequence!=1 || $work->Establishment_type==str_replace (' ', '_',strtolower($service_name))){
+                $workflowstatus=$work->Status_Name;
+                $screen_id=$work->SysSubModuleId;
+                $sequence=$work->Sequence;
+            }
             if($work->Sequence!=1 && $work->screenName==$service_name){
                 $workflowstatus=$work->Status_Name;
                 $screen_id=$work->SysSubModuleId;
@@ -1001,6 +1001,7 @@ class RestructuringController extends Controller
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
+            $work_status=10;
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -1043,7 +1044,7 @@ class RestructuringController extends Controller
             }
         }
         //change the following for each type of application
-        $estd =[
+        $workflow_data =[
             'status'                         =>   $org_status,
             'actiontype'                     =>   $request->actiontype,
             'ParentOrganizationId'           =>   $request->ParentOrganizationId,
@@ -1061,7 +1062,7 @@ class RestructuringController extends Controller
             'attachment_details'             =>   $attachment_details,
             'user_id'                        =>   $this->userId()
         ];
-        $work_response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcationDetails', $estd);
+        $work_response_data= $this->apiService->createData('emis/organization/bifurcation/updateBifurcationDetails', $workflow_data);
         return $work_response_data;
         // dd($response_data);
         // //Ugyen's old route
