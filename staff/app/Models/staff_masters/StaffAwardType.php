@@ -17,6 +17,7 @@ class StaffAwardType extends Model
         'description',
         'code',
         'status',
+        'type',
         'created_by',
         'created_at',
         'updated_by',

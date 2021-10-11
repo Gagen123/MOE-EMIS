@@ -43,11 +43,11 @@ export default {
         axios.get('common/getScreenAccess/workflow__change_in_sen_details')//workflow will specify that the process have workflow
         .then(response => {
             let data = response.data[0].total_count;
-            // if(data<1){
-            //     $('#screenPermission').show();
-            //     $('#mainform').hide();
-            //     $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
-            // }
+            if(data<1){
+                $('#screenPermission').show();
+                $('#mainform').hide();
+                $('#message').html('This page is not accessible to you. Only DET/TEO can avail this services<br> Thank you');
+            }
         })
         .catch(errors => {
             console.log(errors)

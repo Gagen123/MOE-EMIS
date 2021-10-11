@@ -366,7 +366,6 @@ export default {
     async mounted() {
         this.orgList =await this.orgListUnderUserDzongkhag();
         this.loadScreenDetails();
-        this.loadproposedBy();
         this.loadactivedzongkhagList();
         this.getLevel();
         $('[data-toggle="tooltip"]').tooltip();

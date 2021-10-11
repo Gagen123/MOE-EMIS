@@ -47,13 +47,13 @@
                 </div>
             </div>
             <div class="row form-group">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Award Category:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="award_category" v-model="award_form.award_category" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('award_category') }">
                         <option v-for="(item, index) in awardCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="award_form" field="award_category"></has-error>
-                </div>
+                </div> -->
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Award Type:<span class="text-danger">*</span></label>
                      <select v-model="award_form.award_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': award_form.errors.has('award_type_id') }" class="form-control select2" name="award_type_id" id="award_type_id">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input class="form-control" v-model="award_form.date" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
+                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
             </div>
@@ -144,17 +144,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadAwardType(id){
-            let uri="masters/loadStaffDropdownMasters/StaffAwardType/"+id;
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.awardTypeList =  data;
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
+
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
@@ -174,6 +164,7 @@ export default {
                 this.award_form.status= 1;
             }
             if(type=="save"){
+                this.award_form.date=this.formatYYYYMMDD($('#date').val());
                 this.award_form.post('staff/staffServices/saveStaffAward')
                     .then(() => {
                     Toast.fire({
@@ -223,10 +214,10 @@ export default {
                 this.staffList = [];
                 this.staffList=await this.staffOrgwise($('#org_id').val());
             }
-            if(id=="award_category"){
-                this.award_form.award_category=$('#award_category').val();
-                this.loadAwardType($('#award_category').val());
-            }
+            // if(id=="award_category"){
+            //     this.award_form.award_category=$('#award_category').val();
+            //     this.loadAwardType($('#award_category').val());
+            // }
             if(id=="award_type_id"){
                 this.award_form.award_type_id=$('#award_type_id').val();
             }
@@ -249,6 +240,7 @@ export default {
     },
     async mounted(){
         this.dzongkhagList= await this.loadactivedzongkhags();
+        this.awardTypeList =  await this.loadstaffMasters('byparent__type__MOE','StaffAwardType');
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

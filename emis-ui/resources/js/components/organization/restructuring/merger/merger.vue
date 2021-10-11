@@ -922,8 +922,6 @@ export default {
             this.changefunction(id);
         });
         this.loadScreenDetails();
-        this.getLevel();
-        this.getLevel1();
         this.getLocation1();
         this.getLocation();
         this.getClass();

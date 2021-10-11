@@ -80,15 +80,17 @@ const routes = [
                     { path: '/edit_SeperationMaster', name:'edit_SeperationMaster', component: require('./components/masters/staff_masters/SeperationMaster/edit_SeperationMaster.vue').default },
                 ],
             },
-            { path: '/contract_category',
-                component: require('./components/masters/staff_masters/contract_category/contract_category_index.vue').default,
-                children:[
-                    { path: '/', name:'contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
-                    { path: '/list_contract_category',name:'list_contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
-                    { path: '/create_contract_category',name:'create_contract_category', component: require('./components/masters/staff_masters/contract_category/create_contract_category.vue').default },
-                    { path: '/edit_contract_category', name:'edit_contract_category', component: require('./components/masters/staff_masters/contract_category/edit_contract_category.vue').default },
-                ],
-            },
+
+            //duplicate route
+            // { path: '/contract_category',
+            //     component: require('./components/masters/staff_masters/contract_category/contract_category_index.vue').default,
+            //     children:[
+            //         { path: '/', name:'contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+            //         { path: '/list_contract_category',name:'list_contract_category',  component: require('./components/masters/staff_masters/contract_category/list_contract_category.vue').default },
+            //         { path: '/create_contract_category',name:'create_contract_category', component: require('./components/masters/staff_masters/contract_category/create_contract_category.vue').default },
+            //         { path: '/edit_contract_category', name:'edit_contract_category', component: require('./components/masters/staff_masters/contract_category/edit_contract_category.vue').default },
+            //     ],
+            // },
 
         ],
     },
@@ -560,6 +562,15 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
+            { path: '/staff_appointment',
+                component: require('./components/staff/staff_appointment/staff_appointment_index.vue').default,
+                children:[
+                    { path: '/',name:'staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
+                    { path: '/list_staff_appointment',name:'list_staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
+                    { path: '/create_staff_appointment',name:'create_staff_appointment', component: require('./components/staff/staff_appointment/create_staff_appointment.vue').default },
+                    { path: '/view_staff_appointment',name:'view_staff_appointment', component: require('./components/staff/staff_appointment/view_staff_appointment.vue').default },
+                ],
+            },
             //Transfer reporting from staff transfer
             { path: '/reporting',
             component: require('./components/staff/reporting/report_index.vue').default,
@@ -1020,6 +1031,7 @@ const routes = [
                     { path: '/list_staff_awards',name:'list_staff_awards',  component: require('./components/staff/staff_services/staff_awards/staff_awards_list.vue').default },
                     { path: '/create_staff_awards',name:'create_staff_awards', component: require('./components/staff/staff_services/staff_awards/create_staff_awards.vue').default },
                     { path: '/edit_staff_awards', name:'edit_staff_awards', component: require('./components/staff/staff_services/staff_awards/edit_staff_awards.vue').default },
+                    { path: '/view_staff_awards', name:'view_staff_awards', component: require('./components/staff/staff_services/staff_awards/view_staff_awards.vue').default },
                 ],
             },
             { path: '/staff_responsibilities',

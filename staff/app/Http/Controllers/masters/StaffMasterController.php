@@ -107,6 +107,11 @@ class StaffMasterController extends Controller{
                 'code'   =>  $request->code,
             ];
         }
+        if(isset($request->type)){
+            $master_data = $master_data+[
+                'type'   =>  $request->type,
+            ];
+        }
         if(isset($request->group_id)){
             $master_data = $master_data+[
                 'group_id'   =>  $request->group_id,
