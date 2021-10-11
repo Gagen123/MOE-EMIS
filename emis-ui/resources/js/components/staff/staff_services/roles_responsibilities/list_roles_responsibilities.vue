@@ -15,8 +15,8 @@
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staff.emp_id}}:{{ item.staff.name}}</td>
-                            <td>{{ item.responsibility_name}}</td>
+                            <td><span v-if="item.staff!=null">{{ item.staff.emp_id}}:{{ item.staff.name}}</span></td>
+                            <td>{{ item.type.name}}</td>
                             <td>{{ item.remarks}}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>
@@ -37,16 +37,7 @@ export default {
         }
     },
     methods: {
-        loadgenderList(uri = 'staff/staffServices/loadStaffResponsibility'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.data_list = data;
-            })
-            .catch(function (error){
-               console.log('Error: '+error);
-            });
-        },
+
         deleteitem(id) {
             Swal.fire({
                 text: "Are you sure you wish to delete this ?",
@@ -64,7 +55,7 @@ export default {
                                 icon: 'success',
                                 title: 'record has been deleted.'
                             });
-                            this.loadgenderList();
+                            this.loadstaffList();
                         }
                     })
                     .catch((err) => {
@@ -78,21 +69,27 @@ export default {
                 }
             });
         },
-
         loadeditpage(itme){
             this.$router.push({name:"edit_roles_responsibilities",params:{data:itme}});
+        },
+        async loadstaffList(){
+            await axios.get('staff/staffServices/loadStaffResponsibility')
+            .then(response => {
+                let data = response.data.data;
+                this.data_list = data;
+            })
+            .catch(function (error){
+                console.log('Error: '+error);
+            });
         }
     },
-    created(){
-        this.dt =  $("#award-table").DataTable();
-        this.loadgenderList();
+    mounted(){
+        this.loadstaffList();
+        this.dt =  $("#responsible-table").DataTable();
     },
     watch: {
-        data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-             this.dt =  $("#responsible-table").DataTable()
-            });
+        data_list() {
+            this.applydatatable('responsible-table');
         }
     },
 }

@@ -7,9 +7,11 @@
                         <tr>
                             <th>SL#</th>
                             <th>Name</th>
-                            <th>Date of Offence</th>
+                            <th>Case Type</th>
+                            <th>Case Category</th>
                             <th>Offence Type</th>
-                            <th>Severity</th>
+                            <th>Case Received Date</th>
+                            <th>Case Summary</th>
                             <th class="pl-5 ml-5 pr-5 ml-5">Action</th>
                         </tr>
                     </thead>
@@ -86,15 +88,12 @@ export default {
         }
     },
     created(){
-        this.dt =  $("#award-table").DataTable();
+        this.dt =  $("#responsible-table").DataTable();
         this.loadgenderList();
     },
     watch: {
-        data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-             this.dt =  $("#responsible-table").DataTable()
-            });
+        data_list() {
+            this.applydatatable('responsible-table');
         }
     },
 }

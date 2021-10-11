@@ -8,6 +8,7 @@
                 <span class="fa-pull-right pt-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_staff_awards')" id="listnewbtn"><i class="fa fa-list"></i> List</button>
                     <button type="button" class="btn btn-dark text-white btn-sm" @click="showadprocess('create_staff_awards')" id="addnewbtn"><i class="fa fa-plus"></i> Add New</button>
+                    <button type="button" class="btn btn-dark text-white btn-sm"><i class="fa fa-sync"></i> Sync</button>
                 </span>
             </div>
             <div class="card-body pb-1 mb-0 pt-1 mt-0" id="errormsg">
