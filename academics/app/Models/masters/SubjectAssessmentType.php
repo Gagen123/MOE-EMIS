@@ -21,6 +21,7 @@ class SubjectAssessmentType extends Model
         'class_stream',
         'pass_score',
         'is_elective',
+        'display_order',
         'created_by',
         'created_at',
         'updated_by',

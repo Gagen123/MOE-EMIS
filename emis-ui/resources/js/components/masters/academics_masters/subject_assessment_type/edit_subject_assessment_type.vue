@@ -16,6 +16,7 @@
                                 <th>Pass Score</th>
                                 <th>Is Optional</th>
                                 <th>Show in Result</th>
+                                <th>Display Order</th>
                             </tr>
                         </thead>
                         <tbody id="tbody">
@@ -62,7 +63,7 @@
                                         >
                                     </div>
                                 </td>
-                                   <td>
+                                <td>
                                     <div class="form-check col-lg-8 col-md-8 col-sm-8 col-xs-12 ml-2">
                                         <input 
                                             v-model="classSubjects[index].show_in_result"
@@ -72,6 +73,13 @@
                                             :disabled="!classSubjects[index].sub_selected"
                                         >
                                     </div>
+                                </td>
+                                <td>
+                                    <input 
+                                        v-model="classSubjects[index].display_order"
+                                        class="form-control form-control-sm" 
+                                        type="number" 
+                                    >
                                 </td>
                             </tr>
                         </tbody>
@@ -125,6 +133,7 @@ export default {
                     tempValue['sub_dzo_name'] = item.sub_dzo_name
                     tempValue['sub_selected'] = item.sub_selected
                     tempValue['subject'] = item.subject
+                    tempValue['display_order'] = item.display_order
                     if(item.show_in_result == 1 || item.show_in_result === null){
                         tempValue['show_in_result'] = 1
                     }else{
@@ -207,6 +216,7 @@ export default {
         this.loadRatingTypeList();
         this.loadRatingList();
         this.dt =  $("#subject-assessment-type-table").DataTable({
+            "ordering": false,
             drawCallback: function(dt) {
                 $('.select2').select2().
                 on("select2:select", e => {
@@ -232,6 +242,7 @@ export default {
             this.dt.destroy();
             this.$nextTick(() => {
                 this.dt =  $("#subject-assessment-type-table").DataTable({
+                    "ordering": false,
                     drawCallback: function(dt) {
                         $('.select2').select2().
                         on("select2:select", e => {

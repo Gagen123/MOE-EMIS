@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class AcaResultStudent extends Migration
@@ -24,7 +25,7 @@ class AcaResultStudent extends Migration
             $table->char('admission_no',36);
             $table->date('dob');
             $table->string('score_description',500)->nullable()->default(null);
-            $table->unsignedSmallInteger('roll_no',36);
+            $table->unsignedSmallInteger('roll_no');
             $table->string('special_award',500)->nullable();
             $table->string('responsibility',500)->nullable();
             $table->unsignedTinyInteger('promoted')->comment('0-detained, 1-promoted');
@@ -34,7 +35,17 @@ class AcaResultStudent extends Migration
             $table->timestamps();
 
             $table->primary(['id','academic_year']);
+
         });
+        
+        DB::statement("ALTER TABLE aca_result_student PARTITION BY RANGE(academic_year)(
+            PARTITION before_year_2022 VALUES LESS THAN (2022),
+            PARTITION year_2022 VALUES LESS THAN (2023),
+            PARTITION year_2023 VALUES LESS THAN (2024),
+            PARTITION year_2024 VALUES LESS THAN (2025),
+            PARTITION year_2025 VALUES LESS THAN (2026),
+            PARTITION after_year_2025 VALUES LESS THAN MAXVALUE)"
+        );
     }
 
     /**
