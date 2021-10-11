@@ -201,9 +201,11 @@ class HrDevelopmentMastersController extends Controller{
     }
     public function loadHrDevelopmentMastersData($type=""){
         if($type=="all_training_type_list"){
+           
             return $this->successResponse(TrainingType::all());
         }
         if($type=="active_training_type_list"){
+            //dd('m here');
             return $this->successResponse(TrainingType::where ('status', '1')->get());
         }
 
