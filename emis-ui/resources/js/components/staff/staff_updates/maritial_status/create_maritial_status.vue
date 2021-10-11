@@ -70,7 +70,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details updaetd successfully'
+                        title: 'Details updated successfully'
                     })
                     this.$router.push('/list_maritial_status');
                 })
