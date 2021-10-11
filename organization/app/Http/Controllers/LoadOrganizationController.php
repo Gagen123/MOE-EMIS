@@ -158,14 +158,14 @@ class LoadOrganizationController extends Controller{
 
                 //The following is the transpose of the above query
                 $response_data = DB::select(" SELECT l.name,
-                        COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
-                        COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
-                        SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
-                            ELSE 0 END) AS Total
-                        FROM `organization_details` a
-                        LEFT JOIN `level` l ON l.id = a.levelId
-                        WHERE category = 'public_school' OR category = 'private_school'
-                        GROUP BY l.name;");
+                    COUNT(CASE WHEN a.category LIKE 'public_school' THEN 1 END) AS Public_School,
+                    COUNT(CASE WHEN a.category LIKE 'private_school' THEN 2 END) AS Private_School,
+                    SUM(CASE WHEN a.category = 'private_school' OR a.category = 'public_school' THEN 1
+                        ELSE 0 END) AS Total
+                    FROM `organization_details` a
+                    LEFT JOIN `level` l ON l.id = a.levelId
+                    WHERE category = 'public_school' OR category = 'private_school'
+                    GROUP BY l.name;");
 
 
             } else {
