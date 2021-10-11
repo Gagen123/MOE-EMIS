@@ -27,17 +27,6 @@ class StaffController extends Controller{
         return  response()->json($person);
     }
 
-    public function getAppointment($year=""){
-        $person = json_decode($this->apiService->listData('getAppointment/'. $year));
-        dd($person->data->hasdata);
-        if($person->data->hasdata){
-            $response_data = $person->data->employee[0];
-            return  response()->json($response_data);
-        }else{
-            return response()->json('No Data to be fetch.', 404);
-        }
-        return  response()->json($person);
-    }
     public function savePersonalDetails(Request $request){
         $rules = [
             'emp_type'              =>  'required',

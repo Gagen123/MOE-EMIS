@@ -566,7 +566,7 @@ const routes = [
                     { path: '/',name:'staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
                     { path: '/list_staff_appointment',name:'list_staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
                     { path: '/create_staff_appointment',name:'create_staff_appointment', component: require('./components/staff/staff_appointment/create_staff_appointment.vue').default },
-                    { path: '/edit_staff_appointment', name:'edit_staff_appointment', component: require('./components/staff/staff_appointment/edit_staff_appointment.vue').default },
+                    { path: '/view_staff_appointment',name:'view_staff_appointment', component: require('./components/staff/staff_appointment/view_staff_appointment.vue').default },
                 ],
             },
             //Transfer reporting from staff transfer

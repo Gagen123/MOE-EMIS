@@ -12,7 +12,7 @@ use App\Models\staff\HrWorkflow;
 use App\Models\staff\Participant;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\ProgramApplication;
-
+use App\Models\staff_masters\TrainingType;
 
 class HrDevelopmentController extends Controller{
     use ApiResponser;
@@ -267,6 +267,10 @@ class HrDevelopmentController extends Controller{
         //     }
         // }
         $hrdev=HrDevelopment::where('id',$param_array['id'])->first();
+        $t_type=TrainingType::where('program_id',$hrdev->training_type)->first();
+        if($t_type!=null && $t_type!=""){
+            $hrdev->training_type_name=$t_type->name;
+        }
         $hrdev->prog_app=ProgramApplication::where('program_id',$param_array['id'])->first();
         return $this->successResponse($hrdev);
     }

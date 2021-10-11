@@ -467,13 +467,18 @@ Route::prefix('staff')->group(function () {
     Route::get('/loadConfigMasters/{type}/{model}', [App\Http\Controllers\staff\StaffMasterController::class, 'loadConfigMasters'])->name('loadConfigMasters');
 
     Route::get('/getEmployeeDetials/{emp_type}/{emp_id}', [App\Http\Controllers\staff\StaffController::class, 'getEmployeeDetials'])->name('getEmployeeDetials');
-    Route::get('/getAppointment/{year}', [App\Http\Controllers\staff\StaffController::class, 'getAppointment'])->name('getAppointment');
+
+    Route::prefix('zest')->group(function () {
+        Route::get('/getAppointment/{year}', [App\Http\Controllers\staff\ZestController::class, 'getAppointment'])->name('getAppointment');
+        Route::post('/saveAppointmentDetails', [App\Http\Controllers\staff\ZestController::class, 'saveAppointmentDetails'])->name('saveAppointmentDetails');
+        Route::get('/loadappointment', [App\Http\Controllers\staff\ZestController::class, 'loadappointment'])->name('loadappointment');
+
+        Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
+    });
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
     Route::get('/loaddraftpersonalDetails/{type}', [App\Http\Controllers\staff\StaffController::class, 'loaddraftpersonalDetails'])->name('loaddraftpersonalDetails');
     Route::get('/checkThisCid/{cid}', [App\Http\Controllers\staff\StaffController::class, 'checkThisCid'])->name('checkThisCid');
-
-
 
     Route::get('/viewStaffProfile/{id}', [App\Http\Controllers\staff\StaffController::class, 'viewStaffProfile'])->name('viewStaffProfile');
     //staff approval by gagen

@@ -5,7 +5,7 @@
                 <form class="form-horizontal">
                 <div class="row invoice-info">
                     <div class="col-sm-2 invoice-col">
-                        <label class="mb-0"><i><u>Structure Type</u></i></label>
+                        <label class="mb-0"><i><u>Sports Facilities</u></i></label>
                     </div>
                     <div class="col-sm-9 invoice-col">
                         <input type="hidden" class="form-control" v-model="form.id" id="id"/>
@@ -13,58 +13,61 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Facility:<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <select name="category" id="category" class="form-control editable_fields" v-model="form.category" :class="{ 'is-invalid': form.errors.has('category') }" @change="getSubFacilityDropdown(),remove_err('category')">
+                                <select name="facility" id="facility" class="form-control editable_fields" v-model="form.facility" :class="{ 'is-invalid': form.errors.has('facility') }" @change="getSubFacilityDropdown(),remove_err('facility')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
-                                <has-error :form="form" field="category"></has-error>
+                                <has-error :form="form" field="facility"></has-error>
                             </div>
                         </div>
+
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Facilities :<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo" @change="getfields('structureNo')">
+                                <input class="form-control editable_fields " id="facilityno" type="text" v-model="form.facilityno" @change="getfields('facilityno')">
                             </div>
                            
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
-                                 <label>Year of Construction for structure {{index+1}}:<span class="text-danger">*</span></label>
+                                 <label>Year of Construction for Facility {{index+1}}:<span class="text-danger">*</span></label>
                                 <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
                                 v-model="yr.consYear" >
                             </div>
                         </div>
+                        
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.facilitytype' :key="index">
-                                 <label>type of facilities {{index+1}}:<span class="text-danger">*</span></label>
-                                   <select name="facilityname" id="facilityname" class="form-control editable_fields" v-model="form.facilityname " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
-                                         <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
-                                      </select>
-                                <input class="form-control editable_fields" name="facilityname" id="consYear" type="text"
-                                v-model="yr.consYear" >
+                                <label>Type of facilities for Facility {{index+1}}:<span class="text-danger">*</span></label>
+                                <select name="facilityname" id="facilityname" class="form-control editable_fields"  :class="{ 'is-invalid': form.errors.has('facilityname') }" @change="remove_err('type')">
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
-                                 <label>Supported by {{index+1}}:<span class="text-danger">*</span></label>
-                                <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
-                                v-model="yr.consYear" >
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.SupportType' :key="index">
+                                <label>Supported by for Facility {{index+1}}:<span class="text-danger">*</span></label>
+                                <select name="support" id="support" class="form-control editable_fields" :class="{ 'is-invalid': form.errors.has('support') }" >
+                                    <option value="">--- Please Select ---</option>
+                                    <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                </select>
                             </div>
                         </div>
                          <div class="form-group row">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.sizeareatype' :key="index">
+                                 <label>Size/Area of Facility {{index+1}}:<span class="text-danger">*</span></label>
+                                <input class="form-control editable_fields" name="sizearea" id="sizearea" type="text"
+                                v-model="yr.sizearea" >
+                            </div>
+                        </div>
+                        <!-- <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
                                  <label>Size/Area {{index+1}}:<span class="text-danger">*</span></label>
                                 <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
                                 v-model="yr.consYear" >
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
-                                 <label>Size/Area {{index+1}}:<span class="text-danger">*</span></label>
-                                <input class="form-control editable_fields" name="consYear" id="consYear" type="text"
-                                v-model="yr.consYear" >
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 
@@ -85,31 +88,24 @@ export default {
     data(){
         return{
             count:1,
-            categoryList:[],
-            subCategortList:[],
+            supportList:[],
             facilityList:[],
             designerList:[],
-            contructionTypeList:[],
-            users: [],
+            facilitySubList:[],
+             sportslist:[],
             form: new form({
                 id: '',
-                organizationId:'',
-                category: '',
-                subCategory: '',
-                constructionType:'',
-                structureNo: '',
-               // yearOfConstruction: '',
-                plintchArea: '',
-                noOfFloor: '',
-                totalCapacity: '',
-                rampAccess: '1',
-                presentCondition: '1',
-                design: '',
-                yearofconstructinNo:[],
-                users:
-                [{
-                    facility:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''
-                }],
+                facility:'',
+                // facilityname:'',
+                facilityno: '',
+              
+                    yearofconstructinNo:[],
+                    facilitytype:[],
+                    SupportType:[],
+                    sizeareatype:[],
+              
+               
+                
             })
         }
     },
@@ -120,40 +116,67 @@ export default {
          * method to reset form
          */
         restForm(){
-            this.form.category= '';
-            this.form.subCategory= '';
-            this.form.structureNo= '';
-            this.form.constructionType = '';
-            this.form.yearOfConstruction= '';
-            this.form.plintchArea= '';
-            this.form.noOfFloor='';
-            this.form.totalCapacity='';
-            this.form.rampAccess='1';
-            this.form.presentCondition='1';
-            this.form.design='';
-            let formReset =this.form.users;
-            formReset.splice(0, formReset.length);
-            this.form.users.push({facility:'',type:'',remarks:'',capacity:'',noOfFacility:'',accessibleDisabled:'',internetConnection:''})
+            this.form.facility= '';
+           
         },
 
         /**
          * method to save data
          */
-        formaction: function(type){
+        formaction: function(type){ 
             if(type=="reset"){
                 this.restForm();
             }
+            // if(type=="save"){
+            //          this.form.post('/organization/saveSport',this.form)
+            //         .then(() => {
+            //         Toast.fire({
+            //             icon: 'success',
+            //             title: 'Sports added successfully'
+            //         })
+            //         this.$router.push('/sport_list');
+            //     })
+            //     .catch(() => {
+            //         console.log("Error......")
+            //     })
+            // }
             if(type=="save"){
-                    this.form.post('/organization/saveInfrastructure',this.form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Infrastructure is added successfully'
-                    })
-                    this.$router.push('/infrastructure_list');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        
+                        for(let i=0;i<this.form.facilitytype.length;i++){
+                             this.form.facilitytype[i]=$('#facilityname').val();
+                            // this.form.facilitytype=$('#facilityname').val();
+                        }
+                        for(let i=0;i<this.form.SupportType.length;i++){
+                             this.form.SupportType[i]=$('#support').val();
+                            // this.form.facilitytype=$('#facilityname').val();
+                        }
+                        // this.form.facilitytype=$('#facilityname').val();
+                        // this.form.
+                        this.form.post('/organization/saveSport',this.form)
+                        .then((response) =>{
+                            Toast.fire({
+                            icon: 'success',
+                            title: 'Details added successfully'
+                        })
+                        this.$router.push('/sport_list');
+                        })
+                        .catch((error) => {
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Unexpected error occured. Try again.'
+                            });
+                            console.log("Error:"+error);
+                        })
+                    }
                 })
             }
 		},
@@ -173,35 +196,45 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
+        async changefunction(id){
+            if($('#'+id).val()!=""){
+                $('#'+id).removeClass('is-invalid select2');
+                $('#'+id+'_err').html('');
+                $('#'+id).addClass('select2');
+            }
+            if(id=="facilityname"){
+                this.form.facilitytype=[];
+                this.form.facilitytype=$('#facilityname').val();
+                alert (this.form.facilitytype);
+            }
+        },
 
         /**
          * method to get category in dropdown
          */
-        getCategoryDropdown(uri = '/organization/getCategoryInDropdown'){
+        getSupportDropdown(uri = '/organization/getSupportInDropdown'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.categoryList = data;
+                this.supportList = data;
+
             });
         },
-
         /**
          * method to get sub category in dropdown
          */
-        getSubCategoryDropdown(uri = '/organization/getSubCategoryDropdown/'+this.form.category){
-            
+        getSubFacilityDropdown(uri = '/organization/getSubFacilityDropdown/' +this.form.facility){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
-                this.subCategortList = data;
-              //  alert(JSON.stringify(response.data));
+                this.facilitySubList = data;
             });
         },
 
         /**
          * method to get facility in dropdown
          */
-        getFacilityDropdown(uri = '/organization/getStructureFacilityInDropdown'){
+        getFacilityDropdown(uri ='/organization/getFacilityInDropdown/'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -250,17 +283,22 @@ export default {
         },
         getfields(id){
             this.form.yearofconstructinNo=[];
+            this.form.facilitytype=[];
+            this.form.SupportType=[];
+            this.form.sizeareatype=[];
             for(let i=0;i<$('#'+id).val();i++){
                 this.form.yearofconstructinNo.push({consYear:''});
+                this.form.facilitytype.push({facilityname:''});
+                this.form.SupportType.push({support:''});
+                this.form.sizeareatype.push({sizearea:''})
             }
         }
     },
     mounted() {
-        this.getCategoryDropdown();
+        
         this.getFacilityDropdown();
-        this.getDesignerDropdown();
-        this.loadconstructionTypeList();
-        this.getSubCategoryDropdown();
+        this.getSupportDropdown();
+        this.getSubFacilityDropdown();
     }
 }
 </script>

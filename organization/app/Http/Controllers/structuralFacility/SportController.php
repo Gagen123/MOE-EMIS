@@ -29,7 +29,7 @@ class SportController extends Controller
      * method to load sport lists
      */
     public function loadSport($orgId=""){
-        $loadSport = DB::table('sports as a')
+        $loadSport = DB::table('organization_sports as a')
             ->join('master_sport_facility_type as b', 'a.facility', '=', 'b.id')
             ->join('master_sport_facility_subtypes as c', 'c.id', '=', 'a.type')
             ->select('a.id as id', 'a.organizationId as organizationId', 'b.name as facility',
@@ -65,8 +65,9 @@ class SportController extends Controller
         $id = $request->id;
         $organizationId  = $request['organizationId'];
         $facility = $request['facility'];
+        $noOffacilities = $request['no_of_facility'];
         if( $id != null){
-            DB::table('sports')->where('id', $request->id)->delete();
+            DB::table('organization_sports')->where('id', $request->id)->delete();
             foreach($request->items_received as $i=> $item){
                 $size="";
                 if(isset($item['area'])){
@@ -76,7 +77,7 @@ class SportController extends Controller
                     'id'                                    =>  $id,
                     'organizationId'                        =>  $organizationId,
                     'facility'                              =>  $facility,
-                    'number'                                =>  $item['number'],
+                    'number'                                =>  $noOffacilities,
                     'type'                                  =>  $item['type'],
                     'yearOfEstablishment'                   =>  $item['yoe'],
                     'status'                                =>  $item['status'],
@@ -95,6 +96,7 @@ class SportController extends Controller
         else{
             $organizationId  = $request['organizationId'];
             $facility = $request['facility'];
+            $noOffacilities = $request['no_of_facility'];
             foreach ($request->items_received as $i=> $item){
                 $size="";
                 if(isset($item['area'])){
@@ -102,11 +104,11 @@ class SportController extends Controller
                 }
                 //  dd($item);
                 $sport = array(
-                    'id'                               =>   $id,
+                    'id'                               =>  $id,
                     'organizationId'                   =>  $organizationId,
                     'facility'                         =>  $facility,
                     'type'                             =>  $item['type'],
-                    'number'                           =>  $item['number'],
+                    'number'                           =>  $noOffacilities,
                     'yearOfEstablishment'              =>  $item['yoe'],
                     'accessibleToDisabled'             =>  $item['access'],
                     'size'                             =>  $size,
