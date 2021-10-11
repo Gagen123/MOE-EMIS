@@ -26,6 +26,7 @@ class StaffController extends Controller{
         }
         return  response()->json($person);
     }
+
     public function savePersonalDetails(Request $request){
         $rules = [
             'emp_type'              =>  'required',

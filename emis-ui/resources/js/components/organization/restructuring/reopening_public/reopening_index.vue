@@ -21,7 +21,8 @@
 export default {
      methods:{
         showadprocess(type){
-            this.$router.push(type);
+            // this.$router.push(type);
+            this.$router.push({name:type});
 		},
 
         getScreenAccess(){

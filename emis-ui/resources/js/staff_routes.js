@@ -560,6 +560,15 @@ const routes = [
                     { path: '/edit_private_staff', name:'edit_private_staff', component: require('./components/staff/private/edit_private_staff.vue').default },
                 ],
             },
+            { path: '/staff_appointment',
+                component: require('./components/staff/staff_appointment/staff_appointment_index.vue').default,
+                children:[
+                    { path: '/',name:'staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
+                    { path: '/list_staff_appointment',name:'list_staff_appointment',  component: require('./components/staff/staff_appointment/staff_appointment_list.vue').default },
+                    { path: '/create_staff_appointment',name:'create_staff_appointment', component: require('./components/staff/staff_appointment/create_staff_appointment.vue').default },
+                    { path: '/view_staff_appointment',name:'view_staff_appointment', component: require('./components/staff/staff_appointment/view_staff_appointment.vue').default },
+                ],
+            },
             //Transfer reporting from staff transfer
             { path: '/reporting',
             component: require('./components/staff/reporting/report_index.vue').default,
@@ -1020,6 +1029,7 @@ const routes = [
                     { path: '/list_staff_awards',name:'list_staff_awards',  component: require('./components/staff/staff_services/staff_awards/staff_awards_list.vue').default },
                     { path: '/create_staff_awards',name:'create_staff_awards', component: require('./components/staff/staff_services/staff_awards/create_staff_awards.vue').default },
                     { path: '/edit_staff_awards', name:'edit_staff_awards', component: require('./components/staff/staff_services/staff_awards/edit_staff_awards.vue').default },
+                    { path: '/view_staff_awards', name:'view_staff_awards', component: require('./components/staff/staff_services/staff_awards/view_staff_awards.vue').default },
                 ],
             },
             { path: '/staff_responsibilities',
