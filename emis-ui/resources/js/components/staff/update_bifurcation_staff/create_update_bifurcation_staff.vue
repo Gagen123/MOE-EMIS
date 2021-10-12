@@ -30,8 +30,8 @@
                                 <template v-for="(staff, key) in staffList">
                                     <tr :key="key">
                                         <td><b><i>{{staff.name}}</i></b></td>
-                                        <td><input type="radio" name="name1" :value="staff.id+'__'+form.bifuractionOrg"></td>
-                                        <td><input type="radio" name="name2" :value="staff.id+'__'+form.parentOrg"></td>
+                                        <td><input type="radio" name="name" :value="staff.id+'__'+form.bifuractionOrg"></td>
+                                        <td><input type="radio" name="name" :value="staff.id+'__'+form.parentOrg"></td>
                                     </tr>
                                 </template>
                             </tbody>
