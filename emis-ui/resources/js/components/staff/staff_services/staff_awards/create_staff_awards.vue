@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
+                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="text">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
             </div>
