@@ -324,7 +324,7 @@ class StaffServicesController extends Controller{
     }
     public function checkEligibility($type_id="",$role_ids=""){
         $response_data="";
-        if(strpos( $role_ids,',')){
+        if(strpos($role_ids,',')){
             $role_ids=explode(',',$role_ids);
             $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->wherein('submitter_role_id',$role_ids)
             ->select('id','leave_type_id')->first();

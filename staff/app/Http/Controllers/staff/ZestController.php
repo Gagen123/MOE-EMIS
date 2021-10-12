@@ -9,6 +9,7 @@ use App\Models\staff\AppointmentDetailsAudit;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\ZestLongTermTraining;
 use App\Models\staff\ZestPromotion;
+use App\Models\staff\ZestSecondment;
 use App\Models\staff\ZestSeperation;
 use App\Models\staff_masters\ChildGroupPosition;
 use App\Models\staff_masters\FundingAgency;
@@ -199,6 +200,33 @@ class ZestController extends Controller{
     }
     public function loadSeperation(){
         $response_data=ZestSeperation::with('type')->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $sep){
+                $sep->staffName='';
+                $staff=PersonalDetails::where('id',$sep['StaffID'])->first();
+                if($staff!=null && $staff!=""){
+                    $sep->staffName=$staff->name;
+                }
+            }
+        }
+        return $this->successResponse($response_data);
+    }
+
+    public function loadSecondment($param=""){
+        if(strpos($param,'Limit')!==false){
+            $response_data=ZestSecondment::with('type')->take(explode('__',$param)[1])->get();
+        }
+        if(strpos($param,'byOrdId')!==false){
+            $orgId=explode('__',$param)[1];
+            $staffIds=[];
+            $person=PersonalDetails::where('working_agency_id',$orgId)->get();
+            if($person!=null && $person!="" && sizeof($person)>0){
+                foreach($person as $per){
+                    array_push($staffIds,$per['id']);
+                }
+            }
+            $response_data=ZestSecondment::wherein('StaffID',$staffIds)->get();
+        }
         if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
             foreach($response_data as $sep){
                 $sep->staffName='';

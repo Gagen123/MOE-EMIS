@@ -1,5 +1,6 @@
 <template>
     <div>
+        <search />
         <!-- <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-header pb-0 pt-2">
                 <h3 class="card-title"><b>Search </b></h3>
@@ -91,7 +92,11 @@
     </div>
 </template>
 <script>
+import search from "../../searchpage.vue";
 export default {
+    components: {
+        search,
+    },
     data(){
         return{
             dzongkhagList:[],

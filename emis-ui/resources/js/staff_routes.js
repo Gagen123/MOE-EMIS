@@ -631,7 +631,7 @@ const routes = [
                 ],
             },
         ]
-        
+
     },
 
     //Transfer Applicaiton
@@ -692,11 +692,9 @@ const routes = [
                     { path: '/list_secondment_details',name:'list_secondment_details',  component: require('./components/staff/second_seperation/secondment_details/list_secondment_details.vue').default },
                     { path: '/create_secondment_details',name:'create_secondment_details', component: require('./components/staff/second_seperation/secondment_details/create_secondment_details.vue').default },
                     { path: '/edit_secondment_details', name:'edit_secondment_details', component: require('./components/staff/second_seperation/secondment_details/edit_secondment_details.vue').default },
+                    { path: '/view_secondment_details', name:'view_secondment_details', component: require('./components/staff/second_seperation/secondment_details/view_secondment_details.vue').default },
                 ],
             },
-
-
-
 
         ]
     },
