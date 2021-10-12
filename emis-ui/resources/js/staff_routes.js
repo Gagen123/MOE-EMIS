@@ -621,6 +621,15 @@ const routes = [
                     { path: '/edit_update_merge_staff', name:'edit_update_merge_staff', component: require('./components/staff/update_merge_staff/edit_update_merge_staff.vue').default },
                 ],
             },
+            { path: '/substitute_staff',
+                component: require('./components/staff/substitute/substitute_index.vue').default,
+                children:[
+                    { path: '/',name:'substitute_staff',  component: require('./components/staff/substitute/list_substitute.vue').default },
+                    { path: '/list_substitute',name:'list_substitute',  component: require('./components/staff/substitute/list_substitute.vue').default },
+                    { path: '/create_substitute',name:'create_substitute', component: require('./components/staff/substitute/create_substitute.vue').default },
+                    { path: '/edit_substitute', name:'edit_substitute', component: require('./components/staff/substitute/edit_substitute.vue').default },
+                ],
+            },
         ]
         
     },
