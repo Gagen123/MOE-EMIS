@@ -265,6 +265,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadSeperation', ['uses' => 'staff\ZestController@loadSeperation']);
         $router->get('/loadPromotion/{param}', ['uses' => 'staff\ZestController@loadPromotion']);
         $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
+        $router->get('/loadLongTermTraining/{param}', ['uses' => 'staff\ZestController@loadLongTermTraining']);
+
     });
 
 });

@@ -476,6 +476,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
         Route::get('/loadPromotion/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotion'])->name('loadPromotion');
         Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
+        Route::get('/loadLongTermTraining/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLongTermTraining'])->name('loadLongTermTraining');
+
     });
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
@@ -512,7 +514,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveTeachinSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveTeachinSubject'])->name('saveTeachinSubject');
         Route::post('/saveStaffContact', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffContact'])->name('saveStaffContact');
 
-        
+
     });
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                 <table id="training-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>

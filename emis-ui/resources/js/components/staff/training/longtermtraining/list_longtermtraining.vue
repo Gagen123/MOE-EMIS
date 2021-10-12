@@ -1,40 +1,54 @@
 <template>
     <div>
-        <table id="training-table" class="table table-bordered text-sm table-striped">
-            <thead>
-                <tr>
-                    <th>SL#</th>
-                    <th>Name</th>
-                    <th>Course</th>
-                    <th>StartDate</th>
-                    <th>EndDate</th>
-                    <th>FundingID</th>
-                    <th>StudyModeID</th>
-                    <th>HRCNo</th>
-                    <th>HRCDate</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(promotion, index) in staffList" :key="index">
-                   <td>{{ index + 1 }} </td>
-                    <td>{{ promotion.staff_name }}</td>
-                    <td>{{ promotion.PromotionTypeID }}</td>
-                    <td>{{ promotion.superstructure }}</td>
-                    <td>{{ promotion.position_title_name }}</td>
-                    <td>{{ promotion.positionlevel }}</td>
-                    <td>{{ promotion.EffectiveDate }}</td>
-                    <td>{{ promotion.JoiningOrderDate }}</td>
-                    <td>
-                        <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(training)">Veiw</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <search />
+        <div class="form-group row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
+                <table id="training-table" class="table table-bordered text-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>SL#</th>
+                            <th>Dzongkhag</th>
+                            <th>Working Agency</th>
+                            <th>Name</th>
+                            <th>Course</th>
+                            <th>StartDate</th>
+                            <th>EndDate</th>
+                            <th>Funding</th>
+                            <th>Training Status</th>
+                            <th>HRCNo</th>
+                            <th>HRCDate</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(training, index) in staffList" :key="index">
+                            <td>{{ index + 1 }} </td>
+                            <td>{{ training.dzongkhag }}</td>
+                            <td>{{ training.working_agency }}</td>
+                            <td>{{ training.staff_name }}</td>
+                            <td>{{ training.Course }}</td>
+                            <td>{{ training.StartDate }}</td>
+                            <td>{{ training.EndDate }}</td>
+                            <td>{{ training.funding }}</td>
+                            <td>{{ training.training_status }}</td>
+                            <td>{{ training.HRCNo }}</td>
+                            <td>{{ training.HRCDate }}</td>
+                            <td>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(training)">Veiw</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </template>
 <script>
+import search from "../../searchpage.vue";
 export default {
+    components: {
+        search,
+    },
     data() {
         return {
             staffList:[],
@@ -43,7 +57,16 @@ export default {
     },
     methods: {
         loadviewpage(data){
-            this.$router.push({name:'view_promotion',query: {data:data}});
+            this.$router.push({name:'view_longtermtraining',query: {data:data}});
+        },
+        async loadRespectiveDataData(org_id){
+            this.staffList = [];
+            let uri='/staff/zest/loadLongTermTraining/byOrdId__'+org_id;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.staffList = data.data;
+            });
         },
     },
     mounted(){
@@ -53,7 +76,10 @@ export default {
             let data = response.data;
             this.staffList = data.data;
         });
-        this.dt =  $("#training-table").DataTable()
+        this.dt =  $("#training-table").DataTable();
+        Fire.$on('loadRespectiveDataData',(id)=>{
+            this.loadRespectiveDataData(id);
+        });
     },
     watch: {
         staffList(){
