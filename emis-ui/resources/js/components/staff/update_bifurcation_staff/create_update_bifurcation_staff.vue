@@ -4,7 +4,7 @@
             <h5 class="bg-gradient-danger">Sorry!</h5>
             <div id="message"></div>
         </div>
-        <form class="bootbox-form" id="mainform">
+        <form class="bootbox-form">
             <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label class="mb-0.5">Bifurcation Organization:<i class="text-danger">*</i></label>
@@ -13,10 +13,10 @@
                         </select>
                         <has-error :form="form" field="bfOrglist"></has-error>
                     </div>
-                    
             </div>
-            <div class="form-group row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <label><u>Allocating the staff to each organization which has been Bifcurcated:</u><br><small><i>(Allocate to one organization)</i></small></label><br>
+            <div class="form-group row " >
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="content">
                     <div class="table-responsive overflow-auto">
                         <table id="priveleges_table" class="table table-sm table-bordered table-striped" style="width: 100%;">
                             <thead class="table-secondary">
@@ -39,7 +39,12 @@
                     </div>
                 </div>
             </div>
-            <div class="row form-group fa-pull-right" id="actionbtn">
+             <!-- <div class="form-group row " >
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="message">
+                     <label><i class="text-danger">(If you wish to cancel the transfer after processing)</i></label><br/>
+                </div>
+             </div> -->
+            <div class="row form-group fa-pull-right">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button type="button" class="btn btn-primary" @click="submitDetails()"> <i class="fa fa-save"></i>Update</button>
                 </div>
@@ -80,11 +85,11 @@ export default {
             }
             if(id=="bfOrglist"){
                 this.form.biffOrgId=$('#bfOrglist').val();
-                this.loadParentOrgDetailOfBifcurcation(this.form.biffOrgId)
+                this.loadParentOrgDetailOfRegistered(this.form.biffOrgId)
             }
             
         },
-        loadBifurcationList(uri='common/loadBifurcationList'){
+        loadBifurcationList(uri='common/loadRegisteredList/bifurcation'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;
@@ -99,8 +104,8 @@ export default {
             });
         },
 
-        loadParentOrgDetailOfBifcurcation(id){
-             axios.get('common/loadParentOrgDetailOfBifcurcation/'+id)
+        loadParentOrgDetailOfRegistered(id){
+             axios.get('common/loadParentOrgDetailOfRegistered/bifurcation/'+id)
             .then(response => {
                 let data = response.data;
                 this.loadStaffList(data[0].orgId)
@@ -112,8 +117,15 @@ export default {
         loadStaffList(org_id){
              axios.get('common/loadStaffList/'+org_id)
             .then(response => {
-                let data = response.data.data;
-                this.staffList =data;
+                if(response!="" || response!=null){
+                    let data = response.data.data;
+                    this.staffList =data;
+                }
+                // else{
+                //     $('#content').hide();
+                //     $('#message').show();
+                    
+                // }
            })
             .catch(function (error){
                 console.log("Error: "+error)
@@ -166,7 +178,7 @@ export default {
     },
     async mounted(){
         this.loadBifurcationList();
-        this.loadParentOrgDetailOfBifcurcation();
+        this.loadParentOrgDetailOfRegistered();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'

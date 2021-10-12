@@ -685,10 +685,13 @@ Route::prefix('common')->group(function () {
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');
 
      //written by gagen to pull all register organization from bifurcation
-    Route::get('/loadBifurcationList', [App\Http\Controllers\CommonController::class, 'loadBifurcationList'])->name('loadBifurcationList');
-    Route::get('/loadParentOrgDetailOfBifcurcation/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfBifcurcation'])->name('loadParentOrgDetailOfBifcurcation');
+    Route::get('/loadRegisteredList/{type}', [App\Http\Controllers\CommonController::class, 'loadRegisteredList'])->name('loadRegisteredList');
+    Route::get('/loadParentOrgDetailOfRegistered/{type}/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfRegistered'])->name('loadParentOrgDetailOfRegistered');
 
     Route::get('/loadStaffList/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStaffList'])->name('loadStaffList');
+    Route::get('/loadStudentListByOrgId/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStudentListByOrgId'])->name('loadStudentListByOrgId');
+
+    
 
 });
 
