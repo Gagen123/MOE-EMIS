@@ -27,7 +27,7 @@
                                 </select>
                                 <has-error :form="form" field="training_type"></has-error>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> 
                                 <label class="mb-0.5">Course Title:</label>
                                 <input readonly type="text" class="form-control" @change="remove_err('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
                                 <has-error :form="form" field="course_title"></has-error>
