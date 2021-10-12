@@ -16,7 +16,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="responsible-table" class="table table-bordered text-sm table-striped">
                         <thead>
-                            <tr>  
+                            <tr>
                                 <th>SL#</th>
                                 <th>CID</th>
                                 <th>Name</th>
@@ -32,15 +32,16 @@
                                 <td>{{ item.name}}</td>
                                 <td>{{ item.position_title}}</td>
                                 <td>
-                                    <input type="number" v-model="item.no_absent_days" :id="'presentDay'+index"  @change="remove_err('presentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_present_days" :id="'presentDay'+index" class="form-control">
+
                                 </td>
                                 <td>
-                                    <input type="number" v-model="item.no_present_days" :id="'absentDay'+index" @change="remove_err('absentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_absent_days" :id="'absentDay'+index" class="form-control">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div> 
+                </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -107,7 +108,7 @@ export default {
                 this.attendance_form.staff=$('#staff').val();
             }
         },
-        
+
     },
      mounted(){
         $('[data-toggle="tooltip"]').tooltip();
@@ -116,11 +117,11 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
-            this.changefunction(id); 
+            this.changefunction(id);
         });
         this.screen_id=this.$route.query.data;
         this.attendance_form.id=this.$route.params.data;
@@ -138,7 +139,6 @@ export default {
         .catch(function (error){
             console.log('Error: '+error);
         });
-        
     },
     watch: {
         staffList(){
@@ -148,6 +148,6 @@ export default {
             });
         }
     },
-    
+
 }
 </script>

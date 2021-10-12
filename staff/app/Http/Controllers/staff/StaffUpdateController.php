@@ -105,4 +105,6 @@ class StaffUpdateController extends Controller{
         $response_data = PersonalDetails::where('id',$request->staff_id)->update($data);
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
+   
 }
+

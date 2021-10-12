@@ -601,7 +601,18 @@ const routes = [
                     { path: '/edit_seperation_details', name:'edit_seperation_details', component: require('./components/staff/second_seperation/seperation_details/edit_seperation_details.vue').default },
                 ],
             },
+            //new route add for bifurcation by gagen
+            { path: '/update_bifurcation_staff_index',
+                component: require('./components/staff/update_bifurcation_staff/update_bifurcation_staff_index.vue').default,
+                children:[
+                    { path: '/', name:'list_update_bifurcation_staff',  component: require('./components/staff/update_bifurcation_staff/list_update_bifurcation_staff.vue').default },
+                    { path: '/list_update_bifurcation_staff',name:'list_update_bifurcation_staff',  component: require('./components/staff/update_bifurcation_staff/list_update_bifurcation_staff.vue').default },
+                    { path: '/create_update_bifurcation_staff',name:'create_update_bifurcation_staff', component: require('./components/staff/update_bifurcation_staff/create_update_bifurcation_staff.vue').default },
+                    { path: '/edit_update_bifurcation_staff', name:'edit_update_bifurcation_staff', component: require('./components/staff/update_bifurcation_staff/edit_update_bifurcation_staff.vue').default },
+                ],
+            },
         ]
+        
     },
 
     //Transfer Applicaiton
@@ -747,8 +758,23 @@ const routes = [
                 ],
             },
 
+            { path: '/promotion',
+                component: require('./components/staff/training/promotion/promotion_index.vue').default,
+                children:[
+                    { path: '/',name:'promotion',  component: require('./components/staff/training/promotion/list_promotion.vue').default },
+                    { path: '/list_promotion',name:'list_promotion',  component: require('./components/staff/training/promotion/list_promotion.vue').default },
+                    { path: '/view_promotion',name:'view_promotion',  component: require('./components/staff/training/promotion/view_promotion.vue').default },
+                ],
+            },
 
-
+            { path: '/longtermtraining',
+                component: require('./components/staff/training/longtermtraining/longtermtraining_index.vue').default,
+                children:[
+                    { path: '/',name:'longtermtraining',  component: require('./components/staff/training/longtermtraining/list_longtermtraining.vue').default },
+                    { path: '/list_longtermtraining',name:'list_longtermtraining',  component: require('./components/staff/training/longtermtraining/list_longtermtraining.vue').default },
+                    { path: '/view_longtermtraining',name:'view_longtermtraining',  component: require('./components/staff/training/longtermtraining/view_longtermtraining.vue').default },
+                ],
+            },
         ]
     },
 

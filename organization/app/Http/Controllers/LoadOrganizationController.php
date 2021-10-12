@@ -376,10 +376,16 @@ class LoadOrganizationController extends Controller{
         $response_data="";
         if($type=="Orgbyid" || $type=="user_logedin_dzo_id"){
            $response_data=OrganizationDetails::where('id',$id)->first();
-            if($response_data!=null && $response_data->levelId!=null && $response_data->levelId!="" && $response_data->levelId!="ECCD" && $response_data->levelId!="ECR"){
-                $level=Level::where('id',$response_data->levelId)->first();
-                // $response_data->level=$level;
-                $response_data->name=$response_data->name.' '.$level->name;
+            if($response_data!=null ){
+                $response_data->dzongkhagId=$response_data->dzongkhagId;
+                $response_data->name=$response_data->name;
+                if($response_data->levelId!=null && $response_data->levelId!="" && $response_data->levelId!="ECCD" && $response_data->levelId!="ECR"){
+                    $level=Level::where('id',$response_data->levelId)->first();
+                    // $response_data->level=$level;
+                    if($level!=null && $level!=""){
+                        $response_data->name=$response_data->name.' '.$level->name;
+                    }
+                }
             }
             if($response_data!=null && $response_data->parentSchoolId!=null && $response_data->parentSchoolId!="" && $response_data->parentSchoolId!="0"){
                 $parent=OrganizationDetails::where('id',$response_data->parentSchoolId)->first();
@@ -506,7 +512,7 @@ class LoadOrganizationController extends Controller{
             t4.id AS org_section_id, t2.class, t3.stream, t4.section FROM organization_class_streams t1
             JOIN classes t2 ON t1.classId = t2.id
             LEFT JOIN streams t3 ON t1.streamId = t3.id
-            LEFT JOIN section_details t4 ON t1.id = t4.classSectionId 
+            LEFT JOIN section_details t4 ON t1.id = t4.classSectionId
             WHERE t1.organizationId  = ?', [$id]);
             return $section;
         }
@@ -860,6 +866,23 @@ class LoadOrganizationController extends Controller{
             ->select('id AS orgClassStreamId')
             ->where('classId',$class_id)->get();
         return $response_data;
+    }
+
+    //this function is to pull registered organization from bifurcation by gagen
+    public function loadBifurcationList(){
+        $data=DB::table('application_details AS t1')
+        ->join('application_est_bifurcation AS t2', 't1.id', '=', 't2.ApplicationDetailsId')
+        ->select('t2.id as id','t1.application_no AS applicationNo','t2.proposedName1 AS bifuractionOrg', 't2.proposedName AS parentOrg','t2.organizationId AS parentOrgId')
+        ->where('t1.status','=','Registered')
+        ->get();
+        return $data;
+    }
+    public function loadParentOrgDetailOfBifcurcation($id){
+        $data=DB::table('application_est_bifurcation AS a')
+        ->select('a.organizationId AS orgId')
+        ->where('a.id','=',$id)
+        ->get();
+        return $data;
     }
 
 }

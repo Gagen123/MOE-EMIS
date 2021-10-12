@@ -208,13 +208,23 @@
                                         <table id="promotion-table" class="table table-sm table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Date of Promotion</th>
-                                                    <th>Position Level</th>
+                                                    <th>Promotion Type</th>
+                                                    <th>Superstructure</th>
                                                     <th>Position Title</th>
+                                                    <th>Position Level</th>
+                                                    <th>Sub Level</th>
+                                                    <th>Effective Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                <tr v-for="(item, index) in staff_promotion_list" :key="index">
+                                                    <td>{{ item.PromotionTypeID}}</td>
+                                                    <td>{{ item.superstructure}}</td>
+                                                    <td>{{ item.position_title_name}}</td>
+                                                    <td>{{ item.positionlevel}}</td>
+                                                    <td>{{ item.SubLevel}}</td>
+                                                    <td>{{ item.EffectiveDate}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -310,6 +320,7 @@ export default {
             staff_nomination_list:[],
             staff_qualification_list:[],
             attachmentDetails:[],
+            staff_promotion_list:[],
 
         }
     },
@@ -493,6 +504,12 @@ export default {
                 this.response_data.initial_appointment_date=data.initial_appointment_date;
                 this.loadqualication(data.id);
                 this.loadnomination(data.id);
+                let uri='/staff/zest/loadPromotion/byStaffId__'+this.$route.params.data.id;
+                axios.get(uri)
+                .then(response => {
+                    this.staff_promotion_list = response.data.data;
+                });
+
             })
             .catch((error) => {
                 console.log("Error......"+error);

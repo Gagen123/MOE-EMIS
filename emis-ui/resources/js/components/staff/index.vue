@@ -43,11 +43,19 @@
                         Seperation
                     </router-link>
                 </li>
+                <li class="nav-item pr-1">
+                    <router-link to="/update_bifurcation_staff_index" id="update_bifurcation_staff_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        <span class="fa fa-user-clock"></span>
+                        Update Bifurcation Staff
+                    </router-link>
+                </li>
                 <!-- <li class="nav-item pr-1">
                     <router-link to="/reporting" id="transfer_report" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-clock"></span>
                         Reporting
                     </router-link>
+                </li>
+              
                 </li> -->
 
                 <!-- <li class="nav-item pr-1">
