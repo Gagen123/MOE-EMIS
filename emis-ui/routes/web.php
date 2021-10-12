@@ -474,6 +474,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadappointment', [App\Http\Controllers\staff\ZestController::class, 'loadappointment'])->name('loadappointment');
 
         Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
+        Route::get('/loadSecondment/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadSecondment'])->name('loadSecondment');
+
         Route::get('/loadPromotion/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotion'])->name('loadPromotion');
         Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
         Route::get('/loadLongTermTraining/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLongTermTraining'])->name('loadLongTermTraining');
@@ -611,6 +613,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkAttendanceDetailsByDate'])->name('checkAttendanceDetailsByDate');
 
         Route::get('/checkEligibility/{type_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkEligibility'])->name('checkEligibility');
+        Route::get('/checkrole/{staff_id}/{type_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkrole'])->name('checkrole');
+
         Route::post('/submitLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'submitLeaveApplication'])->name('submitLeaveApplication');
         Route::post('/editLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'editLeaveApplication'])->name('editLeaveApplication');
 
@@ -695,7 +699,7 @@ Route::prefix('common')->group(function () {
     Route::get('/loadStaffList/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStaffList'])->name('loadStaffList');
     Route::get('/loadStudentListByOrgId/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStudentListByOrgId'])->name('loadStudentListByOrgId');
 
-    
+
 
 });
 

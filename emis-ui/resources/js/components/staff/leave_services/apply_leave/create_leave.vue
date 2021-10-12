@@ -275,6 +275,7 @@ export default {
             }
             if(id=="staff_id"){
                 this.form.staff_id=$('#staff_id').val();
+                this.getchekConfig();
                 this.getApprovedLeaveCount();
             }
         },
@@ -289,6 +290,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
+
         getLeave_details(){
             axios.get('staff/staffServices/checkEligibility/'+$('#leave_type_id').val())
             .then(response =>{
@@ -317,6 +319,24 @@ export default {
                 console.log(error);
             });
 
+        },
+        getchekConfig(){
+            axios.get('staff/staffServices/checkrole/'+this.form.staff_id+'/'+$('#leave_type_id').val())
+            .then(response =>{
+                let data = response.data.data;
+                if(data==undefined && response.data=="NA"){
+                    Swal.fire({
+                        title: 'No Leave Configuration ! ',
+                        text: "Sorry! System cannot find leave configuration for this role. Please contact system administrator",
+                        icon: 'error',
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
         },
         getApprovedLeaveCount(){
             if(this.total_leave_apply.toLowerCase().includes('day')){
@@ -364,7 +384,6 @@ export default {
             .catch(function (error){
                 console.log(error);
             });
-
         },
         applyselect2(){
             if(!$('#leave_type_id').attr('class').includes('select2-hidden-accessible')){
