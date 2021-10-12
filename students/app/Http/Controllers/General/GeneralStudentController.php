@@ -376,5 +376,13 @@ class GeneralStudentController extends Controller
 
         return $records;
     }
+
+    public function loadStudentListByOrgId($org_id){
+        $student = DB::table('std_student AS t')
+                ->select('t.Name','t.id')
+                ->where('OrgOrganizationId','=',$org_id)
+                ->get();
+                return $student;
+    }
     
 }

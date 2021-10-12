@@ -435,7 +435,7 @@ export default {
                 $('#participant').append('<option value="'+item.participant_id+'_'+item.contact+'_'+item.email+'">'+item.staff_details.name+'</option>');
                 $('#participant').val(item.participant_id+'_'+item.contact+'_'+item.email).trigger('change');
                 this.form.contact=item.contact;
-                this.form.email=item.email;
+                this.form.email=item.email; 
                 this.editdocument=item.document;
                 this.form.action_type='edit';
                 this.form.nature_of_participant=item.nature_of_participant;

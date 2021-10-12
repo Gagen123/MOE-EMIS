@@ -82,7 +82,7 @@
                                         <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>File Name</th>
+                                                    <th>File Name may be</th>
                                                     <th>Upload File</th>
                                                 </tr>
                                             </thead>
@@ -231,13 +231,17 @@ export default {
             this.form.ref_docs=[];
             this.form.status='Pending';
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.nomination_form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
             }
         },
-
         showaddmodal(type){
             if(type=="nomination-modal"){
                 this.resetnomidees();
@@ -276,8 +280,8 @@ export default {
             $('#nomi_email').val(item.nomi_email);
             this.form.nomi_email=item.nomi_email;
 
-            $('#nomi_relation').val(item.nomi_relation).trigger('change');
-            this.form.nomi_relation=item.relations.name;
+            $('#nomi_relation').val(item.nomi_relation.id).trigger('change');
+            this.form.nomi_relation=item.relations.id;
             $('#nomi_percentage').val(item.nomi_percentage);
             this.form.nomi_percentage=item.nomi_percentage;
             this.attachmentDetails=item.attachment;
@@ -320,17 +324,6 @@ export default {
                 this.form.nomi_relation=$('#nomi_relation').val();
             }
 
-        },
-        onChangeFileUpload(e){
-            let currentcount=e.target.id.match(/\d+/g)[0];
-            if($('#file_name'+currentcount).val()!=""){
-                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
-                $('#file_name'+currentcount).prop('readonly',true);
-            }
-            else{
-                $('#file_name'+currentcount+'_err').html('Please mention file name');
-                $('#'+e.target.id).val('');
-            }
         },
         // loadstaff(){
         //     let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';

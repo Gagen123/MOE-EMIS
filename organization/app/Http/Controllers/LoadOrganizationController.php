@@ -869,19 +869,38 @@ class LoadOrganizationController extends Controller{
     }
 
     //this function is to pull registered organization from bifurcation by gagen
-    public function loadBifurcationList(){
-        $data=DB::table('application_details AS t1')
-        ->join('application_est_bifurcation AS t2', 't1.id', '=', 't2.ApplicationDetailsId')
-        ->select('t2.id as id','t1.application_no AS applicationNo','t2.proposedName1 AS bifuractionOrg', 't2.proposedName AS parentOrg','t2.organizationId AS parentOrgId')
-        ->where('t1.status','=','Registered')
-        ->get();
+    public function loadRegisteredList($type){
+        if($type=="bifurcation"){
+            $data=DB::table('application_details AS t1')
+            ->join('application_est_bifurcation AS t2', 't1.id', '=', 't2.ApplicationDetailsId')
+            ->select('t2.id as id','t1.application_no AS applicationNo','t2.proposedName1 AS bifuractionOrg', 't2.proposedName AS parentOrg','t2.organizationId AS parentOrgId')
+            ->where('t1.status','=','Registered')
+            ->get();
+        }
+        else if($type=="merge"){
+            $data=DB::table('application_details AS t1')
+            ->join('application_est_merger AS t2', 't1.id', '=', 't2.ApplicationDetailsId')
+            ->select('t2.id as id','t1.application_no AS applicationNo','t2.OrgType AS OrgType', 't2.proposedName AS NewproposedName','t2.OldOrganizationId AS OldOrganizationId','t2.OldOrganizationId2 AS OldOrganizationId2')
+            ->where('t1.status','=','Registered')
+            ->get();
+
+        }
         return $data;
     }
-    public function loadParentOrgDetailOfBifcurcation($id){
-        $data=DB::table('application_est_bifurcation AS a')
-        ->select('a.organizationId AS orgId')
-        ->where('a.id','=',$id)
-        ->get();
+    public function loadParentOrgDetailOfRegistered($type="",$id=""){
+        if($type=="bifurcation"){
+            $data=DB::table('application_est_bifurcation AS a')
+            ->select('a.organizationId AS orgId')
+            ->where('a.id','=',$id)
+            ->get();
+        }
+        else if($type=="merge"){
+            $data=DB::table('application_est_merger AS a')
+            ->select('a.OldOrganizationId AS orgId')
+            ->where('a.id','=',$id)
+            ->get();
+
+        } 
         return $data;
     }
 

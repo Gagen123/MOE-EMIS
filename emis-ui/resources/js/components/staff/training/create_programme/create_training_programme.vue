@@ -523,7 +523,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        onChangeFileUpload(e){
+        onChangeFileUpload(e){ 
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
                 this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});

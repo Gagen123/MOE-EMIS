@@ -153,19 +153,23 @@ class CommonController extends Controller{
     }
 
     //loading bifurcation organization
-    public function loadBifurcationList(){
-        $response_data= $this->apiService->listData('emis/common_services/loadBifurcationList');
+    public function loadRegisteredList($type){
+        $response_data= $this->apiService->listData('emis/common_services/loadRegisteredList/'.$type);
         return $response_data;
     }
 
-    public function loadParentOrgDetailOfBifcurcation($id){
-        $response_data= $this->apiService->listData('emis/common_services/loadParentOrgDetailOfBifcurcation/'.$id);
+    public function loadParentOrgDetailOfRegistered($type="",$id=""){
+        $response_data= $this->apiService->listData('emis/common_services/loadParentOrgDetailOfRegistered/'.$type.'/'.$id);
         return $response_data;
     }
 
     public function loadStaffList($org_id){
         $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$org_id);
         return $response_data;
+    }
+    public function loadStudentListByOrgId($org_id){
+        $response_data= $this->apiService->listData('emis/common_services/loadStudentListByOrgId/'.$org_id);
+        return $response_data; 
     }
     
 

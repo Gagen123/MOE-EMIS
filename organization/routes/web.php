@@ -505,8 +505,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/LoadStdIdAwardResponsibilites/{class_id}', ['uses' => 'LoadOrganizationController@LoadStdIdAwardResponsibilites']);
 
         //written by gagen to pull the registered organization from bifi
-        $router->get('/loadBifurcationList', ['uses' => 'LoadOrganizationController@loadBifurcationList']);
-        $router->get('/loadParentOrgDetailOfBifcurcation/{id}', ['uses' => 'LoadOrganizationController@loadParentOrgDetailOfBifcurcation']);
+        $router->get('/loadRegisteredList/{type}', ['uses' => 'LoadOrganizationController@loadRegisteredList']);
+        $router->get('/loadParentOrgDetailOfRegistered/{type}/{id}', ['uses' => 'LoadOrganizationController@loadParentOrgDetailOfRegistered']);
 
         //Loading OrgClassStreamId for academic //gagen
         $router->get('/getOrgByDzoLevel/{dzoId}/{levelId}', ['uses' => 'LoadOrganizationController@getOrgByDzoLevel']);
