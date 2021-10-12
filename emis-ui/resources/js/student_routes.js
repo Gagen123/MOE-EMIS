@@ -873,7 +873,7 @@ const routes = [
             { path: '/edit_updated_bifcurcation_students', name:'edit_updated_bifcurcation_students', component: require('./components/students/UpdateDetails/UpdateStudentFromBifcurcation/edit_updated_bifcurcation_students.vue').default },
         ]
         },
-        { path: '/updated_merge_students_index', component: require('./components/students/UpdateDetails/UpdateStudentFromMerge/list_updated_merge_students.vue').default,
+        { path: '/updated_merge_students_index', component: require('./components/students/UpdateDetails/UpdateStudentFromMerge/updated_merge_students_index.vue').default,
         children: [
             { path: '/', name:'updated_merge_students_index', component: require('./components/students/UpdateDetails/UpdateStudentFromMerge/list_updated_merge_students.vue').default },
             { path: '/list_updated_merge_students', name:'list_updated_bifcurcation_students', component: require('./components/students/UpdateDetails/UpdateStudentFromMerge/list_updated_merge_students.vue').default },
