@@ -95,7 +95,7 @@ export default {
                 console.log("Error."+error);
             });
         },
-        loadactivecureerstageList(uri="masters/loadStaffMasters/all_active_cureer_stage_list"){
+        loadactivecureerstageList(uri="staff/loadStaffMasters/active/CureerStage"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -177,15 +177,11 @@ export default {
         this.dt =  $("#career_stage_table").DataTable()
     },
     watch: {
-        substaffList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#career_stage_table").DataTable()
-            });
+        substaffList(val){
+            this.applydatatable('career_stage_table');
+            
         }
     },
-
-
 }
 </script>
 

@@ -254,6 +254,26 @@ class HrDevelopmentController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    // public function loadDetails($id=""){
+    //     parse_str($id,$param_array);
+    //     $app_det=ProgramApplication::where('program_id',$param_array['id'])->where('org_id',$param_array['org'])->where('dzo_id',$param_array['dzongkhag'])->first();
+    //     // if($app_det!=null && $app_det!=""){
+    //     //     $hrdev= $app_det;
+    //     // }
+    //     // else{
+    //     //     $hrdev=HrDevelopment::where('id',$param_array['id'])->where('status','Created')->first();
+    //     //     if($hrdev!="" && $hrdev!=null){
+    //     //         $hrdev->workflow=HrWorkflow::where('program_id',$param_array['id'])->orderBy('sequence')->get();
+    //     //     }
+    //     // }
+    //     $hrdev=HrDevelopment::where('id',$param_array['id'])->first();
+    //     $t_type=TrainingType::where('program_id',$hrdev->training_type)->first();
+    //     if($t_type!=null && $t_type!=""){
+    //         $hrdev->training_type_name=$t_type->name;
+    //     }
+    //     $hrdev->prog_app=ProgramApplication::where('program_id',$param_array['id'])->first();
+    //     return $this->successResponse($hrdev);
+    // }
     public function loadDetails($id=""){
         parse_str($id,$param_array);
         $app_det=ProgramApplication::where('program_id',$param_array['id'])->where('org_id',$param_array['org'])->where('dzo_id',$param_array['dzongkhag'])->first();
@@ -267,13 +287,9 @@ class HrDevelopmentController extends Controller{
         //     }
         // }
         $hrdev=HrDevelopment::where('id',$param_array['id'])->first();
-        $t_type=TrainingType::where('program_id',$hrdev->training_type)->first();
-        if($t_type!=null && $t_type!=""){
-            $hrdev->training_type_name=$t_type->name;
-        }
         $hrdev->prog_app=ProgramApplication::where('program_id',$param_array['id'])->first();
         return $this->successResponse($hrdev);
-    }
+    }  
 
     public function loadProgramDetailsForNomination($param=""){
         $param = rtrim($param, ", ");

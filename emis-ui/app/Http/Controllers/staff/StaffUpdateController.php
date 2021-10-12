@@ -31,6 +31,7 @@ class StaffUpdateController extends Controller{
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId()
         ];
+        //dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/staffUpdateController/saveStaffcareerStage', $request_data);
         return $response_data;
     }
@@ -146,5 +147,6 @@ class StaffUpdateController extends Controller{
         return $response_data;
     }
 
+  
 
 }

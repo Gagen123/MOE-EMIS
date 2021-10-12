@@ -70,7 +70,7 @@ export default {
                     .then(() => {
                     Toast.fire({
                         icon: 'success',
-                        title: 'Details updaetd successfully'
+                        title: 'Details updated successfully'
                     })
                     this.$router.push('/list_maritial_status');
                 })
@@ -90,7 +90,7 @@ export default {
             }
 
         },
-        loadactivemaritalList(uri="masters/loadStaffMasters/all_active_marital_list"){
+        loadactivemaritalList(uri="staff/loadStaffMasters/active/MaritalStatus"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -133,6 +133,8 @@ export default {
         this.name=this.$route.query.data.name;
         this.emp_id=this.$route.query.data.emp_id;
         this.form.staff_id=this.$route.query.data.id;
+        this.form.marital_status=this.$route.query.data.merital_status;
+        this.form.remarks=this.$route.query.data.remarks;
     },
 }
 </script>
