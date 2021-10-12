@@ -211,7 +211,7 @@ export default {
         },
         loaddata(){
             // department
-          
+
             let dzongkhag_id=$('#dzongkhag_id').val();
             let organization_type=$('#organization_type').val();
             let org_id=$('#org_id').val();
@@ -275,7 +275,7 @@ export default {
                 $('#dzosection').hide();
             }
             if(data['acess_level']=="Ministry"){
-                this.loadstff('allCivilServent/ALL_TYPE');
+                this.loadstff('allCivilServent/First__10');
             }
         })
         .catch(errors => {

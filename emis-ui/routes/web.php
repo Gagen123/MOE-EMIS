@@ -474,6 +474,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadappointment', [App\Http\Controllers\staff\ZestController::class, 'loadappointment'])->name('loadappointment');
 
         Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
+        Route::get('/loadPromotion/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotion'])->name('loadPromotion');
+        Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
     });
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');

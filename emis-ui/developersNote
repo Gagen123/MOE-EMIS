@@ -128,6 +128,11 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
     added new master table: secondment and seperation, and added new field called description on master_course_mode
     added new transaction table staff_secondment,staff_seperation
 
+    //if you get following related errors then increase
+        memory_limit=1024M and restart apache :
+        sudo systemctl restart httpd.service and for windonw restart xampp,wampp etc if you are using them
+    //Fatal error: Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in vendor\illuminate\database\Eloquent\Model.php
+
 
 
 
