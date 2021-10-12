@@ -76,6 +76,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getPrincipal/{orgId}', ['uses' => 'staff\StaffController@getPrincipal']);
         $router->get('/getStaffsName', ['uses' => 'staff\StaffController@getStaffsName']);
 
+        //load list of staff
+        $router->get('/loadStaffList/{org_id}', ['uses' => 'staff\StaffController@loadStaffList']);
+
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
             $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
@@ -236,6 +239,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveTeachinSubject', ['uses' => 'staff\StaffUpdateController@saveTeachinSubject']);
         $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
         $router->post('/saveStaffMaritialStatus', ['uses' => 'staff\StaffUpdateController@saveStaffMaritialStatus']);
+
+        //pulling the register organization from bifurcation
+        $router->get('/loadBifurcationList', ['uses' => 'staff\StaffUpdateController@loadBifurcationList']);
 
     });
     //Staff Seleration and Secondment Services

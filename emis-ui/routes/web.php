@@ -509,6 +509,8 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveSEN', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveSEN'])->name('saveSEN');
         Route::post('/saveTeachinSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveTeachinSubject'])->name('saveTeachinSubject');
         Route::post('/saveStaffContact', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffContact'])->name('saveStaffContact');
+
+        
     });
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
@@ -681,6 +683,12 @@ Route::prefix('common')->group(function () {
 
     //Get Student List
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');
+
+     //written by gagen to pull all register organization from bifurcation
+    Route::get('/loadBifurcationList', [App\Http\Controllers\CommonController::class, 'loadBifurcationList'])->name('loadBifurcationList');
+    Route::get('/loadParentOrgDetailOfBifcurcation/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfBifcurcation'])->name('loadParentOrgDetailOfBifcurcation');
+
+    Route::get('/loadStaffList/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStaffList'])->name('loadStaffList');
 
 });
 
