@@ -601,7 +601,7 @@ const routes = [
                     { path: '/edit_seperation_details', name:'edit_seperation_details', component: require('./components/staff/second_seperation/seperation_details/edit_seperation_details.vue').default },
                 ],
             },
-            //new route add for bifurcation by gagen
+            //new route add for allocating staff to bifurcation by gagen
             { path: '/update_bifurcation_staff_index',
                 component: require('./components/staff/update_bifurcation_staff/update_bifurcation_staff_index.vue').default,
                 children:[
@@ -609,6 +609,16 @@ const routes = [
                     { path: '/list_update_bifurcation_staff',name:'list_update_bifurcation_staff',  component: require('./components/staff/update_bifurcation_staff/list_update_bifurcation_staff.vue').default },
                     { path: '/create_update_bifurcation_staff',name:'create_update_bifurcation_staff', component: require('./components/staff/update_bifurcation_staff/create_update_bifurcation_staff.vue').default },
                     { path: '/edit_update_bifurcation_staff', name:'edit_update_bifurcation_staff', component: require('./components/staff/update_bifurcation_staff/edit_update_bifurcation_staff.vue').default },
+                ],
+            },
+            //new route add for allocating the staff to merge by gagen
+            { path: '/update_merge_staff_index',
+                component: require('./components/staff/update_merge_staff/update_merge_staff_index.vue').default,
+                children:[
+                    { path: '/', name:'list_update_merge_staff',  component: require('./components/staff/update_merge_staff/list_update_merge_staff.vue').default },
+                    { path: '/list_update_merge_staff',name:'list_update_merge_staff',  component: require('./components/staff/update_merge_staff/list_update_merge_staff.vue').default },
+                    { path: '/create_update_merge_staff',name:'create_update_merge_staff', component: require('./components/staff/update_merge_staff/create_update_merge_staff.vue').default },
+                    { path: '/edit_update_merge_staff', name:'edit_update_merge_staff', component: require('./components/staff/update_merge_staff/edit_update_merge_staff.vue').default },
                 ],
             },
         ]

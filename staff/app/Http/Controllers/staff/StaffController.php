@@ -583,7 +583,7 @@ class StaffController extends Controller{
     //written by gagen to pull staff list by orgId
     public function loadStaffList($org_id){
         $staff = DB::table('stf_staff AS t')
-        ->select('t.name')
+        ->select('t.name','t.id')
         ->where('t.working_agency_id','=',$org_id)
         ->get();
     return $this->successResponse($staff);

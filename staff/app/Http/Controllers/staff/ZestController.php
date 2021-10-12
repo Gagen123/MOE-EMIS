@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\staff\AppointmentDetails;
 use App\Models\staff\AppointmentDetailsAudit;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff\ZestLongTermTraining;
 use App\Models\staff\ZestPromotion;
 use App\Models\staff\ZestSeperation;
 use App\Models\staff_masters\ChildGroupPosition;
+use App\Models\staff_masters\FundingAgency;
 use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\SuperStructure;
+use App\Models\staff_masters\TrainingStatus;
 use Illuminate\Http\Request;
 
 class ZestController extends Controller{
@@ -219,7 +222,7 @@ class ZestController extends Controller{
 
         if(strpos($param,'byStaffId')!==false){
             $staffid=explode('__',$param)[1];
-            
+
             $response_data=ZestPromotion::where('StaffID',$staffid)->get();
         }
         if(strpos($param,'byOrdId')!==false){
@@ -235,8 +238,47 @@ class ZestController extends Controller{
         }
 
         if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+        }
+        return $this->successResponse($response_data);
+    }
+
+    public function loadPromotionDetails($id){
+        $response_data=ZestPromotion::where('ID',$id)->first();
+        if($response_data!=null && $response_data!=""){
+            $response_data=$this->getstaff_positiondirectory($response_data,'Single');
+        }
+        return $this->successResponse($response_data);
+    }
+
+
+    private function getstaff_positiondirectory($response_data,$type){
+        if($type=="Single"){
+            $person=PersonalDetails::where('zest_staff_id',$response_data->StaffID)->first();
+            if($person!=null && $person!=""){
+                $response_data->staff_name=$person->name;
+                $response_data->working_agency_id=$person->working_agency_id;
+            }
+            $superstructure=SuperStructure::where('id',$response_data->SuperStructureID)->first();
+            if($superstructure!=null && $superstructure!=""){
+                $response_data->superstructure=$superstructure->name;
+            }
+            $positions=ChildGroupPosition::where('id', $response_data->ChildGroupPositionID)->first();
+            if($positions!=null && $positions!=""){
+                //get position title from mapping
+                $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                if($posi!=null && $posi!=""){
+                    $response_data->position_title_name=$posi->name;
+                    //get position level from position title
+                    $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                    if($posiLev!=null && $posiLev!=""){
+                        $response_data->positionlevel=$posiLev->name;
+                    }
+                }
+            }
+        }else{
             foreach($response_data as $res){
-                $person=PersonalDetails::where('id',$res['StaffID'])->first();
+                $person=PersonalDetails::where('zest_staff_id',$res['StaffID'])->first();
                 if($person!=null && $person!=""){
                     $res->staff_name=$person->name;
                     $res->working_agency_id=$person->working_agency_id;
@@ -259,37 +301,64 @@ class ZestController extends Controller{
                     }
                 }
             }
+
         }
-        return $this->successResponse($response_data);
+        return $response_data;
     }
 
-    public function loadPromotionDetails($id){
-        $response_data=ZestPromotion::where('ID',$id)->first();
-        if($response_data!=null && $response_data!=""){
-            $person=PersonalDetails::where('id',$response_data->StaffID)->first();
-            if($person!=null && $person!=""){
-                $response_data->staff_name=$person->name;
-                $response_data->working_agency_id=$person->working_agency_id;
+    public function loadLongTermTraining($param){
+        $response_data="";
+        if(strpos($param,'byId')!==false){
+            $staffid=explode('__',$param)[1];
+            $response_data=ZestLongTermTraining::where('ID',$staffid)->first();
+            $response_data=$this->getstaff_positiondirectory($response_data,'Single');
+            $funding=FundingAgency::where('ID',$response_data->FundingID)->first();
+            if($funding!=null && $funding!=""){
+                $response_data->funding=$funding->Name;
             }
-            $superstructure=SuperStructure::where('id',$response_data->SuperStructureID)->first();
-            if($superstructure!=null && $superstructure!=""){
-                $response_data->superstructure=$superstructure->name;
+            $status=TrainingStatus::where('ID',$response_data->TrainingStatusID)->first();
+            if($status!=null && $status!=""){
+                $response_data->training_status=$status->Status;
             }
-            $positions=ChildGroupPosition::where('id', $response_data->ChildGroupPositionID)->first();
-            if($positions!=null && $positions!=""){
-                //get position title from mapping
-                $posi=PositionTitle::where('id',$positions->position_title_id)->first();
-                if($posi!=null && $posi!=""){
-                    $response_data->position_title_name=$posi->name;
-                    //get position level from position title
-                    $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
-                    if($posiLev!=null && $posiLev!=""){
-                        $response_data->positionlevel=$posiLev->name;
+        }else{
+            if($param=="All"){
+                $response_data=ZestLongTermTraining::get();
+            }
+            if(strpos($param,'Limit')!==false){
+                $response_data=ZestLongTermTraining::take(explode('__',$param)[1])->get();
+            }
+
+            if(strpos($param,'byStaffId')!==false){
+                $staffid=explode('__',$param)[1];
+                $response_data=ZestLongTermTraining::where('StaffID',$staffid)->get();
+            }
+
+            if(strpos($param,'byOrdId')!==false){
+                $orgId=explode('__',$param)[1];
+                $staffIds=[];
+                $person=PersonalDetails::where('working_agency_id',$orgId)->get();
+                if($person!=null && $person!="" && sizeof($person)>0){
+                    foreach($person as $per){
+                        array_push($staffIds,$per['zest_staff_id']);
+                    }
+                }
+                $response_data=ZestLongTermTraining::wherein('StaffID',$staffIds)->get();
+            }
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+                foreach($response_data as $res){
+                    $funding=FundingAgency::where('ID',$res->FundingID)->first();
+                    if($funding!=null && $funding!=""){
+                        $res->funding=$funding->Name;
+                    }
+                    $status=TrainingStatus::where('ID',$res->TrainingStatusID)->first();
+                    if($status!=null && $status!=""){
+                        $res->training_status=$status->Status;
                     }
                 }
             }
         }
+
         return $this->successResponse($response_data);
     }
 }
-

@@ -46,4 +46,9 @@ class ZestController extends Controller{
         return $response_data;
     }
 
+    public function loadLongTermTraining($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadLongTermTraining/'.$param);
+        return $response_data;
+    }
+
 }

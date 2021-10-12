@@ -476,6 +476,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
         Route::get('/loadPromotion/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotion'])->name('loadPromotion');
         Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
+        Route::get('/loadLongTermTraining/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLongTermTraining'])->name('loadLongTermTraining');
+
     });
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
@@ -512,7 +514,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveTeachinSubject', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveTeachinSubject'])->name('saveTeachinSubject');
         Route::post('/saveStaffContact', [App\Http\Controllers\staff\StaffUpdateController::class, 'saveStaffContact'])->name('saveStaffContact');
 
-        
+
     });
     Route::prefix('staffSepSecController')->group(function (){
         Route::post('/saveSecondmentSeperation', [App\Http\Controllers\staff\StaffSepSecController::class, 'saveSecondmentSeperation'])->name('saveSecondmentSeperation');
@@ -687,10 +689,13 @@ Route::prefix('common')->group(function () {
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');
 
      //written by gagen to pull all register organization from bifurcation
-    Route::get('/loadBifurcationList', [App\Http\Controllers\CommonController::class, 'loadBifurcationList'])->name('loadBifurcationList');
-    Route::get('/loadParentOrgDetailOfBifcurcation/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfBifcurcation'])->name('loadParentOrgDetailOfBifcurcation');
+    Route::get('/loadRegisteredList/{type}', [App\Http\Controllers\CommonController::class, 'loadRegisteredList'])->name('loadRegisteredList');
+    Route::get('/loadParentOrgDetailOfRegistered/{type}/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfRegistered'])->name('loadParentOrgDetailOfRegistered');
 
     Route::get('/loadStaffList/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStaffList'])->name('loadStaffList');
+    Route::get('/loadStudentListByOrgId/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStudentListByOrgId'])->name('loadStudentListByOrgId');
+
+    
 
 });
 

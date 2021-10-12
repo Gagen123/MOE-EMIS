@@ -32,9 +32,9 @@
                                 <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-personal-tab" data-toggle="pill" href="#custom-tabs-four-personal" role="tab" aria-controls="custom-tabs-four-personal" aria-selected="false">Personal Details</a>
                                 </li>
-                                <li class="nav-item border-right">
+                                <!-- <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-work-tab" data-toggle="pill" href="#custom-tabs-four-work" role="tab" aria-controls="custom-tabs-four-work" aria-selected="false">Work Experience</a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item border-right">
                                     <a class="nav-link" id="custom-tabs-four-education-tab" data-toggle="pill" href="#custom-tabs-four-education" role="tab" aria-controls="custom-tabs-four-education" aria-selected="false">Education</a>
                                 </li>
@@ -147,7 +147,7 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="custom-tabs-four-work" role="tabpanel" aria-labelledby="custom-tabs-four-work-tab">
+                                <!-- <div class="tab-pane fade" id="custom-tabs-four-work" role="tabpanel" aria-labelledby="custom-tabs-four-work-tab">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <table id="training-table" class="table table-sm table-bordered table-striped">
                                             <thead>
@@ -162,7 +162,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="tab-pane fade" id="custom-tabs-four-education" role="tabpanel" aria-labelledby="custom-tabs-four-education-tab">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                                         <table id="training-table" class="table table-sm table-bordered table-striped">
@@ -234,15 +234,21 @@
                                         <table id="training-table" class="table table-sm table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>Training Type</th>
-                                                    <th>Course Title</th>
-                                                    <th>Location</th>
-                                                    <th>From Date</th>
-                                                    <th>To Date</th>
+                                                    <th>Course</th>
+                                                    <th>Funding</th>
+                                                    <th>Training Status</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-
+                                                <tr v-for="(item, index) in staff_lonttermtraining_list" :key="index">
+                                                    <td>{{ item.Course}}</td>
+                                                    <td>{{ item.funding}}</td>
+                                                    <td>{{ item.training_status}}</td>
+                                                    <td>{{ item.StartDate}}</td>
+                                                    <td>{{ item.EndDate}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -321,6 +327,7 @@ export default {
             staff_qualification_list:[],
             attachmentDetails:[],
             staff_promotion_list:[],
+            staff_lonttermtraining_list:[],
 
         }
     },
@@ -508,6 +515,12 @@ export default {
                 axios.get(uri)
                 .then(response => {
                     this.staff_promotion_list = response.data.data;
+                });
+
+                let uri1='/staff/zest/loadLongTermTraining/byStaffId__'+this.$route.params.data.id;
+                axios.get(uri1)
+                .then(response => {
+                    this.staff_lonttermtraining_list = response.data.data;
                 });
 
             })
