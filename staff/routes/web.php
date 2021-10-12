@@ -263,7 +263,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveAppointmentDetails', ['uses' => 'staff\ZestController@saveAppointmentDetails']);
         $router->get('/loadappointment', ['uses' => 'staff\ZestController@loadappointment']);
         $router->get('/loadSeperation', ['uses' => 'staff\ZestController@loadSeperation']);
+        $router->get('/loadPromotion/{param}', ['uses' => 'staff\ZestController@loadPromotion']);
+        $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
     });
-
 
 });

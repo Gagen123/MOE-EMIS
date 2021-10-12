@@ -62,7 +62,25 @@ class LoadStaffController extends Controller{
             $emp_type=[1,2,3];//regualr,contract and volunteer
             if(strpos($parent_id,'SEN')!==false){
                 return $this->successResponse(PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->where('is_sen',1)->get());
-            }else{
+            }
+            else if(strpos($parent_id,'First')!==false){
+                $num=explode('__',$parent_id)[1];
+                $personal=PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->take($num)->get();
+                if($personal!=null && $personal!="" && sizeof($personal)>0){
+                    foreach($personal as $per){
+                        $positions=ChildGroupPosition::where('id', $per->position_title_id)->first();
+                        if($positions!=null && $positions!=""){
+                            //get position title from mapping
+                            $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                            if($posi!=null && $posi!=""){
+                                $per->position_title_name=$posi->name;
+                            }
+                        }
+                    }
+                }
+                return $this->successResponse($personal);
+            }
+            else{
                 $personal=PersonalDetails::wherein('emp_type_id',$emp_type)->where('status','Created')->get();
                 if($personal!=null && $personal!="" && sizeof($personal)>0){
                     foreach($personal as $per){
@@ -121,7 +139,27 @@ class LoadStaffController extends Controller{
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('dzo_id',$parent_id)->where('status','Created')->get());
         }
         if($type=="orgwise" || $type=="userworkingagency"){
-            return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','dzo_id','village_id','comp_sub_id','elective_sub_id1','elective_sub_id2')->where('working_agency_id',$parent_id)->where('status','Created')->get());
+            $staff_det=PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','dzo_id','village_id','comp_sub_id','elective_sub_id1','elective_sub_id2')->where('working_agency_id',$parent_id)->where('status','Created')->get();
+            if($staff_det!=null && $staff_det!="" && sizeof($staff_det)>0){
+                foreach($staff_det as $stf){
+                    //mapping of the position tile, superstructure and childgroup
+                    $positions=ChildGroupPosition::where('id', $stf['position_title_id'])->first();
+                    if($positions!=null && $positions!=""){
+                        //get position title from mapping
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $stf->position_title_name=$posi->name;
+                            //get position level from position title
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $stf->positionlevel=$posiLev->name;
+                            }
+                        }
+
+                    }
+                }
+            }
+            return $this->successResponse($staff_det);
         }
         if($type=="emptype"){
             return $this->successResponse(PersonalDetails::select('id','emp_id','name','cid_work_permit','position_title_id','sex_id','village_id')->where('emp_type_id',$parent_id)->where('status','Created')->get());

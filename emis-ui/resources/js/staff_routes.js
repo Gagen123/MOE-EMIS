@@ -768,8 +768,23 @@ const routes = [
                 ],
             },
 
+            { path: '/promotion',
+                component: require('./components/staff/training/promotion/promotion_index.vue').default,
+                children:[
+                    { path: '/',name:'promotion',  component: require('./components/staff/training/promotion/list_promotion.vue').default },
+                    { path: '/list_promotion',name:'list_promotion',  component: require('./components/staff/training/promotion/list_promotion.vue').default },
+                    { path: '/view_promotion',name:'view_promotion',  component: require('./components/staff/training/promotion/view_promotion.vue').default },
+                ],
+            },
 
-
+            { path: '/longtermtraining',
+                component: require('./components/staff/training/longtermtraining/longtermtraining_index.vue').default,
+                children:[
+                    { path: '/',name:'longtermtraining',  component: require('./components/staff/training/longtermtraining/list_longtermtraining.vue').default },
+                    { path: '/list_longtermtraining',name:'list_longtermtraining',  component: require('./components/staff/training/longtermtraining/list_longtermtraining.vue').default },
+                    { path: '/view_longtermtraining',name:'view_longtermtraining',  component: require('./components/staff/training/longtermtraining/view_longtermtraining.vue').default },
+                ],
+            },
         ]
     },
 

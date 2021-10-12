@@ -1854,7 +1854,7 @@ export default {
             // await this.loadstaffMasters('byparent__sub_group_id__'+id,'PositionTitle');
         }
     },
-    mounted() {
+    async mounted() {
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -1867,6 +1867,7 @@ export default {
         Fire.$on('changefunction',(id)=>{
             this.changefunction(id);
         });
+        this.groupList =  await this.loadstaffMasters('active','StaffMajorGrop');
         this.loadactivemaritalList();
         this.loadactivesex_idList();
         // this.loadpositiontitleList();

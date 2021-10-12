@@ -66,7 +66,7 @@ class StaffUpdateController extends Controller{
         $request_data =[
             'id'                                =>  $request->id,
             'staff_id'                          =>  $request->staff_id,
-            'marital_status'                     =>  $request->marital_status,
+            'marital_status'                    =>  $request->marital_status,
             'remarks'                           =>  $request->remarks,
             'user_id'                           =>  $this->userId()
         ];

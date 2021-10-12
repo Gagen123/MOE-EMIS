@@ -29,17 +29,17 @@
                                 <td>{{ index+1}}</td>
                                 <td>{{ item.cid_work_permit}}</td>
                                 <td>{{ item.name}}</td>
-                                <td>{{ item.position_title}}</td>
+                                <td>{{ item.position_title_name}}</td>
                                 <td>
-                                    <input type="number" v-model="item.no_absent_days" value="0" @change="remove_err('presentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_absent_days" value="0" @change="remove_error('absentDay')" class="form-control">
                                 </td>
                                 <td>
-                                    <input type="number" v-model="item.no_present_days" value="0" @change="remove_err('absentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_present_days" value="0" @change="remove_error('presentDay')" class="form-control">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                </div> 
+                </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -72,7 +72,7 @@ export default {
         }
     },
     methods: {
-        
+
         loadStaffList(uri='loadCommons/loadFewDetailsStaffList/userworkingagency/NA'){
             axios.get(uri)
             .then(response => {
@@ -114,7 +114,7 @@ export default {
                         })
                     }
                 });
-                
+
             }
 		},
         changefunction(id){
@@ -127,7 +127,7 @@ export default {
                 this.attendance_form.staff=$('#staff').val();
             }
         },
-        
+
     },
      mounted(){
          let currentdate = new Date();
@@ -147,16 +147,16 @@ export default {
         .catch(function (error){
             console.log('Error: '+error);
         });
-        
+
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
