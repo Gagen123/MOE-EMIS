@@ -276,8 +276,8 @@ export default {
             $('#nomi_email').val(item.nomi_email);
             this.form.nomi_email=item.nomi_email;
 
-            $('#nomi_relation').val(item.nomi_relation.id).trigger('change');
-            this.form.nomi_relation=item.relations.id;
+            $('#nomi_relation').val(item.nomi_relation).trigger('change');
+            this.form.nomi_relation=item.relations.name;
             $('#nomi_percentage').val(item.nomi_percentage);
             this.form.nomi_percentage=item.nomi_percentage;
             this.attachmentDetails=item.attachment;
@@ -320,6 +320,17 @@ export default {
                 this.form.nomi_relation=$('#nomi_relation').val();
             }
 
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#file_name'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#file_name'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#file_name'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
         },
         // loadstaff(){
         //     let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';

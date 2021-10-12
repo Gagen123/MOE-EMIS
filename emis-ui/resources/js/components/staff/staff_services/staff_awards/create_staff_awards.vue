@@ -165,17 +165,28 @@ export default {
             }
             if(type=="save"){
                 this.award_form.date=this.formatYYYYMMDD($('#date').val());
-                this.award_form.post('staff/staffServices/saveStaffAward')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.award_form.post('staff/staffServices/saveStaffAward')
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
             }
 		},
         async changefunction(id){

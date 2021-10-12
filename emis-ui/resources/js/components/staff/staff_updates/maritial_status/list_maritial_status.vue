@@ -2,7 +2,7 @@
     <div>
         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-header pb-0 pt-2">
-                <h3 class="card-title"><b>Advance Search </b></h3>
+                <h3 class="card-title"><b>Search </b></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-plus" ></i>
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                 <table id="career_stage_table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
@@ -45,7 +45,10 @@
                             <th>Name</th>
                             <th>Position Title</th>
                             <th>Working Agency</th>
-                            <th>Action</th>
+                            <th>Email</th>
+                            <th>Contact Number</th>
+                            <th>Marital Status</th>
+                            <th class="pr-4 pl-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -55,8 +58,11 @@
                             <td>{{ item.name}}</td>
                             <td>{{ positiontitleList[item.position_title_id]}}</td>
                             <td>{{ item.working_agency}}</td>
+                            <td>{{ item.email}}</td>
+                            <td>{{ item.contact_no}}</td>
+                            <td>{{ marital_statusList[item.merital_status]}}</td>
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Update</a>
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a>
                             </td>
                         </tr>
                     </tbody>
@@ -72,11 +78,12 @@ export default {
             dzongkhagList:[],
             dzo_id:'',
             orgList:[],
-            showedit:false,
+
             substaffList:[],
             genderArray:{},
             cureerstageArray:{},
             positiontitleList:{},
+            marital_statusList:{},
             dt:'',
         }
     },
@@ -119,6 +126,18 @@ export default {
                 console.log('Error: '+error);
             });
         },
+        loadactivemaritalList(uri="staff/loadStaffMasters/active/MaritalStatus"){
+            axios.get(uri)
+            .then(response => {
+                let data = response;
+                for(let i=0;i<data.data.data.length;i++){
+                    this.marital_statusList[data.data.data[i].id] = data.data.data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.leg(error);
+            });
+        },
         async changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -131,12 +150,12 @@ export default {
             }
         },
         async loaddata(){
-            this.staffList=[];
+            this.substaffList=[];
             if($('#org_id').val()!="ALL"){
-                this.staffList=await this.staffSchoolwise($('#org_id').val());
+                this.substaffList=await this.staffSchoolwise($('#org_id').val());
             }
             if($('#dzongkhag_id').val()!="ALL" && $('#org_id').val()=='ALL'){
-                this.staffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
+                this.substaffList=await this.staffDzongkhagwise($('#dzongkhag_id').val());
             }
         }
     },
@@ -144,12 +163,12 @@ export default {
         this.dzongkhagList= await this.loadactivedzongkhags();
         this.loadactivecureerstageList();
         this.loadpositionTitleList();
-
+        this.loadactivemaritalList();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
-        $('.select2').on('select2:se         lect', function (el){
+        $('.select2').on('select2:select', function (el){
             Fire.$emit('changefunction',$(this).attr('id'));
         });
 
@@ -173,7 +192,7 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        this.dt =  $("#teaching_subject_table").DataTable()
+        this.dt =  $("#career_stage_table").DataTable()
     },
     watch: {
         substaffList(){
@@ -183,5 +202,9 @@ export default {
             });
         }
     },
+
+
 }
 </script>
+
+
