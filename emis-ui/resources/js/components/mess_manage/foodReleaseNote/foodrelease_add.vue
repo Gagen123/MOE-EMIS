@@ -216,9 +216,9 @@ export default {
                 let formData = new FormData();
                 formData.append('dateOfrelease', this.form.dateOfrelease);
                
-            //    formData.append('dzongkhag', this.form.dzongkhag);
+             //    formData.append('dzongkhag', this.form.dzongkhag);
                 // alert(this.form.attachments);
-            //    formData.append('organizaiton', this.form.organizaiton);
+              //    formData.append('organizaiton', this.form.organizaiton);
                 formData.append('quarter', this.form.quarter);
                 formData.append('remarks', this.form.remarks);
                  for(let i=0;i<this.form.ref_docs.length;i++){

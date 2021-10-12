@@ -313,12 +313,18 @@ export default {
             studentcomposition_list:[],
             nonstaffcomposition_list:[],
             attachmentDetails:[],
+             fileUpload: [],
             form: new form({
                 id:'',
                 body_type:'',
                 from_date:'',
                 to_date:'',
                 remarks:'',
+                 attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
             staff: new form({
                 management_id:'',
@@ -337,7 +343,21 @@ export default {
     methods: {
         shownexttab(nextclass){
             if(nextclass=="members-details-tab"){
-                this.form.post('staff/managementBody/saveManagementBody')
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('body_type', this.form.body_type);
+                formData.append('from_date', this.form.from_date);
+                formData.append('to_date', this.form.to_date);
+                formData.append('remarks', this.form.remarks);
+                 for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
+                axios.post('staff/managementBody/saveManagementBody',formData,config)
                 .then((response) => {
                     if(response.data!=""){
                         Toast.fire({
@@ -550,6 +570,17 @@ export default {
                     });
                 }
             });
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
         },
         remove_err(fieldId,errorId){
             if($('#'+fieldId).val()!=""){
