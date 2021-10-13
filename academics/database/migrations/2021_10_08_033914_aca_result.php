@@ -37,8 +37,8 @@ class AcaResult extends Migration
             $table->string('stf_class_tecaher_name', 100);
             $table->char('stf_principal_id', 36)->index();
             $table->string('stf_principal_name', 100);
-            $table->char('created_by', 36)->nullable()->index();
-            $table->string('updated_by', 36)->index()->nullable();
+            $table->char('created_by', 36)->nullable();
+            $table->string('updated_by', 36)->nullable();
             $table->timestamps();
 
             $table->primary(['id', 'academic_year']);

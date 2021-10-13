@@ -469,7 +469,10 @@ class AcademicController extends Controller
         $lastSubjectId = "";
         $totalWeightageTerm = 0;
         $totalWeightageSubject = 0;
+
+
         $originalAreas = $areas;
+
         $indexAddTerm = 0;
         $indexAddSubject = 0;
         //For coulmn headers
@@ -763,6 +766,26 @@ class AcademicController extends Controller
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/academics/updateResult', $data);
         return $response_data;
+    }
+    public function getApprovedTerms(Request $request)
+    {
+        $orgId = $this->getWrkingAgencyId();
+        $uri = 'emis/academics/getApprovedTerms?academic_year=' . $request['academic_year'] . '&org_id=' . $orgId . '&org_class_id=' . $request['org_class_id'];
+        if ($request['org_stream_id']) {
+            $uri .= ('&org_stream_id=' . $request['org_stream_id']);
+        }
+        if ($request['org_section_id']) {
+            $uri .= ('&org_section_id=' . $request['org_section_id']);
+        }
+        return $this->apiService->listData($uri);
+    }
+    public function getStudentsForProgressReport($Id)
+    {
+        return $this->apiService->listData('emis/academics/getStudentsForProgressReport/' . $Id);
+    }
+    public function getProgressReport($Id, $resultId)
+    {
+        return $this->apiService->listData('emis/academics/getProgressReport/' . $Id . '/' . $resultId);
     }
     private function getClassTeacherByclass($orgId, $class_id, $stream_id, $section_id)
     {

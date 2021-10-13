@@ -37,6 +37,7 @@
                              <option value="">--Select--</option>
                             <option value="0">Continuous Assessment</option>
                             <option value="1">Term Examination</option>
+                            <option value="2">Others (Personal Traits, SUPW, Non-Academic Subject)</option>
                         </select> 
                         <has-error :form="form" field="aca_assmnt_type"></has-error>
                     </div>

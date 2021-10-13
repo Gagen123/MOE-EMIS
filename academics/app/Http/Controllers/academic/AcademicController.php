@@ -1128,7 +1128,8 @@ class AcademicController extends Controller
     public function getSubCategNonAcademic()
     {
         $sub_categ_non_academic = env('SUB_CATEG_NON_ACADEMIC');
-        return $this->successResponse(DB::select('SELECT t2.name,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.aca_sub_category_id = ?', [$sub_categ_non_academic]));
+        return [];
+        // $this->successResponse(DB::select('SELECT t2.name,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.aca_sub_category_id = ?', [$sub_categ_non_academic]));
     }
     public function getRemedialClass($orgId)
     {
@@ -1183,16 +1184,31 @@ class AcademicController extends Controller
     }
     public function updateStatus(Request $request)
     {
-        // dd($request);
-        if ($request['action'] == 'approve') {
-            $this->finalizedResult($request);
-            $consolidated = DB::update('UPDATE aca_result_consolidated SET approved = 1, approved_date = CURRENT_TIMESTAMP WHERE id = ?', [$request['aca_result_consolidated_id']]);
-        } elseif ($request['action'] == 'publish') {
-            foreach ($request['not_published'] as $key => $value) {
-                $consolidated = DB::update('UPDATE aca_result_consolidated SET published = 1, published_date = CURRENT_TIMESTAMP WHERE id = ?', [$value]);
+        try {
+
+            $success = DB::transaction(function () use ($request) {
+                if ($request['action'] == 'approve') {
+                    $finalized_result = $this->finalizedResult($request);
+                    if ($finalized_result) {
+                        DB::update('UPDATE aca_result_consolidated SET approved = 1, approved_date = CURRENT_TIMESTAMP WHERE id = ?', [$request['aca_result_consolidated_id']]);
+                    } else {
+                        return false;
+                    }
+                } elseif ($request['action'] == 'publish') {
+                    foreach ($request['not_published'] as $key => $value) {
+                        DB::update('UPDATE aca_result_consolidated SET published = 1, published_date = CURRENT_TIMESTAMP WHERE id = ?', [$value]);
+                    }
+                };
+                return true;
+            });
+            if ($success) {
+                return $this->successResponse('Updated', Response::HTTP_CREATED);
+            } else {
+                return $this->errorResponse('Please approve all term results of the class before approving the final result.', Response::HTTP_NOT_FOUND);
             }
+        } catch (Exception $e) {
+            dd($e);
         }
-        return $this->successResponse($consolidated, Response::HTTP_CREATED);
     }
     public function getSubjectOfTerm(Request $request)
     {
@@ -1294,14 +1310,37 @@ class AcademicController extends Controller
     private function finalizedResult($request)
     {
         try {
-            $term_details = DB::select("SELECT t1.academic_year,IFNULL(t2.term_number,0) AS term_number ,IFNULL(t2.name,'Final Result') AS term_name FROM aca_result_consolidated t1 LEFT JOIN aca_assessment_term t2 ON t1.aca_assmt_term_id = t2.id WHERE t1.id = ? ", [$request['aca_result_consolidated_id']]);
-            if (count($term_details)) {
-                $id = (DB::select("SELECT UUID() AS id"))[0]->id;
-                $stream_id = isset($request['class']['org_stream_id']) && trim($request['class']['org_stream_id']) != '' ? $request['class']['org_stream_id'] : null;
-                $stream = isset($request['class']['org_stream']) && trim($request['class']['org_stream']) != '' ? $request['class']['org_stream'] : null;
-                $section_id = isset($request['class']['org_section_id']) && trim($request['class']['org_section_id']) != '' ? $request['class']['org_section_id'] : null;
-                $section = isset($request['class']['org_section']) && trim($request['class']['org_section']) != '' ? $request['class']['org_section'] : null;
+            $term_details = DB::select("SELECT IFNULL(t2.id,'final-result') AS aca_assmt_term_id,t1.academic_year,IFNULL(t2.term_number,0) AS term_number ,IFNULL(t2.name,'Final Result') AS term_name
+            FROM aca_result_consolidated t1 LEFT JOIN aca_assessment_term t2 ON t1.aca_assmt_term_id = t2.id 
+            WHERE t1.id = ? ", [$request['aca_result_consolidated_id']]);
 
+            if (count($term_details)) {
+                $term_detail = $term_details[0];
+                $stream_id = isset($request['class']['org_stream_id']) && trim($request['class']['org_stream_id']) != '' ? $request['class']['org_stream_id'] : null;
+                $stream = isset($request['class']['stream']) && trim($request['class']['stream']) != '' ? $request['class']['stream'] : null;
+                $section_id = isset($request['class']['org_section_id']) && trim($request['class']['org_section_id']) != '' ? $request['class']['org_section_id'] : null;
+                $section = isset($request['class']['section']) && trim($request['class']['section']) != '' ? $request['class']['section'] : null;
+                $lastTermResultId = "";
+                if ($term_detail->term_number == 0) {
+                    $lastTermQuery = "SELECT SUBSTRING(MAX(CONCAT(LPAD(term_number,3,'0'),id)),4) AS id_of_last_term FROM aca_result WHERE org_id = ? AND academic_year = ? AND org_class_id = ?";
+                    $lastTermParams = [$request['orgnization']['id'], $term_detail->academic_year, $request['class']['org_class_id']];
+                    if ($stream_id != null) {
+                        $lastTermQuery .= " AND org_stream_id = ?";
+                        array_push($lastTermParams, $stream_id);
+                    }
+                    if ($section_id != null) {
+                        $lastTermQuery .= " AND org_section_id = ?";
+                        array_push($lastTermParams, $section_id);
+                    }
+                    $lastTermIdQ = DB::select($lastTermQuery, $lastTermParams);
+                    if (count($lastTermIdQ) > 0 && $lastTermIdQ[0]->id_of_last_term) {
+                        $lastTermResultId = $lastTermIdQ[0]->id_of_last_term;
+                    } else {
+                        return false;
+                        //return error ""
+                    }
+                }
+                $id = (DB::select("SELECT UUID() AS id"))[0]->id;
                 $transcript_format_query = "SELECT transcript_format FROM aca_class_assessment_frequency  WHERE org_class_id = ?";
                 $transcript_format_params = [$request['class']['org_class_id']];
                 if ($stream_id != null) {
@@ -1314,7 +1353,7 @@ class AcademicController extends Controller
                 org_stream_id, stream, org_section_id, section, stf_class_teacher_id, stf_class_tecaher_name, stf_principal_id, stf_principal_name, created_by, created_at)
                     VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)",
                     [
-                        $id, $request['aca_result_consolidated_id'], $term_details[0]->academic_year, $transcript_format, $term_details[0]->term_number, $term_details[0]->term_name,
+                        $id, $request['aca_result_consolidated_id'], $term_detail->academic_year, $transcript_format, $term_detail->term_number, $term_detail->term_name,
                         $request['orgnization']['id'], $request['orgnization']['name'], $request['orgnization']['gewogId'],
                         $request['orgnization']['gewog'], $request['orgnization']['dzongkhagId'], $request['orgnization']['dzongkhag'],
                         $request['class']['org_class_id'], $request['class']['class'], $stream_id, $stream, $section_id, $section, $request['class_teacher'][0]['stf_staff_id'],
@@ -1323,13 +1362,13 @@ class AcademicController extends Controller
                     ]
                 );
 
-                $query = "SELECT DISTINCT t1.aca_sub_id, t2.name,IF(t3.name='Academic',1,0) AS is_academic,IFNULL(t4.show_in_result,1) AS show_in_result,t4.display_order
-                FROM aca_student_assessment t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id
+                $query = "SELECT DISTINCT t1.aca_sub_id, t2.name,t21.id AS combined_sub_id,t21.name AS combined_subject,t3.code AS sub_category_code,t3.name AS sub_category,IFNULL(t4.show_in_result,1) AS show_in_result,t4.display_order
+                FROM aca_student_assessment t1 JOIN (aca_subject t2 LEFT JOIN aca_subject t21 ON t2.aca_sub_id = t21.id) ON t1.aca_sub_id = t2.id
                 JOIN aca_subject_category t3 ON t2.aca_sub_category_id = t3.id
                 LEFT JOIN aca_class_subject t4 ON t1.aca_sub_id = t4.aca_sub_id AND t1.org_class_id = t4.org_class_id 
                     AND (t1.org_stream_id = t4.org_stream_id OR (t1.org_stream_id IS NULL AND t4.org_stream_id IS NULL))
                 WHERE t1.org_id = ? AND t1.academic_year = ? AND t1.org_class_id = ?";
-                $params = [$request['orgnization']['id'], $term_details[0]->academic_year, $request['class']['org_class_id']];
+                $params = [$request['orgnization']['id'], $term_detail->academic_year, $request['class']['org_class_id']];
                 if ($stream_id != null) {
                     $query .= " AND org_stream_id = ?";
                     array_push($params, $stream_id);
@@ -1339,64 +1378,74 @@ class AcademicController extends Controller
                     array_push($params, $section_id);
                 }
                 $classSubjects = DB::select($query, $params);
+
                 foreach ($classSubjects as $classSubject) {
                     $result_sub_id = (DB::select("SELECT UUID() AS id"))[0]->id;
                     $key  = array_search($classSubject->aca_sub_id, array_column($request['subject_teachers'], 'aca_sub_id'));
                     $staff_id = $request['subject_teachers'][$key]['stf_staff_id'];
                     $staff_name = $request['subject_teachers'][$key]['name'];
                     DB::statement(
-                        "INSERT INTO aca_result_subject(id, academic_year, aca_result_id, ac_sub_id, subject,
-                    is_academic, teacher_id, teacher, show_in_result, display_order, created_by, created_at)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        "INSERT INTO aca_result_subject(id, academic_year, aca_result_id, aca_sub_id, subject,combined_sub_id,
+                    combined_subject,sub_category_code,sub_category, teacher_id, teacher, show_in_result, display_order, created_by, created_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         [
-                            $result_sub_id, $term_details[0]->academic_year, $id, $classSubject->aca_sub_id,
-                            $classSubject->name, $classSubject->is_academic, $staff_id, $staff_name, $classSubject->show_in_result,
-                            $classSubject->display_order, $request['user_id'], date('Y-m-d h:i:s')
+                            $result_sub_id, $term_detail->academic_year, $id, $classSubject->aca_sub_id,
+                            $classSubject->name, $classSubject->combined_sub_id, $classSubject->combined_subject,
+                            $classSubject->sub_category_code, $classSubject->sub_category, $staff_id, $staff_name,
+                            $classSubject->show_in_result, $classSubject->display_order, $request['user_id'], date('Y-m-d h:i:s')
                         ]
                     );
                 }
-
-
-                if ($term_details[0]->term_number == 0) {
+                if ($term_detail->term_number == 0) {
                     $pass_fail = $this->passFail($request['orgnization']['id'],  $request['class']['org_class_id'], $stream_id, $stream, $section_id, $section);
                 } else {
                     $pass_fail = [];
                 }
                 foreach ($request['stduents'] as $stduent) {
                     $result_std_id = (DB::select("SELECT UUID() AS id"))[0]->id;
-                    $key1  = array_search($stduent['std_student_id'], array_column($request['awards'], 'std_student_id'));
-                    $key2 = array_search($stduent['std_student_id'], array_column($request['responsilities'], 'std_student_id'));
-                    $key3  = array_search($stduent['std_student_id'], array_column($pass_fail, 'std_student_id'));
-                    $comments = DB::select('SELECT remarks FROM aca_result_consolidated_detail WHERE aca_result_consolidated_id = ? AND std_student_id = ?', [$request['aca_result_consolidated_id'], $stduent['std_student_id']])[0]->remarks;
-                    if ($key1 >= 0) {
-                        $awards = $pass_fail[$key1]['awards'];
-                    } else {
-                        $awards = null;
+                    // $key1  = array_search($stduent['std_student_id'], array_column($request['awards'], 'std_student_id'));
+                    // $key2 = array_search($stduent['std_student_id'], array_column($request['responsilities'], 'std_student_id'));
+                    $comments_query = DB::select('SELECT remarks FROM aca_result_consolidated_detail WHERE aca_result_consolidated_id = ? AND std_student_id = ?', [$request['aca_result_consolidated_id'], $stduent['std_student_id']]);
+                    $comments = null;
+                    if (count($comments_query) > 0) {
+                        $comments = $comments_query[0]->remarks;
+                    };
+                    // if ($key1 >= 0) {
+                    //     $awards = $pass_fail[$key1]['awards'];
+                    // } else {
+                    //     $awards = null;
+                    // }
+                    // if ($key2 >= 0) {
+                    //     $responsilities = $pass_fail[$key2]['responsilities'];
+                    // } else {
+                    //     $responsilities = null;
+                    // }
+                    // dd($pass_fail);
+                    $result = null;
+                    if (count($pass_fail) > 0) {
+                        $key3  = array_search($stduent['std_student_id'], array_column($pass_fail, 'std_student_id'));
+                        if ($key3 !== false) {
+                            $result = $pass_fail[$key3]->passed;
+                        }
                     }
-                    if ($key2 >= 0) {
-                        $responsilities = $pass_fail[$key2]['responsilities'];
-                    } else {
-                        $responsilities = null;
-                    }
-                    if ($key3 >= 0) {
-                        $result = $pass_fail[$key3]['passed'];
-                    } else {
-                        $result = null;
-                    }
+                    $cid = isset($stduent['CidNo']) ? $stduent['CidNo'] : null;
                     DB::statement(
                         "INSERT INTO aca_result_student(id, academic_year, aca_result_id, std_student_id, student_code, name, cid,
-                        dob, roll_no, special_award, responsibility, promoted, general_comment, created_by, created_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        dob, roll_no, promoted, general_comment, created_by, created_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?)",
                         [
-                            $result_std_id, $term_details[0]->academic_year, $id, $stduent['std_student_id'], $stduent['student_code'], $stduent['Name'],
-                            $stduent['CidNo'], $stduent['dob'], $stduent['roll_no'], $awards, $responsilities, $result, $comments, $request['user_id'], date('Y-m-d h:i:s')
+                            $result_std_id, $term_detail->academic_year, $id, $stduent['std_student_id'], $stduent['student_code'], $stduent['Name'],
+                            $cid, $stduent['dob'], $stduent['roll_no'], $result, $comments, $request['user_id'], date('Y-m-d h:i:s')
                         ]
                     );
                 }
-                if ($term_details[0]->term_number != 0) {
-                    $query1 = "INSERT INTO aca_result_score(id, academic_year, aca_result_student_id, aca_result_subject_id, aca_assmt_area_id, 
-                            assessment_area,aca_assmnt_type,score, score_description, display_order, created_by, created_at)
-                    SELECT UUID(),?,t4.id,t3.id,t3.id,t3.name,t3.aca_assmnt_type,t1.score,IFNULL(t10.name,t1.descriptive_score),t2.display_order, ? , ?
+
+                if ($term_detail->term_number != 0) { //term result
+                    // try {
+                    $query1 = "INSERT INTO aca_result_score(id, academic_year, aca_result_student_id, aca_sub_id, aca_assmt_area_id, 
+                            assessment_area,aca_assmnt_type,aca_rating_type_id,score, score_description, display_order, created_by, created_at)
+                    SELECT UUID(),t0.academic_year,t5.id,t0.aca_sub_id,t3.id,t3.name,t3.aca_assmnt_type,t1.aca_rating_type_id,t1.score,
+                    IFNULL(t10.name,t1.descriptive_score),t2.display_order, ? , ?
                     FROM aca_student_assessment t0
                         JOIN (aca_student_assessment_detail t1
                                 LEFT JOIN aca_rating t10 ON t1.aca_rating_type_id = t10.aca_rating_type_id AND t1.score = t10.score
@@ -1405,74 +1454,216 @@ class AcademicController extends Controller
                         AND t0.aca_assmt_term_id = t2.aca_assmt_term_id AND t0.org_class_id = t2.org_class_id 
                             AND (t0.org_stream_id = t2.org_stream_id OR (t0.org_stream_id IS NULL AND t2.org_stream_id IS NULL))
                         JOIN aca_assessment_area t3 ON t1.aca_assmt_area_id = t3.id
-                        JOIN aca_result_subject t4 ON t0.aca_sub_id = t4.aca_sub_id AND t4.aca_result_id = ?
                         JOIN aca_result_student t5 ON t1.std_student_id = t5.std_student_id AND t5.aca_result_id = ? 
                     WHERE t0.academic_year = ? AND t0.aca_assmt_term_id = ? AND t0.org_id = ? AND t0.org_class_id = ?";
-                } elseif ($transcript_format == 1) {
-                    $query1 = "INSERT INTO aca_result_score(id, academic_year, aca_result_student_id, aca_result_subject_id, aca_assmt_area_id, 
-                            assessment_area,aca_assmnt_type,score, score_description, display_order, created_by, created_at)
-                    SELECT UUID(),?,t2.id,t5.id,t4.id,t4.name,t4.aca_assmnt_type,ROUND(AVG(t1.score)),IFNULL(t10.name,t1.descriptive_score),t2.display_order, ? , ?
-                    FROM aca_result_score t1
-                        JOIN aca_result_student t2 ON t1.aca_result_student_id = t2.id
-                        JOIN aca_result t3 ON t2.aca_result_id = t3.id
-                        JOIN aca_assessment_area t4 ON t1.aca_assmt_area_id = t4.id
-                        JOIN aca_result_subject t5 ON t4.aca_sub_id = t5.aca_sub_id AND t5.aca_result_id = ?
-                    WHERE t1.academic_year = ?  AND t1.org_id = ? AND t0.org_class_id = ?";
-                }
+                    $params = [$request['user_id'], date('Y-m-d h:i:s'), $id, $term_detail->academic_year, $term_detail->aca_assmt_term_id, $request['orgnization']['id'], $request['class']['org_class_id']];
+                    if ($stream_id != null) {
+                        $query1 .= " AND t0.org_stream_id = ?";
+                        array_push($params, $stream_id);
+                    }
+                    if ($section_id != null) {
+                        $query1 .= " AND t0.org_section_id = ?";
+                        array_push($params, $section_id);
+                    }
+                    DB::statement($query1, $params);
+                    if ($transcript_format == 1) { //CFA
+                        DB::statement("INSERT INTO aca_result_score_cfa(id, academic_year, aca_result_student_id, aca_sub_id, 
+                            assessment_area, score, score_description, display_order, created_by, created_at)
+                        SELECT UUID(), t1.academic_year, t1.aca_result_student_id,aca_sub_id,t1.assessment_area, t1.score, 
+                            t1.score_description, t1.display_order,?, ?
+                        FROM aca_result_score t1 JOIN aca_result_student t2 ON t1.aca_result_student_id = t2.id
+                        WHERE aca_result_id = ?", [$request['user_id'], date('Y-m-d h:i:s'), $id]);
+                    } else { //CSA
+                        DB::statement("INSERT INTO aca_result_score_csa(id, academic_year, aca_result_student_id, sub_category_code,
+                        subject, assessment_area, ca_score, exam_score, score_description, display_order, created_by, created_at)
+                        SELECT UUID(), t1.academic_year, t1.aca_result_student_id,MAX(t3.sub_category_code), IFNULL(t3.combined_subject,t3.subject),
+                            IF(t1.sub_category_code = 3,t1.assessment_area,IFNULL(t3.combined_subject,t3.subject)),
+                            SUM(IF(t1.sub_category_code=1 AND t1.aca_assmnt_type=0,t1.score,0), SUM(t1.sub_category_code=1 AND IF(t1.aca_assmnt_type=1,t1.score,0),
+                            MAX(t1.score_description), MAX(t1.display_order),?, ?
+                        FROM aca_result_score t1 JOIN aca_result_student t2 ON t1.aca_result_student_id = t2.id
+                            JOIN aca_result_subject t3 ON t1.aca_sub_id=t3.aca_sub_id AND t2.aca_result_id=t3.aca_result_id
+                        WHERE t2.aca_result_id = ?
+                        GROUP BY t1.academic_year, t1.aca_result_student_id, IFNULL(t3.combined_subject,t3.subject), 
+                            IF(t1.sub_category_code = 3,t1.assessment_area,IFNULL(t3.combined_subject,t3.subject))", [$request['user_id'], date('Y-m-d h:i:s'), $id]);
+                    }
+                    // } catch (Exception $e) {
+                    //     dd($e);
+                    // }
+                } else {
+                    if ($transcript_format == 1) { //final result for CFA
+                        $query2 = "INSERT INTO aca_result_score_cfa(id, academic_year, aca_result_student_id, aca_sub_id,
+                        aca_rating_type_id,assessment_area,score, display_order, created_by, created_at)
+                        SELECT UUID(),t3.academic_year,t4.id,t1.aca_sub_id,t1.aca_rating_type_id,t1.assessment_area,
+                        ROUND(AVG(t1.score)),MAX(t1.display_order), ? , ?
+                        FROM aca_result_score t1
+                            JOIN aca_result_student t2 ON t1.aca_result_student_id = t2.id
+                            JOIN aca_result t3 ON t2.aca_result_id = t3.id
+                            JOIN (SELECT id,std_student_id FROM aca_result_student WHERE aca_result_id = ?) t4 ON t2.std_student_id = t4.std_student_id
+                        WHERE t1.academic_year = ? AND t3.org_id = ? AND t3.org_class_id = ?";
+                        $params = [$request['user_id'], date('Y-m-d h:i:s'), $lastTermResultId, $term_detail->academic_year, $request['orgnization']['id'], $request['class']['org_class_id']];
+                        if ($stream_id != null) {
+                            $query2 .= " AND t3.org_stream_id = ?";
+                            array_push($params, $stream_id);
+                        }
+                        if ($section_id != null) {
+                            $query2 .= " AND t3.org_section_id = ?";
+                            array_push($params, $section_id);
+                        }
+                        try {
+                            DB::statement("$query2 GROUP BY t3.academic_year,t4.id,t1.aca_sub_id,t1.assessment_area", $params);
+                        } catch (Exception $e) {
+                            dd($e);
+                        }
 
-                $params = [];
-                if ($stream_id != null) {
-                    $query .= " AND t0.org_stream_id = ?";
-                    array_push($params, $stream_id);
-                }
-                if ($section_id != null) {
-                    $query .= " AND t0.org_section_id = ?";
-                    array_push($params, $section_id);
-                }
+                        DB::statement(
+                            'UPDATE aca_result_student t0 JOIN aca_result_score_cfa t1 ON t0.id = t1.aca_result_student_id 
+                                LEFT JOIN aca_rating t2 ON t1.aca_rating_type_id = t2.aca_rating_type_id AND t1.score = t2.score
+                                LEFT JOIN (SELECT aca_result_student_id,aca_assmt_area_id,score_description FROM aca_result_score a
+                                    JOIN aca_result_student b ON a.aca_result_student_id = b.id
+                                    WHERE b.aca_result_id = ? AND a.score IS NULL) t3 ON t0.id = t3.aca_result_student_id AND t1.aca_assmt_area_id = t3.aca_assmt_area_id
+                            SET t1.score_description = IFNULL(t2.name,t3.score_description)
+                            WHERE t0.aca_result_id = ?',
+                            [$lastTermIdQ, $id]
+                        );
+                    } else {
+                        $query2 = "INSERT INTO aca_result_score_csa(id, academic_year, aca_result_student_id, aca_sub_id,
+                        aca_rating_type_id,assessment_area,score, display_order, created_by, created_at)
+                        SELECT UUID(),t3.academic_year,t4.id,t1.aca_sub_id,t1.aca_rating_type_id,t1.assessment_area,
+                        ROUND(AVG(t1.score)),MAX(t1.display_order), ? , ?
+                        FROM aca_result_score t1
+                            JOIN aca_result_student t2 ON t1.aca_result_student_id = t2.id
+                            JOIN aca_result t3 ON t2.aca_result_id = t3.id
+                            JOIN (SELECT id,std_student_id FROM aca_result_student WHERE aca_result_id = ?) t4 ON t2.std_student_id = t4.std_student_id
+                        WHERE t1.sub_category_code<>1 AND t1.academic_year = ? AND t3.org_id = ? AND t3.org_class_id = ?";
+                        $params = [$request['user_id'], date('Y-m-d h:i:s'), $lastTermResultId, $term_detail->academic_year, $request['orgnization']['id'], $request['class']['org_class_id']];
+                        if ($stream_id != null) {
+                            $query2 .= " AND t3.org_stream_id = ?";
+                            array_push($params, $stream_id);
+                        }
+                        if ($section_id != null) {
+                            $query2 .= " AND t3.org_section_id = ?";
+                            array_push($params, $section_id);
+                        }
+                        try {
+                            DB::statement("$query2 GROUP BY t3.academic_year,t4.id,t1.aca_sub_id,t1.assessment_area", $params);
+                        } catch (Exception $e) {
+                            dd($e);
+                        }
 
-                DB::statement(
-
-                    // [
-                    //     $result_std_id, $term_details[0]->academic_year, $id, $stduent['std_student_id'], $stduent['student_code'], $stduent['Name'],
-                    //     $stduent['CidNo'], $stduent['dob'], $stduent['roll_no'], $awards, $responsilities, $result, $comments, $request['user_id'], date('Y-m-d h:i:s')
-                    // ]
-                );
+                        DB::statement(
+                            'UPDATE aca_result_student t0 JOIN aca_result_score_csa t1 ON t0.id = t1.aca_result_student_id 
+                                LEFT JOIN aca_rating t2 ON t1.aca_rating_type_id = t2.aca_rating_type_id AND t1.score = t2.score
+                                LEFT JOIN (SELECT aca_result_student_id,aca_assmt_area_id,score_description FROM aca_result_score a
+                                    JOIN aca_result_student b ON a.aca_result_student_id = b.id
+                                    WHERE b.aca_result_id = ? AND a.score IS NULL) t3 ON t0.id = t3.aca_result_student_id AND t1.aca_assmt_area_id = t3.aca_assmt_area_id
+                            SET t1.score_description = IFNULL(t2.name,t3.score_description)
+                            WHERE t0.aca_result_id = ?',
+                            [$lastTermIdQ, $id]
+                        );
+                    }
+                }
             }
+            return true;
         } catch (Exception $e) {
             dd($e);
         }
     }
-
+    public function getApprovedTerms(Request $request)
+    {
+        $query = "SELECT id,transcript_format,academic_year,CONCAT(class,IFNULL(CONCAT(' ',stream),''),IFNULL(CONCAT(' ',section),'')) AS class,term_name FROM aca_result WHERE academic_year = ? AND org_id = ? AND org_class_id = ?";
+        // Have to put $request['academic_year'] instread of 0
+        $params = [0, $request['org_id'], $request['org_class_id']];
+        if ($request['org_stream_id']) {
+            $query .= " AND org_stream_id = ?";
+            array_push($params, $request['org_stream_id']);
+        }
+        if ($request['org_section_id']) {
+            $query .= " AND org_section_id = ?";
+            array_push($params, $request['org_section_id']);
+        }
+        return $this->successResponse(DB::select($query, $params));
+    }
+    public function getStudentsForProgressReport($Id)
+    {
+        return $this->successResponse(DB::select('SELECT id,aca_result_id,roll_no,name,student_code,cid FROM aca_result_student WHERE aca_result_id = ?', [$Id]));
+    }
+    public function getProgressReport($Id, $resultId)
+    {
+        $org_and_class_details = DB::select("SELECT transcript_format,term_number,school_name,gewog,dzongkhag,CONCAT(class,IFNULL(CONCAT(' ',stream),'')) AS class,section,stf_class_tecaher_name,stf_principal_name FROM aca_result WHERE id = ?", [$resultId]);
+        $student_details = DB::select('SELECT id,aca_result_id,roll_no,name,student_code,cid,admission_no,dob,special_award,responsibility,promoted,general_comment FROM aca_result_student WHERE id = ?', [$Id]);
+        $subjects = DB::select("SELECT subject FROM aca_result_subject WHERE sub_category_code=1 AND aca_result_id = ?", [$resultId]);
+        $org_and_class_details = count($org_and_class_details) > 0 ? $org_and_class_details[0] : false;
+        $student_details = count($student_details) > 0 ? $student_details[0] : false;
+        $academic_result = [];
+        $non_academic_result = [];
+        $others_result = [];
+        if ($org_and_class_details) {
+            if ($org_and_class_details->transcript_format == 1) { //CFA
+                $academic_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
+                    FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
+                    WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 1 ORDER BY t1.display_order', [$resultId, $Id]);
+                $non_academic_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
+                    FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
+                    WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 2 ORDER BY t1.display_order', [$resultId, $Id]);
+                $others_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
+                    FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
+                    WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 3 ORDER BY t1.display_order', [$resultId, $Id]);
+            } elseif ($org_and_class_details->transcript_format == 2) { //CSA
+                if ($org_and_class_details->term_number == 0) { //Final result
+                    $termResultIds = DB::select("");
+                    $academic_result = DB::select('SELECT subject,ca_score,exam_score 
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 1 ORDER BY t1.display_order', [$Id]);
+                    $non_academic_result = DB::select('SELECT subject,IFNULL(score,score_description) as score
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 2 ORDER BY t1.display_order', [$Id]);
+                    $others_result = DB::select('SELECT subject,assessment_area,score_description
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 3 ORDER BY t1.display_order', [$Id]);
+                } else { //Term result
+                    $academic_result = DB::select('SELECT subject,ca_score,exam_score 
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 1 ORDER BY t1.display_order', [$Id]);
+                    $non_academic_result = DB::select('SELECT subject,IFNULL(score,score_description) as score
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 2 ORDER BY t1.display_order', [$Id]);
+                    $others_result = DB::select('SELECT subject,assessment_area,score_description
+                        FROM aca_result_score_csa WHERE aca_result_student_id = ? AND sub_category_code = 3 ORDER BY t1.display_order', [$Id]);
+                }
+            }
+        } else {
+            return $this->errorResponse('Result not found.', Response::HTTP_NOT_FOUND);
+        }
+        return $this->successResponse(['org_and_class_details' => $org_and_class_details, 'student_details' => $student_details, 'subjects' => $subjects, 'academic_result' => $academic_result, 'non_academic_result' => $non_academic_result, 'others_result' => $others_result]);
+    }
     private function passFail($orgId, $classId, $streamId, $sectionId)
     {
+        $inner_pass_fail_query = "SELECT t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,IF(t7.input_type=1,(SUM(IF(t5.aca_assmnt_type=0,t4.score,0))/SUM(IF(t5.aca_assmnt_type=0,t51.weightage,0)))*100>=t6.pass_score AND (SUM(IF(t5.aca_assmnt_type=1,t4.score,0))/SUM(IF(t5.aca_assmnt_type=1,t51.weightage,0)))*100>=t6.pass_score,ROUND(AVG(t4.score))>=t6.pass_score) AS passed
+            FROM (aca_student_assessment t3 
+                JOIN aca_student_assessment_detail t4 ON t3.id = t4.aca_student_assmt_id 
+                JOIN aca_assessment_area t5 ON t4.aca_assmt_area_id=t5.id)
+                JOIN (SELECT aca_assmt_term_id,aca_assmt_area_id,SUM(weightage) AS weightage FROM aca_class_subject_assessment WHERE org_class_id = ? AND (org_stream_id IS NULL OR org_stream_id = ?) GROUP BY aca_assmt_term_id,aca_assmt_area_id) t51 ON t3.aca_assmt_term_id=t51.aca_assmt_term_id AND t5.id = t51.aca_assmt_area_id
+                JOIN aca_class_subject t6 ON t5.aca_sub_id = t6.aca_sub_id AND t3.org_class_id = t6.org_class_id AND (t3.org_stream_id = t6.org_stream_id OR (t3.org_stream_id is null AND t6.org_stream_id IS NULL))
+                JOIN aca_rating_type t7 ON t6.aca_rating_type_id=t7.id
+                JOIN aca_promotion_rule t8 ON t5.aca_sub_id = t8.aca_sub_id AND t3.org_class_id = t8.org_class_id AND (t3.org_stream_id = t8.org_stream_id OR (t3.org_stream_id is null AND t8.org_stream_id IS NULL))
+            WHERE t3.org_id = ? AND t6.org_class_id = ?";
+
+        $pass_fail_param = [$classId, $streamId, $orgId, $classId];
+        if ($streamId) {
+            $inner_pass_fail_query .= ' AND t3.org_stream_id = ?';
+            array_push($pass_fail_param, $streamId);
+        }
+        if ($sectionId) {
+            $inner_pass_fail_query .= ' AND t3.org_section_id = ?';
+            array_push($pass_fail_param, $sectionId);
+        }
+
         $pass_fail_query = "SELECT t0.std_student_id, MIN(t0.passed) AS passed
         FROM (
             SELECT t1.std_student_id,t1.aca_promotion_sub_group_id,SUM(t1.passed)>=IF(t1.aca_promotion_sub_group_id=0,COUNT(t1.aca_sub_id),t1.aca_promotion_sub_group_id) as passed
             FROM (
-                SELECT t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,IF(t7.input_type=1,(SUM(IF(t5.aca_assmnt_type=0,t4.score,0))/SUM(IF(t5.aca_assmnt_type=0,t51.weightage,0)))*100>=t6.pass_score AND (SUM(IF(t5.aca_assmnt_type=1,t4.score,0))/SUM(IF(t5.aca_assmnt_type=1,t51.weightage,0)))*100>=t6.pass_score,ROUND(AVG(t4.score))>=t6.pass_score) AS passed
-                FROM (aca_student_assessment t3 
-                    JOIN aca_student_assessment_detail t4 ON t3.id = t4.aca_student_assmt_id 
-                    JOIN aca_assessment_area t5 ON t4.aca_assmt_area_id=t5.id)
-                    JOIN (SELECT aca_assmt_term_id,aca_assmt_area_id,SUM(weightage) AS weightage FROM aca_class_subject_assessment WHERE org_class_id = ? AND (org_stream_id IS NULL OR org_stream_id = ?) GROUP BY aca_assmt_term_id,aca_assmt_area_id) t51 ON t3.aca_assmt_term_id=t51.aca_assmt_term_id AND t5.id = t51.aca_assmt_area_id
-                    JOIN aca_class_subject t6 ON t5.aca_sub_id = t6.aca_sub_id AND t3.org_class_id = t6.org_class_id AND (t3.org_stream_id = t6.org_stream_id OR (t3.org_stream_id is null AND t6.org_stream_id IS NULL))
-                    JOIN aca_rating_type t7 ON t6.aca_rating_type_id=t7.id
-                    JOIN aca_promotion_rule t8 ON t5.aca_sub_id = t8.aca_sub_id AND t3.org_class_id = t8.org_class_id AND (t3.org_stream_id = t8.org_stream_id OR (t3.org_stream_id is null AND t8.org_stream_id IS NULL))
-                WHERE t3.org_id = ? AND t6.org_class_id = ?
-                GROUP BY t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,t7.input_type,t6.pass_score
+                $inner_pass_fail_query GROUP BY t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,t7.input_type,t6.pass_score
             ) t1
             GROUP BY t1.std_student_id,t1.aca_promotion_sub_group_id
         ) t0
         GROUP BY t0.std_student_id";
 
-        $pass_fail_param = [$classId, $streamId, $orgId, $classId];
-        if ($streamId) {
-            $pass_fail_query .= ' AND t3.org_stream_id = ?';
-            array_push($pass_fail_param, $streamId);
-        }
-        if ($sectionId) {
-            $pass_fail_query .= ' AND t3.org_section_id = ?';
-            array_push($pass_fail_param, $sectionId);
-        }
+
         return DB::select($pass_fail_query, $pass_fail_param);
     }
 }

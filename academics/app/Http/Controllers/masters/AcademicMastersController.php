@@ -449,13 +449,16 @@ class AcademicMastersController extends Controller
         }
 
         if ($param == "all_active_rating_type") {
-            return $this->successResponse(RatingType::where('status', '1')->get(["id", "name", "input_type", "aca_sub_category_id"]));
+            return $this->successResponse(RatingType::where('status', '1')->get(["id", "name", "input_type"]));
         }
         if ($param == "all_active_rating") {
             return $this->successResponse(DB::select('SELECT id,aca_rating_type_id, name,dzo_name, score FROM aca_rating WHERE status=1'));
         }
         if ($param == "all_assessment_area") {
-            $assessment_area = DB::select("SELECT t1.id,t1.display_order,IF(t1.aca_assmnt_type=0,'Continuous Assessment','Term Examination') AS aca_assmnt_type_name,t1.aca_assmnt_type, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id, t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 JOIN aca_subject t2 ON t1.aca_sub_id = t2.id LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order");
+            $assessment_area = DB::select("SELECT t1.id,t1.display_order,CASE t1.aca_assmnt_type WHEN 0 THEN 'Continuous Assessment' WHEN 1 THEN 'Term Examination' ELSE 'Others (Personal Traits, SUPW, Non-Academic Subject)' END AS aca_assmnt_type_name,t1.aca_assmnt_type, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id,
+                t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 
+             JOIN aca_subject t2 ON t1.aca_sub_id = t2.id 
+             LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order");
             return $this->successResponse($assessment_area);
         }
         if ($param == "all_assessment_frequency") {
@@ -508,7 +511,7 @@ class AcademicMastersController extends Controller
     {
         $query = 'SELECT (t2.id IS NOT NULL) AS sub_selected, trim(t2.pass_score)+0 AS pass_score, t1.id AS aca_sub_id,t1.aca_sub_category_id,t3.input_type, 
                 t1.name AS subject,t1.dzo_name AS sub_dzo_name,t2.aca_rating_type_id, t2.is_elective,t2.show_in_result,t2.display_order
-                FROM aca_subject t1
+                FROM aca_subject t1 
                     LEFT JOIN aca_class_subject t2 ON t1.id=t2.aca_sub_id AND t2.org_class_id = ? 
                     LEFT JOIN aca_rating_type t3 ON t2.aca_rating_type_id = t3.id';
         $params = [$class_id];
@@ -568,15 +571,20 @@ class AcademicMastersController extends Controller
 
         ];
         $this->validate($request, $rules, $customMessages);
-        DB::transaction(function () use ($request) {
-            $this->updateAssessmentFrequency($request);
-            DB::delete('DELETE FROM aca_class_assessment_frequency');
-            foreach ($request['data'] as $assessmentFrequency) {
-                $assessmentFrequency['created_by'] =  $request['user_id'];
-                $assessmentFrequency['created_at'] =   date('Y-m-d h:i:s');
-                ClassAssessmentFrequency::create($assessmentFrequency);
-            }
-        });
+        try {
+            DB::transaction(function () use ($request) {
+                // $this->updateAssessmentFrequency($request);
+                DB::delete('DELETE FROM aca_class_assessment_frequency');
+                foreach ($request['data'] as $assessmentFrequency) {
+                    $assessmentFrequency['created_by'] =  $request['user_id'];
+                    $assessmentFrequency['created_at'] =   date('Y-m-d h:i:s');
+                    ClassAssessmentFrequency::create($assessmentFrequency);
+                }
+            });
+        } catch (Exception $e) {
+            dd($e);
+        }
+
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     public function loadclassSubAssmtFrequency()

@@ -15,30 +15,30 @@ class AcaResultStudent extends Migration
     public function up()
     {
         Schema::create('aca_result_student', function (Blueprint $table) {
-            $table->char('id',36);
+            $table->char('id', 36);
             $table->smallInteger('academic_year');
-            $table->char('aca_result_id',36)->index();
-            $table->char('std_student_id',36)->index();
-            $table->string('student_code',100);
-            $table->string('name',100);
-            $table->string('cid',50)->index()->nullable();
-            $table->char('admission_no',36);
+            $table->char('aca_result_id', 36)->index();
+            $table->char('std_student_id', 36)->index();
+            $table->string('student_code', 100);
+            $table->string('name', 100);
+            $table->string('cid', 50)->index()->nullable();
+            $table->char('admission_no', 36);
             $table->date('dob');
-            $table->string('score_description',500)->nullable()->default(null);
+            $table->string('score_description', 500)->nullable()->default(null);
             $table->unsignedSmallInteger('roll_no');
-            $table->string('special_award',500)->nullable();
-            $table->string('responsibility',500)->nullable();
-            $table->unsignedTinyInteger('promoted')->comment('0-detained, 1-promoted');
-            $table->string('general_comment',500)->nullable();
-            $table->char('created_by',36)->nullable()->index();
-            $table->string('updated_by',36)->index()->nullable();
+            $table->string('special_award', 500)->nullable();
+            $table->string('responsibility', 500)->nullable();
+            $table->unsignedTinyInteger('promoted')->nullable()->comment('0-detained, 1-promoted');
+            $table->string('general_comment', 500)->nullable();
+            $table->char('created_by', 36)->nullable();
+            $table->string('updated_by', 36)->nullable();
             $table->timestamps();
 
-            $table->primary(['id','academic_year']);
-
+            $table->primary(['id', 'academic_year']);
         });
-        
-        DB::statement("ALTER TABLE aca_result_student PARTITION BY RANGE(academic_year)(
+
+        DB::statement(
+            "ALTER TABLE aca_result_student PARTITION BY RANGE(academic_year)(
             PARTITION before_year_2022 VALUES LESS THAN (2022),
             PARTITION year_2022 VALUES LESS THAN (2023),
             PARTITION year_2023 VALUES LESS THAN (2024),

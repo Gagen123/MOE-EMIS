@@ -18,16 +18,16 @@ class AcaResultScore extends Migration
             $table->char('id', 36);
             $table->smallInteger('academic_year');
             $table->char('aca_result_student_id', 36)->index();
-            $table->char('aca_result_subject_id', 36)->index();
-            $table->char('aca_assmt_area_id', 36)->index();
+            $table->char('aca_sub_id', 36)->index();
+            $table->char('aca_assmt_area_id', 36);
             $table->string('assessment_area', 100);
             $table->unsignedTinyInteger('aca_assmnt_type')->index()->comment('0 - Continuous Assessment, 1 - Term Examination');
+            $table->char('aca_rating_type_id', 36)->index();
             $table->tinyInteger('score')->nullable()->default(null);
             $table->string('score_description', 500)->nullable()->default(null);
-            $table->unsignedTinyInteger('passed')->index()->comment('0-failed, 1-passed');
             $table->integer('display_order');
-            $table->char('created_by', 36)->nullable()->index();
-            $table->string('updated_by', 36)->index()->nullable();
+            $table->char('created_by', 36)->nullable();
+            $table->string('updated_by', 36)->nullable();
             $table->timestamps();
 
             $table->primary(['id', 'academic_year']);

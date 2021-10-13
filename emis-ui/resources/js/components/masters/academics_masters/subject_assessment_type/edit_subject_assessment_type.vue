@@ -36,7 +36,7 @@
                                         <select v-model="classSubjects[index].aca_rating_type_id" :id="'rating_type_'+index" @change="onChange($event)"  :disabled="!classSubjects[index].sub_selected" class="form-control form-control-sm select2" :class="{ 'is-invalid': errors}"  > 
                                             <option selected :value="null">--SELECT--</option>
                                             <template v-for="(item1, index1) in rating_type_list">
-                                                <option v-if="(item.aca_sub_category_id==item1.aca_sub_category_id) || (item1.aca_sub_category_id === null) " :key="index1" :value="item1.id" :data-input_type="item1.input_type">{{ item1.name }}</option>
+                                                <option :key="index1" :value="item1.id" :data-input_type="item1.input_type">{{ item1.name }}</option>
                                             </template>
                                         </select>
                                         <has-error v-if="errors" field="aca_rating_type_id"></has-error>
@@ -125,7 +125,6 @@ export default {
                 let tempValue = []
                 classSubject.forEach(item => {
                     tempValue['aca_rating_type_id'] = item.aca_rating_type_id
-                    tempValue['aca_sub_category_id'] = item.aca_sub_category_id
                     tempValue['aca_sub_id'] = item.aca_sub_id
                     tempValue['input_type'] = item.input_type
                     tempValue['is_elective'] = item.is_elective
