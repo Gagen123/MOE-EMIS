@@ -867,7 +867,7 @@ export default {
             this.nomination_form.nomi_relation='';
             this.nomination_form.isnominee=1;
             this.nomination_form.action_type='';
-            this.nomination_form.fileUpload=[];
+            this.nomination_form.fileUpload=[]; 
             this.nomination_form.attachments=[{ file_name:'',attachment:''}];
             this.nomination_form.ref_docs=[];
             this.nomination_form.status='Pending';
