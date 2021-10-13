@@ -440,7 +440,9 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($feedback_provider as $feed){
                 if($feed->partifipant_from!="External"){
                     $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$feed->participant));
-                    $user_id=$user_id.$appRole_id[0]->user_id.',';
+                    if($appRole_id!=[]){
+                        $user_id=$user_id.$appRole_id[0]->user_id.',';
+                    }
                 }
             }
             $notification_data=[
@@ -456,7 +458,6 @@ class StaffLeadershipSerivcesController extends Controller{
                 'access_level'                  =>  $this->getAccessLevel(),
                 'action_by'                     =>  $this->userId(),
             ];
-            // dd($notification_data);
             $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
         //prepare data for verification, approval and other updates

@@ -5,21 +5,21 @@
                 <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label class="mb-0">Selection For:</label>
-                        <span class="text-blue text-bold">{{selectionList[form.selection_type]}}</span>
+                        <span class="text-blue text-bold">{{response_data.selection_type_name}}</span>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Position Title:</label>
-                        <span class="text-blue text-bold">{{positionList[form.position_title]}}</span>
+                        <span class="text-blue text-bold">{{response_data.position_name}}</span>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Application Start Date:</label>
-                        <span class="text-blue text-bold">{{form.from_date}}</span>
+                        <span class="text-blue text-bold">{{response_data.from_date}}</span>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Application End Date:</label>
-                        <span class="text-blue text-bold">{{form.to_date}}</span>
+                        <span class="text-blue text-bold">{{response_data.to_date}}</span>
                     </div>
                 </div>
 
@@ -38,21 +38,21 @@
                                     <td>1</td>
                                     <td>270 Degree Feedback</td>
                                     <td>
-                                        <label>{{form.feedback==1 ? 'Yes':'No'}}</label>
+                                        <label>{{response_data.feedback==1 ? 'Yes':'No'}}</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>2</td>
                                     <td>Shortlisting</td>
                                     <td>
-                                        <label>{{form.shortlist==1 ? 'Yes':'No'}}</label>
+                                        <label>{{response_data.shortlist==1 ? 'Yes':'No'}}</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>3</td>
                                     <td>Interview</td>
                                     <td>
-                                        <label>{{form.interview==1 ? 'Yes':'No'}}</label>
+                                        <label>{{response_data.interview==1 ? 'Yes':'No'}}</label>
                                     </td>
                                 </tr>
                             </tbody>
@@ -62,7 +62,7 @@
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label>Details:</label>
-                        <span class="text-blue text-bold">{{form.details}}</span>
+                        <span class="text-blue text-bold">{{response_data.details}}</span>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -83,7 +83,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for='(data, index) in form.applicant_List' :key="index">
+                                <tr v-for='(data, index) in response_data.applicable_applicant' :key="index">
                                     <td>{{index+1}}</td>
                                     <td>
                                         {{data.position_level}}
@@ -105,6 +105,40 @@
                         <span class="text-blue text-bold">{{form.applicant}}</span>
                     </div> -->
                 </div>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Application List: </label>
+                        <table class="table table-bordered text-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>SL#</th>
+                                    <th>App No</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for='(data, index) in response_data.applications' :key="index">
+                                    <td>{{index+1}}</td>
+                                    <td>
+                                        {{data.application_number}}
+                                    </td>
+                                    <td>
+                                        {{data.aplicant_name}}
+                                    </td>
+                                    <td>
+                                        {{data.org_id=='External Application'? 'Out of Ministry': 'Within Ministry'}}
+                                    </td>
+                                    <td>
+                                        {{data.status}}
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -113,13 +147,10 @@
 export default {
     data(){
         return {
-            selectionList:{},
-            positionList:{},
-            roleList:{},
+            response_data:[],
             form: new form({
                 applicant_List:[],
                 id:'',
-                selection_type:'',
                 position_title:'',
                 feedback:1,
                 interview:1,
@@ -134,54 +165,11 @@ export default {
         }
     },
     methods: {
-
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.positionList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.selectionList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('err in retrieving services: '+error);
-            });
-        },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].Id] = data[i].Name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
         loadDetials(){
             axios.get('/staff/staffLeadershipSerivcesController/loadDetials/'+this.form.id)
             .then((response) =>{
                 let data=response.data.data;
-                this.form.selection_type=data.selection_type;
-                $('#selection_type').val(data.selection_type).trigger('change');
-                this.form.position_title=data.position_title;
-                $('#position_title').val(data.position_title).trigger('change');
-                this.form.from_date=data.from_date;
-                this.form.to_date=data.to_date;
-                this.form.details=data.details;
+                this.response_data=data;
                 this.form.shortlist=data.shortlist;
                 this.form.interview=data.interview;
                 this.form.feedback=data.feedback;
@@ -205,9 +193,6 @@ export default {
 
     },
     mounted(){
-        this.getSelectionList();
-        this.loadroleList();
-        this.loadPositionTitleList();
         this.form.id=this.$route.params.id;
         this.loadDetials();
     },

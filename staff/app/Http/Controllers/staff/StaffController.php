@@ -70,6 +70,7 @@ class StaffController extends Controller{
         if($request->issen=="Yes"){
             $sen=1;
         }
+        // dd($request->initial_appointment_date,$request->dob);
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
