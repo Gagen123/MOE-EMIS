@@ -18,6 +18,7 @@ class AcaAssessmentTerm extends Migration
         Schema::create('aca_assessment_term', function (Blueprint $table) {
             $table->char('id',36)->primary();
             $table->char('aca_assmt_frequency_id',36)->index();
+            $table->unsignedTinyInteger('term_number')->index();
             $table->string('name',100)->unique();
             $table->string('dzo_name',1000)->nullable();
             $table->string('display_text',100)->nullable();
