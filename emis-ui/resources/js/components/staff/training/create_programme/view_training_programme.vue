@@ -660,7 +660,6 @@ export default {
                 $('#related_programme').val(data.related_programme).trigger('change');
                 this.form.start_date=data.start_date;
                 this.form.end_date=data.end_date;
-
                 this.form.programme_level=data.programme_level;
                 this.form.programme_type=data.programme_type;
                 this.form.course_type=data.course_type;
@@ -669,7 +668,6 @@ export default {
                 this.form.total_budget=data.total_budget;
                 this.form.total_hrs=data.total_hrs;
                 this.form.financial_source=data.financial_source;
-
                 this.form.category=data.category;
                 this.form.donor_agency=data.donor_agency;
                 this.form.projectofdonor=data.projectofdonor;

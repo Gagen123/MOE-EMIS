@@ -117,6 +117,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/LoadApplicationDetailsByUserId/{param}/{user_id}', ['uses' => 'staff\TransferController@LoadApplicationDetailsByUserId']);
             $router->get('/getTransferConfigDetails/{role_ids}', ['uses' => 'staff\TransferController@getTransferConfigDetails']);
             $router->get('/getAppVeriTransferConfigDetails/{transfer_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\TransferController@getAppVeriTransferConfigDetails']);
+
+            $router->get('/getSubmitterId/{id}', ['uses' => 'staff\TransferController@getSubmitterId']);
         });
 
         //principal recuritment Approval controller by gagen
