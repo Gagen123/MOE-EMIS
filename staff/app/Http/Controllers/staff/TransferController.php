@@ -499,6 +499,15 @@ class TransferController extends Controller{
         $response_data=PersonalDetails::where ('id', $id)->first();
         return$response_data;
     }
+
+    public function getSubmitterId($id=""){
+        $response_data=DB::table('master_staff_transfer_config AS t')
+        ->select('t.submitter_role_id AS Submitter_id')
+        ->where('t.submitter_role_id','=',$id)
+        ->get();
+        return$response_data;
+    }
+
     public function LoadApplicationDetailsByUserId($param="",$user_id=""){
         $response_data=TransferApplication::where ('created_by', $user_id)->where('status',$param)->get();;
         return$response_data;
