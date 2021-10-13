@@ -1099,12 +1099,12 @@ export default {
                                     let personal_detail = response.data;
                                     this.personal_form.name = personal_detail.firstName + " " + personal_detail.lastName;
                                     let dob=personal_detail.dob;
-                                    if(dob.includes('-')){
-                                        dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
-                                    }
-                                    if(dob.includes('/')){
-                                        dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
-                                    }
+                                    // if(dob.includes('-')){
+                                    //     dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
+                                    // }
+                                    // if(dob.includes('/')){
+                                    //     dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
+                                    // }
                                     this.personal_form.dob = dob;
                                     $('#dob').val(dob);
                                     if(personal_detail.gender=="M"){
