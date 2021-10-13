@@ -171,6 +171,17 @@ class StaffServicesController extends Controller{
         return $response_data;
     }
 
+    public function checkrole($staff_id="",$type_id=""){
+        $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$staff_id));
+        if($appRole_id!=[] && $appRole_id!=null){
+            $response_data= $this->apiService->listData('emis/staff/staffServices/checkEligibility/'.$type_id.'/'.$appRole_id[0]->SysRoleId);
+            return $response_data;
+        }else{
+            return json_encode('NA');
+        }
+
+    }
+
     public function submitLeaveApplication(Request $request){
         $rules = [
             'staff_id'                  =>  'required',
@@ -187,7 +198,6 @@ class StaffServicesController extends Controller{
             'no_days.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-
         $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
 
         if($appRole_id!=[]){
@@ -377,7 +387,8 @@ class StaffServicesController extends Controller{
         }
         else{
             //get next role id from leave config to send notification.
-            $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getAppVeriLeaveConfigDetails/'.$request->leave_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds')));
+            $res=$this->apiService->listData('emis/staff/staffServices/getAppVeriLeaveConfigDetails/'.$request->leave_type_id.'/'.$appRole_id[0]->SysRoleId.'/'.$this->getRoleIds('roleIds'));
+            $response_data= json_decode($res);
             $notification_data=$notification_data+[
                 'notification_message'          =>  '',
                 'notification_type'             =>  'role',
@@ -404,10 +415,8 @@ class StaffServicesController extends Controller{
             'remarks'                      =>   $request->remarks,
             'user_id'                      =>   $this->userId()
         ];
-        // dd($request->status_id,$workflow_data,$update_data);
 
         $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-
         $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         // dd($data);
         $response_data= $this->apiService->createData('emis/staff/staffServices/verifyApproveRejectLeaveApplication', $update_data);

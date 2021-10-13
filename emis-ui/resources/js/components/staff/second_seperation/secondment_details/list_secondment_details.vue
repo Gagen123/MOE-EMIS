@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
+        <search />
+        <!-- <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
             <div class="card-header pb-0 pt-2">
                 <h3 class="card-title"><b>Search </b></h3>
                 <div class="card-tools">
@@ -52,19 +53,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                 <table id="secondment_table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Emp Id</th>
                             <th>Name</th>
-                            <th>Position Title</th>
-                            <th>Secondment Type</th>
-                            <th>From Date</th>
-                            <th>To Date</th>
+                            <th>Type</th>
+                            <th>Office Order No</th>
+                            <th>Office Order Date</th>
+                            <th>Approved Date</th>
+                            <th>Effective Date</th>
                             <!-- <th>Working Agency</th> -->
                             <th class="pr-4 pl-5">Action</th>
                         </tr>
@@ -72,16 +73,16 @@
                     <tbody>
                         <tr v-for="(item, index) in staffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staff_detials.emp_id}}</td>
-                            <td>{{ item.staff_detials.name}}</td>
-                            <td>{{ positiontitleList[item.staff_detials.position_title_id]}}</td>
-                            <td>{{ secondmentList[item.secondment_id]}}</td>
-                            <td>{{ item.from_date}}</td>
-                            <td>{{ item.to_date}}</td>
-
+                            <td>{{ item.staffName}}</td>
+                            <td>{{ item.Type }}</td>
+                            <td>{{ item.OfficeOrderNo }}</td>
+                            <td>{{ item.OfficeOrderDate}}</td>
+                            <td>{{ item.ApprovedDate}}</td>
+                            <td>{{ item.EffectiveDate}}</td>
                             <!-- <td>{{ item.staff_detials.working_agency}}</td> -->
                             <td>
-                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a>
+                                <!-- <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a> -->
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(item)"><span class="fa fa-eye"></span> View</a>
                             </td>
                         </tr>
                     </tbody>
@@ -91,7 +92,11 @@
     </div>
 </template>
 <script>
+import search from "../../searchpage.vue";
 export default {
+    components: {
+        search,
+    },
     data(){
         return{
             dzongkhagList:[],
@@ -110,6 +115,10 @@ export default {
         loadeditpage(staff){
             this.$router.push({name:"edit_secondment_details",query:{data:staff}});
 		},
+        loadviewpage(staff){
+            this.$router.push({name:"view_secondment_details",query:{data:staff}});
+		},
+
         loadactivesecondmentListList(uri="staff/loadStaffMasters/active/SecondmentMaster"){
             axios.get(uri)
             .then(response => {
@@ -183,6 +192,15 @@ export default {
                 this.orgList=await this.getdepartmentList($('#department').val());
             }
         },
+        async loadRespectiveDataData(org_id){
+            this.staffList = [];
+            let uri='/staff/zest/loadSecondment/byOrdId__'+org_id;
+            axios.get(uri)
+            .then(response => {
+                let data = response.data;
+                this.staffList = data.data;
+            });
+        },
         async loaddata(){
             this.staffList=[];
             if($('#org_id').val()!="ALL"){
@@ -194,6 +212,10 @@ export default {
         }
     },
     async mounted(){
+        Fire.$on('loadRespectiveDataData',(id)=>{
+            this.loadRespectiveDataData(id);
+        });
+
         this.dzongkhagList= await this.loadactivedzongkhags();
         this.loadpositionTitleList();
         this.loadactivesecondmentListList();
@@ -221,10 +243,18 @@ export default {
             //     this.loadstff('allCivilServent/ALL_TYPE');
             //     this.showedit=true;
             // }
-            axios.get('staff/staffSepSecController/loadSecondment/all/Secondment')
+            // axios.get('staff/staffSepSecController/loadSecondment/all/Secondment')
+            // .then((response) => {
+            //     this.staffList =  response.data;
+            //  })
+            // .catch((error) => {
+            //     console.log("Error."+error);
+            // });
+
+            axios.get('staff/zest/loadSecondment/Limit__50')
             .then((response) => {
-                this.staffList =  response.data;
-             })
+                this.staffList =  response.data.data;
+                })
             .catch((error) => {
                 console.log("Error."+error);
             });
@@ -236,10 +266,7 @@ export default {
     },
     watch: {
         staffList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#secondment_table").DataTable()
-            });
+            this.applydatatable('secondment_table');
         }
     },
 

@@ -17,7 +17,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leave Type:</label><br>
-                        <span class="text-blue text-bold">{{form.leave_type_id}}</span>
+                        <span class="text-blue text-bold">{{form.leave_type_name}}</span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -140,6 +140,7 @@ export default {
                 staff_id:'',
                 appName:'',
                 leave_type_id:'',
+                leave_type_name:'',
                 date_of_application:'',
                 remarks:'',
                 status_id:'',
@@ -247,10 +248,10 @@ export default {
                 this.form.from_date                     =   data.from_date;
                 this.form.to_date                       =   data.to_date;
                 this.form.no_days                       =   data.no_days;
-                // this.form.leave_type_id                 =   data.leave_type_id;
+                this.form.leave_type_id                 =   data.leave_type_id;
                 this.form.reason                        =   data.reason;
                 // this.form.staff_id                      =   data.staff_id;leaveDetails
-                this.form.leave_type_id                 =   data.leave_details.name;
+                this.form.leave_type_name               =   data.leave_details.name;
                 this.form.appName                       =   data.applicant_details.name;
                 this.form.staff_id                      =   data.applicant_details.id;
                 this.form.contact_number                =   data.applicant_details.contact_no;
