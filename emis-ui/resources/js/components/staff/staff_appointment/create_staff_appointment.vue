@@ -8,7 +8,7 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-1">Year:<i class="text-danger">*</i></label>
-                                    <input type="text" v-model="Year" class="form-control" name="Year" id="Year">
+                                    <input type="text" class="form-control" name="Year" id="Year">
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-4 mt-1">
                                     <button type="button" class="btn btn-sm btn-primary" @click="fetchstaff()"><i class="fa fa-download"></i> Fetch</button>
@@ -17,7 +17,7 @@
                             <hr>
                             <span class="text-blue"><label><u>List of Staff</u></label></span>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
-                                <table id="training-table" class="table table-sm table-bordered table-striped">
+                                <table id="data-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>Apointment Date</th>
@@ -137,7 +137,7 @@ export default {
     },
     watch: {
         staffList(){
-            this.applydatatable('training-table');
+            this.applydatatable('data-table');
         }
     },
 }

@@ -40,7 +40,7 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
-            if(data['acess_level']=="Org"){
+            if(data['acess_level']=="Dzongkhag"){
                 this.isvalid=true;
             }
         })

@@ -775,7 +775,6 @@ export default {
         this.getLocation();
         this.getLevel1();
         this.getLocation1();
-        this.getOrgList();
         axios.get('common/getSessionDetail')
         .then(response => {
             let data = response.data.data;
@@ -786,7 +785,6 @@ export default {
         .catch(errors => {
             console.log(errors)
         });
-        this.getOrgList();
     },
 
     async mounted(){

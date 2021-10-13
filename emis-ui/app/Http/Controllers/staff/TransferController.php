@@ -274,7 +274,7 @@ class TransferController extends Controller{
         if($request->transferType == "Inter Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
-                'status'            =>  $org_status,
+                'status'            =>$org_status,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>"Inter Transfer",
                 'preference_school' =>$request->preference_school,
@@ -314,11 +314,11 @@ class TransferController extends Controller{
         else if($request->transferType=='Inter Transfer'){
             $data =[
                 'id'                            =>  $request->id,
-                'status_id'                     =>  $org_status,
+                'status'                        =>  $org_status,
                 'staff_id'                      =>  $request->staff_id,
                 'application_number'            =>  $request->application_no,
                 'remarks'                       =>  $request->remarks,
-                'preference_school'             =>$request->preference_school,
+                'preference_school'             => $request->preference_school,
                 'transferType'                  =>  $request->transferType,
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
@@ -348,6 +348,10 @@ class TransferController extends Controller{
         $type = "userdzongkhagwise";
         $response_data = $this->apiService->listData('emis/common_services/loadOrgList/'.$type.'/'.$parent_id);
 
+        return $response_data;
+    }
+    public function getSubmitterId($id){
+        $response_data = $this->apiService->listData('emis/staff/transfer/getSubmitterId/'.$id);
         return $response_data;
     }
     public function loadtransferDetails($type=""){

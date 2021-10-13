@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
+                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="text">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
             </div>
@@ -165,17 +165,28 @@ export default {
             }
             if(type=="save"){
                 this.award_form.date=this.formatYYYYMMDD($('#date').val());
-                this.award_form.post('staff/staffServices/saveStaffAward')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.award_form.post('staff/staffServices/saveStaffAward')
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
             }
 		},
         async changefunction(id){

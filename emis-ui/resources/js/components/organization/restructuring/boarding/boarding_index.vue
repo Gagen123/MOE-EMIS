@@ -17,14 +17,14 @@
             <div class="card-body pt-1 pb-0" >
                 <router-view></router-view>
             </div>
-            <div class="callout callout-danger">
+            <!-- <div class="callout callout-danger">
                 <div class="form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                          <h5 class="bg-gradient-danger">Sorry!</h5>
                         <div>You are not accessible to this page! Only private school can access here</div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

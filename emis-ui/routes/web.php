@@ -471,6 +471,11 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadappointment', [App\Http\Controllers\staff\ZestController::class, 'loadappointment'])->name('loadappointment');
 
         Route::get('/loadSeperation', [App\Http\Controllers\staff\ZestController::class, 'loadSeperation'])->name('loadSeperation');
+        Route::get('/loadSecondment/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadSecondment'])->name('loadSecondment');
+
+        Route::get('/loadPromotion/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotion'])->name('loadPromotion');
+        Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
+        Route::get('/loadLongTermTraining/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLongTermTraining'])->name('loadLongTermTraining');
     });
 
     Route::post('/savePersonalDetails', [App\Http\Controllers\staff\StaffController::class, 'savePersonalDetails'])->name('savePersonalDetails');
@@ -568,6 +573,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/getapplicatName/{id}', [App\Http\Controllers\staff\TransferController::class, 'getapplicatName'])->name('getapplicatName');
         Route::get('/loadApplicationDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'loadApplicationDetails'])->name('loadApplicationDetails');
         Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
+
+        Route::get('/getSubmitterId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
     });
     Route::prefix('managementBody')->group(function () {
         Route::post('/saveManagementBody', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveManagementBody'])->name('saveManagementBody');
@@ -600,6 +607,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkAttendanceDetailsByDate'])->name('checkAttendanceDetailsByDate');
 
         Route::get('/checkEligibility/{type_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkEligibility'])->name('checkEligibility');
+        Route::get('/checkrole/{staff_id}/{type_id}', [App\Http\Controllers\staff\StaffServicesController::class, 'checkrole'])->name('checkrole');
+
         Route::post('/submitLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'submitLeaveApplication'])->name('submitLeaveApplication');
         Route::post('/editLeaveApplication', [App\Http\Controllers\staff\StaffServicesController::class, 'editLeaveApplication'])->name('editLeaveApplication');
 
@@ -673,6 +682,13 @@ Route::prefix('common')->group(function () {
 
     //Get Student List
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');
+
+    //written by gagen to pull all register organization from bifurcation
+    Route::get('/loadRegisteredList/{type}', [App\Http\Controllers\CommonController::class, 'loadRegisteredList'])->name('loadRegisteredList');
+    Route::get('/loadParentOrgDetailOfRegistered/{type}/{id}', [App\Http\Controllers\CommonController::class, 'loadParentOrgDetailOfRegistered'])->name('loadParentOrgDetailOfRegistered');
+
+    Route::get('/loadStaffList/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStaffList'])->name('loadStaffList');
+    Route::get('/loadStudentListByOrgId/{org_id}', [App\Http\Controllers\CommonController::class, 'loadStudentListByOrgId'])->name('loadStudentListByOrgId');
 });
 
 //routes to load list and detials from respective services

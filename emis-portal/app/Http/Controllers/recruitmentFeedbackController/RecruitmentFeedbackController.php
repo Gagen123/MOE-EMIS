@@ -149,21 +149,21 @@ class RecruitmentFeedbackController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-            //Notification data
-            // $notification_data=[
-            //     'notification_for'              =>  'Leadership Selection',
-            //     'notification_appNo'            =>  $appNo,
-            //     'notification_message'          =>  '',
-            //     'notification_type'             =>  'role',
-            //     'notification_access_type'      =>  'all',
-            //     'call_back_link'                =>  'tasklist',
-            //     'user_role_id'                  =>  config('services.constant.notification_leadership_selection_applicaiton'),
-            //     'dzo_id'                        =>  $this->getUserDzoId(),
-            //     'working_agency_id'             =>  $this->getWrkingAgencyId(),
-            //     'access_level'                  =>  $this->getAccessLevel(),
-            //     'action_by'                     =>  $this->userId(),
-            // ];
-            // $this->apiService->createData('emis/common/insertNotification', $notification_data);
+            // Notification data
+            $notification_data=[
+                'notification_for'              =>  'Leadership Selection',
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  config('services.constant.notification_leadership_selection_applicaiton'),
+                'dzo_id'                        =>  8,
+                'working_agency_id'             =>  null,
+                'access_level'                  =>  null,
+                'action_by'                     =>  $this->userId(),
+            ];
+            $this->apiService->createData('emis/common/insertNotification', $notification_data);
         }
         return $response_data;
     }

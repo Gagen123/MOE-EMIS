@@ -923,7 +923,7 @@ class ChangeBasicDetailsController extends Controller
             'remarks'                       =>   $request->remarks,
             'updated_by'                    =>   $request->user_id,
         ];
-        ApplicationDetails::where('application_no', $request->application_number)->update($estd);
+        $change_details_data=ApplicationDetails::where('application_no', $request->application_number)->update($estd);
 
         if($request->attachment_details!="" ){
             $type="Verification";

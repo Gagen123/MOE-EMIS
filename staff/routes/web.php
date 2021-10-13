@@ -76,6 +76,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getPrincipal/{orgId}', ['uses' => 'staff\StaffController@getPrincipal']);
         $router->get('/getStaffsName', ['uses' => 'staff\StaffController@getStaffsName']);
 
+        //load list of staff
+        $router->get('/loadStaffList/{org_id}', ['uses' => 'staff\StaffController@loadStaffList']);
+
         $router->group(['prefix' => 'hrdevelopment'], function () use ($router) {
             $router->post('/saveprogramDetails', ['uses' => 'staff\HrDevelopmentController@saveprogramDetails']);
             $router->get('/loadDraftDetails/{user_id}', ['uses' => 'staff\HrDevelopmentController@loadDraftDetails']);
@@ -114,6 +117,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/LoadApplicationDetailsByUserId/{param}/{user_id}', ['uses' => 'staff\TransferController@LoadApplicationDetailsByUserId']);
             $router->get('/getTransferConfigDetails/{role_ids}', ['uses' => 'staff\TransferController@getTransferConfigDetails']);
             $router->get('/getAppVeriTransferConfigDetails/{transfer_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\TransferController@getAppVeriTransferConfigDetails']);
+
+            $router->get('/getSubmitterId/{id}', ['uses' => 'staff\TransferController@getSubmitterId']);
         });
 
         //principal recuritment Approval controller by gagen
@@ -237,6 +242,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveStaffContact', ['uses' => 'staff\StaffUpdateController@saveStaffContact']);
         $router->post('/saveStaffMaritialStatus', ['uses' => 'staff\StaffUpdateController@saveStaffMaritialStatus']);
 
+        //pulling the register organization from bifurcation
+        $router->get('/loadBifurcationList', ['uses' => 'staff\StaffUpdateController@loadBifurcationList']);
+
     });
     //Staff Seleration and Secondment Services
     $router->group(['prefix' => 'staffSepSecController'], function () use ($router) {
@@ -257,7 +265,11 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->post('/saveAppointmentDetails', ['uses' => 'staff\ZestController@saveAppointmentDetails']);
         $router->get('/loadappointment', ['uses' => 'staff\ZestController@loadappointment']);
         $router->get('/loadSeperation', ['uses' => 'staff\ZestController@loadSeperation']);
-    });
+        $router->get('/loadSecondment/{param}', ['uses' => 'staff\ZestController@loadSecondment']);
+        $router->get('/loadPromotion/{param}', ['uses' => 'staff\ZestController@loadPromotion']);
+        $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
+        $router->get('/loadLongTermTraining/{param}', ['uses' => 'staff\ZestController@loadLongTermTraining']);
 
+    });
 
 });

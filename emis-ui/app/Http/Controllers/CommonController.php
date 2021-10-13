@@ -152,5 +152,25 @@ class CommonController extends Controller{
         return env($type);
     }
 
+    //loading bifurcation organization
+    public function loadRegisteredList($type){
+        $response_data= $this->apiService->listData('emis/common_services/loadRegisteredList/'.$type);
+        return $response_data;
+    }
+
+    public function loadParentOrgDetailOfRegistered($type="",$id=""){
+        $response_data= $this->apiService->listData('emis/common_services/loadParentOrgDetailOfRegistered/'.$type.'/'.$id);
+        return $response_data;
+    }
+
+    public function loadStaffList($org_id){
+        $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$org_id);
+        return $response_data;
+    }
+    public function loadStudentListByOrgId($org_id){
+        $response_data= $this->apiService->listData('emis/common_services/loadStudentListByOrgId/'.$org_id);
+        return $response_data; 
+    }
+    
 
 }

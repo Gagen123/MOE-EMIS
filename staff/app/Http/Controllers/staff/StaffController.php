@@ -70,6 +70,7 @@ class StaffController extends Controller{
         if($request->issen=="Yes"){
             $sen=1;
         }
+        // dd($request->initial_appointment_date,$request->dob);
         $data =[
             'emp_type_id'           =>  $request->emp_type,
             'cid_work_permit'       =>  $request->cid_work_permit,
@@ -424,7 +425,9 @@ class StaffController extends Controller{
     }
 
     public function loadNominations($staff_id="",$user_id=""){
+       // dd($staff_id);
         $nomineeDetails=Nomination::where('created_by',$user_id)->where('personal_id',$staff_id)->where('status','Pending')->get();
+
         if($nomineeDetails!=null & $nomineeDetails!="" && sizeof($nomineeDetails)>0){
             foreach($nomineeDetails as $nom){
                 $nom->attachment=DocumentDetails::where('parent_id',$nom['id'])->get();
@@ -578,5 +581,13 @@ class StaffController extends Controller{
         return $this->successResponse($staffs);
     }
 
+    //written by gagen to pull staff list by orgId
+    public function loadStaffList($org_id){
+        $staff = DB::table('stf_staff AS t')
+        ->select('t.name','t.id')
+        ->where('t.working_agency_id','=',$org_id)
+        ->get();
+    return $this->successResponse($staff);
+    }
 
 }

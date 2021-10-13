@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Organized By (Department/Division):</label><br>
-                                <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
+                                <span class="text-blue text-bold">{{organizerList[form.organizer]}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -139,6 +139,7 @@ export default {
             dzongkhagList:[],
             department_list:[],
             school_list:[],
+            organizerList:[],
             dzongkhagArray:{},
             form: new form({
                 id: '',
@@ -210,6 +211,11 @@ export default {
                     $('#error_section').show();
                     $('#maindiv').hide();
                 }
+                // else if(check > to){
+                //     $('#err_message').html('Sorry! Nomination date is over');
+                //     $('#error_section').show();
+                //     $('#maindiv').hide();
+                // }
                 else{
                     this.getParticipantDetails(data.id);
                     this.form.training_type=data.training_type;
@@ -221,14 +227,14 @@ export default {
                     $('#related_programme').val(data.related_programme).trigger('change');
                     this.form.start_date=data.start_date;
                     this.form.end_date=data.end_date;
-                    this.form.remarks=data.prog_app.remarks;
                     this.draft_attachments=JSON.parse(response.data.documents).data;
-                    if(data.nature_of_participant.includes(', ')){
-                        this.nature_of_participantList=data.nature_of_participant.split(', ');
-                    }
-                    else{
-                        this.nature_of_participantList=data.nature_of_participant;
-                    }
+                    this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    // if(data.nature_of_participant.includes(', ')){
+                    //    this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    // }
+                    // else{
+                    //     this.nature_of_participantList.add(data.nature_of_participant);
+                    // }
                 }
             })
             .catch((error) =>{
@@ -258,6 +264,19 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        loadorganizerList(uri = 'organization/getsAgencyList/allSSS'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.organizerList[data[i].id] = data[i].agencyName;
+                }
+              //  this.organizerList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
 
     },
 
@@ -279,6 +298,7 @@ export default {
         this.loadHrDevelopmentMasters('active_training_type_list');
         this.loadHrDevelopmentMasters('active_related_programme_list');
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
+        this.loadorganizerList();
         this.loadDetails(this.$route.params.data,this.$route.params.statusId);
     },
 }

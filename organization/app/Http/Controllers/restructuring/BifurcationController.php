@@ -33,7 +33,6 @@ class BifurcationController extends Controller
     public function saveBifurcation(Request $request){
         if($request->action_type!="edit"){
             $last_seq=ApplicationSequence::where('service_name','Bifurcation')->first();
-
             if($last_seq==null || $last_seq==""){
                 $last_seq=1;
                 $app_details = [
@@ -388,6 +387,7 @@ class BifurcationController extends Controller
                 'updated_by'                  =>  $request->user_id,
             ];
             $response_data=ApplicationDetails::where('application_no',$request->application_number)->update($app_details);
+            return $response_data;
         
         //saving attachments
         if(sizeof($request->attachment_details)>0){

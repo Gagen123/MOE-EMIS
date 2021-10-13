@@ -18,7 +18,7 @@
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Trainig Type:</label><br>
-                                <span class="text-blue text-bold">{{ form.training_type}}</span>
+                                <span class="text-blue text-bold">{{ trainingtypeList[form.training_type]}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Course Title:</label><br>
@@ -26,7 +26,7 @@
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label class="mb-0">Organized By (Department/Division):</label><br>
-                                <span class="text-blue text-bold">{{trainingtypeList[form.organizer]}}</span>
+                                <span class="text-blue text-bold">{{organizerList[form.organizer]}}</span>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -80,7 +80,7 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Add Participant</h4>
+                            <h4 class="modal-title">Add/Edit Participant</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -257,6 +257,7 @@ export default {
             editdocument:[],
             dzongkhagList:[],
             department_list:[],
+            organizerList:[],
             school_list:[],
             form: new form({
                 id: '',
@@ -431,9 +432,10 @@ export default {
             else{
                 this.form.id=item.id;
                 this.form.participant=item.participant_id+'_'+item.contact+'_'+item.email;
+                $('#participant').append('<option value="'+item.participant_id+'_'+item.contact+'_'+item.email+'">'+item.staff_details.name+'</option>');
                 $('#participant').val(item.participant_id+'_'+item.contact+'_'+item.email).trigger('change');
                 this.form.contact=item.contact;
-                this.form.email=item.email;
+                this.form.email=item.email; 
                 this.editdocument=item.document;
                 this.form.action_type='edit';
                 this.form.nature_of_participant=item.nature_of_participant;
@@ -462,7 +464,7 @@ export default {
                 // }
                 else{
                     this.getParticipantDetails(data.id);
-                    this.form.training_type=data.training_type_name;
+                    this.form.training_type=data.training_type;
                     $('#training_type').val(data.training_type).trigger('change');
                     this.form.course_title=data.course_title;
                     this.form.organizer=data.organizer;
@@ -472,12 +474,13 @@ export default {
                     this.form.start_date=data.start_date;
                     this.form.end_date=data.end_date;
                     this.draft_attachments=JSON.parse(response.data.documents).data;
-                    if(data.nature_of_participant.includes(', ')){
-                        this.nature_of_participantList=data.nature_of_participant.split(', ');
-                    }
-                    else{
-                        this.nature_of_participantList=data.nature_of_participant;
-                    }
+                    this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    // if(data.nature_of_participant.includes(', ')){
+                    //    this.nature_of_participantList=data.nature_of_participant.split(', ');
+                    // }
+                    // else{
+                    //     this.nature_of_participantList.add(data.nature_of_participant);
+                    // }
                 }
             })
             .catch((error) =>{
@@ -658,6 +661,19 @@ export default {
                 console.log("Error:"+error)
             });
         },
+        loadorganizerList(uri = 'organization/getsAgencyList/allSSS'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.organizerList[data[i].id] = data[i].agencyName;
+                }
+              //  this.organizerList = data.data.data;
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+        },
         // getSchoolList(dzoId){
         //     axios.get('loadCommons/loadOrgList/dzongkhagwise/'+dzoId)
         //     .then((response) => {
@@ -689,6 +705,7 @@ export default {
         this.loadHrDevelopmentMasters('active_training_type_list');
         this.loadHrDevelopmentMasters('active_related_programme_list');
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
+        this.loadorganizerList();
         this.loadDetails(this.$route.params.data,this.$route.params.statusId);
     },
 }
