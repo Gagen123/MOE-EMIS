@@ -492,6 +492,8 @@ class TransferController extends Controller{
             
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
+        //inserting into work flow
+        $appNo=json_decode($response_data)->data->application_no;
         if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
@@ -508,9 +510,30 @@ class TransferController extends Controller{
                 'action_by'         =>$this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        }
+             //notification addded recently usually for next action taker
+           if($response_data!="" || $response_data!=null){
+            $notification_data=[
+                'notification_for'              =>  $request->service_name,
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $request->submitted_to,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+            dd($notification_data);
+
+        $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
         return  $response_data;
     }
+  }
+     
+    }
+
     public function LoadTransferAppealDetails($user_id=""){
         $user_id=$this->userId();
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);

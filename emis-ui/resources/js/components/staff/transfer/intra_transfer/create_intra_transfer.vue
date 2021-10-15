@@ -650,7 +650,6 @@ export default {
             .then(response =>{
                 let data = response.data.data;
                 if(data!=null && data!="null" && data!=""){
-                    //need to handle for multiple role later, for now it will take for first role at the index 0
                     this.form.submitted_to=data;
                 }
                 else{

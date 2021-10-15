@@ -148,9 +148,9 @@ class CommonController extends Controller{
                     $result_data.=' ';
                     foreach($work_flow_for_transfer as $i => $srcn){
                         $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
-                        return $result_data ;
+                        // return $result_data ;
                         if(sizeof($work_flow_for_transfer)-1==$i){
-                            $result_data.=')';
+                            $result_data.='';
                         }
                         else{
                             $result_data.='  OR ';
