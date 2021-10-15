@@ -267,7 +267,7 @@ class StaffServicesController extends Controller{
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
-                    'no_absent_days'           =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_absent_days'],
                 ];
                 StaffAttendanceDetails::create($att_det);
             }
@@ -286,7 +286,7 @@ class StaffServicesController extends Controller{
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
-                    'no_absent_days'           =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_absent_days'],
                 ];
                 StaffAttendanceDetails::create($att_det);
             }

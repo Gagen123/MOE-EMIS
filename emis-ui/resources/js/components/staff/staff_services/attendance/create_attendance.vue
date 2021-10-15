@@ -31,10 +31,10 @@
                                 <td>{{ item.name}}</td>
                                 <td>{{ item.position_title_name}}</td>
                                 <td>
-                                    <input type="number" v-model="item.no_absent_days" value="0" @change="remove_error('absentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_present_days" value="0" @change="remove_error('absentDay')" class="form-control">
                                 </td>
                                 <td>
-                                    <input type="number" v-model="item.no_present_days" value="0" @change="remove_error('presentDay')" class="form-control">
+                                    <input type="number" v-model="item.no_absent_days" value="0" @change="remove_error('presentDay')" class="form-control">
                                 </td>
                             </tr>
                         </tbody>

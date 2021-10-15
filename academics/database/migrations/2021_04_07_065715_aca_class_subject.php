@@ -23,6 +23,7 @@ class AcaClassSubject extends Migration
             $table->decimal('pass_score',6,2)->nullable();
             $table->unsignedTinyInteger('is_elective')->index()->default(0)->comment('1-Subject is elective for the class');
             $table->unsignedTinyInteger('show_in_result')->index()->default(1);
+            $table->unsignedTinyInteger('display_order')->index();
             $table->string('created_by',36)->index();
             $table->string('updated_by',36)->index()->nullable();
             $table->timestamps();

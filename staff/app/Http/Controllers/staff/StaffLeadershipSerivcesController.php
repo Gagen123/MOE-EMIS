@@ -143,6 +143,14 @@ class StaffLeadershipSerivcesController extends Controller{
     public function loadDetials($id=""){
         $respomse_data=LeadershipDetails::where('id',$id)->first();
         if($respomse_data!=""){
+            $selection_type=LeadershipType::where('id',$respomse_data->selection_type)->first();
+            if($selection_type!=null && $selection_type!=""){
+                $respomse_data->selection_type_name=$selection_type->name;
+            }
+            $position=PositionTitle::where('id',$respomse_data->position_title)->first();
+            if($position!=null && $position!=""){
+                $respomse_data->position_name=$position->name;
+            }
             $attachments=RequiredAttachment::where('leadership_id',$id)->get();
             if($attachments!=null && $attachments!=""){
                 $respomse_data->attachments=$attachments;
@@ -154,7 +162,7 @@ class StaffLeadershipSerivcesController extends Controller{
             ->where('a.leadership_id',$respomse_data->id)
             ->get();
             $respomse_data->applicable_applicant=$app;
-            // $respomse_data->applicable_applicant=ApplicableApplicant::where('leadership_id',$id)->get();
+            $respomse_data->applications=LeadershipApplication::where('leadership_id',$id)->get();
         }
         return $this->successResponse($respomse_data);
     }
