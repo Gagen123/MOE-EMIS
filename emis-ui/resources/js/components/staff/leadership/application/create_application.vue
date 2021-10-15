@@ -186,7 +186,8 @@ export default {
             .then((response) =>{
                 let data=response.data.data;
                 if(data!=null && data!=""){
-
+                    let res='You have already submitted application for this post with application number : '+data.application_number+'.</b><br> You are not allow to create more then once application for same post. <br><b>Thank You !</b>';
+                    this.$router.push({name:'application_acknowledgement',params: {data:res }});
                 }else{
                     axios.get('/staff/staffLeadershipSerivcesController/loadPostDetials/'+id)
                     .then((response) =>{

@@ -138,13 +138,13 @@
                         <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date" v-model="form.feedback_start_date">
+                                <input type="text" class="form-control popupDatepicker" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date">
                                 <has-error :form="form" field="feedback_start_date"></has-error>
                                 <span class="text-danger" id="feedback_start_date_err"></span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back End Date:<span class="text-danger">*</span></label>
-                                <input type="date" @change="remove_error('feedback_end_date')" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control" name="feedback_end_date" id="feedback_end_date" v-model="form.feedback_end_date">
+                                <input type="text" @change="remove_error('feedback_end_date')" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control popupDatepicker" name="feedback_end_date" id="feedback_end_date">
                                 <has-error :form="form" field="feedback_end_date"></has-error>
                                 <span class="text-danger" id="feedback_end_date_err"></span>
                             </div>
@@ -1156,8 +1156,10 @@ export default {
                         formData.append('aplicant_working_dzo', this.form.aplicant_working_dzo);
                         formData.append('aplicant_working_gewog', this.form.aplicant_working_gewog);
                         formData.append('verification_remarks', this.form.verification_remarks);
-                        formData.append('feedback_start_date', this.form.feedback_start_date);
-                        formData.append('feedback_end_date', this.form.feedback_end_date);
+                        if(type=="feedback"){
+                            formData.append('feedback_start_date', this.formatYYYYMMDD($('#feedback_start_date').val()));
+                            formData.append('feedback_end_date', this.formatYYYYMMDD($('#feedback_end_date').val()));
+                        }
                         formData.append('feedback_details', this.form.feedback_details);
                         formData.append('current_status', this.form.current_status);
                         formData.append('action_type', this.form.action_type);

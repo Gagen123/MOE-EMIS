@@ -575,6 +575,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
 
         Route::get('/getSubmitterId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
+        Route::get('/checkEligibilityForTransfer/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'checkEligibilityForTransfer'])->name('checkEligibilityForTransfer');
+
     });
     Route::prefix('managementBody')->group(function () {
         Route::post('/saveManagementBody', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveManagementBody'])->name('saveManagementBody');
@@ -681,6 +683,7 @@ Route::prefix('common')->group(function () {
     // Route::get('/getOrgDetailsById/{id}/{accesslevel}', [App\Http\Controllers\CommonController::class, 'getOrgDetailsById'])->name('getOrgDetailsById');
 
     Route::get('/getNotification', [App\Http\Controllers\CommonController::class, 'getNotification'])->name('getNotification');
+    Route::get('/getNotificationDetials/{id}', [App\Http\Controllers\CommonController::class, 'getNotificationDetials'])->name('getNotificationDetials');
 
     //Get Student List
     Route::get('/getStudentList/{orgId}/{orgClassStreamId}', [App\Http\Controllers\CommonController::class, 'getStudentList'])->name('getStudentList');

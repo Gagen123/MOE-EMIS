@@ -52,6 +52,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getGewogNameById/{id}', ['uses' => 'CommonController@getGewogNameById']);
         $router->get('/checkPendingApplication/{type}/{user_id}', ['uses' => 'CommonController@checkPendingApplication']);
         $router->post('/getNotification/{role_ids}/{user_id}', ['uses' => 'CommonController@getNotification']);
+        $router->get('/getNotificationDetials/{id}', ['uses' => 'CommonController@getNotificationDetials']);
     });
 
     $router->group(['prefix' => 'questionAnswerController'], function () use ($router){

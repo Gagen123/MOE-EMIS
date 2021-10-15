@@ -16,9 +16,6 @@ use App\Models\staff_leadership\NominationDetails;
 use App\Models\staff_leadership\FeedbackProviderDetails;
 use App\Models\staff_leadership\RequiredAttachment;
 use App\Models\staff\ApplicationSequence;
-use App\Models\staff\Nomination;
-use App\Models\staff\PersonalDetails;
-use App\Models\staff\StaffHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
 use App\Models\staff_masters\PositionTitle;
@@ -665,24 +662,27 @@ class StaffLeadershipSerivcesController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $response_data="";
         if($request->action_type=="add"){
-            $data =[
-                'application_number'        =>  $request->application_number,
-                'partifipant_from'          =>  $request->partifipant_from,
-                'email'                     =>  $request->email,
-                'contact'                   =>  $request->contact,
-                'participant'               =>  $request->participant,
-                'positiontitle'             =>  $request->positiontitle,
-                'cid'                       =>  $request->cid,
-                'name'                      =>  $request->name,
-                'department'                =>  $request->department,
-                'school'                    =>  $request->school,
-                'dzongkhag'                 =>  $request->dzongkhag,
-                'feedback_type'             =>  $request->feedback_type,
-                'action_type'               =>  $request->action_type,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = FeedbackProviderDetails::create($data);
+            $staf=FeedbackProviderDetails::where('participant',$request->participant)->where('application_number',$request->application_number)->first();
+            if($staf==null || $staf==""){
+                $data =[
+                    'application_number'        =>  $request->application_number,
+                    'partifipant_from'          =>  $request->partifipant_from,
+                    'email'                     =>  $request->email,
+                    'contact'                   =>  $request->contact,
+                    'participant'               =>  $request->participant,
+                    'positiontitle'             =>  $request->positiontitle,
+                    'cid'                       =>  $request->cid,
+                    'name'                      =>  $request->name,
+                    'department'                =>  $request->department,
+                    'school'                    =>  $request->school,
+                    'dzongkhag'                 =>  $request->dzongkhag,
+                    'feedback_type'             =>  $request->feedback_type,
+                    'action_type'               =>  $request->action_type,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s'),
+                ];
+                $response_data = FeedbackProviderDetails::create($data);
+            }
         }
         if($request->action_type=="edit"){
             //need to write edit code if required

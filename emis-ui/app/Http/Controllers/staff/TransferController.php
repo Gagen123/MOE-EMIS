@@ -89,6 +89,7 @@ class TransferController extends Controller{
         $request_data =[
             'id'                                =>  $request->id,
             'record_type_id'                    =>  $request->type_id,
+            'submitterroleid'                   =>  $request->submitterroleid,
             'transferType'                      =>  $request->transferType,
             'preference_dzongkhag1'             =>  $request->preference_dzongkhag1,
             'preference_dzongkhag2'             =>  $request->preference_dzongkhag2,
@@ -105,40 +106,40 @@ class TransferController extends Controller{
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/submitFinalapplicantDetails', $request_data);
         $appNo = json_decode($response_data)->data->aplication_number;
-        $workflow_data=[
-            'db_name'           =>$this->database_name,
-            'table_name'        =>$this->table_name,
-            'service_name'      =>$request->service_name,
-            'application_number'=>  json_decode($response_data)->data->aplication_number,
-            'screen_id'         =>  json_decode($response_data)->data->aplication_number,
-            'status_id'         =>  1,
-            'app_role_id'       => $this->getRoleIds('roleIds'),
-            'record_type_id'    => json_decode($response_data)->data->transfer_type_id,
-            'remarks'           =>null,
-            'user_dzo_id'       =>$this->getUserDzoId(),
-            'access_level'      =>$this->getAccessLevel(),
-            'working_agency_id' =>$this->getWrkingAgencyId(),
-            'action_by'         =>$this->userId(),
-        ];
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$request->service_name,
+                'application_number'=>  json_decode($response_data)->data->aplication_number,
+                'screen_id'         =>  json_decode($response_data)->data->aplication_number,
+                'status_id'         =>  1,
+                'app_role_id'       => $this->getRoleIds('roleIds'),
+                'record_type_id'    => json_decode($response_data)->data->transfer_type_id,
+                'remarks'           =>null,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        // $sequence=1;
-        // $seq= $sequence +1;
-        // $role_id= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')."__nextrole"));
-        // // dd($role_id);
-        // $notification_data=[
-        //     'notification_for'              =>$request->screen_name,
-        //     'notification_appNo'            =>  $appNo,
-        //     'notification_message'          =>  '',
-        //     'notification_type'             =>  'role',
-        //     'notification_access_type'      =>  'all',
-        //     'call_back_link'                =>  'tasklist',
-        //     'user_role_id'                  =>  'e5877ece-9d58-46f1-b860-db1051f7523a',
-        //     'dzo_id'                        =>  $this->getUserDzoId(),
-        //     'working_agency_id'             =>  $this->getWrkingAgencyId(),
-        //     'access_level'                  =>  $this->getAccessLevel(),
-        //     'action_by'                     =>  $this->userId(),
-        // ];
-        // $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
+
+        //notification addded recently
+        if( $work_response_data!="" || $work_response_data!=null){
+            $notification_data=[
+                'notification_for'              =>  $request->service_name,
+                'notification_appNo'            =>  $appNo,
+                'notification_message'          =>  '',
+                'notification_type'             =>  'role',
+                'notification_access_type'      =>  'all',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $request->submitted_to,
+                'dzo_id'                        =>  $this->getUserDzoId(),
+                'working_agency_id'             =>  $this->getWrkingAgencyId(),
+                'access_level'                  =>  $this->getAccessLevel(),
+                'action_by'                     =>  $this->userId(),
+            ];
+        $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
+    }
         return $work_response_data;
     }
 
@@ -207,7 +208,7 @@ class TransferController extends Controller{
 
     }
     public function loadtrainsferDetails($appNo="",$type=""){
-        
+
         $workflowstatus="";
         $screen_id="";
         $sequence="";
@@ -221,7 +222,7 @@ class TransferController extends Controller{
         $response_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
         if($response_data!=null){
             foreach($response_data as $work){
-                if($loadTransferDetails->data->transfer_type_id==$work->transfer_type_id || $updated_data->data->status_id==$work->sequence){
+                if($loadTransferDetails->data->transfer_type_id==$work->transfer_type_id && $updated_data->data->status_id==$work->sequence){
                     if($work->authority_type_id==10){
                         $loadTransferDetails->data->app_seq_no=$work->authority_type_id;
                     }
@@ -231,6 +232,16 @@ class TransferController extends Controller{
                 }
             }
         }
+        //removing notification onces visted
+        $notification_data=[
+            'notification_appNo'            =>  $appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+    $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+
         return json_encode($loadTransferDetails);
     }
     public function updateTransferApplication(Request $request){
@@ -253,6 +264,55 @@ class TransferController extends Controller{
             $org_status="Joined";
             $work_status=8;
         }
+
+        //notification for transfer which include the backward and forward notification
+        $notification_data=[
+            'notification_for'              =>  'Transfer Application',
+            'notification_access_type'      =>  'all',
+            'notification_appNo'            =>  $request->application_no,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        if($request->actiontype=="reject"){
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Transfer has been rejected. Reason for the rejection: '.$request->remarks,
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'view_notification_message',
+                'user_role_id'                  =>  $request->created_by,
+            ];
+        }
+        // if($request->actiontype=="verify"){
+        //     $notification_data=$notification_data+[
+        //         'notification_message'          =>  'Your Application for Transfer has been verified. Remarks: '.$request->remarks,
+        //         'notification_type'             =>  'user',
+        //         'call_back_link'                =>  'view_notification_message',
+        //         'user_role_id'                  =>  $request->created_by,
+        //     ];
+        // }
+        else if($request->actiontype=="approve"){
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Transfer has been Approved ',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'view_notification_message',
+                'user_role_id'                  =>  $request->created_by,
+            ];
+        }
+        else{
+            // dd($request->transfer_type_id,$request->submitterroleid,$this->getRoleIds('roleIds'));
+            //get next role id from transfer config to send notification.
+            $res=$this->apiService->listData('emis/staff/transfer/getNextApprovalRoleIdForTransfer/'.$request->transfer_type_id.'/'.$request->submitterroleid.'/'.$this->getRoleIds('roleIds'));
+            $response_data= json_decode($res);
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Transfer Notification',
+                'notification_type'             =>  'role',
+                'call_back_link'                =>  'tasklist',
+                'user_role_id'                  =>  $response_data[0]->role_id,
+            ];
+        }
+        $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+
         if($request->transferType == "Intra Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
@@ -354,6 +414,11 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/getSubmitterId/'.$id);
         return $response_data;
     }
+    public function checkEligibilityForTransfer($type_id){
+        $response_data = $this->apiService->listData('emis/staff/transfer/checkEligibilityForTransfer/'.$type_id.'/'.$this->getRoleIds('roleIds'));
+        return $response_data;
+    }
+
     public function loadtransferDetails($type=""){
         $userId=$this->userId();
         $dzoId=$this->getUserDzoId();
@@ -365,8 +430,8 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/reportingTransfer/'.$type.'/'.$dzoId);
         return $response_data;
     }
-    
-    
+
+
     public function loadApplicationDetails($id=""){
         $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
         return $response_data;
@@ -424,33 +489,33 @@ class TransferController extends Controller{
             'status'                            =>  $request->status,
             'working_agency_id'                 =>  $this->getWrkingAgencyId(),
             'remarks'                           =>  $request->remarks,
-            
+
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
-        // if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
-        //     $workflow_data=[
-        //         'db_name'           =>$this->database_name,
-        //         'table_name'        =>$this->table_name,
-        //         'service_name'      =>$request->service_name,
-        //         'application_number'=>  json_decode($response_data)->application_no,
-        //         'screen_id'         =>  json_decode($response_data)->application_no,
-        //         'status_id'         =>  1,
-        //         'app_role_id'       => $this->getRoleIds('roleIds'),
-        //         'record_type_id'    => json_decode($response_data)->transferType,
-        //         'user_dzo_id'       =>$this->getUserDzoId(),
-        //         'access_level'      =>$this->getAccessLevel(),
-        //         'working_agency_id' =>$this->getWrkingAgencyId(),
-        //         'action_by'         =>$this->userId(),
-        //     ];
-        //     $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
-        // }
+        if( $response_data!="Not Contain" && $response_data!="Not Approved"  ){
+            $workflow_data=[
+                'db_name'           =>$this->database_name,
+                'table_name'        =>$this->table_name,
+                'service_name'      =>$request->service_name,
+                'application_number'=>  json_decode($response_data)->data->application_no,
+                'screen_id'         =>  json_decode($response_data)->data->application_no,
+                'status_id'         =>  1,
+                'app_role_id'       => $this->getRoleIds('roleIds'),
+                'record_type_id'    => json_decode($response_data)->data->transferType,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+            ];
+            $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        }
         return  $response_data;
     }
     public function LoadTransferAppealDetails($user_id=""){
         $user_id=$this->userId();
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
         return $response_data;
-        
+
 
     }
     public function loadPreference($id=""){

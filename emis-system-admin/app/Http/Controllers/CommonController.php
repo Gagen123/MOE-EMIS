@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use  App\Models\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
@@ -180,6 +181,11 @@ class CommonController extends Controller{
         $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
         // return $result_data;
         return DB::select($result_data);
+    }
+
+    public function getNotificationDetials($id=""){
+        $result_data=Notification::where('id',$id)->first();
+        return $result_data;
     }
     public function releaseApplication($application_number=""){
         $update_data=[
