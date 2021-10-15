@@ -202,13 +202,19 @@ class TransferController extends Controller{
         return $loadTransferDetails;
 
     }
+    
+    public function loadTransferAppealDetail($appNo=""){
+        $loadTransferAppealDetail = $this->apiService->listData('emis/staff/transfer/loadTransferAppealDetail/'.$appNo);
+        return $loadTransferAppealDetail;
+
+    }
     public function loadAppealattachementDetails($appNo=""){
         $loadTransferDetails = $this->apiService->listData('emis/staff/transfer/loadAppealattachementDetails/'.$appNo);
         return $loadTransferDetails;
 
     }
     public function loadtrainsferDetails($appNo="",$type=""){
-        
+
         $workflowstatus="";
         $screen_id="";
         $sequence="";
@@ -418,7 +424,7 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/checkEligibilityForTransfer/'.$type_id.'/'.$this->getRoleIds('roleIds'));
         return $response_data;
     }
-    
+
     public function loadtransferDetails($type=""){
         $userId=$this->userId();
         $dzoId=$this->getUserDzoId();
@@ -430,8 +436,8 @@ class TransferController extends Controller{
         $response_data = $this->apiService->listData('emis/staff/transfer/reportingTransfer/'.$type.'/'.$dzoId);
         return $response_data;
     }
-    
-    
+
+
     public function loadApplicationDetails($id=""){
         $response_data = $this->apiService->listData('emis/staff/transfer/loadApplicationDetails/'.$id);
         return $response_data;
@@ -489,7 +495,7 @@ class TransferController extends Controller{
             'status'                            =>  $request->status,
             'working_agency_id'                 =>  $this->getWrkingAgencyId(),
             'remarks'                           =>  $request->remarks,
-            
+
         ];
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal', $request_data);
         //inserting into work flow
@@ -525,20 +531,82 @@ class TransferController extends Controller{
                 'access_level'                  =>  $this->getAccessLevel(),
                 'action_by'                     =>  $this->userId(),
             ];
-            dd($notification_data);
-
         $response_data = $this->apiService->createData('emis/common/insertNotification', $notification_data);
         return  $response_data;
     }
   }
      
-    }
+}
+
+    public function UpdateTransferAppeal(Request $request){
+
+        if($request->actiontype=="approved"){
+            $status_id = 10;
+        }
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'TransferAppeal';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'              =>  $file_store_path,
+                            'original_name'     =>  $file_name,
+                            'user_defined_name' =>  $filenames[$index],
+                        )
+                    );
+                }
+            }
+        }
+        $request_data =[
+            'remarks'                                =>  $request->remarks,
+            'aplication_number'                      =>  $request->aplication_number,
+        ];
+        $response_data= $this->apiService->createData('emis/staff/transfer/UpdateTransferAppeal', $request_data);
+        //Inserting into the workflow
+        if( $response_data!="" ||  $response_data!=null){
+                 $workflow_data=[
+                'db_name'           =>'staff_db',
+                'table_name'        => 'staff_appeals',
+                'service_name'      => 'transfer appeal',
+                'application_number'=>$request->aplication_number,
+                'screen_id'         =>$request->aplication_number,
+                'status_id'         => $status_id,
+                'remarks'           =>$request->remarks,
+                'user_dzo_id'       =>$this->getUserDzoId(),
+                'access_level'      =>$this->getAccessLevel(),
+                'working_agency_id' =>$this->getWrkingAgencyId(),
+                'action_by'         =>$this->userId(),
+        ];
+        $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+
+        }
+   
+
+           //removing notification onces visted
+           $notification_data=[
+            'notification_appNo'            =>  $request->aplication_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+    ];
+    $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        return  $response_data;
+}
 
     public function LoadTransferAppealDetails($user_id=""){
         $user_id=$this->userId();
         $response_data = $this->apiService->listData('emis/staff/transfer/LoadTransferAppealDetails/'.$user_id);
         return $response_data;
-        
+
 
     }
     public function loadPreference($id=""){

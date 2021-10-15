@@ -450,7 +450,7 @@ export default {
         });
         this.form.application_no=this.$route.params.data.application_number;
         this.form.status_id=this.$route.params.data.status_id;
-         this.form.id=this.$route.params.data.id;
+        this.form.id=this.$route.params.data.id;
         this.form.userDzongkhag=this.$route.params.data.user_dzo_id;
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();

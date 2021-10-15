@@ -682,7 +682,7 @@ export default {
         async getdegreeList(){
             this.degreeList =  await this.loadstaffMasters('active','QualificationLevel');
         },
-        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
+        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_main_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response;

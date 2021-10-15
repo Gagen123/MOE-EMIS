@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use  App\Models\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
@@ -35,6 +36,7 @@ class CommonController extends Controller{
             'user_id'                   =>  $request->user_id,
             'type'                      =>  $request->type,
         ];
+
         $access_level=$data['access_level'];
         $dzo_id=$data['dzongkhag'];
         $org_id=$data['org'];
@@ -42,6 +44,7 @@ class CommonController extends Controller{
         $work_flow_for_leave=$data['leave_config_data'];
         $work_flow_for_leadership=$data['leadership_config_data'];
         $work_flow_for_transfer=$request->tr_config_data;
+        // return $request->tr_config_data;
         $type=$data['type'];
         $user_id=$data['user_id'];
         $result_data='SELECT t.access_level,t.application_number,t.claimed_by,t.remarks,t.name,t.screen_id,t.service_name,t.status_id,t.table_name,t.user_dzo_id,t.working_agency_id,t.created_by,t.applied_on,t.last_action_by,t.last_action_date FROM task_details t WHERE ';
@@ -148,7 +151,6 @@ class CommonController extends Controller{
                     $result_data.=' ';
                     foreach($work_flow_for_transfer as $i => $srcn){
                         $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
-                        // return $result_data ;
                         if(sizeof($work_flow_for_transfer)-1==$i){
                             $result_data.='';
                         }
@@ -176,10 +178,14 @@ class CommonController extends Controller{
             $roles='"'.str_replace(',','","',$role_ids).'"';
         }
         $result_data='SELECT d.id,d.call_back_link,d.notification_for,d.notification_appNo,d.notification_message,d.notification_type,d.created_at,t.id AS notification_to_id,t.user_role_id FROM notification_to t LEFT JOIN notification_details d ON t.notification_id=d.id LEFT JOIN notification_visited v ON v.notification_id=d.id WHERE ';
-        // $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
-        $result_data.=' (v.user_id IS NULL OR v.user_id <> "'.$user_id.'") AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
+        $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
         // return $result_data;
         return DB::select($result_data);
+    }
+
+    public function getNotificationDetials($id=""){
+        $result_data=Notification::where('id',$id)->first();
+        return $result_data;
     }
     public function releaseApplication($application_number=""){
         $update_data=[

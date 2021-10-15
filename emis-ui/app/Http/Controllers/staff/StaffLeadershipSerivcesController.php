@@ -78,6 +78,10 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPostList/'.$position_title);
         return $response_data;
     }
+    public function checkApplication($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/checkApplication/'.$param.'__'.$this->staffId());
+        return $response_data;
+    }
     public function loadPostDetials($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadPostDetials/'.$id);
         return $response_data;
@@ -190,6 +194,15 @@ class StaffLeadershipSerivcesController extends Controller{
         ];
         $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'.$application_number);
+
+        $notification_data=[
+            'notification_appNo'            =>  $application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return $response_data;
     }
 
@@ -448,9 +461,9 @@ class StaffLeadershipSerivcesController extends Controller{
             $notification_data=[
                 'notification_for'              =>  'Leadership Selection',
                 'notification_access_type'      =>  'all',
-                'notification_message'          =>  '',
+                'notification_message'          =>  'Notification for requesting to provide feedback',
                 'notification_type'             =>  'user',
-                'call_back_link'                =>  'leadership_feedback',
+                'call_back_link'                =>  'view_notification_message',
                 'user_role_id'                  =>  rtrim($user_id,','),
                 'notification_appNo'            =>  $request->application_number,
                 'dzo_id'                        =>  $this->getUserDzoId(),
@@ -458,6 +471,7 @@ class StaffLeadershipSerivcesController extends Controller{
                 'access_level'                  =>  $this->getAccessLevel(),
                 'action_by'                     =>  $this->userId(),
             ];
+            // dd($notification_data);
             $notification=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
         //prepare data for verification, approval and other updates

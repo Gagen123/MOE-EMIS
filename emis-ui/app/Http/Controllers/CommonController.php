@@ -105,8 +105,17 @@ class CommonController extends Controller{
         $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
         return $response_data;
     }
-    public function getTaskcount(){
-        $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+    public function getNotificationDetials($id=""){
+        $response_data=$this->apiService->getListData('emis/common/getNotificationDetials',$id);
+        $notification_data=[
+            'notification_appNo'            =>  json_decode($response_data)->notification_appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        return $response_data;
     }
 
     public function getSessionDetail($applicationId=""){
@@ -169,8 +178,8 @@ class CommonController extends Controller{
     }
     public function loadStudentListByOrgId($org_id){
         $response_data= $this->apiService->listData('emis/common_services/loadStudentListByOrgId/'.$org_id);
-        return $response_data; 
+        return $response_data;
     }
-    
+
 
 }

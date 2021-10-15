@@ -379,12 +379,23 @@ export default {
             });
 
         },
+        loadtransferType(uri = 'masters/loadStaffMasters/appeal'){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.getTransfer_details(response.data.data[0].id);
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+        },
          getTransfer_details(id){
             axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
             .then(response =>{
                 let data = response.data.data;
                 if(data!=null && data!="null" && data!=""){
                     this.form.submitted_to=data;
+                    alert(JSON.stringify(this.form.submitted_to))
                 }
                 else{
                     Swal.fire({
@@ -409,7 +420,7 @@ export default {
             }
             if(id=="transfer_type_id"){
                 this.form.transfer_type_id=$('#transfer_type_id').val();
-                this.getTransfer_details(this.form.transfer_type_id);
+               
 
             }
         },
@@ -436,6 +447,7 @@ export default {
         this.changefunction(id);
         });
         this.profile_details();
+        this.loadtransferType();
         this.loadtransferwindow();
         this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();

@@ -141,7 +141,7 @@
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
                                                <span class="text-danger" id="preference_dzongkhag3_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -194,7 +194,7 @@
                                                 </select>
                                                 <has-error :form="form" field="optional2sub"></has-error>
                                                <span class="text-danger" id="optional2sub_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -413,7 +413,7 @@ export default {
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Okay!',
-                        
+
                         })
                     $('#form_details').hide();
                     $('#action').hide();
@@ -425,8 +425,8 @@ export default {
                      this.form.Submitter_id=data.Submitter_id;
                 }
 
-                
-                
+
+
             })
             .catch(function (error){
                 console.log("Error:"+error)
@@ -486,7 +486,7 @@ export default {
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('transferType', this.form.transferType);
-                        
+
                         axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
                         .then((response) =>{
                             if(response!="" && response!="No Screen"){
@@ -552,7 +552,7 @@ export default {
                                     if(response.data!="" && response!="No Screen"){
                                     let message=" Your transfer application has been submitted with the system generated applicaiton number: "+response.data.application_number;
                                     this.$router.push({name:'inter_transfer_acknowledgement',params: {data:message}});
-                                    
+
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Application for Transfer has been submitted for further action'
@@ -561,7 +561,7 @@ export default {
                                     this.applyselect2();
                                     this.$router.push('/list_inter_transfer');
                                 })
-                                
+
                                 .catch((error) => {
                                     console.log("Errors:"+error)
                                 });
@@ -576,7 +576,7 @@ export default {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'okay!',
                     })
-            } 
+            }
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -598,7 +598,7 @@ export default {
                 console.log(errors)
             });
         },
-        
+
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/inter_transfer')
            .then((response) => {
@@ -610,7 +610,7 @@ export default {
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                  
+
                     let todate=new Date(data.to_date);
                     let formdate = new Date();
                     // One day in milliseconds
@@ -640,7 +640,7 @@ export default {
                 console.log("Error."+error);
             });
         },
-         
+
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -740,7 +740,7 @@ export default {
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
-        
+
         // let data = await this.getRequiredDocument("Inter_Transfer_attachment");
         // data.forEach((item => {
         //     this.form.attachments.push({file_name:item.name, file_upload:''})

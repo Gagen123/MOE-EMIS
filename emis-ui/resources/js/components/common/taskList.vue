@@ -164,8 +164,8 @@
                 if(data.service_name.includes('Inter Transfer')){
                     this.$router.push({name:"inter_transfer_verification",params:{data:data,type:actiontype}});
                 }
-                if(data.application_number.includes('TRA')){
-                    this.$router.push({name:"transferAppeal_verification ",params:{data:data,type:actiontype}});
+                if(data.service_name.includes('transfer appeal')){
+                    this.$router.push({name:"transferAppeal_verification",params:{data:data,type:actiontype}});
                 }
                 if(data.service_name.includes('Leave')){
                     this.$router.push({name:"leave_verification",params:{data:data,type:actiontype}});

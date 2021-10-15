@@ -16,9 +16,6 @@ use App\Models\staff_leadership\NominationDetails;
 use App\Models\staff_leadership\FeedbackProviderDetails;
 use App\Models\staff_leadership\RequiredAttachment;
 use App\Models\staff\ApplicationSequence;
-use App\Models\staff\Nomination;
-use App\Models\staff\PersonalDetails;
-use App\Models\staff\StaffHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
 use App\Models\staff_masters\PositionTitle;
@@ -168,12 +165,19 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPostList($role_ids=""){
-        $query="SELECT p.leadership_id,s.id,s.position_title FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id WHERE role_id IN('";
+        $query="SELECT p.leadership_id,s.id,s.position_title,t.name AS positiontitlename FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id JOIN master_stf_position_title t ON t.id=s.position_title WHERE role_id IN('";
         if(strpos($role_ids,',')){
             $role_ids=str_replace(",","','",$role_ids);
         }
-        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id");
+        $query=$query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id";
+        $posts=DB::select($query);
+
         return $this->successResponse($posts);
+    }
+
+    public function checkApplication($id=""){
+        $response_data = LeadershipApplication::where('leadership_id',explode('__',$id)[0])->where('staff_id',explode('__',$id)[1])->first();
+        return $this->successResponse($response_data);
     }
     public function loadPostDetials($id=""){
         $post=LeadershipDetails::where('id',$id)->first();
@@ -658,24 +662,27 @@ class StaffLeadershipSerivcesController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $response_data="";
         if($request->action_type=="add"){
-            $data =[
-                'application_number'        =>  $request->application_number,
-                'partifipant_from'          =>  $request->partifipant_from,
-                'email'                     =>  $request->email,
-                'contact'                   =>  $request->contact,
-                'participant'               =>  $request->participant,
-                'positiontitle'             =>  $request->positiontitle,
-                'cid'                       =>  $request->cid,
-                'name'                      =>  $request->name,
-                'department'                =>  $request->department,
-                'school'                    =>  $request->school,
-                'dzongkhag'                 =>  $request->dzongkhag,
-                'feedback_type'             =>  $request->feedback_type,
-                'action_type'               =>  $request->action_type,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = FeedbackProviderDetails::create($data);
+            $staf=FeedbackProviderDetails::where('participant',$request->participant)->where('application_number',$request->application_number)->first();
+            if($staf==null || $staf==""){
+                $data =[
+                    'application_number'        =>  $request->application_number,
+                    'partifipant_from'          =>  $request->partifipant_from,
+                    'email'                     =>  $request->email,
+                    'contact'                   =>  $request->contact,
+                    'participant'               =>  $request->participant,
+                    'positiontitle'             =>  $request->positiontitle,
+                    'cid'                       =>  $request->cid,
+                    'name'                      =>  $request->name,
+                    'department'                =>  $request->department,
+                    'school'                    =>  $request->school,
+                    'dzongkhag'                 =>  $request->dzongkhag,
+                    'feedback_type'             =>  $request->feedback_type,
+                    'action_type'               =>  $request->action_type,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s'),
+                ];
+                $response_data = FeedbackProviderDetails::create($data);
+            }
         }
         if($request->action_type=="edit"){
             //need to write edit code if required
