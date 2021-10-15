@@ -78,12 +78,30 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPostList/'.$position_title);
         return $response_data;
     }
+    public function checkApplication($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/checkApplication/'.$param.'__'.$this->staffId());
+        return $response_data;
+    }
     public function loadPostDetials($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadPostDetials/'.$id);
         return $response_data;
     }
 
     public function submitApplication(Request $request){
+        $notification_data=[
+            'notification_for'              =>  'Leadership Selection',
+            'notification_appNo'            =>  '123',
+            'notification_message'          =>  '',
+            'notification_type'             =>  'role',
+            'notification_access_type'      =>  'all',
+            'call_back_link'                =>  'tasklist',
+            'user_role_id'                  =>  config('services.constant.notification_leadership_selection_applicaiton'),
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/insertNotification', $notification_data);
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
@@ -190,6 +208,15 @@ class StaffLeadershipSerivcesController extends Controller{
         ];
         $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'.$application_number);
+
+        $notification_data=[
+            'notification_appNo'            =>  $application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return $response_data;
     }
 
@@ -448,9 +475,9 @@ class StaffLeadershipSerivcesController extends Controller{
             $notification_data=[
                 'notification_for'              =>  'Leadership Selection',
                 'notification_access_type'      =>  'all',
-                'notification_message'          =>  '',
+                'notification_message'          =>  'Notification for requesting to provide feedback',
                 'notification_type'             =>  'user',
-                'call_back_link'                =>  'leadership_feedback',
+                'call_back_link'                =>  'view_notification_message',
                 'user_role_id'                  =>  rtrim($user_id,','),
                 'notification_appNo'            =>  $request->application_number,
                 'dzo_id'                        =>  $this->getUserDzoId(),

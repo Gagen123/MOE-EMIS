@@ -168,12 +168,19 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPostList($role_ids=""){
-        $query="SELECT p.leadership_id,s.id,s.position_title FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id WHERE role_id IN('";
+        $query="SELECT p.leadership_id,s.id,s.position_title,t.name AS positiontitlename FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id JOIN master_stf_position_title t ON t.id=s.position_title WHERE role_id IN('";
         if(strpos($role_ids,',')){
             $role_ids=str_replace(",","','",$role_ids);
         }
-        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id");
+        $query=$query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id";
+        $posts=DB::select($query);
+
         return $this->successResponse($posts);
+    }
+
+    public function checkApplication($id=""){
+        $response_data = LeadershipApplication::where('leadership_id',explode('__',$id)[0])->where('staff_id',explode('__',$id)[1])->first();
+        return $this->successResponse($response_data);
     }
     public function loadPostDetials($id=""){
         $post=LeadershipDetails::where('id',$id)->first();

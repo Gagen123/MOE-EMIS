@@ -625,6 +625,8 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadAllPosts', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPosts'])->name('loadAllPosts');
         Route::get('/loadDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadDetials'])->name('loadDetials');
         Route::get('/loadAllPostList', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadAllPostList'])->name('loadAllPostList');
+        Route::get('/checkApplication/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'checkApplication'])->name('checkApplication');
+
         Route::get('/loadPostDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadPostDetials'])->name('loadPostDetials');
         Route::post('/submitApplication', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'submitApplication'])->name('submitApplication');
         Route::get('/loadapplicaitontDetials/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadapplicaitontDetials'])->name('loadapplicaitontDetials');

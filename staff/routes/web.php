@@ -190,6 +190,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadAllPosts/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPosts']);
             $router->get('/loadDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadDetials']);
             $router->get('/loadAllPostList/{role_ids}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllPostList']);
+            $router->get('/checkApplication/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@checkApplication']);
             $router->get('/loadPostDetials/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadPostDetials']);
             $router->post('/submitApplication', ['uses' => 'staff\StaffLeadershipSerivcesController@submitApplication']);
             $router->get('/loadAllApplication/{user_id}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadAllApplication']);

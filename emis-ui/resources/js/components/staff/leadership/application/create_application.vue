@@ -8,7 +8,7 @@
                         <select class="form-control select2" id="post_id" v-model="form.post_id" :class="{ 'is-invalid': form.errors.has('post_id') }">
                             <option value="">--Select--</option>
                             <option v-for="(item, index) in postList" :key="index" v-bind:value="item.id">
-                                {{positionList[item.position_title]}}
+                                {{item.positiontitlename}}
                             </option>
                         </select>
                     </div>
@@ -17,7 +17,7 @@
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Position Title:</label>
-                            <span class="text-blue text-bold">{{positionList[post_detail.position_title]}}</span>
+                            <span class="text-blue text-bold">{{post_detail.position_title}}</span>
                         </div>
                     </div>
                     <div class="row form-group">
@@ -41,7 +41,7 @@
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pt-4 pb-4">
                         <label>Applicant:<i class="text-danger">*</i></label>
-                        <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
+                        <select v-model="form.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('staff_id') }" class="form-control" name="staff_id" id="staff_id">
                             <option value=""> --Select--</option>
                             <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }}: {{ item.name }}, {{item.position_title}}</option>
                         </select>
@@ -170,43 +170,6 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.positionList[data[i].id] = data[i].name;
-                }
-                this.loadAllPostList();
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-        getSelectionList(uri = 'questionAnswerController/loadQuestionaries/loadServices_Leadership_Service'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.selectionList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('err in retrieving services: '+error);
-            });
-        },
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].Id] = data[i].Name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
 
         loadAllPostList(){
             axios.get('/staff/staffLeadershipSerivcesController/loadAllPostList')
@@ -219,25 +182,36 @@ export default {
             });
         },
         loadPostDetials(id){
-            axios.get('/staff/staffLeadershipSerivcesController/loadPostDetials/'+id)
+            axios.get('/staff/staffLeadershipSerivcesController/checkApplication/'+id)
             .then((response) =>{
                 let data=response.data.data;
-                this.loadstaff();
-                this.post_detail=data;
-                this.require_count=data.attachments.length;
-                this.count=data.attachments.length;
-                if(data.attachments.length>0){
-                    this.form.attachments=[];
-                    for(let i=0;i<data.attachments.length;i++){
-                        $('#file_name'+i).prop('readonly',true);
-                        this.form.attachments.push({file_name:data.attachments[i].attachment,attachment:''});
-                    }
+                if(data!=null && data!=""){
+
+                }else{
+                    axios.get('/staff/staffLeadershipSerivcesController/loadPostDetials/'+id)
+                    .then((response) =>{
+                        let data=response.data.data;
+                        this.post_detail=data;
+                        this.require_count=data.attachments.length;
+                        this.count=data.attachments.length;
+                        if(data.attachments.length>0){
+                            this.form.attachments=[];
+                            for(let i=0;i<data.attachments.length;i++){
+                                $('#file_name'+i).prop('readonly',true);
+                                this.form.attachments.push({file_name:data.attachments[i].attachment,attachment:''});
+                            }
+                        }
+                        this.getstaffDetails();
+                    })
+                    .catch((error) =>{
+                        console.log("Error: "+error);
+                    });
                 }
-                this.getstaffDetails();
             })
             .catch((error) =>{
                 console.log("Error: "+error);
             });
+
         },
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -276,6 +250,7 @@ export default {
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes!',
+                cancelButtonText:'No',
                 }).then((result) => {
                 if (result.isConfirmed) {
                     let formData = new FormData();
@@ -319,7 +294,6 @@ export default {
     },
 
     async mounted(){
-        this.loadPositionTitleList();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -330,9 +304,8 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
-        this.getSelectionList();
-        this.loadroleList();
-
+        this.loadstaff();
+        this.loadAllPostList();
     },
 }
 </script>
