@@ -482,6 +482,7 @@ export default {
                             formData.append('id', this.form.id);
                             formData.append('type_id', this.form.type_id);
                             formData.append('submitterroleid', this.form.submitterroleid);
+
                             formData.append('service_name', this.form.service_name);
                             formData.append('preference_school1', this.form.preference_school1);
                             formData.append('preference_school2', this.form.preference_school2);
@@ -655,8 +656,8 @@ export default {
                 }
                 else{
                     Swal.fire({
-                        title: 'No Transfer Configuration ! ',
-                        text: "Sorry! System cannot find transfer configuration for this role. Please contact system administrator",
+                        title: 'No Leave Configuration ! ',
+                        text: "Sorry! System cannot find leave configuration for this role. Please contact system administrator",
                         icon: 'error',
                     });
                     $('#form_details').hide();

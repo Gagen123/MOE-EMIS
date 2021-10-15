@@ -323,6 +323,13 @@ class TransferController extends Controller{
         $response_data->preferences=TransPrefenreces::where('transfer_application_id',$response_data->id)->get();
             return $this->successResponse($response_data);
         }
+    public function loadTransferAppealDetail($appNo){
+        $response_data=DB::table('staff_appeals AS t1')
+        ->select('t1.transferType','t1.name','t1.application_no','t1.description','t1.status','t1.remarks','t1.created_at')
+        ->where('t1.application_no',$appNo)
+        ->get();
+        return $response_data;
+    }
 
     public function loadAppealattachementDetails($appNo=""){
         $response_data=StaffAppeal::where('application_no',$appNo)->first();
@@ -650,6 +657,7 @@ class TransferController extends Controller{
             'description'                       =>  $request->description,
             'user_id'                           =>  $request->user_id,
             'status'                            =>  $request->status,
+            'status_id'                         => '1',
             'org_id'                            =>  $request->working_agency_id,
         ];
         $response_data=TransferApplication::where('created_by',$request->user_id)->where('aplication_number',$request->aplication_number)->first();
@@ -697,5 +705,16 @@ class TransferController extends Controller{
 
     }
   }
+  public function UpdateTransferAppeal(Request $request){
+    $request_data =[
+        'remarks'                               => $request->remarks,
+        'status'                                => 'Verfied By HRD',
+        'status_id'                             =>  $request->status_id,
+    ];
+    $response_data=StaffAppeal::where('application_no', $request->aplication_number)->update($request_data);
+    return $this->successResponse($response_data, Response::HTTP_CREATED);
+
+  }
+  
 
 }

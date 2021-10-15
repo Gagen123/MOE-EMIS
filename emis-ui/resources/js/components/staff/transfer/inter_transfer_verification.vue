@@ -249,6 +249,7 @@ export default {
                 preference_school:'',
                 submitterroleid:'',
                 transfer_type_id:'',
+                created_by:'',
                 app_seq_no:'',
                 userDzongkhag:'',
                 attachments:
@@ -273,6 +274,7 @@ export default {
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
+                this.form.created_by=data.created_by;
                 this.form.transfer_type_id=data.transfer_type_id;
                 this.form.submitterroleid=data.submitterroleid;
                 this.form.applicant_name=data.applicant_name;
@@ -283,7 +285,7 @@ export default {
                 if(this.form.status_id==9){
                     $('#reportId').show();
                 }
-                if(this.form.status_id==10 ){
+                if(this.form.status_id==10){
                     $('#forwardId').show();
                     this.dzongkhagApproved=false;
                     this.schoolApproved=false;
@@ -463,7 +465,7 @@ export default {
                 console.log('Error: '+error);
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;
