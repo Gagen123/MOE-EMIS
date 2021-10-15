@@ -1,14 +1,17 @@
 <template>
-    <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+<div>
+    <div class="container-fluid">
+        <div class="card card-primary card-outline">
             <div class="card-header p-0 border-bottom-0">
                 <div class="callout callout-success">
-                  <h5 class="bg-gradient-lightblue">Acknowledgement</h5>
-                  <div v-html="message"></div>
+                  <h5 class="bg-gradient-lightblue">Notification Message</h5>
+                  <div v-html="message">
+                  </div>
                 </div>
             </div>
-        </div>
     </div>
+  </div>
+</div>
 </template>
 <script>
 export default {

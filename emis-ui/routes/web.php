@@ -582,6 +582,7 @@ Route::prefix('staff')->group(function () {
         Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
 
         Route::get('/getSubmitterId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
+        Route::get('/checkEligibilityForTransfer/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'checkEligibilityForTransfer'])->name('checkEligibilityForTransfer');
 
     });
     Route::prefix('managementBody')->group(function (){

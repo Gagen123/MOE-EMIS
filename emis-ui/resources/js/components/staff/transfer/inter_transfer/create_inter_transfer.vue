@@ -303,6 +303,8 @@ export default {
                 optional2sub:'',
                 user_id:'',
                 transfer_list:'',
+                submitterroleid:'',
+                submitted_to:'',
                 attachments:
                 [],
                 ref_docs:[],
@@ -384,6 +386,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
+                this.getTransfer_details(response.data.data[0].id)
 
             })
             .catch(function (error){
@@ -398,6 +401,60 @@ export default {
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
+        },
+        getSubmitterId(id){
+            let uri ='staff/transfer/getSubmitterId/'+id;
+            axios.get(uri)
+            .then(response =>{
+                if(response.data==""||response.data==null){
+                   Swal.fire({
+                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        
+                        })
+                    $('#form_details').hide();
+                    $('#action').hide();
+                    this.$router.push('/intra_transfer');
+                }
+                else{
+                    $('#form_details').show();
+                    $('#action').show();
+                     this.form.Submitter_id=data.Submitter_id;
+                }
+
+                
+                
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+          getTransfer_details(id){
+            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=null && data!="null" && data!=""){
+                    //need to handle for multiple role later, for now it will take for first role at the index 0
+                    this.form.submitted_to=data;
+                }
+                else{
+                    Swal.fire({
+                        title: 'No Transfer Configuration ! ',
+                        text: "Sorry! System cannot find transfer configuration for this role. Please contact system administrator",
+                        icon: 'error',
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
         },
         validated_final_form(){
             let returntue=true;
@@ -476,6 +533,8 @@ export default {
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                 formData.append('submitterroleid', this.form.submitterroleid);
+                                formData.append('submitted_to', this.form.submitted_to);
                                 formData.append('service_name', this.form.service_name);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
@@ -682,10 +741,21 @@ export default {
         this.loadtransferwindow();
         this.LoadTransferType();
         
-        let data = await this.getRequiredDocument("Inter_Transfer_attachment");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+        // let data = await this.getRequiredDocument("Inter_Transfer_attachment");
+        // data.forEach((item => {
+        //     this.form.attachments.push({file_name:item.name, file_upload:''})
+        // }));
+
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            this.form.submitterroleid = response.data.data.roles[0].Id;
+            // alert(this.form.submitterroleid);
+            this.form.staff_id=response.data.data['staff_id'];
+            this.getSubmitterId(this.form.submitterroleid);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>

@@ -247,6 +247,8 @@ export default {
                 preference_school2:'',
                 preference_school3:'',
                 preference_school:'',
+                submitterroleid:'',
+                transfer_type_id:'',
                 app_seq_no:'',
                 userDzongkhag:'',
                 attachments:
@@ -271,6 +273,8 @@ export default {
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
+                this.form.transfer_type_id=data.transfer_type_id;
+                this.form.submitterroleid=data.submitterroleid;
                 this.form.applicant_name=data.applicant_name;
                 this.form.transferType=data.transferType;
                 this.draft_attachments=data.documents;
@@ -289,10 +293,10 @@ export default {
                     this.dzongkhagApproved=true;
                     this.schoolApproved=true;
                 }
-                if(this.form.status_id==1 || this.form.status_id==2){
+                if(this.form.app_seq_no==1 || this.form.app_seq_no==2){
                     $('#verifyId').show();
                 }
-                if(this.form.status_id == 3  ){
+                if(this.form.app_seq_no==10 ){
                     $('#approveId').show();
                     $('#verifyId').hide();
                     $('#approveDzohead').show();

@@ -118,6 +118,7 @@ class TransferController extends Controller{
         }
         $app_data=[
             'aplication_number'     =>  $application_no,
+            'submitterroleid'       => $request->submitterroleid,
             'status'                =>  'Submitted'
         ];
         TransferApplication::where('id', $request->id)->update($app_data);
@@ -506,6 +507,88 @@ class TransferController extends Controller{
         ->where('t.submitter_role_id','=',$id)
         ->get();
         return$response_data;
+    }
+
+    public function checkEligibilityForTransfer($type_id="",$role_id=""){
+        $response_data="";
+        if(strpos($role_id,',')){
+            $role_id=explode(',',$role_id);
+            $response_data=DB::table('master_staff_transfer_config AS t')
+            ->select('t.id','t.transfer_type_id')
+            ->where('transfer_type_id',$type_id)
+            ->get();
+
+        }
+        else{
+            $response_data=DB::table('master_staff_transfer_config AS t')
+            ->select('t.id','t.transfer_type_id')
+            ->where('transfer_type_id',$type_id)
+            ->get();
+        }
+        if($response_data!=null && $response_data!=""){
+            $det=DB::table('master_staff_transfer_config_details')
+            ->where('transfer_config_id',$response_data[0]->id)
+            ->get();
+            // $det=TransferConfigDetails::where('transfer_config_id',$response_data->id)->get();
+            $submitted_to='NA';
+            if($det!=null && $det!="" && sizeof($det)>0){
+                $count = 0;
+                $cong_seq=0;
+                foreach($det as $d){
+                    $count++;
+                    if($count==1){
+                        $cong_seq=$d->sequence;
+                        $submitted_to=$d->role_id;
+                    }
+                    if($d->sequence<$cong_seq){
+                        $cong_seq=$d->sequence;
+                        $submitted_to=$d->role_id;
+                    }
+                }
+            }
+
+            $response_data->submitted_to=$submitted_to;
+            
+        }
+        return $this->successResponse($response_data->submitted_to);
+    }
+
+    public function getNextApprovalRoleIdForTransfer($type_id="",$submitterRoleId="",$currentRoleId=""){
+        $response_data=DB::table('master_staff_transfer_config AS t')
+        ->where('t.transfer_type_id',$type_id)->where('t.submitter_role_id',$submitterRoleId)
+        ->get();
+        if($response_data!=null && $response_data!=""){
+            if(strpos( $currentRoleId,',')){
+                $role_ids=explode(',',$currentRoleId);
+                $currentTransferConfigDetails=DB::table('master_staff_transfer_config_details AS t1')
+                ->where('t1.transfer_config_id',$response_data[0]->id)
+                ->wherein('t1.role_id', $role_ids)
+                ->select('t1.sequence')
+                ->get();
+            }
+            else{
+                $currentTransferConfigDetails=DB::table('master_staff_transfer_config_details AS t1')
+                ->where('t1.transfer_config_id',$response_data[0]->id)
+                ->where('t1.role_id',$currentRoleId)
+                ->select('t1.sequence')
+                ->get();
+            }
+
+            $nextTransferConfigDetails=DB::table('master_staff_transfer_config_details AS t1')
+            ->where('t1.transfer_config_id',$response_data[0]->id)
+            ->where('t1.sequence',$currentTransferConfigDetails[0]->sequence+1)
+            ->select('t1.id','t1.sequence','t1.authority_type_id','t1.role_id')
+            ->get();
+            if($response_data!=null && $response_data!=""){
+                return $nextTransferConfigDetails;
+            }else{
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
+       
     }
 
     public function LoadApplicationDetailsByUserId($param="",$user_id=""){

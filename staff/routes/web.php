@@ -31,7 +31,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
         $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
-        // $router->get('/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
+        // $router->get(ifica'/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
         $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMastersController@loadStaffDropdownMasters');
 
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
@@ -119,6 +119,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getAppVeriTransferConfigDetails/{transfer_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\TransferController@getAppVeriTransferConfigDetails']);
 
             $router->get('/getSubmitterId/{id}', ['uses' => 'staff\TransferController@getSubmitterId']);
+            $router->get('/checkEligibilityForTransfer/{type_id}/{role_id}', ['uses' => 'staff\TransferController@checkEligibilityForTransfer']);
+            $router->get('/getNextApprovalRoleIdForTransfer/{type_id}/{submitterRoleId}/{currentRoleId}', ['uses' => 'staff\TransferController@getNextApprovalRoleIdForTransfer']);
         });
 
         //principal recuritment Approval controller by gagen

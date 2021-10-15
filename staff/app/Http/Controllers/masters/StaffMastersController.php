@@ -695,12 +695,24 @@ class StaffMastersController extends Controller{
             'transfer_type_id.required' => 'This field is required',
             'role_id.required'          => 'This field is required',
         ];
-        $data = array(
-            'transfer_type_id'          =>  $request['transfer_type_id'],
-            'submitter_role_id'         =>  $request['role_id'],
+        // $data = array(
+        //     'transfer_type_id'          =>  $request['transfer_type_id'],
+        //     'submitter_role_id'         =>  $request['role_id'],
 
-        );
+        // );
         $this->validate($request, $rules,$customMessages);
+        $data = [];
+        if(isset($request->transfer_type_id)){
+            $data = $data+[
+                'transfer_type_id'   =>  $request->transfer_type_id,
+            ];
+        }
+        if(isset($request->role_id)){
+            $data = $data+[
+                'submitter_role_id'   =>  $request->role_id,
+            ];
+        }
+
         if($request['action_type']=="add"){
             $data =$data +[
                 'created_by'                =>  $request['user_id'],
@@ -719,6 +731,7 @@ class StaffMastersController extends Controller{
                 $config_det= TransferConfigDetails::create($data);
             }
         }
+
         if($request['action_type']=="edit"){
             $data =$data +[
                 'updated_by'                =>  $request['user_id'],
