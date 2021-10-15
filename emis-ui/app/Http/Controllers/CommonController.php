@@ -98,7 +98,6 @@ class CommonController extends Controller{
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
         // dd($response_data);
         return $response_data;
-
     }
 
     public function getNotification(){
