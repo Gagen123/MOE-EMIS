@@ -28,11 +28,11 @@
                                 </td>
                                  <td>
                                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                                        <select v-model="classAssessmentFrequencyList[index].aca_assmnt_type" class="form-control select2 editable_fields" > 
+                                        <select v-model="classAssessmentFrequencyList[index].transcript_format" class="form-control select2 editable_fields" > 
                                             <option selected="selected" value="">---Select---</option>
                                             <option value="0">NA</option>
-                                            <option value="1">Subjects as Rows </option>
-                                            <option value="2">Subjects as Columns</option>
+                                            <option value="1">Key Stage I (CFA) </option>
+                                            <option value="2">Key Stage II-V (CSA) </option>
                                         </select>
                                     </div>
                                 </td>
@@ -88,7 +88,7 @@ export default {
                     renameId['org_class_id'] = item.classId;
                     renameId['org_stream_id'] = item.streamId;
                     renameId['aca_assmt_frequency_id'] ='';
-                    renameId['aca_assmnt_type'] ='';
+                    renameId['transcript_format'] ='';
                     const obj = {...renameId};
                     finalClassStreams.push(obj);
                 }))
@@ -98,7 +98,7 @@ export default {
                     classAssessmentFrequencies.forEach(item => {
                         if(classStream.org_class_id == item.org_class_id && (classStream.org_stream_id == item.org_stream_id || classStream.org_stream_id == null)){
                             finalClassStreams[index].aca_assmt_frequency_id = item.aca_assmt_frequency_id
-                            finalClassStreams[index].aca_assmnt_type = item.aca_assmnt_type
+                            finalClassStreams[index].transcript_format = item.transcript_format
                             finalClassStreams[index].id = item.id
                            
                         }

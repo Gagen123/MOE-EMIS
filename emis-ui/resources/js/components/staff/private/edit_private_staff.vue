@@ -18,7 +18,7 @@
             <div class="card-body pt-1">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="personal-tab" role="tabpanel" aria-labelledby="basicdetails">
-                        <div class="callout callout-success">
+                        <!-- <div class="callout callout-success">
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Nationality:<i class="text-danger">*</i></label>
@@ -33,7 +33,7 @@
                                     <has-error :form="personal_form" field="cid_work_permit"></has-error>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="callout callout-success">
                             <span class="text-blue"><label><u>Personal Detail</u></label></span>
                             <div class="form-group row">
@@ -682,7 +682,7 @@ export default {
         async getdegreeList(){
             this.degreeList =  await this.loadstaffMasters('active','QualificationLevel');
         },
-        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_subject"){
+        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_main_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -819,12 +819,13 @@ export default {
                     $('#dob').val(this.formatDateToddmmyyyy(data.dob));
 
                     this.personal_form.dzongkhag=data.dzo_id;
-                    $('#dzongkhag').val(data.dzo_id).trigger('change');
+                    $('#p_dzongkhag').val(data.dzo_id).trigger('change');
                     this.allOrgList(data.dzo_id,data.working_agency_id);
                     this.getgewoglist(data.dzo_id,data.geowg_id);
                     this.personal_form.gewog=data.geowg_id;
                     this.getvillagelist(data.geowg_id,data.village_id);
                     this.personal_form.village_id=data.village_id;
+                    this.personal_form.initial_appointment_date=data.initial_appointment_date;
 
                     this.personal_form.personal_id=data.id;
                     this.qualification_form.personal_id=data.id;

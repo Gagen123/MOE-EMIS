@@ -30,8 +30,29 @@ class ZestController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/zest/loadappointment');
         return $response_data;
     }
+
     public function loadSeperation(){
         $response_data= $this->apiService->listData('emis/staff/zest/loadSeperation');
+        return $response_data;
+    }
+    public function loadSecondment($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadSecondment/'.$param);
+        return $response_data;
+    }
+
+
+    public function loadPromotion($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadPromotion/'.$param);
+        return $response_data;
+    }
+
+    public function loadPromotionDetails($id=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadPromotionDetails/'.$id);
+        return $response_data;
+    }
+
+    public function loadLongTermTraining($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadLongTermTraining/'.$param);
         return $response_data;
     }
 

@@ -78,12 +78,12 @@
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Place:<span class="text-danger">*</span></label>
-                    <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_err('place')" type="text">
+                    <input class="form-control" v-model="award_form.place" :class="{ 'is-invalid': award_form.errors.has('place') }" id="place" @change="remove_error('place')" type="text">
                     <has-error :form="award_form" field="place"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_err('date')" type="text">
+                    <input class="form-control popupDatepicker" :class="{ 'is-invalid': award_form.errors.has('date') }" id="date" @change="remove_error('date')" type="text">
                     <has-error :form="award_form" field="date"></has-error>
                 </div>
             </div>
@@ -154,17 +154,29 @@ export default {
             }
             if(type=="save"){
                 this.award_form.date=this.formatYYYYMMDD($('#date').val());
-                this.award_form.post('staff/staffServices/saveStaffAward')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/list_staff_awards');
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.award_form.post('staff/staffServices/saveStaffAward')
+                        .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push('/list_staff_awards');
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
+
             }
 		},
         async changefunction(id){
@@ -240,7 +252,10 @@ export default {
         this.award_form.place=this.$route.params.data.place;
         this.award_form.date=this.$route.params.data.date;
         this.award_form.remarks=this.$route.params.data.remarks;
-        this.staffdet=this.$route.params.data.staff.name;
+        if(this.$route.params.data.staff!=undefined){
+            this.staffdet=this.$route.params.data.staff.name;
+        }
+
     },
 
 }

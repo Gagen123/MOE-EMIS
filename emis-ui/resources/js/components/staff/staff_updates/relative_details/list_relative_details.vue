@@ -135,7 +135,7 @@ export default {
         },
         async loaddata(){
             this.staffList=[];
-            alert($('#org_id').val());
+          //  alert($('#org_id').val());
             if($('#org_id').val()!="ALL"){
                 this.staffList=await this.staffSchoolwise($('#org_id').val());
             }

@@ -13,29 +13,29 @@
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Leadership Selection For:</label>
-                                    <input type="hidden" id="selectionfor" :value="selectionListArray[post_detail.selection_type]">
-                                    <span class="text-blue text-bold">{{selectionListArray[post_detail.selection_type]}}</span>
+                                    <input type="hidden" id="selectionfor" :value="post_detail.leadership_for">
+                                    <span class="text-blue text-bold">{{post_detail.leadership_for}}</span>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Position Title:</label>
-                                    <span class="text-blue text-bold">{{positionList[post_detail.position_title]}}</span>
+                                    <span class="text-blue text-bold">{{post_detail.position_title}}</span>
                                 </div>
 
                             </div>
                             <div class="row form-group">
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Application Start Date:</label>
-                                    <span class="text-blue text-bold">{{post_detail.from_date}}</span>
+                                    <span class="text-blue text-bold">{{post_detail.Post_details.from_date}}</span>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Application End Date:</label>
-                                    <span class="text-blue text-bold">{{post_detail.to_date}}</span>
+                                    <span class="text-blue text-bold">{{post_detail.Post_details.to_date}}</span>
                                 </div>
                             </div>
                             <div class="row form-group">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Details:</label>
-                                    <span class="text-blue text-bold">{{post_detail.details}}</span>
+                                    <span class="text-blue text-bold">{{post_detail.Post_details.details}}</span>
                                 </div>
                             </div>
                         </div>
@@ -138,13 +138,13 @@
                         <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date" v-model="form.feedback_start_date">
+                                <input type="text" class="form-control popupDatepicker" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date">
                                 <has-error :form="form" field="feedback_start_date"></has-error>
                                 <span class="text-danger" id="feedback_start_date_err"></span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back End Date:<span class="text-danger">*</span></label>
-                                <input type="date" @change="remove_error('feedback_end_date')" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control" name="feedback_end_date" id="feedback_end_date" v-model="form.feedback_end_date">
+                                <input type="text" @change="remove_error('feedback_end_date')" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control popupDatepicker" name="feedback_end_date" id="feedback_end_date">
                                 <has-error :form="form" field="feedback_end_date"></has-error>
                                 <span class="text-danger" id="feedback_end_date_err"></span>
                             </div>
@@ -200,7 +200,7 @@
                                                 <td>{{stf.positiontitle}}</td>
                                                 <td>{{stf.contact}}</td>
                                                 <td>{{stf.email}}</td>
-                                                <td>{{feedbackCategoryArray[stf.feedback_type]}}</td>
+                                                <td>{{stf.feedbacktypeName}}</td>
                                                 <td>
                                                     <span v-if="stf.status=='Pending'" class="right badge badge-warning">{{stf.status}}</span>
                                                     <span v-if="stf.status=='Submitted'" class="right badge badge-success">{{stf.status}}</span>
@@ -209,7 +209,7 @@
                                                 <td >
                                                     <!-- <button v-if="form.current_status=='Notified for Feedback' && form.feedback==1" type="button" class="btn btn-flat btn-sm btn-danger pt-0 pb-1" id="remove"
                                                         @click="deleteNomination(stf.id)"> Delete</button> -->
-                                                    <button v-if="stf.status!='Pending'" type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
+                                                    <button type="button" class="btn btn-flat btn-sm btn-primary pt-0 pb-1" id="open"
                                                         @click="checkfeedback(stf.id)"> Open</button>
                                                 </td>
                                             </template>
@@ -219,7 +219,7 @@
                                 <span class="text-danger" id="feedbackNomineesList_err"></span>
                             </div>
                         </div>
-                        <div class="row form-group" v-if="form.current_status=='Shortlisted' && form.feedback==1">
+                        <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Details for Feedback Provider:</label>
                                 <textarea class="form-control" :class="{ 'is-invalid': form.errors.has('reason') }" v-model="form.feedback_details" id="feedback_details"></textarea>
@@ -280,7 +280,7 @@
                         <div class="row" v-if="feedback_status=='Completed' && form.current_status!='Interviewed'">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Interview Date:<span class="text-danger">*</span></label>
-                                <input type="date" class="form-control" @change="remove_error('interniew_date')" :class="{ 'is-invalid': form.errors.has('interniew_date') }"  name="interniew_date" id="interniew_date" v-model="form.interniew_date">
+                                <input type="text" class="form-control popupDatepicker" @change="remove_error('interniew_date')" :class="{ 'is-invalid': form.errors.has('interniew_date') }"  name="interniew_date" id="interniew_date">
                                 <has-error :form="form" field="interniew_date"></has-error>
                                 <span class="text-danger" id="interniew_date_err"></span>
                             </div>
@@ -328,7 +328,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Add Staff for Feedback</h4>
+                        <h4 class="modal-title">Feedback</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">×</span>
                         </button>
@@ -368,7 +368,7 @@
                                     <span class="text-danger" id="department_err"></span>
                                 </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="school_section" style="display:none">
-                                    <label>Organization:<span class="text-danger">*</span></label>
+                                    <label id="levelName">Organization:<span class="text-danger">*</span></label>
                                     <select class="form-control select2" v-model="form.school" @change="remove_error('school')" name="school" id="school">
                                         <option value="">- Please Select -</option>
                                         <option v-for="(item, index) in school_list" :key="index" v-bind:value="item.id"> {{ item.name }}</option>
@@ -408,7 +408,7 @@
                                     <label>Nominee:<span class="text-danger">*</span></label>
                                     <select class="form-control select2" @change="remove_error('participant'),getdetails()" name="participant" id="participant" v-model="selectstaff.participant">
                                         <option value="">- Please Select -</option>
-                                        <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.cid_work_permit+'_'+item.name+'_'+item.contact_no+'_'+item.email+'_'+item.position_title.name"> {{ item.cid_work_permit }}, {{ item.name }},{{ item.position_title.name }}</option>
+                                        <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.cid_work_permit+'_'+item.name+'_'+item.contact_no+'_'+item.email+'_'+item.position_title_name"> {{ item.emp_id }}, {{ item.name }},{{ item.position_title_name }}</option>
                                     </select>
                                     <span class="text-danger" id="participant_err"></span>
                                 </div>
@@ -496,7 +496,7 @@
                                     <div class="row form-group">
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Feedback Category:</label><br>
-                                            <span class="text-blue text-bold">{{ feedbackCategoryArray[feedback_details.feedback_type] }}</span>
+                                            <span class="text-blue text-bold">{{ feedback_details.feedbacktypeName }}</span>
                                         </div>
                                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                             <label>Contact No:</label><br>
@@ -583,20 +583,16 @@ export default {
             feedback_status:'Completed',
             feedback_pending:false,
             count:0,
-            positionList:{},
-            roleList:{},
             post_detail:'',
             staff_list:[],
             department_list:[],
             school_list:[],
             dzongkhagList:[],
             feedbackCategory:[],
-            feedbackCategoryArray:{},
             applicationdetailsatt:'',
             feedbackNomineesList:[],
             feedback_details:'',
             questionList:[],
-            selectionListArray:{},
             feedback_form: new form({
                 questionList:[],
             }),
@@ -688,6 +684,15 @@ export default {
         showmodel(){
             this.selectstaff.action_type='add';
             this.resetmodel();
+            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.feedbackCategory =  data;
+            })
+            .catch(function (error){
+                console.log(error);
+            });
             $('#add_modal').modal('show');
         },
         resetmodel(){
@@ -813,37 +818,13 @@ export default {
         //         console.log("Error:"+error);
         //     });
         // },
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                for(let i=0;i<data.length;i++){
-                    this.positionList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
 
-        loadroleList(uri = 'masters/getroles/allActiveRoles'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data;
-                for(let i=0;i<data.length;i++){
-                    this.roleList[data[i].Id] = data[i].Name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
 
         loadApplicationDetils(appNo,type){
             axios.get('/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'+appNo+'/'+type)
             .then((response) =>{
                 let data=response.data.data;
-                this.post_detail=data.Post_details;
+                this.post_detail=data;
                 this.form.id=data.id;
                 this.form.remarks=data.remarks;
                 this.form.applicant=data.aplicant_name;
@@ -901,6 +882,7 @@ export default {
                 this.school_list=[];
                 this.form.department=$('#department').val();
                 if($('#department').val()!=""){
+                    $('#levelName').html('Division');
                     this.school_list=await this.getdivisionList($('#department').val());
                     $('#school_section').show();
                 }
@@ -925,19 +907,7 @@ export default {
             }
 
         },
-        loadcategoryList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.feedbackCategory =  data;
-                for(let i=0;i<data.length;i++){
-                    this.feedbackCategoryArray[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         validateaddform(){
             let retval=true;
             // if($("input[type='radio'][name='partifipant_from']:checked").val()!="outofministry" && $('#participant').val()==""){
@@ -1064,7 +1034,7 @@ export default {
             axios.get('/staff/staffLeadershipSerivcesController/getFeedbackData/'+id)
             .then(response =>{
                 let data = response.data;
-                this.feedback_details=data;
+                this.feedback_details=data;//leadership_for
                 this.loadFeedbackQuestion(data.feedback_type,this.post_detail.selection_type,data.answers);
                 $('#feedback_modal').modal('show');
             })
@@ -1115,7 +1085,7 @@ export default {
                 }
 
                 if(type=="interview"){
-                    message="Update for Interview for this application";
+                    message="Update Interview for this application";
                 }
                 if(type=="select"){
                     message="Select this applicant";
@@ -1128,6 +1098,7 @@ export default {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
+                    cancelButtonText:'No',
                     }).then((result) => {
                     if(result.isConfirmed){
                         const config = {
@@ -1137,6 +1108,7 @@ export default {
                         }
                         let formData = new FormData();
                         formData.append('id', this.form.id);
+                        formData.append('selectionfor',$("#selectionfor").val());
                         formData.append('staff_id', this.form.staff_id);
                         formData.append('application_number', this.form.application_number);
                         formData.append('application_date', this.form.application_date);
@@ -1154,12 +1126,16 @@ export default {
                         formData.append('aplicant_working_dzo', this.form.aplicant_working_dzo);
                         formData.append('aplicant_working_gewog', this.form.aplicant_working_gewog);
                         formData.append('verification_remarks', this.form.verification_remarks);
-                        formData.append('feedback_start_date', this.form.feedback_start_date);
-                        formData.append('feedback_end_date', this.form.feedback_end_date);
+                        if(type=="feedback"){
+                            formData.append('feedback_start_date', this.formatYYYYMMDD($('#feedback_start_date').val()));
+                            formData.append('feedback_end_date', this.formatYYYYMMDD($('#feedback_end_date').val()));
+                        }
                         formData.append('feedback_details', this.form.feedback_details);
                         formData.append('current_status', this.form.current_status);
                         formData.append('action_type', this.form.action_type);
-                        formData.append('interniew_date', this.form.interniew_date);
+                        if(type=="interview"){
+                            formData.append('interniew_date', this.formatYYYYMMDD($('#interniew_date').val()));
+                        }
                         formData.append('interniew_score', this.form.interniew_score);
 
                         formData.append('ref_docs[]', this.form.ref_docs);
@@ -1220,19 +1196,7 @@ export default {
             });
         },
 
-        //get position details to populate form
-        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.selectionListArray[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('err: '+error);
-            });
-        },
+
         updatedVisited(itmId){
             axios.get('staff/staffLeadershipSerivcesController/updatedVisited/'+itmId)
             .then(response => {
@@ -1261,11 +1225,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadcategoryList();
-        this.loadroleList();
-        this.loadPositionTitleList();
         this.loadactivedzongkhagList();
-        this.getSelectionList();
         this.form.application_number=this.$route.params.data.application_number;
         this.selectstaff.application_number=this.$route.params.data.application_number;
         this.loadApplicationDetils(this.$route.params.data.application_number,this.$route.params.type);

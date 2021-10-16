@@ -103,22 +103,7 @@ export default {
                 console.log("Error: "+error)
             });
         },
-        loadActiveResponList(uri="masters/loadStaffMasters/all_active_staff_responsibility_List"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.responsibilityList =  data;
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
+
         formaction: function(type){
             if(type=="reset"){
                 this.resp_form.staff= '';
@@ -127,17 +112,28 @@ export default {
                 this.resp_form.status= 1;
             }
             if(type=="save"){
-                this.resp_form.post('staff/staffServices/saveStaffResponsibility')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'list_roles_responsibilities',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.resp_form.post('staff/staffServices/saveStaffResponsibility')
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push({name:'list_roles_responsibilities',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
             }
 		},
 
@@ -148,13 +144,12 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="dzongkhag_id"){
+                this.departmentList=[];
+                this.orgList=[];
                 if($('#organization_type_id').val()==""){
                     $('#organization_type_id_err').html('Please select Organization type');
                 }else{
-                    this.departmentList=[];
-                    this.orgList=[];
                     $('#organization_type_id_err').html('');
-                    // alert($('#organization_type_id').val());
                     if($('#organization_type_id').val()=="Org"){
                         $('#departmentdiv').hide();
                         this.orgList=await this.schoolList($('#dzongkhag_id').val());
@@ -215,7 +210,7 @@ export default {
         });
 
         this.loadStaffList();
-        this.loadActiveResponList();
+        this.responsibilityList =  await this.loadstaffMasters('active','StaResponsiblity');
         this.screen_id=this.$route.query.data;
     },
 

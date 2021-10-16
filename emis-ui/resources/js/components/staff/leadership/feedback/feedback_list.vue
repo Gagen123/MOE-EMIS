@@ -19,9 +19,9 @@
                             <td>{{ index+1}}</td>
                             <td>{{ item.application_number }}</td>
                             <td>{{ item.leadership_for }}</td>
-                            <td>{{ item.post_details.position_title }}</td>
-                            <td>{{ item.application_details.feedback_start_date }}</td>
-                            <td>{{ item.application_details.feedback_end_date }}</td>
+                            <td>{{ item.positiontitle }}</td>
+                            <td>{{ item.feedback_start_date }}</td>
+                            <td>{{ item.feedback_end_date }}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
                             </td>

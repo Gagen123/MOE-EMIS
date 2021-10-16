@@ -15,6 +15,7 @@ class AcaStudentAssessment extends Migration
     {
         Schema::create('aca_student_assessment', function (Blueprint $table) {
             $table->char('id',36)->primary();
+            $table->smallInteger('academic_year')->index();
             $table->char('org_id',36)->index();
             $table->char('org_class_id',36)->index();
             $table->char('org_stream_id',36)->index()->nullable();

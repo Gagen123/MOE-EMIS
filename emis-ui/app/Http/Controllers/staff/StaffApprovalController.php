@@ -175,11 +175,13 @@ class StaffApprovalController extends Controller
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
-            $work_status=0;
             $org_status="Rejected";
+            $work_status=0;
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
+            $work_status=10;
+
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,
@@ -236,11 +238,12 @@ class StaffApprovalController extends Controller
         $org_status='Verified';
         $work_status=$request->sequence;
         if($request->actiontype=="reject"){
-            $work_status=0;
             $org_status="Rejected";
+            $work_status=0;
         }
         if($request->actiontype=="approve"){
             $org_status="Approved";
+            $work_status=10;
         }
         $workflow_data=[
             'db_name'           =>$this->database_name,

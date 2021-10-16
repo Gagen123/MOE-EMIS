@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-body pt-0 mt-1">
+            <div class="card-body pt-0 mt-1" id="form_details">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
@@ -91,7 +91,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')" id="action">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -305,6 +305,9 @@ export default {
                 optional2sub:'',
                 transfer_list:'',
                 attachments:[],
+                submitterroleid:'',
+                Submitter_id:'',
+                submitted_to:'',
                 ref_docs:[],
             })
         }
@@ -384,6 +387,8 @@ export default {
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
+                this.getTransfer_details(response.data.data[0].id)
+
 
             })
             .catch(function (error){
@@ -476,11 +481,14 @@ export default {
                             let formData = new FormData();
                             formData.append('id', this.form.id);
                             formData.append('type_id', this.form.type_id);
+                            formData.append('submitterroleid', this.form.submitterroleid);
+
                             formData.append('service_name', this.form.service_name);
                             formData.append('preference_school1', this.form.preference_school1);
                             formData.append('preference_school2', this.form.preference_school2);
                             formData.append('preference_school3', this.form.preference_school3);
                             formData.append('spSubject', this.form.spSubject);
+                            formData.append('submitted_to', this.form.submitted_to);
                             formData.append('optional1sub', this.form.optional1sub);
                             formData.append('optional2sub', this.form.optional2sub);
                             formData.append('transferType', this.form.transferType);
@@ -607,6 +615,60 @@ export default {
                 this.checkforselectedval(3);
             }
         },
+        getSubmitterId(id){
+            let uri ='staff/transfer/getSubmitterId/'+id;
+            axios.get(uri)
+            .then(response =>{
+                if(response.data==""||response.data==null){
+                   Swal.fire({
+                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        
+                        })
+                    $('#form_details').hide();
+                    $('#action').hide();
+                    this.$router.push('/intra_transfer');
+                }
+                else{
+                    $('#form_details').show();
+                    $('#action').show();
+                     this.form.Submitter_id=data.Submitter_id;
+                }
+
+                
+                
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+         getTransfer_details(id){
+            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=null && data!="null" && data!=""){
+                    //need to handle for multiple role later, for now it will take for first role at the index 0
+                    this.form.submitted_to=data;
+                }
+                else{
+                    Swal.fire({
+                        title: 'No Leave Configuration ! ',
+                        text: "Sorry! System cannot find leave configuration for this role. Please contact system administrator",
+                        icon: 'error',
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
+        },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
             .then(response => {
@@ -673,10 +735,19 @@ export default {
         this.loadtransferwindow();
         this.LoadTransferType();
         
-        let data = await this.getRequiredDocument("Staff_Transfer");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+        // let data = await this.getRequiredDocument("Staff_Transfer");
+        // data.forEach((item => {
+        //     this.form.attachments.push({file_name:item.name, file_upload:''})
+        // }));
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            this.form.submitterroleid = response.data.data.roles[0].Id;
+            this.form.staff_id=response.data.data['staff_id'];
+            this.getSubmitterId(this.form.submitterroleid);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>

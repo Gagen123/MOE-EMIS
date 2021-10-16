@@ -38,9 +38,58 @@
                                 <span class="text-danger" id="to_date"></span>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row form-group">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <textarea v-model="form.remarks" name="remarks" class="form-control"></textarea>
+                                <label class="mb-0">Upload the Required Documents(if any)</label>
+                                <br>
+                                <table id="dynamic-table" class="table table-sm table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>File Name/Description</th>
+                                            <th>Upload File</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for='(attach, count) in attachmentDetails' :key="count+1" :id="'esxist'+count">
+                                            <template>
+                                                <td>
+                                                    {{attach.user_defined_name}}
+                                                </td>
+                                                <td>
+                                                    <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
+                                                    <span>
+                                                        <a href="#" class="pl-4 fa fa-times text-danger" @click="deletefile(attach,count)"> Delete </a>
+                                                    </span>
+                                                </td>
+                                            </template>
+                                        </tr>
+                                        <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
+                                            <td>
+                                                <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
+                                            </td>
+                                            <td>
+                                                <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="5">
+                                                <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                                @click="addMoreattachment()"><i class="fa fa-plus"></i> Add More</button>
+                                                <button type="button" class="btn btn-flat btn-sm btn-danger" id="remove"
+                                                @click="removeattachment()"><i class="fa fa-trash"></i> Remove</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                       <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Remarks:</label>
+                                <textarea @change="remove_error('remarks')" class="form-control" v-model="form.remarks" :class="{ 'is-invalid': form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
+                                <has-error :form="form" field="remarks"></has-error>
                             </div>
                         </div>
                         <hr>
@@ -263,12 +312,19 @@ export default {
             staffcomposition_list:[],
             studentcomposition_list:[],
             nonstaffcomposition_list:[],
+            attachmentDetails:[],
+             fileUpload: [],
             form: new form({
                 id:'',
                 body_type:'',
                 from_date:'',
                 to_date:'',
                 remarks:'',
+                 attachments:
+                [{
+                    file_name:'',attachment:''
+                }],
+                ref_docs:[],
             }),
             staff: new form({
                 management_id:'',
@@ -287,7 +343,21 @@ export default {
     methods: {
         shownexttab(nextclass){
             if(nextclass=="members-details-tab"){
-                this.form.post('staff/managementBody/saveManagementBody')
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
+                }
+                let formData = new FormData();
+                formData.append('body_type', this.form.body_type);
+                formData.append('from_date', this.form.from_date);
+                formData.append('to_date', this.form.to_date);
+                formData.append('remarks', this.form.remarks);
+                 for(let i=0;i<this.form.ref_docs.length;i++){
+                        formData.append('attachments[]', this.form.ref_docs[i].attach);
+                        formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                    }
+                axios.post('staff/managementBody/saveManagementBody',formData,config)
                 .then((response) => {
                     if(response.data!=""){
                         Toast.fire({
@@ -456,7 +526,62 @@ export default {
             }
             return ret;
         },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+        deletefile(file,count){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            $('#esxist'+count).remove();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
 
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
         remove_err(fieldId,errorId){
             if($('#'+fieldId).val()!=""){
                 $('#'+errorId).html('');

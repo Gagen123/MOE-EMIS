@@ -27,7 +27,7 @@
                                 </select>
                                 <has-error :form="form" field="training_type"></has-error>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> 
                                 <label class="mb-0.5">Course Title:</label>
                                 <input readonly type="text" class="form-control" @change="remove_err('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
                                 <has-error :form="form" field="course_title"></has-error>
@@ -660,7 +660,6 @@ export default {
                 $('#related_programme').val(data.related_programme).trigger('change');
                 this.form.start_date=data.start_date;
                 this.form.end_date=data.end_date;
-
                 this.form.programme_level=data.programme_level;
                 this.form.programme_type=data.programme_type;
                 this.form.course_type=data.course_type;
@@ -669,7 +668,6 @@ export default {
                 this.form.total_budget=data.total_budget;
                 this.form.total_hrs=data.total_hrs;
                 this.form.financial_source=data.financial_source;
-
                 this.form.category=data.category;
                 this.form.donor_agency=data.donor_agency;
                 this.form.projectofdonor=data.projectofdonor;

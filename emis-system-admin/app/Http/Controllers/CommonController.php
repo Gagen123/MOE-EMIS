@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use  App\Models\Notification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\Workflow;
@@ -147,11 +148,11 @@ class CommonController extends Controller{
              //This query is for Ministry level during the transfer process
             else if(strtolower($access_level)=="ministry"){
                 if($work_flow_for_transfer!=""){
-                    $result_data.='OR(';
+                    $result_data.=' ';
                     foreach($work_flow_for_transfer as $i => $srcn){
                         $result_data.='((t.application_number like "TR%" OR t.application_number like "TRA%") AND t.record_type_id="'.$srcn['transfer_type_id'].'" AND t.app_role_id="'.$srcn['submitter_role_id'].'" AND t.status_id='.$srcn['sequence'].')';
                         if(sizeof($work_flow_for_transfer)-1==$i){
-                            $result_data.=')';
+                            $result_data.='';
                         }
                         else{
                             $result_data.='  OR ';
@@ -180,6 +181,11 @@ class CommonController extends Controller{
         $result_data.=' IF(v.user_id <> NULL,v.user_id <>"'.$user_id.'",v.user_id IS NULL) AND IF(d.notification_type="role", t.user_role_id IN('.$roles.'),t.user_role_id="'.$user_id.'") GROUP BY d.id';
         // return $result_data;
         return DB::select($result_data);
+    }
+
+    public function getNotificationDetials($id=""){
+        $result_data=Notification::where('id',$id)->first();
+        return $result_data;
     }
     public function releaseApplication($application_number=""){
         $update_data=[

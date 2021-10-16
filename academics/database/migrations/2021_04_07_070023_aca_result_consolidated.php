@@ -15,6 +15,7 @@ class AcaResultConsolidated extends Migration
     {
         Schema::create('aca_result_consolidated', function (Blueprint $table) {
             $table->char('id',36)->primary();
+            $table->smallInteger('academic_year')->index();
             $table->char('org_id',36)->index();
             $table->char('aca_assmt_term_id',36)->index()->nullable()->comment('Null for final/annual result');
             $table->char('org_class_id',36)->index();

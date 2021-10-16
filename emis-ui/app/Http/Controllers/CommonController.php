@@ -98,15 +98,23 @@ class CommonController extends Controller{
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
         // dd($response_data);
         return $response_data;
-
     }
 
     public function getNotification(){
         $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
         return $response_data;
     }
-    public function getTaskcount(){
-        $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+    public function getNotificationDetials($id=""){
+        $response_data=$this->apiService->getListData('emis/common/getNotificationDetials',$id);
+        $notification_data=[
+            'notification_appNo'            =>  json_decode($response_data)->notification_appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        return $response_data;
     }
 
     public function getSessionDetail($applicationId=""){
@@ -150,6 +158,26 @@ class CommonController extends Controller{
     }
     public function getEnvValues($type=""){
         return env($type);
+    }
+
+    //loading bifurcation organization
+    public function loadRegisteredList($type){
+        $response_data= $this->apiService->listData('emis/common_services/loadRegisteredList/'.$type);
+        return $response_data;
+    }
+
+    public function loadParentOrgDetailOfRegistered($type="",$id=""){
+        $response_data= $this->apiService->listData('emis/common_services/loadParentOrgDetailOfRegistered/'.$type.'/'.$id);
+        return $response_data;
+    }
+
+    public function loadStaffList($org_id){
+        $response_data= $this->apiService->listData('emis/common_services/loadStaffList/'.$org_id);
+        return $response_data;
+    }
+    public function loadStudentListByOrgId($org_id){
+        $response_data= $this->apiService->listData('emis/common_services/loadStudentListByOrgId/'.$org_id);
+        return $response_data;
     }
 
 

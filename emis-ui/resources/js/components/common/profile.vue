@@ -103,7 +103,7 @@
                                     </div>
                                 </form>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                     console.log(errors)
                 });
             },
-            getorgName(rogId,accessLevel){ 
+            getorgName(rogId,accessLevel){
                 let type="Headquarterbyid";
                 if(accessLevel=="Org"){
                     type="Orgbyid";

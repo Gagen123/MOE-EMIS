@@ -141,7 +141,7 @@
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
                                                <span class="text-danger" id="preference_dzongkhag3_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -194,7 +194,7 @@
                                                 </select>
                                                 <has-error :form="form" field="optional2sub"></has-error>
                                                <span class="text-danger" id="optional2sub_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -303,6 +303,8 @@ export default {
                 optional2sub:'',
                 user_id:'',
                 transfer_list:'',
+                submitterroleid:'',
+                submitted_to:'',
                 attachments:
                 [],
                 ref_docs:[],
@@ -384,6 +386,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
+                this.getTransfer_details(response.data.data[0].id)
 
             })
             .catch(function (error){
@@ -398,6 +401,60 @@ export default {
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
+        },
+        getSubmitterId(id){
+            let uri ='staff/transfer/getSubmitterId/'+id;
+            axios.get(uri)
+            .then(response =>{
+                if(response.data==""||response.data==null){
+                   Swal.fire({
+                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+
+                        })
+                    $('#form_details').hide();
+                    $('#action').hide();
+                    this.$router.push('/intra_transfer');
+                }
+                else{
+                    $('#form_details').show();
+                    $('#action').show();
+                     this.form.Submitter_id=data.Submitter_id;
+                }
+
+
+
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+          getTransfer_details(id){
+            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=null && data!="null" && data!=""){
+                    //need to handle for multiple role later, for now it will take for first role at the index 0
+                    this.form.submitted_to=data;
+                }
+                else{
+                    Swal.fire({
+                        title: 'No Transfer Configuration ! ',
+                        text: "Sorry! System cannot find transfer configuration for this role. Please contact system administrator",
+                        icon: 'error',
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
         },
         validated_final_form(){
             let returntue=true;
@@ -429,7 +486,7 @@ export default {
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('transferType', this.form.transferType);
-                        
+
                         axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
                         .then((response) =>{
                             if(response!="" && response!="No Screen"){
@@ -476,6 +533,8 @@ export default {
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                 formData.append('submitterroleid', this.form.submitterroleid);
+                                formData.append('submitted_to', this.form.submitted_to);
                                 formData.append('service_name', this.form.service_name);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
@@ -493,7 +552,7 @@ export default {
                                     if(response.data!="" && response!="No Screen"){
                                     let message=" Your transfer application has been submitted with the system generated applicaiton number: "+response.data.application_number;
                                     this.$router.push({name:'inter_transfer_acknowledgement',params: {data:message}});
-                                    
+
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Application for Transfer has been submitted for further action'
@@ -502,7 +561,7 @@ export default {
                                     this.applyselect2();
                                     this.$router.push('/list_inter_transfer');
                                 })
-                                
+
                                 .catch((error) => {
                                     console.log("Errors:"+error)
                                 });
@@ -517,7 +576,7 @@ export default {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'okay!',
                     })
-            } 
+            }
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -539,7 +598,7 @@ export default {
                 console.log(errors)
             });
         },
-        
+
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/inter_transfer')
            .then((response) => {
@@ -551,7 +610,7 @@ export default {
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                  
+
                     let todate=new Date(data.to_date);
                     let formdate = new Date();
                     // One day in milliseconds
@@ -581,7 +640,7 @@ export default {
                 console.log("Error."+error);
             });
         },
-         
+
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -681,11 +740,22 @@ export default {
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
-        
-        let data = await this.getRequiredDocument("Inter_Transfer_attachment");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+
+        // let data = await this.getRequiredDocument("Inter_Transfer_attachment");
+        // data.forEach((item => {
+        //     this.form.attachments.push({file_name:item.name, file_upload:''})
+        // }));
+
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            this.form.submitterroleid = response.data.data.roles[0].Id;
+            // alert(this.form.submitterroleid);
+            this.form.staff_id=response.data.data['staff_id'];
+            this.getSubmitterId(this.form.submitterroleid);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>

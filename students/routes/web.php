@@ -157,6 +157,9 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/studentListByGender/{data}', ['uses' => 'General\GeneralStudentController@studentListByGender']);
         $router->get('/getStudentClassId/{std_id}', ['uses' => 'General\GeneralStudentController@getStudentClassId']);
         $router->get('/loadStudentInformation/{org_id}/{param}', ['uses' => 'General\GeneralStudentController@loadStudentInformation']);
+
+        //written by gagen for loading the student by organizationid
+        $router->get('/loadStudentListByOrgId/{org_id}', ['uses' => 'General\GeneralStudentController@loadStudentListByOrgId']);
         //for profile
         $router->get('/getStudentDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentDetails']);
         $router->get('/getStudentParentsDetails/{id}', ['uses' => 'General\GeneralStudentController@getStudentParentsDetails']);

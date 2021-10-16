@@ -237,7 +237,17 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-
+        onChangeFileUpload(e){
+            let currentcount=e.target.id.match(/\d+/g)[0];
+            if($('#fileName'+currentcount).val()!=""){
+                this.form.ref_docs.push({name:$('#file_name'+currentcount).val(), attach: e.target.files[0]});
+                $('#fileName'+currentcount).prop('readonly',true);
+            }
+            else{
+                $('#fileName'+currentcount+'_err').html('Please mention file name');
+                $('#'+e.target.id).val('');
+            }
+        },
         showaddmodal(type){
             if(type=="nomination-modal"){
                 this.resetnomidees();
@@ -275,8 +285,9 @@ export default {
             $('#nomi_email').val(item.nomi_email);
             this.form.nomi_email=item.nomi_email;
 
-            $('#nomi_relation').val(item.nomi_relation.id).trigger('change');
-            this.form.nomi_relation=item.relations.id;
+            $('#nomi_relation').append('<option value="'+item.nomi_relation+'">'+item.relations.name+'</option>');
+            $('#nomi_relation').val(item.nomi_relation).trigger('change');
+            this.form.nomi_relation=item.nomi_relation;
             $('#nomi_percentage').val(item.nomi_percentage);
             this.form.nomi_percentage=item.nomi_percentage;
             this.attachmentDetails=item.attachment;
@@ -320,6 +331,51 @@ export default {
             }
 
         },
+        openfile(file){
+            let file_path=file.path+'/'+file.original_name;
+            file_path=file_path.replaceAll('/', 'SSS');
+            let uri = 'common/viewFiles/'+file_path;
+            window.location=uri;
+        },
+         deletefile(file,count){
+            Swal.fire({
+                text: "Are you sure you wish to DELETE this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let file_path=file.path+'/'+file.original_name;
+                    file_path=file_path.replaceAll('/', 'SSS');
+                    let uri = 'common/deleteFile/'+file_path+'/'+file.id;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'File has been deleted successfully.',
+                                'success',
+                            );
+                            $('#esxist'+count).remove();
+                        }
+                        else{
+                        Swal.fire(
+                                'error!',
+                                'Not able to delete this file. Please contact system adminstrator.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         // loadstaff(){
         //     let uri ='loadCommons/loadFewDetailsStaffList/userworkingagency/NA';
         //     axios.get(uri)
@@ -331,7 +387,7 @@ export default {
         //         console.log("Error:"+error)
         //     });
         // },
-        loadrelationship(uri = 'masters/loadStaffMasters/all_active_relationship_list'){
+        loadrelationship(uri = 'staff/loadStaffMasters/active/Relationship'){
             axios.get(uri)
             .then(response => {
                 let data = response;

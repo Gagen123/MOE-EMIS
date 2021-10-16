@@ -191,7 +191,8 @@ class StaffServicesController extends Controller{
     }
 
     public function loadStaffResponsibility($user_id=""){
-        return $this->successResponse(StaffResponsiblity::where('created_by',$user_id)->get());
+        $roles=StaffResponsiblity::with('type')->get();
+        return $this->successResponse($roles);
     }
 
     public function saveStaffDisaplinary(Request $request){
@@ -266,7 +267,7 @@ class StaffServicesController extends Controller{
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
-                    'no_absent_days'           =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_absent_days'],
                 ];
                 StaffAttendanceDetails::create($att_det);
             }
@@ -285,7 +286,7 @@ class StaffServicesController extends Controller{
                     'staff_id'                 =>  $leave['id'],
                     'cid_work_permit'          =>  $leave['cid_work_permit'],
                     'no_present_days'          =>  $leave['no_present_days'],
-                    'no_absent_days'           =>  $leave['no_present_days'],
+                    'no_absent_days'           =>  $leave['no_absent_days'],
                 ];
                 StaffAttendanceDetails::create($att_det);
             }
@@ -323,7 +324,7 @@ class StaffServicesController extends Controller{
     }
     public function checkEligibility($type_id="",$role_ids=""){
         $response_data="";
-        if(strpos( $role_ids,',')){
+        if(strpos($role_ids,',')){
             $role_ids=explode(',',$role_ids);
             $response_data=LeaveConfiguration::with('leaveDetails')->where('leave_type_id',$type_id)->wherein('submitter_role_id',$role_ids)
             ->select('id','leave_type_id')->first();

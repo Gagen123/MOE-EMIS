@@ -78,6 +78,10 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadAllPostList/'.$position_title);
         return $response_data;
     }
+    public function checkApplication($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/checkApplication/'.$param.'__'.$this->staffId());
+        return $response_data;
+    }
     public function loadPostDetials($id=""){
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadPostDetials/'.$id);
         return $response_data;
@@ -190,6 +194,15 @@ class StaffLeadershipSerivcesController extends Controller{
         ];
         $this->apiService->createData('emis/common/updateTaskDetails',$update_data);
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadapplicaitontDetialsforVerification/'.$application_number);
+
+        $notification_data=[
+            'notification_appNo'            =>  $application_number,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
         return $response_data;
     }
 
@@ -440,15 +453,17 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($feedback_provider as $feed){
                 if($feed->partifipant_from!="External"){
                     $appRole_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$feed->participant));
-                    $user_id=$user_id.$appRole_id[0]->user_id.',';
+                    if($appRole_id!=[]){
+                        $user_id=$user_id.$appRole_id[0]->user_id.',';
+                    }
                 }
             }
             $notification_data=[
                 'notification_for'              =>  'Leadership Selection',
                 'notification_access_type'      =>  'all',
-                'notification_message'          =>  '',
+                'notification_message'          =>  'Notification for requesting to provide feedback',
                 'notification_type'             =>  'user',
-                'call_back_link'                =>  'leadership_feedback',
+                'call_back_link'                =>  'view_notification_message',
                 'user_role_id'                  =>  rtrim($user_id,','),
                 'notification_appNo'            =>  $request->application_number,
                 'dzo_id'                        =>  $this->getUserDzoId(),
@@ -461,14 +476,20 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         //prepare data for verification, approval and other updates
         $current_status="";
+        $notifyap=false;
+        $n_message='Your application for Leadership Selection has been ';
         if($request->action_type=="feedback"){
             $current_status="Notified for Feedback";
         }
         if($request->action_type=="shortlist"){
             $current_status="Shortlisted";
+            $notifyap=true;
+            $n_message='You are shortlisted for the '.$request->selectionfor.' applied with application number: '.$request->application_number;
         }
         if($request->action_type=="interview"){
             $current_status="Interviewed";
+            $notifyap=true;
+            $n_message='Your application for '.$request->selectionfor.' applied with application number: '.$request->application_number.'. has updated your interviewed details.Thank you!';
         }
         if($request->action_type=="select"){
             $current_status="Selected";
@@ -486,6 +507,8 @@ class StaffLeadershipSerivcesController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $notifyap=true;
+            $n_message='You are selected for the '.$request->selectionfor.' applied with application number: '.$request->application_number.'. Thank you!';
         }
         if($request->action_type=="reject"){
             $current_status="Rejected";
@@ -503,17 +526,19 @@ class StaffLeadershipSerivcesController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $notifyap=true;
+            $n_message='Your application for '.$request->selectionfor.' applied with application number: '.$request->application_number.'. has rejected.Thank you!';
         }
 
          //Notification to applicant
         $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
         // dd($feed->participant,$appRole_id,$feed->partifipant_from);
-        if($staff_user_id!=null && $staff_user_id!=[]){
+        if($staff_user_id!=null && $staff_user_id!=[] && $notifyap){
             $staff_user_id=$staff_user_id[0]->user_id.',';
             $notification_data=[
                 'notification_for'              =>  'Updates on Leadership Selection',
                 'notification_access_type'      =>  'all',
-                'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
+                'notification_message'          =>  $n_message,
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
                 'action'                        =>  'delete_on_view',
