@@ -395,7 +395,6 @@ export default {
                 let data = response.data.data;
                 if(data!=null && data!="null" && data!=""){
                     this.form.submitted_to=data;
-                    alert(JSON.stringify(this.form.submitted_to))
                 }
                 else{
                     Swal.fire({
