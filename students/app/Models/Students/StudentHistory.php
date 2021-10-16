@@ -16,6 +16,7 @@ class StudentHistory extends Model
         'StdStudentId',
         'historyFor',
         'previousValue',
+        'date',
         'Remarks',
         'created_by',
         'created_at',

@@ -35,6 +35,7 @@ class StudentUpdateController extends Controller{
             'id'            =>  $request->id,
             'student'       =>  $request->student,
             'remarks'       =>  $request->remarks,
+            'date'          =>  $request->date,
             'record_type'   =>  $request->record_type,
             'action_type'   =>  $request->action_type,
             'user_id'       =>  $this->userId()

@@ -27,6 +27,7 @@ class StudentUpdateController extends Controller
             'id'            =>  $request->id,
             'student'       =>  $request->student,
             'Remarks'       =>  $request->remarks,
+            'date'          =>  $request->date,
             'record_type'   =>  $request->record_type,
             'action_type'   =>  $request->action_type,
             'user_id'       =>  $request->user_id
@@ -136,7 +137,9 @@ class StudentUpdateController extends Controller
             'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_cid = [
             'CidNo' => $data['cid']
@@ -175,11 +178,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Change in Parent Contact',
-            'previousValue' =>  $previousValue
+            'previousValue' =>  $previousValue,
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $student = StudentGuardianDetails::where('StdStudentId', $data['student'])->where('Relationship', $data['change_for'])->update($new_data);
         return $this->successResponse($student);
@@ -190,11 +197,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Parents Maritial Status Change',
-            'previousValue' =>  $student_detail[0]['MaritialStatus']
+            'previousValue' =>  $student_detail[0]['MaritialStatus'],
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_data = [
             'MaritialStatus' => $data['maritial_status']
@@ -214,11 +225,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Student SEN Change',
-            'previousValue' =>  $student_detail[0]['isSen']
+            'previousValue' =>  $student_detail[0]['isSen'],
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_data = [
             'isSen' => $data['sen']
@@ -233,11 +248,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Student Feeding Change',
-            'previousValue' =>  $student_detail[0]['noOfMeals']
+            'previousValue' =>  $student_detail[0]['noOfMeals'],
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_data = [
             'noOfMeals' => $data['feeding']
@@ -252,11 +271,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Student Dietary Change',
-            'previousValue' =>  $student_detail[0]['dietType']
+            'previousValue' =>  $student_detail[0]['dietType'],
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_data = [
             'dietType' => $data['diet']
@@ -271,11 +294,15 @@ class StudentUpdateController extends Controller
         
         $student_history =[
             'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
             'historyFor'    =>  'Student Needy Status Change',
-            'previousValue' =>  $student_detail[0]['isNeedy']
+            'previousValue' =>  $student_detail[0]['isNeedy'],
+            'Remarks'       =>  $data['Remarks']
         ];
 
-        $history = $this->insertStudentHistory($student_history);
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
 
         $new_data = [
             'isNeedy' => $data['needy']
@@ -356,7 +383,7 @@ class StudentUpdateController extends Controller
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.CidNo','std_student_history.id', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Student CID Change')
                 ->get();
@@ -370,7 +397,7 @@ class StudentUpdateController extends Controller
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
                 ->select('std_student.Name as StudentName','std_student.student_code', 'std_student_guardian.*', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Change in Parent Contact')
                 ->get();
@@ -383,7 +410,7 @@ class StudentUpdateController extends Controller
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->join('std_student_guardian', 'std_student.id', '=', 'std_student_guardian.StdStudentId')
                 ->select('std_student.Name as StudentName','std_student.student_code', 'std_student_guardian.*', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Parents Maritial Status Change')
                 ->get();
@@ -396,7 +423,7 @@ class StudentUpdateController extends Controller
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.noOfMeals','std_student_history.id', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Student Feeding Change')
                 ->get();
@@ -409,7 +436,7 @@ class StudentUpdateController extends Controller
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.dietType','std_student_history.id', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Student Dietary Change')
                 ->get();
@@ -423,7 +450,7 @@ class StudentUpdateController extends Controller
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.isNeedy','std_student_history.id', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Student Needy Status Change')
                 ->get();
@@ -436,7 +463,7 @@ class StudentUpdateController extends Controller
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.isSen','std_student_history.id', 'std_student_history.StdStudentId',
-                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks')
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
                 ->where('std_student.OrgOrganizationId', $org_id)
                 ->where('historyFor', 'Student SEN Change')
                 ->get();
