@@ -4,6 +4,7 @@ namespace App\Http\Controllers\staff;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\FeedbackCategory;
 use App\Models\FeedbackModel;
 use App\Models\LeadershipType;
 use App\Models\Question;
@@ -330,16 +331,21 @@ class StaffLeadershipSerivcesController extends Controller{
         $app_details=LeadershipApplication::where('application_number',$app_no)->first();
         if($app_details!=null && $app_details!=""){
             $post_det=LeadershipDetails::where('id',$app_details->leadership_id)->first();
-            $app_details->Post_details=$post_det;
+            if($post_det!=null && $post_det!=""){
+                $app_details->Post_details=$post_det;
+                $post=LeadershipType::where('id',$post_det->selection_type)->first();
+                if($post!=null && $post!=""){
+                    $app_details->selection_type=$post_det->selection_type;
+                    $app_details->leadership_for=$post->name;
+                }
+
+                $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
+                if($positiontitle!=null && $positiontitle!=""){
+                    $app_details->position_title=$positiontitle->name;
+                }
+            }
+            // $app_details->Post_details=$post_det;
             $app_details->attachments=DocumentDetails::where('parent_id',$app_details->id)->get();
-            $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
-            if($positiontitle!=null && $positiontitle!=""){
-                $app_details->position_title=$positiontitle->name;
-            }
-            $post=LeadershipType::where('id',$post_det->selection_type)->first();
-            if($post!=null && $post!=""){
-                $app_details->leadership_for=$post->name;
-            }
         }
         return $this->successResponse($app_details);
     }
@@ -692,6 +698,14 @@ class StaffLeadershipSerivcesController extends Controller{
 
     public function getFeedbackProviderData($appNo=""){
         $response_data=FeedbackProviderDetails::where('application_number',$appNo)->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $app){
+                $type=FeedbackCategory::where('id',$app->feedback_type)->first();
+                if($type!=null && $type!=""){
+                    $app->feedbacktypeName=$type->name;
+                }
+            }
+        }
         return $response_data;
     }
     public function deleteNomination($id=""){
@@ -802,6 +816,8 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($response_data as $data){
                 $app_details=LeadershipApplication::where('application_number',$data['application_number'])->first();
                 if($app_details!=null && $app_details!=""){
+                    $data->feedback_start_date=$app_details->feedback_start_date;
+                    $data->feedback_end_date=$app_details->feedback_end_date;
                     $data->application_details=$app_details;
                     $leadership_detials=LeadershipDetails::where('id',$app_details->leadership_id)->first();
                     if($leadership_detials!=null && $leadership_detials!=""){
@@ -890,6 +906,10 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data=FeedbackProviderDetails::where('id',$id)->first();
         if($response_data!=null && $response_data!=""){
             $response_data->answers=FeedbackModel::where('feedback_provider_id',$id)->get();
+            $type=FeedbackCategory::where('id',$response_data->feedback_type)->first();
+            if($type!=null && $type!=""){
+                $response_data->feedbacktypeName=$type->name;
+            }
         }
         return $response_data;
     }

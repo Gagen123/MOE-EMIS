@@ -476,14 +476,20 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         //prepare data for verification, approval and other updates
         $current_status="";
+        $notifyap=false;
+        $n_message='Your application for Leadership Selection has been ';
         if($request->action_type=="feedback"){
             $current_status="Notified for Feedback";
         }
         if($request->action_type=="shortlist"){
             $current_status="Shortlisted";
+            $notifyap=true;
+            $n_message='You are shortlisted for the '.$request->selectionfor.' applied with application number: '.$request->application_number;
         }
         if($request->action_type=="interview"){
             $current_status="Interviewed";
+            $notifyap=true;
+            $n_message='Your application for '.$request->selectionfor.' applied with application number: '.$request->application_number.'. has updated your interviewed details.Thank you!';
         }
         if($request->action_type=="select"){
             $current_status="Selected";
@@ -501,6 +507,8 @@ class StaffLeadershipSerivcesController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $notifyap=true;
+            $n_message='You are selected for the '.$request->selectionfor.' applied with application number: '.$request->application_number.'. Thank you!';
         }
         if($request->action_type=="reject"){
             $current_status="Rejected";
@@ -518,17 +526,19 @@ class StaffLeadershipSerivcesController extends Controller{
                 'action_by'         =>  $this->userId(),
             ];
             $response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+            $notifyap=true;
+            $n_message='Your application for '.$request->selectionfor.' applied with application number: '.$request->application_number.'. has rejected.Thank you!';
         }
 
          //Notification to applicant
         $staff_user_id=json_decode($this->apiService->listData('system/getRoleDetails/'.$request->staff_id));
         // dd($feed->participant,$appRole_id,$feed->partifipant_from);
-        if($staff_user_id!=null && $staff_user_id!=[]){
+        if($staff_user_id!=null && $staff_user_id!=[] && $notifyap){
             $staff_user_id=$staff_user_id[0]->user_id.',';
             $notification_data=[
                 'notification_for'              =>  'Updates on Leadership Selection',
                 'notification_access_type'      =>  'all',
-                'notification_message'          =>  'Your application for Leadership Selection has been '.$current_status.' For more information, open your application from application list',
+                'notification_message'          =>  $n_message,
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
                 'action'                        =>  'delete_on_view',
