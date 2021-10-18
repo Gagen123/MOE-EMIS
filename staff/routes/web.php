@@ -103,6 +103,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/submitIntialapplicantDetails', ['uses' => 'staff\TransferController@submitIntialapplicantDetails']);
             $router->get('/getDraftDetails/{user_id}', ['uses' => 'staff\TransferController@getDraftDetails']);
             $router->post('/submitFinalapplicantDetails', ['uses' => 'staff\TransferController@submitFinalapplicantDetails']);
+            $router->get('/getIntialAppointmentDate/{cid}', ['uses' => 'staff\TransferController@getIntialAppointmentDate']);
             $router->post('/UpdatedApplicantDetails', ['uses' => 'staff\TransferController@UpdatedApplicantDetails']);
             $router->get('/loadtrainsferDetails/{appNo}', ['uses' => 'staff\TransferController@loadtrainsferDetails']);
 
@@ -121,8 +122,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getTransferConfigDetails/{role_ids}', ['uses' => 'staff\TransferController@getTransferConfigDetails']);
             $router->get('/getAppVeriTransferConfigDetails/{transfer_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\TransferController@getAppVeriTransferConfigDetails']);
 
-            $router->get('/getSubmitterId/{id}', ['uses' => 'staff\TransferController@getSubmitterId']);
+            $router->get('/getSubmitterId/{type_id}/{role_id}', ['uses' => 'staff\TransferController@getSubmitterId']);
             $router->get('/checkEligibilityForTransfer/{type_id}/{role_id}', ['uses' => 'staff\TransferController@checkEligibilityForTransfer']);
+            $router->get('/getTransferTypeName/{type_id}', ['uses' => 'staff\TransferController@getTransferTypeName']);
             $router->get('/getNextApprovalRoleIdForTransfer/{type_id}/{submitterRoleId}/{currentRoleId}', ['uses' => 'staff\TransferController@getNextApprovalRoleIdForTransfer']);
         });
 

@@ -70,7 +70,7 @@
                                 <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                                 <br/>
                                 <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
-                                    <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
+                                  <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.transfer_type_id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
                                 </select>
                         <has-error :form="form" field="aplication_number"></has-error>
                             </div>
@@ -82,7 +82,7 @@
                             </div>
                         </div>
                         <span class="text-danger" id="undertaking_err"></span>
-                        <div class="form-group row">
+                        <div class="form-group row " id="attachtment">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Addtional Attachments:(If Any)<i class="text-danger">*</i></label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
@@ -135,12 +135,17 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0">Remarks:<i class="text-danger">*</i></label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
-                                <span class="text-danger" id="remarks_err"></span>
+                                <span class="text-warning" id="remarks_err"></span>
                             </div>
                         </div>
-                        <div  class="row form-group fa-pull-right">
+                         <div class="form-group row" id="actionMessage">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label style="font-size:20"><i class="mb-0.9">You cannot update since your application <b style="color:green">({{this.form.aplication_number}})</b> has been already taken action</i></label><br/>
+                            </div>
+                        </div>
+                        <div  class="row form-group fa-pull-right" id="actionButton">
                          <div v-if="button" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Apply </button>
+                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Update </button>
                          </div>
                         </div>
                     </div>
@@ -161,6 +166,7 @@ export default {
             transfertypeList:[],
             intratransfer:[],
             applicationNo:[],
+            draft_attachments:[],
             form: new form({
                 id: '',
                 t_year:'',
@@ -180,7 +186,7 @@ export default {
                 withdraw:'',
                 aplication_number:'',
                 service_name:'transfer appeal',
-                status:'',
+                actionType:'edit',
                 attachments:[],
                 ref_docs:[],
             })
@@ -222,9 +228,15 @@ export default {
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
                 
-                if(this.form.status =="Appealed" || this.form.status =="withdrawn"){
-                     $('#Withdraw').hide();
-                     $('#remarks').hide();
+                if(this.form.status =="Verfied By HRD" || this.form.status =="withdrawn"){
+                    $('#Withdraw').hide();
+                    $('#remarks').hide();
+                    $('#actionButton').hide();
+                    $('#attachtment').hide();
+                    $('#actionMessage').show();
+                }
+                else{
+                     $('#actionMessage').hide();
                 }
             })
             .catch(errors =>{
@@ -275,7 +287,7 @@ export default {
         shownexttab(nextclass){
             if(nextclass=="submit"){
                 Swal.fire({
-                    text: "Are you sure you wish to submit for transfer appeal ?",
+                    text: "Are you sure you wish to update for transfer appeal ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -289,11 +301,12 @@ export default {
                             }
                         }
                         let formData = new FormData();
-                        // formData.append('id', this.form.id);
+                        formData.append('id', this.form.id);
                         formData.append('transfer_type_id', this.form.transfer_type_id);
                         formData.append('name', this.form.name);
                         formData.append('user_id', this.form.user_id);
                         formData.append('status', this.form.status);
+                        formData.append('remarks', this.form.remarks);
                         formData.append('withdraw', this.form.withdraw);
                         formData.append('aplication_number', this.form.aplication_number);
                         formData.append('description', this.form.description);
@@ -301,7 +314,7 @@ export default {
                             formData.append('attachments[]', this.form.ref_docs[i].attachment);
                             formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
                         }
-                        axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
+                        axios.post('staff/transfer/SaveTransferAppeal', formData, config)
                         .then((response) =>{
                             if(response.data!=""){
                                  Swal.fire({
@@ -368,13 +381,12 @@ export default {
               axios.get( 'staff/transfer/LoadApplicationDetailsByUserId/Approved/' +user_id)
                 .then(response =>{
                     let data = response.data;
-                     this.applicationNo =  data;
-                     this.form.aplication_number = data.aplication_number;
+                    this.applicationNo =  data;
+                    this.form.aplication_number = data[0].aplication_number;
                 })
                 .catch(function (error){
                 console.log(error);
             });
-
         },
         LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
             axios.get(uri)
@@ -470,6 +482,7 @@ export default {
         this.form.description=this.$route.params.data.description;
         this.form.aplication_number=this.$route.params.data.application_no;
         this.form.transferType=this.$route.params.data.transferType;
+        this.form.status=this.$route.params.data.status;
         this.loadattachementDetails(this.$route.params.data.application_no);
     },
 }

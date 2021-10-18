@@ -314,7 +314,13 @@ class TransferController extends Controller{
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
-
+    public function getIntialAppointmentDate($cid){
+        $response_data=DB::table('stf_staff AS t')
+        ->select('t.initial_appointment_date')
+        ->where('t.cid_work_permit',$cid)
+        ->get();
+        return $response_data;
+    }
     public function loadtrainsferDetails($appNo=""){
         $response_data=TransferApplication::where('aplication_number',$appNo)->first();
         if($response_data!="" && $response_data!=null){
@@ -508,35 +514,37 @@ class TransferController extends Controller{
         return$response_data;
     }
 
-    public function getSubmitterId($id=""){
-        $response_data=DB::table('master_staff_transfer_config AS t')
-        ->select('t.submitter_role_id AS Submitter_id')
-        ->where('t.submitter_role_id','=',$id)
-        ->get();
-        return$response_data;
+    public function getSubmitterId($type_id="",$role_id=""){
+        $response_data=TransferConfig::where('transfer_type_id',$type_id)->where('submitter_role_id',$role_id)
+        ->select('submitter_role_id')->first();
+        return $response_data;
     }
 
+    public function getTransferTypeName($type_id){
+        // return $type_id;
+        $response_data=DB::table('master_transfer_type AS t')
+        ->select('t.name AS transferType')
+        ->where('t.id',$type_id)
+        ->get();
+        return $response_data;
+
+    }
     public function checkEligibilityForTransfer($type_id="",$role_id=""){
         $response_data="";
         if(strpos($role_id,',')){
             $role_id=explode(',',$role_id);
-            $response_data=DB::table('master_staff_transfer_config AS t')
-            ->select('t.id','t.transfer_type_id')
-            ->where('transfer_type_id',$type_id)
-            ->get();
+            $response_data=TransferConfig::where('transfer_type_id',$type_id)->where('submitter_role_id',$role_id)
+                ->select('id','transfer_type_id')->first();
 
         }
         else{
-            $response_data=DB::table('master_staff_transfer_config AS t')
-            ->select('t.id','t.transfer_type_id')
-            ->where('transfer_type_id',$type_id)
-            ->get();
+            $response_data=TransferConfig::where('transfer_type_id',$type_id)->where('submitter_role_id',$role_id)
+                ->select('id','transfer_type_id')->first();
         }
         if($response_data!=null && $response_data!=""){
             $det=DB::table('master_staff_transfer_config_details')
-            ->where('transfer_config_id',$response_data[0]->id)
+            ->where('transfer_config_id',$response_data->id)
             ->get();
-            // $det=TransferConfigDetails::where('transfer_config_id',$response_data->id)->get();
             $submitted_to='NA';
             if($det!=null && $det!="" && sizeof($det)>0){
                 $count = 0;
@@ -556,6 +564,9 @@ class TransferController extends Controller{
 
             $response_data->submitted_to=$submitted_to;
 
+        }
+        else{
+            return null;
         }
         return $this->successResponse($response_data->submitted_to);
     }
@@ -599,6 +610,8 @@ class TransferController extends Controller{
     }
 
     public function LoadApplicationDetailsByUserId($param="",$user_id=""){
+        // $response_data=DB::table('transfer_application AS t')
+        // ->where('t.created_by', $user_id 'OR')
         $response_data=TransferApplication::where ('created_by', $user_id)->where('status',$param)->get();;
         return$response_data;
     }
@@ -609,15 +622,8 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
+      
      if($request->id==""){
-        $rules = [
-            'description'              =>  'required  ',
-        ];
-        $customMessages = [
-            'description.required'     => 'Please mention the reasons for transfer appeal ',
-        ];
-        $this->validate($request, $rules,$customMessages);
-
         $last_seq=ApplicationSequence::where('service_name','transfer appeal')->first();
         if($last_seq==null || $last_seq==""){
             $last_seq=1;
@@ -634,7 +640,7 @@ class TransferController extends Controller{
             ];
             ApplicationSequence::where('service_name', 'transfer appeal')->update($app_details);
         }
-        $application_no='TRA_-';
+        $application_no='TRA-';
         if(strlen($last_seq)==1){
             $application_no= $application_no.date('Y').date('m').'-000'.$last_seq;
         }
@@ -681,26 +687,38 @@ class TransferController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     else{
-        if($request->withdraw == "true"){
-            $status =[
-                'status'        =>  'withdrawn'
-            ];
-            StaffAppeal::where('application_no', $request->application_no)->update($status);
+        $response_data=TransferApplication::where('created_by',$request->user_id)->where('aplication_number',$request->aplication_number)->first();
+        if($request->attachment_details!=null && $request->attachment_details!=""){
+            foreach($request->attachment_details as $att){
+                $doc_data =[
+                    'parent_id'                        =>  $response_data->id,
+                    'attachment_for'                   =>  'Transfer Appeal',
+                    'path'                             =>  $att['path'],
+                    'original_name'                    =>  $att['original_name'],
+                    'user_defined_name'                =>  $att['user_defined_name'],
+                ];
+                $response_data = DocumentDetails::create($doc_data);
+            }
         }
-        $rules = [
-            'description'              =>  'required  ',
-        ];
-        $customMessages = [
-            'description.required'     => 'Please mention the reasons for transfer appeal ',
-        ];
-        $this->validate($request, $rules,$customMessages);
-        $request_data =[
+        if($request->withdraw =="true"){
+            $status =[
+                'status'                            =>  'withdrawn',
+                'updated_at'                        =>  date('Y-m-d h:i:s'),
+                'remarks'                           =>  $request->remarks,
+            ];
+            $response_data=StaffAppeal::where('id', $request->id)->update($status);
+        }
+        else{
+            $request_data=[
             'id'                                =>  $request->id,
-            'status'                            =>  'Appealed',
-            'updated_at'                        =>  $request->updated_at,
+            'updated_at'                        =>  date('Y-m-d h:i:s'),
             'remarks'                           =>  $request->remarks,
+            'record_type_id'                    =>  $request->record_type_id,
+            'transferType'                      =>  $request->transferType,
+            'description'                       =>  $request->description,
         ];
-        $response_data=StaffAppeal::where('id', $request->id)->update($request_data);
+            $response_data=StaffAppeal::where('id', $request->id)->update($request_data);
+        }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
     }
