@@ -18,9 +18,14 @@
                         Leadership Selection Type
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1" id="feedback_link">
+                <!-- <li class="nav-item active pr-1" id="feedback_link">
                     <router-link id="service" to="/feedback_category" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Feedback Category
+                    </router-link>
+                </li> -->
+                <li class="nav-item active pr-1" id="feedback_link">
+                    <router-link id="service" to="/traits" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Traits
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" id="feedback_link">

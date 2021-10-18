@@ -1048,6 +1048,17 @@ const routes = [
                     { path: '/edit_feedback_category',name:'edit_feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/edit_feedback_category.vue').default },
                 ],
             },
+
+            { path: '/traits',
+                component: require('./components/staff/leadership/questions/traits/traits_index.vue').default,
+                children:[
+                    { path: '/',name:'traits',  component: require('./components/staff/leadership/questions/traits/list_traits.vue').default },
+                    { path: '/list_traits',name:'list_traits',  component: require('./components/staff/leadership/questions/traits/list_traits.vue').default },
+                    { path: '/create_traits',name:'create_traits',  component: require('./components/staff/leadership/questions/traits/create_traits.vue').default },
+                    { path: '/edit_traits',name:'edit_traits',  component: require('./components/staff/leadership/questions/traits/edit_traits.vue').default },
+                ],
+            },
+            
             { path: '/question_answer',
                 component: require('./components/staff/leadership/questions/question_answer/question_answer_index.vue').default,
                 children:[
