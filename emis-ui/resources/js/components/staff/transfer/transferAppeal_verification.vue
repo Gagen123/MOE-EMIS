@@ -201,7 +201,7 @@ export default {
         shownexttab(nextclass){
             if(nextclass=="submit"){
                 Swal.fire({
-                    text: "Are you sure you wish to submit for transfer appeal ?",
+                    text: "Are you sure you wish to update transfer appeal application ?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

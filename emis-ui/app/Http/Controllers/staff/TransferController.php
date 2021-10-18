@@ -306,7 +306,6 @@ class TransferController extends Controller{
             ];
         }
         else{
-            // dd($request->transfer_type_id,$request->submitterroleid,$this->getRoleIds('roleIds'));
             //get next role id from transfer config to send notification.
             $res=$this->apiService->listData('emis/staff/transfer/getNextApprovalRoleIdForTransfer/'.$request->transfer_type_id.'/'.$request->submitterroleid.'/'.$this->getRoleIds('roleIds'));
             $response_data= json_decode($res);
@@ -318,7 +317,6 @@ class TransferController extends Controller{
             ];
         }
         $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
-
         if($request->transferType == "Intra Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
