@@ -290,7 +290,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
         $router->group(['prefix' => 'feeder'], function () use ($router) {
             $router->post('/saveFeeders', 'generalInformation\ProjectionsController@saveFeeders');
+            $router->post('/saveFeederStudents', 'generalInformation\ProjectionsController@saveFeederStudents');
+            $router->post('/editFeederStudents', 'generalInformation\ProjectionsController@editFeederStudents');
             $router->get('/loadFeeders/{dzoId}', 'generalInformation\ProjectionsController@loadFeeders');
+            $router->get('/listParentSchool/{org_id}', 'generalInformation\ProjectionsController@listParentSchool');
+            $router->get('/loadFeederStudents/{org_id}', 'generalInformation\ProjectionsController@loadFeederStudents');
         });
 
         //newly added routs ends here
