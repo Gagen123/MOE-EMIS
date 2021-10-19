@@ -2,9 +2,14 @@ try {
     Vue.mixin({
         mounted(){
             $('.popupDatepicker').datepick({
+                onSelect: function() {
+                    if($('#'+$(this).attr("id")).val()!=""){
+                        $('#'+$(this).attr("id")).removeClass('is-invalid');
+                        $('#'+$(this).attr("id")+'_err').html('');
+                    }
+                },
                 dateFormat: 'dd/mm/yyyy',
             });
-            $('.popupDatepicker').css('z-index',' 99999 !important; ');
         },
         methods: {
 

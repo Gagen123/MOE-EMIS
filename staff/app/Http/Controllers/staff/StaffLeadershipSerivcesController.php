@@ -37,7 +37,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'feedback'                      =>  $request->feedback,
             'interview'                     =>  $request->interview,
             'shortlist'                     =>  $request->shortlist,
-            'details'                       =>  $request->details,
+            'question_category'             =>  $request->question_category,
             'details'                       =>  $request->details,
         ];
         if($request->id==""){
