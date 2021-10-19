@@ -22,6 +22,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'feedback'          =>  'required',
             'interview'         =>  'required',
             'shortlist'         =>  'required',
+            'question_category' =>  'required',
             'details'           =>  'required',
             'from_date'         =>  'required | date',
             'to_date'           =>  'required | date | after:from_date',
@@ -30,6 +31,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'selection_type.required'   => 'This field is required',
             'position_title.required'   => 'This field is required',
             'feedback.required'         => 'This field is required',
+            'question_category.required'=> 'This field is required',
             'interview.required'        => 'This field is required',
             'shortlist.required'        => 'This field is required',
             'details.required'          => 'This field is required',
@@ -38,23 +40,9 @@ class StaffLeadershipSerivcesController extends Controller{
             'to_date.after'             => 'This field cannot be before start date',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                            =>  $request->id,
-            'selection_type'                =>  $request->selection_type,
-            'position_title'                =>  $request->position_title,
-            'feedback'                      =>  $request->feedback,
-            'interview'                     =>  $request->interview,
-            'shortlist'                     =>  $request->shortlist,
-            'details'                       =>  $request->details,
-            'from_date'                     =>  $request->from_date,
-            'to_date'                       =>  $request->to_date,
-            'document_List'                 =>  $request->document_List,
-            'applicant_List'                =>  $request->applicant_List,
-            'action_type'                   =>  $request->action_type,
-            'user_id'                       =>  $this->userId()
-        ];
+        $request['user_id'] = $this->userId();
         // dd($staff_data);
-        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createPost', $staff_data);
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/createPost', $request->all());
         return $response_data;
     }
 
@@ -323,22 +311,22 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         $this->validate($request, $rules,$customMessages);
 
-        $nomi_data =[
-            'id'                            =>  $request->id,
-            'name'                          =>  $request->name,
-            'isfeedbackapplicable'          =>  $request->isfeedbackapplicable,
-            'status'                        =>  $request->status,
-            'category_type_id'              =>  $request->category_type_id,
-            'leadership_type'               =>  $request->leadership_type,
-            'answer_type'                   =>  $request->answer_type,
-            'answer'                        =>  $request->answer,
-            'display_order'                 =>  $request->display_order,
-            'record_type'                   =>  $request->record_type,
-            'action_type'                   =>  $request->action_type,
-            'user_id'                       =>  $this->userId()
-        ];
-        // dd($nomi_data);
-        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveData', $nomi_data);
+        // $nomi_data =[
+        //     'id'                            =>  $request->id,
+        //     'name'                          =>  $request->name,
+        //     'isfeedbackapplicable'          =>  $request->isfeedbackapplicable,
+        //     'status'                        =>  $request->status,
+        //     'category_type_id'              =>  $request->category_type_id,
+        //     'leadership_type'               =>  $request->leadership_type,
+        //     'answer_type'                   =>  $request->answer_type,
+        //     'answer'                        =>  $request->answer,
+        //     'display_order'                 =>  $request->display_order,
+        //     'record_type'                   =>  $request->record_type,
+        //     'action_type'                   =>  $request->action_type,
+        //     'user_id'                       =>  $this->userId()
+        // ];
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveData',  $request->all());
         return $response_data;
     }
 

@@ -4,6 +4,16 @@
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Leadership Capabilities:<span class="text-danger">*</span></label>
+                        <select class="form-control select2" id="category" v-model="form.category" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category') }">
+                            <option value=""> --Select--</option>
+                            <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="category"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Trait:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="dzongkhag_name" @change="remove_error('dzongkhag_name')" type="text">
                         <has-error :form="form" field="name"></has-error>
@@ -37,11 +47,13 @@
 export default {
     data() {
         return {
+            category_list:[],
             form: new form({
                 id: '',
+                category:'',
                 name: '',
                 code:'',
-                status:'',
+                status:1,
                 description:'',
                 model:'staff_leadership___Traits',
                 action_type:'add',
@@ -54,7 +66,9 @@ export default {
                this.submitstaffmaster('list_traits');
             }
 		},
-
+    },
+    async mounted(){
+        this.category_list =  await this.loadstaffMasters('active','staff_leadership___Capability');
     },
 }
 </script>

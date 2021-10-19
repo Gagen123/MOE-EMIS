@@ -7,7 +7,6 @@ use App\Models\Answer;
 use App\Models\FeedbackCategory;
 use App\Models\FeedbackModel;
 use App\Models\LeadershipType;
-use App\Models\Question;
 use App\Models\staff\DocumentDetails;
 use App\Models\staff_leadership\ApplicableApplicant;
 use Illuminate\Http\Response;
@@ -19,6 +18,7 @@ use App\Models\staff_leadership\RequiredAttachment;
 use App\Models\staff\ApplicationSequence;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
+use App\Models\staff_leadership\Question;
 use App\Models\staff_masters\PositionTitle;
 
 class StaffLeadershipSerivcesController extends Controller{
@@ -550,6 +550,7 @@ class StaffLeadershipSerivcesController extends Controller{
                         $ans_data =[
                             'question_id'   =>  $response_data->id,
                             'name'          =>  $ans['name'],
+                            'watage'        =>  $ans['rate'],
                             'status'        =>  $ans['status'],
                             'created_by'    =>  $request->user_id,
                             'created_at'    =>  date('Y-m-d h:i:s'),
@@ -591,15 +592,18 @@ class StaffLeadershipSerivcesController extends Controller{
                             $ans_data =[
                                 'question_id'   =>  $request->id,
                                 'name'          =>  $ans['name'],
+                                'watage'        =>  $ans['rate'],
                                 'status'        =>  $ans['status'],
                                 'created_by'    =>  $request->user_id,
                                 'created_at'    =>  date('Y-m-d h:i:s'),
                             ];
+                            dd($ans_data);
                             Answer::create($ans_data);
                         }
                         else{
                             $ans_data = Answer::find($ans['id']);
                             $ans_data->name             = $ans['name'];
+                            $ans_data->watage           = $ans['rate'];
                             $ans_data->status           = $ans['status'];
                             $ans_data->question_id      = $request->id;
                             $ans_data->update();
@@ -619,6 +623,13 @@ class StaffLeadershipSerivcesController extends Controller{
             $model = new $modelName();
             return $this->successResponse($model::all());
         }
+        if(strpos($param, 'allQuestionWithcategory_')!==false){
+            $databaseModel=explode("_",$param)[1];
+            $modelName = "App\\Models\\"."$databaseModel";
+            $model = new $modelName();
+            return $this->successResponse($model::with('category')->get());
+        }
+
         if(strpos($param, 'questionsUnderCatType')!==false){
             $databaseModel=explode("_",$param)[1];
             $modelName = "App\\Models\\"."$databaseModel";

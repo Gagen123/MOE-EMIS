@@ -18,8 +18,8 @@
                             <td>{{ index+1}}</td>
                             <td>{{ item.leadership_for }}</td>
                             <td>{{ item.position_title_name }}</td>
-                            <td>{{ item.from_date }}</td>
-                            <td>{{ item.to_date }}</td>
+                            <td>{{ reverseDate1(item.from_date) }}</td>
+                            <td>{{ reverseDate1(item.to_date)}}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-edit"></span> Edit</a>

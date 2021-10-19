@@ -7,7 +7,7 @@ try {
             $('.popupDatepicker').css('z-index',' 99999 !important; ');
         },
         methods: {
-            
+
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
             checkminmax: function (id, type,num,btnid) {
                 if(type=='min' && parseInt($('#'+id).val())<num){
@@ -27,6 +27,12 @@ try {
                 const reverse =
                 dateData.split("-").reverse().join("-");
                 return reverse;
+            },
+            reverseDate1(dateData){
+                if(dateData!="" && dateData!=undefined){
+                    const reverse = dateData.split("-").reverse().join("/");
+                    return reverse;
+                }
             },
             formatDateToddmmyyyy(dateData){
                 let formatteddate = new Date(dateData);
@@ -56,7 +62,7 @@ try {
                     $('#'+id).addClass('select2-hidden-accessible');
                 }
             },
-            
+
             remove_error(field_id){
                 if($('#'+field_id).val()!=""){
                     $('#'+field_id).removeClass('is-invalid');
