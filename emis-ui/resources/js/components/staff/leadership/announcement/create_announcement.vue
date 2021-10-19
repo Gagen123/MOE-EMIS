@@ -23,12 +23,12 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application Start Date:<span class="text-danger">*</span></label>
-                        <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_error('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date">
+                        <input type="text" autocomplete="off" class="form-control popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application End Date:<span class="text-danger">*</span></label>
-                        <input type="text" autocomplete="off" @change="remove_error('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control popupDatepicker" name="to_date" id="to_date">
+                        <input type="text" autocomplete="off" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control popupDatepicker" name="to_date" id="to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                 </div>
@@ -348,6 +348,9 @@ export default {
                 this.form.question_category='';
                 $('#leadershipquestionsec').hide();
             }
+        },
+        checkfunction(){
+            alert();
         }
     },
     async mounted(){

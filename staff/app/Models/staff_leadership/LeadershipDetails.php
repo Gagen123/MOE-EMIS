@@ -16,6 +16,7 @@ class LeadershipDetails extends Model{
         'shortlist',
         'from_date',
         'to_date',
+        'question_category',
         'details',
         'status',
         'created_by',
