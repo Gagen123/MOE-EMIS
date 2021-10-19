@@ -543,8 +543,8 @@
                                             <td>{{ item.coursetitle}}</td>
                                             <!-- <td>{{ item.country.country_name}}</td> -->
                                             <td>{{ item.institutename}}</td>
-                                            <td>{{ item.startdate}}</td>
-                                            <td>{{ item.enddate}}</td>
+                                            <td>{{ reverseDate1(item.startdate)}}</td>
+                                            <td>{{ reverseDate1(item.enddate)}}</td>
                                             <td>{{ item.remarks}}</td>
                                             <td>
                                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)">Edit</a>
@@ -1069,10 +1069,10 @@ export default {
                 $('#institute').val(item.institute_id).trigger('change');
                 this.qualification_form.institute=item.institute_id;
 
-                $('#startdate').val(item.startdate);
+                $('#startdate').val(this.reverseDate1(item.startdate));
                 this.qualification_form.startdate=item.startdate;
 
-                $('#enddate').val(item.enddate);
+                $('#enddate').val(this.reverseDate1(item.enddate));
                 this.qualification_form.enddate=item.enddate;
                 
                 $('#type').val(item.type);
@@ -1519,7 +1519,7 @@ export default {
                 console.log("Error loaddraftpersonalDetails:"+error);
             });
         },
-        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_main_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

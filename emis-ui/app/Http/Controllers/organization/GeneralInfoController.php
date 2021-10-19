@@ -421,7 +421,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
 
-    public function getOrgProfile($type="",$id=""){
+    public function getOrgProfile($id=""){
         // dd($id);
         $type=$this->getAccessLevel();
         //dd($type);

@@ -154,7 +154,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Organization Details</label>
+                                <label class="mb-0.5">Current Organization Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -567,7 +567,7 @@ export default {
             });
         },
         getOrgaName(id){
-            axios.get('organization/getOrgProfile/' +id)
+            axios.get('organization/getOrgProfile/'+id)
             .then(response => {
                 this.form.schoolName = response.data.data.orgName;
                 this.form.level = response.data.data.level;

@@ -95,4 +95,36 @@ class ProjectionsController extends Controller
         return $dis;
     }
 
+    public function saveFeederStudents(Request $request){
+        $data = $request->all();
+        $additional_data = [
+            'user_id'       =>  $this->userId(),
+            'present_org'   =>  $this->getWrkingAgencyId()
+        ];
+        $data = $data + $additional_data;
+
+        $response_data= $this->apiService->createData('emis/organization/feeder/saveFeederStudents', $data);
+        return $response_data;
+    }
+
+    public function editFeederStudents(Request $request){
+        $data = $request->all();
+
+        $response_data= $this->apiService->createData('emis/organization/feeder/editFeederStudents', $data);
+        return $response_data;
+    }
+
+    public function listParentSchool(){
+        $org_id = $this->getWrkingAgencyId();
+
+        $list = $this->apiService->listData('emis/organization/feeder/listParentSchool/'.$org_id);
+        return $list;
+    }
+
+    public function loadFeederStudents(){
+        $org_id = $this->getWrkingAgencyId();
+
+        $list = $this->apiService->listData('emis/organization/feeder/loadFeederStudents/'.$org_id);
+        return $list;
+    }
 }

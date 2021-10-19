@@ -5,18 +5,17 @@
                 <table id="training-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Sl#</th>
-                            <th>Applicant Name</th>
-                            <th>From Dzongkhag/Thromde</th>
-                            <th>From School</th>
-                            <th>To Dzongkhag/Thromde</th>
-                            <th>To School</th>
-                            <th>Transfer Type</th>
-                            <th>Qualification</th>
-                            <th>Competent Subject</th>
-                            <th>Last Transfer Date</th>
-                            <th>Status</th>
-                            <th class="pl-4 pr-4">Action</th>
+                            <th style="width:5%">Sl#</th>
+                            <th style="width:8%">Applicant Name</th>
+                            <th style="width:10%">From Dzongkhag/Thromde</th>
+                            <th style="width:10%">To Dzongkhag/Thromde</th>
+                            <th style="width:10%">To School</th>
+                            <th style="width:10%">Transfer Type</th>
+                            <th style="width:10%">Qualification</th>
+                            <th style="width:10%">Competent Subject</th>
+                            <th style="width:10%">Last Transfer Date</th>
+                            <th style="width:10%">Status</th>
+                            <th style="width:7%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -24,13 +23,12 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.applicant_name}}</td>
                             <td>{{ dzoArray[item.user_dzo_id]}}</td>
-                            <td>Yangchenphu Higher Secondary School</td>
                             <td>{{ dzoArray[item.dzongkhagApproved]}}</td>
-                            <td>Khangkhu Middle Secondary School</td>
-                            <td>{{ item.transferType}}</td>
+                            <td>{{orgArray[item.preference_school]}}</td>
+                            <td>{{item.transferType}}</td>
                             <td>Master</td>
                             <td>English</td>
-                            <td>{{ item.effective_date}}</td>
+                            <td>{{ reverseDateTime(item.updated_at)}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>
@@ -48,6 +46,7 @@ export default {
         return{
             transfer_list:[],
             dzoArray:{},
+            orgArray:{},
             form: new form({
                 id:'',
                 access_level:'',
@@ -92,8 +91,23 @@ export default {
         },
         applyselect2(){
         },
+
+        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.SchoolList =  data;
+                for(let i=0;i<data.length;i++){
+                 this.orgArray[data[i].id] = data[i].name;
+                }
+            })
+            .catch(function (error) {
+                console.log("Error:"+error)
+            });
+        },
     },
     mounted() {
+        this.loadOrgList();
         this.loadactivedzongkhagList();
         this.profile_details();
 

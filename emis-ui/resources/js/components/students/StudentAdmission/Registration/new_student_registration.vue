@@ -680,6 +680,7 @@ export default {
             motherTongueList:[],
             classList:[],
             clasList:[],
+            org_details:[],
             streamList:[],
             streamListSelected:[],
             studentTypeList:[],
@@ -1171,6 +1172,16 @@ export default {
             })
             .catch(function (error) {
                 console.log("Error......"+error)
+            });
+        },
+
+        loadOrgDetails(org_id){
+            axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
+            .then(response => {
+                this.org_details=response.data.data;
+            })
+            .catch((error) => {  
+                console.log("Error: "+error);
             });
         },
 
@@ -1773,7 +1784,14 @@ export default {
         });
         this.getstudentPersonalDetails(this.$route.params.data);
         this.loadClassList();
-
+        axios.get('common/getSessionDetail')
+            .then(response => {
+                let data = response.data.data;
+                this.loadOrgDetails(data['Agency_Code']);
+            })
+            .catch(errors => {
+                console.log(errors)
+            });
     },
 }
 </script>

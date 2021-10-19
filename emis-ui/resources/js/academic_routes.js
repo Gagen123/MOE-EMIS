@@ -139,10 +139,6 @@ const routes = [
                     { path: '/view-consolidated-result', name: 'view_consolidated_result', component: require('./components/academics/consolidated_result/view_consolidated_result.vue').default },
                     { path: '/edit-consolidated-result',name:'edit_consolidated_result', component:require('./components/academics/consolidated_result/edit_consolidated_result.vue').default},
                     { path: '/view-detail-consolidated-result', name: 'view_detail_consolidated_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
-                    //changed name: from final_result_subject_columns to progress-report-col by tshewang as it was duplicate
-                    { path: '/progress-report-col', name: 'progress-report-col', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
-                    { path: '/progress-report-row', name: 'final_result_subject_rows', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
-
                 ]
             },
             { path:'/remedial-class', component:require('./components/academics/remedial_class/remedial_class_index.vue').default,
@@ -155,18 +151,24 @@ const routes = [
                 ]
             },
             { path:'/publish-result', component:require('./components/academics/publish_result/publish_result_index.vue').default,
-            children: [
-                { path: '', name:'publish-result', component:require('./components/academics/publish_result/list_publish_result.vue').default},
-                { path: '/list-publish-result', name: 'list_publish_result', component: require('./components/academics/publish_result/list_publish_result.vue').default },
-                { path: '/view-publish-result', name: 'view_publish_result', component: require('./components/academics/publish_result/view_publish_result.vue').default },
-                { path: '/edit-publish-result',name:'edit_publish_result', component:require('./components/academics/publish_result/edit_publish_result.vue').default},
-                { path: '/view-publish-result', name: 'view_detail_publish_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
-                { path: '/progress-report-col', name: 'final_result_subject_columns', component: require('./components/academics/consolidated_result/final_result_subject_columns.vue').default },
-                //changed name from final_result_subject_rows to progress-report-row by tshewang as it show duplicate routes
-                { path: '/progress-report-row', name: 'progress-report-row', component: require('./components/academics/consolidated_result/final_result_subject_rows.vue').default },
+                children: [
+                    { path: '', name:'publish-result', component:require('./components/academics/publish_result/list_publish_result.vue').default},
+                    { path: '/list-publish-result', name: 'list_publish_result', component: require('./components/academics/publish_result/list_publish_result.vue').default },
+                    { path: '/view-publish-result', name: 'view_publish_result', component: require('./components/academics/publish_result/view_publish_result.vue').default },
+                    { path: '/edit-publish-result',name:'edit_publish_result', component:require('./components/academics/publish_result/edit_publish_result.vue').default},
+                    { path: '/view-publish-result', name: 'view_detail_publish_result', component: require('./components/academics/consolidated_result/view_detail_consolidated_result.vue').default },
+                ]
+            },
+            { path:'/student-progress-report', component:require('./components/academics/student_progress_report/student_progress_report_index.vue').default,
+                children: [
+                    { path: '', name:'student-progress-report', component:require('./components/academics/student_progress_report/list_student_progress_report.vue').default},
+                    { path: '/list-student-progress-report', name:'list_student_progress_report', component:require('./components/academics/student_progress_report/list_student_progress_report.vue').default},
+                    { path: '/view-student-progress-report', name:'view_student_progress_report', component:require('./components/academics/student_progress_report/view_student_progress_report.vue').default},
+                    { path: '/student-progress-report-cfa', name: 'student_progress_report_cfa', component: require('./components/academics/student_progress_report/student_progress_report_cfa.vue').default },
+                    { path: '/student-progress-report-rsa', name: 'student_progress_report_csa', component: require('./components/academics/student_progress_report/student_progress_report_csa.vue').default },
 
-            ]
-        },
+                ]
+            },
 
         ]
     }

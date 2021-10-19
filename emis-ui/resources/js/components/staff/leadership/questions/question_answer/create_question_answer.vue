@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leadership Type:</label>
                         <select class="form-control select2" id="leadership_type" v-model="form.leadership_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('leadership_type') }">
                             <option value=""> --Select--</option>
@@ -11,7 +11,7 @@
                         </select>
                         <has-error :form="form" field="leadership_type"></has-error>
                         <span class="text-danger" id="leadership_type_err"></span>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Category:</label>
                         <select class="form-control select2" id="category_type_id" v-model="form.category_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type_id') }">
@@ -25,7 +25,7 @@
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <label class="required">Question:<span class="text-danger">*</span></label>
-                        <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')"></textarea>
+                        <textarea class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_error('name')"></textarea>
                         <has-error :form="form" field="name"></has-error>
                         <span class="text-danger" id="name_err"></span>
                     </div>
@@ -63,7 +63,8 @@
                                 <tr>
                                     <th >SL#</th>
                                     <th >Answer <span id="anstype"></span></th>
-                                    <th >Answer Status</th>
+                                    <th >Rating </th>
+                                    <!-- <th >Answer Status</th> -->
                                 </tr>
                             </thead>
                             <tbody id="tbody">
@@ -72,22 +73,27 @@
                                         {{index+1}}
                                     </td>
                                     <td>
-                                        <input class="form-control" v-model="answer.name" :class="{ 'is-invalid': form.errors.has('name') }" :id="'answer'+(index+1)" type="text">
-                                        <span class="text-danger" :id="'answer_err'+(index+1)"></span>
+                                        {{answer.name}}
+                                        <!-- <input class="form-control" disabled v-model="answer.name" :class="{ 'is-invalid': form.errors.has('name') }" :id="'answer'+(index+1)" type="text">
+                                        <span class="text-danger" :id="'answer_err'+(index+1)"></span> -->
                                     </td>
                                     <td>
+                                        {{answer.rate}}
+                                        <!-- <input class="form-control" disabled v-model="answer.rate" :class="{ 'is-invalid': form.errors.has('rate') }" :id="'rate'+(index+1)" type="text"> -->
+                                    </td>
+                                    <!-- <td>
                                         <label><input v-model="answer.status"  type="radio" value="1" /> Active</label>
                                         <label><input v-model="answer.status"  type="radio" value="0" /> In Active</label>
-                                    </td>
+                                    </td> -->
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan="3">
                                         <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                         <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                         <span class="text-danger" id="answer_err"></span>
@@ -106,7 +112,7 @@ export default {
     data() {
         return {
             category_type_list:[],
-            leadershipe_list:[],
+            // leadershipe_list:[],
             is_answer_option:false,
             form: new form({
                 id: '',
@@ -116,19 +122,13 @@ export default {
                 status: 1,
                 answer_type:'',
                 display_order:'',
-                answer:[{name:'',status:1}],
+                answer:[{name:'',rate:'',status:1}],
                 record_type:'Question',
                 action_type:'add',
             })
         }
     },
     methods: {
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
         addMore: function(){
             this.count++;
             this.form.answer.push({name:'',status:1})
@@ -139,29 +139,18 @@ export default {
                 this.form.answer.pop();
             }
         },
-        loadcategorylist(){
-            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.category_type_list=data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
 
-        leadershipelist(){
-            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.leadershipe_list=data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
+        // leadershipelist(){
+        //     let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response.data.data;
+        //         this.leadershipe_list=data;
+        //     })
+        //     .catch(function (error){
+        //         console.log("Error:"+error)
+        //     });
+        // },
 
         checkanswers(){
             let returntype=true;
@@ -210,7 +199,6 @@ export default {
             if(type=="save"){
                 let save=true;
                 save=this.checkanswers();
-
                 if(save){
                     this.form.post('/staff/staffLeadershipSerivcesController/saveData',this.form)
                         .then(() => {
@@ -255,13 +243,22 @@ export default {
             }
         }
     },
-    mounted(){
+    async mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
-        this.loadcategorylist();
-        this.leadershipelist();
+        this.category_type_list =  await this.loadstaffMasters('active','staff_leadership___Traits');
+        $('#answer_type').prop('disabled',true);
+        $('#answer_type').val('Radio').trigger('change');
+        this.form.answer_type='Radio';
+        this.is_answer_option=true;
+        this.form.answer=[];
+        this.form.answer.push({name:'Outstanding',rate:4,status:1});
+        this.form.answer.push({name:'Very Good',rate:3,status:1});
+        this.form.answer.push({name:'Good',rate:2,status:1});
+        this.form.answer.push({name:'Need Improvement ',rate:1,status:1});
+        // this.leadershipelist();
         $('.select2').on('select2:select', function (){
             Fire.$emit('changeval',$(this).attr('id'))
         });
@@ -269,6 +266,5 @@ export default {
             this.changefunction(id);
         });
     },
-
 }
 </script>

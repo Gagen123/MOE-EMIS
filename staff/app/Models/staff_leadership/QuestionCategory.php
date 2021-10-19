@@ -1,24 +1,22 @@
 <?php
 
-namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
+namespace App\Models\staff_leadership;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
-class Question extends Model{
+use Illuminate\Database\Eloquent\Model;
+class QuestionCategory extends Model{
     use HasFactory, Uuid;
-    protected $table="question_details";
+    protected $table="master_question_category";
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'category_type_id',
-        'leadership_type_id',
         'name',
-        'answer_type',
-        'display_order',
+        'code',
+        'description',
         'status',
         'created_by',
         'created_at',
         'updated_by',
-        'updated_at'
+        'updated_at',
     ];
 }

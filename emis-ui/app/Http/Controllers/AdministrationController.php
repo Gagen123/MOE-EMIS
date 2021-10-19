@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Session;
 use GuzzleHttp\Client;
 use App\Helper\EmisService;
@@ -8,19 +9,22 @@ use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
 use Illuminate\Http\Request;
 
-class AdministrationController extends Controller{
+class AdministrationController extends Controller
+{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
 
-    public function __construct(EmisService $apiService){
+    public function __construct(EmisService $apiService)
+    {
         $this->apiService = $apiService;
     }
 
-    public function saveGlobalMasters(Request $request){
-        $rules=[];
-        $customMessages =[];
-        if($request['record_type']=="country"){
+    public function saveGlobalMasters(Request $request)
+    {
+        $rules = [];
+        $customMessages = [];
+        if ($request['record_type'] == "country") {
             $rules = [
                 'name'          =>  'required',
                 'nationality'   =>  'required',
@@ -28,14 +32,14 @@ class AdministrationController extends Controller{
                 'status'        =>  'required',
             ];
         }
-        if($request['record_type']=="dzongkhag" || $request['record_type']=="gender"){
+        if ($request['record_type'] == "dzongkhag" || $request['record_type'] == "gender") {
             $rules = [
                 'name'      =>  'required',
                 'code'      =>  'required',
                 'status'    =>  'required',
             ];
         }
-        if($request['record_type']=="calender"){
+        if ($request['record_type'] == "calender") {
             $rules = [
                 'from_date'         =>  'required | date',
                 'to_date'           =>  'required | date | after:from_date',
@@ -49,7 +53,7 @@ class AdministrationController extends Controller{
 
             ];
         }
-        if($request['record_type']=="gewog" || $request['record_type']=="village"){
+        if ($request['record_type'] == "gewog" || $request['record_type'] == "village") {
             $rules = [
                 'name'          =>  'required',
                 'parent_field'  =>  'required',
@@ -60,8 +64,8 @@ class AdministrationController extends Controller{
                 'parent_field.required' => 'This field is required',
             ];
         }
-        $this->validate($request, $rules,$customMessages);
-        $data =[
+        $this->validate($request, $rules, $customMessages);
+        $data = [
             'name'                  =>  $request['name'],
             'nationality'           =>  $request['nationality'],
             'parent_field'          =>  $request['parent_field'],
@@ -79,42 +83,46 @@ class AdministrationController extends Controller{
             'type'                  =>  $request['type'],
             'user_type'             =>  $request['user_type'],
             'remarks'               =>  $request['remarks'],
-            'user_id'               =>$this->userId()
+            'user_id'               => $this->userId()
         ];
         // dd($data);
-        try{
-            $response_data= $this->apiService->createData('emis/masters/saveGlobalMasters', $data);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/saveGlobalMasters', $data);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadGlobalMasters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/'.$param);
+    public function loadGlobalMasters($param = "")
+    {
+        $global_masters = $this->apiService->listData('emis/masters/loadGlobalMasters/' . $param);
         return $global_masters;
     }
     //written by gagen
-    public function subjectlist($id=""){
-        $global_masters = $this->apiService->listData('emis/masters/subjectlist/'.$id);
+    public function subjectlist($id = "")
+    {
+        $global_masters = $this->apiService->listData('emis/masters/subjectlist/' . $id);
         return $global_masters;
     }
 
-    public function getroles($param){
+    public function getroles($param)
+    {
         // dd($this->getRoleIds('roleIds'));
-        $param=$param.'SSS'.$this->getAccessLevel().'SSS'.$this->getUserDzoId().'SSS'.$this->getWrkingAgencyId().'SSS'.$this->getRoleIds('roleIds');
-        $system = $this->apiService->listData('system/get_roles/'.$param);
+        $param = $param . 'SSS' . $this->getAccessLevel() . 'SSS' . $this->getUserDzoId() . 'SSS' . $this->getWrkingAgencyId() . 'SSS' . $this->getRoleIds('roleIds');
+        $system = $this->apiService->listData('system/get_roles/' . $param);
         return $system;
     }
 
-    public function getworkflows($param="",$parentId=""){
-        $system = $this->apiService->listData('system/get_actions/'.$param.'/'.$parentId);
+    public function getworkflows($param = "", $parentId = "")
+    {
+        $system = $this->apiService->listData('system/get_actions/' . $param . '/' . $parentId);
         return $system;
     }
 
-    public function all_active_dropdowns($model="",$parent_id=""){
-        $response_data = $this->apiService->listData('emis/masters/load_dropdown/'.$model."/".$parent_id);
+    public function all_active_dropdowns($model = "", $parent_id = "")
+    {
+        $response_data = $this->apiService->listData('emis/masters/load_dropdown/' . $model . "/" . $parent_id);
         return $response_data;
     }
 
@@ -182,9 +190,10 @@ class AdministrationController extends Controller{
     // }
 
 
-    public function saveTransferConfigMasters(Request $request){
-        $rules=[];
-        $customMessages =[];
+    public function saveTransferConfigMasters(Request $request)
+    {
+        $rules = [];
+        $customMessages = [];
         $rules = [
             'transfer_type_id'          =>  'required',
             'role_id'                   =>  'required',
@@ -193,8 +202,8 @@ class AdministrationController extends Controller{
             'transfer_type_id.required' => 'This field is required',
             'role_id.required'          => 'This field is required',
         ];
-        $this->validate($request, $rules,$customMessages);
-        $data =[
+        $this->validate($request, $rules, $customMessages);
+        $data = [
             'id'                        =>  $request['id'],
             'transfer_type_id'          =>  $request['transfer_type_id'],
             'role_id'                   =>  $request['role_id'],
@@ -202,45 +211,53 @@ class AdministrationController extends Controller{
             'role_action_mapp'          =>  $request['role_action_mapp'],
             'user_id'                   =>  $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
+        $response_data = $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
         return $response_data;
     }
 
-    public function loadLeaveConfigMasters($type="",$submitter=""){
-        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigMasters/'.$type.'/'.$submitter);
+    public function loadLeaveConfigMasters($type = "", $submitter = "")
+    {
+        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigMasters/' . $type . '/' . $submitter);
         return $response_data;
     }
 
-    public function loadAllLeaveConfigMasters(){
+    public function loadAllLeaveConfigMasters()
+    {
         $response_data = $this->apiService->listData('emis/masters/loadAllLeaveConfigMasters');
         return $response_data;
     }
-    public function loadAllTransferConfigMasters(){
+    public function loadAllTransferConfigMasters()
+    {
         $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters');
         return $response_data;
     }
 
-    public function loadLeaveConfigDetails($id=""){
-        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/'.$id);
+    public function loadLeaveConfigDetails($id = "")
+    {
+        $response_data = $this->apiService->listData('emis/masters/loadLeaveConfigDetails/' . $id);
         return $response_data;
     }
-    public function loadTransferConfigDetails($id=""){
-        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/'.$id);
+    public function loadTransferConfigDetails($id = "")
+    {
+        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/' . $id);
         return $response_data;
     }
     //commented by tshewang to fix master data 
     //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
-    public function loadStaffMasters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/'.$param);
+    public function loadStaffMasters($param = "")
+    {
+        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/' . $param);
         return $global_masters;
     }
-    public function loadStaffDropdownMasters($model="",$parent_id=""){
-        $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/'.$model."/".$parent_id);
+    public function loadStaffDropdownMasters($model = "", $parent_id = "")
+    {
+        $response_data = $this->apiService->listData('emis/masters/loadStaffDropdownMasters/' . $model . "/" . $parent_id);
         return $response_data;
     }
 
-    public function saveAcademicMasters(Request $request){
-        if($request['record_type'] == 'main_subject') {
+    public function saveAcademicMasters(Request $request)
+    {
+        if ($request['record_type'] == 'main_subject') {
             $rules = [
                 'name'    =>  'required',
                 'code' => 'required',
@@ -252,7 +269,7 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
-        if($request['record_type'] == 'subject') {
+        if ($request['record_type'] == 'subject') {
             $rules = [
                 'name'                      =>  'required',
                 'aca_sub_category_id'       => 'required',
@@ -271,7 +288,7 @@ class AdministrationController extends Controller{
 
             ];
         }
-        if($request['record_type'] == 'sub_subject') {
+        if ($request['record_type'] == 'sub_subject') {
             $rules = [
                 'aca_sub_id' => 'required',
                 'aca_sub_category_id' => 'required',
@@ -290,7 +307,7 @@ class AdministrationController extends Controller{
 
             ];
         }
-        if($request['record_type'] == 'assessment_area') {
+        if ($request['record_type'] == 'assessment_area') {
             $rules = [
                 'aca_sub_id' => 'required',
                 'aca_assmnt_type' => 'required',
@@ -308,7 +325,7 @@ class AdministrationController extends Controller{
                 'status.required' => 'This field is required',
             ];
         }
-        if($request['record_type'] == 'reason_for_absent') {
+        if ($request['record_type'] == 'reason_for_absent') {
             $rules = [
 
                 'name'              =>  'required',
@@ -320,7 +337,7 @@ class AdministrationController extends Controller{
                 'status.required'               => 'This field is required',
             ];
         }
-        if($request['record_type'] == 'teaching_subject') {
+        if ($request['record_type'] == 'teaching_subject') {
             $rules = [
                 'subjecttype'       => 'required',
                 'name'              =>  'required',
@@ -345,23 +362,27 @@ class AdministrationController extends Controller{
         $response_data = $this->apiService->createData('emis/masters/saveAcademicMasters', $data);
         return $response_data;
     }
-    public function loadAcademicMasters($param=""){
-        $global_masters = $this->apiService->listData('emis/masters/loadAcademicMasters/'.$param);
+    public function loadAcademicMasters($param = "")
+    {
+        $global_masters = $this->apiService->listData('emis/masters/loadAcademicMasters/' . $param);
         return $global_masters;
     }
-    public function loadClassSubject($class_id="",$stream_id=""){
-        $uri = 'emis/masters/loadClassSubject/'.$class_id;
-        if($stream_id){
-           $uri .= ('/'.$stream_id);
+    public function loadClassSubject($class_id = "", $stream_id = "")
+    {
+        $uri = 'emis/masters/loadClassSubject/' . $class_id;
+        if ($stream_id) {
+            $uri .= ('/' . $stream_id);
         }
         $response_data = $this->apiService->listData($uri);
         return $response_data;
     }
-    public function getClassAssessmentFrequency(){
+    public function getClassAssessmentFrequency()
+    {
         $global_masters = $this->apiService->listData('emis/masters/getClassAssessmentFrequency');
         return $global_masters;
     }
-    public function saveClassSubject(Request $request){
+    public function saveClassSubject(Request $request)
+    {
         $rules = [
             'data.*.aca_sub_id' => 'required',
             'data.*.aca_rating_type_id'  => 'required',
@@ -375,16 +396,16 @@ class AdministrationController extends Controller{
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveClassSubject', $data);
         return $response_data;
-
     }
-    public function saveAssessmentFrequency(Request $request){
+    public function saveAssessmentFrequency(Request $request)
+    {
         $rules = [
-           'data.*.aca_assmt_frequency_id' => 'required',
-           'data.*.aca_assmnt_type' => 'required',
+            'data.*.aca_assmt_frequency_id' => 'required',
+            'data.*.transcript_format' => 'required',
         ];
         $customMessages = [
             'data.*.aca_assmt_frequency_id.required' => 'All the fields are required',
-            'data.*.aca_assmnt_type.required' => 'All the fields are required',
+            'data.*.transcript_format.required' => 'All the fields are required',
 
         ];
         $this->validate($request, $rules, $customMessages);
@@ -392,27 +413,29 @@ class AdministrationController extends Controller{
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveAssessmentFrequency', $data);
         return $response_data;
-
     }
-    public function loadclassSubAssmtFrequency(){
+    public function loadclassSubAssmtFrequency()
+    {
         $global_masters = $this->apiService->listData('emis/masters/loadclassSubAssmtFrequency');
         return $global_masters;
     }
-    public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id=""){
-        $uri = 'emis/masters/loadclassSubjectAssessment/'.$term_id.'/'.$sub_id.'/'.$class_id;
-    if($stream_id){
-           $uri .= ('/'.$stream_id);
+    public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id = "")
+    {
+        $uri = 'emis/masters/loadclassSubjectAssessment/' . $term_id . '/' . $sub_id . '/' . $class_id;
+        if ($stream_id) {
+            $uri .= ('/' . $stream_id);
         }
         $response_data = $this->apiService->listData($uri);
         return $response_data;
     }
-    public function saveclassSubjectAssessment(Request $request){
+    public function saveclassSubjectAssessment(Request $request)
+    {
         $rules = [
-           'aca_assmt_term_id' => 'required',
-           'aca_sub_id' => 'required',
-           'org_class_id' => 'required',
-           'data.*.display_order' => 'required',
-           'data.*.aca_assmt_area_id' => 'required',
+            'aca_assmt_term_id' => 'required',
+            'aca_sub_id' => 'required',
+            'org_class_id' => 'required',
+            'data.*.display_order' => 'required',
+            'data.*.aca_assmt_area_id' => 'required',
 
         ];
         $customMessages = [
@@ -428,9 +451,9 @@ class AdministrationController extends Controller{
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/saveclassSubjectAssessment', $data);
         return $response_data;
-
     }
-    public function saveSubjectMappingForTre(Request $request){
+    public function saveSubjectMappingForTre(Request $request)
+    {
         $rules = [
             'org_class_id' => 'required',
             'data.*.org_class_id' => 'required',
@@ -438,31 +461,33 @@ class AdministrationController extends Controller{
             'data.*.aca_teacher_sub_id' => 'required',
             'data.*.standard_hours' => 'required',
             'data.*.standard_minutes' => 'required',
-         ];
-         $customMessages = [
-             'org_class_id.required' => 'All the fields are required',
-             'data.*.org_class_id.required' => 'All the fields are required',
-             'data.*.aca_sub_id.required' => 'All the fields are required',
-             'data.*.aca_teacher_sub_id.required' => 'All the fields are required',
-             'data.*.standard_hours.required' => 'All the fields are required',
-             'data.*.standard_minutes.required' => 'All the fields are required',
-         ];
-         $this->validate($request, $rules, $customMessages);
-         $request['user_id'] = $this->userId();
-         $data = $request->all();
-         $response_data = $this->apiService->createData('emis/masters/saveSubjectMappingForTre', $data);
-         return $response_data;
+        ];
+        $customMessages = [
+            'org_class_id.required' => 'All the fields are required',
+            'data.*.org_class_id.required' => 'All the fields are required',
+            'data.*.aca_sub_id.required' => 'All the fields are required',
+            'data.*.aca_teacher_sub_id.required' => 'All the fields are required',
+            'data.*.standard_hours.required' => 'All the fields are required',
+            'data.*.standard_minutes.required' => 'All the fields are required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $data = $request->all();
+        $response_data = $this->apiService->createData('emis/masters/saveSubjectMappingForTre', $data);
+        return $response_data;
     }
-    public function loadPromotionRule($class_id,$stream_id=""){
-        $uri = 'emis/masters/loadPromotionRule/'.$class_id;
-        if($stream_id){
-           $uri .= ('/'.$stream_id);
+    public function loadPromotionRule($class_id, $stream_id = "")
+    {
+        $uri = 'emis/masters/loadPromotionRule/' . $class_id;
+        if ($stream_id) {
+            $uri .= ('/' . $stream_id);
         }
         $response_data = $this->apiService->listData($uri);
         return $response_data;
     }
 
-    public function savePromotionRule(Request $request){
+    public function savePromotionRule(Request $request)
+    {
         $rules = [
             'data.*.aca_sub_id' => 'required',
             'data.*.aca_promotion_sub_group_id'  => 'required',
@@ -476,13 +501,14 @@ class AdministrationController extends Controller{
         $data = $request->all();
         $response_data = $this->apiService->createData('emis/masters/savePromotionRule', $data);
         return $response_data;
-
     }
-    public function loaddzongkhagDetails($id){
+    public function loaddzongkhagDetails($id)
+    {
         $dzo = $this->apiService->listData('emis/masters/dzongkhag/getallDzongkhag');
         return $dzo;
     }
-    public function saveLocation(Request $request){
+    public function saveLocation(Request $request)
+    {
         $rules = [
             'locationName'  =>  'required',
             'status'    =>  'required',
@@ -492,30 +518,31 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $loc =[
+        $loc = [
             'locationName'  =>  $request['locationName'],
             'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'user_id'       => $this->userId()
         ];
         //dd('loc');
-        try{
-            $response_data= $this->apiService->createData('emis/masters/location/saveLocation', $loc);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/location/saveLocation', $loc);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadLocation(Request $request){
+    public function loadLocation(Request $request)
+    {
         $dis = $this->apiService->listData('emis/masters/location/loadLocation');
         return $dis;
     }
 
-    public function saveDisaster(Request $request){
+    public function saveDisaster(Request $request)
+    {
         $rules = [
             'disasterName'  =>  'required',
             'status'    =>  'required',
@@ -525,29 +552,30 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $dis =[
+        $dis = [
             'disasterName'   =>  $request['disasterName'],
             'description'    =>  $request['description'],
             'status'         =>  $request['status'],
             'actiontype'     =>  $request['action_type'],
             'id'             =>  $request['id'],
-            'user_id'        =>$this->userId()
+            'user_id'        => $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/masters/disaster/saveDisaster', $dis);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/disaster/saveDisaster', $dis);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadDisaster(Request $request){
+    public function loadDisaster(Request $request)
+    {
         $dis = $this->apiService->listData('emis/masters/disaster/loadDisaster');
         return $dis;
     }
 
-    public function saveStructureCategory(Request $request){
+    public function saveStructureCategory(Request $request)
+    {
         $rules = [
             'structureCategoryName'  =>  'required',
             'status'    =>  'required',
@@ -557,25 +585,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'structureCategoryName'  =>  $request['structureCategoryName'],
             'description'            =>  $request['description'],
             'status'                 =>  $request['status'],
             'actiontype'             =>  $request['action_type'],
             'id'                     =>  $request['id'],
-            'user_id'                =>$this->userId()
+            'user_id'                => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
+        $response_data = $this->apiService->createData('emis/masters/structureCategory/saveStructureCategory', $cat);
         return $response_data;
-
     }
 
-    public function loadStructureCategory(Request $request){
+    public function loadStructureCategory(Request $request)
+    {
         $str = $this->apiService->listData('emis/masters/structureCategory/loadStructureCategory');
         return $str;
     }
 
-    public function saveLevel(Request $request){
+    public function saveLevel(Request $request)
+    {
         $rules = [
             'levelName'  =>  'required',
             'status'    =>  'required',
@@ -585,25 +614,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'levelName'       =>  $request['levelName'],
             'description'    =>  $request['description'],
             'status'         =>  $request['status'],
             'actiontype'     =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/level/saveLevel', $cat);
+        $response_data = $this->apiService->createData('emis/masters/level/saveLevel', $cat);
         return $response_data;
-
     }
 
-    public function loadLevel(Request $request){
+    public function loadLevel(Request $request)
+    {
         $str = $this->apiService->listData('emis/masters/level/loadLevel');
         return $str;
     }
 
-    public function saveStructureFacility(Request $request){
+    public function saveStructureFacility(Request $request)
+    {
         $rules = [
             'structureFacilityName'  =>  'required',
             'status'    =>  'required',
@@ -613,25 +643,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'structureFacilityName'  =>  $request['structureFacilityName'],
             'description'    =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
+        $response_data = $this->apiService->createData('emis/masters/structureFacility/saveStructureFacility', $cat);
         return $response_data;
-
     }
 
-    public function loadStructureFacility(Request $request){
+    public function loadStructureFacility(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/structureFacility/loadStructureFacility');
         return $strCategory;
     }
 
-    public function saveEquipmentType(Request $request){
+    public function saveEquipmentType(Request $request)
+    {
         $rules = [
             'equipmentTypeName'  =>  'required',
             'status'    =>  'required',
@@ -641,26 +672,27 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'equipmentTypeName'  =>  $request['equipmentTypeName'],
             'description'    =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
         //dd( $cat);
-        $response_data= $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
+        $response_data = $this->apiService->createData('emis/masters/equipmentType/saveEquipmentType', $cat);
         return $response_data;
-
     }
 
-    public function loadEquipmentType(Request $request){
+    public function loadEquipmentType(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/equipmentType/loadEquipmentType');
         return $strCategory;
     }
 
-    public function saveEquipmentUsage(Request $request){
+    public function saveEquipmentUsage(Request $request)
+    {
         $rules = [
             'equipmentUsageName'  =>  'required',
             'status'    =>  'required',
@@ -670,27 +702,28 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'equipmentUsageName'  =>  $request['equipmentUsageName'],
             'description'    =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-       // dd($cat);
-        $response_data= $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
+        // dd($cat);
+        $response_data = $this->apiService->createData('emis/masters/equipmentUsage/saveEquipmentUsage', $cat);
         return $response_data;
-
     }
 
-    public function loadEquipmentUsage(Request $request){
-      //  dd('from UI');
+    public function loadEquipmentUsage(Request $request)
+    {
+        //  dd('from UI');
         $strCategory = $this->apiService->listData('emis/masters/equipmentUsage/loadEquipmentUsage');
         return $strCategory;
     }
 
-    public function saveSportFacility(Request $request){
+    public function saveSportFacility(Request $request)
+    {
         $rules = [
             'sportFacilityName'  =>  'required',
             'status'    =>  'required',
@@ -700,25 +733,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'sportFacilityName'  =>  $request['sportFacilityName'],
             'description'        =>  $request['description'],
             'status'             =>  $request['status'],
             'actiontype'         =>  $request['action_type'],
             'id'                 =>  $request['id'],
-            'user_id'            =>$this->userId()
+            'user_id'            => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
+        $response_data = $this->apiService->createData('emis/masters/sportFacility/saveSportFacility', $cat);
         return $response_data;
-
     }
 
-    public function loadSportFacility(Request $request){
+    public function loadSportFacility(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/sportFacility/loadSportFacility');
         return $strCategory;
     }
 
-    public function saveSportSupporter(Request $request){
+    public function saveSportSupporter(Request $request)
+    {
         $rules = [
             'sportSupporterName'  =>  'required',
             'status'    =>  'required',
@@ -728,30 +762,32 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'sportSupporterName'  =>  $request['sportSupporterName'],
             'description'        =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
+        $response_data = $this->apiService->createData('emis/masters/sportSupporter/saveSportSupporter', $cat);
         return $response_data;
-
     }
 
-    public function loadSportSupporter(Request $request){
+    public function loadSportSupporter(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/sportSupporter/loadSportSupporter');
         return $strCategory;
     }
 
-    public function loadSportFacilitySubtype(){
+    public function loadSportFacilitySubtype()
+    {
         $load = $this->apiService->listData('emis/masters/sportFacilitySubtype/loadSportFacilitySubtype');
         return $load;
     }
 
-    public function saveSportFacilitySubtype(Request $request){
+    public function saveSportFacilitySubtype(Request $request)
+    {
         $rules = [
             'sportFacility'  =>  'required',
             'subtypeName'    =>  'required',
@@ -761,21 +797,21 @@ class AdministrationController extends Controller{
             'subtypeName.required' => 'Name is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'sportFacility'     =>  $request['sportFacility'],
             'description'       =>  $request['description'],
             'subtypeName'       =>  $request['subtypeName'],
             'status'            =>  $request['status'],
             'id'                =>  $request['id'],
-            'user_id'           =>$this->userId()
+            'user_id'           => $this->userId()
         ];
-      //  dd($cat);
-        $response_data= $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
+        //  dd($cat);
+        $response_data = $this->apiService->createData('emis/masters/sportFacilitySubtype/saveSportFacilitySubtype', $cat);
         return $response_data;
-
     }
 
-    public function saveStrSubCategory(Request $request){
+    public function saveStrSubCategory(Request $request)
+    {
         $rules = [
             'structureCategory'  =>  'required',
             'subCategoryName'  =>  'required',
@@ -787,31 +823,33 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'structureCategory'  =>  $request['structureCategory'],
             'subCategoryName'  =>  $request['subCategoryName'],
             'description'  =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
+        $response_data = $this->apiService->createData('emis/masters/structureSubCategory/saveStrSubCategory', $cat);
         return $response_data;
-
     }
 
-    public function loadStrSubCategory(Request $request){
+    public function loadStrSubCategory(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/structureSubCategory/loadStrSubCategory');
         return $strCategory;
     }
 
-    public function getStrCategoryDropdown(Request $request){
+    public function getStrCategoryDropdown(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/structureSubCategory/getStrCategoryDropdown');
         return $strCategory;
     }
 
-    public function saveEquipmentItem(Request $request){
+    public function saveEquipmentItem(Request $request)
+    {
         $rules = [
             'equipmentItem'  =>  'required',
             'equipmentType'  =>  'required',
@@ -823,21 +861,21 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'equipmentItem'  =>  $request['equipmentItem'],
             'equipmentType'  =>  $request['equipmentType'],
             'description'  =>  $request['description'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
+        $response_data = $this->apiService->createData('emis/masters/equipmentItem/saveEquipmentItem', $cat);
         return $response_data;
-
     }
 
-    public function saveClass(Request $request){
+    public function saveClass(Request $request)
+    {
         $rules = [
             'className'         =>  'required',
             'code'              => 'required',
@@ -849,36 +887,39 @@ class AdministrationController extends Controller{
             'status.required'           => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $class =[
+        $class = [
             'className'      =>  $request['className'],
             'code'           =>  $request['code'],
             'description'    =>  $request['description'],
             'status'         =>  $request['status'],
             'id'             =>  $request['id'],
-            'user_id'        =>$this->userId()
+            'user_id'        => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/class/saveClass', $class);
+        $response_data = $this->apiService->createData('emis/masters/class/saveClass', $class);
         return $response_data;
-
     }
 
-    public function loadClass(Request $request){
+    public function loadClass(Request $request)
+    {
         //dd('m here');
         $loadClass = $this->apiService->listData('emis/masters/class/loadClass');
         return $loadClass;
     }
 
-    public function getEquipmentTypeDropdown(Request $request){
+    public function getEquipmentTypeDropdown(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/equipmentItem/getEquipmentTypeDropdown');
         return $strCategory;
     }
 
-    public function loadEquipmentItem(Request $request){
+    public function loadEquipmentItem(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/equipmentItem/loadEquipmentItem');
         return $strCategory;
     }
 
-    public function saveStream(Request $request){
+    public function saveStream(Request $request)
+    {
         $rules = [
             'name'          =>  'required',
             'code'          =>  'required',
@@ -889,29 +930,32 @@ class AdministrationController extends Controller{
             'status.required'       => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $stream =[
+        $stream = [
             'name'                  =>  $request['name'],
             'code'                  =>  $request['code'],
             'description'           =>  $request['description'],
             'status'                =>  $request['status'],
             'id'                    =>  $request['id'],
-            'user_id'               =>$this->userId()
+            'user_id'               => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/stream/saveStream', $stream);
+        $response_data = $this->apiService->createData('emis/masters/stream/saveStream', $stream);
         return $response_data;
     }
 
-    public function getClassInDropdown(Request $request){
+    public function getClassInDropdown(Request $request)
+    {
         $classDropdown = $this->apiService->listData('emis/masters/stream/getClassInDropdown');
         return $classDropdown;
     }
 
-    public function loadStream(Request $request){
+    public function loadStream(Request $request)
+    {
         $loadStream = $this->apiService->listData('emis/masters/stream/loadStream');
         return $loadStream;
     }
 
-    public function saveClassStreamMapping(Request $request){
+    public function saveClassStreamMapping(Request $request)
+    {
 
         //need to do array validation
         // $rules = [
@@ -924,25 +968,26 @@ class AdministrationController extends Controller{
         // ];
         // $this->validate($request, $rules, $customMessages);
 
-        $class =[
+        $class = [
             'classStream'  =>  $request['classStream'],
 
             'status'  =>  $request['status'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-       // dd( $class);
-        $response_data= $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
+        // dd( $class);
+        $response_data = $this->apiService->createData('emis/masters/classStreamMapping/saveClassStreamMapping', $class);
         return $response_data;
-
     }
 
-    public function loadClassStreamMapping($type=""){
-        $loadClassStream = $this->apiService->listData('emis/masters/classStreamMapping/loadClassStreamMapping/'.$type);
+    public function loadClassStreamMapping($type = "")
+    {
+        $loadClassStream = $this->apiService->listData('emis/masters/classStreamMapping/loadClassStreamMapping/' . $type);
         return $loadClassStream;
     }
 
-    public function saveElectricitySource(Request $request){
+    public function saveElectricitySource(Request $request)
+    {
         $rules = [
             'sourceName'  =>  'required',
             'status'    =>  'required',
@@ -952,29 +997,30 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'sourceName'    =>  $request['sourceName'],
             'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'user_id'       => $this->userId()
         ];
         // dd($dis);
-        try{
-            $response_data= $this->apiService->createData('emis/masters/electricitySource/saveElectricitySource', $source);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/electricitySource/saveElectricitySource', $source);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadElectricitySource(){
+    public function loadElectricitySource()
+    {
         $loadElectricitySource = $this->apiService->listData('emis/masters/electricitySource/loadElectricitySource');
         return $loadElectricitySource;
     }
 
-    public function saveElectricitySupply(Request $request){
+    public function saveElectricitySupply(Request $request)
+    {
         $rules = [
             'supplyName'  =>  'required',
             'status'    =>  'required',
@@ -984,28 +1030,29 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'supplyName'    =>  $request['supplyName'],
             'description'   =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'user_id'       => $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/electricitySupply/saveElectricitySupply', $source);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadElectricitySupply(){
+    public function loadElectricitySupply()
+    {
         $loadElectricitySupply = $this->apiService->listData('emis/masters/electricitySupply/loadElectricitySupply');
         return $loadElectricitySupply;
     }
 
-    public function saveRoadType(Request $request){
+    public function saveRoadType(Request $request)
+    {
         $rules = [
             'roadType'  =>  'required',
             'status'    =>  'required',
@@ -1015,24 +1062,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'roadType'       =>  $request['roadType'],
             'description'    =>  $request['description'],
             'status'         =>  $request['status'],
             'id'             =>  $request['id'],
-            'user_id'        =>$this->userId()
+            'user_id'        => $this->userId()
         ];
 
-        $response_data= $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
+        $response_data = $this->apiService->createData('emis/masters/roadType/saveRoadType', $source);
         return $response_data;
     }
 
-    public function loadRoadType(){
+    public function loadRoadType()
+    {
         $loadRoadType = $this->apiService->listData('emis/masters/roadType/loadRoadType');
         return $loadRoadType;
     }
 
-    public function saveServiceProvider(Request $request){
+    public function saveServiceProvider(Request $request)
+    {
         $rules = [
             'serviceType'  =>  'required',
             'serviceName'  =>  'required',
@@ -1044,24 +1093,26 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'serviceType'    =>  $request['serviceType'],
             'serviceName'    =>  $request['serviceName'],
             'description'    =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'user_id'       => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
+        $response_data = $this->apiService->createData('emis/masters/serviceProvider/saveServiceProvider', $source);
         return $response_data;
     }
 
-    public function loadServiceProvider(){
+    public function loadServiceProvider()
+    {
         $loadServiceProvider = $this->apiService->listData('emis/masters/serviceProvider/loadServiceProvider');
         return $loadServiceProvider;
     }
 
-    public function saveStructureDesigner(Request $request){
+    public function saveStructureDesigner(Request $request)
+    {
         $rules = [
             'designerName'  =>  'required',
             'description'   =>  'required',
@@ -1073,23 +1124,25 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'designerName'    =>  $request['designerName'],
             'description'     =>  $request['description'],
             'status'          =>  $request['status'],
             'id'              =>  $request['id'],
-            'user_id'         =>$this->userId()
+            'user_id'         => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
+        $response_data = $this->apiService->createData('emis/masters/structureDesigner/saveStructureDesigner', $source);
         return $response_data;
     }
 
-    public function loadStructureDesigner(){
+    public function loadStructureDesigner()
+    {
         $loadStructureDesigner = $this->apiService->listData('emis/masters/structureDesigner/loadStructureDesigner');
         return $loadStructureDesigner;
     }
 
-    public function saveContactType(Request $request){
+    public function saveContactType(Request $request)
+    {
         $rules = [
             'contactName'  =>  'required',
             'status'        =>  'required',
@@ -1099,23 +1152,25 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $source =[
+        $source = [
             'contactName'    =>  $request['contactName'],
             'description'    =>  $request['description'],
             'status'        =>  $request['status'],
             'id'            =>  $request['id'],
-            'user_id'       =>$this->userId()
+            'user_id'       => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
+        $response_data = $this->apiService->createData('emis/masters/contactType/saveContactType', $source);
         return $response_data;
     }
 
-    public function loadContactType(){
+    public function loadContactType()
+    {
         $loadContactType = $this->apiService->listData('emis/masters/contactType/loadContactType');
         return $loadContactType;
     }
 
-    public function saveAttachment(Request $request){
+    public function saveAttachment(Request $request)
+    {
         $rules = [
             'attachmentName'  =>  'required',
             'status'          =>  'required',
@@ -1125,24 +1180,25 @@ class AdministrationController extends Controller{
             'status.required'             => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $attachment =[
+        $attachment = [
             'attachmentName'    =>  $request['attachmentName'],
             'description'       =>  $request['description'],
             'status'            =>  $request['status'],
             'id'                =>  $request['id'],
-            'user_id'           =>$this->userId()
+            'user_id'           => $this->userId()
         ];
-        $response_data= $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
+        $response_data = $this->apiService->createData('emis/masters/attachment/saveAttachment', $attachment);
         return $response_data;
-
     }
 
-    public function loadAttachment(){
+    public function loadAttachment()
+    {
         $loadAttachment = $this->apiService->listData('emis/masters/attachment/loadAttachment');
         return $loadAttachment;
     }
 
-    public function saveStudentHealth(Request $request){
+    public function saveStudentHealth(Request $request)
+    {
 
         $rules = [
             'studenthealthName'  =>  'required',
@@ -1153,18 +1209,19 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $dis =[
+        $dis = [
             'studenthealthName'  =>  $request['studenthealthName'],
         ];
-
     }
-    public function loadStudentHealth(Request $request){
+    public function loadStudentHealth(Request $request)
+    {
 
         $dis = $this->apiService->listData('masters/studentHealth/loadStudentHealth');
         return $dis;
     }
 
-    public function saveScreening(Request $request){
+    public function saveScreening(Request $request)
+    {
         $rules = [
             'screeningName'  =>  'required',
             'status'    =>  'required',
@@ -1174,18 +1231,19 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $src =[
+        $src = [
             'screeningName'  =>  $request['screeningName'],
         ];
-
     }
-    public function loadScreening(Request $request){
+    public function loadScreening(Request $request)
+    {
 
         $src = $this->apiService->listData('masters/screening/loadScreening');
         return $src;
     }
     //student_helth_term_controller
-    public function saveTerm(Request $request){
+    public function saveTerm(Request $request)
+    {
         $rules = [
             'termName'  =>  'required',
             'status'    =>  'required',
@@ -1195,45 +1253,49 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $dis =[
+        $dis = [
             'termName'  =>  $request['termName'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
         ];
-        try{
-            $response_data= $this->apiService->createData('masters/term/saveTerm', $dis);
+        try {
+            $response_data = $this->apiService->createData('masters/term/saveTerm', $dis);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
 
-    public function loadTerm(Request $request){
+    public function loadTerm(Request $request)
+    {
         $dis = $this->apiService->listData('masters/term/loadTerm');
         return $dis;
     }
-    public function getpersonbycid($cid){
-        $person = json_decode($this->apiService->listData('getCensusData/'. $cid));
-        if($person->data->hasdata){
+    public function getpersonbycid($cid)
+    {
+        $person = json_decode($this->apiService->listData('getCensusData/' . $cid));
+        if ($person->data->hasdata) {
             $response_data = $person->data->citizenDetail;
             return  response()->json($response_data);
-        }else {
+        } else {
             return response()->json('Citizen detail not found. Please check CID and try again.', 404);
         }
         return  response()->json($person);
     }
-    public function getchildDetailsOncid($cid=""){
-        $personal_data=$this->apiService->listData('getchildDetailsOncid/'. $cid);
+    public function getchildDetailsOncid($cid = "")
+    {
+        $personal_data = $this->apiService->listData('getchildDetailsOncid/' . $cid);
         return $personal_data;
     }
-    public function loadQuater(Request $request){
-     //  return('from UI');
+    public function loadQuater(Request $request)
+    {
+        //  return('from UI');
         $dis = $this->apiService->listData('emis/masters/mess_manage/loadQuater');
         return $dis;
     }
-    public function saveQuater(Request $request){
+    public function saveQuater(Request $request)
+    {
 
         $rules = [
             'quaterName'  =>  'required',
@@ -1244,23 +1306,23 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $dis =[
+        $dis = [
             'quaterName'  =>  $request['quaterName'],
             'status'    =>  $request['status'],
             'actiontype'    =>  $request['action_type'],
             'id'    =>  $request['id'],
-            'user_id'=>$this->userId()
+            'user_id' => $this->userId()
         ];
-        try{
-            $response_data= $this->apiService->createData('emis/masters/mess_manage/saveQuater', $dis);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/mess_manage/saveQuater', $dis);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
-    public function saveDisasterCommittee(Request $request){
-       // dd('m here');
+    public function saveDisasterCommittee(Request $request)
+    {
+        // dd('m here');
         $rules = [
             'disasterCommName'  =>  'required',
             'status'            =>  'required',
@@ -1270,25 +1332,25 @@ class AdministrationController extends Controller{
             'status.required'                   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $disComm =[
+        $disComm = [
             'disasterCommName'   =>  $request['disasterCommName'],
             'description'        =>  $request['description'],
             'status'             =>  $request['status'],
             'actiontype'         =>  $request['action_type'],
             'id'                 =>  $request['id'],
-            'user_id'            =>$this->userId()
+            'user_id'            => $this->userId()
         ];
-       // dd($disComm);
-        try{
-            $response_data= $this->apiService->createData('emis/masters/disasterComm/saveDisasterCommittee', $disComm);
+        // dd($disComm);
+        try {
+            $response_data = $this->apiService->createData('emis/masters/disasterComm/saveDisasterCommittee', $disComm);
             return $response_data;
-        }
-        catch(\GuzzleHttp\Exception\ClientException $e){
+        } catch (\GuzzleHttp\Exception\ClientException $e) {
             return $e;
         }
     }
-    public function loadDisasterComm(Request $request){
-      //  dd('loading');
+    public function loadDisasterComm(Request $request)
+    {
+        //  dd('loading');
         $dis = $this->apiService->listData('emis/masters/disasterComm/loadDisasterComm');
         return $dis;
     }
@@ -1296,7 +1358,8 @@ class AdministrationController extends Controller{
 
 
     // Furniture
-    public function saveFurnitureType(Request $request){
+    public function saveFurnitureType(Request $request)
+    {
         $rules = [
             'name'  =>  'required',
             'status'    =>  'required',
@@ -1306,26 +1369,27 @@ class AdministrationController extends Controller{
             'status.required'   => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $fur =[
+        $fur = [
             'organizationId'    =>  $this->getWrkingAgencyId(),
             'name'              =>  $request['name'],
             'description'       =>  $request['description'],
             'status'            =>  $request['status'],
-         //   'actiontype'        =>  $request['action_type'],
+            //   'actiontype'        =>  $request['action_type'],
             'id'                =>  $request['id'],
-            'user_id'           =>$this->userId()
+            'user_id'           => $this->userId()
         ];
-       // dd( $fur);
-        $response_data= $this->apiService->createData('emis/masters/furnitureType/saveFurnitureType', $fur);
+        // dd( $fur);
+        $response_data = $this->apiService->createData('emis/masters/furnitureType/saveFurnitureType', $fur);
         return $response_data;
-
     }
-    public function loadFurnitureType(){
+    public function loadFurnitureType()
+    {
         $global_masters = $this->apiService->listData('emis/masters/furnitureType/loadFurnitureType');
         return $global_masters;
     }
 
-    public function saveFurnitureItem(Request $request){
+    public function saveFurnitureItem(Request $request)
+    {
         $rules = [
             'name'                  =>  'required',
             'furnitureType'         =>  'required',
@@ -1337,31 +1401,34 @@ class AdministrationController extends Controller{
             'status.required'           => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $furitem =[
+        $furitem = [
             'name'                      =>  $request['name'],
             'furnitureType'             =>  $request['furnitureType'],
             'description'               =>  $request['description'],
             'status'                    =>  $request['status'],
-        //    'actiontype'                =>  $request['action_type'],
+            //    'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
-            'user_id'                   =>$this->userId()
+            'user_id'                   => $this->userId()
         ];
-      //  dd( $furitem);
-        $response_data= $this->apiService->createData('emis/masters/furnitureItem/saveFurnitureItem', $furitem);
+        //  dd( $furitem);
+        $response_data = $this->apiService->createData('emis/masters/furnitureItem/saveFurnitureItem', $furitem);
         return $response_data;
     }
 
-    public function loadFurnitureItem(){
+    public function loadFurnitureItem()
+    {
         $response_data = $this->apiService->listData('emis/masters/furnitureItem/loadFurnitureItem');
         return $response_data;
     }
-    public function getFurnitureTypeDropdown(){
-  //  dd('from UI');
+    public function getFurnitureTypeDropdown()
+    {
+        //  dd('from UI');
         $response_data = $this->apiService->listData('emis/masters/furnitureItem/getFurnitureTypeDropdown');
         return $response_data;
     }
 
-    public function saveFurnitureUsage(Request $request){
+    public function saveFurnitureUsage(Request $request)
+    {
         $rules = [
             'name'                          =>  'required',
             'status'                        =>  'required',
@@ -1371,26 +1438,27 @@ class AdministrationController extends Controller{
             'status.required'               => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $furuse =[
+        $furuse = [
             'name'                          =>  $request['name'],
             'description'                   =>  $request['description'],
             'status'                        =>  $request['status'],
-         //   'actiontype'                    =>  $request['action_type'],
+            //   'actiontype'                    =>  $request['action_type'],
             'id'                            =>  $request['id'],
-            'user_id'                       =>$this->userId()
+            'user_id'                       => $this->userId()
         ];
-      //  dd($furuse);
-        $response_data= $this->apiService->createData('emis/masters/furnitureUsage/saveFurnitureUsage', $furuse);
+        //  dd($furuse);
+        $response_data = $this->apiService->createData('emis/masters/furnitureUsage/saveFurnitureUsage', $furuse);
         return $response_data;
-
     }
-    public function loadFurnitureUsage(Request $request){
+    public function loadFurnitureUsage(Request $request)
+    {
         //  dd('from UI');
         $strCategory = $this->apiService->listData('emis/masters/furnitureUsage/loadFurnitureUsage');
         return $strCategory;
     }
 
-    public function saveEccdFacility(Request $request){
+    public function saveEccdFacility(Request $request)
+    {
         $rules = [
             'faciltytype'           =>  'required',
             'structuretype'         =>  'required',
@@ -1402,48 +1470,44 @@ class AdministrationController extends Controller{
             'status.required'               => 'Status field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        $cat =[
+        $cat = [
             'faciltytype'               =>  $request['faciltytype'],
             'structuretype'             =>  $request['structuretype'],
             'description'               =>  $request['description'],
             'status'                    =>  $request['status'],
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
-            'user_id'                   =>$this->userId()
+            'user_id'                   => $this->userId()
         ];
         //dd($cat);
-        $response_data= $this->apiService->createData('emis/masters/eccdfacility/saveEccdFacility', $cat);
+        $response_data = $this->apiService->createData('emis/masters/eccdfacility/saveEccdFacility', $cat);
         return $response_data;
-
     }
-    public function loadEccdFacilityList(Request $request){
+    public function loadEccdFacilityList(Request $request)
+    {
         $eccdfacity = $this->apiService->listData('emis/masters/eccdfacility/loadEccdFacilityList');
         return $eccdfacity;
     }
-    public function getEccdStructureType(Request $request){
+    public function getEccdStructureType(Request $request)
+    {
         $strCategory = $this->apiService->listData('emis/masters/eccdfacility/getEccdStructureType');
         return $strCategory;
     }
-    public function load_village_details_by_village_id($id=""){
-        $strCategory = $this->apiService->listData('emis/masters/load_village_details_by_village_id/'.$id);
+    public function load_village_details_by_village_id($id = "")
+    {
+        $strCategory = $this->apiService->listData('emis/masters/load_village_details_by_village_id/' . $id);
         return $strCategory;
     }
 
-    public function load_gewog_details_by_id($id=""){
-        $strCategory = $this->apiService->listData('emis/masters/load_gewog_details_by_id/'.$id);
+    public function load_gewog_details_by_id($id = "")
+    {
+        $strCategory = $this->apiService->listData('emis/masters/load_gewog_details_by_id/' . $id);
         return $strCategory;
     }
 
-    public function load_dzongkhag_details_by_id($id=""){
-        $strCategory = $this->apiService->listData('emis/masters/load_dzongkhag_details_by_id/'.$id);
+    public function load_dzongkhag_details_by_id($id = "")
+    {
+        $strCategory = $this->apiService->listData('emis/masters/load_dzongkhag_details_by_id/' . $id);
         return $strCategory;
     }
-
-
-
-
-
-
-
-
 }

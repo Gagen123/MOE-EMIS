@@ -26,7 +26,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-body pt-0 mt-1">
+            <div class="card-body pt-0 mt-1" id="form_details">
                 <div class="tab-content">
                     <div class="tab-pane fade active show tab-content-details" id="application-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="card card-success card-outline collapsed-card" id="adv_serach_ection">
@@ -91,7 +91,7 @@
                         <hr>
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')">Next <i class="fa fa-arrow-right"></i></button>
+                                <button class="btn btn-primary" @click="shownexttab('undertaking-tab')" id="action">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </div>
@@ -305,6 +305,11 @@ export default {
                 optional2sub:'',
                 transfer_list:'',
                 attachments:[],
+                submitterroleid:'',
+                Submitter_id:'',
+                submitted_to:'',
+                initial_AppointmentDate:'',
+                timeDifferent:'',
                 ref_docs:[],
             })
         }
@@ -384,6 +389,9 @@ export default {
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
+                this.getTransfer_details(response.data.data[0].id)
+                this.getSubmitterId(response.data.data[0].id)
+
 
             })
             .catch(function (error){
@@ -418,6 +426,7 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
+         if(this.days<'1096'||this.days ==""|| this.days==undefined){
             if(this.form.transfer_list=="" || this.form.transfer_list== null){
                 if(nextclass=="undertaking-tab"){
                     if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
@@ -476,11 +485,14 @@ export default {
                             let formData = new FormData();
                             formData.append('id', this.form.id);
                             formData.append('type_id', this.form.type_id);
+                            formData.append('submitterroleid', this.form.submitterroleid);
+                            formData.append('name', this.form.name);
                             formData.append('service_name', this.form.service_name);
                             formData.append('preference_school1', this.form.preference_school1);
                             formData.append('preference_school2', this.form.preference_school2);
                             formData.append('preference_school3', this.form.preference_school3);
                             formData.append('spSubject', this.form.spSubject);
+                            formData.append('submitted_to', this.form.submitted_to);
                             formData.append('optional1sub', this.form.optional1sub);
                             formData.append('optional2sub', this.form.optional2sub);
                             formData.append('transferType', this.form.transferType);
@@ -507,15 +519,26 @@ export default {
                 }
             }
           }
-          else{
-                Swal.fire({
-                text: "Sorry! you have already submitted your transfer application and  you are not allowed to apply again ",
-                icon: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'okay!',
-                })
-            } 
+            else{
+                    Swal.fire({
+                    text: "Sorry! you have already submitted your transfer application and  you are not allowed to apply again ",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'okay!',
+                    })
+                } 
+            }
+             else{
+                    Swal.fire({
+                    text: "Sorry! You need minimum of three year from your initial appointment date to apply transfer",
+                    icon: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'okay!',
+                    })
+                } 
+
         },
+        
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -525,15 +548,21 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-        profile_details(){
-            axios.get('common/getSessionDetail')
+        getIntialAppointmentDate(cid){
+            axios.get('staff/transfer/getIntialAppointmentDate/' +cid)
             .then(response => {
-                this.form.name = response.data.data.Full_Name;
-                this.form.staff_id = response.data.data.staff_id;
+                if(response.data[0]!="" || response.data[0]!=NULL){
+                    this.form.initial_AppointmentDate = response.data[0].initial_appointment_date;
+                    let current_date=new Date(this.form.currentdateForTransfer);
+                    let appointment_date=new Date(this.form.initial_AppointmentDate);
+                    this.difference= (current_date.getTime())-(appointment_date.getTime());
+                    this.days = this.difference/(1000 * 3600 * 24)
+                }
             })
             .catch(errors =>{
                 console.log(errors)
             });
+
         },
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/intra_transfer')
@@ -607,6 +636,51 @@ export default {
                 this.checkforselectedval(3);
             }
         },
+        getSubmitterId(type_id){
+            let uri ='staff/transfer/getSubmitterId/'+type_id;
+            axios.get(uri)
+            .then(response =>{
+                if(response.data==""||response.data==null){
+                   Swal.fire({
+                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        
+                        })
+                    $('#form_details').hide();
+                    $('#action').hide();
+                    this.$router.push('/intra_transfer');
+                }
+                else{
+                    $('#form_details').show();
+                    $('#action').show();
+                     this.form.Submitter_id=response.data.submitter_role_id;
+                }
+
+                
+                
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+         getTransfer_details(id){
+            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=null && data!="null" && data!=""){
+                    //need to handle for multiple role later, for now it will take for first role at the index 0
+                    this.form.submitted_to=data;
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
+        },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
             .then(response => {
@@ -651,6 +725,7 @@ export default {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
+        this.form.currentdateForTransfer=currentdate.getFullYear()+'-'+12+'-'+31;
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -664,7 +739,6 @@ export default {
         });
         this.loadtransferDetails();
         this.getDraftDetails();
-        this.profile_details();
         this.loadstaff();
         this.loadreasons();
         this.loadOrgList();
@@ -673,10 +747,21 @@ export default {
         this.loadtransferwindow();
         this.LoadTransferType();
         
-        let data = await this.getRequiredDocument("Staff_Transfer");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+        // let data = await this.getRequiredDocument("Staff_Transfer");
+        // data.forEach((item => {
+        //     this.form.attachments.push({file_name:item.name, file_upload:''})
+        // }));
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            this.form.submitterroleid = response.data.data.roles[0].Id;
+            this.form.staff_id=response.data.data['staff_id'];
+            this.form.name = response.data.data.Full_Name;
+            this.form.staff_id = response.data.data.staff_id;
+            this.getIntialAppointmentDate(response.data.data.Passport_CID);
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>

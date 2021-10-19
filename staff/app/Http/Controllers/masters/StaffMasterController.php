@@ -29,7 +29,13 @@ class StaffMasterController extends Controller{
     }
 
     public function saveStaffMasters(Request $request){
-        $modelName = "App\\Models\\staff_masters\\"."$request->model";
+        if(strpos($request->model,'___')!==false){
+            $path=explode('___',$request->model)[0];
+            $model=explode('___',$request->model)[1];
+            $modelName = "App\\Models\\"."$path"."\\"."$model";
+        }else{
+            $modelName = "App\\Models\\staff_masters\\"."$request->model";
+        }
         $model = new $modelName();
         $response_data="";
 
@@ -226,10 +232,16 @@ class StaffMasterController extends Controller{
 
     public function loadStaffMasters($type="",$model=""){
         $mod=$model;
-        if($type!="all_active_position_title_with_level"){
+        if(strpos($model,'___')!==false){
+            $path=explode('___',$model)[0];
+            $model=explode('___',$model)[1];
+            $modelName = "App\\Models\\"."$path"."\\"."$model";
+            //staff_leadership
+            // dd($modelName);
+        }else if($type!="all_active_position_title_with_level"){
             $modelName = "App\\Models\\staff_masters\\"."$model";
-            $model = new $modelName();
         }
+        $model = new $modelName();
         if($type == 'all'){
             if($mod=="ChildGroupPosition"){
                 $response_data=$model::get();
@@ -279,6 +291,12 @@ class StaffMasterController extends Controller{
         else if(strpos($type,'byparent')!==false){
             // dd(explode('__',$type)[1]);
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
+        }
+        else if(strpos($type,'withparent')!==false){
+            return $this->successResponse($model::with(explode('__',$type)[1])->where(explode('__',$type)[2],explode('__',$type)[3])->get());
+        }
+        else if(strpos($type,'allwith')!==false){
+            return $this->successResponse($model::with(explode('__',$type)[1])->get());
         }
         else if(strpos($type,'byid')!==false){
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->first());

@@ -12,6 +12,7 @@ class StudentAdmissionSchool extends Model{
     protected $fillable = [
         'id',
         'StdAdmissionsId',
+        'AdmissionNo',
         'Dzongkhagid',
         'OrgOrganizationId',
         'class_id',

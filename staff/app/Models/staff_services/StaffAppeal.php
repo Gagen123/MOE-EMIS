@@ -19,6 +19,7 @@ class StaffAppeal extends Model
         'application_no',
         'description',
         'user_id',
+        'status_id',
         'org_id',
         'status',
         'remarks',

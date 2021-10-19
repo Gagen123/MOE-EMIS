@@ -6,6 +6,7 @@
                     <li class="nav-item personal-tab" @click="shownexttab('personal-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Appointment </label>
+
                         </a>
                     </li>
                     <li class="nav-item qualification-tab" @click="shownexttab('qualification-tab')">
@@ -465,12 +466,12 @@
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
-                                                        <input :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('startdate') }" type="text" id="startdate" class="form-control popupDatepicker" @change="remove_error('startdate')">
+                                                        <input autocomplete="off" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('startdate') }" type="text" id="startdate" class="form-control popupDatepicker">
                                                         <has-error :form="qualification_form" field="startdate"></has-error>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
-                                                        <input :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('enddate') }" type="text" id="enddate" class="form-control popupDatepicker" @change="remove_error('enddate')">
+                                                        <input autocomplete="off" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('enddate') }" type="text" id="enddate" class="form-control popupDatepicker">
                                                         <has-error :form="qualification_form" field="enddate"></has-error>
                                                     </div>
                                                 </div>
@@ -1408,7 +1409,7 @@ export default {
             $('#'+nextclass).show().removeClass('fade');
         },
 
-        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_main_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

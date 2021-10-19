@@ -121,7 +121,9 @@ export default {
     },
     mounted(){ 
         this.loadclassSubjectAssessment();
-        this.dt =  $("#class_subject_assessment_area-create-table").DataTable()
+        this.dt =  $("#class_subject_assessment_area-create-table").DataTable({
+            "ordering": false,
+        })
         
     },
     created() {
@@ -129,7 +131,7 @@ export default {
         this.org_class_id=this.$route.params.data.org_class_id;
         this.org_stream_id=this.$route.params.data.org_stream_id;
         this.aca_sub_id=this.$route.params.data.aca_sub_id;
-        this.aca_assmt_term_id = this.$route.params.data.aca_assmt_term_id
+        this.aca_assmt_term_id = this.$route.params.data.aca_assmt_term_id;
         this.class_stream = this.$route.params.data.class_stream;
         this.sub_name = this.$route.params.data.sub_name;
         this.sub_dzo_name = this.$route.params.data.sub_dzo_name;
@@ -142,7 +144,9 @@ export default {
         classSubAssessmentList(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt = $("#class_subject_assessment_area-create-table").DataTable()
+                this.dt = $("#class_subject_assessment_area-create-table").DataTable({
+                    "ordering": false,
+                })
             });
         }
     }

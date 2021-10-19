@@ -21,11 +21,11 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <label class="rp-3">No. of Meals:</label><br>
-                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="1" tabindex=""/> One Meal</label>
-                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="2" tabindex=""/> Two Meals</label>
-                    <label><input  type="radio" v-model="student_form.feeding" name="feeding" id="feeding" value="3" tabindex=""/> Three Meals</label>
-                    <has-error :form="student_form" field="feeding"></has-error>
+                    <label class="rp-3">Type of Diet:</label><br>
+                    <label><input  type="radio" v-model="student_form.diet" name="diet" id="diet" value="1" tabindex=""/> Vegetarian</label>
+                    <label><input  type="radio" v-model="student_form.diet" name="diet" id="diet" value="2" tabindex=""/> Non-Vegetarian</label>
+                    <label><input  type="radio" v-model="student_form.diet" name="diet" id="diet" value="3" tabindex=""/> Eggitarian</label>
+                    <has-error :form="student_form" field="diet"></has-error>
                 </div>
             </div>
             <div class="row">
@@ -60,10 +60,10 @@ export default {
                 id:'',
                 student: '',
                 date: '',
-                feeding: 1,
+                diet: 1,
                 remarks:'',
-                record_type:'update_feeding',
-                action_type:'add'
+                record_type:'update_diet',
+                action_type:'edit'
             }),
         }
     },
@@ -100,7 +100,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/updated_feeding_list');
+                    this.$router.push('/updated_dietary_list');
                 })
                 .catch(() => {
                     console.log("Error......")
@@ -138,8 +138,8 @@ export default {
         this.student_form.student=this.$route.params.data.StdStudentId;
         this.student_form.feeding=this.$route.params.data.noOfMeals;
         this.student_form.remarks=this.$route.params.data.Remarks;
+        this.student_form.date=this.$route.params.data.date;
         this.student_form.id=this.$route.params.data.id;
     },
-    
 }
 </script>
