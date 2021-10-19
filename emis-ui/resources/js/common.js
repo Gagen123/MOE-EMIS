@@ -34,6 +34,12 @@ try {
                     return reverse;
                 }
             },
+            reverseDateTime(dateData){
+                if(dateData!="" && dateData!=undefined){
+                    reverse = dateData.split(" ")[0].split("-").reverse().join("/")+' '+dateData.split(" ")[1];
+                    return reverse;
+                }
+            },
             formatDateToddmmyyyy(dateData){
                 let formatteddate = new Date(dateData);
                 let month=formatteddate.getMonth()+1;

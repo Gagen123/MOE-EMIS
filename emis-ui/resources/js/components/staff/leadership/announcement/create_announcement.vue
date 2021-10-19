@@ -75,7 +75,7 @@
                 <div class="row form-group" id="leadershipquestionsec">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Select Feedback Question Category: </label>
-                        <select class="form-control select2" @change="getfeedbackquestions()" id="question_category" v-model="form.question_category" :class="{ 'is-invalid': form.errors.has('question_category') }">
+                        <select class="form-control select2" id="question_category" v-model="form.question_category" :class="{ 'is-invalid': form.errors.has('question_category') }">
                             <option value="">--Select--</option>
                             <option v-for="(item, index) in questionCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>

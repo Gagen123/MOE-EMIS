@@ -48,8 +48,8 @@
                                     <td>1</td>
                                     <td>270 Degree Feedback</td>
                                     <td>
-                                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
-                                        <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                        <label><input v-model="form.feedback" @click="showQuestion('1')" type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.feedback" @click="showQuestion('0')" type="radio" value="0" /> No</label>
                                     </td>
                                 </tr>
                                 <tr>
@@ -70,6 +70,16 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="row form-group" id="leadershipquestionsec">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Select Feedback Question Category: </label>
+                        <select class="form-control select2" id="question_category" v-model="form.question_category" :class="{ 'is-invalid': form.errors.has('question_category') }">
+                            <option value="">--Select--</option>
+                            <option v-for="(item, index) in questionCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="question_category"></has-error>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -270,12 +280,9 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#selection_type').attr('class').includes('select2-hidden-accessible')){
-                $('#selection_type').addClass('select2-hidden-accessible');
-            }
-            if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
-                $('#position_title').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('selection_type');
+            this.applyselect2field('position_title');
+            this.applyselect2field('question_category');
         },
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -288,6 +295,16 @@ export default {
             }
             if(id=="position_title"){
                 this.form.position_title=$('#position_title').val();
+            }
+        },
+
+        showQuestion(type){
+            if(type==1){
+                $('#leadershipquestionsec').show();
+            }else{
+                $('#question_category').val();
+                this.form.question_category='';
+                $('#leadershipquestionsec').hide();
             }
         },
         // loadroleList(uri = 'masters/getroles/allActiveRoles'){
@@ -337,7 +354,6 @@ export default {
                 console.log("Error: "+error);
             });
         }
-
     },
     async mounted(){
         $('.select2').select2();

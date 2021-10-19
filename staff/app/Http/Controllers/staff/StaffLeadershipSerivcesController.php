@@ -38,6 +38,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'interview'                     =>  $request->interview,
             'shortlist'                     =>  $request->shortlist,
             'details'                       =>  $request->details,
+            'details'                       =>  $request->details,
         ];
         if($request->id==""){
             $rules = [
