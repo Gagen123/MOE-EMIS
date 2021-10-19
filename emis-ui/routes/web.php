@@ -563,6 +563,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitIntialapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitIntialapplicantDetails'])->name('submitIntialapplicantDetails');
         Route::get('/getDraftDetails', [App\Http\Controllers\staff\TransferController::class, 'getDraftDetails'])->name('getDraftDetails');
         Route::post('/submitFinalapplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'submitFinalapplicantDetails'])->name('submitFinalapplicantDetails');
+        Route::get('/getIntialAppointmentDate/{cid}', [App\Http\Controllers\staff\TransferController::class, 'getIntialAppointmentDate'])->name('getIntialAppointmentDate');
         Route::post('/UpdatedApplicantDetails', [App\Http\Controllers\staff\TransferController::class, 'UpdatedApplicantDetails'])->name('UpdatedApplicantDetails');
         Route::post('/SaveTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'SaveTransferAppeal'])->name('SaveTransferAppeal');
         Route::post('/UpdateTransferAppeal', [App\Http\Controllers\staff\TransferController::class, 'UpdateTransferAppeal'])->name('UpdateTransferAppeal');
@@ -583,8 +584,9 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadApplicationDetails/{id}', [App\Http\Controllers\staff\TransferController::class, 'loadApplicationDetails'])->name('loadApplicationDetails');
         Route::get('/getStaffNameWithId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getStaffNameWithId'])->name('getStaffNameWithId');
 
-        Route::get('/getSubmitterId/{id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
+        Route::get('/getSubmitterId/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
         Route::get('/checkEligibilityForTransfer/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'checkEligibilityForTransfer'])->name('checkEligibilityForTransfer');
+        Route::get('/getTransferTypeName/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'getTransferTypeName'])->name('getTransferTypeName');
 
     });
     Route::prefix('managementBody')->group(function () {

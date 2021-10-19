@@ -150,11 +150,9 @@ export default {
             }
             if(id=="transfer_type_id"){
                 this.form.transfer_type_id=$('#transfer_type_id').val();
-                this.getLeave_details($('#role_id').val());
             }
             if(id=="role_id"){
                 this.form.role_id=$('#role_id').val();
-                this.getLeave_details();
             }
         },
         

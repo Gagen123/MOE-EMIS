@@ -93,10 +93,10 @@
                                     <span class="text-danger" id="remarks_err"></span>
                                 </div>
                             </div>
-                            <div  class="row form-group fa-pull-right">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Update </button>
-                            </div>
+                             <div class="row form-group fa-pull-right">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <button class="btn btn-primary" @click="shownexttab('submit')"  id="submit"> <i class="fa fa-check"></i>Update </button>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -175,13 +175,15 @@ export default {
         loadtransferAppealDetails(appNo){
              axios.get('staff/transfer/loadTransferAppealDetail/'+appNo)
             .then((response) =>{
-                let data = response.data[0];
-                this.form.name=data.name;
-                this.form.reason=data.description;
-                this.form.status=data.status;
-                this.form.created_at=data.created_at;
-                this.form.aplication_number=data.application_no;
-                this.form.transferTypeId=data.transferType;
+                if(response!="" || response!=null){
+                    let data = response.data[0];
+                    this.form.name=data.name;
+                    this.form.reason=data.description;
+                    this.form.status=data.status;
+                    this.form.created_at=data.created_at;
+                    this.form.aplication_number=data.application_no;
+                    this.form.transferTypeId=data.transferType;
+                }
             })
             .catch(errors =>{
                 console.log('error loadattachementDetails: '+errors)
@@ -200,8 +202,8 @@ export default {
         },
         shownexttab(nextclass){
             if(nextclass=="submit"){
-                Swal.fire({
-                    text: "Are you sure you wish to update transfer appeal application ?",
+            Swal.fire({
+                    text: "Are you sure you wish to update transfer appeal application?",
                     icon: 'info',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -215,7 +217,6 @@ export default {
                             }
                         }
                         let formData = new FormData();
-                        
                         formData.append('aplication_number', this.form.aplication_number);
                         formData.append('actiontype', this.form.actiontype);
                         formData.append('remarks', this.form.remarks);
@@ -225,13 +226,13 @@ export default {
                         }
                         axios.post('/staff/transfer/UpdateTransferAppeal', formData, config)
                         .then((response) =>{
-                            if(response.data!=""){
-                             Toast.fire({
-                                        icon: 'success',
-                                        title: 'Application has been updated successfully!'
-                                    });
-                            this.$router.push('/tasklist');
-                            }
+                           if(response!=""){
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Application details has been updated.'
+                                });
+                                this.$router.push({path:'/tasklist'});
+                                }
                             
                         })
                         .catch((error) => {
@@ -335,7 +336,6 @@ export default {
         Fire.$on('changefunction',(id)=> {
         this.changefunction(id);
         });
-
         this.loadtransferAppealDetails(this.$route.params.data.application_number);
         this.loadattachementDetails(this.$route.params.data.application_number);
     },

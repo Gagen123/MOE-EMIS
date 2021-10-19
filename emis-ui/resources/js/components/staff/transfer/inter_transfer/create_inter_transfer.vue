@@ -305,6 +305,7 @@ export default {
                 transfer_list:'',
                 submitterroleid:'',
                 submitted_to:'',
+                initial_AppointmentDate:'',
                 attachments:
                 [],
                 ref_docs:[],
@@ -387,6 +388,7 @@ export default {
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
                 this.getTransfer_details(response.data.data[0].id)
+                this.getSubmitterId(response.data.data[0].id)
 
             })
             .catch(function (error){
@@ -402,8 +404,8 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        getSubmitterId(id){
-            let uri ='staff/transfer/getSubmitterId/'+id;
+        getSubmitterId(type_id){
+            let uri ='staff/transfer/getSubmitterId/'+type_id;
             axios.get(uri)
             .then(response =>{
                 if(response.data==""||response.data==null){
@@ -413,7 +415,7 @@ export default {
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Okay!',
-
+                        
                         })
                     $('#form_details').hide();
                     $('#action').hide();
@@ -422,16 +424,30 @@ export default {
                 else{
                     $('#form_details').show();
                     $('#action').show();
-                     this.form.Submitter_id=data.Submitter_id;
+                     this.form.Submitter_id=response.data.submitter_role_id;
                 }
 
-
-
+                
+                
             })
             .catch(function (error){
                 console.log("Error:"+error)
             });
 
+        },
+         getIntialAppointmentDate(cid){
+            axios.get('staff/transfer/getIntialAppointmentDate/' +cid)
+            .then(response => {
+                this.form.initial_AppointmentDate = response.data[0].initial_appointment_date;
+                let current_date=new Date(this.form.current_date);
+                let appointment_date=new Date(this.form.initial_AppointmentDate);
+                this.difference= (current_date.getTime())-(appointment_date.getTime());
+                this.days = this.difference/(1000 * 3600 * 24)
+               
+            })
+            .catch(errors =>{
+                console.log(errors)
+            });
         },
           getTransfer_details(id){
             axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
@@ -475,6 +491,7 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
+         if(this.days<1096){
             if(this.form.transfer_list =="" || this.form.transfer_list == null){
                 if(nextclass=="undertaking-tab"){
                     if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
@@ -577,6 +594,15 @@ export default {
                     confirmButtonText: 'okay!',
                     })
             }
+         }
+        else{
+                Swal.fire({
+                text: "Sorry! You need minimum of 3 year from your last transfer to appy again",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'okay!',
+                })
+            } 
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -587,18 +613,7 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-
-        profile_details(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                this.form.name = response.data.data.Full_Name;
-                this.form.user_id = response.data.data.User_Id;
-            })
-            .catch(errors =>{
-                console.log(errors)
-            });
-        },
-
+        
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/inter_transfer')
            .then((response) => {
@@ -732,7 +747,6 @@ export default {
         });
         this.loadtransferDetails();
         this.getDraftDetails();
-        this.profile_details();
         this.loadstaff();
         this.loadreasons();
         this.loadactivedzongkhagList();
@@ -749,9 +763,11 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response => {
             this.form.submitterroleid = response.data.data.roles[0].Id;
-            // alert(this.form.submitterroleid);
             this.form.staff_id=response.data.data['staff_id'];
-            this.getSubmitterId(this.form.submitterroleid);
+            // this.getSubmitterId(this.form.submitterroleid);
+            this.getIntialAppointmentDate(response.data.data.Passport_CID);
+            this.form.name = response.data.data.Full_Name;
+            this.form.user_id = response.data.data.User_Id;
         })
         .catch(errors => {
             console.log(errors)
