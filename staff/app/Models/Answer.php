@@ -14,6 +14,7 @@ class Answer extends Model
         'id',
         'question_id',
         'name',
+        'watage',
         'status',
         'created_by',
         'created_at',

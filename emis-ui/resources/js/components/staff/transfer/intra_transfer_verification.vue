@@ -152,11 +152,11 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Forward </button>
+                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Not Recommended </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Recommended </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Assign School </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('report')" style="display:none"  id="reportId"> <i class="fa fa-forward"></i>Joined </button>
-                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Assign School </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
                         </div>
@@ -213,6 +213,9 @@ export default {
                 preference_school:'',
                 schoolApproved:'',
                 app_seq_no:'',
+                submitterroleid:'',
+                created_by:'',
+                transfer_type_id:'',
                 userDzongkhag:'',
                 attachments:
                 [{
@@ -233,7 +236,10 @@ export default {
                 this.gettransferconfig(data.transfer_window_id);
                 this.getStaffDetials(data.staff_id);
                 this.form.id=data.id;
+                this.form.created_by=data.created_by;
+                this.form.transfer_type_id=data.transfer_type_id;
                 this.form.transfer_reason_id=data.transfer_reason_id;
+                this.form.submitterroleid=data.submitterroleid;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
                 this.form.applicant_name=data.applicant_name;
@@ -241,7 +247,7 @@ export default {
                 this.draft_attachments=data.documents;
                 this.form.app_seq_no=data.app_seq_no;
 
-                if(this.form.status_id==2 ){
+                if(this.form.app_seq_no==10){
                     $('#approveId').show();
                     $('#verifyId').hide();
                     $('#approveSchool').show();
@@ -249,7 +255,7 @@ export default {
                     $('#approveSchool2').show();
                     $('#approveSchool3').show();
                 }
-                if(this.form.status_id==1){
+                if(this.form.app_seq_no==1){
                     $('#verifyId').show();
                     $('#approveId').hide();
                     $('#approveSchool').hide();
@@ -444,6 +450,7 @@ export default {
         });
         this.form.application_no=this.$route.params.data.application_number;
         this.form.status_id=this.$route.params.data.status_id;
+        this.form.id=this.$route.params.data.id;
         this.form.userDzongkhag=this.$route.params.data.user_dzo_id;
         this.loadtransferdetails(this.$route.params.data.application_number,this.$route.params.type);
         this.loadGenders();

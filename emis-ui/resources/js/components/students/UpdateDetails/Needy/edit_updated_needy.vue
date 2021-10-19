@@ -140,6 +140,7 @@ export default {
         this.student_form.student=this.$route.params.data.StdStudentId;
         this.student_form.needy=this.$route.params.data.isNeedy;
         this.student_form.remarks=this.$route.params.data.Remarks;
+        this.student_form.date=this.$route.params.data.date;
         this.student_form.id=this.$route.params.data.id;
     },
     

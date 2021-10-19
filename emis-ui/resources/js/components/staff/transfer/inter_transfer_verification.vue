@@ -165,18 +165,16 @@
                             <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Select School</label>
                                     <select v-model="form.preference_school" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school') }" class="form-control select2" name="preference_school" id="preference_school">
-                                <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                            </select>
-                            <has-error :form="form" field="preference_school"></has-error>
-                            <span class="text-danger" id="preference_school_err"></span>
+                                        <option value=""> -- Select-- </option>
+                                        <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    </select>
+                                <has-error :form="form" field="preference_school"></has-error>
+                                <span class="text-danger" id="preference_school_err"></span>
                             </div>
                         </div>
-                        <!-- <Workflow
-                            :appNo="form.application_no"
-                        /> -->
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Remarks</label>
+                                <label class="mb-0">Remarks<i class="text-danger">*</i></label>
                                 <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
                                 <span class="text-danger" id="remarks_err"></span>
                             </div>
@@ -185,11 +183,11 @@
                         <div class="row form-group fa-pull-right">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <button class="btn btn-success" @click="shownexttab('application-tab')"><i class="fa fa-arrow-left"></i>Previous </button>
-                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
-                                <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Forward </button>
+                                <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Not Recommended </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Recommended </button>
+                                <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Assign School </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('report')" style="display:none"  id="reportId"> <i class="fa fa-forward"></i>Joined </button>
-                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Assign Dzongkhag </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
                         </div>
@@ -247,6 +245,9 @@ export default {
                 preference_school2:'',
                 preference_school3:'',
                 preference_school:'',
+                submitterroleid:'',
+                transfer_type_id:'',
+                created_by:'',
                 app_seq_no:'',
                 userDzongkhag:'',
                 attachments:
@@ -271,6 +272,9 @@ export default {
                 this.form.transfer_reason_id=data.transfer_reason_id;
                 this.form.description=data.description;
                 this.form.staff_id=data.staff_id;
+                this.form.created_by=data.created_by;
+                this.form.transfer_type_id=data.transfer_type_id;
+                this.form.submitterroleid=data.submitterroleid;
                 this.form.applicant_name=data.applicant_name;
                 this.form.transferType=data.transferType;
                 this.draft_attachments=data.documents;
@@ -279,7 +283,7 @@ export default {
                 if(this.form.status_id==9){
                     $('#reportId').show();
                 }
-                if(this.form.status_id==10 ){
+                if(this.form.status_id==10){
                     $('#forwardId').show();
                     this.dzongkhagApproved=false;
                     this.schoolApproved=false;
@@ -289,10 +293,10 @@ export default {
                     this.dzongkhagApproved=true;
                     this.schoolApproved=true;
                 }
-                if(this.form.status_id==1 || this.form.status_id==2){
+                if(this.form.app_seq_no==1 || this.form.app_seq_no==2){
                     $('#verifyId').show();
                 }
-                if(this.form.status_id == 3  ){
+                if(this.form.app_seq_no==10 ){
                     $('#approveId').show();
                     $('#verifyId').hide();
                     $('#approveDzohead').show();
@@ -459,12 +463,12 @@ export default {
                 console.log('Error: '+error);
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.reasonList[data.data.data[i].id] = data.data.data[i].name;
+                let data = response.data.data;
+                for(let i=0;i<data.length;i++){
+                    this.reasonList[data[i].id] = data[i].name;
                 }
             })
             .catch(function (error) {
@@ -484,7 +488,7 @@ export default {
             });
         },
          changefunction(id){
-            if($('#'+id).val()!=""){
+           if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
@@ -501,6 +505,7 @@ export default {
         },
     },
     mounted(){
+        $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -512,6 +517,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
+        this.loadreasons();
         this.loadactivedzongkhagList();
         this.form.application_no=this.$route.params.data.application_number;
         this.form.status_id=this.$route.params.data.status_id;
@@ -521,7 +527,6 @@ export default {
         this.loadpositionTitleList();
         this.loadreasons();
         this.loadOrgList();
-
     }
 }
 </script>

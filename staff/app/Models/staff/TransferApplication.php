@@ -10,6 +10,7 @@ class TransferApplication extends Model{
     protected $fillable = [
         'id',
         'transfer_type_id',
+        'submitterroleid',
         'aplication_number',
         'transfer_window_id',
         'applicant_name',

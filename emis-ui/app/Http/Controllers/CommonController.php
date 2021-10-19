@@ -64,13 +64,17 @@ class CommonController extends Controller{
         $tr_data= json_decode($this->apiService->listData('emis/staff/transfer/getTransferConfigDetails/'.$this->getRoleIds('roleIds')));
 
         if(config('services.constant.deo_role_id')!=null && strpos($this->getRoleIds('roleIds'),config('services.constant.deo_role_id'))!==false){
-            $approved_transfer_data="Valid";//pull approved Transfer application only for DEO role
+            $approved_transfer_data="Valid";
+
+            //pull approved Transfer application only for DEO role
         }
         else{
             $approved_transfer_data="Invalid";
         }
+        
 
         $leadership_data="Invalid";
+        $approved_appeal_hrd_data="Invalid";
         $hrd_roles=config('services.constant.hrd_role_id');
         $hr_roles="";
         if(strpos($hrd_roles,',')!==false){
@@ -80,17 +84,20 @@ class CommonController extends Controller{
             foreach($hr_roles as $role){
                 if($role!=null && strpos($this->getRoleIds('roleIds'),$role)!==false){
                     $leadership_data="Valid";
+                    $approved_appeal_hrd_data="Valid"; //hrd appeal application
                 }
             }
         }else{
             if($hrd_roles!=null && strpos($this->getRoleIds('roleIds'),$hrd_roles)!==false){
                 $leadership_data="Valid";//pull leadership application only for HRD role
+                $approved_appeal_hrd_data="Valid"; //hrd appeal application
             }
         }
         $task_data=$data+[
             'work_status'               =>  $approval_response_data,
             'leave_config_data'         =>  $leave_config_data,
             'tr_config_data'            =>  $tr_data,
+            'approved_appeal_hrd_data'  =>  $approved_appeal_hrd_data,
             'leadership_config_data'    =>  $leadership_data,
             'approved_transfer_data'    =>  $approved_transfer_data,
             'access_level'              =>  $this->getAccessLevel(),
@@ -98,15 +105,23 @@ class CommonController extends Controller{
         $response_data=$this->apiService->createData('emis/common/getTaskList',$task_data);
         // dd($response_data);
         return $response_data;
-
     }
 
     public function getNotification(){
         $response_data=$this->apiService->getListData('emis/common/getNotification',$this->getRoleIds('roleIds').'/'.$this->userId());
         return $response_data;
     }
-    public function getTaskcount(){
-        $response_data= json_decode($this->apiService->listData('emis/staff/staffServices/getLeaveConfigDetails/'.$this->getRoleIds('roleIds')));
+    public function getNotificationDetials($id=""){
+        $response_data=$this->apiService->getListData('emis/common/getNotificationDetials',$id);
+        $notification_data=[
+            'notification_appNo'            =>  json_decode($response_data)->notification_appNo,
+            'dzo_id'                        =>  $this->getUserDzoId(),
+            'working_agency_id'             =>  $this->getWrkingAgencyId(),
+            'access_level'                  =>  $this->getAccessLevel(),
+            'action_by'                     =>  $this->userId(),
+        ];
+        $this->apiService->createData('emis/common/visitedNotification', $notification_data);
+        return $response_data;
     }
 
     public function getSessionDetail($applicationId=""){
@@ -169,8 +184,8 @@ class CommonController extends Controller{
     }
     public function loadStudentListByOrgId($org_id){
         $response_data= $this->apiService->listData('emis/common_services/loadStudentListByOrgId/'.$org_id);
-        return $response_data; 
+        return $response_data;
     }
-    
+
 
 }

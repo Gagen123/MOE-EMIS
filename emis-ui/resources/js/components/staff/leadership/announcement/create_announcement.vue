@@ -23,12 +23,12 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application Start Date:<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" @change="remove_err('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
+                        <input type="text" autocomplete="off" class="form-control popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application End Date:<span class="text-danger">*</span></label>
-                        <input type="date" @change="remove_err('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
+                        <input type="text" autocomplete="off" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control popupDatepicker" name="to_date" id="to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                 </div>
@@ -47,8 +47,8 @@
                                     <td>1</td>
                                     <td>270 Degree Feedback</td>
                                     <td>
-                                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
-                                        <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                        <label><input v-model="form.feedback" @click="showQuestion('1')" type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.feedback" @click="showQuestion('0')" type="radio" value="0" /> No</label>
                                     </td>
                                 </tr>
                                 <tr>
@@ -69,6 +69,17 @@
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <div class="row form-group" id="leadershipquestionsec">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Select Feedback Question Category: </label>
+                        <select class="form-control select2" id="question_category" v-model="form.question_category" :class="{ 'is-invalid': form.errors.has('question_category') }">
+                            <option value="">--Select--</option>
+                            <option v-for="(item, index) in questionCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="question_category"></has-error>
                     </div>
                 </div>
                 <!-- <div class="row form-group">
@@ -136,7 +147,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Applicable Applicants: </label>
+                        <label>Eligible Applicants: </label>
                         <table class="table table-bordered text-sm table-striped">
                             <thead>
                                 <tr>
@@ -196,12 +207,14 @@ export default {
             applicantcount:1,
             selectionList:[],
             positionList:[],
+            questionCategoryList:[],
             // roleList:[],
             positionLevelList:[],
             form: new form({
                 id:'',
                 selection_type:'',
                 position_title:'',
+                question_category:'',
                 from_date:'',
                 to_date:'',
                 details:'',
@@ -226,6 +239,8 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if(result.isConfirmed){
+                        this.form.from_date=this.formatYYYYMMDD($('#from_date').val());
+                        this.form.to_date=this.formatYYYYMMDD($('#to_date').val());
                         this.form.post('/staff/staffLeadershipSerivcesController/createPost')
                         .then((response) =>{
                             if(response!=""){
@@ -279,11 +294,6 @@ export default {
                 this.form.applicant_List.push({position_level:'',position_title:''})
             }
         },
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
 
         getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
@@ -296,12 +306,9 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#selection_type').attr('class').includes('select2-hidden-accessible')){
-                $('#selection_type').addClass('select2-hidden-accessible');
-            }
-            if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
-                $('#position_title').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('selection_type');
+            this.applyselect2field('position_title');
+            this.applyselect2field('question_category');
         },
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -316,26 +323,7 @@ export default {
                 this.form.position_title=$('#position_title').val();
             }
         },
-        // loadroleList(uri = 'masters/getroles/allActiveRoles'){
-        //     axios.get(uri)
-        //     .then(response =>{
-        //         let data = response;
-        //         this.roleList =  data.data;
-        //     })
-        //     .catch(function (error){
-        //         console.log(error);
-        //     });
-        // },
-        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.positionLevelList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         getpositionTitleList(index){
             let uri = 'staff/loadStaffMasters/byparent__position_level_id__'+$('#position_level_id'+index).val()+'/PositionTitle';
             axios.get(uri)
@@ -352,19 +340,20 @@ export default {
                 console.log(error);
             });
         },
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.positionList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+        showQuestion(type){
+            if(type==1){
+                $('#leadershipquestionsec').show();
+            }else{
+                $('#question_category').val();
+                this.form.question_category='';
+                $('#leadershipquestionsec').hide();
+            }
         },
-
+        checkfunction(){
+            alert();
+        }
     },
-    mounted(){
+    async mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -375,10 +364,14 @@ export default {
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
         });
+
+        this.positionList =  await this.loadstaffMasters('active','PositionTitle');
+        this.positionLevelList =  await this.loadstaffMasters('active','PositionLevel');
+        this.questionCategoryList =  await this.loadstaffMasters('active','staff_leadership___QuestionCategory');
         this.getSelectionList();
         // this.loadroleList();
-        this.loadPositionLevelList();
-        this.loadPositionTitleList();
+        // this.loadPositionLevelList();
+        // this.loadPositionTitleList();
     },
 }
 </script>

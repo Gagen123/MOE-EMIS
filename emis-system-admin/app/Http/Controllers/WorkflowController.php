@@ -182,19 +182,19 @@ class WorkflowController extends Controller{
         $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
         $record_id=$notificationDetails->id;
         $not_audit_data=[
-            'id'                        =>  $request->id,
-            'notification_for'          =>  $request->notification_for,
-            'notification_appNo'        =>  $request->notification_appNo,
-            'notification_message'      =>  $request->notification_message,
-            'notification_type'         =>  $request->notification_type,
-            'notification_access_type'  =>  $request->notification_access_type,
-            'access_level'              =>  $request->access_level,
-            'call_back_link'            =>  $request->call_back_link,
-            'created_by'                =>  $request->created_by,
-            'created_at'                =>  $request->created_at,
-            'updated_by'                =>  $request->action_by,
-            'updated_at'                =>  $request->udpated_on,
-            'audited_by'                =>  $request->action_by,
+            'id'                        =>  $notificationDetails->id,
+            'notification_for'          =>  $notificationDetails->notification_for,
+            'notification_appNo'        =>  $notificationDetails->notification_appNo,
+            'notification_message'      =>  $notificationDetails->notification_message,
+            'notification_type'         =>  $notificationDetails->notification_type,
+            'notification_access_type'  =>  $notificationDetails->notification_access_type,
+            'access_level'              =>  $notificationDetails->access_level,
+            'call_back_link'            =>  $notificationDetails->call_back_link,
+            'created_by'                =>  $notificationDetails->created_by,
+            'created_at'                =>  $notificationDetails->created_at,
+            'updated_by'                =>  $notificationDetails->action_by,
+            'updated_at'                =>  $notificationDetails->udpated_on,
+            'audited_by'                =>  $notificationDetails->action_by,
             'audited_at'                =>  date('Y-m-d h:i:s'),
         ];
         NotificationAudit::create($not_audit_data);
@@ -240,7 +240,7 @@ class WorkflowController extends Controller{
             foreach($user_roles as $usr){
                 if($usr!=""){
                     $notification_to_data=[
-                        'notification_id'               =>  $notificationDetails->id,
+                        'notification_id'               =>  $record_id,
                         'user_role_id'                  =>  $usr,
                         'dzo_id'                        =>  $request->dzo_id,
                         'access_level'                  =>  $request->access_level,
@@ -252,7 +252,7 @@ class WorkflowController extends Controller{
         }
         else{
             $notification_to_data=[
-                'notification_id'               =>  $notificationDetails->id,
+                'notification_id'               =>  $record_id,
                 'user_role_id'                  =>  $request->user_role_id,
                 'dzo_id'                        =>  $request->dzo_id,
                 'access_level'                  =>  $request->access_level,

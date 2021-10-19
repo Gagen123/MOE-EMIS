@@ -4,9 +4,9 @@ namespace App\Http\Controllers\staff;
 use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use App\Models\Answer;
+use App\Models\FeedbackCategory;
 use App\Models\FeedbackModel;
 use App\Models\LeadershipType;
-use App\Models\Question;
 use App\Models\staff\DocumentDetails;
 use App\Models\staff_leadership\ApplicableApplicant;
 use Illuminate\Http\Response;
@@ -16,11 +16,9 @@ use App\Models\staff_leadership\NominationDetails;
 use App\Models\staff_leadership\FeedbackProviderDetails;
 use App\Models\staff_leadership\RequiredAttachment;
 use App\Models\staff\ApplicationSequence;
-use App\Models\staff\Nomination;
-use App\Models\staff\PersonalDetails;
-use App\Models\staff\StaffHistory;
 use Illuminate\Support\Facades\DB;
 use App\Models\staff_leadership\LeadershipApplication;
+use App\Models\staff_leadership\Question;
 use App\Models\staff_masters\PositionTitle;
 
 class StaffLeadershipSerivcesController extends Controller{
@@ -39,6 +37,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'feedback'                      =>  $request->feedback,
             'interview'                     =>  $request->interview,
             'shortlist'                     =>  $request->shortlist,
+            'question_category'             =>  $request->question_category,
             'details'                       =>  $request->details,
         ];
         if($request->id==""){
@@ -168,12 +167,19 @@ class StaffLeadershipSerivcesController extends Controller{
     }
 
     public function loadAllPostList($role_ids=""){
-        $query="SELECT p.leadership_id,s.id,s.position_title FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id WHERE role_id IN('";
+        $query="SELECT p.leadership_id,s.id,s.position_title,t.name AS positiontitlename FROM staff_applicable_applicant p JOIN staff_leadership_detials s ON p.leadership_id=s.id JOIN master_stf_position_title t ON t.id=s.position_title WHERE role_id IN('";
         if(strpos($role_ids,',')){
             $role_ids=str_replace(",","','",$role_ids);
         }
-        $posts=DB::select($query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id");
+        $query=$query.$role_ids."') AND CURRENT_DATE>= s.from_date AND CURRENT_DATE<= s.to_date GROUP BY p.leadership_id";
+        $posts=DB::select($query);
+
         return $this->successResponse($posts);
+    }
+
+    public function checkApplication($id=""){
+        $response_data = LeadershipApplication::where('leadership_id',explode('__',$id)[0])->where('staff_id',explode('__',$id)[1])->first();
+        return $this->successResponse($response_data);
     }
     public function loadPostDetials($id=""){
         $post=LeadershipDetails::where('id',$id)->first();
@@ -326,16 +332,21 @@ class StaffLeadershipSerivcesController extends Controller{
         $app_details=LeadershipApplication::where('application_number',$app_no)->first();
         if($app_details!=null && $app_details!=""){
             $post_det=LeadershipDetails::where('id',$app_details->leadership_id)->first();
-            $app_details->Post_details=$post_det;
+            if($post_det!=null && $post_det!=""){
+                $app_details->Post_details=$post_det;
+                $post=LeadershipType::where('id',$post_det->selection_type)->first();
+                if($post!=null && $post!=""){
+                    $app_details->selection_type=$post_det->selection_type;
+                    $app_details->leadership_for=$post->name;
+                }
+
+                $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
+                if($positiontitle!=null && $positiontitle!=""){
+                    $app_details->position_title=$positiontitle->name;
+                }
+            }
+            // $app_details->Post_details=$post_det;
             $app_details->attachments=DocumentDetails::where('parent_id',$app_details->id)->get();
-            $positiontitle=PositionTitle::where('id',$post_det->position_title)->first();
-            if($positiontitle!=null && $positiontitle!=""){
-                $app_details->position_title=$positiontitle->name;
-            }
-            $post=LeadershipType::where('id',$post_det->selection_type)->first();
-            if($post!=null && $post!=""){
-                $app_details->leadership_for=$post->name;
-            }
         }
         return $this->successResponse($app_details);
     }
@@ -540,6 +551,7 @@ class StaffLeadershipSerivcesController extends Controller{
                         $ans_data =[
                             'question_id'   =>  $response_data->id,
                             'name'          =>  $ans['name'],
+                            'watage'        =>  $ans['rate'],
                             'status'        =>  $ans['status'],
                             'created_by'    =>  $request->user_id,
                             'created_at'    =>  date('Y-m-d h:i:s'),
@@ -581,15 +593,18 @@ class StaffLeadershipSerivcesController extends Controller{
                             $ans_data =[
                                 'question_id'   =>  $request->id,
                                 'name'          =>  $ans['name'],
+                                'watage'        =>  $ans['rate'],
                                 'status'        =>  $ans['status'],
                                 'created_by'    =>  $request->user_id,
                                 'created_at'    =>  date('Y-m-d h:i:s'),
                             ];
+                            dd($ans_data);
                             Answer::create($ans_data);
                         }
                         else{
                             $ans_data = Answer::find($ans['id']);
                             $ans_data->name             = $ans['name'];
+                            $ans_data->watage           = $ans['rate'];
                             $ans_data->status           = $ans['status'];
                             $ans_data->question_id      = $request->id;
                             $ans_data->update();
@@ -609,6 +624,13 @@ class StaffLeadershipSerivcesController extends Controller{
             $model = new $modelName();
             return $this->successResponse($model::all());
         }
+        if(strpos($param, 'allQuestionWithcategory_')!==false){
+            $databaseModel=explode("_",$param)[1];
+            $modelName = "App\\Models\\"."$databaseModel";
+            $model = new $modelName();
+            return $this->successResponse($model::with('category')->get());
+        }
+
         if(strpos($param, 'questionsUnderCatType')!==false){
             $databaseModel=explode("_",$param)[1];
             $modelName = "App\\Models\\"."$databaseModel";
@@ -658,24 +680,27 @@ class StaffLeadershipSerivcesController extends Controller{
         $this->validate($request, $rules,$customMessages);
         $response_data="";
         if($request->action_type=="add"){
-            $data =[
-                'application_number'        =>  $request->application_number,
-                'partifipant_from'          =>  $request->partifipant_from,
-                'email'                     =>  $request->email,
-                'contact'                   =>  $request->contact,
-                'participant'               =>  $request->participant,
-                'positiontitle'             =>  $request->positiontitle,
-                'cid'                       =>  $request->cid,
-                'name'                      =>  $request->name,
-                'department'                =>  $request->department,
-                'school'                    =>  $request->school,
-                'dzongkhag'                 =>  $request->dzongkhag,
-                'feedback_type'             =>  $request->feedback_type,
-                'action_type'               =>  $request->action_type,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s'),
-            ];
-            $response_data = FeedbackProviderDetails::create($data);
+            $staf=FeedbackProviderDetails::where('participant',$request->participant)->where('application_number',$request->application_number)->first();
+            if($staf==null || $staf==""){
+                $data =[
+                    'application_number'        =>  $request->application_number,
+                    'partifipant_from'          =>  $request->partifipant_from,
+                    'email'                     =>  $request->email,
+                    'contact'                   =>  $request->contact,
+                    'participant'               =>  $request->participant,
+                    'positiontitle'             =>  $request->positiontitle,
+                    'cid'                       =>  $request->cid,
+                    'name'                      =>  $request->name,
+                    'department'                =>  $request->department,
+                    'school'                    =>  $request->school,
+                    'dzongkhag'                 =>  $request->dzongkhag,
+                    'feedback_type'             =>  $request->feedback_type,
+                    'action_type'               =>  $request->action_type,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s'),
+                ];
+                $response_data = FeedbackProviderDetails::create($data);
+            }
         }
         if($request->action_type=="edit"){
             //need to write edit code if required
@@ -685,6 +710,14 @@ class StaffLeadershipSerivcesController extends Controller{
 
     public function getFeedbackProviderData($appNo=""){
         $response_data=FeedbackProviderDetails::where('application_number',$appNo)->get();
+        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+            foreach($response_data as $app){
+                $type=FeedbackCategory::where('id',$app->feedback_type)->first();
+                if($type!=null && $type!=""){
+                    $app->feedbacktypeName=$type->name;
+                }
+            }
+        }
         return $response_data;
     }
     public function deleteNomination($id=""){
@@ -795,6 +828,8 @@ class StaffLeadershipSerivcesController extends Controller{
             foreach($response_data as $data){
                 $app_details=LeadershipApplication::where('application_number',$data['application_number'])->first();
                 if($app_details!=null && $app_details!=""){
+                    $data->feedback_start_date=$app_details->feedback_start_date;
+                    $data->feedback_end_date=$app_details->feedback_end_date;
                     $data->application_details=$app_details;
                     $leadership_detials=LeadershipDetails::where('id',$app_details->leadership_id)->first();
                     if($leadership_detials!=null && $leadership_detials!=""){
@@ -883,6 +918,10 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data=FeedbackProviderDetails::where('id',$id)->first();
         if($response_data!=null && $response_data!=""){
             $response_data->answers=FeedbackModel::where('feedback_provider_id',$id)->get();
+            $type=FeedbackCategory::where('id',$response_data->feedback_type)->first();
+            if($type!=null && $type!=""){
+                $response_data->feedbacktypeName=$type->name;
+            }
         }
         return $response_data;
     }

@@ -31233,11 +31233,11 @@ a.text-muted:hover {
 	direction: rtl;
 }
 .datepick-popup {
-	z-index: 1000;
+	z-index: 10000;
 }
 .datepick-disable {
 	position: absolute;
-	z-index: 100;
+	z-index: 10000;
 	background-color: white;
 	opacity: 0.5;
 	filter: alpha(opacity=50);

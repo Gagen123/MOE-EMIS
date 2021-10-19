@@ -141,7 +141,7 @@
                                                 </select>
                                                 <has-error :form="form" field="preference_dzongkhag3"></has-error>
                                                <span class="text-danger" id="preference_dzongkhag3_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -194,7 +194,7 @@
                                                 </select>
                                                 <has-error :form="form" field="optional2sub"></has-error>
                                                <span class="text-danger" id="optional2sub_err"></span>
-                                            </td> 
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -303,6 +303,9 @@ export default {
                 optional2sub:'',
                 user_id:'',
                 transfer_list:'',
+                submitterroleid:'',
+                submitted_to:'',
+                initial_AppointmentDate:'',
                 attachments:
                 [],
                 ref_docs:[],
@@ -384,6 +387,8 @@ export default {
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
+                this.getTransfer_details(response.data.data[0].id)
+                this.getSubmitterId(response.data.data[0].id)
 
             })
             .catch(function (error){
@@ -398,6 +403,76 @@ export default {
             .catch((error) => {
                 console.log("Error in retrieving ."+error);
             });
+        },
+        getSubmitterId(type_id){
+            let uri ='staff/transfer/getSubmitterId/'+type_id;
+            axios.get(uri)
+            .then(response =>{
+                if(response.data==""||response.data==null){
+                   Swal.fire({
+                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        
+                        })
+                    $('#form_details').hide();
+                    $('#action').hide();
+                    this.$router.push('/intra_transfer');
+                }
+                else{
+                    $('#form_details').show();
+                    $('#action').show();
+                     this.form.Submitter_id=response.data.submitter_role_id;
+                }
+
+                
+                
+            })
+            .catch(function (error){
+                console.log("Error:"+error)
+            });
+
+        },
+         getIntialAppointmentDate(cid){
+            axios.get('staff/transfer/getIntialAppointmentDate/' +cid)
+            .then(response => {
+                if(response.data[0]!="" || response.data[0]!=NULL){
+                    this.form.initial_AppointmentDate = response.data[0].initial_appointment_date;
+                    let current_date=new Date(this.form.currentdateForTransfer);
+                    let appointment_date=new Date(this.form.initial_AppointmentDate);
+                    this.difference= (current_date.getTime())-(appointment_date.getTime());
+                    this.days = this.difference/(1000 * 3600 * 24)
+                }
+               
+            })
+            .catch(errors =>{
+                console.log(errors)
+            });
+        },
+          getTransfer_details(id){
+            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
+            .then(response =>{
+                let data = response.data.data;
+                if(data!=null && data!="null" && data!=""){
+                    //need to handle for multiple role later, for now it will take for first role at the index 0
+                    this.form.submitted_to=data;
+                }
+                else{
+                    Swal.fire({
+                        title: 'No Transfer Configuration ! ',
+                        text: "Sorry! System cannot find transfer configuration for this role. Please contact system administrator",
+                        icon: 'error',
+                    });
+                    $('#form_details').hide();
+                    $('#applyId').hide();
+                }
+            })
+            .catch(function (error){
+                console.log(error);
+            });
+
         },
         validated_final_form(){
             let returntue=true;
@@ -418,6 +493,7 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
+         if(this.days<'1096'||this.days ==""|| this.days==undefined){
             if(this.form.transfer_list =="" || this.form.transfer_list == null){
                 if(nextclass=="undertaking-tab"){
                     if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
@@ -429,7 +505,7 @@ export default {
                             formData.append('reason_id', this.form.reason_id);
                             formData.append('description', this.form.description);
                             formData.append('transferType', this.form.transferType);
-                        
+
                         axios.post('/staff/transfer/submitIntialapplicantDetails', formData)
                         .then((response) =>{
                             if(response!="" && response!="No Screen"){
@@ -476,6 +552,9 @@ export default {
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
+                                formData.append('submitterroleid', this.form.submitterroleid);
+                                formData.append('submitted_to', this.form.submitted_to);
+                                formData.append('name', this.form.name);
                                 formData.append('service_name', this.form.service_name);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
@@ -493,7 +572,7 @@ export default {
                                     if(response.data!="" && response!="No Screen"){
                                     let message=" Your transfer application has been submitted with the system generated applicaiton number: "+response.data.application_number;
                                     this.$router.push({name:'inter_transfer_acknowledgement',params: {data:message}});
-                                    
+
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Application for Transfer has been submitted for further action'
@@ -502,7 +581,7 @@ export default {
                                     this.applyselect2();
                                     this.$router.push('/list_inter_transfer');
                                 })
-                                
+
                                 .catch((error) => {
                                     console.log("Errors:"+error)
                                 });
@@ -517,6 +596,15 @@ export default {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'okay!',
                     })
+            }
+         }
+        else{
+                Swal.fire({
+                text: "Sorry! You need minimum of three year from your initial appointment date to apply transfer",
+                icon: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'okay!',
+                })
             } 
         },
         change_tab(nextclass){
@@ -527,17 +615,6 @@ export default {
             $('.'+nextclass+' >a').removeClass('disabled');
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
-        },
-
-        profile_details(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                this.form.name = response.data.data.Full_Name;
-                this.form.user_id = response.data.data.User_Id;
-            })
-            .catch(errors =>{
-                console.log(errors)
-            });
         },
         
         loadtransferwindow(){
@@ -551,7 +628,7 @@ export default {
                     this.form.t_year=data.year;
                     this.form.t_remarks=data.remarks;
                     this.form.t_id=data.id;
-                  
+
                     let todate=new Date(data.to_date);
                     let formdate = new Date();
                     // One day in milliseconds
@@ -581,7 +658,7 @@ export default {
                 console.log("Error."+error);
             });
         },
-         
+
         changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
@@ -659,6 +736,7 @@ export default {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
+        this.form.currentdateForTransfer=currentdate.getFullYear()+'-'+12+'-'+31;
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -673,7 +751,6 @@ export default {
         });
         this.loadtransferDetails();
         this.getDraftDetails();
-        this.profile_details();
         this.loadstaff();
         this.loadreasons();
         this.loadactivedzongkhagList();
@@ -681,11 +758,24 @@ export default {
         this.loadundertakingList();
         this.loadtransferwindow();
         this.LoadTransferType();
-        
-        let data = await this.getRequiredDocument("Inter_Transfer_attachment");
-        data.forEach((item => {
-            this.form.attachments.push({file_name:item.name, file_upload:''})
-        }));
+
+        // let data = await this.getRequiredDocument("Inter_Transfer_attachment");
+        // data.forEach((item => {
+        //     this.form.attachments.push({file_name:item.name, file_upload:''})
+        // }));
+
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            this.form.submitterroleid = response.data.data.roles[0].Id;
+            this.form.staff_id=response.data.data['staff_id'];
+            // this.getSubmitterId(this.form.submitterroleid);
+            this.getIntialAppointmentDate(response.data.data.Passport_CID);
+            this.form.name = response.data.data.Full_Name;
+            this.form.user_id = response.data.data.User_Id;
+        })
+        .catch(errors => {
+            console.log(errors)
+        });
     },
 }
 </script>
