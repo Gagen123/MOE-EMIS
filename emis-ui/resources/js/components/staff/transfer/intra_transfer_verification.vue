@@ -156,7 +156,7 @@
                                 <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none"  id="verifyId"> <i class="fa fa-forward"></i>Recommended </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('forward')" style="display:none"  id="forwardId"> <i class="fa fa-forward"></i>Assign School </button>
                                 <button class="btn btn-info text-white" @click="shownexttab('report')" style="display:none"  id="reportId"> <i class="fa fa-forward"></i>Joined </button>
-                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
+                                <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Assign School </button>
                                 <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
                             </div>
                         </div>

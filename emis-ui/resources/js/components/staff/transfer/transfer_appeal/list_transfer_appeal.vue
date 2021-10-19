@@ -19,7 +19,7 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ item.application_no}}</td>
-                            <td>{{ reverseDate1(item.created_at)}}</td>
+                            <td>{{ reverseDateTime(item.created_at)}}</td>
                              <td>{{ item.remarks}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>

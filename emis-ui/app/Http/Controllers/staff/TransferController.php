@@ -269,7 +269,7 @@ class TransferController extends Controller{
             $work_status=10;
         }
         if($request->actiontype=="forward"){
-            $org_status="Forwarded";
+            $org_status="Assigned School";
             $work_status=9;
         }
         if($request->actiontype=="report"){
@@ -292,7 +292,7 @@ class TransferController extends Controller{
                 'notification_message'          =>  'Your Application for Transfer has been rejected. Reason for the rejection: '.$request->remarks,
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
-                'user_role_id'                  =>  $request->created_by,
+                'user_role_id'                  =>  $request->submitterroleid,
             ];
             $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
@@ -311,7 +311,16 @@ class TransferController extends Controller{
                 'notification_message'          =>  'Your Application for Transfer has been Approved ',
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
-                'user_role_id'                  =>  $request->created_by,
+                'user_role_id'                  =>  $request->submitterroleid,
+            ];
+            $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        }
+        else if($request->actiontype=="forward"){
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Transfer has been Approved and Deo had Assigned you School ',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'view_notification_message',
+                'user_role_id'                  =>  $request->submitterroleid,
             ];
             $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
@@ -405,7 +414,7 @@ class TransferController extends Controller{
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
                 'service_name'                  =>  "Inter Transfer",
-                'dzongkhagApproved'             =>$request->userDzongkhag,
+                'dzongkhagApproved'             => $request->userDzongkhag,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>   $this->userId()
             ];
