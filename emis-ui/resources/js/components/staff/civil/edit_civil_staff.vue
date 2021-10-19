@@ -361,23 +361,34 @@
                                                         </select>
                                                         <has-error :form="qualification_form" field="description"></has-error>
                                                     </div>
+                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <label class="mb-0.5">Sub-Category:<i class="text-danger">*</i></label><br>
+                                                        <label><input  type="radio" v-model="qualification_form.type" value="ex_country" @change="showfield('ex_country')" > Ex-Country</label>
+                                                        <label><input  type="radio" v-model="qualification_form.type" value="in_country" @change="showfield('in_country')" > In-Country</label>
+                                                         <!-- <select v-model="qualification_form.type" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('type') }" class="form-control select2" name="type" id="type" > -->
+                                                         <!-- <select name="type" id="type" class="form-control editable_fields" v-model="qualification_form.type " :class="{ 'is-invalid': qualification_form.errors.has('type')}" @onchange="showfield('type')"> -->
+                                                           <!-- <option name="ex_country"  value="ex_country" >Ex-Country</option>
+                                                           <option name="in_country" value="in_country">In-Country</option>
+                                                        </select> -->
+                                                        <has-error :form="qualification_form" field="type"></has-error>
+                                                    </div>
                                                 </div>
                                                 <div class="row form-group">
-                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                        <label class="mb-0.5">Doner Agency:<i class="text-danger">*</i></label>
-                                                        <select v-model="qualification_form.doner_agency" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('doner_agency') }" class="form-control select2" id="doner_agency">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="countryshow">
+                                                        <label class="mb-0.5">Country:<i class="text-danger">*</i></label>
+                                                        <select v-model="qualification_form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('country') }" class="form-control select2" id="country">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in donerAgencyList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                                                         </select>
-                                                        <has-error :form="qualification_form" field="doner_agency"></has-error>
+                                                        <has-error :form="qualification_form" field="country"></has-error>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                        <label class="mb-0.5">Project of Donor Agency:</label>
-                                                        <select v-model="qualification_form.project_doner_agency" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('project_doner_agency') }" class="form-control select2" id="project_doner_agency">
+                                                        <label class="mb-0.5">Institute:</label>
+                                                        <select v-model="qualification_form.institute" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('institute') }" class="form-control select2" id="institute">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in projectdonerAgencyList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in instituteList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
-                                                        <has-error :form="qualification_form" field="project_doner_agency"></has-error>
+                                                        <has-error :form="qualification_form" field="institute"></has-error>
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -416,7 +427,6 @@
                                                         <has-error :form="qualification_form" field="secondsub"></has-error>
                                                     </div>
                                                 </div>
-
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Course Mode/Type:<i class="text-danger">*</i></label>
@@ -432,26 +442,26 @@
                                                         <has-error :form="qualification_form" field="coursetitle"></has-error>
                                                     </div>
                                                 </div>
-
-
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                        <label class="mb-0.5">Country:<i class="text-danger">*</i></label>
-                                                        <select v-model="qualification_form.country" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('country') }" class="form-control select2" id="country">
+                                                        <label class="mb-0.5">Doner Agency:<i class="text-danger">*</i></label>
+                                                        <select v-model="qualification_form.doner_agency" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('doner_agency') }" class="form-control select2" id="doner_agency">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
+                                                            <option v-for="(item, index) in donerAgencyList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
-                                                        <has-error :form="qualification_form" field="country"></has-error>
+                                                        <has-error :form="qualification_form" field="doner_agency"></has-error>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                                        <label class="mb-0.5">Institute:</label>
-                                                        <select v-model="qualification_form.institute" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('institute') }" class="form-control select2" id="institute">
+                                                        <label class="mb-0.5">Project of Donor Agency:</label>
+                                                        <select v-model="qualification_form.project_doner_agency" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('project_doner_agency') }" class="form-control select2" id="project_doner_agency">
                                                             <option value="">--Select--</option>
-                                                            <option v-for="(item, index) in instituteList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                            <option v-for="(item, index) in projectdonerAgencyList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                         </select>
-                                                        <has-error :form="qualification_form" field="institute"></has-error>
+                                                        <has-error :form="qualification_form" field="project_doner_agency"></has-error>
                                                     </div>
                                                 </div>
+
+                                                
                                                 <div class="row form-group">
                                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                         <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
@@ -462,6 +472,17 @@
                                                         <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
                                                         <input :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('enddate') }" type="text" id="enddate" class="form-control popupDatepicker" @change="remove_error('enddate')">
                                                         <has-error :form="qualification_form" field="enddate"></has-error>
+                                                    </div>
+                                                </div>
+                                                <div class="row form-group">
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                                        <label class="mb-0.5">Status:<i class="text-danger">*</i></label>
+                                                        <select v-model="qualification_form.qua_status" :class="{ 'is-invalid select2 select2-hidden-accessible': qualification_form.errors.has('qua_status') }" class="form-control select2" id="qua_status">
+                                                        <!-- <select name="status" id="status" class="form-control editable_fields" v-model="qualification_form.status " :class="{ 'is-invalid': qualification_form.errors.has('status')}"> -->
+                                                            <option name="in_going"  value="in_going" >On going</option>
+                                                            <option name="completed" value="completed">Completed</option>
+                                                            <option name="drop_out" value="drop_out">Drop out</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                                 <div class="row form-group">
@@ -824,8 +845,10 @@ export default {
                 secondsub:'',
                 country:'',
                 institute:'',
+                type:'',
                 startdate:'',
                 enddate:'',
+                qua_status:'',
                 action_type:'',
                 status:'Created',
             }),
@@ -1030,10 +1053,16 @@ export default {
             $('#coursetitle').val(item.coursetitle);
             this.qualification_form.coursetitle=item.coursetitle;
 
-            $('#country').val(item.country.id).trigger('change');
-            this.qualification_form.country=item.country.id;
+            $('#country').val(item.country).trigger('change');
+            this.qualification_form.country=item.country;
+            
             $('#institute').val(item.institute_id).trigger('change');
             this.qualification_form.institute=item.institute_id;
+
+            $('#type').val(item.type);
+            this.qualification_form.type=item.type;
+            $('#qua_status').val(item.qua_status);
+            this.qualification_form.qua_status=item.qua_status;
 
             $('#startdate').val(item.startdate);
             this.qualification_form.startdate=item.startdate;

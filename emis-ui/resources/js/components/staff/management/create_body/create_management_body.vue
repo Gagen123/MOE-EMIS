@@ -321,7 +321,7 @@ export default {
                 to_date:'',
                 remarks:'',
                 fileUpload: [],
-                 attachments:
+                attachments:
                 [{
                     file_name:'',attachment:''
                 }],

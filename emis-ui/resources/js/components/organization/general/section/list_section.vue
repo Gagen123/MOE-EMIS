@@ -18,7 +18,7 @@
                     <td>{{ item.section}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info" @click="viewEquipmentList(item)"><i class="fas fa-edit"></i ></a>
+                            <a href="#" class="btn btn-info" @click="viewEquipmentList(item)"><i class="fas fa-edit"></i > Edit</a>
                         </div>
                     </td>
                 </tr>
