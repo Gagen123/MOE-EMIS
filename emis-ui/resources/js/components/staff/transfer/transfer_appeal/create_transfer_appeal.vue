@@ -220,15 +220,15 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
-            axios.get(uri)
-            .then(response =>{
-                let data=response.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+        // LoadTransferType(uri = 'masters/loadStaffTransferMasters/appeal'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data=response.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
       
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/transfer_appeal')
@@ -390,7 +390,7 @@ export default {
         this.changefunction(id);
         });
         this.loadtransferwindow();
-        this.LoadTransferType();
+        // this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
         this.loadTransferAppealDetails();
 

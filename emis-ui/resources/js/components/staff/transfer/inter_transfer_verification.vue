@@ -451,7 +451,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadpositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
+        loadpositionTitleList(uri = 'staff/loadStaffTransferMasters/active/PositionTitle'){
             axios.get(uri)
             .then(response =>{
                 let data = response;
@@ -463,7 +463,7 @@ export default {
                 console.log('Error: '+error);
             });
         },
-         loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+         loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;

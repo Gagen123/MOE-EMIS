@@ -487,295 +487,296 @@ class StaffMastersController extends Controller{
     //     return $this->successResponse($response_data, Response::HTTP_CREATED);
     // }
 
-    public function loadStaffMasters($param=""){
-        if($param=="all_transfer_type_list"){
-            return $this->successResponse(TransferType::all());
-        }
-        if($param=="intra"){
-            return $this->successResponse(TransferType::where ('name', 'LIKE', '%intra%')->get());
-        }
-        if($param=="inter"){
-            return $this->successResponse(TransferType::where ('name', 'LIKE', '%inter%')->get());
-        }
-        if($param=="appeal"){
-            return $this->successResponse(TransferType::where ('name', 'LIKE', '%appeal%')->get());
-        }
-        if($param=="all_transfer"){
-            return $this->successResponse(TransferReason::all());
-        }
-        if($param=="active_transfer"){
-            return $this->successResponse(TransferReason::where ('status', '1')->get());
-        }
-        if($param=="all_transfe_undertakingr"){
-            return $this->successResponse(TransferUndertaking::all());
-        }
-        if($param=="active_transfer_undertakingr"){
-            return $this->successResponse(TransferUndertaking::where ('status', '1')->get());
-        }
-        if($param=="all_mgmn_desig"){
-            return $this->successResponse(MgmnDesignation::all());
-        }
-        if($param=="all_active_mgmn_desig"){
-            return $this->successResponse(MgmnDesignation::where ('status', '1')->get());
-        }
-        if($param=="all_staff_major_groupList"){
-            return $this->successResponse(StaffMajorGrop::all());
-        }
-        if($param=="all_active_staff_major_groupList"){
-            return $this->successResponse(StaffMajorGrop::where ('status', '1')->get());
-        }
-        if($param=="all_sub_major_groupList"){
-            return $this->successResponse(StaffSubMajorGrop::with('majorgroup')->get());
-        }
-        if($param=="all_active_sub_group_List"){
-            return $this->successResponse(StaffSubMajorGrop::where('status','1')->get());
-        }
+//     public function loadStaffMasters($param=""){
+//         return $param;
+//         if($param=="all_transfer_type_list"){
+//             return $this->successResponse(TransferType::all());
+//         }
+//         if($param=="intra"){
+//             return $this->successResponse(TransferType::where ('name', 'LIKE', '%intra%')->get());
+//         }
+//         if($param=="inter"){
+//             return $this->successResponse(TransferType::where ('name', 'LIKE', '%inter%')->get());
+//         }
+//         if($param=="appeal"){
+//             return $this->successResponse(TransferType::where ('name', 'LIKE', '%appeal%')->get());
+//         }
+//         if($param=="all_transfer"){
+//             return $this->successResponse(TransferReason::all());
+//         }
+//         if($param=="active_transfer"){
+//             return $this->successResponse(TransferReason::where ('status', '1')->get());
+//         }
+//         if($param=="all_transfe_undertakingr"){
+//             return $this->successResponse(TransferUndertaking::all());
+//         }
+//         if($param=="active_transfer_undertakingr"){
+//             return $this->successResponse(TransferUndertaking::where ('status', '1')->get());
+//         }
+//         if($param=="all_mgmn_desig"){
+//             return $this->successResponse(MgmnDesignation::all());
+//         }
+//         if($param=="all_active_mgmn_desig"){
+//             return $this->successResponse(MgmnDesignation::where ('status', '1')->get());
+//         }
+//         if($param=="all_staff_major_groupList"){
+//             return $this->successResponse(StaffMajorGrop::all());
+//         }
+//         if($param=="all_active_staff_major_groupList"){
+//             return $this->successResponse(StaffMajorGrop::where ('status', '1')->get());
+//         }
+//         if($param=="all_sub_major_groupList"){
+//             return $this->successResponse(StaffSubMajorGrop::with('majorgroup')->get());
+//         }
+//         if($param=="all_active_sub_group_List"){
+//             return $this->successResponse(StaffSubMajorGrop::where('status','1')->get());
+//         }
 
-        if($param=="all_position_title_List"){
-            return $this->successResponse(PositionTitle::with('submajorgroup','level')->get());
-        }
-        if($param=="all_active_position_title"){
-            return $this->successResponse(PositionTitle::where ('status', 1)->get());
-        }
-        if($param=="all_active_position_title_with_level"){
-            $positions=PositionTitle::where('status', 1)->get();
-            if($positions!=null && $positions!="" && sizeof($positions)>0){
-                foreach($positions as $pos){
-                    $pos->subgroup=StaffSubMajorGrop::where('id',$pos['sub_group_id'])->first()->name;
-                    $level=PositionLevel::where('id',$pos['position_level_id'])->first();
-                    if($level!=null && $level!=""){
-                        $pos->level=$level->name;
-                    }
-                }
-            }
-            return $this->successResponse($positions);
-        }
+//         if($param=="all_position_title_List"){
+//             return $this->successResponse(PositionTitle::with('submajorgroup','level')->get());
+//         }
+//         if($param=="all_active_position_title"){
+//             return $this->successResponse(PositionTitle::where ('status', 1)->get());
+//         }
+//         if($param=="all_active_position_title_with_level"){
+//             $positions=PositionTitle::where('status', 1)->get();
+//             if($positions!=null && $positions!="" && sizeof($positions)>0){
+//                 foreach($positions as $pos){
+//                     $pos->subgroup=StaffSubMajorGrop::where('id',$pos['sub_group_id'])->first()->name;
+//                     $level=PositionLevel::where('id',$pos['position_level_id'])->first();
+//                     if($level!=null && $level!=""){
+//                         $pos->level=$level->name;
+//                     }
+//                 }
+//             }
+//             return $this->successResponse($positions);
+//         }
 
-        if($param=="all_position_level_List"){
-            return $this->successResponse(PositionLevel::all());
-        }
-        if($param=="all_active_position_level_List"){
-            return $this->successResponse(PositionLevel::where ('status', 1)->get());
-        }
-        if($param=="all_qualification_tpe_List"){
-            return $this->successResponse(QualificationType::all());
-        }
-        if($param=="active_qualification_type_List"){
-            return $this->successResponse(QualificationType::where('status','1')->get());
-        }
+//         if($param=="all_position_level_List"){
+//             return $this->successResponse(PositionLevel::all());
+//         }
+//         if($param=="all_active_position_level_List"){
+//             return $this->successResponse(PositionLevel::where ('status', 1)->get());
+//         }
+//         if($param=="all_qualification_tpe_List"){
+//             return $this->successResponse(QualificationType::all());
+//         }
+//         if($param=="active_qualification_type_List"){
+//             return $this->successResponse(QualificationType::where('status','1')->get());
+//         }
 
-        if($param=="all_qualification_level_List"){
-            return $this->successResponse(QualificationLevel::all());
-        }
-        if($param=="active_qualification_level_List"){
-            return $this->successResponse(QualificationLevel::where('status','1')->get());
-        }
+//         if($param=="all_qualification_level_List"){
+//             return $this->successResponse(QualificationLevel::all());
+//         }
+//         if($param=="active_qualification_level_List"){
+//             return $this->successResponse(QualificationLevel::where('status','1')->get());
+//         }
 
-        if($param=="all_qualification_List"){
-            return $this->successResponse(Qualification::with('quialificationtype','quialificationlevel')->get());
-        }
-        if($param=="all_active_qualification_List"){
-            return $this->successResponse(Qualification::where('status','1')->get());
-        }
+//         if($param=="all_qualification_List"){
+//             return $this->successResponse(Qualification::with('quialificationtype','quialificationlevel')->get());
+//         }
+//         if($param=="all_active_qualification_List"){
+//             return $this->successResponse(Qualification::where('status','1')->get());
+//         }
 
-        if($param=="all_relationship_list"){
-            return $this->successResponse(Relationship::all());
-        }
-        if($param=="all_active_relationship_list"){
-            return $this->successResponse(Relationship::where('status','1')->get());
-        }
+//         if($param=="all_relationship_list"){
+//             return $this->successResponse(Relationship::all());
+//         }
+//         if($param=="all_active_relationship_list"){
+//             return $this->successResponse(Relationship::where('status','1')->get());
+//         }
 
-        if($param=="all_marital_list"){
-            return $this->successResponse(MaritalStatus::all());
-        }
-        if($param=="all_active_marital_list"){
-            return $this->successResponse(MaritalStatus::where('status','1')->get());
-        }
+//         if($param=="all_marital_list"){
+//             return $this->successResponse(MaritalStatus::all());
+//         }
+//         if($param=="all_active_marital_list"){
+//             return $this->successResponse(MaritalStatus::where('status','1')->get());
+//         }
 
-        if($param=="all_subject_area_List"){
-            return $this->successResponse(StaffSubjectArea::all());
-        }
-        if($param=="all_active_subject_area_list"){
-            return $this->successResponse(StaffSubjectArea::where('status','1')->get());
-        }
+//         if($param=="all_subject_area_List"){
+//             return $this->successResponse(StaffSubjectArea::all());
+//         }
+//         if($param=="all_active_subject_area_list"){
+//             return $this->successResponse(StaffSubjectArea::where('status','1')->get());
+//         }
 
-        if($param=="all_subject_List"){
-            return $this->successResponse(Subjects::with('subjectArea')->get());
-        }
-        if($param=="all_active_subject_List"){
-            return $this->successResponse(Subjects::where('status','1')->get());
-        }
+//         if($param=="all_subject_List"){
+//             return $this->successResponse(Subjects::with('subjectArea')->get());
+//         }
+//         if($param=="all_active_subject_List"){
+//             return $this->successResponse(Subjects::where('status','1')->get());
+//         }
 
-        if($param=="all_cureer_stage_list"){
-            return $this->successResponse(CureerStage::all());
-        }
-        if($param=="all_active_cureer_stage_list"){
-            return $this->successResponse(CureerStage::where('status','1')->get());
-        }
+//         if($param=="all_cureer_stage_list"){
+//             return $this->successResponse(CureerStage::all());
+//         }
+//         if($param=="all_active_cureer_stage_list"){
+//             return $this->successResponse(CureerStage::where('status','1')->get());
+//         }
 
-        if($param=="all_qualification_description_list"){
-            return $this->successResponse(QualificationDescription::all());
-        }
-        if($param=="all_active_qualification_description_list"){
-            return $this->successResponse(QualificationDescription::where('status','1')->get());
-        }
+//         if($param=="all_qualification_description_list"){
+//             return $this->successResponse(QualificationDescription::all());
+//         }
+//         if($param=="all_active_qualification_description_list"){
+//             return $this->successResponse(QualificationDescription::where('status','1')->get());
+//         }
 
-        if($param=="all_coursemode_list"){
-            return $this->successResponse(CourseMode::all());
-        }
+//         if($param=="all_coursemode_list"){
+//             return $this->successResponse(CourseMode::all());
+//         }
 
-        if($param=="all_active_coursemode_list"){
-            return $this->successResponse(CourseMode::where('status','1')->get());
-        }
-        if($param=="all_mgmn_body_type"){
-            return $this->successResponse(MgmntBodyType::all());
-        }
-        if($param=="all_active_mgmn_body_type"){
+//         if($param=="all_active_coursemode_list"){
+//             return $this->successResponse(CourseMode::where('status','1')->get());
+//         }
+//         if($param=="all_mgmn_body_type"){
+//             return $this->successResponse(MgmntBodyType::all());
+//         }
+//         if($param=="all_active_mgmn_body_type"){
 
-            return $this->successResponse(MgmntBodyType::where('status','1')->get());
-        }
+//             return $this->successResponse(MgmntBodyType::where('status','1')->get());
+//         }
 
-        if($param=="all_staff_award_category_List"){
-            return $this->successResponse(StaffAwardCategory::all());
-        }
-        if($param=="all_active_staff_award_category_List"){
-            return $this->successResponse(StaffAwardCategory::where('status','1')->get());
-        }
+//         if($param=="all_staff_award_category_List"){
+//             return $this->successResponse(StaffAwardCategory::all());
+//         }
+//         if($param=="all_active_staff_award_category_List"){
+//             return $this->successResponse(StaffAwardCategory::where('status','1')->get());
+//         }
 
       
 
-        if($param=="all_leave_type_list"){
-            return $this->successResponse(LeaveType::all());
-        }
-        if($param=="all_active_leave_type_list"){
-            return $this->successResponse(LeaveType::where('status','1')->get());
-        }
+//         if($param=="all_leave_type_list"){
+//             return $this->successResponse(LeaveType::all());
+//         }
+//         if($param=="all_active_leave_type_list"){
+//             return $this->successResponse(LeaveType::where('status','1')->get());
+//         }
 
-    }
-    public function load_staff_masters_by_id($param="",$id=""){
-        if($param=="qdescription"){
-            return $this->successResponse(QualificationDescription::where('id',$id)->first());
-        }
-        if($param=="qualification"){
-            return $this->successResponse(Qualification::where('id',$id)->first());
-        }
-        if($param=="coursemode"){
-            return $this->successResponse(CourseMode::where('id',$id)->first());
-        }
-        if($param=="subject"){
-            return $this->successResponse(Subjects::where('id',$id)->first());
-        }
-        if($param=="relation"){
-            return $this->successResponse(Relationship::where('id',$id)->first());
-        }
-        if($param=="position_title"){
-            return $this->successResponse(PositionTitle::where('id',$id)->first());
-        }
-        if($param=="staff_designation_details"){
-            return $this->successResponse(MgmnDesignation::where('id',$id)->first());
-        }
-    }
-
-
-
-    public function loadStaffDropdownMasters($model="",$parent_id=""){
-        if($model=="StaffSubMajorGrop"){
-            return $this->successResponse(StaffSubMajorGrop::where('group_id',$parent_id)->get());
-        }
-    }
+//     }
+//     public function load_staff_masters_by_id($param="",$id=""){
+//         if($param=="qdescription"){
+//             return $this->successResponse(QualificationDescription::where('id',$id)->first());
+//         }
+//         if($param=="qualification"){
+//             return $this->successResponse(Qualification::where('id',$id)->first());
+//         }
+//         if($param=="coursemode"){
+//             return $this->successResponse(CourseMode::where('id',$id)->first());
+//         }
+//         if($param=="subject"){
+//             return $this->successResponse(Subjects::where('id',$id)->first());
+//         }
+//         if($param=="relation"){
+//             return $this->successResponse(Relationship::where('id',$id)->first());
+//         }
+//         if($param=="position_title"){
+//             return $this->successResponse(PositionTitle::where('id',$id)->first());
+//         }
+//         if($param=="staff_designation_details"){
+//             return $this->successResponse(MgmnDesignation::where('id',$id)->first());
+//         }
+//     }
 
 
-//transfer service by gagen
-    public function saveTransferConfigMasters(Request $request){
-        $rules = [
-            'transfer_type_id' =>  'required',
-            'role_id'          =>  'required',
-        ];
-        $customMessages = [
-            'transfer_type_id.required' => 'This field is required',
-            'role_id.required'          => 'This field is required',
-        ];
-        // $data = array(
-        //     'transfer_type_id'          =>  $request['transfer_type_id'],
-        //     'submitter_role_id'         =>  $request['role_id'],
 
-        // );
-        $this->validate($request, $rules,$customMessages);
-        $data = [];
-        if(isset($request->transfer_type_id)){
-            $data = $data+[
-                'transfer_type_id'   =>  $request->transfer_type_id,
-            ];
-        }
-        if(isset($request->role_id)){
-            $data = $data+[
-                'submitter_role_id'   =>  $request->role_id,
-            ];
-        }
-
-        if($request['action_type']=="add"){
-            $data =$data +[
-                'created_by'                =>  $request['user_id'],
-                'created_at'                =>  date('Y-m-d h:i:s')
-            ];
-            // dd($data);
-            $config_det= TransferConfig::create($data);
-            // dd($config_det);
-            foreach ($request->role_action_mapp as $rol){
-                $data = array(
-                    'transfer_config_id'    =>  $config_det->id,
-                    'sequence'              =>  $rol['sequence'],
-                    'authority_type_id'     =>  $rol['authority'],
-                    'role_id'               =>  $rol['role'],
-                );
-                $config_det= TransferConfigDetails::create($data);
-            }
-        }
-
-        if($request['action_type']=="edit"){
-            $data =$data +[
-                'updated_by'                =>  $request['user_id'],
-                'updated_at'                =>  date('Y-m-d h:i:s')
-            ];
-            TransferConfig ::where('id',$request['id'])->update($data);
-            TransferConfigDetails ::where('transfer_config_id',$request['id'])->delete();
-            foreach ($request->role_action_mapp as $rol){
-                $data = array(
-                    'transfer_config_id'      =>  $request['id'],
-                    'sequence'              =>  $rol['sequence'],
-                    'authority_type_id'     =>  $rol['authority'],
-                    'role_id'               =>  $rol['role'],
-                );
-                $config_det= TransferConfigDetails ::create($data);
-            }
-        }
-        return $this->successResponse($config_det, Response::HTTP_CREATED);
-    }
+//     public function loadStaffDropdownMasters($model="",$parent_id=""){
+//         if($model=="StaffSubMajorGrop"){
+//             return $this->successResponse(StaffSubMajorGrop::where('group_id',$parent_id)->get());
+//         }
+//     }
 
 
-    public function loadLeaveConfigMasters($type="",$submitter=""){
-        return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
-    }
+// //transfer service by gagen
+//     public function saveTransferConfigMasters(Request $request){
+//         $rules = [
+//             'transfer_type_id' =>  'required',
+//             'role_id'          =>  'required',
+//         ];
+//         $customMessages = [
+//             'transfer_type_id.required' => 'This field is required',
+//             'role_id.required'          => 'This field is required',
+//         ];
+//         // $data = array(
+//         //     'transfer_type_id'          =>  $request['transfer_type_id'],
+//         //     'submitter_role_id'         =>  $request['role_id'],
 
-    public function loadAllTransferConfigMasters(){
-       $response_data=DB::table('master_transfer_type')->
-       select('master_transfer_type.name','master_transfer_type.id','master_staff_transfer_config.submitter_role_id','master_staff_transfer_config.id')
-       ->join('master_staff_transfer_config','master_staff_transfer_config.transfer_type_id','=','master_transfer_type.id')->get();
-        return $response_data;
-    }
+//         // );
+//         $this->validate($request, $rules,$customMessages);
+//         $data = [];
+//         if(isset($request->transfer_type_id)){
+//             $data = $data+[
+//                 'transfer_type_id'   =>  $request->transfer_type_id,
+//             ];
+//         }
+//         if(isset($request->role_id)){
+//             $data = $data+[
+//                 'submitter_role_id'   =>  $request->role_id,
+//             ];
+//         }
 
-    // public function loadAllLeaveConfigMasters(){
-    //     return $this->successResponse(LeaveConfiguration::get());
-    // }
+//         if($request['action_type']=="add"){
+//             $data =$data +[
+//                 'created_by'                =>  $request['user_id'],
+//                 'created_at'                =>  date('Y-m-d h:i:s')
+//             ];
+//             // dd($data);
+//             $config_det= TransferConfig::create($data);
+//             // dd($config_det);
+//             foreach ($request->role_action_mapp as $rol){
+//                 $data = array(
+//                     'transfer_config_id'    =>  $config_det->id,
+//                     'sequence'              =>  $rol['sequence'],
+//                     'authority_type_id'     =>  $rol['authority'],
+//                     'role_id'               =>  $rol['role'],
+//                 );
+//                 $config_det= TransferConfigDetails::create($data);
+//             }
+//         }
 
-    // public function loadLeaveConfigDetails($id=""){
-    //     $data=LeaveConfiguration::where('id',$id)->first();
-    //     $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$id)->get();
-    //     return $this->successResponse($data);
-    // }
-    public function loadTransferConfigDetails($id=""){
-        $data=TransferConfig::where('id',$id)->first();
-        $data->conDetails= TransferConfigDetails::where('transfer_config_id',$id)->get();
-        return $this->successResponse($data);
-    }
+//         if($request['action_type']=="edit"){
+//             $data =$data +[
+//                 'updated_by'                =>  $request['user_id'],
+//                 'updated_at'                =>  date('Y-m-d h:i:s')
+//             ];
+//             TransferConfig ::where('id',$request['id'])->update($data);
+//             TransferConfigDetails ::where('transfer_config_id',$request['id'])->delete();
+//             foreach ($request->role_action_mapp as $rol){
+//                 $data = array(
+//                     'transfer_config_id'      =>  $request['id'],
+//                     'sequence'              =>  $rol['sequence'],
+//                     'authority_type_id'     =>  $rol['authority'],
+//                     'role_id'               =>  $rol['role'],
+//                 );
+//                 $config_det= TransferConfigDetails ::create($data);
+//             }
+//         }
+//         return $this->successResponse($config_det, Response::HTTP_CREATED);
+//     }
+
+
+//     public function loadLeaveConfigMasters($type="",$submitter=""){
+//         return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
+//     }
+
+//     public function loadAllTransferConfigMasters(){
+//        $response_data=DB::table('master_transfer_type')->
+//        select('master_transfer_type.name','master_transfer_type.id','master_staff_transfer_config.submitter_role_id','master_staff_transfer_config.id')
+//        ->join('master_staff_transfer_config','master_staff_transfer_config.transfer_type_id','=','master_transfer_type.id')->get();
+//         return $response_data;
+//     }
+
+//     // public function loadAllLeaveConfigMasters(){
+//     //     return $this->successResponse(LeaveConfiguration::get());
+//     // }
+
+//     // public function loadLeaveConfigDetails($id=""){
+//     //     $data=LeaveConfiguration::where('id',$id)->first();
+//     //     $data->conDetails= LeaveConfigurationDetials::where('leave_config_id',$id)->get();
+//     //     return $this->successResponse($data);
+//     // }
+//     public function loadTransferConfigDetails($id=""){
+//         $data=TransferConfig::where('id',$id)->first();
+//         $data->conDetails= TransferConfigDetails::where('transfer_config_id',$id)->get();
+//         return $this->successResponse($data);
+//     }
 }

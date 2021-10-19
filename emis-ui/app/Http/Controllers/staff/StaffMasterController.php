@@ -35,6 +35,11 @@ class StaffMasterController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/'.$type.'/'.$model);
         return $response_data;
     }
+    // public function loadStaffTransferMasters($param = "")
+    // {
+    //     $global_masters = $this->apiService->listData('emis/masters/loadStaffTransferMasters/' . $param);
+    //     return $global_masters;
+    // }
 
     public function saveConfigMasters(Request $request){
         if($request->model=="LeaveConfiguration"){

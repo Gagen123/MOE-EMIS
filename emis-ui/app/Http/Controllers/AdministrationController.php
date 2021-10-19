@@ -211,7 +211,7 @@ class AdministrationController extends Controller
             'role_action_mapp'          =>  $request['role_action_mapp'],
             'user_id'                   =>  $this->userId()
         ];
-        $response_data = $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
+        $response_data = $this->apiService->createData('emis/staff/staffMasterController/saveTransferConfigMasters', $data);
         return $response_data;
     }
 
@@ -228,7 +228,7 @@ class AdministrationController extends Controller
     }
     public function loadAllTransferConfigMasters()
     {
-        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters');
+        $response_data = $this->apiService->listData('emis/staff/staffMasterController/loadAllTransferConfigMasters');
         return $response_data;
     }
 
@@ -244,9 +244,8 @@ class AdministrationController extends Controller
     }
     //commented by tshewang to fix master data 
     //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
-    public function loadStaffMasters($param = "")
-    {
-        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/' . $param);
+    public function loadStaffTransferMasters($param = ""){
+        $global_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffTransferMasters/' . $param);
         return $global_masters;
     }
     public function loadStaffDropdownMasters($model = "", $parent_id = "")
