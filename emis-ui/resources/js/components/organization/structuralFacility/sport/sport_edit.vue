@@ -5,32 +5,33 @@
                 <div class="form-group row"> 
                  <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Facility:<span class="text-danger">*</span></label>
                     <div class="col-lg-8 col-md-8 col-sm-8">
-                        <select name="facility" id="facility" class="form-control editable_fields" @change="getSubFacilityDropdown(),remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
+                        <select name="facility" id="facility" class="form-control " @change="getSubFacilityDropdown(),remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
                         <has-error :form="form" field="facility"></has-error>
                     </div>
                 </div>
-                <div class="form-group row"> 
+                 <div class="form-group row"> 
                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No.of Facility:<span class="text-danger">*</span></label>
                     <div class="col-lg-8 col-md-8 col-sm-8">
                         <input name="no_of_facility" class="form-control" v-model="form.no_of_facility" :class="{ 'is-invalid': form.errors.has('no_of_facility') }" id="no_of_facility" @change="remove_err('no_of_facility')" type="number">
                         <has-error :form="form" field="no_of_facility"></has-error>
                     </div>
                 </div>
+                  
             <div class="card">
                 <div class="form-group row">
                    <div class="card-body col-lg-12 col-md-12 col-sm-12 col-xs-12">
                        <table id="dynamic-table" class="table table-sm table-bordered table-striped">
                           <thead>
                               <tr>
-                                  <th>Detail for facility:</th>
+                                   <th style="width:5%">Detail for facility:</th>
                                   <th>Type of facilities<span class="text-danger">*</span></th>
                                   <!-- <th>No. of Facilities<span class="text-danger">*</span></th> -->
                                   <th>Year of establishment<span class="text-danger">*</span></th>
                                   <th>support By<span class="text-danger">*</span></th>
-                                  <th>Area/Size</th>
+                                  <th id='sizeAndarea1'>Area/Size</th>
                                   <th>Accessible to SEN<span class="text-danger">*</span></th>
                                   <th>Sports type</th>
                                   <th>Status<span class="text-danger">*</span></th>
@@ -40,7 +41,7 @@
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>{{index+1}}</td>
                                   <td>
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type')">
+                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
                                   </td>
@@ -56,16 +57,16 @@
                                             <option v-for="(item, index) in supportList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
                                   </td>
-                                  <td > 
+                                  <td id='sizeAndarea'> 
                                         <input name="area" class="form-control" v-model="item.area"/>
                                  </td>
                                   <td>                                
-                                    <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
-                                        <option  value="">--- Please Select ---</option>
-                                            <option  value="0">yes</option>
-                                            <option value="1">no</option>
-                                        <option value="2">partial</option>
-                                    </select> 
+                                     <select name="access" id="access" class="form-control editable_fields" v-model="item.access">
+                                           <option  value="">--- Please Select ---</option>
+                                                <option  value="0">yes</option>
+                                                <option value="1">no</option>
+                                            <option value="2">partial</option>
+                                     </select> 
                                   </td>
                                   <td>                                
                                         <label><input v-model="item.sportstype"  type="radio" value="1" /> Indoor</label>
@@ -73,7 +74,7 @@
                                   </td>
                                   <td>                                
                                         <label><input v-model="item.status"  type="radio" value="1" /> Usable</label>
-                                        <label><input v-model="item.status"  type="radio" value="0" /> Non_Usable</label>
+                                        <label><input v-model="item.status"  type="radio" value="0" /> Unusable</label>
                                   </td>
                               </tr> 
                              <!-- <tr>
@@ -111,7 +112,7 @@ export default {
             facilitySubList:[],
             items_received: [],
             form: new form({
-                 id: '',facility:'', no_of_facility:'',
+                 id: '',facility:'',no_of_facility:'',
                   items_received:
                 [{
                     type:'',yoe:'', access:'',area:'', status:'',sportstype:'',support:'',
@@ -127,9 +128,10 @@ export default {
          */
         restForm(){
             this.form.facility= '';
+            this.form.no_of_facility= '';
             let formReset =this.form.items_received;
             formReset.splice(0, formReset.length);
-            this.form.items_received.push({type:'',yoe:'',number:'', access:'',area:'', status:'',sportstype:'',support:'',})
+            this.form.items_received.push({type:'',yoe:'', access:'',area:'', status:'',sportstype:'',support:'',})
         },
 
         /**
@@ -155,8 +157,8 @@ export default {
 		},
 
         applyselect(){
-            if(!$('#quarter').attr('class').includes('select2-hidden-accessible')){
-                $('#quarter').addClass('select2-hidden-accessible');
+            if(!$('#facility').attr('class').includes('select2-hidden-accessible')){
+                $('#facility').addClass('select2-hidden-accessible');
             }
         },
 
@@ -244,15 +246,15 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
-            if(id=="quarter"){
-                this.form.quarter=$('#quarter').val();
+            if(id=="facility"){
+                this.form.facility=$('#facility').val();
             }
         },
 
         addMore: function(){
             this.count++;
             this.form.items_received.push({
-               type:'',number:'', yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})    
+               type:'', yoe:'',access:'',area:'', status:'',sportstype:'',support:'',})    
         }, 
         /**
          * method to remove fields
@@ -323,8 +325,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        // this.getFacilityDropdown();
-        // this.getSupportDropdown();
+        
     
     },
     created(){

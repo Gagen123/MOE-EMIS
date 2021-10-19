@@ -12,7 +12,7 @@
             <div class="card-body pb-0 mb-0" style="display:none">
                 <div class="form-group row">
                     <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="dzosection">
-                        <label class="mb-0">Dzongkhag: <i class="text-danger">*</i></label>
+                        <label class="mb-0">Dzongkhag/Thromde: <i class="text-danger">*</i></label>
                         <select class="form-control select2" id="dzongkhag_id" v-model="dzo_id">
                             <option value="ALL"> --Select--</option>
                             <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>

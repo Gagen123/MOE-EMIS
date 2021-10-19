@@ -1044,6 +1044,8 @@ class EstablishmentController extends Controller{
             'disasterArea'          =>  $request['disasterArea'],
             'distance_from_dzo'     =>  $request['distance_from_dzo'],
             'fencingtypeId'         =>  $request['fencingtype'],
+            'schoolbus'             =>  $request['schoolbus'],
+            'no_of_bus'             =>  $request['busno'],
         ];
 
         $loc = Locations::where('organizationId', $request->org_id)->first();

@@ -7,6 +7,7 @@ use App\Models\staff\StaffManagementMeetingMinutes;
 use App\Models\staff\ManagementBodyComposition;
 use App\Models\staff\StaffManagementMeeting;
 use App\Models\staff\ManagementBodyDetails;
+use App\Models\staff\DocumentDetails;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
@@ -43,6 +44,7 @@ class ManagementBodyController extends Controller{
             'created_by'        =>$request->user_id,
             'created_at'        =>date('Y-m-d h:i:s'),
         ];
+       
         if($request->type=="edit"){
             ManagementBodyDetails::where('id', $request->id)->update($mgmn_details);
             $response_data = ManagementBodyDetails::where('id', $request->id)->first();
@@ -55,6 +57,18 @@ class ManagementBodyController extends Controller{
             else{
                 ManagementBodyDetails::where('created_by', $request->user_id)->where ('status', 'pending')->update($mgmn_details);
                 $response_data = ManagementBodyDetails::where('created_by', $request->user_id)->where('status', 'pending')->first();
+            }
+            if($request->attachment_details!=null){
+                foreach($request->attachment_details as $att){
+                    $doc_data =[
+                        'parent_id'                        =>  $response_data->id,
+                        'attachment_for'                   =>  'Management Body',
+                        'path'                             =>  $att['path'],
+                        'original_name'                    =>  $att['original_name'],
+                        'user_defined_name'                =>  $att['user_defined_name'],
+                    ];
+                    DocumentDetails::create($doc_data);
+                }
             }
         }
 
@@ -172,6 +186,7 @@ class ManagementBodyController extends Controller{
     }
 
     public function saveResolutions(Request $request){
+        dd($request);
         // $rules = [
         //     'minutes'        =>'required',
         // ];
@@ -245,6 +260,10 @@ class ManagementBodyController extends Controller{
     }
 
     public function loadcurrentbaord($id=""){
-        return $this->successResponse(ManagementBodyDetails::where('id',$id)->first());
+        // return $this->successResponse(ManagementBodyDetails::where('id',$id)->first());
+        $response_data=ManagementBodyDetails::where('id',$id)->first();
+        $response_data->attachments=DocumentDetails::where('parent_id',$response_data->id)->get();
+        return $this->successResponse($response_data);
+
     }
 }

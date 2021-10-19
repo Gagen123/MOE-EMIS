@@ -15,6 +15,7 @@ class QualificationDetails extends Model{
         'project_doner_id',
         'field_id',
         'degree_id',
+        'type',
         'personal_id',
         'description',
         'qualification',
@@ -31,6 +32,7 @@ class QualificationDetails extends Model{
         'updated_by',
         'created_at',
         'updated_at',
-        'status'
+        'status',
+        'qua_status',
     ];
 }

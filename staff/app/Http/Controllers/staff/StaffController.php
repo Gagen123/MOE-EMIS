@@ -166,31 +166,36 @@ class StaffController extends Controller{
             'description'      =>  'required',
             'doner_agency'     =>  'required',
             'field'            =>  'required',
+            'type'             =>  'required',
             'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
             'firstsub'         =>  'required',
-            'country'          =>  'required',
+            // 'country'          =>  'required',
             'startdate'        =>  'required',
-            'enddate'          =>  'required'
+            'enddate'          =>  'required',
+            'qua_status'       =>  'required'
         ];
         $customMessages = [
             'description.required'        => 'This field is required',
             'doner_agency.required'       => 'This field is required',
             'field.required'              => 'This field is required',
+            'type.required'               => 'This field is required',
             'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
             'firstsub.required'           => 'This field is required',
-            'country.required'            => 'Country field is required',
+            // 'country.required'            => 'Country field is required',
             'startdate.required'          => 'This field is required',
             'enddate.required'            => 'This field is required',
+            'qua_status.required'         => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
             'personal_id'           =>  $request->personal_id,
             'category'              =>  $request->description,
             'doner_id'              =>  $request->doner_agency,
+            'type'                  =>  $request->type,
             'project_doner_id'      =>  $request->project_doner_agency,
             'field_id'              =>  $request->field,
             'degree_id'             =>  $request->degree,
@@ -203,9 +208,11 @@ class StaffController extends Controller{
             'startdate'             =>  $request->startdate,
             'enddate'               =>  $request->enddate,
             'status'                =>  $request->status,
+            'qua_status'            =>  $request->qua_status,
             'remarks'               =>  $request->remarks,
 
         ];
+        //dd( $data);
         if($request->status=="Pending"){
             $data=array_merge($data,
                 array('created_by'            =>  $request->user_id,
