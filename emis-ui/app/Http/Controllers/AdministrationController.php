@@ -239,7 +239,7 @@ class AdministrationController extends Controller
     }
     public function loadTransferConfigDetails($id = "")
     {
-        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/' . $id);
+        $response_data = $this->apiService->listData('emis/staff/staffMasterController/loadTransferConfigDetails/' . $id);
         return $response_data;
     }
     //commented by tshewang to fix master data 
