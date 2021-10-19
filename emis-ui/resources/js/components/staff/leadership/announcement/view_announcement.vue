@@ -15,11 +15,11 @@
                 <div class="row form-group">
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Application Start Date:</label>
-                        <span class="text-blue text-bold">{{response_data.from_date}}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(response_data.from_date)}}</span>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                         <label>Application End Date:</label>
-                        <span class="text-blue text-bold">{{response_data.to_date}}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(response_data.to_date)}}</span>
                     </div>
                 </div>
 
@@ -73,7 +73,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Applicable Applicants: </label>
+                        <label>Eligible Applicants: </label>
                         <table class="table table-bordered text-sm table-striped">
                             <thead>
                                 <tr>
@@ -94,16 +94,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <!--<select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
-                                <option value="">--- Please Select ---</option>
-                                <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                            </select>
-                        <span class="text-danger" id="applicant_err"></span> -->
                     </div>
-                    <!-- <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Applicable Applicant:</label>
-                        <span class="text-blue text-bold">{{form.applicant}}</span>
-                    </div> -->
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -102,6 +102,13 @@ class LoadStaffController extends Controller{
         if($type=="Principle"){
             return $this->successResponse(PersonalDetails::where('isPrincipal',1)->where('working_agency_id',$parent_id)->first());
         }
+        if($type=="EMD"){
+            $response_data=PersonalDetails::where('working_agency_id',$parent_id)->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getpositiontitle($response_data);
+            }
+            return $this->successResponse($response_data);
+        }
         if($type=="DEO"){
             $query="SELECT s.email,s.alternative_email,s.name,m.name AS positions FROM stf_staff s JOIN master_stf_position_title m ON s.position_title_id=m.id WHERE s.dzo_id=".$parent_id." AND (LOWER(REPLACE(m.name,' ','')) LIKE '%dzongkhageducationofficer%' OR LOWER(m.name) LIKE '%deo%') ";
             return $this->successResponse(DB::select($query));
@@ -188,7 +195,6 @@ class LoadStaffController extends Controller{
                         $stf->positionlevel=$posiLev->name;
                     }
                 }
-
             }
         }
         return $staff_det;

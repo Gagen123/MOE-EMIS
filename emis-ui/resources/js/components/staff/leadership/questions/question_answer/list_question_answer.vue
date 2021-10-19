@@ -4,23 +4,31 @@
             <div class="card-body pb-0 mb-0" style="display:none">
                 <div class="callout callout-success">
                     <div class="form-group row">
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Leadership Selection Type:</label>
-                            <select class="form-control select2" id="leadership_type">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label>Category:<span class="text-danger">*</span></label>
+                            <select  @change="remove_error('category'),getcapabilities()" class="form-control select2" id="category" name="category">
                                 <option value=""> --Select--</option>
-                                <option v-for="(item, index) in leadershipe_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in category_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
-                            <span class="text-danger" id="leadership_type_err"></span>
+                            <span id="category_err" class="text-danger"></span>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label class="mb-0">Feedback Category:</label>
-                            <select class="form-control select2" id="category_type_id">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label>Capability:<span class="text-danger">*</span></label>
+                            <select  @change="remove_error('capability'),gettraits()" class="form-control select2" id="capability" name="capability">
                                 <option value=""> --Select--</option>
-                                <option v-for="(item, index) in category_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                <option v-for="(item, index) in capabilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                            </select>
+                            <span id="capability_err" class="text-danger"></span>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                            <label>Traits:</label>
+                            <select class="form-control select2" id="trait">
+                                <option value=""> --Select--</option>
+                                <option v-for="(item, index) in trait_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
                             <span class="text-danger" id="category_type_id_err"></span>
                         </div>
-                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 pt-3">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 pt-4 mt-2">
                             <button type="button" @click="loaddata()" class="btn btn-success">
                                 <i class="fas fa-search" ></i> Search
                             </button>
@@ -29,7 +37,7 @@
                 </div>
             </div>
             <div class="card-header pb-0 pt-2">
-                <h3 class="card-title"><b>Advance Search </b>(Search By Selection Type & Feedback Category)</h3>
+                <h3 class="card-title"><b>Search Options</b></h3>
                 <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-plus" ></i>
@@ -42,9 +50,9 @@
                 <thead>
                     <tr>
                         <th style="width:5%">SL#</th>
-                        <th style="width:8%">Leadership</th>
+                        <!-- <th style="width:8%">Leadership</th> -->
                         <th style="width:10%">Category</th>
-                        <th style="width:40%">Question</th>
+                        <th style="width:48%">Question</th>
                         <th style="width:5%">display Order</th>
                         <th style="width:9%">Status</th>
                         <th style="width:13%">Created Date</th>
@@ -54,8 +62,8 @@
                 <tbody>
                     <tr v-for="(item, index) in dataList" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ leadershipe_list[item.leadership_type_id]}}</td>
-                        <td>{{ categoryList[item.category_type_id]}}</td>
+                        <!-- <td>{{ leadershipe_list[item.leadership_type_id]}}</td> -->
+                        <td>{{ item.category.name }}</td>
                         <td>{{ item.name}}</td>
                         <td>{{ item.display_order}}</td>
                         <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
@@ -79,100 +87,44 @@ export default {
             leadershipe_list:{},
             category_type_list:[],
             leadershipe_type_list:[],
+
+            category_list:[],
+            capabilityList:[],
+            trait_list:[],
         }
     },
     methods:{
-        loadcategoryList(uri = 'staff/staffLeadershipSerivcesController/loadData/allData_FeedbackCategory'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.category_type_list=data;
-                for(let i=0;i<data.length;i++){
-                    this.categoryList[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+        async getcapabilities(){
+            this.capabilityList=[];
+            if($('#category').val()!=""){
+              this.capabilityList =  await this.loadstaffMasters('byparent__category__'+$('#category').val(),'staff_leadership___Capability');
+            }
         },
-        leadershipelist(){
-            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.leadershipe_type_list=data;
-                for(let i=0;i<data.length;i++){
-                    this.leadershipe_list[data[i].id] = data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        loadquestionList(uri = 'staff/staffLeadershipSerivcesController/loadData/allData_Question'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.dataList=data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-        loaddata(){
-            this.dataList=[];
-            let feedback_category_id=$('#category_type_id').val();
-            let leadership_selection_id=$('#leadership_type').val();
-            axios.get('staff/staffLeadershipSerivcesController/loadData/questionsUnderCatType_Question_'+feedback_category_id+'_'+leadership_selection_id)
-            .then(response => {
-                let data = response.data.data;
-                this.dataList=data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
+        async gettraits(){
+            this.trait_list=[];
+            if($('#capability').val()!=""){
+              this.trait_list =  await this.loadstaffMasters('byparent__category__'+$('#capability').val(),'staff_leadership___Traits');
+            }
         },
 
+        async loaddata(){
+            this.dataList=[];
+            if($('#trait').val()!=""){
+              this.dataList =  await this.loadstaffMasters('withparent__category__category_type_id__'+$('#trait').val(),'staff_leadership___Question');
+            }
+        },
         showedit(data){
             this.$router.push({name:'edit_question_answer',params: {data:data.id}});
         },
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="category_type_id"){
-                this.form.category_type_id=$('#category_type_id').val();
-            }
-            if(id=="leadership_type"){
-                this.form.leadership_type=$('#leadership_type').val();
-            }
-        }
     },
-    mounted(){
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (){
-            Fire.$emit('changeval',$(this).attr('id'))
-        });
-        Fire.$on('changeval',(id)=> {
-            this.changefunction(id);
-        });
-
-        this.loadcategoryList();
-        this.leadershipelist();
-        this.loadquestionList();
+    async mounted(){
+        this.category_list =  await this.loadstaffMasters('active','staff_leadership___QuestionCategory');
+        this.dataList =  await this.loadstaffMasters('allwith__category','staff_leadership___Question');
         this.dt =  $("#data-table").DataTable()
     },
     watch: {
         dataList() {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#data-table").DataTable()
-            });
+            this.applydatatable('data-table');
         }
     },
 }

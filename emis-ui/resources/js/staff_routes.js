@@ -1048,6 +1048,37 @@ const routes = [
                     { path: '/edit_feedback_category',name:'edit_feedback_category',  component: require('./components/staff/leadership/questions/feedback_category/edit_feedback_category.vue').default },
                 ],
             },
+
+            { path: '/qcategory',
+                component: require('./components/staff/leadership/questions/category/category_index.vue').default,
+                children:[
+                    { path: '/',name:'qcategory',  component: require('./components/staff/leadership/questions/category/list_category.vue').default },
+                    { path: '/qlist_category',name:'qlist_category',  component: require('./components/staff/leadership/questions/category/list_category.vue').default },
+                    { path: '/qcreate_category',name:'qcreate_category',  component: require('./components/staff/leadership/questions/category/create_category.vue').default },
+                    { path: '/qedit_category',name:'qedit_category',  component: require('./components/staff/leadership/questions/category/edit_category.vue').default },
+                ],
+            },
+
+            { path: '/capability',
+                component: require('./components/staff/leadership/questions/capability/capability_index.vue').default,
+                children:[
+                    { path: '/',name:'capability',  component: require('./components/staff/leadership/questions/capability/list_capability.vue').default },
+                    { path: '/list_capability',name:'list_capability',  component: require('./components/staff/leadership/questions/capability/list_capability.vue').default },
+                    { path: '/create_capability',name:'create_capability',  component: require('./components/staff/leadership/questions/capability/create_capability.vue').default },
+                    { path: '/edit_capability',name:'edit_capability',  component: require('./components/staff/leadership/questions/capability/edit_capability.vue').default },
+                ],
+            },
+
+            { path: '/traits',
+                component: require('./components/staff/leadership/questions/traits/traits_index.vue').default,
+                children:[
+                    { path: '/',name:'traits',  component: require('./components/staff/leadership/questions/traits/list_traits.vue').default },
+                    { path: '/list_traits',name:'list_traits',  component: require('./components/staff/leadership/questions/traits/list_traits.vue').default },
+                    { path: '/create_traits',name:'create_traits',  component: require('./components/staff/leadership/questions/traits/create_traits.vue').default },
+                    { path: '/edit_traits',name:'edit_traits',  component: require('./components/staff/leadership/questions/traits/edit_traits.vue').default },
+                ],
+            },
+
             { path: '/question_answer',
                 component: require('./components/staff/leadership/questions/question_answer/question_answer_index.vue').default,
                 children:[

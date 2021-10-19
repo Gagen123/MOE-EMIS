@@ -3,7 +3,7 @@
         <form class="bootbox-form">
             <div class="card-body">
                 <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leadership Type:</label>
                         <select class="form-control select2" id="leadership_type" v-model="form.leadership_type" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('leadership_type') }">
                             <option value=""> --Select--</option>
@@ -11,7 +11,7 @@
                         </select>
                         <has-error :form="form" field="leadership_type"></has-error>
                         <span class="text-danger" id="leadership_type_err"></span>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Category Type:</label>
                         <select class="form-control select2" id="category_type_id" v-model="form.category_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('category_type_id') }">
@@ -63,7 +63,7 @@
                                 <tr>
                                     <th >SL#</th>
                                     <th >Answer <span id="anstype"></span></th>
-                                    <th >Answer Status</th>
+                                    <th >Rating</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody">
@@ -72,22 +72,22 @@
                                         {{index+1}}
                                     </td>
                                     <td>
-                                        <input class="form-control" v-model="answer.name" :class="{ 'is-invalid': form.errors.has('name') }" :id="'answer'+(index+1)" type="text">
-                                        <span class="text-danger" :id="'answer_err'+(index+1)"></span>
+                                        {{ answer.name}}
+                                        <!-- <input class="form-control" v-model="answer.name" :class="{ 'is-invalid': form.errors.has('name') }" :id="'answer'+(index+1)" type="text">
+                                        <span class="text-danger" :id="'answer_err'+(index+1)"></span> -->
                                     </td>
                                     <td>
-                                        <label><input v-model="answer.status"  type="radio" value="1" /> Active</label>
-                                        <label><input v-model="answer.status"  type="radio" value="0" /> In Active</label>
+                                        {{answer.rate}}
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan="3">
                                         <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Add More</button>
                                         <button type="button" class="btn btn-flat btn-sm btn-danger" id="addMore"
                                         @click="remove()"><i class="fa fa-trash"></i> Remove</button>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                         <span class="text-danger" id="answer_err"></span>
@@ -142,28 +142,28 @@ export default {
                 }
             }
         },
-        loadcategorylist(){
-            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory';
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.category_type_list=data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        leadershipelist(){
-            let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.leadershipe_list=data;
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
+        // loadcategorylist(){
+        //     let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_FeedbackCategory';
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response;
+        //         this.category_type_list=data.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log("Error:"+error)
+        //     });
+        // },
+        // leadershipelist(){
+        //     let uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType';
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data = response.data.data;
+        //         this.leadershipe_list=data;
+        //     })
+        //     .catch(function (error){
+        //         console.log("Error:"+error)
+        //     });
+        // },
         checkanswers(){
             let returntype=true;
             if($('#category_type_id').val()==""){
@@ -250,24 +250,26 @@ export default {
             }
         }
     },
-    mounted(){
+    async mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });
-        this.loadcategorylist();
-        this.leadershipelist();
+        // this.loadcategorylist();
+        // this.leadershipelist();
         $('.select2').on('select2:select', function (){
             Fire.$emit('changeval',$(this).attr('id'))
         });
         Fire.$on('changeval',(id)=> {
             this.changefunction(id);
         });
-
+        $('#answer_type').prop('disabled',true);
+        $('#answer_type').val('Radio').trigger('change');
+        this.form.answer_type='Radio';
+        this.category_type_list =  await this.loadstaffMasters('active','staff_leadership___Traits');
         axios.get('staff/staffLeadershipSerivcesController/loadexistingData/'+this.$route.params.data)
         .then(response => {
             let data = response.data;
-
             this.form.id=data.id;
             this.form.display_order=data.display_order;
             this.form.answer_type=data.answer_type;
@@ -290,7 +292,7 @@ export default {
                 this.count=data.answers.length;
                 this.base_count=data.answers.length;
                 data.answers.forEach(itm => {
-                    this.form.answer.push({id:itm.id,name:itm.name,status:itm.status});
+                    this.form.answer.push({id:itm.id,name:itm.name,rate:itm.watage,status:itm.status});
                 });
             }
         })
