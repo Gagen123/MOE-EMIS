@@ -7,16 +7,14 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
-                            <th>Dzongkhag</th>
+                            <th>Dzongkhag/Thromde</th>
                             <th>Working Agency</th>
                             <th>Name</th>
                             <th>Course</th>
                             <th>StartDate</th>
                             <th>EndDate</th>
                             <th>Funding</th>
-                            <th>Training Status</th>
-                            <th>HRCNo</th>
-                            <th>HRCDate</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -31,8 +29,6 @@
                             <td>{{ training.EndDate }}</td>
                             <td>{{ training.funding }}</td>
                             <td>{{ training.training_status }}</td>
-                            <td>{{ training.HRCNo }}</td>
-                            <td>{{ training.HRCDate }}</td>
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(training)">Veiw</a>
                             </td>
