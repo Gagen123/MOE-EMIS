@@ -610,9 +610,7 @@ class TransferController extends Controller{
     }
 
     public function LoadApplicationDetailsByUserId($param="",$user_id=""){
-        // $response_data=DB::table('transfer_application AS t')
-        // ->where('t.created_by', $user_id 'OR')
-        $response_data=TransferApplication::where ('created_by', $user_id)->where('status',$param)->get();;
+        $response_data=TransferApplication::where ('created_by', $user_id)->where('status',$param)->orWhere('status','Rejected')->orWhere('status','Verified')->get();;
         return$response_data;
     }
 
@@ -726,7 +724,7 @@ class TransferController extends Controller{
   public function UpdateTransferAppeal(Request $request){
     $request_data =[
         'remarks'                               => $request->remarks,
-        'status'                                => 'Verfied By HRD',
+        'status'                                => 'Verfied',
         'status_id'                             =>  $request->status_id,
     ];
     $response_data=StaffAppeal::where('application_no', $request->aplication_number)->update($request_data);

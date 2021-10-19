@@ -438,11 +438,13 @@ export default {
          getIntialAppointmentDate(cid){
             axios.get('staff/transfer/getIntialAppointmentDate/' +cid)
             .then(response => {
-                this.form.initial_AppointmentDate = response.data[0].initial_appointment_date;
-                let current_date=new Date(this.form.current_date);
-                let appointment_date=new Date(this.form.initial_AppointmentDate);
-                this.difference= (current_date.getTime())-(appointment_date.getTime());
-                this.days = this.difference/(1000 * 3600 * 24)
+                if(response.data[0]!="" || response.data[0]!=NULL){
+                    this.form.initial_AppointmentDate = response.data[0].initial_appointment_date;
+                    let current_date=new Date(this.form.currentdateForTransfer);
+                    let appointment_date=new Date(this.form.initial_AppointmentDate);
+                    this.difference= (current_date.getTime())-(appointment_date.getTime());
+                    this.days = this.difference/(1000 * 3600 * 24)
+                }
                
             })
             .catch(errors =>{
@@ -491,7 +493,7 @@ export default {
             return returntue;
         },
         shownexttab(nextclass){
-         if(this.days<1096){
+         if(this.days<'1096'||this.days ==""|| this.days==undefined){
             if(this.form.transfer_list =="" || this.form.transfer_list == null){
                 if(nextclass=="undertaking-tab"){
                     if(this.form.t_to_date >=this.form.current_date || this.form.t_from_date <=this.form.current_date){
@@ -550,8 +552,9 @@ export default {
                                 let formData = new FormData();
                                 formData.append('id', this.form.id);
                                 formData.append('type_id', this.form.type_id);
-                                 formData.append('submitterroleid', this.form.submitterroleid);
+                                formData.append('submitterroleid', this.form.submitterroleid);
                                 formData.append('submitted_to', this.form.submitted_to);
+                                formData.append('name', this.form.name);
                                 formData.append('service_name', this.form.service_name);
                                 formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                                 formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
@@ -597,7 +600,7 @@ export default {
          }
         else{
                 Swal.fire({
-                text: "Sorry! You need minimum of 3 year from your last transfer to appy again",
+                text: "Sorry! You need minimum of three year from your initial appointment date to apply transfer",
                 icon: 'warning',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'okay!',
@@ -733,6 +736,7 @@ export default {
         let currentdate = new Date();
         this.form.year=currentdate.getFullYear();
         this.form.current_date=currentdate.getFullYear()+'-'+(currentdate.getMonth() + 1)+'-'+currentdate.getDate();
+        this.form.currentdateForTransfer=currentdate.getFullYear()+'-'+12+'-'+31;
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

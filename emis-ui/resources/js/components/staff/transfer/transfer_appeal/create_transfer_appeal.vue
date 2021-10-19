@@ -114,11 +114,11 @@
                                 </table>
                             </div>
                         </div>
-                        <div  class="row form-group fa-pull-right">
+                    </div>
+                     <div  class="row form-group fa-pull-right">
                          <div v-if="button" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Apply </button>
+                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Appeal </button>
                          </div>
-                        </div>
                     </div>
                     <hr>
                  </div>
@@ -224,15 +224,6 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data=response.data.data;
-                // for(let i=0;i<data.length;i++){
-                //    if(data[i].name[0,4]=="Intra"){
-                //        this.form.Intra_type_id = data[i].id;
-                //     }
-                //    else if(data[i].name[0,4]=="Inter"){ 
-                //         this.form.Inter_type_id = data[i].id;
-                //    }
-                // }
-                
             })
             .catch(function (error){
                 console.log(error);
@@ -352,38 +343,7 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-
         
-        //  getSubmitterId(transferTypeId){
-        //     let uri ='staff/transfer/getSubmitterId/'+transferTypeId;
-        //     axios.get(uri)
-        //     .then(response =>{
-        //         if(response.data==""||response.data==null){
-        //            Swal.fire({
-        //                 text: "Sorry! Configuration for transfer appeal in your role is not configure. Please contact Administrator for further information",
-        //                 icon: 'error',
-        //                 confirmButtonColor: '#3085d6',
-        //                 cancelButtonColor: '#d33',
-        //                 confirmButtonText: 'Okay!',
-                        
-        //                 })
-        //             this.$router.push('/transfer_appeal');
-        //         }
-        //     })
-        //     .catch(function (error){
-        //         console.log("Error:"+error)
-        //     });
-
-        // },
-        // loadtransferType(uri = 'masters/loadStaffMasters/appeal'){
-        //     axios.get(uri)
-        //     .then(response =>{
-               
-        //     })
-        //     .catch(function (error){
-        //         console.log(error);
-        //     });
-        // },
          getTransferTypeName(transferTypeId){
             axios.get('staff/transfer/getTransferTypeName/'+transferTypeId)
             .then(response =>{
@@ -440,9 +400,7 @@ export default {
         // }));
         axios.get('common/getSessionDetail')
         .then(response => {
-            // alert(response.data.data.roles[0].Id);
             this.form.submitterroleid = response.data.data.roles[0].Id;
-            // this.getSubmitterId(response.data.data.roles[0].Id);
             this.form.staff_id=response.data.data['staff_id'];
             this.form.name = response.data.data.Full_Name;
             this.LoadApplicationDetailsByUserId(response.data.data.User_Id);

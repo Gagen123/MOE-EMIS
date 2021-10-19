@@ -9,7 +9,7 @@
                             <th>Applicant Name</th>
                             <th>Application Number</th>
                             <th>Date of Apply</th>
-                            <th>Remark From HRCD</th>
+                            <th>Remark From (HRCD/DEO)</th>
                             <th>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>

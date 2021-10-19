@@ -110,6 +110,7 @@ class TransferController extends Controller{
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$request->service_name,
+                'name'              =>$request->name,
                 'application_number'=>  json_decode($response_data)->data->aplication_number,
                 'screen_id'         =>  json_decode($response_data)->data->aplication_number,
                 'status_id'         =>  1,
@@ -301,7 +302,9 @@ class TransferController extends Controller{
         //         'notification_type'             =>  'user',
         //         'call_back_link'                =>  'view_notification_message',
         //         'user_role_id'                  =>  $request->created_by,
+                
         //     ];
+        //     $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         // }
         else if($request->actiontype=="approve"){
             $notification_data=$notification_data+[
@@ -324,6 +327,7 @@ class TransferController extends Controller{
             ];
         }
         $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        
         if($request->transferType == "Intra Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
@@ -594,7 +598,6 @@ class TransferController extends Controller{
 }
 
     public function UpdateTransferAppeal(Request $request){
-
         if($request->actiontype=="approved"){
             $status_id = 10;
         }

@@ -93,10 +93,10 @@
                                     <span class="text-danger" id="remarks_err"></span>
                                 </div>
                             </div>
-                             <div class="row form-group fa-pull-right">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('submit')"  id="submit"> <i class="fa fa-check"></i>Update </button>
-                                </div>
+                        </div>
+                        <div class="row form-group fa-pull-right">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <button class="btn btn-primary" @click="shownexttab('submit')"  id="submit"> <i class="fa fa-check"></i>Update </button>
                             </div>
                         </div>
                         <hr>
