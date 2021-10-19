@@ -433,13 +433,14 @@ class AcademicController extends Controller
     public function loadAssessmentAreas($term_id, $sub_id, $class_id, $stream_id = "")
     {
         $areaFormat = DB::table("aca_setting")->where("id", 1)->value("value");
+        $rating_type_descriptive_id = DB::table('aca_rating_type')->where('input_type', 2)->value('id');
         $query = "SELECT t1.aca_assmt_area_id,IF($areaFormat=2,t2.name,IFNUll(t2.code,t2.name)) AS assessment_area,IF($areaFormat=1,(t2.name),'') AS name,
          IF($areaFormat=1,(t2.code),'') AS code ,t2.dzo_name AS assmt_area_dzo_name, TRIM(t1.weightage)+0 AS weightage,
-         IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id) AS aca_rating_type_id,t4.input_type, t1.display_order
+         IF(t2.is_descriptive = 1,'$rating_type_descriptive_id',t3.aca_rating_type_id) AS aca_rating_type_id,IF(t2.is_descriptive = 1,2,t4.input_type) AS input_type, t1.display_order
         FROM aca_class_subject_assessment t1
             JOIN aca_assessment_area t2 ON t1.aca_sub_id = t2.aca_sub_id AND t1.aca_assmt_area_id=t2.id
-            JOIN aca_class_subject t3 on t1.aca_sub_id=t3.aca_sub_id AND t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id is null AND t3.org_stream_id IS NULL))
-            JOIN aca_rating_type t4 ON IFNULL(t2.aca_rating_type_id,t3.aca_rating_type_id)=t4.id
+            JOIN aca_class_subject t3 on t1.aca_sub_id=t3.aca_sub_id AND t1.org_class_id = t3.org_class_id AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL))
+            JOIN aca_rating_type t4 ON t3.aca_rating_type_id=t4.id
         WHERE t1.aca_assmt_term_id = ? AND t1.aca_sub_id = ? AND t1.org_class_id =?";
         $params = [$term_id, $sub_id, $class_id];
         if ($stream_id) {

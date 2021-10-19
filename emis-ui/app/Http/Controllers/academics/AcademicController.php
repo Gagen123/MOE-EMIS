@@ -783,7 +783,7 @@ class AcademicController extends Controller
     {
         return $this->apiService->listData('emis/academics/getStudentsForProgressReport/' . $Id);
     }
-    public function getProgressReport($Id, $resultId)
+    public function classAssessmentFrequencyList($Id, $resultId)
     {
         return $this->apiService->listData('emis/academics/getProgressReport/' . $Id . '/' . $resultId);
     }
