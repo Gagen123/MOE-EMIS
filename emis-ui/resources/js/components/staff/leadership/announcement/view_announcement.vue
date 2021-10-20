@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                         <label>Application List: </label>
                         <table class="table table-bordered text-sm table-striped">
                             <thead>
@@ -105,6 +105,9 @@
                                     <th>SL#</th>
                                     <th>App No</th>
                                     <th>Name</th>
+                                    <th>Emp Id</th>
+                                    <th>Position Title</th>
+                                    <th>Position Level</th>
                                     <th>Type</th>
                                     <th>Status</th>
                                 </tr>
@@ -112,19 +115,15 @@
                             <tbody>
                                 <tr v-for='(data, index) in response_data.applications' :key="index">
                                     <td>{{index+1}}</td>
-                                    <td>
-                                        {{data.application_number}}
-                                    </td>
-                                    <td>
-                                        {{data.aplicant_name}}
-                                    </td>
+                                    <td>{{data.application_number}}</td>
+                                    <td>{{data.aplicant_name}}</td>
+                                    <td>{{data.eid}}</td>
+                                    <td>{{data.positiontitle}}</td>
+                                    <td>{{data.positionlevel}}</td>
                                     <td>
                                         {{data.org_id=='External Application'? 'Out of Ministry': 'Within Ministry'}}
                                     </td>
-                                    <td>
-                                        {{data.status}}
-                                    </td>
-
+                                    <td> {{data.status}} </td>
                                 </tr>
                             </tbody>
                         </table>

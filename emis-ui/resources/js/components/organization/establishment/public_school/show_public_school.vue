@@ -322,7 +322,7 @@ export default {
     },
     methods:{
         loadestablishmentapplicationdetails(appId){
-            axios.get('organization/loadEstbDetailsForView/'+appId)
+            axios.get('organizationApproval/loadEstbDetailsForView/'+appId)
             .then((response) => {
                 let data=response.data.data;
                 this.applicationdetails=data;

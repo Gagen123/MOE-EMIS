@@ -15,6 +15,7 @@ class FeedbackProviderDetails extends Model{
         'participant',
         'positiontitle',
         'cid',
+        'eid',
         'name',
         'email',
         'contact',

@@ -20,7 +20,7 @@
                             <td>{{ item.application_number }}</td>
                             <td>{{ item.LeadershipType }}</td>
                             <td>{{ item.Positiontitle }}</td>
-                            <td>{{ item.created_at }}</td>
+                            <td>{{ reverseDateTime(item.created_at) }}</td>
                             <td>{{ item.status }}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadviewpage(item)"> <span class="fa fa-eye"></span> View</a>

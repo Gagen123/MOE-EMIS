@@ -6,15 +6,15 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Selection For:</label><br>
-                        <span class="text-blue text-bold">{{selectionList[feedback_form.selection_type_id]}}</span>
+                        <span class="text-blue text-bold">{{data_list.leadership_for}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Position:</label><br>
-                        <span class="text-blue text-bold">{{positionList[feedback_form.position_title_id] }}</span>
+                        <span class="text-blue text-bold">{{data_list.position_title_for_leadership}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Last Date for Feedback:</label><br>
-                        <span class="text-blue text-bold">{{ feedback_end_data }}</span>
+                        <span class="text-blue text-bold">{{ reverseDate1(feedback_end_data) }}</span>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -55,14 +55,14 @@
                 <span><label><u>Feedback</u></label></span>
                 <div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  You are providing <b>{{feedbackArray[feedback_category_id]}}</b> feedback to {{data_list.aplicant_name}}
+                  You are providing feedback to {{data_list.aplicant_name}} as a <b>{{feedbackArray[feedback_category_id]}}</b>
                 </div>
                 <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <thead>
                         <tr>
                             <th style="width:5%">Sl#</th>
-                            <th style="width:55%">Question</th>
-                            <th style="width:40%">Answers</th>
+                            <th style="width:72%">Question</th>
+                            <th style="width:23%">Answers</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -128,11 +128,8 @@
 export default {
     data(){
         return{
-            selectionList:{},
-            positionList:{},
             feedbackArray:{},
             data_list:[],
-
             feedback_end_data:'',
             feedback_details:'',
 
@@ -147,34 +144,6 @@ export default {
         }
     },
     methods: {
-        //get position details to populate form
-        getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.selectionList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('err: '+error);
-            });
-        },
-
-        //get position title to populate form
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                // this.positionList =  data.data.data;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positionList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
 
         //loadFeedback qeustion according to the type and position
         loadFeedbackQuestion(feedback_category_id,leadership_selection_id){
@@ -271,8 +240,6 @@ export default {
         }
     },
     mounted(){
-        this.getSelectionList();
-        this.loadPositionTitleList();
         this.getFeedbackCategoryList();
         axios.get('/staff/staffLeadershipSerivcesController/getleadershipDetailsForFeedback/'+this.$route.params.nomination_id)
         .then((response) =>{
@@ -285,7 +252,8 @@ export default {
             this.feedback_form.selection_type_id=data.post_details.selection_type;
             this.feedback_form.position_title_id=data.post_details.position_title;
             this.feedback_category_id=data.feedback_type;
-            this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+            // this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+            this.feedback_form.questionList=data.questions;
         })
         .catch((error)=>{
             console.log("Error: "+error);
