@@ -39,6 +39,7 @@ class StaffLeadershipSerivcesController extends Controller{
             'to_date.required'          => 'This field is required',
             'to_date.after'             => 'This field cannot be before start date',
         ];
+
         $this->validate($request, $rules,$customMessages);
         $request['user_id'] = $this->userId();
         // dd($staff_data);
@@ -348,24 +349,9 @@ class StaffLeadershipSerivcesController extends Controller{
             'feedback_type.required'                   => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $nomi_data =[
-            'application_number'        =>  $request->application_number,
-            'partifipant_from'          =>  $request->partifipant_from,
-            'email'                     =>  $request->email,
-            'contact'                   =>  $request->contact,
-            'participant'               =>  $request->participant,
-            'positiontitle'             =>  $request->positiontitle,
-            'cid'                       =>  $request->cid,
-            'name'                      =>  $request->name,
-            'department'                =>  $request->department,
-            'school'                    =>  $request->school,
-            'dzongkhag'                 =>  $request->dzongkhag,
-            'feedback_type'             =>  $request->feedback_type,
-            'action_type'               =>  $request->action_type,
-            'user_id'                   =>  $this->userId()
-        ];
-        // dd($nomi_data);
-        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedbackProviderData', $nomi_data);
+
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/saveFeedbackProviderData', $request->all());
         if($request->partifipant_from=="External"){
             $create_data =[
                 'email'                     =>  $request->email,

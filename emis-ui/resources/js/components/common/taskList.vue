@@ -33,9 +33,9 @@
                                 <td>{{ commontask.service_name }}</td>
                                 <td>{{ commontask.name }}</td>
                                 <td>{{ commontask.applicant_name }} ({{ commontask.applicant_role }})</td>
-                                <td>{{ commontask.applied_on }}</td>
+                                <td>{{ reverseDateTime(commontask.applied_on) }}</td>
                                 <td>{{ commontask.user_name }} ({{ commontask.role_name }})</td>
-                                <td>{{ commontask.last_action_date }}</td>
+                                <td>{{ reverseDateTime(commontask.last_action_date) }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,9 +72,9 @@
                                 <td>{{ mytask.service_name }}</td>
                                 <td>{{ mytask.name }}</td>
                                 <td>{{ mytask.applicant_name }} ({{ mytask.applicant_role }})</td>
-                                <td>{{ mytask.applied_on }}</td>
+                                <td>{{ reverseDateTime(mytask.applied_on) }}</td>
                                 <td>{{ mytask.user_name }} ({{ mytask.role_name }})</td>
-                                <td>{{ mytask.last_action_date }}</td>
+                                <td>{{ reverseDateTime(mytask.last_action_date) }}</td>
                             </tr>
                         </tbody>
                     </table>

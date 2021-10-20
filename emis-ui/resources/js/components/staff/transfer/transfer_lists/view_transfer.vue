@@ -38,7 +38,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">School Preferences:</label>
+                                <label class="mb-0.5">PPreference Organization Details:</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -75,7 +75,7 @@
                         </div>
                         <div class="form-group row" id="approvedDetails">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Select Organization Details</label>
+                                <label class="mb-0.5">Selected Organization Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -287,7 +287,7 @@ export default {
             .then(response => {
                 this.form.name = response.data.data.Full_Name;
                 this.form.user_id = response.data.data.User_Id;
-                this.LoadApplicationDetailsByUserId(response.data.data.User_Id);
+                // this.LoadApplicationDetailsByUserId(response.data.data.User_Id);
             })
             .catch(errors =>{
                 console.log(errors)

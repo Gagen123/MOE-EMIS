@@ -29,7 +29,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                     <label>Application End Date:</label>
-                                    <span class="text-blue text-bold">{{post_detail.Post_details.to_date}}</span>
+                                    <span class="text-blue text-bold">{{reverseDateTime(post_detail.Post_details.to_date)}}</span>
                                 </div>
                             </div>
                             <div class="row form-group">
@@ -138,13 +138,13 @@
                         <div class="row form-group" v-if="form.current_status=='Submitted' && form.feedback==1">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:<span class="text-danger">*</span></label>
-                                <input type="text" class="form-control popupDatepicker" @change="remove_error('feedback_start_date')" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date">
+                                <input type="text" autocomplete="off" class="form-control popupDatepicker" :class="{ 'is-invalid': form.errors.has('feedback_start_date') }"  name="feedback_start_date" id="feedback_start_date">
                                 <has-error :form="form" field="feedback_start_date"></has-error>
                                 <span class="text-danger" id="feedback_start_date_err"></span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back End Date:<span class="text-danger">*</span></label>
-                                <input type="text" @change="remove_error('feedback_end_date')" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control popupDatepicker" name="feedback_end_date" id="feedback_end_date">
+                                <input type="text" autocomplete="off" :class="{ 'is-invalid': form.errors.has('feedback_end_date') }"  class="form-control popupDatepicker" name="feedback_end_date" id="feedback_end_date">
                                 <has-error :form="form" field="feedback_end_date"></has-error>
                                 <span class="text-danger" id="feedback_end_date_err"></span>
                             </div>
@@ -155,11 +155,11 @@
                         <div class="row form-group" v-else>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back Start Date:</label>
-                                <span class="text-blue text-bold">{{form.feedback_start_date}}</span>
+                                <span class="text-blue text-bold">{{reverseDate1(form.feedback_start_date)}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Feed back End Date:</label>
-                                <span class="text-blue text-bold">{{form.feedback_end_date}}</span>
+                                <span class="text-blue text-bold">{{reverseDate1(form.feedback_end_date)}}</span>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label>Details for Feedback Provider:</label>
@@ -176,14 +176,16 @@
                             In order to take further action for this applicaiton, you need to make sure that you have visited all feedbacks and click visited button from popup. Once you update, the status will chage to visited
                         </div>
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
                                 <table id="feedback_provider-table" class="table table-sm table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th>From</th>
                                             <th>CID</th>
                                             <th>Name</th>
+                                            <th>EID</th>
                                             <th>Position Title</th>
+                                            <th>Position Level</th>
                                             <th>Contact No</th>
                                             <th>Email</th>
                                             <th>Feedback Category</th>
@@ -197,7 +199,9 @@
                                                 <td>{{stf.partifipant_from}} </td>
                                                 <td>{{stf.cid}}</td>
                                                 <td>{{stf.name}}</td>
+                                                <td>{{stf.eid}}</td>
                                                 <td>{{stf.positiontitle}}</td>
+                                                <td>{{stf.positionlevel}}</td>
                                                 <td>{{stf.contact}}</td>
                                                 <td>{{stf.email}}</td>
                                                 <td>{{stf.feedbacktypeName}}</td>
@@ -285,7 +289,7 @@
                                 <span class="text-danger" id="interniew_date_err"></span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                <label>Interview Score:<span class="text-danger">*</span></label>
+                                <label>Score Obtained:<span class="text-danger">*</span></label>
                                 <input type="number" class="form-control" @change="remove_error('interniew_score')" :class="{ 'is-invalid': form.errors.has('interniew_score') }"  name="interniew_score" id="interniew_score" v-model="form.interniew_score">
                                 <has-error :form="form" field="interniew_score"></has-error>
                                 <span class="text-danger" id="interniew_score_err"></span>
@@ -294,11 +298,11 @@
                         <div class="row" v-if="form.current_status=='Interviewed'">
                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Interview Date:</label>
-                                <span class="text-blue text-bold">{{form.interniew_date}}</span>
+                                <span class="text-blue text-bold">{{reverseDate1(form.interniew_date)}}</span>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                 <label>Interview Score:</label>
-                                <span class="text-blue text-bold">{{form.interniew_score}}</span>
+                                <span class="text-blue text-bold">{{reverseDate1(form.interniew_score)}}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -316,9 +320,11 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <button class="btn btn-info text-white" @click="shownexttab('feedback')" v-if="form.current_status=='Submitted' && form.feedback==1"> <i class="fa fa-save"></i> Send Notification </button>
                             <button class="btn btn-info text-white" @click="shownexttab('shortlist')" v-if="form.current_status=='Notified for Feedback' && form.shortlist==1"> <i class="fa fa-save"></i> Shortlist </button>
+                            <button class="btn btn-danger" @click="shownexttab('reject')" v-if="form.current_status=='Notified for Feedback' && form.shortlist==1"> <i class="fa fa-times"></i> Not Shortlist </button>
                             <button class="btn btn-primary" @click="shownexttab('interview')" v-if="form.current_status=='Shortlisted' && form.interview==1 && feedback_status=='Completed'"> <i class="fa fa-check"></i> Update Interview </button>
+                            <button class="btn btn-danger" @click="shownexttab('reject')" v-if="form.current_status=='Shortlisted' && form.shortlist==1"> <i class="fa fa-times"></i> Not Interviewed </button>
                             <button class="btn btn-primary" @click="shownexttab('select')" v-if="form.current_status=='Interviewed'"> <i class="fa fa-save"></i> Select </button>
-                            <button class="btn btn-danger" id="rejectbtn" @click="shownexttab('reject')"> <i class="fa fa-times"></i> Reject </button>
+                            <button class="btn btn-danger" @click="shownexttab('reject')" v-if="form.current_status=='Interviewed'"> <i class="fa fa-times"></i> Not Select </button>
                         </div>
                     </div>
                 </div>
@@ -338,15 +344,15 @@
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Participating From:<span class="text-danger">*</span></label>
-                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('External')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from" :value="'External'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('External'),removeerrors('nature_of_participant_err')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from" :value="'External'">
                                     <label class="pr-3"> External </label>
-                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Ministry')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from0" :value="'Ministry'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Ministry'),removeerrors('nature_of_participant_err')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from0" :value="'Ministry'">
                                     <label class="pr-3"> Ministry </label>
-                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Dzongkhag')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from1" :value="'Dzongkhag'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('Dzongkhag'),removeerrors('nature_of_participant_err')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from1" :value="'Dzongkhag'">
                                     <label class="pr-3"> Dzongkhag Head Quarters </label>
-                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('School')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from2" :value="'School'">
+                                    <input type="radio" v-model="form.partifipant_from" @change="showSearch('School'),removeerrors('nature_of_participant_err')" :class="{ 'is-invalid' :form.errors.has('partifipant_from') }" name="partifipant_from" id="partifipant_from2" :value="'School'">
                                     <label class="pr-3"> Schools </label>
-                                    <span class="text-danger" id="partifipant_from_err"></span>
+                                    <span class="text-danger" id="nature_of_participant_err"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -408,7 +414,7 @@
                                     <label>Nominee:<span class="text-danger">*</span></label>
                                     <select class="form-control select2" @change="remove_error('participant'),getdetails()" name="participant" id="participant" v-model="selectstaff.participant">
                                         <option value="">- Please Select -</option>
-                                        <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.cid_work_permit+'_'+item.name+'_'+item.contact_no+'_'+item.email+'_'+item.position_title_name"> {{ item.emp_id }}, {{ item.name }},{{ item.position_title_name }}</option>
+                                        <option v-for="(item, index) in staff_list" :key="index" v-bind:value="item.id+'_'+item.cid_work_permit+'_'+item.name+'_'+item.contact_no+'_'+item.email+'_'+item.position_title_name"> {{ item.name }},{{ item.emp_id }}, {{ item.position_title_name }},{{ item.positionlevel }}</option>
                                     </select>
                                     <span class="text-danger" id="participant_err"></span>
                                 </div>
@@ -430,6 +436,12 @@
                                     <input type="text" @change="remove_error('cid')" v-model="selectstaff.cid" :class="{ 'is-invalid': selectstaff.errors.has('cid') }" name="cid" id="cid" class="form-control">
                                     <has-error :form="selectstaff" field="cid"></has-error>
                                     <span class="text-danger" id="cid_err"></span>
+                                </div>
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>EID:<span class="text-danger">*</span></label>
+                                    <input type="text" @change="remove_error('eid')" v-model="selectstaff.eid" :class="{ 'is-invalid': selectstaff.errors.has('eid') }" name="eid" id="eid" class="form-control">
+                                    <has-error :form="selectstaff" field="eid"></has-error>
+                                    <span class="text-danger" id="eid_err"></span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Name:<span class="text-danger">*</span></label>
@@ -515,14 +527,17 @@
                                                     <tr>
                                                         <th style="width:5%">Sl#</th>
                                                         <th style="width:55%">Question</th>
-                                                        <th style="width:40%">Answers</th>
+                                                        <th style="width:20%">Answers</th>
+                                                        <th style="width:20%">Watage</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr v-for="(item, index) in feedback_form.questionList" :key="index">
+                                                    <tr v-for="(item, index) in feedback_details.qanswer" :key="index">
                                                         <td>{{ index+1}}</td>
-                                                        <td>{{ item.name}}</td>
-                                                        <td v-if="item.answer_type=='TextArea'">
+                                                        <td>{{ item.question}}</td>
+                                                        <td>{{ item.answers}}</td>
+                                                        <td>{{ item.watage}}</td>
+                                                        <!-- <td v-if="item.answer_type=='TextArea'">
                                                             <textarea class="form-control" disabled :name="'answer_textarea'+index" v-model="item.answered" :id="item.id" ></textarea>
                                                         </td>
                                                         <td v-if="item.answer_type=='Text'">
@@ -548,16 +563,21 @@
                                                                     <option v-for="(item, index) in item.answers" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                                 </select>
                                                             </div>
-                                                        </td>
+                                                        </td> -->
 
-                                                        <td v-if="item.answer_type=='Checkbox'">
+                                                        <!-- <td v-if="item.answer_type=='Checkbox'">
                                                             <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                                 <span v-for="(ans, index1) in item.answers" :key="index1">
                                                                     <input type="checkbox" disabled :name="'answer_check'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" class="ml-4" :value="ans.id">
                                                                     <label>{{ans.name}} </label>
                                                                 </span>
                                                             </div>
-                                                        </td>
+                                                        </td> -->
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td colspan="2"><b>Average Score</b></td>
+                                                        <td><b>{{ feedback_details.totalwatage/feedback_details.toatalquestion}}</b></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -568,8 +588,9 @@
                         </div>
                     </div>
                     <div class="modal-footer text-right">
-                        <button data-bb-handler="cancel" type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
-                        <button data-bb-handler="confirm" @click="updatedVisited(feedback_details.id)" type="button" class="btn btn-primary">visited</button>
+                        <button data-bb-handler="cancel" @click="updatedVisited(feedback_details.id,'cancel')" type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                        <button data-bb-handler="confirm" @click="updatedVisited(feedback_details.id,'visited')" type="button" class="btn btn-primary">Reviewed</button>
+                        <button data-bb-handler="close" type="button" data-dismiss="modal" class="btn btn-warning">Close</button>
                     </div>
                 </div>
             </div>
@@ -605,6 +626,7 @@ export default {
                 participant:'',
                 positiontitle:'',
                 cid:'',
+                eid:'',
                 name:'',
                 department:'',
                 school:'',
@@ -652,6 +674,9 @@ export default {
         }
     },
     methods: {
+        removeerrors(rerr){
+            $('#'+rerr).html('');
+        },
         openfile(file){
             let file_path=file.path+'/'+file.original_name;
             file_path=file_path.replaceAll('/', 'SSS');
@@ -716,36 +741,8 @@ export default {
             $('#contact').val('');
             this.selectstaff.contact='';
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
         async showSearch(type){
-            // $("#dzongkhag_section").hide();
-            // $("#school_section").hide();
-            // $("#department_section").hide();
-            // $("#select_staff_section").hide();
-            // $("#outofministry_section").hide();
-            // if(type=="School"){
-            //     $("#dzongkhag_section").show();
-            //     $("#school_section").show();
-            // }
-            // if(type=="Dzongkhag"){
-            //     this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
-            //     $("#dzongkhag_section").show();
-            // }
-            // if(type=="Ministry"){
-            //     this.getDzongkhagHeadQuarterList('all_ministry_headquarters');
-            //     $("#department_section").show();
-            // }
-            // if(type=="outofministry"){
-            //     $("#outofministry_section").show();
-            // }
-            // else{
-            //     $("#select_staff_section").show();
-            // }
+            this.staff_list=[];
             $('#dzongkhag_section').hide();
             $('#school_section').hide();
             $('#department_section').hide();
@@ -756,7 +753,8 @@ export default {
                 $('#school_section').show();
             }
             if(type=="Dzongkhag"){
-                 this.department_list=await this.getDepartmentListbydzo('DzongkhagHeadquarter','All');
+                $('#dzongkhag_section').show();
+                // this.department_list=await this.getDepartmentListbydzo('DzongkhagHeadquarter','All');
                 // this.getDzongkhagHeadQuarterList('all_dzongkhag_headquarters');
                 $('#department_section').show();
                 $('#select_staff_section').show();
@@ -874,8 +872,15 @@ export default {
             // }
             if(id=="dzongkhag"){
                 this.school_list=[];
+                this.staff_list=[];
                 this.form.dzongkhag=$('#dzongkhag').val();
-                this.school_list=await this.schoolList($('#dzongkhag').val());
+                if(this.form.partifipant_from!=null && this.form.partifipant_from=="School"){
+                    this.school_list=await this.schoolList($('#dzongkhag').val());
+                }
+                if(this.form.partifipant_from!=null && this.form.partifipant_from=="Dzongkhag"){
+                    this.department_list=await this.getDepartmentListbydzo('Dzongkhag',$('#dzongkhag').val());
+                }
+
                 // this.getSchoolList($('#dzongkhag').val());
             }
             if(id=="department"){
@@ -931,7 +936,7 @@ export default {
             }
 
             if($("input[type='radio'][name='partifipant_from']:checked").val()==undefined){
-                $('#nature_of_participant_err').html('this field is requred');
+                $('#nature_of_participant_err').html('<br>Please select the participating from');
                 $('#partifipant_from').addClass('is-invalid');
                 retval=false;
             }
@@ -1196,17 +1201,37 @@ export default {
             });
         },
 
-
-        updatedVisited(itmId){
-            axios.get('staff/staffLeadershipSerivcesController/updatedVisited/'+itmId)
-            .then(response => {
-                let data = response.data;
-                this.loadexistingfeedbackprovider(this.selectstaff.application_number);
-                $('#feedback_modal').modal('hide');
-            })
-            .catch(function (error){
-                console.log('err: '+error);
-            });
+        updatedVisited(itmId,type){
+            let submit=false;
+            if(type=="cancel"){
+                Swal.fire({
+                    text: "Are you sure you wish to  cancel this detials ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText:'No',
+                    }).then((result) => {
+                    if(result.isConfirmed){
+                        submit=true;
+                    }
+                });
+            }
+            else{
+                submit=true;
+            }
+            if(submit){
+                axios.get('staff/staffLeadershipSerivcesController/updatedVisited/'+itmId+'__'+type)
+                .then(response => {
+                    let data = response.data;
+                    this.loadexistingfeedbackprovider(this.selectstaff.application_number);
+                    $('#feedback_modal').modal('hide');
+                })
+                .catch(function (error){
+                    console.log('err: '+error);
+                });
+            }
         }
     },
     created(){

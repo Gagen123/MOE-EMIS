@@ -163,10 +163,12 @@ export default {
             positionLevelList:[],
             positionList:[],
             roleList:[],
+            questionCategoryList:[],
             form: new form({
                 id:'',
                 selection_type:'',
                 position_title:'',
+                question_category:'',
                 from_date:'',
                 to_date:'',
                 feedback:1,
@@ -329,6 +331,8 @@ export default {
                 $('#from_date').val(this.reverseDate1(data.from_date));
                 this.form.to_date=data.to_date;
                 $('#to_date').val(this.reverseDate1(data.to_date));
+                this.form.question_category=data.question_category;
+                $('#question_category').val(data.question_category).trigger('change');
                 this.form.details=data.details;
                 this.form.shortlist=data.shortlist;
                 this.form.interview=data.interview;
@@ -370,6 +374,7 @@ export default {
         // this.loadroleList();
         this.positionList =  await this.loadstaffMasters('active','PositionTitle');
         this.positionLevelList =  await this.loadstaffMasters('active','PositionLevel');
+        this.questionCategoryList =  await this.loadstaffMasters('active','staff_leadership___QuestionCategory');
         this.form.id=this.$route.params.id;
         this.loadDetials();
     },

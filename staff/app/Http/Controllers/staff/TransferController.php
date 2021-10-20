@@ -610,8 +610,8 @@ class TransferController extends Controller{
     }
 
     public function LoadApplicationDetailsByUserId($param="",$user_id=""){
-        $response_data=TransferApplication::where ('created_by', $user_id)->where('status',$param)->orWhere('status','Rejected')->orWhere('status','Verified')->get();;
-        return$response_data;
+        $response_data=TransferApplication::where('created_by', $user_id)->Where('status',$param)->orWhere('status','Rejected')->orWhere('status','Verified')->orWhere('status','Assigned School')->orWhere('status','Submitted')->get();;
+        return $response_data;
     }
 
     public function loadPreference($id=""){
@@ -620,7 +620,6 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
-      
      if($request->id==""){
         $last_seq=ApplicationSequence::where('service_name','transfer appeal')->first();
         if($last_seq==null || $last_seq==""){
@@ -666,7 +665,7 @@ class TransferController extends Controller{
         ];
         $response_data=TransferApplication::where('created_by',$request->user_id)->where('aplication_number',$request->aplication_number)->first();
         if($response_data!=null || $response_data!=""){
-            if($response_data->status=="Rejected" || $response_data->status=="Approved" || $response_data->status=="Verified"){
+            if($response_data->status=="Rejected" || $response_data->status=="Submitted" || $response_data->status=="Approved" || $response_data->status=="Verified" || $response_data->status=="Assigned School"){
                 $response_data = StaffAppeal::create($request_data);
             }
         }

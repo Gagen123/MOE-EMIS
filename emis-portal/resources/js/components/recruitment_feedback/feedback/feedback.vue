@@ -1,16 +1,6 @@
 <template>
     <div>
         <div class="card-body">
-            <!-- <div class="callout callout-success">
-                <span><label><u>Position and Feedback Detials</u></label></span>
-
-                <div class="row form-group">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Remarks:</label><br>
-                        <span class="text-blue text-bold">{{ feedback_details }}</span>
-                    </div>
-                </div>
-            </div> -->
             <div class="callout callout-success">
                 <span><label><u>Nominee Detials</u></label></span>
                 <div class="row form-group">
@@ -45,25 +35,17 @@
                         <label>Selection For:</label>
                         <span class="text-blue text-bold">{{selectionList[feedback_form.selection_type_id]}}</span>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Position:</label><br>
-                        <span class="text-blue text-bold">{{positionList[feedback_form.position_title_id] }}</span>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Last Date for Feedback:</label><br>
-                        <span class="text-blue text-bold">{{ feedback_end_data }}</span>
-                    </div> -->
                 </div>
                 <div class="alert alert-success alert-dismissible">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                  You are providing <b>{{feedbackArray[feedback_category_id]}}</b> feedback to {{data_list.aplicant_name}}
+                  You are providing feedback to {{data_list.aplicant_name}} as a <b>{{feedbackArray[feedback_category_id]}}</b>
                 </div>
                 <table id="waterTable" class="table w-100  table-sm table-bordered table-striped col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <thead>
                         <tr>
                             <th style="width:5%">Sl#</th>
-                            <th style="width:55%">Question</th>
-                            <th style="width:40%">Answers</th>
+                            <th style="width:72%">Question</th>
+                            <th style="width:23%">Answers</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,7 +70,7 @@
                             <td v-if="item.answer_type=='Radio'">
                                 <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <span v-for="(ans, index1) in item.answers" :key="index1">
-                                        <input type="radio" :name="'answer_radio'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" @change="remove_err(item.id+'_'+ans.id)" class="ml-4" :value="ans.id"> <label>  {{ans.name}} </label>
+                                        <input type="radio" :name="'answer_radio'+index" v-model="ans.answered" :id="item.id+'_'+ans.id" @change="remove_err(item.id+'_'+ans.id)" class="ml-4" :value="ans.id"> <label>  {{ans.name}} <br> </label>
                                     </span>
                                 </div>
                                 <label class="ml-4 text-danger" :id="item.id+'err'"></label>
@@ -291,7 +273,8 @@ export default {
                 this.feedback_form.selection_type_id=data.post_details.selection_type;
                 this.feedback_form.position_title_id=data.post_details.position_title;
                 this.feedback_category_id=data.feedback_type;
-                this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+                // this.loadFeedbackQuestion(data.feedback_type,data.post_details.selection_type);
+                this.feedback_form.questionList=data.questions;
             }
         })
         .catch((error)=>{

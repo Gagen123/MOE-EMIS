@@ -484,13 +484,6 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
-         $rules = [
-            'description'              =>  'required  ',
-        ];
-        $customMessages = [
-            'description.required'     => 'Please mention the reasons for transfer appeal ',
-        ];
-        $this->validate($request, $rules,$customMessages);
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
@@ -527,6 +520,7 @@ class TransferController extends Controller{
             'remarks'                           =>  $request->remarks,
             'withdraw'                          =>  $request->withdraw,
         ];
+        // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal',$request_data);
         //inserting into work flow
         if($request->actionType=="add"){

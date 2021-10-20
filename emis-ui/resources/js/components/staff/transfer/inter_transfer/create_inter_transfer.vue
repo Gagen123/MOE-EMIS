@@ -351,7 +351,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -371,7 +371,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -383,7 +383,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadStaffMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/inter'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;

@@ -105,7 +105,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadtransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
+        loadtransferType(uri = 'masters/loadStaffTransferMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
