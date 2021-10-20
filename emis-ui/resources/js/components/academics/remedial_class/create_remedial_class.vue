@@ -127,14 +127,15 @@
                     let classes = response.data
                     classes.forEach(item => {
                         let CombineClassStreamSection =[]
+                        CombineClassStreamSection['class_stream_section'] = item.class
                         if(item.stream && item.section){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                        }else if(item.stream){
+                        }
+                        if(item.stream){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.stream
-                        } else if(item.section){
+                        } 
+                        if(item.section){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.section
-                        }else{
-                            CombineClassStreamSection['class_stream_section'] = item.class
                         }
                         CombineClassStreamSection["org_class_id"] = item.org_class_id;
                         CombineClassStreamSection["org_stream_id"] = item.org_stream_id;
@@ -145,6 +146,7 @@
                         classStreamSectionArray.push(object)
                     });
                     this.class_list = classStreamSectionArray
+                    console.log(this.class_list)
                 })
                 .catch(function(e){
                     if(e.toString().includes("500")){

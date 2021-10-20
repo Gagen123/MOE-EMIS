@@ -1,20 +1,25 @@
 <?php
 
 namespace App\Http\Controllers\common_services;
+
 use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use Illuminate\Http\Request;
 use App\Traits\AuthUser;
 use App\Http\Controllers\Controller;
-class LoadOrganizaitonController extends Controller{
+
+class LoadOrganizaitonController extends Controller
+{
     use AuthUser;
     use ServiceHelper;
     public $apiService;
-    public function __construct(EmisService $apiService){
+    public function __construct(EmisService $apiService)
+    {
         $this->apiService = $apiService;
     }
-    public function loadOrgList($type="",$id=""){//'id','name','levelId','dzongkhagId'
+    public function loadOrgList($type = "", $id = "")
+    { //'id','name','levelId','dzongkhagId'
         // dd($type,$id);
         //if Ministry then give entire list
         // $access_level = $this->getAccessLevel();
@@ -22,78 +27,81 @@ class LoadOrganizaitonController extends Controller{
         //     $type = "allorganizationList";
         // }
 
-        $param="";
+        $param = "";
         //type=allorganizationList: to list entire organization
-        if($type=="allorganizationList"){
-            $param=$id; 
+        if ($type == "allorganizationList") {
+            $param = $id;
         }
 
         //type=userdzongkhagwise: to list with dzongkhag id from user login
-        if($type=="userdzongkhagwise" || $type=="all_eccds_dzogkhag_wise" || $type=="school"){
-            $param=$this->getUserDzoId();
+        if ($type == "userdzongkhagwise" || $type == "all_eccds_dzogkhag_wise" || $type == "school") {
+            $param = $this->getUserDzoId();
         }
 
         //type=userworkingagency: to list with working agency from user login
-        if($type=="userworkingagency"){
-            $param=$this->getWrkingAgencyId();
-        } 
+        if ($type == "userworkingagency") {
+            $param = $this->getWrkingAgencyId();
+        }
         //type=dzongkhagwise, parent_id=?: to list with dzongkhag id
-        if($type=="dzongkhagwise"){
-            $param=$id;
+        if ($type == "dzongkhagwise") {
+            $param = $id;
         }
 
         //type=gewoggwise, parent_id=?: to list with gewog id
-        if($type=="gewoggwise"){
-            $param=$id;
+        if ($type == "gewoggwise") {
+            $param = $id;
         }
         //type=gewoggwise, parent_id=?: to list with gewog id
-        if($type=="private" || $type=="SEN"|| $type=="tertiary" || $type=="ECR" || $type=="eccd" || $type=="School" || $type=="all_eccds"){
-            $param=$id;
+        if ($type == "private" || $type == "SEN" || $type == "tertiary" || $type == "ECR" || $type == "eccd" || $type == "School" || $type == "all_eccds") {
+            $param = $id;
         }
- 
+
         // dd('emis/common_services/loadOrgList/'.$type.'/'.$param);
-        return $this->apiService->getListData('emis/common_services/loadOrgList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/common_services/loadOrgList/' . $type . '/' . $param);
     }
-    public function loadInactiveOrgList(){
+    public function loadInactiveOrgList()
+    {
         $dzo_id = $this->getUserDzoId();
-        return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/'.$dzo_id);
+        return $this->apiService->getListData('emis/common_services/loadInactiveOrgList/' . $dzo_id);
     }
 
     //type can be Orgbyid,Headquarterbyid,user_login_access_id, orgcode etc and id shoulb be their respective values
-    public function loadOrgDetails($type="",$id=""){
-        if($type=="full_user_logedin_dzo_id"){
-            $id=$this->getUserDzoId();
+    public function loadOrgDetails($type = "", $id = "")
+    {
+        if ($type == "full_user_logedin_dzo_id") {
+            $id = $this->getUserDzoId();
         }
-        return $this->apiService->getListData('emis/common_services/loadOrgDetails/'.$type.'/'.$id);
+        return $this->apiService->getListData('emis/common_services/loadOrgDetails/' . $type . '/' . $id);
     }
 
-    public function loadHeaquarterList($type="",$parent_id=""){
-        $param="";
+    public function loadHeaquarterList($type = "", $parent_id = "")
+    {
+        $param = "";
         // type=allList: to list entire headquarters
         // if($type=="allList"){
         //     $param="NA";
         // }
 
         //list headquarters of all dzongkhg
-        if($type=="all_dzongkhag_headquarters"){
-            $param=2;
+        if ($type == "all_dzongkhag_headquarters") {
+            $param = 2;
         }
 
         //list all departments at ministry
-        if($type=="all_ministry_departments"){
-            $param=$parent_id;
+        if ($type == "all_ministry_departments") {
+            $param = $parent_id;
         }
         //list headquarters of all ministry
-        if($type=="all_division"){
-            $param=$parent_id;
+        if ($type == "all_division") {
+            $param = $parent_id;
         }
 
         //list department dzongkhag wise
-        if($type=="user_dzongkhag"){
-            $param=$parent_id;
+        if ($type == "user_dzongkhag") {
+            $param = $parent_id;
         }
 
-        return $this->apiService->getListData('emis/common_services/loadHeaquarterList/'.$type.'/'.$param);
+        return $this->apiService->getListData('emis/common_services/loadHeaquarterList/' . $type . '/' . $param);
     }
 
     /**
@@ -101,37 +109,42 @@ class LoadOrganizaitonController extends Controller{
      *
      */
 
-    public function loadClassStreamSection($type="",$id=""){
+    public function loadClassStreamSection($type = "", $id = "")
+    {
         //type=userworkingagency: to list with working agency from user login
-        if($type=="userworkingagency"){
-            $id=$this->getWrkingAgencyId();
+        if ($type == "userworkingagency") {
+            $id = $this->getWrkingAgencyId();
         }
 
         //type=selelctedorgWise: by selected organization
-        if($type=="selelctedorgWise"){
-            $id=$id;
+        if ($type == "selelctedorgWise") {
+            $id = $id;
         }
-        return $this->apiService->getListData('emis/common_services/loadClassStreamSection/'.$type.'/'.$id);
+        return $this->apiService->getListData('emis/common_services/loadClassStreamSection/' . $type . '/' . $id);
     }
-    public function getClassByType($type=""){
-        return $this->apiService->getListData('emis/common_services/getClassByType/'.$type);
+    public function getClassByType($type = "")
+    {
+        return $this->apiService->getListData('emis/common_services/getClassByType/' . $type);
     }
 
     /**
      * Get the class list from the organization class mapping
      */
 
-    public function getOrgClassStream(){
+    public function getOrgClassStream()
+    {
         $org_id = $this->getWrkingAgencyId();
-        return $this->apiService->getListData('emis/common_services/getOrgClassStream/'.$org_id);
+        return $this->apiService->getListData('emis/common_services/getOrgClassStream/' . $org_id);
     }
 
-    public function getOrgClassStreambyId($id=""){
-        return $this->apiService->getListData('emis/common_services/getOrgClassStreambyId/'.$id);
+    public function getOrgClassStreambyId($id = "")
+    {
+        return $this->apiService->getListData('emis/common_services/getOrgClassStreambyId/' . $id);
     }
 
-    public function getSectionById($id=""){
-        return $this->apiService->getListData('emis/common_services/getSectionById/'.$id);
+    public function getSectionById($id = "")
+    {
+        return $this->apiService->getListData('emis/common_services/getSectionById/' . $id);
     }
 
     /**
@@ -139,21 +152,24 @@ class LoadOrganizaitonController extends Controller{
      * params is Class, Stream and Section separated by __ (double underscore)
      */
 
-    public function getClassStreamSection($params){
+    public function getClassStreamSection($params)
+    {
         $org_id = $this->getWrkingAgencyId();
-        return $this->apiService->getListData('emis/common_services/getClassStreamSection/'.$params.'/'.$org_id);
+        return $this->apiService->getListData('emis/common_services/getClassStreamSection/' . $params . '/' . $org_id);
     }
 
     /**
      * the id is the id from the table organizaiton_class_streams
      */
 
-    public function loadStreamList($id){
-        return $this->apiService->getListData('emis/common_services/loadStreamList/'.$id);
+    public function loadStreamList($id)
+    {
+        return $this->apiService->getListData('emis/common_services/loadStreamList/' . $id);
     }
 
-    public function loadSectionList($id){
-        return $this->apiService->getListData('emis/common_services/loadSectionList/'.$id);
+    public function loadSectionList($id)
+    {
+        return $this->apiService->getListData('emis/common_services/loadSectionList/' . $id);
     }
 
     /**
@@ -161,23 +177,27 @@ class LoadOrganizaitonController extends Controller{
      * this is for display the name of the class, stream and section
      */
 
-    public function getClassArray(){
+    public function getClassArray()
+    {
         $org_id = $this->getWrkingAgencyId();
-        return $this->apiService->getListData('emis/common_services/getClassArray/'.$org_id);
+        return $this->apiService->getListData('emis/common_services/getClassArray/' . $org_id);
     }
 
-    public function getStreamArray(){
+    public function getStreamArray()
+    {
         $org_id = $this->getWrkingAgencyId();
-        return $this->apiService->getListData('emis/common_services/getStreamArray/'.$org_id);
+        return $this->apiService->getListData('emis/common_services/getStreamArray/' . $org_id);
     }
 
-    public function getSectionArray(){
+    public function getSectionArray()
+    {
         $org_id = $this->getWrkingAgencyId();
-        return $this->apiService->getListData('emis/common_services/getSectionArray/'.$org_id);
+        return $this->apiService->getListData('emis/common_services/getSectionArray/' . $org_id);
     }
 
 
-    public function loadeducationCenter($type=""){
-        return $this->apiService->getListData('emis/common_services/loadeducationCenter/'.$type);
+    public function loadeducationCenter($type = "")
+    {
+        return $this->apiService->getListData('emis/common_services/loadeducationCenter/' . $type);
     }
 }

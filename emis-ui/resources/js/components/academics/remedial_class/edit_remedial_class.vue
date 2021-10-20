@@ -36,13 +36,13 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>From Date:<span class="text-danger">*</span></label> 
-                    <input v-model="form.from_date" type="text" name="from_date" id="from_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
+                    <input v-model="form.from_date" type="text" id="from_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
                     <has-error :form="form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>To Date:<span class="text-danger">*</span></label> 
                     <input v-model="form.to_date" type="text" name="to_date" id="to_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('to_date') }" @change="remove_err('to_date')" />
-                    <has-error :form="form" field="from_date"></has-error>
+                    <has-error :form="form" field="to_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Total No. of Hours:<span class="text-danger">*</span></label> 
@@ -196,9 +196,6 @@
                 this.getSubjectTeachers = teacherList
             },
             async getStudents(){
-                 this.studentList =[]
-                $('#from_date').val(this.from.from_date)
-                $('#to_date').val(this.from.to_date)
                 if($('#class_stream_section_id').val()==''){
                     let errorMessage = "This field is required"
                     $('#error_class').text(errorMessage);
@@ -237,16 +234,8 @@
                    })
                })
                this.studentList = students
+               console.log(this.studentList)
 
-            },
-            getRemedialClassDetail(){
-                 axios.get('academics/getRemedialClassDetail/'+this.form.id)
-                .then(response => {
-                    console.log(response.data.data);
-                })
-                .catch(function (error){
-                    console.log('Error..... '+error)
-                });
             },
             save(){
                 this.form.from_date = this.formatYYYYMMDD($('#from_date').val());
@@ -297,15 +286,16 @@
             const event = new Event("change", { bubbles: true, cancelable: true });
             e.params.data.element.parentElement.dispatchEvent(event);
             });
-            this.getClasses()
-            this.getSubjectByClass()
-            this.getSubjectTeacherBySubId()
-            this.getStudents()
-            this.getRemedialClassDetail()
+            // this.getRemedialClassDetail()
             this.dt = $("#student-table").DataTable({
                 "lengthChange": false,
                 "searching": false,
             })
+            this.getClasses()
+            this.getSubjectByClass()
+            this.getSubjectTeacherBySubId()
+            this.getStudents()
+
         },
         watch: {
         studentList(val) {

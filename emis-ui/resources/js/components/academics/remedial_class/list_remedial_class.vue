@@ -56,17 +56,18 @@ export default {
                 remedialClasses.forEach((item,index) => {
                     classSections.forEach(item1 => {
                         teachers.forEach(item3 => {
-                            const stream_id = item.org_stream_id == "" ? null : item.org_stream_id;
-                            const section_id = item.org_section_id == "" ? null : item.org_section_id;
-                            const stream_id1 = item1.org_stream_id == "" ? null : item1.org_stream_id;
-                            const section_id1 = item1.org_section_id == "" ? null : item1.org_section_id;
+                            const stream_id = item.org_stream_id == null ? "" : item.org_stream_id;
+                            const section_id = item.org_section_id == null ? "" : item.org_section_id;
+                            const stream_id1 = item1.org_stream_id == null ? "" : item1.org_stream_id;
+                            const section_id1 = item1.org_section_id == null ? "" : item1.org_section_id;
                             if(item.org_class_id == item1.org_class_id
-                                && (stream_id == stream_id1 || (stream_id == null && stream_id1 == null)) 
-                                && (section_id == section_id1 || (section_id == null && section_id1 == null))
+                                && (stream_id == stream_id1 || (stream_id == "" && stream_id1 == "")) 
+                                && (section_id == section_id1 || (section_id == "" && section_id1 == ""))
                                 && item.stf_staff_id == item3.id)
                             {
                                 remedialClasses[index]['OrgClassStreamId'] =  item1.OrgClassStreamId 
-                                remedialClasses[index]['class'] = item1.class
+                                remedialClasses[index]['org_stream_id'] = stream_id
+                                remedialClasses[index]['org_section_id'] = section_id
                                 if(item1.stream){
                                     remedialClasses[index]['class'] = item1.class +' '+ item1.stream;
                                 }

@@ -14,7 +14,7 @@
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 overflow-auto">
-                    <table id="assessment-term-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="assessment-term-table" cellspacing="0" width="100%" class="stripe cell-bordered order-column">
                         <thead>
                             <tr>
                                  <th>Roll No.
