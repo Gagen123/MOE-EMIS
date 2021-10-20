@@ -9,7 +9,7 @@
                             <th>Applicant Name</th>
                             <th>Application Number</th>
                             <th>Date of Apply</th>
-                            <th>Remark From HRCD</th>
+                            <th>Remark From (HRCD/DEO)</th>
                             <th>Status</th>
                             <th class="pl-4 pr-4">Action</th>
                         </tr>
@@ -19,7 +19,7 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ item.name}}</td>
                             <td>{{ item.application_no}}</td>
-                            <td>{{ item.created_at}}</td>
+                            <td>{{ reverseDateTime(item.created_at)}}</td>
                              <td>{{ item.remarks}}</td>
                             <td><span class="badge badge-success">{{ item.status}}</span></td>
                             <td>

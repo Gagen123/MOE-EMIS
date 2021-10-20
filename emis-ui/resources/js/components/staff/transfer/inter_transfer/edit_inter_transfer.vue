@@ -54,8 +54,8 @@
                                     <thead>
                                         <tr>
                                             <th>SlNo</th>
-                                            <th>Preferences</th>
-                                            <th>Dzongkhag/Thromde</th>
+                                            <th >Preferences</th>
+                                            <th >Dzongkhag/Thromde</th>
                                         </tr>
                                     </thead>approvedDetails
                                     <tbody>
@@ -101,13 +101,13 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Organization Details</label>
+                                <label class="mb-0.5">Current Organization Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Dzongkhag/Thromde</th>
-                                            <th>School</th>
+                                            <th style="width:10%">SlNo</th>
+                                            <th style="width:20%">Dzongkhag/Thromde</th>
+                                            <th style="width:30%">School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -130,9 +130,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Dzongkhag/Thromde</th>
-                                            <th>School</th>
+                                            <th style="width:10%">SlNo</th>
+                                            <th style="width:20%">Dzongkhag/Thromde</th>
+                                            <th style="width:30%">School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -308,14 +308,15 @@ export default {
                 this.form.application_number = data.aplication_number;
                 this.form.status=data.status;
                 this.loadattachementDetails(data.aplication_number);
-                if(this.form.status =="Approved"){
+                if(this.form.status =="Approved" ||this.form.status =="Assigned School"){
                      $('#approvedDetails').show();
 
                 }else{
                     $('#approvedDetails').hide();
                 }
+
                 
-                if(this.form.status =="Approved" || this.form.status =="withdrawn" || this.form.status == "Forwarded"){
+                if(this.form.status =="Approved" || this.form.status =="withdrawn" || this.form.status == "Assigned School"){
                      $('#Withdraw').hide();
                      $('#remarks').hide();
                      $('#update').hide();
@@ -345,7 +346,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -371,10 +372,11 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
+         loadOrgList(uri ='staff/transfer/LoadSchoolByDzoId/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
-                let data = response.data;
+                let data = response.data.data;
+                this.SchoolList =  data;
                 for(let i=0;i<data.length;i++){
                  this.orgArray[data[i].id] = data[i].name;
                 }
@@ -383,7 +385,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -395,7 +397,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/inter'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data.id;

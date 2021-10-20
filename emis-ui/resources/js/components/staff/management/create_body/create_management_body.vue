@@ -313,14 +313,15 @@ export default {
             studentcomposition_list:[],
             nonstaffcomposition_list:[],
             attachmentDetails:[],
-             fileUpload: [],
+            
             form: new form({
                 id:'',
                 body_type:'',
                 from_date:'',
                 to_date:'',
                 remarks:'',
-                 attachments:
+                fileUpload: [],
+                attachments:
                 [{
                     file_name:'',attachment:''
                 }],
@@ -580,6 +581,14 @@ export default {
             else{
                 $('#fileName'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
+            }
+        },
+        addMoreattachment: function(){
+            this.form.fileUpload.push({file_name:'', file_upload:''})
+        },
+        removeattachment(index){
+            if(this.form.fileUpload.length>1){
+                this.form.fileUpload.pop();
             }
         },
         remove_err(fieldId,errorId){

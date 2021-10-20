@@ -23,26 +23,31 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadStaffMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadStaffMasters']);
             $router->get('/loadStaffMastersbyId/{model}/{id}', ['uses' => 'masters\StaffMasterController@loadStaffMastersbyId']);
             $router->get('/getTeacherPositionTitle', ['uses' => 'masters\StaffMasterController@getTeacherPositionTitle']);
-
             $router->post('/saveConfigMasters', ['uses' => 'masters\StaffMasterController@saveConfigMasters']);
             $router->get('/loadConfigMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadConfigMasters']);
-
+            $router->get('/loadStaffsTransferMasters/{param}','masters\StaffMasterController@loadStaffsTransferMasters');
+            $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMasterController@saveTransferConfigMasters']);
+            $router->get('/loadAllTransferConfigMasters', ['uses' => 'masters\StaffMasterController@loadAllTransferConfigMasters']);
+            $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
+            $router->get('/loadStaffTransferMasters/{param}',['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
+            $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
+            
         });
 
         // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
-        $router->get('/loadStaffMasters/{param}','masters\StaffMastersController@loadStaffMasters');
-        // $router->get(ifica'/load_staff_masters_by_id/{param}/{id}','masters\StaffMastersController@load_staff_masters_by_id');
-        $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMastersController@loadStaffDropdownMasters');
+        // $router->get('/loadStaffMasters/{param}','masters\StaffMasterController@loadStaffMasters');
+        // $router->get(ifica'/load_staff_masters_by_id/{param}/{id}','masters\StaffMasterController@load_staff_masters_by_id');
+        // $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
 
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
         $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
         $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
 
-        $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMastersController@saveTransferConfigMasters']);
-        $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMastersController@loadLeaveConfigMasters');
-        $router->get('/loadAllTransferConfigMasters','masters\StaffMastersController@loadAllTransferConfigMasters');
-        $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMastersController@loadLeaveConfigDetails');
-        $router->get('/loadTransferConfigDetails/{id}','masters\StaffMastersController@loadTransferConfigDetails');
+        // $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMasterController@saveTransferConfigMasters']);
+        $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMasterController@loadLeaveConfigMasters');
+        // $router->get('/loadAllTransferConfigMasters','masters\StaffMasterController@loadAllTransferConfigMasters');
+        $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMasterController@loadLeaveConfigDetails');
+        // $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
         $router->post('/savePersonalDetails', ['uses' => 'staff\StaffController@savePersonalDetails']);

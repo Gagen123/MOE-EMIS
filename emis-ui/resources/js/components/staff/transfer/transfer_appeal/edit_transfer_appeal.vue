@@ -140,7 +140,7 @@
                         </div>
                          <div class="form-group row" id="actionMessage">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label style="font-size:20"><i class="mb-0.9">You cannot update since your application <b style="color:green">({{this.form.aplication_number}})</b> has been already taken action</i></label><br/>
+                                <label style="font-size:14px"><i class="mb-0.9">"You cannot update since your application <b style="color:green">({{this.form.aplication_number}})</b> has been <b style="color:green">{{this.form.status}} already</b></i>"</label><br/>
                             </div>
                         </div>
                         <div  class="row form-group fa-pull-right" id="actionButton">
@@ -228,7 +228,7 @@ export default {
                 this.form.status=data.status;
                 this.form.transferType=data.transferType;
                 
-                if(this.form.status =="Verfied By HRD" || this.form.status =="withdrawn"){
+                if(this.form.status =="Verfied" || this.form.status =="withdrawn"){
                     $('#Withdraw').hide();
                     $('#remarks').hide();
                     $('#actionButton').hide();

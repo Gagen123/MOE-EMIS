@@ -110,6 +110,7 @@ class TransferController extends Controller{
                 'db_name'           =>$this->database_name,
                 'table_name'        =>$this->table_name,
                 'service_name'      =>$request->service_name,
+                'name'              =>$request->name,
                 'application_number'=>  json_decode($response_data)->data->aplication_number,
                 'screen_id'         =>  json_decode($response_data)->data->aplication_number,
                 'status_id'         =>  1,
@@ -268,7 +269,7 @@ class TransferController extends Controller{
             $work_status=10;
         }
         if($request->actiontype=="forward"){
-            $org_status="Forwarded";
+            $org_status="Assigned School";
             $work_status=9;
         }
         if($request->actiontype=="report"){
@@ -291,7 +292,7 @@ class TransferController extends Controller{
                 'notification_message'          =>  'Your Application for Transfer has been rejected. Reason for the rejection: '.$request->remarks,
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
-                'user_role_id'                  =>  $request->created_by,
+                'user_role_id'                  =>  $request->submitterroleid,
             ];
             $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
@@ -301,14 +302,25 @@ class TransferController extends Controller{
         //         'notification_type'             =>  'user',
         //         'call_back_link'                =>  'view_notification_message',
         //         'user_role_id'                  =>  $request->created_by,
+                
         //     ];
+        //     $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         // }
         else if($request->actiontype=="approve"){
             $notification_data=$notification_data+[
                 'notification_message'          =>  'Your Application for Transfer has been Approved ',
                 'notification_type'             =>  'user',
                 'call_back_link'                =>  'view_notification_message',
-                'user_role_id'                  =>  $request->created_by,
+                'user_role_id'                  =>  $request->submitterroleid,
+            ];
+            $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        }
+        else if($request->actiontype=="forward"){
+            $notification_data=$notification_data+[
+                'notification_message'          =>  'Your Application for Transfer has been Approved and Deo had Assigned you School ',
+                'notification_type'             =>  'user',
+                'call_back_link'                =>  'view_notification_message',
+                'user_role_id'                  =>  $request->submitterroleid,
             ];
             $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
         }
@@ -324,6 +336,7 @@ class TransferController extends Controller{
             ];
         }
         $data=$this->apiService->createData('emis/common/updateNextNotification', $notification_data);
+        
         if($request->transferType == "Intra Transfer"){
             $workflow_data=[
                 'db_name'           =>$this->database_name,
@@ -401,7 +414,7 @@ class TransferController extends Controller{
                 'current_status'                =>  $request->actiontype,
                 'status_id'                     =>  $work_status,
                 'service_name'                  =>  "Inter Transfer",
-                'dzongkhagApproved'             =>$request->userDzongkhag,
+                'dzongkhagApproved'             => $request->userDzongkhag,
                 // 'attachment_details'            =>   $attachment_details,
                 'user_id'                       =>   $this->userId()
             ];
@@ -471,13 +484,6 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
-         $rules = [
-            'description'              =>  'required  ',
-        ];
-        $customMessages = [
-            'description.required'     => 'Please mention the reasons for transfer appeal ',
-        ];
-        $this->validate($request, $rules,$customMessages);
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
@@ -514,6 +520,7 @@ class TransferController extends Controller{
             'remarks'                           =>  $request->remarks,
             'withdraw'                          =>  $request->withdraw,
         ];
+        // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/transfer/SaveTransferAppeal',$request_data);
         //inserting into work flow
         if($request->actionType=="add"){
@@ -594,7 +601,6 @@ class TransferController extends Controller{
 }
 
     public function UpdateTransferAppeal(Request $request){
-
         if($request->actiontype=="approved"){
             $status_id = 10;
         }

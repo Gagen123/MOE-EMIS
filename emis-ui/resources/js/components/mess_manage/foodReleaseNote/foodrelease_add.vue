@@ -451,7 +451,7 @@ export default {
        
     },
      mounted() { 
-         $('.select2').select2();
+        $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
         });

@@ -154,7 +154,7 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Organization Details</label>
+                                <label class="mb-0.5">Current Organization Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
@@ -407,7 +407,7 @@ export default {
                 console.log(error);
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -446,7 +446,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -458,7 +458,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/inter'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data.id;
@@ -567,7 +567,7 @@ export default {
             });
         },
         getOrgaName(id){
-            axios.get('organization/getOrgProfile/' +id)
+            axios.get('organization/getOrgProfile/'+id)
             .then(response => {
                 this.form.schoolName = response.data.data.orgName;
                 this.form.level = response.data.data.level;

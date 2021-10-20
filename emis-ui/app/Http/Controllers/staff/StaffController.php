@@ -88,29 +88,34 @@ class StaffController extends Controller{
     }
 
     public function savequalificationDetails(Request $request){
+        //dd($request);
         $rules = [
             'description'      =>  'required',
             'doner_agency'     =>  'required',
             'field'            =>  'required',
+            'type'             =>  'required',
             'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
             'firstsub'         =>  'required',
-            'country'          =>  'required',
+            // 'country'          =>  'required',
             'startdate'        =>  'required',
-            'enddate'          =>  'required'
+            'enddate'          =>  'required',
+            'qua_status'       =>  'required',
         ];
         $customMessages = [
             'description.required'        => 'This field is required',
             'doner_agency.required'       => 'This field is required',
             'field.required'              => 'This field is required',
+            'type.required'               => 'This field is required',
             'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
             'firstsub.required'           => 'This field is required',
-            'country.required'            => 'Country field is required',
+            // 'country.required'            => 'Country field is required',
             'startdate.required'          => 'This field is required',
             'enddate.required'            => 'This field is required',
+            'qua_status.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
 
@@ -125,7 +130,9 @@ class StaffController extends Controller{
     }
     public function loadStaffQualification($staff_id=""){
         $response_data= $this->apiService->listData('emis/staff/loadStaffQualification/'.$staff_id);
+        //dd($response_data);
         return $response_data;
+       
     }
 
     public function savenominationDetails(Request $request){

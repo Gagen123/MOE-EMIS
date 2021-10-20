@@ -12,6 +12,7 @@ class Locations extends Model
     protected $table="organization_locations";
     protected $fillable = [
         'id','organizationId','entranceGate','gate_type','longitude','latitude','altitude','compoundFencing','compoundArea','landOwnership',
+        'no_of_bus','schoolbus',
         'thramNo','googleMapPath','climate_type','distance_from_dzo','fencingtypeId','disasterArea','created_by','updated_by'
     ];
 }

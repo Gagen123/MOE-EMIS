@@ -27,16 +27,40 @@ class ManagementBodyController extends Controller{
             'to_date.required'        => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
+        $files = $request->attachments;
+        $filenames = $request->attachmentname;
+        $attachment_details=[];
+        $file_store_path=config('services.constant.file_stored_base_path').'managementdocument';
+        if($files!=null && $files!=""){
+            if(sizeof($files)>0 && !is_dir($file_store_path)){
+                mkdir($file_store_path,0777,TRUE);
+            }
+            if(sizeof($files)>0){
+                foreach($files as $index => $file){
+                    $file_name = time().'_' .$file->getClientOriginalName();
+                    move_uploaded_file($file,$file_store_path.'/'.$file_name);
+                    array_push($attachment_details,
+                        array(
+                            'path'                   =>  $file_store_path,
+                            'original_name'          =>  $file_name,
+                            'user_defined_name'      =>  $filenames[$index],
+                            'application_number'     =>  $request->applicationNo,
+                        )
+                    );
+                }
+            }
+        }
         $mgmn_details =[
-            'id'                =>  $request->id,
-            'type'                =>  $request->type,
-            'body_type'         =>  $request->body_type,
-            'from_date'         =>  $request->from_date,
-            'to_date'           =>  $request->to_date,
-            'org'               =>  $this->getWrkingAgencyId(),
-            'dzongkhag'         =>  $this->getUserDzoId(),
-            'remarks'           =>  $request->remarks,
-            'user_id'           =>$this->userId()
+            'id'                            =>  $request->id,
+            'type'                          =>  $request->type,
+            'body_type'                     =>  $request->body_type,
+            'from_date'                     =>  $request->from_date,
+            'to_date'                       =>  $request->to_date,
+            'org'                           =>  $this->getWrkingAgencyId(),
+            'dzongkhag'                     =>  $this->getUserDzoId(),
+            'remarks'                       =>  $request->remarks,
+            'attachment_details'            =>  $attachment_details,
+            'user_id'                       =>$this->userId()
         ];
         $response_data= $this->apiService->createData('emis/staff/managementBody/saveManagementBody', $mgmn_details);
         return $response_data;

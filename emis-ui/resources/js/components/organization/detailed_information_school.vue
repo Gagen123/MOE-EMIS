@@ -170,7 +170,7 @@
                                                         <option v-for="(item, index) in gate_type_list" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> 
                                             <div class="form-group row">
                                                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                                     <label>Compound Fencing:</label><br>
@@ -185,6 +185,19 @@
                                                         <input type="checkbox" name="disasterArea" :id="'dester'+item.id" :value="item.id"/>
                                                         {{item.name}}<br />
                                                     </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                    <label>School Bus:</label><br>
+                                                    <label><input  type="radio" v-model="form.schoolbus" value="1" @click="showfield(1)" tabindex=""/> Yes</label>
+                                                    <label><input  type="radio" v-model="form.schoolbus" value="0" @click="showfield(0)" tabindex=""/> No</label>
+                                                </div>
+                                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"  id="no_bus_section">
+                                                    <label>No. of Bus:</label>
+                                                    <input type="text" class="form-control" @change="removeerror('busno')" :class="{ 'is-invalid': form.errors.has('busno') }" id="busno" v-model="form.busno" >
+                                                   
+                                                    <has-error :form="form" field="busno"></has-error>
                                                 </div>
                                             </div>
                                         </div>
@@ -240,6 +253,8 @@
                     fencingtype:'',entranceGate:'',disasterArea:'',
                     fields_for:'school',
                     gate_type:'',
+                    busno:'',
+                    schoolbus:'',
                 })
             }
         },
@@ -305,6 +320,7 @@
                         this.form.disasterArea=response_data.loc_details.disasterArea;
                         this.form.distance_from_dzo=response_data.loc_details.distance_from_dzo;
                         this.form.entranceGate=response_data.loc_details.entranceGate;
+                        this.form.busno=response_data.loc_details.no_of_bus;
                         this.form.fencingtype=response_data.loc_details.fencingtypeId;
                         this.form.map_path=response_data.loc_details.googleMapPath;
                         if(response_data.loc_details.googleMapPath!=null && response_data.loc_details.googleMapPath!=""){
@@ -314,6 +330,8 @@
                         this.form.longitude=response_data.loc_details.longitude;
                         this.form.thramNo=response_data.loc_details.thramNo;
                         this.form.gate_type=response_data.loc_details.gate_type;
+                      
+                        this.form.schoolbus=response_data.loc_details.schoolbus;
                         // alert(this.form.gate_type);
                     }
                     let prop=response_data.contactDetails;
@@ -460,6 +478,23 @@
                     $('#gate_type_section').show();
                 }
             },
+            showfield:function(type){
+                if(type==1){
+                    $('#no_bus_section').show();
+               
+                }else{
+                    $('#no_bus_section').hide();
+                }
+            },
+
+        //      showtextbox:function(type){
+        // if(type=="No"){
+        //     $('#roadtypeno').show();
+        // }
+        //     else{
+        //         $('#roadtypeno').hide();
+        //     }
+        // },
 
 
         },
