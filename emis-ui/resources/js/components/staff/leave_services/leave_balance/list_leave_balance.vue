@@ -109,11 +109,10 @@ export default {
             }
             if(data['acess_level']=="Dzongkhag"){
                 $('#orgType').hide();
-                $('#dzosection').show();
+                $('#dzosection').hide();
+                this.orgList=this.schoolList(data['Dzo_Id']);
             }
-            if(data['acess_level']=="Ministry"){
-                $('#dzongkhag_id').show();
-            }
+
             this.loadRespectiveDataData(data['Agency_Code']);
             this.staff_id=data['staff_id'];
             this.getallLeaves();

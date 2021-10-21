@@ -28,16 +28,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadStaffsTransferMasters/{param}', 'masters\StaffMasterController@loadStaffsTransferMasters');
             $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMasterController@saveTransferConfigMasters']);
             $router->get('/loadAllTransferConfigMasters', ['uses' => 'masters\StaffMasterController@loadAllTransferConfigMasters']);
-<<<<<<< HEAD
             $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
             $router->get('/loadStaffTransferMasters/{param}',['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
             $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
-
-=======
-            $router->get('/loadTransferConfigDetails/{id}', 'masters\StaffMasterController@loadTransferConfigDetails');
-            $router->get('/loadStaffTransferMasters/{param}', ['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
-            $router->get('/loadStaffDropdownMasters/{model}/{parent_id}', 'masters\StaffMasterController@loadStaffDropdownMasters');
->>>>>>> d386cf5358cdf7af6f5512030c835e771cfcaa66
         });
 
         // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
@@ -203,10 +196,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
             $router->get('/getAppVeriLeaveConfigDetails/{leave_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\StaffServicesController@getAppVeriLeaveConfigDetails']);
-<<<<<<< HEAD
             $router->get('/getLeaveBalance/{staff_id}/{year}', ['uses' => 'staff\StaffServicesController@getLeaveBalance']);
-=======
->>>>>>> d386cf5358cdf7af6f5512030c835e771cfcaa66
         });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);
