@@ -25,13 +25,19 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getTeacherPositionTitle', ['uses' => 'masters\StaffMasterController@getTeacherPositionTitle']);
             $router->post('/saveConfigMasters', ['uses' => 'masters\StaffMasterController@saveConfigMasters']);
             $router->get('/loadConfigMasters/{type}/{model}', ['uses' => 'masters\StaffMasterController@loadConfigMasters']);
-            $router->get('/loadStaffsTransferMasters/{param}','masters\StaffMasterController@loadStaffsTransferMasters');
+            $router->get('/loadStaffsTransferMasters/{param}', 'masters\StaffMasterController@loadStaffsTransferMasters');
             $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMasterController@saveTransferConfigMasters']);
             $router->get('/loadAllTransferConfigMasters', ['uses' => 'masters\StaffMasterController@loadAllTransferConfigMasters']);
+<<<<<<< HEAD
             $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
             $router->get('/loadStaffTransferMasters/{param}',['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
             $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
 
+=======
+            $router->get('/loadTransferConfigDetails/{id}', 'masters\StaffMasterController@loadTransferConfigDetails');
+            $router->get('/loadStaffTransferMasters/{param}', ['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
+            $router->get('/loadStaffDropdownMasters/{model}/{parent_id}', 'masters\StaffMasterController@loadStaffDropdownMasters');
+>>>>>>> d386cf5358cdf7af6f5512030c835e771cfcaa66
         });
 
         // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
@@ -40,13 +46,13 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         // $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
 
         $router->post('/saveHrDevelopmentMasters', ['uses' => 'masters\HrDevelopmentMastersController@saveHrDevelopmentMasters']);
-        $router->get('/loadHrDevelopmentMastersData/{type}','masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
-        $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}','masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
+        $router->get('/loadHrDevelopmentMastersData/{type}', 'masters\HrDevelopmentMastersController@loadHrDevelopmentMastersData');
+        $router->get('/loadHrDevelopmentDepedentMastersData/{model}/{parent_id}', 'masters\HrDevelopmentMastersController@loadHrDevelopmentDepedentMastersData');
 
         // $router->post('/saveTransferConfigMasters', ['uses' => 'masters\StaffMasterController@saveTransferConfigMasters']);
-        $router->get('/loadLeaveConfigMasters/{type}/{submitter}','masters\StaffMasterController@loadLeaveConfigMasters');
+        $router->get('/loadLeaveConfigMasters/{type}/{submitter}', 'masters\StaffMasterController@loadLeaveConfigMasters');
         // $router->get('/loadAllTransferConfigMasters','masters\StaffMasterController@loadAllTransferConfigMasters');
-        $router->get('/loadLeaveConfigDetails/{id}','masters\StaffMasterController@loadLeaveConfigDetails');
+        $router->get('/loadLeaveConfigDetails/{id}', 'masters\StaffMasterController@loadLeaveConfigDetails');
         // $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
     });
     $router->group(['prefix' => 'staff'], function () use ($router) {
@@ -68,7 +74,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         $router->get('/loadStaff', ['uses' => 'staff\StaffController@loadStaff']);
         $router->post('/updateStaffDetails', ['uses' => 'staff\StaffController@updateStaffDetails']);
-		  //Method by Chimi thinley
+        //route by Chimi thinley
         $router->get('/getLoginUser/{orgId}', ['uses' => 'staff\StaffController@getLoginUser']);
         // $router->get('/loadAllStaff/{type}', ['uses' => 'staff\StaffController@loadAllStaff']);
         // $router->get('/loadStaff/{type}/{param}', ['uses' => 'staff\StaffController@loadStaff']);
@@ -78,7 +84,10 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/load_staff_details_by_id/{id}', ['uses' => 'staff\StaffController@load_staff_details_by_id']);
         $router->get('/viewStaffProfile/{id}', ['uses' => 'staff\StaffController@viewStaffProfile']);
         $router->get('/getStaffName/{Id}', ['uses' => 'staff\StaffController@getStaffName']);
+        //route by Chimi thinley
         $router->get('/getPrincipal/{orgId}', ['uses' => 'staff\StaffController@getPrincipal']);
+
+
         $router->get('/getStaffsName', ['uses' => 'staff\StaffController@getStaffsName']);
 
         //load list of staff
@@ -141,17 +150,14 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadPrincipalApprovalApplication/{id}/{type}', ['uses' => 'staff\StaffRecruitmentController@loadApprovalApplication']);
             $router->get('/loadPrincipalApplicationDetials/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalApplicationDetials']);
             $router->get('/loadPrincipalAttachmentDetials/{id}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalAttachmentDetials']);
-
         });
 
-         //Expatriate recuritment Approval controller by gagen
+        //Expatriate recuritment Approval controller by gagen
         $router->group(['prefix' => 'staffRecruitmentController'], function () use ($router) {
             $router->post('/saveExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@saveExpatriateRecuritment']);
             $router->post('/UpdateExpatriateRecuritment', ['uses' => 'staff\StaffRecruitmentController@UpdateExpatriateRecuritment']);
             $router->get('/loadPrincipalRecuritmentApplication/{appNo}', ['uses' => 'staff\StaffRecruitmentController@loadPrincipalRecuritmentApplication']);
             $router->get('/loadExpatriateApprovalApplication/{id}/{type}', ['uses' => 'staff\StaffRecruitmentController@loadApprovalApplication']);
-
-
         });
 
         $router->group(['prefix' => 'managementBody'], function () use ($router) {
@@ -197,7 +203,10 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
             $router->get('/getAppVeriLeaveConfigDetails/{leave_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\StaffServicesController@getAppVeriLeaveConfigDetails']);
+<<<<<<< HEAD
             $router->get('/getLeaveBalance/{staff_id}/{year}', ['uses' => 'staff\StaffServicesController@getLeaveBalance']);
+=======
+>>>>>>> d386cf5358cdf7af6f5512030c835e771cfcaa66
         });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);
@@ -246,7 +255,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
         $router->get('/loadFewDetailsStaffListBySubject', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffListBySubject']);
         $router->get('/loadStaffCountDetail/{type}/{id}', ['uses' => 'staff\LoadStaffController@loadStaffCountDetail']);
-
     });
 
     //Staff Update Services
@@ -259,7 +267,6 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
         //pulling the register organization from bifurcation
         $router->get('/loadBifurcationList', ['uses' => 'staff\StaffUpdateController@loadBifurcationList']);
-
     });
     //Staff Seleration and Secondment Services
     $router->group(['prefix' => 'staffSepSecController'], function () use ($router) {
@@ -284,7 +291,5 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadPromotion/{param}', ['uses' => 'staff\ZestController@loadPromotion']);
         $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
         $router->get('/loadLongTermTraining/{param}', ['uses' => 'staff\ZestController@loadLongTermTraining']);
-
     });
-
 });

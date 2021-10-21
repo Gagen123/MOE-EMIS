@@ -1,20 +1,21 @@
 <template>
    <div>
-        <form @submit.prevent="save" class="bootbox-form">
+        <form class="bootbox-form">
             <div class="row form-group">
                 <div class="ml-3 col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding-left:0px;">
                     <label>Date:<span class="text-danger">*</span></label>
-                    <input  id="attendance_date"  class="form-control form-control-sm" v-model="attendance_date"  type="date">
+                    <input :class="{'is-invalid': attendance_dateError }" type="text" id="attendance_date_id" placeholder="dd/mm/yyyy" class="form-control form-control-sm popupDatepicker" @change="remove_error('attendance_date_id','err_id')">
+                    <span id= "err_id" class="text-danger">{{ attendance_dateError }}</span>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
                     <label>Select Class:<span class="text-danger">*</span></label>
-                    <select class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id" :class="{'is-invalid select2 select2-hidden-accessible': errorMessage  }" @change="remove_err('class_stream_section_id')">
+                    <select :class="{'is-invalid select2 select2-hidden-accessible': classError  }" class="form-control form-control-sm select2" id="class_stream_section_id" v-model="class_stream_section_id"  @change="remove_err('class_stream_section_id','class_id')">
                         <option selected="selected" value="">---Select---</option>
                         <option selected v-for="(item, index) in classTecherClass" :key="index" :value="[item.OrgClassStreamId,item.org_class_id,item.org_stream_id,item.org_section_id,item.class_stream_section]">
                             {{ item.class_stream_section }}
                         </option>
                     </select>
-                    <span id= "errorId" class="text-danger">{{ errorMessage }}</span>
+                    <span id= "class_id" class="text-danger">{{ classError }}</span>
                 </div>
                 <div class="col-auto pt-1 mt-4">
                     <button type="button" class="btn btn-primary btn-sm" @click="getStudents()"><i class="fa fa-download"></i> Fetch Student</button>
@@ -60,7 +61,7 @@
             </div>
             <div class="card-footer text-right">
                 <button v-if="studentList.length" type="reset" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button v-if="studentList.length" type="submit" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
+                <button v-if="studentList.length"  @click.prevent="save"  class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -74,19 +75,24 @@ export default {
             remarkList:[],
             studentList:[],
             class_stream_section_id:'',
-            attendance_date:new Date().toISOString().substr(0, 10),
+            attendance_date:'',
             message:'',
             action:'add',
             dt:'',
-            errorMessage: '',
+            attendance_dateError:'',
+            classError: '',
         }
     },
     methods:{
-        remove_err(id){
+        remove_err(id,error_id){
             if($('#' + id).val()!=""){
-               $('#'+id).removeClass('is-invalid select2');
-               $('#'+id).addClass('select2');
-               $('#errorId').remove()
+                if(error_id ==='err_id'){
+                    $('#'+id).removeClass('is-invalid');
+                }else{
+                    $('#'+id).removeClass('is-invalid select2 select2-hidden-accessible');
+                    $('#'+id).addClass('select2');
+                }
+                $('#'+error_id).remove();
             }
         },
         async getClassTeacherClasss(){
@@ -120,43 +126,46 @@ export default {
              }
         },
         getStudents(){
-            if($('#class_stream_section_id').val()==''){
-                this.errorMessage = "This field is required"
-            }
-            let uri = 'academics/getStudentsForAttendance'
-            uri += ('?action='+this.action+'&attendance_date='+this.attendance_date+'&class_stream_section='+this.class_stream_section_id[4]+'&OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
-            if(this.class_stream_section_id[2] !== null && this.class_stream_section_id[2] !== ""){
-                    uri += ('&streamId='+this.class_stream_section_id[2])
-            }
-            if(this.class_stream_section_id[3] !== null && this.class_stream_section_id[3] !== ""){
-                uri += ('&sectionId='+this.class_stream_section_id[3])
-            }
-            axios.get(uri)
-            .then(response => {
-                if(response.data.error){
-                    Swal.fire({
-                        icon: 'warning',
-                        text: response.data.error,
-                    })
-                }else{
-                    let studentList = response.data.student
-                    let aa = []
-                    studentList.forEach((item)=>{
-                        aa['CidNo'] = item.CidNo
-                        aa['Name'] = item.Name
-                        aa['std_student_id'] = item.std_student_id
-                        aa['is_present'] = 1
-                        aa['roll_no'] = item.roll_no
-                        const obj = {...aa};
-                        this.studentList.push(obj);
-                    })
+            if($('#attendance_date_id').val()==''){
+                this.attendance_dateError = "This field is required"
+            }else if($('#class_stream_section_id').val()==''){
+                this.classError = "This field is required"
+            }else{
+                let uri = 'academics/getStudentsForAttendance'
+                uri += ('?action='+this.action+'&attendance_date='+this.attendance_date+'&class_stream_section='+this.class_stream_section_id[4]+'&OrgClassStreamId='+this.class_stream_section_id[0]+'&classId='+this.class_stream_section_id[1])
+                if(this.class_stream_section_id[2] !== null && this.class_stream_section_id[2] !== ""){
+                        uri += ('&streamId='+this.class_stream_section_id[2])
                 }
+                if(this.class_stream_section_id[3] !== null && this.class_stream_section_id[3] !== ""){
+                    uri += ('&sectionId='+this.class_stream_section_id[3])
+                }
+                axios.get(uri)
+                .then(response => {
+                    if(response.data.error){
+                        Swal.fire({
+                            icon: 'warning',
+                            text: response.data.error,
+                        })
+                    }else{
+                        let studentList = response.data.student
+                        let aa = []
+                        studentList.forEach((item)=>{
+                            aa['CidNo'] = item.CidNo
+                            aa['Name'] = item.Name
+                            aa['std_student_id'] = item.std_student_id
+                            aa['is_present'] = 1
+                            aa['roll_no'] = item.roll_no
+                            const obj = {...aa};
+                            this.studentList.push(obj);
+                        })
+                    }
 
-            }).catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
+                }).catch(function (error) {
+                    if(error.toString().includes("500")){
+                        $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+                    }
+                });
+            }
         },
         loadReasonsForAbsentList(uri = 'masters/loadAcademicMasters/all_active_reasons_for_absent'){
             axios.get(uri)
@@ -170,7 +179,15 @@ export default {
             });
         },
         save(){
-            axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],attendance_date:this.attendance_date,data:this.studentList})
+            this.attendance_date = this.formatYYYYMMDD($('#attendance_date_id').val());
+            axios.post('academics/saveStudentAttendance', {
+                action:this.action,
+                org_class_id:this.class_stream_section_id[1],
+                org_stream_id:this.class_stream_section_id[2],
+                org_section_id:this.class_stream_section_id[3],
+                class_stream_section:this.class_stream_section_id[4],
+                attendance_date:this.attendance_date,
+                data:this.studentList})
                 .then(() => {
                     Toast.fire({
                         icon: 'success',
@@ -179,7 +196,8 @@ export default {
                     this.$router.push('/list-student-attendance');
                 })
                 .catch(function(error){
-                console.log( error);
+                    console.log(error);
+                 this.attendance_date = error
             });
         },
     },

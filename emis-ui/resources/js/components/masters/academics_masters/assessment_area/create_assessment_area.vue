@@ -42,10 +42,10 @@
                         <has-error :form="form" field="aca_assmnt_type"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Rating Type:</label> 
-                         <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id"> 
-                            <option value="">--Select--</option>
-                        </select> 
+                         <label>Is Descriptive Comment:</label> 
+                        <div class="form-check">
+                            <input v-model="form.is_descriptive" class="form-check-input" type="checkbox" true-value="1" false-value="0" checked>
+                        </div>
                     </div>
                 </div>  
                 <div class="row form-group">
@@ -74,12 +74,12 @@ export default {
     data() {
         return {
             subject_list:[],
-            rating_type_list:[],
+            descriptive_rating_type:'',
             filtered_rating_type:[],
             form: new form({
                 aca_sub_id:'',
                 aca_assmnt_type:'',
-                aca_rating_type_id:'',
+                is_descriptive:0,
                 name: '',
                 dzo_name: '',
                 code:'',
@@ -107,29 +107,11 @@ export default {
                $('#'+id).removeClass('is-invalid select2');
                $('#'+id).addClass('select2');
             }
-		    var aca_sub_category_id = $('#aca_sub_id option:selected').data('category-id')
-            var ratingtypes = "<option value=''>--Select--</option>"
-            this.rating_type_list.forEach((item,index)=>{
-                if((item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id) || item.aca_sub_category_id === null )){
-                    ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
-                }
-            })
-            $("#aca_rating_type_id").html(ratingtypes) 
-        },
-        loadRatingTypeList(){
-            let uri = 'masters/loadAcademicMasters/all_active_rating_type'
-            axios.get(uri)
-            .then(response =>{
-                this.rating_type_list = response.data.data
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
         },
 		formaction: function(type){
             if(type=="reset"){
                 this.form.aca_sub_id = '';
-                this.form.aca_rating_type_id = '';
+                this.form.is_descriptive = 0;
                 this.form.aca_assmnt_type = '';
                 this.form.name = '';
                 this.form.dzo_name = '';
@@ -168,7 +150,6 @@ export default {
         e.params.data.element.parentElement.dispatchEvent(event);
         });
         this.loadSubList()
-        this.loadRatingTypeList()
     },
 }
 </script>

@@ -586,7 +586,6 @@ Route::prefix('staff')->group(function () {
         Route::get('/getSubmitterId/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'getSubmitterId'])->name('getSubmitterId');
         Route::get('/checkEligibilityForTransfer/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'checkEligibilityForTransfer'])->name('checkEligibilityForTransfer');
         Route::get('/getTransferTypeName/{type_id}', [App\Http\Controllers\staff\TransferController::class, 'getTransferTypeName'])->name('getTransferTypeName');
-
     });
     Route::prefix('managementBody')->group(function () {
         Route::post('/saveManagementBody', [App\Http\Controllers\staff\ManagementBodyController::class, 'saveManagementBody'])->name('saveManagementBody');
