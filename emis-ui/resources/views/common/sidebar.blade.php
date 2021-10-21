@@ -551,7 +551,7 @@
                             <router-link to="/leave_service_index" class="nav-link pt-1 pb-1">
                                 <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Leave Services
+                                    Leave & Attendance
                                 </p>
                             </router-link>
                         </li>

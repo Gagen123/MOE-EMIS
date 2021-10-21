@@ -512,22 +512,22 @@ const routes = [
                 { path: '/edit_offence_type', name:'edit_offence_type', component: require('./components/masters/staff_servces_masters/offence_type/edit_offence_type.vue').default },
                 ],
             },
-            { path: '/offence_severity_index',
-                component: require('./components/masters/staff_servces_masters/offence_severity/offence_severity_index.vue').default,
+            { path: '/category_category_index',
+                component: require('./components/masters/staff_servces_masters/category_category/category_category_index.vue').default,
                 children:[
-                { path: '/',name:'offence_severity_index', component: require('./components/masters/staff_servces_masters/offence_severity/list_offence_severity.vue').default },
-                { path: '/list_offence_severity',name:'list_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/list_offence_severity.vue').default },
-                { path: '/create_offence_severity',name:'create_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/create_offence_severity.vue').default },
-                { path: '/edit_offence_severity', name:'edit_offence_severity', component: require('./components/masters/staff_servces_masters/offence_severity/edit_offence_severity.vue').default },
+                { path: '/',name:'category_category_index', component: require('./components/masters/staff_servces_masters/category_category/list_category_category.vue').default },
+                { path: '/list_category_category',name:'list_category_category', component: require('./components/masters/staff_servces_masters/category_category/list_category_category.vue').default },
+                { path: '/create_category_category',name:'create_category_category', component: require('./components/masters/staff_servces_masters/category_category/create_category_category.vue').default },
+                { path: '/edit_category_category', name:'edit_category_category', component: require('./components/masters/staff_servces_masters/category_category/edit_category_category.vue').default },
                 ],
             },
-            { path: '/offence_action_index',
-                component: require('./components/masters/staff_servces_masters/offence_action/offence_action_index.vue').default,
+            { path: '/case_type_index',
+                component: require('./components/masters/staff_servces_masters/case_type/case_type_index.vue').default,
                 children:[
-                { path: '/',name:'offence_action_index', component: require('./components/masters/staff_servces_masters/offence_action/list_offence_action.vue').default },
-                { path: '/list_offence_action',name:'list_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/list_offence_action.vue').default },
-                { path: '/create_offence_action',name:'create_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/create_offence_action.vue').default },
-                { path: '/edit_offence_action', name:'edit_offence_action', component: require('./components/masters/staff_servces_masters/offence_action/edit_offence_action.vue').default },
+                { path: '/',name:'case_type_index', component: require('./components/masters/staff_servces_masters/case_type/list_case_type.vue').default },
+                { path: '/list_case_type',name:'list_case_type', component: require('./components/masters/staff_servces_masters/case_type/list_case_type.vue').default },
+                { path: '/create_case_type',name:'create_case_type', component: require('./components/masters/staff_servces_masters/case_type/create_case_type.vue').default },
+                { path: '/edit_case_type', name:'edit_case_type', component: require('./components/masters/staff_servces_masters/case_type/edit_case_type.vue').default },
                 ],
             },
 
@@ -842,6 +842,24 @@ const routes = [
                     { path: '/Leave_acknowledgement', name:'Leave_acknowledgement', component: require('./components/staff/leave_services/apply_leave/leave_acknowledgement.vue').default },
                 ],
             },
+
+            { path: '/leave_balance',
+                component: require('./components/staff/leave_services/leave_balance/leave_balance_index.vue').default,
+                children:[
+                    { path: '/', name:'leave_balance',  component: require('./components/staff/leave_services/leave_balance/list_leave_balance.vue').default },
+                    { path: '/list_leave',name:'list_leave',  component: require('./components/staff/leave_services/leave_balance/list_leave_balance.vue').default },
+                ],
+            },
+
+            { path: '/staff_attendance',
+                component: require('./components/staff/leave_services/attendance/attendance_index.vue').default,
+                children:[
+                    { path: '/', name:'staff_attendance',  component: require('./components/staff/leave_services/attendance/list_attendance.vue').default },
+                    { path: '/list_attendance',name:'list_attendance',  component: require('./components/staff/leave_services/attendance/list_attendance.vue').default },
+                    { path: '/create_attendance',name:'create_attendance', component: require('./components/staff/leave_services/attendance/create_attendance.vue').default },
+                    { path: '/edit_attendance', name:'edit_attendance', component: require('./components/staff/leave_services/attendance/edit_attendance.vue').default },
+                ],
+            },
         ]
     },
      //Staff Update Services
@@ -1124,18 +1142,9 @@ const routes = [
                     { path: '/list_staff_disciplinary',name:'list_staff_disciplinary',  component: require('./components/staff/staff_services/staff_disciplinary/list_staff_disciplinary.vue').default },
                     { path: '/create_staff_disciplinary',name:'create_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/create_staff_disciplinary.vue').default },
                     { path: '/edit_staff_disciplinary', name:'edit_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/edit_staff_disciplinary.vue').default },
+                    { path: '/view_staff_disciplinary', name:'view_staff_disciplinary', component: require('./components/staff/staff_services/staff_disciplinary/view_staff_disciplinary.vue').default },
                 ],
             },
-            { path: '/staff_attendance',
-                component: require('./components/staff/staff_services/attendance/attendance_index.vue').default,
-                children:[
-                    { path: '/', name:'staff_attendance',  component: require('./components/staff/staff_services/attendance/list_attendance.vue').default },
-                    { path: '/list_attendance',name:'list_attendance',  component: require('./components/staff/staff_services/attendance/list_attendance.vue').default },
-                    { path: '/create_attendance',name:'create_attendance', component: require('./components/staff/staff_services/attendance/create_attendance.vue').default },
-                    { path: '/edit_attendance', name:'edit_attendance', component: require('./components/staff/staff_services/attendance/edit_attendance.vue').default },
-                ],
-            },
-
 
         ]
     },

@@ -1,29 +1,39 @@
 <template>
     <div>
         <div class="card">
-            <div class="card-body pb-1 mb-0 pt-1 mt-0">
+            <div class="card-body pb-1 mb-0 pt-1 mt-0 overflow-auto">
                 <table id="responsible-table" class="table table-bordered text-sm table-striped">
                     <thead>
                         <tr>
                             <th>SL#</th>
                             <th>Name</th>
+                            <th>EID</th>
+                            <th>Position Title</th>
+                            <th>Position Level</th>
+                            <th>Working Address</th>
                             <th>Case Type</th>
                             <th>Case Category</th>
                             <th>Offence Type</th>
                             <th>Case Received Date</th>
-                            <th>Case Summary</th>
                             <th class="pl-5 ml-5 pr-5 ml-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in data_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staff.emp_id}}:{{ item.staff.name}}</td>
-                            <td>{{ item.offence_date}}</td>
+                            <td>{{ item.name}}</td>
+                            <td>{{ item.emp_id}}</td>
+                            <td>{{ item.position_title_name}}</td>
+                            <td>{{ item.working_agency}}</td>
+                            <td>{{ item.positionlevel}}</td>
+                            <td>{{ item.case_type_name}}</td>
+                            <td>{{ item.case_category_name}}</td>
                             <td>{{ item.offence_type}}</td>
-                            <td>{{ item.offence_severity}}</td>
+                            <td>{{ reverseDate1(item.offence_date)}}</td>
                             <td>
-                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)">View/Edit</a>
+                                <!-- <span v-if="item.record_type=='MOE'"> -->
+                                <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)">View</a>
+                                <!-- </span> -->
                                 <!-- <a href="#" class="btn btn-danger btn-sm btn-flat text-white" @click="deleteitem(item.id)">Delete</a> -->
                             </td>
                         </tr>
@@ -84,7 +94,7 @@ export default {
         // },
 
         loadeditpage(itme){
-            this.$router.push({name:"edit_staff_disciplinary",params:{data:itme}});
+            this.$router.push({name:"view_staff_disciplinary",params:{data:itme}});
         }
     },
     created(){

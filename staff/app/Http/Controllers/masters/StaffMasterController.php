@@ -111,6 +111,11 @@ class StaffMasterController extends Controller{
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
+        if(isset($request->carryforward)){
+            $master_data = $master_data+[
+                'carryforward'   =>  $request->carryforward,
+            ];
+        }
         if(isset($request->code)){
             $master_data = $master_data+[
                 'code'   =>  $request->code,
@@ -562,7 +567,7 @@ class StaffMasterController extends Controller{
     }
 
 
-//transfer 
+//transfer
     public function saveTransferConfigMasters(Request $request){
         $rules = [
             'transfer_type_id' =>  'required',

@@ -9,8 +9,8 @@
                     <th >Position Level</th>
                     <th >Position Title</th>
                     <th >Description</th>
-                    <th >Status</th>
                     <th >Code</th>
+                    <th >Status</th>
                     <th >Created Date</th>
                     <th class="pl-4 pr-5">Action</th>
                 </tr>

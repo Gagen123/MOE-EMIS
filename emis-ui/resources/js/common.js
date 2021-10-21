@@ -7,6 +7,7 @@ try {
                         $('#'+$(this).attr("id")).removeClass('is-invalid');
                         $('#'+$(this).attr("id")+'_err').html('');
                     }
+                    Fire.$emit('firedatechangefunction',$(this).attr('id'));
                 },
                 dateFormat: 'dd/mm/yyyy',
             });
@@ -57,16 +58,18 @@ try {
             },
 
             formatYYYYMMDD(dateData){
-                dateData=dateData.replaceAll('/', '-');
-                dateData=dateData.split("-").reverse().join("-");
-                let formatteddate = new Date(dateData.replaceAll('/', '-'));
-                let month=formatteddate.getMonth()+1;
-                if(month.toString().length==1){
-                    month='0'+month;
+                if(dateData!=""){
+                    dateData=dateData.replaceAll('/', '-');
+                    dateData=dateData.split("-").reverse().join("-");
+                    let formatteddate = new Date(dateData.replaceAll('/', '-'));
+                    let month=formatteddate.getMonth()+1;
+                    if(month.toString().length==1){
+                        month='0'+month;
+                    }
+                    //formatting the date to yyyy-mm-dd
+                    let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
+                    return curr_date;
                 }
-                //formatting the date to yyyy-mm-dd
-                let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
-                return curr_date;
             },
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){

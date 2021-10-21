@@ -31,7 +31,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/loadTransferConfigDetails/{id}','masters\StaffMasterController@loadTransferConfigDetails');
             $router->get('/loadStaffTransferMasters/{param}',['uses' => 'masters\StaffMasterController@loadStaffTransferMasters']);
             $router->get('/loadStaffDropdownMasters/{model}/{parent_id}','masters\StaffMasterController@loadStaffDropdownMasters');
-            
+
         });
 
         // $router->post('/saveStaffMasters', ['uses' => 'masters\StaffMastersController@saveStaffMasters']);
@@ -178,6 +178,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
 
             $router->post('/saveStaffDisaplinary', ['uses' => 'staff\StaffServicesController@saveStaffDisaplinary']);
             $router->get('/loadStaffdisaplinary/{user_id}', ['uses' => 'staff\StaffServicesController@loadStaffdisaplinary']);
+            $router->get('/loadStaffdisaplinaryByIsd/{id}', ['uses' => 'staff\StaffServicesController@loadStaffdisaplinaryByIsd']);
+
 
             $router->post('/saveStaffAttendance', ['uses' => 'staff\StaffServicesController@saveStaffAttendance']);
             $router->get('/loadStaffattendance/{param}', ['uses' => 'staff\StaffServicesController@loadStaffattendance']);
@@ -195,7 +197,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getOnGoingLeave/{staff_id}', ['uses' => 'staff\StaffServicesController@getOnGoingLeave']);
             $router->get('/getallLeaves/{staff_id}', ['uses' => 'staff\StaffServicesController@getallLeaves']);
             $router->get('/getAppVeriLeaveConfigDetails/{leave_type_id}/{app_role_id}/{role_id}', ['uses' => 'staff\StaffServicesController@getAppVeriLeaveConfigDetails']);
-
+            $router->get('/getLeaveBalance/{staff_id}/{year}', ['uses' => 'staff\StaffServicesController@getLeaveBalance']);
         });
         $router->group(['prefix' => 'staffLeadershipSerivcesController'], function () use ($router) {
             $router->post('/createPost', ['uses' => 'staff\StaffLeadershipSerivcesController@createPost']);

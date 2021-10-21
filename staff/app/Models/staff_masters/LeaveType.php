@@ -15,6 +15,7 @@ class LeaveType extends Model
         'no_days',
         'code',
         'category',
+        'carryforward',
         'status',
         'created_by',
         'created_at',

@@ -31,12 +31,12 @@
 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>From Date:<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
+                        <input type="text" autocomplete="off" class="form-control popupDatepicker"  :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>To Date:<span class="text-danger">*</span></label>
-                        <input type="date" @change="calculateNoDays()" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
+                        <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="calculateNoDays()" :class="{ 'is-invalid': form.errors.has('to_date') }" name="to_date" id="to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -178,8 +178,8 @@ export default {
                 $('#to_date').val('');
             }
             if($('#from_date').val()!="" && $('#to_date').val()!="" && $('#from_date').val() <= $('#to_date').val()){
-                let date1 = new Date($('#from_date').val());
-                let date2 = new Date($('#to_date').val());
+                let date1 = new Date(this.formatYYYYMMDD($('#from_date').val()));
+                let date2 = new Date(this.formatYYYYMMDD($('#to_date').val()));
                 let Difference_In_Time = date2.getTime() - date1.getTime();
                 let Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
                 // $('#no_days').val(Difference_In_Days);
@@ -215,8 +215,8 @@ export default {
                         formData.append('staff_id', this.form.staff_id);
                         formData.append('year', this.form.year);
                         formData.append('date_of_application', this.form.date_of_application);
-                        formData.append('from_date', this.form.from_date);
-                        formData.append('to_date', this.form.to_date);
+                        formData.append('from_date', this.formatYYYYMMDD($('#from_date').val()));
+                        formData.append('to_date', this.formatYYYYMMDD($('#to_date').val()));
                         formData.append('no_days', this.form.no_days);
                         formData.append('reason', this.form.reason);
                         formData.append('submitted_to', this.form.submitted_to);
@@ -234,7 +234,7 @@ export default {
                         // this.form.post('/staff/staffServices/submitLeaveApplication',this.form)
                         .then((response) => {
                             if(response.data!=undefined){
-                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                let message="Leave Application has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.application_number+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                                 this.$router.push({name:'Leave_acknowledgement',params: {data:message}});
                                 Swal.fire(
                                     'Success!',
@@ -408,6 +408,12 @@ export default {
         });
         Fire.$on('changeval',(id)=>{
             this.changefunction(id);
+        });
+
+        Fire.$on('firedatechangefunction',(id)=> {
+            if(id=="to_date"){
+                this.calculateNoDays();
+            }
         });
         this.loadleaveTypeList();
         this.loadstaff();

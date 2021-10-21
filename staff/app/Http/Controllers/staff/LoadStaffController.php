@@ -139,7 +139,7 @@ class LoadStaffController extends Controller{
                 //mapping of the position tile, superstructure and childgroup
                 $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
                 if($positions!=null && $positions!=""){
-                    $posi=PositionTitle::where('id',$staff_det->position_title_id)->first();
+                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
                     if($posi!=null && $posi!=""){
                         $staff_det->position_title_name=$posi->name;
                         //get position level from position title
@@ -180,8 +180,10 @@ class LoadStaffController extends Controller{
 
     }
 
-    private function getpositiontitle($staff_det){
+    static function getpositiontitle($staff_det){
         foreach($staff_det as $stf){
+            $stf->position_title_name="";
+            $stf->positionlevel="";
             //mapping of the position tile, superstructure and childgroup
             $positions=ChildGroupPosition::where('id', $stf['position_title_id'])->first();
             if($positions!=null && $positions!=""){
