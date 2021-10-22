@@ -362,8 +362,8 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error on submit:"+err)
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data.errors;
                         })
                     }
                 });
@@ -474,7 +474,9 @@ export default {
                     $('#mainform').hide();
                 }
             })
-            .catch(errors => {
+            .catch(
+                
+                => {
                 console.log(errors)
             });
         },

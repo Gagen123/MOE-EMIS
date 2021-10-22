@@ -23,7 +23,7 @@
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
-                                        <has-errors :form="form" field="organizationId"></has-errors>
+                                        <has-error :form="form" field="organizationId"></has-error>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                        <label class="mb-0">Upload the Required Documents</label>
+                                        <label class="mb-0">Upload the Required Documents({{validfile()}})</label>
                                     </div>
                                 </div><br>
                                 <div class="form-group row">
@@ -217,69 +217,71 @@ export default {
 
         shownexttab(nextclass){
             if(nextclass=="final-tab"){
-                Swal.fire({
-                    text: "Are you sure you wish to save this details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        const config = {
-                            headers: {
-                                'content-type': 'multipart/form-data'
-                            }
-                        }
-                        let formData = new FormData();
-                        formData.append('id', this.form.id);
-                        formData.append('ref_docs[]', this.form.ref_docs);
-                        for(let i=0;i<this.form.ref_docs.length;i++){
-                            formData.append('attachments[]', this.form.ref_docs[i].attach);
-                            formData.append('attachmentname[]', this.form.ref_docs[i].name);
-                        }
-                        formData.append('organizationId', this.form.organizationId);
-                        formData.append('category', this.form.category);
-                        formData.append('proposedName', this.form.proposedName);
-                        formData.append('initiatedBy', this.form.initiatedBy);
-                        formData.append('application_type', this.form.application_type);
-                        formData.append('application_for', this.form.application_for);
-                        formData.append('action_type', this.form.action_type);
-                        formData.append('status', this.form.status);
-                        formData.append('service_name', this.form.service_name);
-                        formData.append('screenId', this.screenId);
-                        formData.append('SysRoleId', this.SysRoleId);
-                        formData.append('Sequence', this.Sequence);
-                        formData.append('Status_Name', this.Status_Name);
-                        formData.append('screen_name', this.screen_name);
-                        formData.append('organization_type', this.form.organization_type);
-                        axios.post('organization/saveChangeBasicDetails', formData, config)
-                        .then((response) => {
-                            if(response!=""){
-                                if(response.data=="No Screen"){
-                                    Toast.fire({
-                                        icon: 'error',
-                                        title: 'You dont have privileged to submit this application. Please contact system administrator'
-                                    });
-                                }
-                                if(response!="" && response!="No Screen"){
-                                    let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
-                                    this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
-                                    Toast.fire({
-                                        icon: 'success',
-                                        title: 'Change details is saved successfully'
-                                    });
+            //   if(nextclass=="final-tab"){
+            //         subform=this.validateFileform();
+            //    }
+                    Swal.fire({
+                        text: "Are you sure you wish to save this details ?",
+                        icon: 'info',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes!',
+                        }).then((result) => {
+
+                        if (result.isConfirmed) {
+                            const config = {
+                                headers: {
+                                    'content-type': 'multipart/form-data'
                                 }
                             }
-                        })
-                        .catch((error) => {
-                            this.applyselect2();
-                            this.change_tab('file-tab');
-                            console.log("Error:"+error);
-                        })
-                        
-                    }
-                });
+                            let formData = new FormData();
+                            formData.append('id', this.form.id);
+                            formData.append('ref_docs[]', this.form.ref_docs);
+                            for(let i=0;i<this.form.ref_docs.length;i++){
+                                formData.append('attachments[]', this.form.ref_docs[i].attach);
+                                formData.append('attachmentname[]', this.form.ref_docs[i].name);
+                            }
+                            formData.append('organizationId', this.form.organizationId);
+                            formData.append('category', this.form.category);
+                            formData.append('proposedName', this.form.proposedName);
+                            formData.append('initiatedBy', this.form.initiatedBy);
+                            formData.append('application_type', this.form.application_type);
+                            formData.append('application_for', this.form.application_for);
+                            formData.append('action_type', this.form.action_type);
+                            formData.append('status', this.form.status);
+                            formData.append('service_name', this.form.service_name);
+                            formData.append('screenId', this.screenId);
+                            formData.append('SysRoleId', this.SysRoleId);
+                            formData.append('Sequence', this.Sequence);
+                            formData.append('Status_Name', this.Status_Name);
+                            formData.append('screen_name', this.screen_name);
+                            formData.append('organization_type', this.form.organization_type);
+                            axios.post('organization/saveChangeBasicDetails', formData, config)
+                            .then((response) => {
+                                if(response!=""){
+                                    if(response.data=="No Screen"){
+                                        Toast.fire({
+                                            icon: 'error',
+                                            title: 'You dont have privileged to submit this application. Please contact system administrator'
+                                        });
+                                    }
+                                    if(response!="" && response!="No Screen"){
+                                        let message="Application for Change basic details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
+                                        this.$router.push({name:'name_change_acknowledgement',params: {data:message}});
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Change details is saved successfully'
+                                        });
+                                    }
+                                }
+                            })
+                            .catch((error) => {
+                                this.form.errors.errors = error.response.data.errors;
+                            })
+                            
+                        }
+                    });
             }
         },
 
@@ -406,6 +408,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         applyselect2(){
             this.applyselect2field('level');

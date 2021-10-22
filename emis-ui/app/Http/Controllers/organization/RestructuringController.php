@@ -1339,11 +1339,11 @@ class RestructuringController extends Controller
 
     private function validateChangeInLevel($request){
         $rules = [
-            // 'level'                       =>  'required',
+            'level'                       =>  'required',
             'organizationId'              =>  'required'
         ];
         $customMessages = [
-            // 'level.required'                => 'New Level is required',
+            'level.required'                => 'New Level is required',
             'organizationId.required'       => 'Organization is required'
         ];
         $this->validate($request, $rules, $customMessages);

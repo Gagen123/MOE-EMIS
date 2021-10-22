@@ -51,7 +51,7 @@
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                       <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
