@@ -15,6 +15,7 @@ class StaffResponsiblity extends Model{
         'staff_id',
         'responsibility',
         'remarks',
+        'year',
         'created_by',
         'updated_by',
         'created_at',

@@ -19,6 +19,11 @@
                     </select>
                     <has-error :form="resp_form" field="responsibility"></has-error>
                 </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Year:<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" v-model="resp_form.year" :class="{ 'is-invalid': resp_form.errors.has('year') }">
+                    <has-error :form="resp_form" field="year"></has-error>
+                </div>
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -46,6 +51,7 @@ export default {
             resp_form: new form({
                 id:'',
                 staff: '',
+                year:'',
                 responsibility:'',
                 remarks:'',
                 action_type:'edit',
@@ -63,22 +69,6 @@ export default {
                 console.log("Error: "+error)
             });
         },
-        loadActiveResponList(uri="masters/loadStaffMasters/all_active_staff_responsibility_List"){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.responsibilityList =  data;
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
         formaction: function(type){
             if(type=="reset"){
                 this.resp_form.staff= '';
@@ -87,17 +77,30 @@ export default {
                 this.resp_form.status= 1;
             }
             if(type=="save"){
-                this.resp_form.post('staff/staffServices/saveStaffResponsibility')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push({name:'list_roles_responsibilities',query: {data:this.screen_id}});
-                })
-                .catch(() => {
-                    console.log("Error:")
-                })
+                Swal.fire({
+                    text: "Are you sure you wish to save this details ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText: 'No',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        this.resp_form.post('staff/staffServices/saveStaffResponsibility')
+                        .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push({name:'list_roles_responsibilities',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
+                });
+
             }
 		},
         async changefunction(id){
@@ -116,7 +119,7 @@ export default {
         },
 
     },
-     mounted(){
+    async mounted(){
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({
@@ -131,9 +134,10 @@ export default {
         });
 
         this.loadStaffList();
-        this.loadActiveResponList();
+        this.responsibilityList =  await this.loadstaffMasters('active','StaResponsiblity');
         this.resp_form.id=this.$route.params.data.id;
         this.resp_form.staff=this.$route.params.data.staff_id;
+        this.resp_form.year=this.$route.params.data.year;
         this.staffdet=this.$route.params.data.staff.name;
         this.resp_form.responsibility=this.$route.params.data.responsibility;
         this.resp_form.remarks=this.$route.params.data.remarks;

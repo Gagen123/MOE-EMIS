@@ -157,7 +157,7 @@ export default {
             }
         },
         async loadleaveTypeList(){
-            this.leavetypeList = await this.loadstaffMasters('active','LeaveType');
+            this.leavetypeList = await this.loadstaffMasters('setconditions__status!1__category!MOE','LeaveType');
         },
         calculateNoDays(){
             if($('#from_date').val()==""){

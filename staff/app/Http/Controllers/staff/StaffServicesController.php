@@ -175,6 +175,7 @@ class StaffServicesController extends Controller{
         $data =[
             'staff_id'                   =>  $request->staff,
             'responsibility'             =>  $request->responsibility,
+            'year'                       =>  $request->year,
             'remarks'                    =>  $request->remarks,
         ];
         if($request->action_type=="edit"){
@@ -266,29 +267,29 @@ class StaffServicesController extends Controller{
                 if($offence!=null && $offence!=""){
                     $off->offence_type=$offence->name;
                 }
-
                 $off->emp_id="";
                 $off->name="";
                 $off->working_agency_id="";
+
                 $staff_det=PersonalDetails::where('id',$off->staff_id)->first();
                 if($staff_det!=null && $staff_det!=""){
                     $off->emp_id=$staff_det->emp_id;
                     $off->name=$staff_det->name;
                     $off->working_agency_id=$staff_det->working_agency_id;
-                }
-                $positions=ChildGroupPosition::where('id', $off->staff_id)->first();
-                if($positions!=null && $positions!=""){
-                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
-                    if($posi!=null && $posi!=""){
-                        $off->position_title_name=$posi->name;
-                        //get position level from position title
-                        $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
-                        if($posiLev!=null && $posiLev!=""){
-                            $off->positionlevel=$posiLev->name;
+
+                    $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $off->position_title_name=$posi->name;
+                            //get position level from position title
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $off->positionlevel=$posiLev->name;
+                            }
                         }
                     }
                 }
-
             }
         }
         return $this->successResponse($disaplinary);

@@ -554,7 +554,14 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error:"+err);
+                            if(err.response.status === 422){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Please select applicable class!',
+                                })
+                            }
                         })
                     }
                     // this.classStreamForm.submit_type=nextclass;
