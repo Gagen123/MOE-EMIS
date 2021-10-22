@@ -121,7 +121,7 @@ class RestructuringController extends Controller
                 break;
             }
             case "all_details" : {
-                    $validation = $this->validateAllChangesFields($request);
+                    $validatioorganizationIdn = $this->validateAllChangesFields($request);
                     $establishment_data = $this->setAllChangesFields($request);
                     break;
                 }
@@ -1326,7 +1326,7 @@ class RestructuringController extends Controller
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'initiatedBy.required'          => 'Initiated By is required',
-            'organizationId.required'       => 'Organization is required'
+            'organizationId.required'       => 'Select Organization is required'
         ];
         $this->validate($request, $rules, $customMessages);
 

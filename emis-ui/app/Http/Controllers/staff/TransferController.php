@@ -27,10 +27,12 @@ class TransferController extends Controller{
         $rules = [
             'name'                  =>  'required  ',
             'reason_id'             =>  'required',
+            'description'           =>  'required'
         ];
         $customMessages = [
             'name.required'         => 'Please select applicant',
             'reason_id.required'    => 'Please select transfer reason',
+            'description.required'  => 'You need to provide the description',
         ];
         $this->validate($request, $rules,$customMessages);
         $request_data =[
@@ -59,9 +61,15 @@ class TransferController extends Controller{
         $service_name = $request->service_name;
         $rules = [
             'transferType'              =>  'required  ',
+            'preference_school'              =>  'required  ',
+            'preference_school'              =>  'required  ',
+            'preference_school'              =>  'required  ',
         ];
+        
         $customMessages = [
             'transferType.required'     => 'Please select this',
+            'preference_school2'        =>  'required  ',
+            'preference_school2'        =>  'required  ',
         ];
         $this->validate($request, $rules,$customMessages);
         $files = $request->attachments;

@@ -23,12 +23,8 @@
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
-                                        <has-error :form="form" field="organizationId"></has-error>
+                                        <has-errors :form="form" field="organizationId"></has-errors>
                                     </div>
-                                     <!-- <div class="col-lg-4 col-md-4 col-sm-4" id="orgType">
-                                        <label>Organization Type:</label>
-                                        <input type="text" readonly :value="form.organization_type"  class="form-control" id="organization_type"/>
-                                    </div> -->
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4">
@@ -276,9 +272,12 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.change_tab('file-tab');
+                            console.log("Error:"+error);
                         })
+                        
                     }
                 });
             }
