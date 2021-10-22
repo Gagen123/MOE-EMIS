@@ -851,6 +851,14 @@ const routes = [
                 ],
             },
 
+            { path: '/leave_from_zest',
+                component: require('./components/staff/leave_services/leave_from_zest/leave_from_zest_index.vue').default,
+                children:[
+                    { path: '/', name:'leave_from_zest',  component: require('./components/staff/leave_services/leave_from_zest/list_leave_from_zest.vue').default },
+                    { path: '/list_leave',name:'list_leave',  component: require('./components/staff/leave_services/leave_from_zest/list_leave_from_zest.vue').default },
+                ],
+            },
+
             { path: '/staff_attendance',
                 component: require('./components/staff/leave_services/attendance/attendance_index.vue').default,
                 children:[

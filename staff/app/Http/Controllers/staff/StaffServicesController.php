@@ -705,7 +705,7 @@ class StaffServicesController extends Controller{
     }
 
     public function getLeaveBalance($staff_id="",$year=""){
-        $leaveType=LeaveType::all();
+        $leaveType=LeaveType::where('category','MOE')->get();
         if($leaveType!=null && $leaveType!="" && sizeof($leaveType)>0){
             foreach($leaveType as $per){
                 $per->totalleave="";
@@ -722,16 +722,19 @@ class StaffServicesController extends Controller{
                 $accumulateLeave=0;
                 if(strtolower($per->name)=="earned leave"){
                     $totalapplicableleave=($year-2015)*$per->no_days;
-                    $leavesbal=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$per->id)->Where('year','>',2015)->Where('year','<',$year)->where('status','Approved')->get();
+                    $leavesbal=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$per->id)->Where('year','>',2015)->Where('year','<=',$year)->where('status','Approved')->get();
                     if($leavesbal!=null && $leavesbal!="" && sizeof($leavesbal)>0){
                         foreach($leavesbal as $bal){
                             $totalapplicableleave=$totalapplicableleave-$bal->no_days;
                         }
-                        $accumulateLeave=$totalapplicableleave;
                     }
+                    $accumulateLeave=$totalapplicableleave;
                 }
                 $per->accumulateLeave= $accumulateLeave;
-                $per->leavebalance= ($per->no_days-$totalLeaveavailed)+$accumulateLeave;
+                if($accumulateLeave>90){
+                    $per->accumulateLeave= 90;
+                }
+                $per->leavebalance= ($per->no_days-$totalLeaveavailed);
             }
         }
         return $this->successResponse($leaveType);

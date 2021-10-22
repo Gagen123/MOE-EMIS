@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\staff\AppointmentDetails;
 use App\Models\staff\AppointmentDetailsAudit;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff\ZestLeaveDetails;
 use App\Models\staff\ZestLongTermTraining;
 use App\Models\staff\ZestPromotion;
 use App\Models\staff\ZestSecondment;
@@ -387,6 +388,15 @@ class ZestController extends Controller{
             }
         }
 
+        return $this->successResponse($response_data);
+    }
+
+    public function loadLeaveDetails($param){
+        $response_data="";
+        $personal=PersonalDetails::where('id',$param)->first();
+        if($personal!=null && $personal!=""){
+            $response_data=ZestLeaveDetails::with('leavetype')->where('StaffID',$personal->zest_staff_id)->get();
+        }
         return $this->successResponse($response_data);
     }
 }

@@ -32,8 +32,8 @@
                             <th>Leave Type</th>
                             <th>Leave Applicable</th>
                             <th>Leave Availed</th>
-                            <th>Leave Accumulated</th>
                             <th>Balance</th>
+                            <th>Leave Accumulated</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -42,8 +42,8 @@
                             <td>{{ item.name}}</td>
                             <td>{{ item.no_days}}</td>
                             <td>{{ item.totalleave}}</td>
-                            <td>{{ item.accumulateLeave}}</td>
                             <td>{{ item.leavebalance}}</td>
+                            <td>{{ item.accumulateLeave}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -67,7 +67,7 @@ export default {
     },
     methods: {
         getallLeaves(){
-            let uri = 'staff/staffServices/getLeaveBalance/'+this.staff_id+'/'+$('#year').val();
+            let uri = 'staff/staffServices/getLeaveBalance/'+$('#staff_id').val()+'/'+$('#year').val();
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -115,7 +115,14 @@ export default {
 
             this.loadRespectiveDataData(data['Agency_Code']);
             this.staff_id=data['staff_id'];
-            this.getallLeaves();
+            let uri = 'loadCommons/viewStaffDetails/by_id/'+data['staff_id'];
+            axios.get(uri)
+            .then(response =>{
+                let response_data = response.data.data;
+                $('#staff_id').append('<option value="'+response_data.id+'">'+response_data.emp_id+':'+response_data.name+', '+response_data.position_title_name+'</option>');
+                $('#staff_id').val(response_data.id).trigger('change');
+                this.getallLeaves();
+            })
         })
         .catch(errors => {
             console.log(errors)

@@ -306,6 +306,16 @@ class StaffMasterController extends Controller{
         else if(strpos($type,'allwith')!==false){
             return $this->successResponse($model::with(explode('__',$type)[1])->get());
         }
+        else if(strpos($type,'setconditions')!==false){
+            $condition=explode('__',$type);
+            $result=$model::query();
+            foreach($condition as $con){
+                if($con!="setconditions"){
+                    $result->where(explode('!',$con)[0],explode('!',$con)[1]);
+                }
+            }
+            return $this->successResponse($result->get());
+        }
         else if(strpos($type,'byid')!==false){
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->first());
         }
