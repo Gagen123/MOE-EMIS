@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Models\staff;
-use App\Models\staff_masters\SeperationMaster;
+
+use App\Models\staff_masters\PromotionModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 class ZestPromotion extends Model{
@@ -26,7 +27,7 @@ class ZestPromotion extends Model{
         'JoiningOrderNo',
         'JoiningOrderDate',
     ];
-    // public function type(){
-    //     return $this->belongsTo(SeperationMaster::class, 'SeparationTypeID')->select('id','name as mastertypename');
-    // }
+    public function type(){
+        return $this->belongsTo(PromotionModel::class, 'PromotionTypeID')->select('ID','PromotionType as mastertypename');
+    }
 }
