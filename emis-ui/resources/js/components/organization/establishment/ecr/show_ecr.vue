@@ -4,13 +4,13 @@
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Organization Details </label>                              
+                        <a class="nav-link active" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Organization Details </label>
                         </a>
                     </li>
                     <li class="nav-item attachments-tab" @click="shownexttab('attachments-tab')">
-                        <a class="nav-link" data-toggle="pill" role="tab"> 
-                            <label class="mb-0.5">Attachments & Verification </label>                              
+                        <a class="nav-link" data-toggle="pill" role="tab">
+                            <label class="mb-0.5">Attachments & Verification </label>
                         </a>
                     </li>
                     <li class="nav-item class-tab" @click="shownexttab('class-tab')">
@@ -25,24 +25,24 @@
                     <div class="tab-pane fade active show tab-content-details" id="organization-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <h4><u>Application Details</u></h4>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Application Number:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.application_no}}</span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Submitted Date:</label>
-                                    <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
-                                </div> 
+                                    <span class="text-blue text-bold">{{reverseDateTime(applicationdetails.application_date)}}</span>
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
                                     <span class="text-blue text-bold">Establishment of {{applicationdetails.establishment_type}}</span>
-                                </div> 
+                                </div>
                             </div>
                         </div>
                         <div class="callout callout-success">
                             <h5><u>Organization Details</u></h5>
-                            <div class="form-group row"> 
+                            <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationdetails.establishment_type=='Public School'">
                                     <label class="mb-0">Proposal Initiated By:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.initiated_by}}</span>
@@ -50,13 +50,13 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Proposed Name:</label>
                                     <span class="text-blue text-bold">{{applicationOrgdetails.proposedName}}</span>
-                                </div>  
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Dzongkhag:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.dzongkhag}}</span>
-                                </div>  
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Gewog:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.gewog}}</span>
@@ -64,7 +64,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Chiwog:</label>
                                     <span class="text-blue text-bold">{{applicationdetails.village}}</span>
-                                </div>                 
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -72,11 +72,11 @@
                                     <span class="text-blue text-bold">
                                         {{ applicationOrgdetails.proposedLocation}}
                                     </span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Location Type:</label>
                                     <span class="text-blue text-bold">{{locationList[applicationOrgdetails.locationId]}}</span>
-                                </div>   
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -84,11 +84,11 @@
                                     <span class="text-blue text-bold">
                                         {{ applicationOrgdetails.coLocatedParent  == 1 ? "Yes" :  "No"}}
                                     </span>
-                                </div> 
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-if="applicationOrgdetails.coLocatedParent  == 1">
                                     <label class="mb-0">Location Type:</label>
                                     <span class="text-blue text-bold">{{orgArray[applicationOrgdetails.parentSchool]}}</span>
-                                </div>   
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -97,7 +97,7 @@
                                 <button class="btn btn-primary" @click="shownexttab('attachments-tab')">Next <i class="fa fa-arrow-right"></i></button>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                     <div class="tab-pane fade tab-content-details" id="attachments-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="callout callout-success">
                             <div class="row pb-2">
@@ -106,17 +106,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type == null || attach.upload_type=='Applicant'">
                                                     <td> {{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -132,7 +132,7 @@
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Verifying Agency:</label>
                                     <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
-                                </div>   
+                                </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Tentative Date:</label>
                                     <span class="text-blue text-bold">{{ verification.verifyingAgency }}</span>
@@ -142,17 +142,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='tentative'">
                                                     <td>  {{attach.user_defined_file_name}}</td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -192,17 +192,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='team_verification'">
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -217,17 +217,17 @@
                                     <table id="participant-table" class="table w-100 table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Attachment Name</th> 
-                                                <th>Attachment</th> 
-                                                <th>File</th> 
+                                                <th>Attachment Name</th>
+                                                <th>Attachment</th>
+                                                <th>File</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                             <tr v-for='(attach,count) in applicationdetails.attachments' :key="count+1">
                                                 <template v-if="attach.upload_type=='final_verification'">
                                                     <td>{{attach.user_defined_file_name}} </td>
                                                     <td>  {{attach.name}}</td>
-                                                    <td>    
+                                                    <td>
                                                         <a href="#" @click="openfile(attach)" class="fa fa-eye"> View</a>
                                                     </td>
                                                 </template>
@@ -253,8 +253,8 @@
                                     <span v-for="(item, index) in  class_section" :key="index">
                                         <br>
                                         <input type="checkbox" checked="true"><label class="pr-4"> &nbsp;{{ calssArray[item.classId] }}<span v-if="item.streamId"> - {{ streamArray[item.streamId] }}</span> </label>
-                                    </span> 
-                                </div> 
+                                    </span>
+                                </div>
                             </div>
                         </div>
                         <hr>
@@ -274,7 +274,7 @@ export default {
     components: {
     },
     data(){
-        return{ 
+        return{
             calssArray:{},
             streamArray:{},
             levelList:{},
@@ -285,12 +285,12 @@ export default {
             nomi_staffList:[],
              orgArray:{},
              verification:''
-        } 
+        }
     },
     methods:{
         loadestablishmentapplicationdetails(appId){
-            axios.get('organization/loadEstbDetailsForView/'+appId)
-            .then((response) => {  
+            axios.get('organizationApproval/loadEstbDetailsForVerification/'+appId+'/NA')
+            .then((response) => {
                 let data=response.data.data;
                 this.applicationdetails=data;
                 this.applicationOrgdetails=data.org_details;
@@ -311,11 +311,11 @@ export default {
                     }
                 }
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error......"+error);
             });
         },
-        openfile(file){ 
+        openfile(file){
             let file_path=file.path+'/'+file.name;
             file_path=file_path.replaceAll('/', 'SSS');
             let uri = 'common/viewFiles/'+file_path;
@@ -335,7 +335,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.levelList[data[i].id] = data[i].name; 
+                    this.levelList[data[i].id] = data[i].name;
                 }
             });
         },
@@ -344,7 +344,7 @@ export default {
             .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.locationList[data[i].id] = data[i].name; 
+                    this.locationList[data[i].id] = data[i].name;
                 }
             });
         },
@@ -365,7 +365,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.calssArray[data[i].id] = data[i].class; 
+                    this.calssArray[data[i].id] = data[i].class;
                 }
             });
         },
@@ -375,7 +375,7 @@ export default {
               .then(response => {
                 let data = response.data;
                 for(let i=0;i<data.length;i++){
-                    this.streamArray[data[i].id] = data[i].stream; 
+                    this.streamArray[data[i].id] = data[i].stream;
                 }
             });
         },
@@ -383,7 +383,7 @@ export default {
             axios.get(uri)
             .then(response => {
                 for(let i=0;i<response.data.data.length;i++){
-                    this.orgArray[response.data.data[i].id] = response.data.data[i].stream; 
+                    this.orgArray[response.data.data[i].id] = response.data.data[i].stream;
                 }
             });
         },
