@@ -611,7 +611,14 @@ export default {
                     .catch((error) => {
                        this.applyselect2();
                         this.change_tab('organization-tab');
-                        console.log("Error:"+error)
+                        console.log("Error:"+error);
+                        if(err.response.status === 422){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class!',
+                            })
+                        }
                     })
                 }
                 else if(nextclass=="class-tab"){

@@ -238,7 +238,7 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
                 $data = [
                     'aca_sub_id' => $request['aca_sub_id'],
-                    'aca_rating_type_id' => $request['aca_rating_type_id'],
+                    'is_descriptive' => $request['is_descriptive'],
                     'aca_assmnt_type' => $request['aca_assmnt_type'],
                     'name'  =>  $request['name'],
                     'dzo_name'  =>  $request['dzo_name'],
@@ -275,9 +275,9 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = AssessmentArea::find($request['id']);
-                $messs_det = 'aca_sub_id:' . $data->aca_sub_id . '; aca_assmnt_type:' . $data->aca_assmnt_type . '; aca_rating_type_id:' . $data->aca_rating_type_id . '; display_order' . $data->display_order . '; name' . $data->name . '; code' . $data->code . '; status:' . $data->status;
+                $messs_det = 'aca_sub_id:' . $data->aca_sub_id . '; is_descriptive:' . $data->is_descriptive . '; aca_assmnt_type:' . $data->aca_assmnt_type . '; display_order' . $data->display_order . '; name' . $data->name . '; code' . $data->code . '; status:' . $data->status;
                 $procid = DB::select("CALL " . $this->audit_table . ".emis_audit_proc('" . $this->database . "','aca_assessment_area','" . $request['id'] . "','" . $messs_det . "','" . $request['user_id'] . "','Edit')");
-                $data->aca_rating_type_id = $request['aca_rating_type_id'];
+                $data->is_descriptive = $request['is_descriptive'];
                 $data->aca_assmnt_type = $request['aca_assmnt_type'];
                 $data->name = $request['name'];
                 $data->dzo_name = $request['dzo_name'];
@@ -356,12 +356,7 @@ class AcademicMastersController extends Controller
                     'created_by'        =>  $request['user_id'],
                     'created_at'        =>   date('Y-m-d h:i:s'),
                 ];
-                // dd($data);
-                //  try{  
                 $responsedata = TeachingSubject::create($data);
-                //   }catch(Exception $e){
-                //     dd($e);
-                //  }
             }
             if ($request['action_type'] == "edit") {
                 $rules = [
@@ -444,7 +439,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($subject);
         }
         if ($param == "all_active_subject_and_sub_subject") {
-            $Activesubject = DB::select('SELECT id,aca_sub_category_id,name FROM aca_subject  WHERE status = 1 ORDER BY display_order');
+            $Activesubject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,is_special_educational_needs,display_order FROM aca_subject  WHERE status = 1 ORDER BY display_order');
             return $this->successResponse($Activesubject);
         }
 
@@ -455,10 +450,11 @@ class AcademicMastersController extends Controller
             return $this->successResponse(DB::select('SELECT id,aca_rating_type_id, name,dzo_name, score FROM aca_rating WHERE status=1'));
         }
         if ($param == "all_assessment_area") {
-            $assessment_area = DB::select("SELECT t1.id,t1.display_order,CASE t1.aca_assmnt_type WHEN 0 THEN 'Continuous Assessment' WHEN 1 THEN 'Term Examination' ELSE 'Others (Personal Traits, SUPW, Non-Academic Subject)' END AS aca_assmnt_type_name,t1.aca_assmnt_type, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id,
-                t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 
-             JOIN aca_subject t2 ON t1.aca_sub_id = t2.id 
-             LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order");
+            $assessment_area = DB::select("SELECT t1.id,t1.display_order,t1.is_descriptive,
+                CASE t1.aca_assmnt_type WHEN 0 THEN 'Continuous Assessment' WHEN 1 THEN 'Term Examination' ELSE 'Others (Personal Traits, SUPW, Non-Academic Subject)' END AS aca_assmnt_type_name,
+                t1.aca_assmnt_type,t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id,
+             t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 
+             JOIN aca_subject t2 ON t1.aca_sub_id = t2.id ORDER BY t1.display_order");
             return $this->successResponse($assessment_area);
         }
         if ($param == "all_assessment_frequency") {
@@ -594,17 +590,19 @@ class AcademicMastersController extends Controller
     }
     public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id = "")
     {
-        $query = 'SELECT (t2.id IS NOT NULL) AS assmt_area_selected,t1.id AS aca_assmt_area_id, t1.name AS assessment_area, t1.dzo_name, trim(t2.weightage)+0 AS weightage, t3.input_type, IFNULL(t2.display_order,t1.display_order) AS display_order
-        FROM aca_assessment_area t1 LEFT JOIN aca_subject tt ON (t1.aca_sub_id=tt.aca_sub_id or t1.aca_sub_id=tt.id)
-            LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id=t3.id
-            LEFT JOIN aca_class_subject_assessment t2 ON t1.id=t2.aca_assmt_area_id AND t1.aca_sub_id = t2.aca_sub_id AND t2.aca_sub_id = ? AND t2.aca_assmt_term_id = ? AND t2.org_class_id =? ';
-        $params = [$sub_id, $term_id, $class_id];
+        $query = "SELECT (t3.id IS NOT NULL) AS assmt_area_selected,t2.id AS aca_assmt_area_id,t2.name AS assessment_area, t2.dzo_name, trim(t3.weightage)+0 AS weightage, IF(t2.is_descriptive=1,2,t4.input_type) AS input_type, IFNULL(t3.display_order,t2.display_order) AS display_order
+        FROM aca_class_subject t1 JOIN aca_assessment_area t2 ON t1.aca_sub_id=t2.aca_sub_id JOIN aca_rating_type t4 ON t1.aca_rating_type_id=t4.id
+            LEFT JOIN aca_class_subject_assessment t3 ON t2.id=t3.aca_assmt_area_id AND t1.aca_sub_id = t3.aca_sub_id AND t1.org_class_id = t3.org_class_id
+                AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL)) AND t3.aca_assmt_term_id = ?
+            WHERE t1.aca_sub_id = ? AND t1.org_class_id = ? ";
+        $params =  [$term_id, $sub_id, $class_id];
         if ($stream_id) {
-            $query .= ' AND t2.org_stream_id = ?';
+            $query .= ' AND t1.org_stream_id = ?';
             array_push($params, $stream_id);
         }
+        // AND t2.org_class_id =?
         array_push($params, $sub_id);
-        return $this->successResponse(DB::select($query . ' WHERE IFNULL(tt.id,t1.aca_sub_id) = ? ORDER BY assmt_area_selected DESC,display_order', $params));
+        return $this->successResponse(DB::select($query . ' ORDER BY assmt_area_selected DESC,display_order', $params));
     }
     public function saveclassSubjectAssessment(Request $request)
     {

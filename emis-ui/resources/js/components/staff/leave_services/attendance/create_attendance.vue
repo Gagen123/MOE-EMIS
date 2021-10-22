@@ -12,29 +12,41 @@
                 </div>
             </div>
             <div class="form-group row">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Enter total Working day:<span class="text-danger">*</span></label>
+                    <input type="number" id="total_work_days" onfocus="if(this.value == '0') this.value = '';" onblur="if(this.value == '') this.value = '0';" value="0"
+                    @change="remove_error('total_work_days'),allocatedays()" class="form-control">
+                    <span class="text-danger" id="total_work_days_err"></span>
+                </div>
+            </div>
+            <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <table id="responsible-table" class="table table-bordered text-sm table-striped">
                         <thead>
                             <tr>
                                 <th>SL#</th>
-                                <th>CID</th>
                                 <th>Name</th>
+                                <th>EID</th>
                                 <th>Position title</th>
-                                <th>No of present day/s</th>
-                                <th>No of absent day/s</th>
+                                <th>Position Level</th>
+                                <th>No of day/s absent</th>
+                                <th>No of day/s present</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in attendance_form.staffList" :key="index">
                                 <td>{{ index+1}}</td>
-                                <td>{{ item.cid_work_permit}}</td>
                                 <td>{{ item.name}}</td>
+                                <td>{{ item.emp_id}}</td>
                                 <td>{{ item.position_title_name}}</td>
+                                <td>{{ item.positionlevel}}</td>
                                 <td>
-                                    <input type="number" v-model="item.no_present_days" value="0" @change="remove_error('absentDay')" class="form-control">
+                                    <input type="number" onfocus="if(this.value == '0') this.value = '';" onblur="if(this.value == '') this.value = '0';" value="0"
+                                     @change="remove_error('absentDay'+index),calculatePresentDay(index)" :id="'absentDay'+index" class="form-control">
+                                     <span class="text-danger" :id="'absentDay'+index+'_err'"></span>
                                 </td>
                                 <td>
-                                    <input type="number" v-model="item.no_absent_days" value="0" @change="remove_error('presentDay')" class="form-control">
+                                    <span :id="'presentday'+index"></span>
                                 </td>
                             </tr>
                         </tbody>
@@ -62,6 +74,7 @@ export default {
             months:'',
             attendance_form: new form({
                 id:'',
+                total_work_days:'',
                 year:'',
                 month:'',
                 monthName:'',
@@ -72,7 +85,30 @@ export default {
         }
     },
     methods: {
-
+        calculatePresentDay(count){
+            let valid=true;
+            if($('#total_work_days').val()=="0"){
+                $('#absentDay'+count).val(0);
+                $('#total_work_days_err').html('Please mention total working days');
+                valid=false;
+            }
+            if($('#total_work_days').val()!="0" && parseInt($('#absentDay'+count).val()) > parseInt($('#total_work_days').val())){
+                $('#absentDay'+count+'_err').html('Absent days cannot be greater then total working days');
+                $('#absentDay'+count).val(0);
+                valid=false;
+            }
+            if(valid){
+                let presentday=parseInt($('#total_work_days').val())-parseInt($('#absentDay'+count).val())
+                $('#presentday'+count).html(presentday);
+                this.attendance_form.staffList[count].no_absent_days=$('#absentDay'+count).val();
+                this.attendance_form.staffList[count].no_present_days=presentday;
+            }
+        },
+        allocatedays(){
+            for(let i=0;i<this.attendance_form.staffList.length;i++){
+                $('#presentday'+i).html($('#total_work_days').val());
+            }
+        },
         loadStaffList(uri='loadCommons/loadFewDetailsStaffList/userworkingagency/NA'){
             axios.get(uri)
             .then(response => {
@@ -83,14 +119,16 @@ export default {
                 console.log("Error: "+error)
             });
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
+        validated(){
+            let retruntrype=true;
+            if($('#total_work_days').val()=="0"){
+                $('#total_work_days_err').html('Please mention total working days');
+                retruntrype=false;
             }
+            return retruntrype;
         },
         formaction: function(type){
-            if(type=="save"){
+            if(this.validated() && type=="save"){
                 Swal.fire({
                     title: 'Are you sure you wish to submit attendance for this month ?',
                     text: "Once submitted, you cannot revert or edit details",
@@ -98,9 +136,11 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, I confirm!',
+                    confirmButtonText: 'Yes',
+                    cancelButtonText:'No',
                     }).then((result) => {
                     if (result.isConfirmed) {
+                        this.attendance_form.total_work_days=$('#total_work_days').val();
                         this.attendance_form.post('staff/staffServices/saveStaffAttendance')
                             .then(() => {
                             Toast.fire({

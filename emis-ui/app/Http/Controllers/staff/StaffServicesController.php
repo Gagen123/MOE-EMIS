@@ -35,21 +35,10 @@ class StaffServicesController extends Controller{
             'place.required'            => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                         =>  $request->id,
-            'staff'                      =>  $request->staff,
-            'award_category'             =>  $request->award_category,
-            'award_given_by'             =>  $request->award_given_by,
-            'award_type_id'              =>  $request->award_type_id,
-            'date'                       =>  $request->date,
-            'place'                      =>  $request->place,
-            'remarks'                    =>  $request->remarks,
-            'coursetitle'                =>  $request->coursetitle,
-            'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId()
-        ];
+
+        $request['user_id'] = $this->userId();
         // dd($staff_data);
-        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAward', $staff_data);
+        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAward', $request->all());
         return $response_data;
     }
 
@@ -78,16 +67,9 @@ class StaffServicesController extends Controller{
             'responsibility.required'   => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                         =>  $request->id,
-            'staff'                      =>  $request->staff,
-            'responsibility'             =>  $request->responsibility,
-            'remarks'                    =>  $request->remarks,
-            'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId()
-        ];
+        $request['user_id'] = $this->userId();
         // dd($staff_data);
-        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffResponsibility', $staff_data);
+        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffResponsibility', $request->all());
         return $response_data;
     }
 
@@ -101,31 +83,20 @@ class StaffServicesController extends Controller{
             'staff'                 =>  'required',
             'offence_date'          =>  'required',
             'offence_type_id'       =>  'required',
-            'offence_severity_id'   =>  'required',
-            'offence_action_id'     =>  'required',
+            'case_type'   =>  'required',
+            'case_category'     =>  'required',
         ];
         $customMessages = [
             'staff.required'                => 'This field is required',
             'offence_date.required'         => 'This field is required',
             'offence_type_id.required'      => 'This field is required',
-            'offence_severity_id.required'  => 'This field is required',
-            'offence_action_id.required'    => 'This field is required',
+            'case_type.required'  => 'This field is required',
+            'case_category.required'    => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                         =>  $request->id,
-            'staff'                      =>  $request->staff,
-            'offence_date'               =>  $request->offence_date,
-            'offence_type_id'            =>  $request->offence_type_id,
-            'offence_severity_id'        =>  $request->offence_severity_id,
-            'offence_action_id'          =>  $request->offence_action_id,
-            'offence_description'        =>  $request->offence_description,
-            'description_on_action'      =>  $request->description_on_action,
-            'action_type'                =>  $request->action_type,
-            'user_id'                    =>  $this->userId()
-        ];
+        $request['user_id'] = $this->userId();
         // dd($staff_data);
-        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffDisaplinary', $staff_data);
+        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffDisaplinary', $request->all());
         return $response_data;
     }
 
@@ -134,19 +105,16 @@ class StaffServicesController extends Controller{
         return $response_data;
     }
 
+    public function loadStaffdisaplinaryByIsd($id=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/loadStaffdisaplinaryByIsd/'.$id);
+        return $response_data;
+    }
+
     public function saveStaffAttendance(Request $request){
-        $staff_data =[
-            'id'                        =>  $request->id,
-            'year'                      =>  $request->year,
-            'month'                     =>  $request->month,
-            'remarks'                   =>  $request->remarks,
-            'staffList'                 =>  $request->staffList,
-            'org'                       =>  $this->getWrkingAgencyId(),
-            'dzongkhag'                 =>  $this->getUserDzoId(),
-            'action_type'               =>  $request->action_type,
-            'user_id'                   =>  $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $staff_data);
+        $request['user_id'] = $this->userId();
+        $request['org']     = $this->getWrkingAgencyId();
+        $request['dzongkhag']     = $this->getUserDzoId();
+        $response_data= $this->apiService->createData('emis/staff/staffServices/saveStaffAttendance', $request->all());
         return $response_data;
     }
 
@@ -282,7 +250,7 @@ class StaffServicesController extends Controller{
                 // dd($notification_data);
                 $this->apiService->createData('emis/common/insertNotification', $notification_data);
             }
-            return $work_response_data;
+            return $response_data;
         }
         else{
             return 'No role mapping found for this selected user. Please contact with system administrator';
@@ -309,17 +277,8 @@ class StaffServicesController extends Controller{
             'no_days.required'         => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
-        $staff_data =[
-            'id'                        =>  $request->id,
-            'staff_id'                  =>  $request->staff_id,
-            'from_date'                 =>  $request->from_date,
-            'to_date'                   =>  $request->to_date,
-            'no_days'                   =>  $request->no_days,
-            'reason'                    =>  $request->reason,
-            'action_type'               =>  $request->action_type,
-            'user_id'                   =>  $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $staff_data);
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffServices/submitLeaveApplication', $request->all());
         return $response_data;
     }
     public function loadLeaveDetails($appNo="",$type=""){
@@ -436,6 +395,11 @@ class StaffServicesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffServices/getallLeaves/'.$this->staffId().'__'.$this->userId());
         return $response_data;
     }
+    public function getLeaveBalance($staff_id="",$year=""){
+        $response_data= $this->apiService->listData('emis/staff/staffServices/getLeaveBalance/'.$staff_id.'/'.$year);
+        return $response_data;
+    }
+
 
 
 }

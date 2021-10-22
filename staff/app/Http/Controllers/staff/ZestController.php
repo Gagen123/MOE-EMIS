@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\staff\AppointmentDetails;
 use App\Models\staff\AppointmentDetailsAudit;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff\ZestLeaveDetails;
 use App\Models\staff\ZestLongTermTraining;
 use App\Models\staff\ZestPromotion;
 use App\Models\staff\ZestSecondment;
@@ -367,6 +368,22 @@ class ZestController extends Controller{
                 $person=PersonalDetails::where('working_agency_id',$orgId)->get();
                 if($person!=null && $person!="" && sizeof($person)>0){
                     foreach($person as $per){
+                        $per->emp_id=$per->emp_id;
+                        $per->name=$per->name;
+                        $per->working_agency_id=$per->working_agency_id;
+
+                        $positions=ChildGroupPosition::where('id', $per->position_title_id)->first();
+                        if($positions!=null && $positions!=""){
+                            $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                            if($posi!=null && $posi!=""){
+                                $per->position_title_name=$posi->name;
+                                //get position level from position title
+                                $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                                if($posiLev!=null && $posiLev!=""){
+                                    $per->positionlevel=$posiLev->name;
+                                }
+                            }
+                        }
                         array_push($staffIds,$per['zest_staff_id']);
                     }
                 }
@@ -387,6 +404,15 @@ class ZestController extends Controller{
             }
         }
 
+        return $this->successResponse($response_data);
+    }
+
+    public function loadLeaveDetails($param){
+        $response_data="";
+        $personal=PersonalDetails::where('id',$param)->first();
+        if($personal!=null && $personal!=""){
+            $response_data=ZestLeaveDetails::with('leavetype')->where('StaffID',$personal->zest_staff_id)->get();
+        }
         return $this->successResponse($response_data);
     }
 }

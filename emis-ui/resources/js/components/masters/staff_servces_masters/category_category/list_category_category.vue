@@ -5,11 +5,12 @@
                 <thead>
                     <tr>
                         <th style="width:5%">SL#</th>
-                        <th style="width:20%">Name</th>
+                        <th style="width:15%">Name</th>
                         <th style="width:10%">Code</th>
-                        <th style="width:25%">Description</th>
+                        <th style="width:20%">Description</th>
+                        <th style="width:15%">Type</th>
                         <th style="width:10%">Status</th>
-                        <th style="width:20%">Created Date</th>
+                        <th style="width:15%">Created Date</th>
                         <th style="width:10%">Action</th>
                     </tr>
                 </thead>
@@ -19,10 +20,13 @@
                         <td>{{ item.name}}</td>
                         <td>{{ item.code}}</td>
                         <td>{{ item.description}}</td>
+                        <td>{{ item.type}}</td>
                         <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
-                        <td>{{ item.created_at }}</td>
+                        <td>{{ reverseDateTime(item.created_at) }}</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            <span v-if="item.type=='MOE'">
+                                <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            </span>
                         </td>
                     </tr>
                 </tbody>
@@ -40,12 +44,12 @@ export default {
     },
     methods:{
         showedit(data){
-            this.$router.push({name:'edit_offence_action',params: {data:data}});
+            this.$router.push({name:'edit_category_category',params: {data:data}});
         },
     },
     async mounted(){
         this.dt =  $("#working-agency-table").DataTable();
-        this.dataList =  await this.loadstaffMasters('all','StaffOffenceAction');
+        this.dataList =  await this.loadstaffMasters('all','CaseCategory');
     },
     watch: {
         dataList(){

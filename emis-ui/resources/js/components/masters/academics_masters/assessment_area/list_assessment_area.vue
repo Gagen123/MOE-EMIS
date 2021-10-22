@@ -10,7 +10,7 @@
                             <th >Assessment Area</th>
                             <th >Assessment Area Code</th>
                             <th >Assessment Type</th>
-                            <th >Rating Type</th>
+                            <th >Is Descriptive</th>
                             <th >Status</th>
                             <th >Action</th> 
                         </tr>
@@ -28,12 +28,10 @@
                             </td>
                             <td>{{ item.code }}</td>
                             <td>{{item.aca_assmnt_type_name}}</td>
-                            <td>{{item.rating_type_name}}</td>
+                            <td>{{ item.is_descriptive ==  1 ? "Yes" : "No" }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
-                                <!-- <div class="btn-group btn-group-sm"> -->
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
-                                <!-- </div> -->
+                                <div class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</div>
                             </td>
                         </tr>
                     </tbody>

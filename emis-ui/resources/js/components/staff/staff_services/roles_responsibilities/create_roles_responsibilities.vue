@@ -42,7 +42,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
                     <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
-                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
+                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.emp_id }} : {{ item.name }}, {{item.position_title_name}}</option>
                     </select>
                     <has-error :form="resp_form" field="staff"></has-error>
                 </div>
@@ -54,6 +54,11 @@
                         <option v-for="(item, index) in responsibilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="resp_form" field="responsibility"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Year:<span class="text-danger">*</span></label>
+                    <input type="number" class="form-control" v-model="resp_form.year" :class="{ 'is-invalid': resp_form.errors.has('year') }">
+                    <has-error :form="resp_form" field="year"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -87,6 +92,7 @@ export default {
                 id:'',
                 staff: '',
                 responsibility:'',
+                year:'',
                 remarks:'',
                 action_type:'add',
             }),
@@ -119,6 +125,7 @@ export default {
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'Yes!',
+                    cancelButtonText: 'No',
                     }).then((result) => {
                     if (result.isConfirmed) {
                         this.resp_form.post('staff/staffServices/saveStaffResponsibility')
@@ -129,7 +136,7 @@ export default {
                             })
                             this.$router.push({name:'list_roles_responsibilities',query: {data:this.screen_id}});
                         })
-                        .catch(() => {
+                        .catch(() =>{
                             console.log("Error:")
                         })
                     }

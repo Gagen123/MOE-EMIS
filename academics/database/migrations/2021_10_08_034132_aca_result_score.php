@@ -21,10 +21,12 @@ class AcaResultScore extends Migration
             $table->char('aca_sub_id', 36)->index();
             $table->char('aca_assmt_area_id', 36);
             $table->string('assessment_area', 100);
+            $table->string('dzo_name', 1000)->nullable();
             $table->unsignedTinyInteger('aca_assmnt_type')->index()->comment('0 - Continuous Assessment, 1 - Term Examination');
             $table->char('aca_rating_type_id', 36)->index();
             $table->tinyInteger('score')->nullable()->default(null);
             $table->string('score_description', 500)->nullable()->default(null);
+            $table->string('dzo_name_score_description', 500)->nullable();
             $table->integer('display_order');
             $table->char('created_by', 36)->nullable();
             $table->string('updated_by', 36)->nullable();

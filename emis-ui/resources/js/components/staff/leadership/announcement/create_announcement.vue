@@ -322,6 +322,9 @@ export default {
             if(id=="position_title"){
                 this.form.position_title=$('#position_title').val();
             }
+            if(id=="question_category"){
+                this.form.question_category=$('#question_category').val();
+            }
         },
 
         getpositionTitleList(index){

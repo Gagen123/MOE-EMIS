@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form class="bootbox-form">
+        <form class="bootbox-form" id="courseMode">
             <div class="card-body">
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -35,7 +35,7 @@
 </template>
 <script>
 export default {
-    data(){
+    data() {
         return {
             form: new form({
                 id: '',
@@ -43,8 +43,8 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                model:'StaffOffenceAction',
-                action_type:'add',
+                model:'CaseType',
+                action_type:'edit',
             })
         }
     },
@@ -52,12 +52,21 @@ export default {
 		formaction: function(type){
             if(type=="reset"){
                 this.form.name= '';
+                this.form.code='';
                 this.form.status= 1;
             }
             if(type=="save"){
-                this.submitstaffmaster('list_offence_action');
+                this.submitstaffmaster('list_case_type');
             }
 		},
     },
+    created() {
+        this.form.name=this.$route.params.data.name;
+        this.form.status=this.$route.params.data.status;
+        this.form.description=this.$route.params.data.description;
+        this.form.code=this.$route.params.data.code;
+        this.form.id=this.$route.params.data.id;
+    },
+
 }
 </script>

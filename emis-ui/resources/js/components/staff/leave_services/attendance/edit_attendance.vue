@@ -9,7 +9,7 @@
                     <label>Created By: <span class="text-blue">{{attendance_form.created_by}}</span> </label>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Created At: <span class="text-blue">{{attendance_form.created_at}}</span> </label>
+                    <label>Created At: <span class="text-blue">{{reverseDateTime(attendance_form.created_at)}}</span> </label>
                 </div>
             </div>
             <div class="form-group row">
@@ -18,26 +18,23 @@
                         <thead>
                             <tr>
                                 <th>SL#</th>
-                                <th>CID</th>
                                 <th>Name</th>
+                                <th>EID</th>
                                 <th>Position title</th>
-                                <th>No of present day/s</th>
-                                <th>No of absent day/s</th>
+                                <th>Position Level</th>
+                                <th>No of day/s present</th>
+                                <th>No of day/s present</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in attendance_form.staffList" :key="index">
                                 <td>{{ index+1}}</td>
-                                <td>{{ item.cid_work_permit}}</td>
                                 <td>{{ item.name}}</td>
-                                <td>{{ item.position_title}}</td>
-                                <td>
-                                    <input type="number" v-model="item.no_present_days" :id="'presentDay'+index" class="form-control">
-
-                                </td>
-                                <td>
-                                    <input type="number" v-model="item.no_absent_days" :id="'absentDay'+index" class="form-control">
-                                </td>
+                                <td>{{ item.emp_id}}</td>
+                                <td>{{ item.position_title_name}}</td>
+                                <td>{{ item.positionlevel}}</td>
+                                <td>{{item.no_present_days}}</td>
+                                <td>{{item.no_absent_days}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -45,14 +42,9 @@
             </div>
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label class="mb-0.5">Remarks:</label>
-                    <textarea @change="remove_error('remarks')" class="form-control" v-model="attendance_form.remarks" :class="{ 'is-invalid': attendance_form.errors.has('remarks') }" name="remarks" id="remarks"></textarea>
-                    <has-error :form="attendance_form" field="remarks"></has-error>
+                    <label class="mb-0.5">Remarks: {{attendance_form.remarks}}</label>
                 </div>
             </div>
-            <!-- <div class="card-footer text-right">
-                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
-            </div> -->
         </form>
     </div>
 </template>
@@ -110,7 +102,7 @@ export default {
         },
 
     },
-     mounted(){
+    mounted(){
         $('[data-toggle="tooltip"]').tooltip();
         $('.select2').select2();
         $('.select2').select2({

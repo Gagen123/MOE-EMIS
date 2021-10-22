@@ -4,14 +4,15 @@ namespace App\Models\staff_masters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Model;
-class StaffOffenceAction extends Model
+class CaseType extends Model
 {
     use HasFactory, Uuid;
-    protected $table="master_staff_offence_action";
+    protected $table="master_case_type";//master_staff_offence_action
     public $timestamps = false;
     protected $fillable = [
         'id',
         'name',
+        'type',
         'code',
         'description',
         'status',
