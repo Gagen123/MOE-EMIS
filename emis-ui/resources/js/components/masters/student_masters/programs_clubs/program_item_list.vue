@@ -21,14 +21,14 @@
                     <td>{{ item.Code}}</td>
                     <td>{{ item.Description}}</td>
                     <td>{{ item.Status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{reverseDateTime(item.created_at)}}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
@@ -58,12 +58,12 @@ export default {
                 console.log(error);
             });
     },
-        
+
     },
     mounted(){
         this.loadMeasurementList();
         this.loadworkingagencyList();
-       
+
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
