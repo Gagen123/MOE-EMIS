@@ -1322,18 +1322,17 @@ class RestructuringController extends Controller
             'proposedName'                =>  'required',
             'initiatedBy'                 =>  'required',
             'organizationId'              =>  'required'
-        ];
+            ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'initiatedBy.required'          => 'Initiated By is required',
             'organizationId.required'       => 'Select Organization is required'
-        ];
+            ];
         $this->validate($request, $rules, $customMessages);
 
         $validation = array();
         $validation['rules'] = $rules;
         $validation['messages'] = $customMessages;
-
         return ($validation);
     }
 
@@ -1351,7 +1350,6 @@ class RestructuringController extends Controller
         $validation = array();
         $validation['rules'] = $rules;
         $validation['messages'] = $customMessages;
-
         return ($validation);
     }
 

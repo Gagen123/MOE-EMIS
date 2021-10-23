@@ -277,6 +277,7 @@ export default {
                                 }
                             })
                              .catch((error) => {
+                                 console.log("Error:"+error);
                                  this.form.errors.errors = error.response.data.errors;
                                 })
                             
