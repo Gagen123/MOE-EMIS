@@ -308,8 +308,7 @@ export default {
                 }
             })
             .catch((err) => {
-                alert(err);
-                this.form.errors.errors = err.response.data.errors;
+                this.form.errors.errors = err.response.data;
             })
             }
          });
