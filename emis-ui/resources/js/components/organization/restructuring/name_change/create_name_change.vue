@@ -276,9 +276,9 @@ export default {
                                     }
                                 }
                             })
-                            .catch((error) => {
-                                this.form.errors.errors = error.response.data.errors;
-                            })
+                             .catch((error) => {
+                                 this.form.errors.errors = error.response.data.errors;
+                                })
                             
                         }
                     });

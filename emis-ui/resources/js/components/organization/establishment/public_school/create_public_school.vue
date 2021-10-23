@@ -455,7 +455,7 @@ export default {
 
                                 formData.append('screenId', this.screenId);
                                 formData.append('SysRoleId', this.SysRoleId);
-                                formData.append('Sequence', this.Sequence);
+                                formData.append('SequencsaveprivatepublicschoolEstablishmente', this.Sequence);
                                 formData.append('Status_Name', this.Status_Name);
 
                                 axios.post('organization/saveUploadedFiles', formData, config)
@@ -477,7 +477,7 @@ export default {
                                         }
                                     }
                                 })
-                                .catch((error) => {
+                                .catch(() => {
                                     this.applyselect2();
                                     this.change_tab('file-tab');
                                     console.log("Error:"+error);
