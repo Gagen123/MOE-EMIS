@@ -8,7 +8,7 @@
                     <th >Code</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -17,7 +17,7 @@
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ reverseDateTime(item.created_at) }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -26,13 +26,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            categoryList:[], 
+            categoryList:[],
         }
     },
     methods:{
@@ -51,8 +51,8 @@ export default {
                 $("#dzongkhag-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_category',params: {data:data}});
