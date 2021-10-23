@@ -243,16 +243,16 @@ class ZestController extends Controller{
     public function loadPromotion($param=""){
         $response_data="";
         if($param=="All"){
-            $response_data=ZestPromotion::get();
+            $response_data=ZestPromotion::with('type')->get();
         }
         if(strpos($param,'Limit')!==false){
-            $response_data=ZestPromotion::take(explode('__',$param)[1])->get();
+            $response_data=ZestPromotion::with('type')->take(explode('__',$param)[1])->get();
         }
 
         if(strpos($param,'byStaffId')!==false){
             $staffid=explode('__',$param)[1];
 
-            $response_data=ZestPromotion::where('StaffID',$staffid)->get();
+            $response_data=ZestPromotion::with('type')->where('StaffID',$staffid)->get();
         }
         if(strpos($param,'byOrdId')!==false){
             $orgId=explode('__',$param)[1];
@@ -263,9 +263,8 @@ class ZestController extends Controller{
                     array_push($staffIds,$per['id']);
                 }
             }
-            $response_data=ZestPromotion::wherein('StaffID',$staffIds)->get();
+            $response_data=ZestPromotion::with('type')->wherein('StaffID',$staffIds)->get();
         }
-
         if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
             $response_data=$this->getstaff_positiondirectory($response_data,'Array');
         }
@@ -273,7 +272,7 @@ class ZestController extends Controller{
     }
 
     public function loadPromotionDetails($id){
-        $response_data=ZestPromotion::where('ID',$id)->first();
+        $response_data=ZestPromotion::with('type')->where('ID',$id)->first();
         if($response_data!=null && $response_data!=""){
             $response_data=$this->getstaff_positiondirectory($response_data,'Single');
         }
@@ -286,6 +285,7 @@ class ZestController extends Controller{
             $person=PersonalDetails::where('zest_staff_id',$response_data->StaffID)->first();
             if($person!=null && $person!=""){
                 $response_data->staff_name=$person->name;
+                $response_data->emp_id=$person->emp_id;
                 $response_data->working_agency_id=$person->working_agency_id;
             }
             $superstructure=SuperStructure::where('id',$response_data->SuperStructureID)->first();
@@ -307,30 +307,32 @@ class ZestController extends Controller{
             }
         }else{
             foreach($response_data as $res){
-                $person=PersonalDetails::where('zest_staff_id',$res['StaffID'])->first();
+                return $person=PersonalDetails::where('zest_staff_id',$res['StaffID'])->first();
                 if($person!=null && $person!=""){
                     $res->staff_name=$person->name;
                     $res->working_agency_id=$person->working_agency_id;
-                }
-                $superstructure=SuperStructure::where('id',$res['SuperStructureID'])->first();
-                if($superstructure!=null && $superstructure!=""){
-                    $res->superstructure=$superstructure->name;
-                }
-                $positions=ChildGroupPosition::where('id', $res['ChildGroupPositionID'])->first();
-                if($positions!=null && $positions!=""){
-                    //get position title from mapping
-                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
-                    if($posi!=null && $posi!=""){
-                        $res->position_title_name=$posi->name;
-                        //get position level from position title
-                        $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
-                        if($posiLev!=null && $posiLev!=""){
-                            $res->positionlevel=$posiLev->name;
+                    $res->position_title_name='';
+                    $res->positionlevel='';
+                    $positions=ChildGroupPosition::where('id', $person->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        //get position title from mapping
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $res->position_title_name=$posi->name;
+                            //get position level from position title
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $res->positionlevel=$posiLev->name;
+                            }
                         }
                     }
+                    $sup=SuperStructure::where('id',$res->SuperStructureID)->first();
+                    if($sup!=null && $sup!=""){
+                        $res->superstructure=$sup->name;
+                    }
+
                 }
             }
-
         }
         return $response_data;
     }
@@ -356,7 +358,6 @@ class ZestController extends Controller{
             if(strpos($param,'Limit')!==false){
                 $response_data=ZestLongTermTraining::take(explode('__',$param)[1])->get();
             }
-
             if(strpos($param,'byStaffId')!==false){
                 $staffid=explode('__',$param)[1];
                 $response_data=ZestLongTermTraining::where('StaffID',$staffid)->get();
@@ -368,22 +369,6 @@ class ZestController extends Controller{
                 $person=PersonalDetails::where('working_agency_id',$orgId)->get();
                 if($person!=null && $person!="" && sizeof($person)>0){
                     foreach($person as $per){
-                        $per->emp_id=$per->emp_id;
-                        $per->name=$per->name;
-                        $per->working_agency_id=$per->working_agency_id;
-
-                        $positions=ChildGroupPosition::where('id', $per->position_title_id)->first();
-                        if($positions!=null && $positions!=""){
-                            $posi=PositionTitle::where('id',$positions->position_title_id)->first();
-                            if($posi!=null && $posi!=""){
-                                $per->position_title_name=$posi->name;
-                                //get position level from position title
-                                $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
-                                if($posiLev!=null && $posiLev!=""){
-                                    $per->positionlevel=$posiLev->name;
-                                }
-                            }
-                        }
                         array_push($staffIds,$per['zest_staff_id']);
                     }
                 }

@@ -26,17 +26,17 @@
                                     <th>Action By</th>
                                     <th>Action Date</th>
                                 </tr>
-                            </thead>  
+                            </thead>
                             <tbody>
                                 <tr v-for="(item, index) in workflow_detail_list" :key="index">
                                     <td>{{ index + 1 }}</td>
                                     <td>{{ item.status_name }}</td>
                                     <td>{{ item.remarks }}</td>
                                     <td>{{ item.user_name}} ({{ item.role_name}})</td>
-                                    <td>{{ item.action_date }}</td>
+                                    <td>{{ item.action_date(item.action_date) }}</td>
                                 </tr>
                             </tbody>
-                        </table> 
+                        </table>
                     </div>
                 </div>
             </div>

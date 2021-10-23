@@ -54,6 +54,14 @@ class EstablishmentController extends Controller{
                 'level.required'                => 'Level is required',
             ];
         }
+        if(strpos($request->establishment_type,'ECR')!==false){
+            $rules = $rules+[
+                'parentSchool'                 =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'parentSchool.required'         => 'Parent School is required',
+            ];
+        }
         if(strpos($request->establishment_type,'Public')!==false){
             $rules = $rules+[
                 'initiatedBy'           =>  'required',

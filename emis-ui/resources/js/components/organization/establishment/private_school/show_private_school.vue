@@ -37,7 +37,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Submitted Date:</label>
-                                    <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
+                                    <span class="text-blue text-bold">{{reverseDateTime(applicationdetails.application_date)}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
@@ -418,7 +418,7 @@
                             <div class="row form-group">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label>Tentative Date for Feasibility Study:</label>
-                                    <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control">
+                                    <!-- <input type="date" name="tentative_date" v-model="form.tentative_date" id="tentative_date" class="form-control"> -->
                                     <input type="text" name="tentative_date_show" id="tentative_date_show" style="display:none" class="form-control">
                                     <span class="text-danger" id="tentative_date_err"></span>
                                 </div>
@@ -433,7 +433,7 @@
                                                 <th style="width:45%">Division</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="setverifyingagency">
+                                        <!-- <tbody id="setverifyingagency">
                                             <tr v-for='(veri, index) in form.verifying_agency_list' :key="index">
                                                 <td>{{index+1}}</td>
                                                 <td>
@@ -448,7 +448,7 @@
                                                     <span class="text-danger" :id="'org_id_err'+index"></span>
                                                 </td>
                                             </tr>
-                                        </tbody>
+                                        </tbody> -->
                                         <tbody id="getverifyingagency">
                                             <tr v-for='(veri, index) in form.verifying_agency_verified_list' :key="index">
                                                 <td>{{index+1}}</td>
