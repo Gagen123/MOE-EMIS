@@ -1,11 +1,12 @@
 <template>
     <div class="card-body">
-        <table id="dzongkhag-table" class="table table-bordered text-sm table-striped">
+        <table id="participant-table" class="table table-bordered text-sm table-striped">
             <thead>
                 <tr>
                     <th >SL#</th>
                     <th >Nature of participation</th>
                     <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th>
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ reverseDateTime(item.created_at) }}</td>
                     <td>
@@ -43,11 +45,11 @@ export default {
     },
     async mounted(){
         this.natureOfParticipantList =  await this.loadstaffMasters('all','hr_development_masters___NatureOfParticipant');
-        this.dt =  $("#data-table").DataTable();
+        this.dt =  $("#participant-table").DataTable();
     },
-    watch: {
-        dataList() {
-            this.applydatatable('dzongkhag-table');
+    watch:{
+        natureOfParticipantList(){
+            this.applydatatable('participant-table');
         }
     },
 }

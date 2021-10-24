@@ -6,6 +6,7 @@
                     <th >SL#</th>
                     <th >Degree</th>
                     <th >Code</th>
+                    <th >Description</th>
                     <th >Status</th>
                     <th >Created At</th>
                     <th >Action</th>
@@ -16,6 +17,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.code}}</td>
+                    <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ reverseDateTime(item.created_at) }}</td>
                     <td>
@@ -36,30 +38,18 @@ export default {
         }
     },
     methods:{
-        loaddegreeList(uri = 'masters/loadHrDevelopmentMastersData/all_degree_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.degreeList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#dzongkhag-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                });
-            }, 3000);
-        },
         showedit(data){
             this.$router.push({name:'edit_degree',params: {data:data}});
         },
     },
-    mounted(){
-        this.loaddegreeList();
+    async mounted(){
+        this.degreeList =  await this.loadstaffMasters('all','hr_development_masters___Degree');
+        this.dt =  $("#dzongkhag-table").DataTable();
+    },
+    watch:{
+        degreeList(){
+            this.applydatatable('dzongkhag-table');
+        }
     },
 }
 </script>

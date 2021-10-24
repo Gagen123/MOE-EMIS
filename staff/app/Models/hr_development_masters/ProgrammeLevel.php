@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\staff_masters;
+namespace App\Models\hr_development_masters;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;

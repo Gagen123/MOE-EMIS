@@ -44,7 +44,7 @@ export default {
         },
     },
     async mounted(){
-        this.dataList =  await this.loadstaffMasters('all','ProgrammeLevel');
+        this.dataList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeLevel');
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
