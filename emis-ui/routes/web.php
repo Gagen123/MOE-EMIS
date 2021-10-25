@@ -556,6 +556,9 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitParticipants', [App\Http\Controllers\staff\HrDevelopmentController::class, 'submitParticipants'])->name('submitParticipants');
         Route::post('/updateParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateParticipant'])->name('updateParticipant');
         Route::post('/updateapplication', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateapplication'])->name('updateapplication');
+        Route::post('/saveprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramOpenDetail'])->name('saveprogramOpenDetail');
+        Route::get('/getprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getprogramOpenDetail'])->name('getprogramOpenDetail');
+
     });
 
     // Transfer route

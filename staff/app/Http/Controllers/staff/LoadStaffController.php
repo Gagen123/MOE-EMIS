@@ -80,7 +80,7 @@ class LoadStaffController extends Controller{
             }
         }
         if($type=="allPrivateStaff"){
-            $personal=PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get();
+            $personal=PersonalDetails::where('emp_type_id','Private')->get();
             if($personal!=null && $personal!="" && sizeof($personal)>0){
                 $personal=$this->getpositiontitle($personal);
             }
