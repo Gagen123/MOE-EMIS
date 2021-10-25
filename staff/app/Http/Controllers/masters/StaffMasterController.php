@@ -216,7 +216,6 @@ class StaffMasterController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-
         if($request['action_type']=="edit"){
             $data =$data +[
                 'updated_by'                =>  $request['user_id'],

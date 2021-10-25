@@ -660,7 +660,7 @@ export default {
             }
         },
 
-        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_main_subject"){
+        loadactivesubjectList(uri="masters/loadAcademicMasters/all_active_teacher_subject"){
             axios.get(uri)
             .then(response => {
                 let data = response;

@@ -11,12 +11,12 @@
                     </div>
                     <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
                         <label>Description:</label>
-                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_erroror('description')" ></textarea>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_error('description')" ></textarea>
                         <has-error :form="form" field="description"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:</label>
-                        <input class="form-control" v-model="form.code"  :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_error('code')" type="number">
+                        <input class="form-control" v-model="form.code"  :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_error('code')" type="text">
                         <has-error :form="form" field="code" ></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">

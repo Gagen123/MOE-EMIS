@@ -43,7 +43,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                model:'ProgrammeType',
+                model:'hr_development_masters___ProgrammeType',
                 action_type:'add',
             })
         }

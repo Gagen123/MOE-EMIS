@@ -45,7 +45,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                model:'ProgrammeLevel',
+                model:'hr_development_masters___ProgrammeLevel',
                 action_type:'edit',
             })
         }
