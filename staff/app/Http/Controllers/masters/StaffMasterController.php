@@ -21,6 +21,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use StfMajorGroup;
 
 class StaffMasterController extends Controller{
     use ApiResponser;
@@ -151,6 +152,11 @@ class StaffMasterController extends Controller{
                 'q_level_id'   =>  $request->qualification_level,
             ];
         }
+        if(isset($request->country_id)){
+            $master_data = $master_data+[
+                'country_id'   =>  $request->country_id,
+            ];
+        }
 
         if(isset($request->child_group_id)){
             $master_data = $master_data+[
@@ -245,7 +251,7 @@ class StaffMasterController extends Controller{
             $modelName = "App\\Models\\"."$path"."\\"."$model";
             //staff_leadership
             // dd($modelName);
-        }else if($type!="all_active_position_title_with_level"){
+        }else{
             $modelName = "App\\Models\\staff_masters\\"."$model";
         }
         $model = new $modelName();
@@ -325,7 +331,24 @@ class StaffMasterController extends Controller{
             return $this->successResponse($model::with('majorgroup')->get());
         }
         else if($type=="all_active_position_title_with_level"){
-            $positions=ChildGroupPosition::where('status', 1)->where('child_group_id', $model)->get();
+            $childids=[];
+            $edumajorgroup=StaffMajorGrop::where('name','Education & Training Services Group')->first();
+            if($edumajorgroup!=null && $edumajorgroup!=""){
+                $subgrp=StaffSubMajorGrop::where('status', 1)->where('group_id',$edumajorgroup->id)->get();
+                if($subgrp!=null && $subgrp!="" && sizeof($subgrp)>0){
+                    $subids=[];
+                    foreach($subgrp as $sub){
+                        array_push($subids,$sub->id);
+                    }
+                    $childgroup=ChildGroup::where('status', 1)->wherein('sub_group_id',$subids)->get();
+                    if($childgroup!=null && $childgroup!="" && sizeof($childgroup)>0){
+                        foreach($childgroup as $child){
+                            array_push($childids,$child->id);
+                        }
+                    }
+                }
+            }
+            $positions=ChildGroupPosition::where('status', 1)->wherein('child_group_id',$childids)->get();
             if($positions!=null && $positions!="" && sizeof($positions)>0){
                 foreach($positions as $pos){
                     $posi=PositionTitle::where('id',$pos['position_title_id'])->first();
@@ -334,18 +357,6 @@ class StaffMasterController extends Controller{
                         $pos->positionTitle=$posi->name;
                         if($posiLev!=null && $posiLev!=""){
                             $pos->positionlevel=$posiLev->name;
-                        }
-                    }
-                    $sup=SuperStructure::where('id',$pos['superstructure_id'])->first();
-                    if($sup!=null && $sup!=""){
-                        $pos->superstructure=$sup->name;
-                    }
-                    $child=ChildGroup::where('id',$pos['child_group_id'])->first();
-                    if($child!=null && $child!=""){
-                        $pos->childgroup=$child->name;
-                        $submajorgrp=StaffSubMajorGrop::where('id', $child->sub_group_id)->first();
-                        if($submajorgrp!=null && $submajorgrp!=""){
-                            $pos->subgroup=$submajorgrp->name;
                         }
                     }
                 }

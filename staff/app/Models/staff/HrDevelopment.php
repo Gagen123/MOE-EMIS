@@ -33,6 +33,7 @@ class HrDevelopment extends Model{
         'course_provider',
         'vanue',
         'total_budget',
+        'expenditurel_budget',
         'total_hrs',
         'financial_source',
 

@@ -12,22 +12,22 @@
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/qualification_category" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
-                       Description/Category
+                       Category
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_type'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Field/Type
+                       Type
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'qualification_level'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Degree/Level
+                       Level
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
                     <router-link :to="{name: 'staff_qualification'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Qualification/Subject
+                       Subject
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
@@ -35,14 +35,19 @@
                        Institute
                     </router-link>
                 </li>
-                <li class="nav-item active pr-1">
+                <!-- <li class="nav-item active pr-1"> Its there in staff qualification master
                     <router-link to="/doner_agency" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Doner Agency
                     </router-link>
-                </li>
-                <li class="nav-item active pr-1">
+                </li> -->
+                <!-- <li class="nav-item active pr-1"> Its there in staff qualification master
                     <router-link to="/project_doner_agency" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        Project Doner Agency
+                    </router-link>
+                </li> -->
+                <li class="nav-item active pr-1">
+                    <router-link to="/qualification_status" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                       Qualification Stutus
                     </router-link>
                 </li>
             </ul>

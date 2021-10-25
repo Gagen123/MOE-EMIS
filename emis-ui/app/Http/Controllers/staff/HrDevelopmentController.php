@@ -22,11 +22,30 @@ class HrDevelopmentController extends Controller{
             'organizer'                 =>  'required',
             'start_date'                =>  'required | date',
             'end_date'                  =>  'required | date',
+            'programme_level'           =>  'required',
+            'programme_type'            =>  'required',
+            'course_type'               =>  'required',
+            'course_provider'           =>  'required',
+            'vanue'                     =>  'required',
+            'total_budget'              =>  'required',
+            'financial_source'          =>  'required',
+            'nature_of_participant'     =>  'required',
+
         ];
         $customMessages = [
-            'training_type.required'               => 'Please select training type',
-            'course_title.required'                => 'Please mention course title ',
-            'organizer.required'                   => 'Please select organizer',
+            'training_type.required'                => 'Please select training type',
+            'course_title.required'                 => 'Please mention course title ',
+            'organizer.required'                    => 'Please select organizer',
+            'start_date.required'                   => 'Please select start date',
+            'end_date.required'                     => 'Please select end date',
+            'programme_level.required'              => 'Please select programme level',
+            'programme_type.required'               => 'Please select programme type',
+            'course_type.required'                  => 'Please select couorse type',
+            'course_provider.required'              =>  'Please select course provider',
+            'vanue.required'                        =>  'Plese mention place/vanue',
+            'total_budget.required'                 =>  'Please provide total budget',
+            'financial_source.required'             =>  'Please select financial source',
+            'nature_of_participant.required'        =>  'Please select Nature of participant',
         ];
         if(strpos($request->training_type_text,'qualification upgrad')!==false){
             $rules=array_merge($rules,
@@ -50,28 +69,15 @@ class HrDevelopmentController extends Controller{
                 )
             );
         }
-        if(strpos($request->training_type_text,'professional development')!==false){
+        if(strpos(strtolower($request->training_type_text),'professional')!==false){
             $rules=array_merge($rules,
-                array('programme_level'     =>  'required',
-                    'programme_type'        =>  'required',
-                    'course_type'           =>  'required',
-                    'course_provider'       =>  'required',
-                    'vanue'                 =>  'required',
-                    'total_budget'          =>  'required',
+                array(
                     'total_hrs'             =>  'required',
-                    'financial_source'      =>  'required',
                 )
             );
             $customMessages =array_merge($rules,
                 array(
-                    'programme_level.required'          => 'Please select programme level',
-                    'programme_type.required'           => 'Please select programme type',
-                    'course_type.required'              => 'Please select couorse type',
-                    'course_provider.required'          =>  'Please select course provider',
-                    'vanue.required'                    =>  'Plese mention place/vanue',
-                    'total_budget.required'             =>  'Please provide total budget',
                     'total_hrs.required'                =>  'Please mention total hrs',
-                    'financial_source.required'         =>  'Please select financial source',
                 )
             );
         }
@@ -97,44 +103,13 @@ class HrDevelopmentController extends Controller{
                             'user_defined_name'       =>  $filenames[$index],
                         )
                     );
-                    // dd($attachment_details);
                 }
             }
         }
 
-        $request_data =[
-            'id'                                =>  $request->id,
-            'training_type'                     =>  $request->training_type,
-            'files'                             =>  $request->files,
-            'course_title'                      =>  $request->course_title,
-            'organizer'                         =>  $request->organizer,
-            'start_date'                        =>  $request->start_date,
-            'end_date'                          =>  $request->end_date,
-            'related_programme'                 =>  $request->related_programme,
-
-            'programme_level'                   =>  $request->programme_level,
-            'programme_type'                    =>  $request->programme_type,
-            'course_type'                       =>  $request->course_type,
-            'course_provider'                   =>  $request->course_provider,
-            'vanue'                             =>  $request->vanue,
-            'total_budget'                      =>  $request->total_budget,
-            'total_hrs'                         =>  $request->total_hrs,
-            'financial_source'                  =>  $request->financial_source,
-
-            'category'                          =>  $request->category,
-            'donor_agency'                      =>  $request->donor_agency,
-            'projectofdonor'                    =>  $request->projectofdonor,
-            'study_country'                     =>  $request->study_country,
-            'coursemode'                        =>  $request->coursemode,
-            'degree'                            =>  $request->degree,
-            'subject1'                          =>  $request->subject1,
-            'subject2'                          =>  $request->subject2,
-            'thesis_title'                      =>  $request->thesis_title,
-            'attachment_details'                =>  $attachment_details,
-            'status'                            =>  $request->status,
-            'user_id'                           =>  $this->userId()
-        ];
-        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramDetails', $request_data);
+        $request['user_id'] = $this->userId();
+        $request['attachment_details'] = $attachment_details;
+        $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveprogramFinalDetails', $request->all());//saveprogramDetails
         return $response_data;
     }
 
@@ -349,6 +324,35 @@ class HrDevelopmentController extends Controller{
             'action_by'         =>$this->userId(),
         ];
         $work_response_data= $this->apiService->createData('emis/common/insertWorkflow', $workflow_data);
+        return $response_data;
+    }
+
+    public function saveprogramOpenDetail(Request $request){
+        $rules = [
+            'staff'             =>  'required',
+            'from_date'           =>  'required',
+            'to_date'               =>  'required',
+        ];
+        $customMessages = [
+            'staff.required'              => 'Please select staff',
+            'from_date.required'          => 'Please select start date',
+            'to_date.required'            => 'Please select end date',
+        ];
+        $this->validate($request, $rules,$customMessages);
+        $user_id= $this->apiService->listData('system/getuserIdByStaffId/'.$request->staff);
+        if(json_decode($user_id)==[] ||$user_id==""){
+            return 'This person doesnot have valid user. Please cpntact system administrator for further procedural';
+        }else{
+            $user_id=json_decode($user_id)[0]->user_id;
+        }
+        $request['staff_user_id'] = $user_id;
+        $request['user_id'] = $this->userId();
+        $response_data = $this->apiService->createData('emis/staff/hrdevelopment/saveprogramOpenDetail', $request->all());
+        return $response_data;
+    }
+
+    public function getprogramOpenDetail(){
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/getprogramOpenDetail');
         return $response_data;
     }
 }

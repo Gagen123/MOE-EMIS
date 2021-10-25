@@ -12,7 +12,6 @@
                 </tr>
             </thead>
             <tbody>
-
                 <tr v-for="(training, index) in staffList" :key="index">
                    <td>{{ index + 1 }} </td>
                     <td>{{ training.course_title }}</td>
@@ -30,7 +29,7 @@
 </template>
 <script>
 export default {
-    data() {
+    data(){
         return {
             staffList:[],
             dt:'',
@@ -47,7 +46,7 @@ export default {
         loadStaffList(){
             let uri='/staff/hrdevelopment/loadprogramDetails';
             axios.get(uri)
-            .then(response => {
+            .then(response =>{
                 let data = response.data;
                 this.staffList = data.data;
             });
@@ -67,10 +66,7 @@ export default {
     },
     watch: {
         staffList(){
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#staff-table").DataTable()
-            });
+            this.applydatatable('staff-table');
         }
     },
 }

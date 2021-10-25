@@ -167,6 +167,16 @@ const routes = [
                 ],
             },
 
+            { path: '/qualification_status',
+            component: require('./components/masters/staff_qualification/qualification_status/qualification_status_index.vue').default,
+            children:[
+                { path: '/',name:'qualification_status', component: require('./components/masters/staff_qualification/qualification_status/list_qualification_status.vue').default },
+                { path: '/list_qualification_status',name:'list_qualification_status', component: require('./components/masters/staff_qualification/qualification_status/list_qualification_status.vue').default },
+                { path: '/create_qualification_status',name:'create_qualification_status', component: require('./components/masters/staff_qualification/qualification_status/create_qualification_status.vue').default },
+                { path: '/edit_qualification_status', name:'edit_qualification_status', component: require('./components/masters/staff_qualification/qualification_status/edit_qualification_status.vue').default },
+            ],
+        },
+
         ]
     },
 
@@ -740,6 +750,17 @@ const routes = [
         component: require('./components/staff/training/inset_index.vue').default,
         children:[
             { path: '/',name:'create_inset', component: require('./components/staff/training/inset_list.vue').default },
+
+            { path: '/open_programme',
+                component: require('./components/staff/training/open_programme/open_programme_index.vue').default,
+                children:[
+                    { path: '/',name:'open_programme',  component: require('./components/staff/training/open_programme/list_open_programme.vue').default },
+                    { path: '/list_open_programme',name:'list_open_programme',  component: require('./components/staff/training/open_programme/list_open_programme.vue').default },
+                    { path: '/create_open_programme',name:'create_open_programme',  component: require('./components/staff/training/open_programme/create_open_programme.vue').default },
+                    { path: '/edit_open_programme',name:'edit_open_programme',  component: require('./components/staff/training/open_programme/edit_open_programme.vue').default },
+                ],
+            },
+
             { path: '/programme_index',
                 component: require('./components/staff/training/create_programme/programme_index.vue').default,
                 children:[

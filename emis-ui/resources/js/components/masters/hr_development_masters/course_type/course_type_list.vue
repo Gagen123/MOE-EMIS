@@ -47,7 +47,7 @@ export default {
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        dataList(){
+        courseTypeList(){
             this.applydatatable('working-agency-table');
         }
     },

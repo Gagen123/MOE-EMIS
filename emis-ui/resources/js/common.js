@@ -279,16 +279,20 @@ try {
                 }
             },
             isvalidfile(filename) {
-                let returnt=false;
-                let fileext=this.getExtension(filename);
-                if('jpg, png, docx, pdf, xlsx'.includes(fileext.toLowerCase())){
-                    returnt= true;
+                if(filename!=undefined){
+                    let returnt=false;
+                    let fileext=this.getExtension(filename);
+                    if('jpg, png, docx, pdf, xlsx'.includes(fileext.toLowerCase())){
+                        returnt= true;
+                    }
+                    return returnt;
                 }
-                return returnt;
             },
             getExtension(filename) {
-                var parts = filename.split('.');
-                return parts[parts.length - 1];
+                if(filename!=undefined){
+                    var parts = filename.split('.');
+                    return parts[parts.length - 1];
+                }
             },
             validfile() {
                 return 'jpg, png, docx, pdf, xlsx';

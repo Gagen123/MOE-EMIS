@@ -102,6 +102,9 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/submitParticipants', ['uses' => 'staff\HrDevelopmentController@submitParticipants']);
             $router->post('/updateapplication', ['uses' => 'staff\HrDevelopmentController@updateapplication']);
             $router->post('/updateParticipant', ['uses' => 'staff\HrDevelopmentController@updateParticipant']);
+            $router->post('/saveprogramOpenDetail', ['uses' => 'staff\HrDevelopmentController@saveprogramOpenDetail']);
+            $router->get('/getprogramOpenDetail', ['uses' => 'staff\HrDevelopmentController@getprogramOpenDetail']);
+
         });
         $router->group(['prefix' => 'transfer'], function () use ($router) {
             $router->post('/saveTransferWindow', ['uses' => 'staff\TransferController@saveTransferWindow']);
