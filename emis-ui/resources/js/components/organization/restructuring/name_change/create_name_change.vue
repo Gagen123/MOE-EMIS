@@ -124,7 +124,7 @@
                                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                     </td>
                                                     <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <input type="file" name="attachments" class="form-control application_attachment" @change="remove_error('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                     </td>
                                                 </tr>
@@ -277,7 +277,9 @@ export default {
                                 }
                             })
                              .catch((error) => {
+                               this.applyselect2();
                                this.form.errors.errors = error.response.data;
+                               this.validateFileform();
                                 })
                             
                         }
@@ -289,7 +291,7 @@ export default {
          * method to populate dropdown
          */
         async changefunction(id){
-            if($('#'+id).val()!=""){
+              if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
@@ -297,6 +299,13 @@ export default {
             if(id=="organizationId"){
                 this.form.organizationId=$('#organizationId').val();
                 this.getorgdetials($('#organizationId').val());
+            }
+             
+            if(id=="initiatedBy"){
+                this.form.initiatedBy=$('#initiatedBy').val();
+            }
+            if(id=="proposedName"){
+                this.form.organizationId=$('#proposedName').val();
             }
 
         },
@@ -428,11 +437,8 @@ export default {
             return returnvariable;
         },
         applyselect2(){
-            this.applyselect2field('level');
-            this.applyselect2field('dzongkhag');
-            this.applyselect2field('gewog');
-            this.applyselect2field('chiwog');
-            this.applyselect2field('locationType');
+            this.applyselect2field('organizationId');
+           
         },
         loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
             axios.get(uri)

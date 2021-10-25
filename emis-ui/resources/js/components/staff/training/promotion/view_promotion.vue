@@ -44,7 +44,7 @@
                 <label class="mb-0.5">Joining Order No: <span class="text-blue text-bold">{{staffList.JoiningOrderNo}}</span></label>
             </div>
         </div>
-        
+    </div>
 </template>
 <script>
 export default {

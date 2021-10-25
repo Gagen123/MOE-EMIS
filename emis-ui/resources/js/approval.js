@@ -236,6 +236,7 @@ const routes = [
                     { path: '/',name:'merger_index', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
                     { path: '/merger_list',name:'merger_list', component: require('./components/organization/restructuring/merger/merger_list.vue').default },
                     { path: '/merger', name:'merger', component: require('./components/organization/restructuring/merger/merger.vue').default },
+                    { path: '/merger_edit', name:'merger_edit', component: require('./components/organization/restructuring/merger/merger_edit.vue').default },
                 ]
             },
             { path: '/restr_acknowledgement', name:'restr_acknowledgement', component: require('./components/organization/restructuring/acknowledgement.vue').default },

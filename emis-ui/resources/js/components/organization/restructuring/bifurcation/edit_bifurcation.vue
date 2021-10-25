@@ -725,9 +725,8 @@ export default {
                             }
 
                         })
-                        .catch((er) => {
-                            console.log("Error:"+er);
-                            this.form.errors.errors = er.response.data.errors;
+                        .catch((error) => {
+                              this.form.errors.errors = error.response.data;
                         });
                     }
                 });

@@ -33,33 +33,22 @@ export default {
     data(){
         return{
             natureOfParticipantList:[],
+            dt:[],
         }
     },
     methods:{
-        loadnatureOfParticipantList(uri = 'masters/loadHrDevelopmentMastersData/all_nature_of_participant_list'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.natureOfParticipantList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-            setTimeout(function(){
-                $("#dzongkhag-table").DataTable({
-                    "responsive": true,
-                    "autoWidth": true,
-                });
-            }, 3000);
-        },
         showedit(data){
             this.$router.push({name:'edit_nature_of_participation',params: {data:data}});
         },
     },
-    mounted(){
-        this.loadnatureOfParticipantList();
+    async mounted(){
+        this.natureOfParticipantList =  await this.loadstaffMasters('all','hr_development_masters___NatureOfParticipant');
+        this.dt =  $("#data-table").DataTable();
+    },
+    watch: {
+        dataList() {
+            this.applydatatable('dzongkhag-table');
+        }
     },
 }
 </script>

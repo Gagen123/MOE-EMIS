@@ -253,7 +253,7 @@ export default {
 
                     })
                     .catch(function (error) {
-                        console.log("Error:"+error);
+                        this.form.errors.errors = error.response.data;
                     });
                 }
             });
@@ -318,8 +318,9 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err)
+                        .catch((error) => {
+                            alert(error.response.data);
+                           this.form.errors.errors = error.response.data;
                         })
                     }
                 });

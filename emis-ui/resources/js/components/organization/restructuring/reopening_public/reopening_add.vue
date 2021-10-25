@@ -149,7 +149,7 @@
                                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                     </td>
                                                     <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" @change="remove_error('attach'+(index+1))">
                                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                     </td>
                                                 </tr>
@@ -490,6 +490,7 @@ export default {
                 this.streamList = response.data;
             });
         },
+       
 
         /**
          * method to get other category if the category is 'ECCD'
@@ -612,8 +613,9 @@ export default {
                             }
 
                         })
-                        .catch((er) => {
-                            console.log("Error:"+er)
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                      })
                     }
                 });

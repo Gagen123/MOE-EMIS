@@ -16,6 +16,7 @@ use App\Models\staff_masters\ChildGroupPosition;
 use App\Models\staff_masters\FundingAgency;
 use App\Models\staff_masters\PositionLevel;
 use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\PromotionModel;
 use App\Models\staff_masters\SuperStructure;
 use App\Models\staff_masters\TrainingStatus;
 use Illuminate\Http\Request;
@@ -246,12 +247,11 @@ class ZestController extends Controller{
             $response_data=ZestPromotion::with('type')->get();
         }
         if(strpos($param,'Limit')!==false){
-            $response_data=ZestPromotion::with('type')->take(explode('__',$param)[1])->get();
+            $response_data=ZestPromotion::take(explode('__',$param)[1])->get();
         }
 
         if(strpos($param,'byStaffId')!==false){
             $staffid=explode('__',$param)[1];
-
             $response_data=ZestPromotion::with('type')->where('StaffID',$staffid)->get();
         }
         if(strpos($param,'byOrdId')!==false){
@@ -260,13 +260,19 @@ class ZestController extends Controller{
             $person=PersonalDetails::where('working_agency_id',$orgId)->get();
             if($person!=null && $person!="" && sizeof($person)>0){
                 foreach($person as $per){
-                    array_push($staffIds,$per['id']);
+                    array_push($staffIds,$per['zest_staff_id']);
                 }
             }
             $response_data=ZestPromotion::with('type')->wherein('StaffID',$staffIds)->get();
         }
         if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
             $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+            foreach($response_data as $pro){
+                $promotype=PromotionModel::where('ID',$pro->PromotionTypeID)->first();
+                if($promotype!=null && $promotype!=""){
+                    $pro->protype=$promotype->PromotionType;
+                }
+            }
         }
         return $this->successResponse($response_data);
     }
@@ -275,6 +281,10 @@ class ZestController extends Controller{
         $response_data=ZestPromotion::with('type')->where('ID',$id)->first();
         if($response_data!=null && $response_data!=""){
             $response_data=$this->getstaff_positiondirectory($response_data,'Single');
+            $promotype=PromotionModel::where('ID',$response_data->PromotionTypeID)->first();
+            if($promotype!=null && $promotype!=""){
+                $response_data->protype=$promotype->PromotionType;
+            }
         }
         return $this->successResponse($response_data);
     }
@@ -307,7 +317,11 @@ class ZestController extends Controller{
             }
         }else{
             foreach($response_data as $res){
-                return $person=PersonalDetails::where('zest_staff_id',$res['StaffID'])->first();
+                $sup=SuperStructure::where('id',$res->SuperStructureID)->first();
+                if($sup!=null && $sup!=""){
+                    $res->superstructure=$sup->name;
+                }
+                $person=PersonalDetails::where('zest_staff_id',$res->StaffID)->first();
                 if($person!=null && $person!=""){
                     $res->staff_name=$person->name;
                     $res->working_agency_id=$person->working_agency_id;
@@ -326,11 +340,6 @@ class ZestController extends Controller{
                             }
                         }
                     }
-                    $sup=SuperStructure::where('id',$res->SuperStructureID)->first();
-                    if($sup!=null && $sup!=""){
-                        $res->superstructure=$sup->name;
-                    }
-
                 }
             }
         }

@@ -427,7 +427,7 @@ export default {
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes!',
-                        }).then((result) => {
+                      applyselect2  }).then((result) => {
                         if (result.isConfirmed) {
                             let clasArray=[];
                             $("input[name='attachment']:checked").each( function () {
