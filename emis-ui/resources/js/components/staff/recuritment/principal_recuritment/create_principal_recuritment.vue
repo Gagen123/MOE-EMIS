@@ -20,7 +20,7 @@
                                         <div class="row form-group">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                 <label id="level_name"></label>
-                                                <input type="text" class="form-control border border-success" :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid" placeholder="Enter CID Number">
+                                                <input type="text" class="form-control border border-success" :class="{ 'is-invalid': form.errors.has('cid') }" id="cid" v-model="form.cid" @change="remove_error('cid')" placeholder="Enter CID Number">
                                                 <has-error :form="form" field="cid"></has-error>
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 pt-4 ">
@@ -308,8 +308,7 @@ export default {
                 }
             })
             .catch((err) => {
-                console.log("Error:"+err);
-                this.form.errors.errors = err.response.data.errors;
+                this.form.errors.errors = err.response.data;
             })
             }
          });

@@ -85,7 +85,8 @@
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Brief description for seeking transfer</label>
-                                <textarea class="form-control" v-model="form.description" id="description"></textarea>
+                                <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description')}" @change="remove_error('proposedName')"  id="description"></textarea>
+                                <has-error :form="form" field="description"></has-error>
                             </div>
                         </div>
                         <hr>
@@ -407,13 +408,25 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        validated_final_form(){
+        validated_final_form(){ 
             let returntue=true;
-            if($('#preference_school1').val()==null){
+            if($('#preference_school1').val()==null || $('#reason_id').val()==null ){
                 $('#preference_school1_err').html('Please select this dzongkhag');
+                $('#reason_id_err').html('Please select this dzongkhag');
                 $('#preference_school1').focus();
+                $('#reason_id').focus();
                 $('#preference_school1').addClass('is-invalid');
+                $('#reason_id').addClass('is-invalid');
+
                 returntue=false;
+            }
+            for(let i=0;i<this.reasonList.length;i++){
+                if($('#reason_id'+i).prop('checked')==false){
+                    $('#reason_id_err').html('You need to select the medical reason');
+                    $('#reason_id').focus();
+                    $('#reason_id').addClass('is-invalid');
+                    returntue=false;
+                }
             }
             for(let i=0;i<this.undertakingList.length;i++){
                 if($('#undertaking'+i).prop('checked')==false){
@@ -451,8 +464,12 @@ export default {
                             }
                         })
                         .catch((error) => {
-                            console.log("Errors:"+error)
-                        });
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected error occured. Try again.'
+                                });
+                                console.log("Error:"+error);
+                            })
                         this.change_tab(nextclass);
                     }
                     else{
@@ -512,8 +529,12 @@ export default {
                                 }
                             })
                             .catch((error) => {
-                                console.log("Errors:"+error)
-                            });
+                                Toast.fire({
+                                    icon: 'error',
+                                    title: 'Unexpected error occured. Try again.'
+                                });
+                                console.log("Error:"+error);
+                            })
                         }
                     });
                 }

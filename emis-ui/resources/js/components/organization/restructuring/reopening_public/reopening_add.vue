@@ -149,7 +149,7 @@
                                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                     </td>
                                                     <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" @change="remove_error('attach'+(index+1))">
                                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                     </td>
                                                 </tr>
@@ -490,6 +490,7 @@ export default {
                 this.streamList = response.data;
             });
         },
+       
 
         /**
          * method to get other category if the category is 'ECCD'
@@ -612,8 +613,16 @@ export default {
                             }
 
                         })
-                        .catch((er) => {
-                            console.log("Error:"+er)
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
+                            if(error.response.data.class == 'class is required'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class or streams!',
+                            })
+                            }
+                            this.validateFileform();
                      })
                     }
                 });
@@ -690,6 +699,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
     },
     created(){

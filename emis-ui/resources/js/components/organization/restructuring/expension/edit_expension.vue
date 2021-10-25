@@ -319,9 +319,8 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err);
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
                         })
                     }
                 });

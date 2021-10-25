@@ -13,6 +13,14 @@
                         <input class="form-control form-control-sm" v-model="form.code" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
+                   <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Is Special Educational Needs (SEN) :</label>
+                        <br> 
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" /> No</label>
+                    </div>
+                </div>
+                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -37,8 +45,9 @@ export default {
                 id:'',
                 name: '',
                 code:'',
+                is_special_educational_needs:0,
                 status: 1,
-                record_type:'main_subject',
+                record_type:'teacher_subject',
                 action_type:'edit',
             })
         }
@@ -62,7 +71,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-main-subject');
+                    this.$router.push('/list-teacher-subject-master');
                 })
                 .catch(() => {
                     console.log("Error.")
@@ -75,6 +84,7 @@ export default {
         this.form.name=this.$route.params.data.name;
         this.form.code = this.$route.params.data.code,
         this.form.status=this.$route.params.data.status;
+        this.form.is_special_educational_needs=this.$route.params.data.is_special_educational_needs;
     }
 }
 </script>

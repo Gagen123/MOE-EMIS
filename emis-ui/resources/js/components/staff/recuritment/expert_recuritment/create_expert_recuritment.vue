@@ -225,7 +225,7 @@ export default {
                             title: 'No dont have privileged to submit this application. Please contact system administrator'
                         });
                     }
-                    if(response!="" && response!="No Screen"){
+                if(response!="" && response!="No Screen"){
                         let message="Application details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                         this.$router.push({name:'expert_recuritment_acknowledgement',params: {data:message}});
                         Toast.fire({
@@ -235,6 +235,9 @@ export default {
                     }
                 }
                  })
+              .catch((err) => {
+                this.form.errors.errors = err.response.data;
+            })
             }
             })
         },

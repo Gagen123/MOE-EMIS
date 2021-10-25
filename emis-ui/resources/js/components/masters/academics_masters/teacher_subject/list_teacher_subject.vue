@@ -2,11 +2,12 @@
     <div>
         <div class="form-group row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <table id="main-subject-table" class="table table-sm table-bordered table-striped">
+                <table id="teacher-subject-table" class="table table-sm table-bordered table-striped">
                     <thead>
                         <tr>
-                            <th>Main Subject</th>
+                            <th>Techer's Subject</th>
                             <th>Code</th>
+                            <th>Is Special Educational Needs (SEN) </th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -15,6 +16,7 @@
                         <tr v-for="(item, index) in mainSubject" :key="index">
                             <td>{{ item.name }}</td>
                             <td>{{ item.code }}</td>
+                             <td>{{ item.is_special_educational_needs ==  1 ? "Yes" : "No" }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
@@ -37,7 +39,7 @@ export default {
         }
     },
     methods:{
-        loadMainSubjects(uri = 'masters/loadAcademicMasters/all_main_subject'){
+        loadMainSubjects(uri = 'masters/loadAcademicMasters/all_teacher_subject'){
             axios.get(uri)
             .then(response => {
                 this.mainSubject = response.data.data
@@ -49,12 +51,12 @@ export default {
             });
         },
         showedit(data){
-            this.$router.push({name:'edit_main_subject',params: {data:data}});
+            this.$router.push({name:'edit_teacher_subject_master',params: {data:data}});
         },
     },
     mounted(){ 
         this.loadMainSubjects();
-        this.dt =  $("#main-subject-table").DataTable({
+        this.dt =  $("#teacher-subject-table").DataTable({
              columnDefs: [
                 { width: 200, targets: 0},
             ],
@@ -64,7 +66,7 @@ export default {
         mainSubject(val) {
             this.dt.destroy();
             this.$nextTick(() => {
-                this.dt =  $("#main-subject-table").DataTable()
+                this.dt =  $("#teacher-subject-table").DataTable()
             });
         }
     }

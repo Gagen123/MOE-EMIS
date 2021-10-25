@@ -4,12 +4,12 @@ const routes = [
         children:
         [
             { path: '/',name:'academic-master', component: require('./components/masters/academics_masters/academics_master_list.vue').default,},
-            { path: '/main-subject-master', component: require('./components/masters/academics_masters/main_subject/main_subject_index.vue').default,
+            { path: '/teacher-subject-master', component: require('./components/masters/academics_masters/teacher_subject/teacher_subject_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/masters/academics_masters/main_subject/list_main_subject.vue').default },
-                    { path: '/list-main-subject', name: 'list_main_subject', component: require('./components/masters/academics_masters/main_subject/list_main_subject.vue').default },
-                    { path: '/create-main-subject', name: 'create_main_subject', component: require('./components/masters/academics_masters/main_subject/create_main_subject.vue').default },
-                    { path: '/edit-main-subject', name: 'edit_main_subject', component: require('./components/masters/academics_masters/main_subject/edit_main_subject.vue').default },
+                    { path: '', component: require('./components/masters/academics_masters/teacher_subject/list_teacher_subject.vue').default },
+                    { path: '/list-teacher-subject-master', name: 'list_teacher_subject_master', component: require('./components/masters/academics_masters/teacher_subject/list_teacher_subject.vue').default },
+                    { path: '/create-teacher-subject-master', name: 'create_teacher_subject_master', component: require('./components/masters/academics_masters/teacher_subject/create_teacher_subject.vue').default },
+                    { path: '/edit-teacher-subject-master', name: 'edit_teacher_subject_master', component: require('./components/masters/academics_masters/teacher_subject/edit_teacher_subject.vue').default },
                 ]
             },
             { path: '/subject-master', component: require('./components/masters/academics_masters/subject/subject_index.vue').default,

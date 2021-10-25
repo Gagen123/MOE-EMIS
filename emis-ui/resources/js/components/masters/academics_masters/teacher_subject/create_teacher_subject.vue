@@ -14,6 +14,14 @@
                         <has-error :form="form" field="code"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Is Special Educational Needs (SEN) :</label>
+                        <br> 
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" /> No</label>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -36,8 +44,9 @@ export default {
             form: new form({
                 name: '',
                 code:'',
+                is_special_educational_needs:0,
                 status: 1,
-                record_type:'main_subject',
+                record_type:'teacher_subject',
                 action_type:'add',
             })
         }
@@ -61,7 +70,7 @@ export default {
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/list-main-subject');
+                    this.$router.push('/list-teacher-subject-master');
                 })
                 .catch(() => {
                     console.log("Error.")

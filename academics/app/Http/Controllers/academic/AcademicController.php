@@ -1602,7 +1602,7 @@ class AcademicController extends Controller
             $maxNoOfAssmntAreasDescriptive = 0;
             if ($org_and_class_details) {
                 if ($org_and_class_details->transcript_format == 1) { //CFA
-                    $academic_result_raw = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description,t1.input_type
+                    $academic_result_raw = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description,t1.input_type,t2.teacher
                     FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
                     WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 1 ORDER BY t1.display_order', [$resultId, $Id]);
 
@@ -1614,19 +1614,21 @@ class AcademicController extends Controller
                     FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
                     WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 3 ORDER BY t1.display_order', [$resultId, $Id]);
 
+                    // $subject_tecaher = DB::select('');
+
                     foreach ($academic_result_raw as $result) {
                         $newItem = ['assessment_area' => $result->assessment_area, 'assmnt_area_dzo' => null, 'score_description' => $result->score_description, "score_dzo" => null];
                         if ($result->input_type == 2) {
                             if (array_key_exists($result->subject, $academic_result_descriptive)) {
-                                array_push($academic_result_descriptive[$result->subject]["scores"], $newItem);
+                                array_push($academic_result_descriptive[$result->subject]["scores"], $newItem,);
                             } else {
-                                $academic_result_descriptive[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem]];
+                                $academic_result_descriptive[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
                             }
                         } else {
                             if (array_key_exists($result->subject, $academic_result)) {
                                 array_push($academic_result[$result->subject]["scores"], $newItem);
                             } else {
-                                $academic_result[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem]];
+                                $academic_result[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
                             }
                         }
                     }

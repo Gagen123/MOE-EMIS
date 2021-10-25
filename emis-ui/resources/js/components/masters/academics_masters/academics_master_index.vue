@@ -12,7 +12,7 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('main_subject')">
-                    <router-link id="main_subject" to="/main-subject-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                    <router-link id="main_subject" to="/teacher-subject-master" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                      Teacher's Subject
                     </router-link>
                 </li>

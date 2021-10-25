@@ -68,7 +68,7 @@
                                                     <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" @change="remove_error('attach'+(index+1))" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -250,9 +250,9 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err);
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                         })
                     }
                 });
@@ -281,6 +281,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
 
         change_tab(nextclass){

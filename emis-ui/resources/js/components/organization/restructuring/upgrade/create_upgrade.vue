@@ -148,7 +148,7 @@
                                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                     </td>
                                                     <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <input type="file" name="attachments" class="form-control application_attachment" @change="remove_error('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                     </td>
                                                 </tr>
@@ -362,8 +362,18 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error on submit:"+err)
+                        .catch((error) => {
+                           this.applyselect2();
+                           this.form.errors.errors = error.response.data;
+                           this.validateFileform();
+                           if(error.response.data.class == 'class is required'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class!',
+                            })
+                           }
+                          
                         })
                     }
                 });
@@ -438,21 +448,13 @@ export default {
             });
         },
         applyselect2(){
+            if(!$('#organizationId').attr('class').includes('select2-hidden-accessible')){
+                $('#organizationId').addClass('select2-hidden-accessible');
+            }
             if(!$('#level').attr('class').includes('select2-hidden-accessible')){
                 $('#level').addClass('select2-hidden-accessible');
             }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+           
         },
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/Upgrade__'+1)
@@ -490,6 +492,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
 
     },

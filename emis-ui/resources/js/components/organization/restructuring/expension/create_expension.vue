@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
+                                <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure</label>
                                 <div class="col-lg-8 col-md-8 col-sm-8">
                                     <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo">
                                 </div>
@@ -87,7 +87,7 @@
                                                     <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" @change="remove_error('attach'+(index+1))">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -229,9 +229,9 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err);
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                         })
                     }
                 });
@@ -262,6 +262,24 @@ export default {
                 this.getorgdetials($('#organizationId').val());
             }
 
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)

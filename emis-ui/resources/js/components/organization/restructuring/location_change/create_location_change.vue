@@ -111,7 +111,7 @@
                                 <tbody>
                                     <tr id="record1" v-for='(att, index) in form.fileUpload' :key="index">
                                         <td>
-                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                            <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)" @change="remove_error('attach'+(index+1))">
                                             <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                         </td>
                                         <td>
@@ -323,8 +323,9 @@ export default {
                                 });
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err)
+                        .catch((error) => {
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                         })
                     }
                 });
@@ -355,6 +356,24 @@ export default {
                 this.form.parentSchool=$('#parentSchool').val();
             }
 
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         validateForm(){
             let returntype=true;
