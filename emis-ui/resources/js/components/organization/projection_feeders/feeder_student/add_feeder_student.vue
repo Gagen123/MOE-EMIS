@@ -107,7 +107,7 @@ export default {
                 this.feederClass = class_splits[0];
                 let loop_length = this.classList.length;
                 for(let i=0; i<=loop_length; i++){
-                    if(this.classList[i].class !== this.feederClass){
+                    if(this.classList[i].class != this.feederClass){
                          this.classList.splice(i, 1); 
                     }
                 }
