@@ -143,22 +143,45 @@
                                 </td>
                             </template>
                         </tr>
-                        <tr v-for="i in maxNoOfAssessmentAreas" :key="i">
+                        <tr v-for="i in maxNoOfAssessmentAreas" :key="i+'_'+i">
                             <template v-for="(item,index) in academic_result">
-                                <td :key="index">
+                                <td :key="index+'_'">
                                     {{item.scores[i-1] ? item.scores[i-1].assessment_area : ""}}
                                 </td>
-                                <td :key="index+1">
+                                <td :key="index+'_'+1">
                                     {{item.scores[i-1] ? item.scores[i-1].score_description : ""}}
                                 </td>
                             </template>
                         </tr>
-                        <tr v-for="j in maxNoOfAssmntAreasDescriptive" :key="j">
+                        <tr v-for="j in maxNoOfAssmntAreasDescriptive" :key="j+j">
                             <template v-for="(item1,index1) in academic_result">
-                                <td colspan="2" :key="index1">
-                                    {{academic_result_descriptive[index1]}}
-                                    <!-- {{academic_result_descriptive[index1].scores[j-1] ? academic_result_descriptive[index1].scores[j-1].assessment_area : ""}}: <br/>
-                                    {{academic_result_descriptive[index1].scores[j-1] ? academic_result_descriptive[index1].scores[j-1].score_description : ""}} -->
+                                <td colspan="2" :key="index1+'_'+3" >
+                                    <div v-for="(descriptive,i) in academic_result_descriptive" :key="i">
+                                        <span v-if="i == index1">
+                                            <strong>
+                                                <span v-if="descriptive.assmnt_area_dzo != null">{{descriptive.assmnt_area_dzo}}</span>
+                                                {{descriptive.scores[j-1].assessment_area}}
+                                            </strong><br/>
+                                            {{descriptive.scores[j-1].score_description}}<br/><br/>
+                                        </span> 
+                                    </div>
+                                </td>
+                            </template>
+                        </tr>
+                        <tr>
+                            <td colspan="2" v-for="(item2,index2) in academic_result" :key="index2+'-'+1">
+                                <br/> <br/><br/><br/>  
+                                {{item2.sub_teacher}}                      
+                                <strong>Name & Signature of Subject Teacher</strong>                    
+                            </td>
+                        </tr>
+                        <tr>
+                            <template v-for="(item3,index3) in non_academic_result">
+                                <td :key="index3">
+                                     <strong>{{item3.subject}}</strong>
+                                </td>
+                                <td :key="index3+'_'+2">
+                                    {{item3.score_description}}
                                 </td>
                             </template>
                         </tr>
@@ -179,6 +202,7 @@ export default {
             org_and_class_details:{},
             no_subjects:0,
             academic_result:[],
+            non_academic_result:[],
             academic_result_descriptive:[],
             maxNoOfAssessmentAreas:0,
             maxNoOfAssmntAreasDescriptive:0,
@@ -193,29 +217,20 @@ export default {
                 this.org_and_class_details = response.data.data.org_and_class_details
                 this.student_details = response.data.data.student_details
                 this.academic_result = response.data.data.academic_result
+                this.non_academic_result = response.data.data.non_academic_result
                 this.academic_result_descriptive = response.data.data.academic_result_descriptive
                 this.no_subjects = Object.keys(this.academic_result).length
                 this.no_subjects = Object.keys(this.academic_result).length
                 this.maxNoOfAssessmentAreas = response.data.data.maxNoOfAssessmentAreas
                 this.maxNoOfAssmntAreasDescriptive = response.data.data.maxNoOfAssmntAreasDescriptive
+                this.maxNoOfAssmntAreasDescriptive = response.data.data.maxNoOfAssmntAreasDescriptive
                
             })
         },
-//         getSubCategNonAcademic(){
-//             axios.get('academics/getSubCategNonAcademic').then(response => {
-//                 academic_result: [{subject: "Dzongkha", assessment_area: "Listening & Speaking", score_description: "Meeting"},…]
-// non_academic_result: [,…]
-// org_and_class_details: [,…]
-// others_result: [{subject: "Personal Characteristics", assessment_area: "Leadership Quality",…},…]
-// student_details: []
-                // this.others_result = response.data.data.others_result
-//             })
-//         },
    
     },
     mounted(){ 
         this.getProgressReport()
-        // this.getSubCategNonAcademic()
         // this.dt =  $("#final-result-table").DataTable();
     },
     created(){

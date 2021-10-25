@@ -45,12 +45,6 @@
                 </div> 
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Special Educational Needs (SEN) :</label>
-                        <br> 
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" />Yes</label>
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" />No</label>
-                    </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -77,7 +71,6 @@ export default {
                 aca_sub_category_id:'',
                 dzo_name:'',
                 assessed_by_class_teacher:0,
-                is_special_educational_needs:0,
                 display_order:'',
                 status:'',
                 record_type:'subject',
@@ -130,7 +123,6 @@ export default {
         this.form.dzo_name=this.$route.params.data.dzo_name;
         this.form.display_order = this.$route.params.data.display_order,
         this.form.assessed_by_class_teacher=this.$route.params.data.assessed_by_class_teacher;
-        this.form.is_special_educational_needs=this.$route.params.data.is_special_educational_needs;
         this.form.status=this.$route.params.data.status;
         this.form.display_order = this.$route.params.data.display_order,
         this.form.id=this.$route.params.data.id;

@@ -10,7 +10,6 @@
                             <th>Code</th>
                             <th>Subject Category</th>
                             <th>Assessed by Class Teacher</th>
-                            <th>Is Special Educational Needs (SEN) </th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -25,7 +24,6 @@
                             <td>{{ item.code }} </td>
                             <td>{{ item.sub_category_name }}</td>
                             <td>{{ item.assessed_by_class_teacher ==  1 ? "Yes" : "No" }}</td>
-                             <td>{{ item.is_special_educational_needs ==  1 ? "Yes" : "No" }}</td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
 
                             <td>
