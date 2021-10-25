@@ -75,7 +75,7 @@
                                 <label class="mb-0.5">Transfer Reason:<i class="text-danger">*</i></label>
                                 <br/>
                                 <span v-for="(item, key, index) in  reasonList" :key="index">
-                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" @change="remove_error('reason_id')" id="reason_id" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
                                 </span>
                                 <has-error :form="form" field="reason_id"></has-error>
                             </div>
@@ -83,7 +83,8 @@
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Brief description for seeking transfer</label>
-                                <textarea class="form-control" v-model="form.description" id="description"></textarea>
+                                <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description')}" id="description"  @change="remove_error('description')"></textarea>
+                                 <has-error :form="form" field="description"></has-error>
                             </div>
                         </div>
                         <hr>
@@ -101,9 +102,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Preferences</th>
-                                            <th>Dzongkhag/Thromde</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%">Preferences</th>
+                                            <th style="width:50%">Dzongkhag/Thromde</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -154,9 +155,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Specialization</th>
-                                            <th>Select Subject</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%">Specialization</th>
+                                            <th style="width:50%">Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -519,9 +520,16 @@ export default {
                         })
 
                         .catch((error) => {
-                            console.log("Errors:"+error)
+                            this.change_tab(nextclass);
+                           if(error.response.data.description=='You need to provide the description' && error.response.data.reason_id=='Please select transfer reason'){
+                                 this.form.errors.errors = error.response.data;
+                                 
+                            }
+                            else if(error== " "){
+                                 
+                            }
                         });
-                        this.change_tab(nextclass);
+                       
                         }
                         else{
                             Swal.fire({
@@ -583,8 +591,9 @@ export default {
                                 })
 
                                 .catch((error) => {
-                                    console.log("Errors:"+error)
-                                });
+                                    this.form.errors.errors = error.response.data;
+                                    this.validateFileform();
+                            })
                             }
                         });
                     }
@@ -729,6 +738,24 @@ export default {
             .catch(function (error) {
                 console.log(error);
             });
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
 
     },

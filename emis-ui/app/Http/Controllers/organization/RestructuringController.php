@@ -106,7 +106,7 @@ class RestructuringController extends Controller
                 break;
             }
             case "fee_structure_change" : {
-                $validation = $this->validateGeneralChange($request);
+                $validation = $this->validateFeeStructure($request);
                 $establishment_data = $this->setFeeStructure($request);
                 break;
             }
@@ -850,6 +850,7 @@ class RestructuringController extends Controller
 
     public function saveBifurcation(Request $request){
         $rules = [
+            'parent_id'          =>  'required',
             'name1'              =>  'required',
             'level1'             =>  'required',
             'category1'          =>  'required',
@@ -868,6 +869,7 @@ class RestructuringController extends Controller
             'chiwog1.required'       => 'Chiwog is required',
             'location1.required'     => 'Location Type is required',
             'senSchool1.required'    => 'SEN School is required',
+            'parent_id.required'     => 'Select the organization',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -1418,6 +1420,26 @@ class RestructuringController extends Controller
 
         return ($validation);
     }
+
+    private function validateFeeStructure($request){
+        $rules = [
+            'organizationId'              =>  'required',
+            'fees'                        =>  'required',
+            
+        ];
+        $customMessages = [
+            'organizationId.required'       => 'Organization is required',
+            'fees.required'                 => 'Propose New Fee is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+    
     private function validateStreamlChange($request){
         $rules = [
             'organizationId'              =>  'required',
