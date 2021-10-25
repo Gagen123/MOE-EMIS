@@ -18,7 +18,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                        <select name="organizationId" v-model="form.organizationId" @change="remove_error('organizationId')" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" >
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
@@ -93,7 +93,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">New Level of Organization:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" id="level" class="form-control select2" @change="remove_error('level')">
+                                        <select name="level" v-model="form.level" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('level') }" @change="remove_error('level')"  id="level" class="form-control select2" >
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in levelList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
@@ -365,7 +365,7 @@ export default {
                             }
                         })
                         .catch((error) => {
-                            // this.applyselect2();
+                            this.applyselect2();
                             this.form.errors.errors = error.response.data;
                             this.validateFileform();
                         })
@@ -460,21 +460,24 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('organizationId');
+            this.applyselect2field('level');
+
+            // if(!$('#level').attr('class').includes('select2-hidden-accessible')){
+            //     $('#level').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+            //     $('#dzongkhag').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#gewog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#chiwog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+            //     $('#locationType').addClass('select2-hidden-accessible');
+            // }
         },
         getAttachmentType(type){
             this.form.attachments=[];

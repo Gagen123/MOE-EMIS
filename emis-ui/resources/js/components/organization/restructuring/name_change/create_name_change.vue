@@ -19,7 +19,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6">
-                                        <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                        <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>

@@ -59,18 +59,49 @@ class TransferController extends Controller{
     //submitting the final application for transfer
     public function submitFinalapplicantDetails(Request $request){
         $service_name = $request->service_name;
-        $rules = [
-            'transferType'              =>  'required  ',
-            'preference_school'              =>  'required  ',
-            'preference_school'              =>  'required  ',
-            'preference_school'              =>  'required  ',
-        ];
-        
-        $customMessages = [
-            'transferType.required'     => 'Please select this',
-            'preference_school2'        =>  'required  ',
-            'preference_school2'        =>  'required  ',
-        ];
+        if($request->transferType=="Intra Transfer"){
+            $rules = [
+                'preference_school1'         =>  'required  ',
+                'preference_school2'         =>  'required  ',
+                'preference_school3'         =>  'required  ',
+                'spSubject'                  =>  'required  ',
+                'optional1sub'               =>  'required  ',
+                'optional2sub'               =>  'required  ',
+            ];
+            
+            $customMessages = [
+                'transferType.required'           => 'Please select this',
+                'preference_school1.required'     => 'Please select preferences school',
+                'preference_school2.required'     => 'Please select preferences school',
+                'preference_school3.required'     => 'Please select preferences school',
+                'spSubject.required'              => 'Please select Specialization subject',
+                'optional1sub.required'           => 'Please select optional subject',
+                'optional2sub.required'           => 'Please select optional subject',
+                
+            ];
+        }
+        if($request->transferType=="Inter Transfer"){
+            $rules = [
+                'preference_dzongkhag1'         =>  'required  ',
+                'preference_dzongkhag2'         =>  'required  ',
+                'preference_dzongkhag3'         =>  'required  ',
+                'spSubject'                     =>  'required  ',
+                'optional1sub'                  =>  'required  ',
+                'optional2sub'                  =>  'required  ',
+            ];
+            
+            $customMessages = [
+                'transferType.required'              => 'Please select this',
+                'preference_dzongkhag1.required'     => 'Please select preferences dzongkhag',
+                'preference_dzongkhag2.required'     => 'Please select preferences dzongkhag',
+                'preference_dzongkhag3.required'     => 'Please select preferences dzongkhag',
+                'spSubject.required'                 => 'Please select Specialization subject',
+                'optional1sub.required'              => 'Please select optional subject',
+                'optional2sub.required'              => 'Please select optional subject',
+                
+            ];
+        }
+       
         $this->validate($request, $rules,$customMessages);
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -492,6 +523,15 @@ class TransferController extends Controller{
     }
 
     public function SaveTransferAppeal(Request $request){
+        $rules = [
+            'transfer_type_id'          =>  'required  ',
+            'description'               =>  'required  ',
+        ];
+        $customMessages = [
+            'transfer_type_id.required' => 'please select the transfer type for appealing',
+            'description.required'      => 'please mention the description',
+        ];
+        $this->validate($request, $rules,$customMessages);
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];

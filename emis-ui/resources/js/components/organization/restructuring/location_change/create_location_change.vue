@@ -12,7 +12,7 @@
                     <div class="form-group row">
                         <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                         <div class="col-lg-6 col-md-6 col-sm-6">
-                            <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                            <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                 <option value="">--- Please Select ---</option>
                                 <option v-for="(item, index) in eccdList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                             </select>
@@ -324,6 +324,7 @@ export default {
                             }
                         })
                         .catch((error) => {
+                            this.applyselect2();
                             this.form.errors.errors = error.response.data;
                             this.validateFileform();
                         })
@@ -413,7 +414,7 @@ export default {
         },
 
         applyselect2(){
-            this.applyselect2field('level');
+            this.applyselect2field('organizationId');
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');
             this.applyselect2field('locationType');
