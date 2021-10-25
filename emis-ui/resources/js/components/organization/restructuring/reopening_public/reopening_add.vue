@@ -615,6 +615,13 @@ export default {
                         })
                         .catch((error) => {
                             this.form.errors.errors = error.response.data;
+                            if(error.response.data.class == 'class is required'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class or streams!',
+                            })
+                            }
                             this.validateFileform();
                      })
                     }
@@ -692,6 +699,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
     },
     created(){

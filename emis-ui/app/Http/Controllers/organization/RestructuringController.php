@@ -418,6 +418,8 @@ class RestructuringController extends Controller
                 'dzongkhag1'    =>  'required',
                 'gewog1'        =>  'required',
                 'chiwog1'       =>  'required',
+                'class'         =>  'required',
+                
                 
             ];
             $customMessages = [
@@ -427,6 +429,7 @@ class RestructuringController extends Controller
                 'dzongkhag1.required'   =>  'Select the dzongkhag',
                 'gewog1.required'       =>  'Select the gewog',
                 'chiwog1.required'      =>  'Select the chiwog',
+                'class.required'        =>  'Select the class',
             ];
 
         }else{
@@ -1104,6 +1107,8 @@ class RestructuringController extends Controller
             'gewog1'             =>  'required',
             'chiwog1'            =>  'required',
             'location1'          =>  'required',
+            'location1'          =>  'required',
+            'class'              =>  'required'
             // 'senSchool1'         =>  'required',
         ];
         $customMessages = [
@@ -1115,6 +1120,7 @@ class RestructuringController extends Controller
             'gewog1.required'        => 'Gewog is required',
             'chiwog1.required'       => 'Chiwog is required',
             'location1.required'     => 'Location Type is required',
+            'class.required'         => 'class is required',
             // 'senSchool1.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
