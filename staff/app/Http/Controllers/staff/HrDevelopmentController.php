@@ -449,6 +449,7 @@ class HrDevelopmentController extends Controller{
             }
 
             $nparticipate=[];
+            $nparticipatefortransaction=[];
             if($hrdev->nature_of_participant!=null && $hrdev->nature_of_participant!=""){
                 if(strpos($hrdev->nature_of_participant,',')){
                     $parti=explode(',',$hrdev->nature_of_participant);
@@ -456,16 +457,20 @@ class HrDevelopmentController extends Controller{
                         $partype=NatureOfParticipant::where('id',$par)->first();
                         if($partype!=null && $partype!=""){
                             array_push($nparticipate,$partype->name);
+                            array_push($nparticipatefortransaction,$partype);
                         }
                     }
                 }else{
                     $partype=NatureOfParticipant::where('id',$hrdev->nature_of_participant)->first();
                     if($partype!=null && $partype!=""){
                         array_push($nparticipate,$partype->name);
+                        array_push($nparticipatefortransaction,$partype);
                     }
                 }
             }
             $hrdev->participantType=$nparticipate;
+            $hrdev->nparticipatefortransaction=$nparticipatefortransaction;
+
         }
         $hrdev->prog_app=ProgramApplication::where('program_id',$param_array['id'])->first();
         $hrdev->attachments=DocumentDetails::where('parent_id',$param_array['id'])->get();
@@ -565,14 +570,22 @@ class HrDevelopmentController extends Controller{
         if($param_array['action_type']=="nomination"){
             $response_details=Participant::where('dzo_id',$param_array['dzongkhag'])->where('org_id',$param_array['org'])->where('program_id',$param_array['program_id'])->get();
             foreach($response_details as $part){
+                $part->StaffID=$part->participant_id;
                 $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+                $parti=NatureOfParticipant::where('id',$part->participant_id)->first();
+                if($parti!=null && $parti!=""){
+                    $part->participacingas=$parti->name;
+                }
             }
+            $response_details=$this->getstaff_positiondirectory($response_details,'Array');
         }
         else if($param_array['action_type']=="verification"){
             $response_details=Participant::where('program_id',explode('SSS',$param_array['program_id'])[0])->where('org_id',explode('SSS',$param_array['program_id'])[1])->get();
             foreach($response_details as $part){
+                $part->StaffID=$part->participant_id;
                 $part->document=DocumentDetails::where('parent_id',$part->id)->get();
             }
+            $response_details=$this->getstaff_positiondirectory($response_details,'Array');
         }
         else if($param_array['action_type']=="orgdetails"){
             if($param_array['accessLevel']=="Ministry"){
@@ -789,5 +802,15 @@ class HrDevelopmentController extends Controller{
             }
         }
         return $response_data;
+    }
+
+    public function checkProgramAccess($user_id=""){
+        $response_details=OpenProgramme::where('user_id',$user_id)->where('start_date','<=',date('Y-m-d'))->where('end_date','>=',date('Y-m-d'))->get();
+        if($response_details!=null && $response_details!="" && sizeof(($response_details))>0){
+            $response_details=true;
+        }else{
+            $response_details=false;
+        }
+        return $this->successResponse($response_details);
     }
 }

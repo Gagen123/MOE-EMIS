@@ -1,6 +1,10 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="noaccesssection">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <!-- <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item programme-tab" @click="shownexttab('programme-tab')">
@@ -946,10 +950,30 @@ export default {
             .catch((error) => {
                 console.log("Error......"+error);
             });
+        },
+        async loadmasters(){
+            this.trainingtypeList =  await this.loadstaffMasters('active','hr_development_masters___TrainingType');
+            this.relatedProgrammeList =  await this.loadstaffMasters('all','hr_development_masters___RelatedProgramme');
+            this.nature_of_participantList =  await this.loadstaffMasters('all','hr_development_masters___NatureOfParticipant');
+            // this.target_groupList =  await this.loadstaffMasters('all','hr_development_masters___TargetGroup');
+            this.financialSourceList =  await this.loadstaffMasters('all','hr_development_masters___FinancialSource');
+            // this.categoryList =  await this.loadstaffMasters('all','hr_development_masters___Category');
+            // this.donor_agencyList =  await this.loadstaffMasters('all','hr_development_masters___Donor');
+            // this.degreeList =  await this.loadstaffMasters('all','hr_development_masters___Degree');
+            this.programmeLevelList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeLevel');
+            this.programmeTypeList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeType');
+            this.courseTypeList =  await this.loadstaffMasters('all','hr_development_masters___CourseType');
+            this.coursemodeList =  await this.loadstaffMasters('all','CourseMode');
+            this.loadorganizerList();
+            this.loadstudy_countryList();
+            // this.loadcoursemode();
+            // this.loadsubjectList();
+            // this.loadroleList();
         }
     },
 
     async mounted() {
+        let valid=false;
         this.count=1,
         this.loaddraftDetails();
         $('[data-toggle="tooltip"]').tooltip();
@@ -964,25 +988,20 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.trainingtypeList =  await this.loadstaffMasters('active','hr_development_masters___TrainingType');
-        this.relatedProgrammeList =  await this.loadstaffMasters('all','hr_development_masters___RelatedProgramme');
-        this.nature_of_participantList =  await this.loadstaffMasters('all','hr_development_masters___NatureOfParticipant');
-        // this.target_groupList =  await this.loadstaffMasters('all','hr_development_masters___TargetGroup');
-        this.financialSourceList =  await this.loadstaffMasters('all','hr_development_masters___FinancialSource');
-        // this.categoryList =  await this.loadstaffMasters('all','hr_development_masters___Category');
-        // this.donor_agencyList =  await this.loadstaffMasters('all','hr_development_masters___Donor');
-        // this.degreeList =  await this.loadstaffMasters('all','hr_development_masters___Degree');
-        this.programmeLevelList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeLevel');
-        this.programmeTypeList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeType');
-        this.courseTypeList =  await this.loadstaffMasters('all','hr_development_masters___CourseType');
-        this.coursemodeList =  await this.loadstaffMasters('all','CourseMode');
-        this.loadorganizerList();
-        this.loadstudy_countryList();
-        // this.loadcoursemode();
-        // this.loadsubjectList();
-        // this.loadroleList();
-
-
+        axios.get('staff/hrdevelopment/checkProgramAccess')
+        .then((response) => {
+            valid=response.data.data;
+            if(valid){
+                this.loadmasters();
+            }else{
+                $('#noaccesssection').show();
+                $('#mainform').hide();
+                $('#message').html('There is no configuration for you to access this page. Plese contact responsible person to open this page for you. Thank you!');
+            }
+        })
+        .catch((error) => {
+            console.log("Error......"+error);
+        });
     },
 }
 </script>
