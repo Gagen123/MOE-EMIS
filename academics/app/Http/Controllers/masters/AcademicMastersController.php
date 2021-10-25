@@ -402,7 +402,7 @@ class AcademicMastersController extends Controller
     public function loadAcademicMasters($param = "")
     {
         if ($param == "all_teacher_subject") {
-            $main_subject = DB::select('SELECT id,name,code,is_special_educational_needs,status FROM aca_teacher_subject');
+            $main_subject = DB::select('SELECT id,name,code,is_special_educational_needs,status FROM aca_teacher_subject ORDER BY code');
             return $this->successResponse($main_subject);
         }
         if ($param == "all_active_teacher_subject") {

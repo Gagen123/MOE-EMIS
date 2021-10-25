@@ -171,7 +171,7 @@
                         <tr>
                             <td colspan="2" v-for="(item2,index2) in academic_result" :key="index2+'-'+1">
                                 <br/> <br/><br/><br/>  
-                                {{item2.sub_teacher}}                      
+                                {{item2.sub_teacher}} <br/>                   
                                 <strong>Name & Signature of Subject Teacher</strong>                    
                             </td>
                         </tr>
