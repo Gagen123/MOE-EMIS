@@ -40,21 +40,21 @@
                         </select> 
                         <has-error :form="form" field="aca_assmnt_type"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label>Rating Type:</label> 
-                         <select v-model="form.aca_rating_type_id" class="form-control select2" id="aca_rating_type_id" :class="{ 'is-invalid': form.errors.has('aca_rating_type_id') }"> -->
-                           <option v-for="(item, index) in filterRating(1)" :key="index" :value="item.id">{{ item.name }}</option>
-                        </select>
-                        <has-error :form="form" field="aca_sub_group_id"></has-error>
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                         <label>Is Descriptive Comment:</label> 
+                        <div class="form-check">
+                            <input v-model="form.is_descriptive" class="form-check-input" type="checkbox" true-value="1" false-value="0" checked>
+                        </div>
                     </div>
-                    
-                </div>  
-                <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Display Order:<span class="text-danger">*</span></label>
                         <input class="form-control form-control-sm text-right" v-model="form.display_order" :class="{ 'is-invalid': form.errors.has('display_order') }" id="display_order" @change="remove_err('display_order')" type="number">
                         <has-error :form="form" field="order"></has-error>
                     </div>
+                    
+                </div>  
+                <div class="row form-group">
+                   
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br> 
@@ -75,10 +75,9 @@ export default {
     data() {
         return {
             subject_list:[],
-            rating_type_list:[],
             form: new form({
                 aca_sub_id:'',
-                aca_rating_type_id:'',
+                is_descriptive:'',
                 aca_assmnt_type:'',
                 name: '',
                 dzo_name:'',
@@ -108,26 +107,6 @@ export default {
                 $('#'+field_id).addClass('select2');
             }
             this.filterRating()
-        },
-        loadRatingTypeList(uri = 'masters/loadAcademicMasters/all_active_rating_type'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.rating_type_list = data.data.data
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-        },
-        filterRating(){
-           var aca_sub_category_id = $('#aca_sub_id option:selected').data('category-id')
-           var ratingtypes = "<option value=''>---Select--</option>"
-            this.rating_type_list.forEach((item,index)=>{
-                if(item.input_type != 1 && (item.aca_sub_category_id == aca_sub_category_id || item.aca_sub_category_id === null )){
-                    ratingtypes += ("<option value='" + item.id + "'>" + item.name + "</option>")
-                }
-            })
-            $("#aca_rating_type_id").html(ratingtypes) 
         },
 		formaction: function(type){
             if(type=="reset"){
@@ -176,7 +155,7 @@ export default {
     },
       created() {
         this.form.aca_sub_id=this.$route.params.data.aca_sub_id;
-        this.form.aca_rating_type_id=this.$route.params.data.aca_rating_type_id;
+        this.form.is_descriptive=this.$route.params.data.is_descriptive;
         this.form.aca_assmnt_type=this.$route.params.data.aca_assmnt_type;
         this.form.display_order = this.$route.params.data.display_order;
         this.form.name=this.$route.params.data.assessment_area_name;

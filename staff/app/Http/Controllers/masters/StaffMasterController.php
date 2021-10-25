@@ -7,11 +7,14 @@ use App\Models\staff_master_config\LeaveConfiguration;
 use App\Models\staff_master_config\LeaveConfigurationDetials;
 use App\Models\staff_masters\ChildGroup;
 use App\Models\staff_masters\ChildGroupPosition;
-use App\Models\staff_masters\PositionLevel;
-use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\SuperStructure;
+use App\Models\staff_masters\TransferReason;
 use App\Models\staff_masters\StaffMajorGrop;
 use App\Models\staff_masters\StaffSubMajorGrop;
-use App\Models\staff_masters\SuperStructure;
+use App\Models\staff_masters\PositionTitle;
+use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\TransferType;
+use App\Models\staff_masters\TransferUndertaking;
 use App\Models\staff_masters\TransferConfig;
 use App\Models\staff_masters\TransferConfigDetails;
 use App\Traits\ApiResponser;
@@ -29,7 +32,13 @@ class StaffMasterController extends Controller{
     }
 
     public function saveStaffMasters(Request $request){
-        $modelName = "App\\Models\\staff_masters\\"."$request->model";
+        if(strpos($request->model,'___')!==false){
+            $path=explode('___',$request->model)[0];
+            $model=explode('___',$request->model)[1];
+            $modelName = "App\\Models\\"."$path"."\\"."$model";
+        }else{
+            $modelName = "App\\Models\\staff_masters\\"."$request->model";
+        }
         $model = new $modelName();
         $response_data="";
 
@@ -102,6 +111,11 @@ class StaffMasterController extends Controller{
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
+        if(isset($request->carryforward)){
+            $master_data = $master_data+[
+                'carryforward'   =>  $request->carryforward,
+            ];
+        }
         if(isset($request->code)){
             $master_data = $master_data+[
                 'code'   =>  $request->code,
@@ -202,7 +216,6 @@ class StaffMasterController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-
         if($request['action_type']=="edit"){
             $data =$data +[
                 'updated_by'                =>  $request['user_id'],
@@ -226,10 +239,16 @@ class StaffMasterController extends Controller{
 
     public function loadStaffMasters($type="",$model=""){
         $mod=$model;
-        if($type!="all_active_position_title_with_level"){
+        if(strpos($model,'___')!==false){
+            $path=explode('___',$model)[0];
+            $model=explode('___',$model)[1];
+            $modelName = "App\\Models\\"."$path"."\\"."$model";
+            //staff_leadership
+            // dd($modelName);
+        }else if($type!="all_active_position_title_with_level"){
             $modelName = "App\\Models\\staff_masters\\"."$model";
-            $model = new $modelName();
         }
+        $model = new $modelName();
         if($type == 'all'){
             if($mod=="ChildGroupPosition"){
                 $response_data=$model::get();
@@ -279,6 +298,22 @@ class StaffMasterController extends Controller{
         else if(strpos($type,'byparent')!==false){
             // dd(explode('__',$type)[1]);
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->get());
+        }
+        else if(strpos($type,'withparent')!==false){
+            return $this->successResponse($model::with(explode('__',$type)[1])->where(explode('__',$type)[2],explode('__',$type)[3])->get());
+        }
+        else if(strpos($type,'allwith')!==false){
+            return $this->successResponse($model::with(explode('__',$type)[1])->get());
+        }
+        else if(strpos($type,'setconditions')!==false){
+            $condition=explode('__',$type);
+            $result=$model::query();
+            foreach($condition as $con){
+                if($con!="setconditions"){
+                    $result->where(explode('!',$con)[0],explode('!',$con)[1]);
+                }
+            }
+            return $this->successResponse($result->get());
         }
         else if(strpos($type,'byid')!==false){
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->first());
@@ -467,5 +502,160 @@ class StaffMasterController extends Controller{
             return $this->successResponse($data);
         }
         return $this->successResponse($modelName::get());
+    }
+
+
+    //copied from staffMastersController
+    public function loadStaffTransferMasters($param=""){
+        if($param=="all_transfer_type_list"){
+            return $this->successResponse(TransferType::all());
+        }
+        if($param=="intra"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%intra%')->get());
+        }
+        if($param=="inter"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%inter%')->get());
+        }
+        if($param=="appeal"){
+            return $this->successResponse(TransferType::where ('name', 'LIKE', '%appeal%')->get());
+        }
+        if($param=="all_transfer"){
+            return $this->successResponse(TransferReason::all());
+        }
+        if($param=="active_transfer"){
+            return $this->successResponse(TransferReason::where ('status', '1')->get());
+        }
+        if($param=="all_transfe_undertakingr"){
+            return $this->successResponse(TransferUndertaking::all());
+        }
+        if($param=="active_transfer_undertakingr"){
+            return $this->successResponse(TransferUndertaking::where ('status', '1')->get());
+        }
+        if($param=="all_active_staff_major_groupList"){
+            return $this->successResponse(StaffMajorGrop::where ('status', '1')->get());
+        }
+        if($param=="all_sub_major_groupList"){
+            return $this->successResponse(StaffSubMajorGrop::with('majorgroup')->get());
+        }
+        if($param=="all_active_sub_group_List"){
+            return $this->successResponse(StaffSubMajorGrop::where('status','1')->get());
+        }
+
+        if($param=="all_position_title_List"){
+            return $this->successResponse(PositionTitle::with('submajorgroup','level')->get());
+        }
+        if($param=="all_active_position_title"){
+            return $this->successResponse(PositionTitle::where ('status', 1)->get());
+        }
+        if($param=="all_active_position_title_with_level"){
+            $positions=PositionTitle::where('status', 1)->get();
+            if($positions!=null && $positions!="" && sizeof($positions)>0){
+                foreach($positions as $pos){
+                    $pos->subgroup=StaffSubMajorGrop::where('id',$pos['sub_group_id'])->first()->name;
+                    $level=PositionLevel::where('id',$pos['position_level_id'])->first();
+                    if($level!=null && $level!=""){
+                        $pos->level=$level->name;
+                    }
+                }
+            }
+            return $this->successResponse($positions);
+        }
+
+        if($param=="all_position_level_List"){
+            return $this->successResponse(PositionLevel::all());
+        }
+        if($param=="all_active_position_level_List"){
+            return $this->successResponse(PositionLevel::where ('status', 1)->get());
+        }
+
+    }
+    public function loadStaffDropdownMasters($model="",$parent_id=""){
+        if($model=="StaffSubMajorGrop"){
+            return $this->successResponse(StaffSubMajorGrop::where('group_id',$parent_id)->get());
+        }
+    }
+
+
+//transfer
+    public function saveTransferConfigMasters(Request $request){
+        $rules = [
+            'transfer_type_id' =>  'required',
+            'role_id'          =>  'required',
+        ];
+        $customMessages = [
+            'transfer_type_id.required' => 'This field is required',
+            'role_id.required'          => 'This field is required',
+        ];
+        // $data = array(
+        //     'transfer_type_id'          =>  $request['transfer_type_id'],
+        //     'submitter_role_id'         =>  $request['role_id'],
+
+        // );
+        $this->validate($request, $rules,$customMessages);
+        $data = [];
+        if(isset($request->transfer_type_id)){
+            $data = $data+[
+                'transfer_type_id'   =>  $request->transfer_type_id,
+            ];
+        }
+        if(isset($request->role_id)){
+            $data = $data+[
+                'submitter_role_id'   =>  $request->role_id,
+            ];
+        }
+
+        if($request['action_type']=="add"){
+            $data =$data +[
+                'created_by'                =>  $request['user_id'],
+                'created_at'                =>  date('Y-m-d h:i:s')
+            ];
+            $config_det= TransferConfig::create($data);
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'transfer_config_id'    =>  $config_det->id,
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $config_det= TransferConfigDetails::create($data);
+            }
+        }
+
+        if($request['action_type']=="edit"){
+            $data =$data +[
+                'updated_by'                =>  $request['user_id'],
+                'updated_at'                =>  date('Y-m-d h:i:s')
+            ];
+            TransferConfig ::where('id',$request['id'])->update($data);
+            TransferConfigDetails ::where('transfer_config_id',$request['id'])->delete();
+            foreach ($request->role_action_mapp as $rol){
+                $data = array(
+                    'transfer_config_id'      =>  $request['id'],
+                    'sequence'              =>  $rol['sequence'],
+                    'authority_type_id'     =>  $rol['authority'],
+                    'role_id'               =>  $rol['role'],
+                );
+                $config_det= TransferConfigDetails ::create($data);
+            }
+        }
+        return $this->successResponse($config_det, Response::HTTP_CREATED);
+    }
+
+
+    // public function loadLeaveConfigMasters($type="",$submitter=""){
+    //     return $this->successResponse(TransferConfig ::where('submitter_role_id',$submitter)->where('leave_type_id',$type)->first());
+    // }
+
+    public function loadAllTransferConfigMasters(){
+       $response_data=DB::table('master_transfer_type')->
+        select('master_transfer_type.name','master_transfer_type.id','master_staff_transfer_config.submitter_role_id','master_staff_transfer_config.id')
+        ->join('master_staff_transfer_config','master_staff_transfer_config.transfer_type_id','=','master_transfer_type.id')->get();
+        return $response_data;
+    }
+
+    public function loadTransferConfigDetails($id=""){
+        $data=TransferConfig::where('id',$id)->first();
+        $data->conDetails= TransferConfigDetails::where('transfer_config_id',$id)->get();
+        return $this->successResponse($data);
     }
 }

@@ -2,12 +2,18 @@ try {
     Vue.mixin({
         mounted(){
             $('.popupDatepicker').datepick({
+                onSelect: function() {
+                    if($('#'+$(this).attr("id")).val()!=""){
+                        $('#'+$(this).attr("id")).removeClass('is-invalid');
+                        $('#'+$(this).attr("id")+'_err').html('');
+                    }
+                    Fire.$emit('firedatechangefunction',$(this).attr('id'));
+                },
                 dateFormat: 'dd/mm/yyyy',
             });
-            $('.popupDatepicker').css('z-index',' 99999 !important; ');
         },
         methods: {
-            
+
             //parameter:id-field id, type: min, max, num:number to check, btnid:action button id
             checkminmax: function (id, type,num,btnid) {
                 if(type=='min' && parseInt($('#'+id).val())<num){
@@ -28,6 +34,18 @@ try {
                 dateData.split("-").reverse().join("-");
                 return reverse;
             },
+            reverseDate1(dateData){
+                if(dateData!="" && dateData!=undefined){
+                    const reverse = dateData.split("-").reverse().join("/");
+                    return reverse;
+                }
+            },
+            reverseDateTime(dateData){
+                if(dateData!="" && dateData!=undefined){
+                    reverse = dateData.split(" ")[0].split("-").reverse().join("/")+' '+dateData.split(" ")[1];
+                    return reverse;
+                }
+            },
             formatDateToddmmyyyy(dateData){
                 let formatteddate = new Date(dateData);
                 let month=formatteddate.getMonth()+1;
@@ -40,23 +58,25 @@ try {
             },
 
             formatYYYYMMDD(dateData){
-                dateData=dateData.replaceAll('/', '-');
-                dateData=dateData.split("-").reverse().join("-");
-                let formatteddate = new Date(dateData.replaceAll('/', '-'));
-                let month=formatteddate.getMonth()+1;
-                if(month.toString().length==1){
-                    month='0'+month;
+                if(dateData!=""){
+                    dateData=dateData.replaceAll('/', '-');
+                    dateData=dateData.split("-").reverse().join("-");
+                    let formatteddate = new Date(dateData.replaceAll('/', '-'));
+                    let month=formatteddate.getMonth()+1;
+                    if(month.toString().length==1){
+                        month='0'+month;
+                    }
+                    //formatting the date to yyyy-mm-dd
+                    let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
+                    return curr_date;
                 }
-                //formatting the date to yyyy-mm-dd
-                let curr_date=formatteddate.getFullYear()+'-'+month+'-'+formatteddate.getDate();
-                return curr_date;
             },
             applyselect2field(id){
                 if(!$('#'+id).attr('class').includes('select2-hidden-accessible')){
                     $('#'+id).addClass('select2-hidden-accessible');
                 }
             },
-            
+
             remove_error(field_id){
                 if($('#'+field_id).val()!=""){
                     $('#'+field_id).removeClass('is-invalid');
@@ -257,7 +277,22 @@ try {
                 }catch(e){
                     console.log('error getEnvValues '+e);
                 }
-            }
+            },
+            isvalidfile(filename) {
+                let returnt=false;
+                let fileext=this.getExtension(filename);
+                if('jpg, png, docx, pdf, xlsx'.includes(fileext.toLowerCase())){
+                    returnt= true;
+                }
+                return returnt;
+            },
+            getExtension(filename) {
+                var parts = filename.split('.');
+                return parts[parts.length - 1];
+            },
+            validfile() {
+                return 'jpg, png, docx, pdf, xlsx';
+            },
         },
     })
 

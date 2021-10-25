@@ -7,7 +7,7 @@
                     <th >Student Award</th>
                     <th >Status</th>
                     <th >Created At</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -15,7 +15,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.awardName}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{reverseDateTime(item.created_at)}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
@@ -25,13 +25,13 @@
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
-            dzongkhagList:[], 
+            dzongkhagList:[],
         }
     },
     methods:{
@@ -50,8 +50,8 @@ export default {
                 $("#dzongkhag-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
             this.$router.push({name:'edit_dzongkhag',params: {data:data}});

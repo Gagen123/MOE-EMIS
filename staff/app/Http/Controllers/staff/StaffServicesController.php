@@ -17,7 +17,14 @@ use App\Models\staff_master_config\LeaveConfigurationDetials;
 use App\Models\staff_services\LeaveApplication;
 use App\Models\staff\ApplicationSequence;
 use App\Models\staff\PersonalDetails;
+use App\Models\staff_masters\CaseCategory;
+use App\Models\staff_masters\CaseType;
+use App\Models\staff_masters\ChildGroupPosition;
+use App\Models\staff_masters\LeaveType;
+use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\StaffAwardType;
+use App\Models\staff_masters\StaffOffenceType;
 use App\Models\staff_services\ZestAward;
 
 class StaffServicesController extends Controller{
@@ -168,6 +175,7 @@ class StaffServicesController extends Controller{
         $data =[
             'staff_id'                   =>  $request->staff,
             'responsibility'             =>  $request->responsibility,
+            'year'                       =>  $request->year,
             'remarks'                    =>  $request->remarks,
         ];
         if($request->action_type=="edit"){
@@ -200,23 +208,24 @@ class StaffServicesController extends Controller{
             'staff'                 =>  'required',
             'offence_date'          =>  'required',
             'offence_type_id'       =>  'required',
-            'offence_severity_id'   =>  'required',
-            'offence_action_id'     =>  'required',
+            'case_type'   =>  'required',
+            'case_category'     =>  'required',
         ];
         $customMessages = [
             'staff.required'                => 'This field is required',
             'offence_date.required'         => 'This field is required',
             'offence_type_id.required'      => 'This field is required',
-            'offence_severity_id.required'  => 'This field is required',
-            'offence_action_id.required'    => 'This field is required',
+            'case_type.required'  => 'This field is required',
+            'case_category.required'    => 'This field is required',
         ];
         $this->validate($request, $rules,$customMessages);
         $data =[
             'staff_id'                   =>  $request->staff,
             'offence_date'               =>  $request->offence_date,
             'offence_type_id'            =>  $request->offence_type_id,
-            'offence_severity_id'        =>  $request->offence_severity_id,
-            'offence_action_id'          =>  $request->offence_action_id,
+            'case_type'                  =>  $request->case_type,
+            'case_category'              =>  $request->case_category,
+            'record_type'                =>  'MOE',
             'offence_description'        =>  $request->offence_description,
             'description_on_action'      =>  $request->description_on_action,
         ];
@@ -240,7 +249,93 @@ class StaffServicesController extends Controller{
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
     public function loadStaffdisaplinary($user_id=""){
-        $disaplinary=StaffDisaplinary::where('created_by',$user_id)->get();
+        $disaplinary=StaffDisaplinary::get();
+        if($disaplinary!=null && $disaplinary!="" && sizeof($disaplinary)>0){
+            foreach($disaplinary as $off){
+                $off->case_category_name="";
+                $category=CaseCategory::where('id',$off->case_category)->first();
+                if($category!=null && $category!=""){
+                    $off->case_category_name=$category->name;
+                }
+                $off->case_type_name="";
+                $casetype=CaseType::where('id',$off->case_type)->first();
+                if($casetype!=null && $casetype!=""){
+                    $off->case_type_name=$casetype->name;
+                }
+                $off->offence_type="";
+                $offence=StaffOffenceType::where('id',$off->offence_type_id)->first();
+                if($offence!=null && $offence!=""){
+                    $off->offence_type=$offence->name;
+                }
+                $off->emp_id="";
+                $off->name="";
+                $off->working_agency_id="";
+
+                $staff_det=PersonalDetails::where('id',$off->staff_id)->first();
+                if($staff_det!=null && $staff_det!=""){
+                    $off->emp_id=$staff_det->emp_id;
+                    $off->name=$staff_det->name;
+                    $off->working_agency_id=$staff_det->working_agency_id;
+
+                    $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $off->position_title_name=$posi->name;
+                            //get position level from position title
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $off->positionlevel=$posiLev->name;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $this->successResponse($disaplinary);
+    }
+
+    public function loadStaffdisaplinaryByIsd($id=""){
+        $disaplinary=StaffDisaplinary::where('id',$id)->first();
+        if($disaplinary!=null && $disaplinary!=""){
+            $disaplinary->case_category_name="";
+            $category=CaseCategory::where('id',$disaplinary->case_category)->first();
+            if($category!=null && $category!=""){
+                $disaplinary->case_category_name=$category->name;
+            }
+            $disaplinary->case_type_name="";
+            $casetype=CaseType::where('id',$disaplinary->case_type)->first();
+            if($casetype!=null && $casetype!=""){
+                $disaplinary->case_type_name=$casetype->name;
+            }
+            $disaplinary->offence_type="";
+            $offence=StaffOffenceType::where('id',$disaplinary->offence_type_id)->first();
+            if($offence!=null && $offence!=""){
+                $disaplinary->offence_type=$offence->name;
+            }
+
+            $disaplinary->emp_id="";
+            $disaplinary->name="";
+            $disaplinary->working_agency_id="";
+            $staff_det=PersonalDetails::where('id',$disaplinary->staff_id)->first();
+            if($staff_det!=null && $staff_det!=""){
+                $disaplinary->emp_id=$staff_det->emp_id;
+                $disaplinary->name=$staff_det->name;
+                $disaplinary->working_agency_id=$staff_det->working_agency_id;
+            }
+            $positions=ChildGroupPosition::where('id', $disaplinary->staff_id)->first();
+            if($positions!=null && $positions!=""){
+                $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                if($posi!=null && $posi!=""){
+                    $disaplinary->position_title_name=$posi->name;
+                    //get position level from position title
+                    $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                    if($posiLev!=null && $posiLev!=""){
+                        $disaplinary->positionlevel=$posiLev->name;
+                    }
+                }
+            }
+        }
         return $this->successResponse($disaplinary);
     }
 
@@ -249,8 +344,9 @@ class StaffServicesController extends Controller{
             'year'                      =>  $request->year,
             'month'                     =>  $request->month,
             'remarks'                   =>  $request->remarks,
-            'org_id'                       =>  $request->org,
-            'dzongkhag_id'                 =>  $request->dzongkhag,
+            'org_id'                    =>  $request->org,
+            'total_work_day'            =>  $request->total_work_days,
+            'dzongkhag_id'              =>  $request->dzongkhag,
         ];
         if($request->action_type=="edit"){
             $additional=[
@@ -314,7 +410,33 @@ class StaffServicesController extends Controller{
 
     public function loadattendanceDetails($id=""){
         $att_detials=StaffAttendance::where('id',$id)->first();
-        $att_detials->details=StaffAttendanceDetails::where('att_id',$att_detials->id)->get();
+        if($att_detials!=null && $att_detials!=""){
+            $staff=StaffAttendanceDetails::where('att_id',$att_detials->id)->get();
+            if($staff!=null && $staff!="" && sizeof($staff)>0){
+                foreach($staff as $per){
+                    $staff_det=PersonalDetails::where('id',$per->staff_id)->first();
+                    if($staff_det!=null && $staff_det!=""){
+                        $per->emp_id=$staff_det->emp_id;
+                        $per->name=$staff_det->name;
+                    }
+                    $per->position_title_name="";
+                    $per->positionlevel="";
+                    $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $per->position_title_name=$posi->name;
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $per->positionlevel=$posiLev->name;
+                            }
+                        }
+                    }
+
+                }
+                $att_detials->details=$staff;
+            }
+        }
         return $this->successResponse($att_detials);
     }
 
@@ -554,10 +676,70 @@ class StaffServicesController extends Controller{
     }
 
     public function getallLeaves($staff_id=""){
-        $leave_detials=LeaveApplication::with('leaveDetails')->where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
-        return $this->successResponse($leave_detials);
+        $leaves=LeaveApplication::with('leaveDetails')->where('staff_id',explode('__',$staff_id)[0])->orWhere('created_by',explode('__',$staff_id)[1])->get();
+        if($leaves!=null && $leaves!="" && sizeof($leaves)>0){
+            foreach($leaves as $per){
+                $staff_det=PersonalDetails::where('id',$per->staff_id)->first();
+                if($staff_det!=null && $staff_det!=""){
+                    $per->emp_id=$staff_det->emp_id;
+                    $per->name=$staff_det->name;
+                    $per->working_agency_id=$staff_det->working_agency_id;
+
+                }
+                $per->position_title_name="";
+                $per->positionlevel="";
+                $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
+                if($positions!=null && $positions!=""){
+                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                    if($posi!=null && $posi!=""){
+                        $per->position_title_name=$posi->name;
+                        $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                        if($posiLev!=null && $posiLev!=""){
+                            $per->positionlevel=$posiLev->name;
+                        }
+                    }
+                }
+
+            }
+        }
+        return $this->successResponse($leaves);
     }
 
+    public function getLeaveBalance($staff_id="",$year=""){
+        $leaveType=LeaveType::where('category','MOE')->get();
+        if($leaveType!=null && $leaveType!="" && sizeof($leaveType)>0){
+            foreach($leaveType as $per){
+                $per->totalleave="";
+                $leaves=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$per->id)->Where('year',$year)->where('status','Approved')->get();
+                $totalLeaveavailed=0;
+                if($leaves!=null && $leaves!="" && sizeof($leaves)>0){
+                    foreach($leaves as $lev){
+                        $totalLeaveavailed+=$lev->no_days;
+                    }
+                }
+                $per->totalleave= $totalLeaveavailed;
+
+                //2015 will be the base year to calculate balance
+                $accumulateLeave=0;
+                if(strtolower($per->name)=="earned leave"){
+                    $totalapplicableleave=($year-2015)*$per->no_days;
+                    $leavesbal=LeaveApplication::where('staff_id',$staff_id)->where('leave_type_id',$per->id)->Where('year','>',2015)->Where('year','<=',$year)->where('status','Approved')->get();
+                    if($leavesbal!=null && $leavesbal!="" && sizeof($leavesbal)>0){
+                        foreach($leavesbal as $bal){
+                            $totalapplicableleave=$totalapplicableleave-$bal->no_days;
+                        }
+                    }
+                    $accumulateLeave=$totalapplicableleave;
+                }
+                $per->accumulateLeave= $accumulateLeave;
+                if($accumulateLeave>90){
+                    $per->accumulateLeave= 90;
+                }
+                $per->leavebalance= ($per->no_days-$totalLeaveavailed);
+            }
+        }
+        return $this->successResponse($leaveType);
+    }
 
 }
 

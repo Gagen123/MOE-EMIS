@@ -105,7 +105,7 @@ export default {
                 $('#'+field_id).removeClass('is-invalid');
             }
         },
-        loadtransferType(uri = 'masters/loadStaffMasters/all_transfer_type_list'){
+        loadtransferType(uri = 'masters/loadStaffTransferMasters/all_transfer_type_list'){
             axios.get(uri)
             .then(response =>{
                 let data = response.data.data;
@@ -150,11 +150,9 @@ export default {
             }
             if(id=="transfer_type_id"){
                 this.form.transfer_type_id=$('#transfer_type_id').val();
-                this.getLeave_details($('#role_id').val());
             }
             if(id=="role_id"){
                 this.form.role_id=$('#role_id').val();
-                this.getLeave_details();
             }
         },
         

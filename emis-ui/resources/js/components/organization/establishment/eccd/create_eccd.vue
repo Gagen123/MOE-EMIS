@@ -180,7 +180,7 @@
                     <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                                <label class="mb-0">Upload the Required Documents ({{validfile()}})<span class="text-danger">*</span></label>
                             </div>
                         </div><br>
                         <div class="card">
@@ -196,11 +196,11 @@
                                         <tbody>
                                             <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
                                                 <td>
-                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <input type="text" class="form-control"  @change="remove_error('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments"  @change="remove_error('attach'+(index+1))" class="form-control" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -269,7 +269,7 @@ export default {
                 category:'',
                 dzongkhag:'',
                 gewog:'',
-                chiwog:'0',
+                chiwog:'',
                 locationType:'',
                 coLocatedParent:'1',
                 parentSchool:'',
@@ -370,6 +370,7 @@ export default {
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
                     message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    subform=this.validateFileform();
                 }
                 if(subform){
                     Swal.fire({
@@ -454,11 +455,10 @@ export default {
                     });
                     if(clasArray.length<1){
                         Swal.fire({
-                            text: "Please select Age group?",
-                            icon: 'info',
-                            confirmButtonText: 'OK',
-                            showCancelButton: true,
-                        });
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please select Age group!',
+                        })
                         validated=false;
                     }
                     else{
@@ -469,7 +469,14 @@ export default {
                             }
                         })
                         .catch((err) => {
-                            console.log("Error:"+err)
+                            console.log("Error:"+err);
+                            if(err.response.status === 422){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: 'Please select applicable class!',
+                                })
+                            }
                         })
                     }
                 }
@@ -492,6 +499,25 @@ export default {
                 }
             }
         },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.file_form.fileUpload.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
+        },
+
         applyselect2(){
             this.applyselect2field('gewog');
             this.applyselect2field('chiwog');

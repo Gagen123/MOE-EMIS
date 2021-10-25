@@ -45,7 +45,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                model:'TrainingType',
+                model:'hr_development_masters___TrainingType',
                 action_type:'edit',
             })
         }
@@ -65,6 +65,7 @@ export default {
     created() {
         this.form.name=this.$route.params.data.name;
         this.form.code=this.$route.params.data.code;
+        this.form.description=this.$route.params.data.description;
         this.form.status=this.$route.params.data.status;
         this.form.id=this.$route.params.data.id;
     },

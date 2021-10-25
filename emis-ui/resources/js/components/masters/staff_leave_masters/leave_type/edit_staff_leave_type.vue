@@ -8,33 +8,41 @@
                         <input class="form-control" v-model="form.name" :class="{ 'is-invalid': form.errors.has('name') }" id="name" @change="remove_err('name')" type="text">
                         <has-error :form="form" field="name"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leave Category:<span class="text-danger">*</span></label> <br>
                         <label><input v-model="form.category"  type="radio" value="Months" /> Months</label>
                         <label><input v-model="form.category"  type="radio" value="Days" /> Days</label>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Applicable Number:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.no_days" :class="{ 'is-invalid': form.errors.has('no_days') }" id="no_days" @change="remove_err('no_days')" type="number">
                         <has-error :form="form" field="no_days"></has-error>
                     </div>
-                    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                        <label>Description:</label>
-                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_error('description')" ></textarea>
-                        <has-error :form="form" field="description"></has-error>
-                    </div>
-                </div>
-                <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Code:<span class="text-danger">*</span></label>
                         <input class="form-control" v-model="form.code" :class="{ 'is-invalid': form.errors.has('code') }" id="code" @change="remove_err('code')" type="text">
                         <has-error :form="form" field="code"></has-error>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Carry Forward:</label>
+                        <br>
+                        <label><input v-model="form.carryforward"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.carryforward"  type="radio" value="0" /> No</label>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">status:</label>
                         <br>
                         <label><input v-model="form.status" type="radio" value="1" /> Active</label>
                         <label><input v-model="form.status" type="radio" value="0" /> Inactive</label>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Description:</label>
+                        <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description') }" id="description" @change="remove_error('description')" ></textarea>
+                        <has-error :form="form" field="description"></has-error>
                     </div>
                 </div>
             </div>
@@ -54,6 +62,7 @@ export default {
                 id: '',
                 name: '',
                 category:'',
+                carryforward:'',
                 no_days:'',
                 code:'',
                 description:'',
@@ -78,6 +87,7 @@ export default {
     created() {
         this.form.name=this.$route.params.data.name;
         this.form.no_days=this.$route.params.data.no_days;
+        this.form.carryforward=this.$route.params.data.carryforward;
         this.form.category=this.$route.params.data.category;
         this.form.status=this.$route.params.data.status;
         this.form.description=this.$route.params.data.description;

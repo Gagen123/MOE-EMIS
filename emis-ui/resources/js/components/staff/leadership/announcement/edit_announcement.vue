@@ -24,12 +24,12 @@
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application Start Date:<span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" @change="remove_err('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date" v-model="form.from_date">
+                        <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_erroe('from_date')" :class="{ 'is-invalid': form.errors.has('from_date') }"  name="from_date" id="from_date">
                         <has-error :form="form" field="from_date"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Application End Date:<span class="text-danger">*</span></label>
-                        <input type="date" @change="remove_err('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control" name="to_date" id="to_date" v-model="form.to_date">
+                        <input type="text" autocomplete="off" @change="remove_error('to_date')" :class="{ 'is-invalid': form.errors.has('to_date') }"  class="form-control popupDatepicker" name="to_date" id="to_date">
                         <has-error :form="form" field="to_date"></has-error>
                     </div>
                 </div>
@@ -48,8 +48,8 @@
                                     <td>1</td>
                                     <td>270 Degree Feedback</td>
                                     <td>
-                                        <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
-                                        <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
+                                        <label><input v-model="form.feedback" @click="showQuestion('1')" type="radio" value="1" /> Yes</label>
+                                        <label class="pl-2"><input v-model="form.feedback" @click="showQuestion('0')" type="radio" value="0" /> No</label>
                                     </td>
                                 </tr>
                                 <tr>
@@ -71,45 +71,16 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend pr-2">
-                                <span class="img-bordered bg-black">1</span>
-                            </div>
-                            <div class="input-group-append pt-1">
-                                <label class="pr-3">Shortlisting:<span class="text-danger">*</span></label><br />
-                                <label><input v-model="form.shortlist"  type="radio" value="1" /> Yes</label>
-                                <label class="pl-2"><input v-model="form.shortlist"  type="radio" value="0" /> No</label>
-                                <has-error :form="form" field="shortlist"></has-error>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+                <div class="row form-group" id="leadershipquestionsec">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend pr-2">
-                                <span class="img-bordered bg-black">2</span>
-                            </div>
-                            <div class="input-group-append pt-1">
-                                <label class="pr-3">270 Degree Feedback:<span class="text-danger">*</span></label><br />
-                                <label><input v-model="form.feedback"  type="radio" value="1" /> Yes</label>
-                                <label class="pl-2"><input v-model="form.feedback"  type="radio" value="0" /> No</label>
-                                <has-error :form="form" field="feedback"></has-error>
-                            </div>
-                        </div>
+                        <label>Select Feedback Question Category: </label>
+                        <select class="form-control select2" id="question_category" v-model="form.question_category" :class="{ 'is-invalid': form.errors.has('question_category') }">
+                            <option value="">--Select--</option>
+                            <option v-for="(item, index) in questionCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                        </select>
+                        <has-error :form="form" field="question_category"></has-error>
                     </div>
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend pr-2">
-                                <span class="img-bordered bg-black">3</span>
-                            </div>
-                            <div class="input-group-append pt-1">
-                                <label class="pr-3">Interview:<span class="text-danger">*</span></label><br />
-                                <label><input v-model="form.interview"  type="radio" value="1" /> Yes</label>
-                                <label class="pl-2"><input v-model="form.interview"  type="radio" value="0" /> No</label>
-                                <has-error :form="form" field="shortlist"></has-error>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -135,7 +106,7 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Applicable Applicants: </label>
+                        <label>Eligible Applicants: </label>
                         <table class="table table-bordered text-sm table-striped">
                             <thead>
                                 <tr>
@@ -164,14 +135,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(app, index) in form.applicant_List' :key="index">
-                        <label>Applicable Applicant:<span class="text-danger">*</span></label>
-                        <select name="applicant" :id="'applicant'+(index)" class="form-control" v-model="app.applicant">
-                            <option value="">--- Please Select ---</option>
-                            <option v-for="(item, index) in roleList" :key="index" v-bind:value="item.Id">{{ item.Name }}</option>
-                        </select>
-                        <span class="text-danger" id="applicant_err"></span>
-                    </div> -->
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -200,10 +163,12 @@ export default {
             positionLevelList:[],
             positionList:[],
             roleList:[],
+            questionCategoryList:[],
             form: new form({
                 id:'',
                 selection_type:'',
                 position_title:'',
+                question_category:'',
                 from_date:'',
                 to_date:'',
                 feedback:1,
@@ -229,7 +194,8 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if(result.isConfirmed){
-                        console.log(this.form.applicant_List);
+                        this.form.from_date=this.formatYYYYMMDD($('#from_date').val());
+                        this.form.to_date=this.formatYYYYMMDD($('#to_date').val());
                         this.form.post('/staff/staffLeadershipSerivcesController/createPost')
                         .then((response) =>{
                             if(response!=""){
@@ -283,21 +249,7 @@ export default {
                 this.form.applicant_List.push({position_level:'',position_title_id:''})
             }
         },
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
-        loadPositionLevelList(uri = 'staff/loadStaffMasters/active/PositionLevel'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.positionLevelList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+
         getpositionTitleList(levelid,index){
             let p_levelId=$('#position_level_id'+index).val();
             if(levelid!=""){
@@ -319,17 +271,6 @@ export default {
             });
         },
 
-        loadPositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.positionList =  data.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-
         getSelectionList(uri = 'staff/staffLeadershipSerivcesController/loadData/activeData_LeadershipType'){
             axios.get(uri)
             .then(response => {
@@ -341,12 +282,9 @@ export default {
             });
         },
         applyselect2(){
-            if(!$('#selection_type').attr('class').includes('select2-hidden-accessible')){
-                $('#selection_type').addClass('select2-hidden-accessible');
-            }
-            if(!$('#position_title').attr('class').includes('select2-hidden-accessible')){
-                $('#position_title').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('selection_type');
+            this.applyselect2field('position_title');
+            this.applyselect2field('question_category');
         },
         changefunction(id){
             if($('#'+id).val()!=""){
@@ -359,6 +297,16 @@ export default {
             }
             if(id=="position_title"){
                 this.form.position_title=$('#position_title').val();
+            }
+        },
+
+        showQuestion(type){
+            if(type==1){
+                $('#leadershipquestionsec').show();
+            }else{
+                $('#question_category').val();
+                this.form.question_category='';
+                $('#leadershipquestionsec').hide();
             }
         },
         // loadroleList(uri = 'masters/getroles/allActiveRoles'){
@@ -380,7 +328,11 @@ export default {
                 this.form.position_title=data.position_title;
                 $('#position_title').val(data.position_title).trigger('change');
                 this.form.from_date=data.from_date;
+                $('#from_date').val(this.reverseDate1(data.from_date));
                 this.form.to_date=data.to_date;
+                $('#to_date').val(this.reverseDate1(data.to_date));
+                this.form.question_category=data.question_category;
+                $('#question_category').val(data.question_category).trigger('change');
                 this.form.details=data.details;
                 this.form.shortlist=data.shortlist;
                 this.form.interview=data.interview;
@@ -406,9 +358,8 @@ export default {
                 console.log("Error: "+error);
             });
         }
-
     },
-    mounted(){
+    async mounted(){
         $('.select2').select2();
         $('.select2').select2({
             theme: 'bootstrap4'
@@ -421,8 +372,9 @@ export default {
         });
         this.getSelectionList();
         // this.loadroleList();
-        this.loadPositionLevelList();
-        this.loadPositionTitleList();
+        this.positionList =  await this.loadstaffMasters('active','PositionTitle');
+        this.positionLevelList =  await this.loadstaffMasters('active','PositionLevel');
+        this.questionCategoryList =  await this.loadstaffMasters('active','staff_leadership___QuestionCategory');
         this.form.id=this.$route.params.id;
         this.loadDetials();
     },

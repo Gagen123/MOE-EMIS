@@ -102,6 +102,13 @@ class LoadStaffController extends Controller{
         if($type=="Principle"){
             return $this->successResponse(PersonalDetails::where('isPrincipal',1)->where('working_agency_id',$parent_id)->first());
         }
+        if($type=="EMD"){
+            $response_data=PersonalDetails::where('working_agency_id',$parent_id)->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getpositiontitle($response_data);
+            }
+            return $this->successResponse($response_data);
+        }
         if($type=="DEO"){
             $query="SELECT s.email,s.alternative_email,s.name,m.name AS positions FROM stf_staff s JOIN master_stf_position_title m ON s.position_title_id=m.id WHERE s.dzo_id=".$parent_id." AND (LOWER(REPLACE(m.name,' ','')) LIKE '%dzongkhageducationofficer%' OR LOWER(m.name) LIKE '%deo%') ";
             return $this->successResponse(DB::select($query));
@@ -132,7 +139,7 @@ class LoadStaffController extends Controller{
                 //mapping of the position tile, superstructure and childgroup
                 $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
                 if($positions!=null && $positions!=""){
-                    $posi=PositionTitle::where('id',$staff_det->position_title_id)->first();
+                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
                     if($posi!=null && $posi!=""){
                         $staff_det->position_title_name=$posi->name;
                         //get position level from position title
@@ -173,8 +180,10 @@ class LoadStaffController extends Controller{
 
     }
 
-    private function getpositiontitle($staff_det){
+    static function getpositiontitle($staff_det){
         foreach($staff_det as $stf){
+            $stf->position_title_name="";
+            $stf->positionlevel="";
             //mapping of the position tile, superstructure and childgroup
             $positions=ChildGroupPosition::where('id', $stf['position_title_id'])->first();
             if($positions!=null && $positions!=""){
@@ -188,7 +197,6 @@ class LoadStaffController extends Controller{
                         $stf->positionlevel=$posiLev->name;
                     }
                 }
-
             }
         }
         return $staff_det;

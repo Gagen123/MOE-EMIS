@@ -11,7 +11,7 @@
             </div>          
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="edit-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="edit-table" cellspacing="0" width="100%" class="stripe cell-border order-column">
                         <thead>
                             <tr>
                                 <th rowspan="3">Roll No.</th>
@@ -163,8 +163,6 @@
             }
             setTimeout(function(){
                 $("#edit-table").DataTable({
-                    "responsive": false,
-                    "autoWidth": true,
                     scrollY:        "300px",
                     scrollX:        true,
                     scrollCollapse: true,

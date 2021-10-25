@@ -13,11 +13,15 @@ try {
     require('bootstrap');
     require('admin-lte');
     require('./jquery.dataTables.min.js');
-    require('./fiexedcolums.dataTables.fixedCloumns.min.js');
-    require('./rowgroup.dataTables.rowGroup.min.js');
+    require('./datables/fiexedcolums.dataTables.fixedCloumns.min.js');
+    require('./datables/rowgroup.dataTables.rowGroup.min.js');
     require('./select2.full.min.js');
-    require('./dataTables.buttons.min.js');
-    require('./dataTables.buttons.print.min.js');
+    require('./datables/dataTables.buttons.min.js');
+    require('./datables/dataTables.buttons.html5.min.js');
+    require('./datables/dataTables.buttons.print.min.js');
+    require('./datables/dataTables.jszip.min.js');
+    require('./datables/dataTables.pdfmake.min.js');
+    require('./datables/dataTables.pdfmake.vfs_fonts.js');
     require('./jquery.plugin.js');
     require('./jquery.datepick.js');
 } catch (e) {}

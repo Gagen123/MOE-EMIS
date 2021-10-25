@@ -54,6 +54,14 @@ class EstablishmentController extends Controller{
                 'level.required'                => 'Level is required',
             ];
         }
+        if(strpos($request->establishment_type,'ECR')!==false){
+            $rules = $rules+[
+                'parentSchool'                 =>  'required',
+            ];
+            $customMessages = $customMessages+[
+                'parentSchool.required'         => 'Parent School is required',
+            ];
+        }
         if(strpos($request->establishment_type,'Public')!==false){
             $rules = $rules+[
                 'initiatedBy'           =>  'required',
@@ -86,6 +94,13 @@ class EstablishmentController extends Controller{
     }
 
     public function saveClassStream(Request $request){
+        $rules = [
+            'class'          =>  'required',
+        ];
+        $customMessages = [
+            'class.required'         => 'Class is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
         $request['user_id']=$this->userId();
         $response_data= $this->apiService->createData('emis/organization/establishment/saveClassStream', $request->all());
         return $response_data;

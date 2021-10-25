@@ -26,18 +26,18 @@
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'category_category_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Case Category
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
+                    <router-link :to="{name: 'case_type_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       Case Type
+                    </router-link>
+                </li>
+                <li class="nav-item active pr-1">
                     <router-link :to="{name: 'offence_type_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        Offence Type
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'offence_severity_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Offence Severity
-                    </router-link>
-                </li>
-                <li class="nav-item active pr-1">
-                    <router-link :to="{name: 'offence_action_index'}" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                       Offence Action
                     </router-link>
                 </li>
             </ul>

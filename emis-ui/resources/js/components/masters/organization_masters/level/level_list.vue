@@ -9,7 +9,7 @@
                 <th style="width:25%">Description</th>
                 <th style="width:10%">Status</th>
                 <th style="width:25%">Created Date</th>
-                <th style="width:10%">Action</th> 
+                <th style="width:10%">Action</th>
             </tr>
         </thead>
         <tbody id="tbody">
@@ -19,7 +19,7 @@
                 <td>{{ item.code}}</td>
                 <td>{{ item.description}}</td>
                 <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                <td>{{ item.created_at }}</td> -->
+                <td>{{reverseDateTime(item.created_at)}}</td> -->
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a href="#" class="btn btn-info" @click="editmasters(item)"><i class="fas fa-edit"></i ></a>
@@ -56,8 +56,8 @@ export default {
         //         $("#level-table").DataTable({
         //             "responsive": true,
         //             "autoWidth": true,
-        //         }); 
-        //     }, 300);  
+        //         });
+        //     }, 300);
         // },
         // viewLevelList(data){
         //     data.action='edit';

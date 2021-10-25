@@ -36,7 +36,7 @@
                                     </div>
                                 </td>
                                 <td v-if="input_type==1">
-                                    <div v-if="classSubAssessmentList[index].input_type==null" class="input-group">
+                                    <div v-if="classSubAssessmentList[index].input_type==1" class="input-group">
                                         <input :disabled="!classSubAssessmentList[index].assmt_area_selected" v-model="classSubAssessmentList[index].weightage" type="number" step="0.1" max="100" min="0" class="form-control text-right" required aria-label="weightage">
                                         <span class="input-group-text">%</span>
                                     </div>
@@ -127,7 +127,6 @@ export default {
         
     },
     created() {
-        
         this.org_class_id=this.$route.params.data.org_class_id;
         this.org_stream_id=this.$route.params.data.org_stream_id;
         this.aca_sub_id=this.$route.params.data.aca_sub_id;

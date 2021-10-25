@@ -7,16 +7,17 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
-                            <th>Dzongkhag</th>
+                            <th>Dzongkhag/Thromde</th>
                             <th>Working Agency</th>
                             <th>Name</th>
+                            <th>EID</th>
+                            <th>Position Title</th>
+                            <th>Position Level</th>
                             <th>Course</th>
                             <th>StartDate</th>
                             <th>EndDate</th>
                             <th>Funding</th>
-                            <th>Training Status</th>
-                            <th>HRCNo</th>
-                            <th>HRCDate</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -26,13 +27,14 @@
                             <td>{{ training.dzongkhag }}</td>
                             <td>{{ training.working_agency }}</td>
                             <td>{{ training.staff_name }}</td>
+                            <td>{{ training.emp_id }}</td>
+                            <td>{{ training.position_title_name }}</td>
+                            <td>{{ training.positionlevel }}</td>
                             <td>{{ training.Course }}</td>
                             <td>{{ training.StartDate }}</td>
                             <td>{{ training.EndDate }}</td>
                             <td>{{ training.funding }}</td>
                             <td>{{ training.training_status }}</td>
-                            <td>{{ training.HRCNo }}</td>
-                            <td>{{ training.HRCDate }}</td>
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(training)">Veiw</a>
                             </td>

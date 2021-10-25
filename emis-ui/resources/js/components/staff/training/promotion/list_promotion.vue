@@ -7,15 +7,15 @@
                     <thead>
                         <tr>
                             <th>SL#</th>
-                            <th>Dzongkhag</th>
+                            <th>Dzongkhag/Thromde</th>
                             <th>Organization</th>
                             <th>Name</th>
                             <th>Promotion Type</th>
                             <th>Superstructure</th>
                             <th>Position Title</th>
                             <th>Position Level</th>
-                            <th>Effective Date</th>
-                            <th>Joining Order Date</th>
+                            <th>Last Date of Promotion</th>
+
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -25,12 +25,12 @@
                             <td>{{ promotion.dzongkhag }}</td>
                             <td>{{ promotion.working_agency }}</td>
                             <td>{{ promotion.staff_name }}</td>
-                            <td>{{ promotion.PromotionTypeID }}</td>
+                            <td>{{ promotion.protype }}</td>
                             <td>{{ promotion.superstructure }}</td>
                             <td>{{ promotion.position_title_name }}</td>
                             <td>{{ promotion.positionlevel }}</td>
-                            <td>{{ promotion.EffectiveDate }}</td>
-                            <td>{{ promotion.JoiningOrderDate }}</td>
+                            <td>{{ reverseDate1(promotion.EffectiveDate) }}</td>
+
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(promotion)">Veiw</a>
                             </td>

@@ -32,7 +32,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Submitted Date:</label>
-                                    <span class="text-blue text-bold">{{applicationdetails.application_date}}</span>
+                                    <span class="text-blue text-bold">{{reverseDateTime(applicationdetails.application_date)}}</span>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Service Name:</label>
@@ -322,7 +322,7 @@ export default {
     },
     methods:{
         loadestablishmentapplicationdetails(appId){
-            axios.get('organization/loadEstbDetailsForView/'+appId)
+            axios.get('organizationApproval/loadEstbDetailsForView/'+appId)
             .then((response) => {
                 let data=response.data.data;
                 this.applicationdetails=data;

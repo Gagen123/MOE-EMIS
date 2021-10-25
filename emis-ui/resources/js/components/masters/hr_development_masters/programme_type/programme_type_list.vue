@@ -20,7 +20,7 @@
                         <td>{{ item.code}}</td>
                         <td>{{ item.description}}</td>
                         <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
-                        <td>{{ item.created_at }}</td>
+                        <td>{{ reverseDateTime(item.created_at) }}</td>
                         <td>
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                         </td>
@@ -44,7 +44,7 @@ export default {
         },
     },
     async mounted(){
-        this.dataList =  await this.loadstaffMasters('all','ProgrammeType');
+        this.dataList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeType');
         this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {

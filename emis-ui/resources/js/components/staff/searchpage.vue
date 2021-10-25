@@ -1,8 +1,8 @@
 <template>
     <div>
         <div class="form-group row">
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                <label class="mb-0">Organization Type : <i class="text-danger">*</i></label>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="orgType">
+                <label class="mb-0">Organization Type :</label>
                 <select class="form-control select2" name="organization_type_id" id="organization_type_id">
                     <option value=""> --Select--</option>
                     <option value="Org">Organization/School </option>
@@ -12,7 +12,7 @@
                 <span class="text-danger" id="organization_type_id_err"></span>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="dzosection">
-                <label class="mb-0">Dzongkhag: <i class="text-danger">*</i></label>
+                <label class="mb-0">Dzongkhag:</label>
                 <select class="form-control select2" id="dzongkhag_id">
                     <option value=""> --Select--</option>
                     <option v-for="(item, index) in dzongkhagList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
@@ -20,15 +20,15 @@
                 <span class="text-danger" id="dzongkhag_id_err"></span>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" style="display:none" id="departmentdiv">
-                <label class="mb-0">Department: <i class="text-danger">*</i></label>
+                <label class="mb-0">Department:</label>
                 <select class="form-control select2" name="department_id" id="department_id">
                     <option value="ALL"> --Select--</option>
                     <option v-for="(item, index) in departmentList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                 </select>
                 <span class="text-danger" id="department_id_err"></span>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
-                <label class="mb-0">Organization: <i class="text-danger">*</i></label>
+            <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12" id="organizationSection">
+                <label class="mb-0">Organization: </label>
                 <select class="form-control select2" id="org_id">
                     <option value="ALL"> --Select--</option>
                     <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>

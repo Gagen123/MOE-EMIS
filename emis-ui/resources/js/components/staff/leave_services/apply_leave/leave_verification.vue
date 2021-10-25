@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">Application Date:</label><br>
-                        <span class="text-blue text-bold">{{form.date_of_application}}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(form.date_of_application)}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>Leave Type:</label><br>
@@ -23,11 +23,11 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">From Date:</label><br>
-                        <span class="text-blue text-bold">{{form.from_date }}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(form.from_date) }}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="mb-0">To Date:</label><br>
-                        <span class="text-blue text-bold">{{form.to_date}}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(form.to_date)}}</span>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label>No. Days:</label><br>
@@ -109,10 +109,10 @@
                 <hr>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                         <button class="btn btn-info text-white" @click="shownexttab('verify')" style="display:none" id="verifyId"> <i class="fa fa-forward"></i>Verify </button>
                         <button class="btn btn-primary" @click="shownexttab('approve')" style="display:none" id="approveId"> <i class="fa fa-check"></i>Approve </button>
                         <button class="btn btn-primary" @click="shownexttab('confirm')" style="display:none" id="confirm"> <i class="fa fa-check"></i>Confirm </button>
+                        <button class="btn btn-danger" @click="shownexttab('reject')"> <i class="fa fa-times"></i>Reject </button>
                     </div>
                 </div>
             </div>

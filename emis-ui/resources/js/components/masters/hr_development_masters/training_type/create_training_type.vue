@@ -43,7 +43,7 @@ export default {
                 description:'',
                 code:'',
                 status: 1,
-                model:'TrainingType',
+                model:'hr_development_masters___TrainingType',
                 action_type:'add',
             })
         }

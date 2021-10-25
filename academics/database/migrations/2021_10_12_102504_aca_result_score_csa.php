@@ -23,9 +23,12 @@ class AcaResultScoreCsa extends Migration
             $table->tinyInteger('exam_score');
             $table->string('sub_category_code', 10);
             $table->string('subject', 100);
+            $table->string('subject_dzo_name', 100)->nullable();
             $table->string('assessment_area', 100);
+            $table->string('assessment_area_dzo_name', 1000)->nullable();
             $table->tinyInteger('score')->nullable()->default(null);
             $table->string('score_description', 500)->nullable()->default(null);
+            $table->string('score_description_dzo_name', 500)->nullable()->default(null);
             $table->integer('display_order');
             $table->char('created_by', 36)->nullable();
             $table->string('updated_by', 36)->nullable();

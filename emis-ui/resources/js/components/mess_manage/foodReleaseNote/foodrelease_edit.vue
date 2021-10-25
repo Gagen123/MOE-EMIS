@@ -221,7 +221,7 @@ export default {
                 this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfrelease').val());
                  const config = {
                     headers: {
-                        'content-type': 'multipart/form-data'
+                        'content-type': 'multipart/form-data' 
                     }
                 }
                 let formData = new FormData();
@@ -490,7 +490,7 @@ export default {
                 this.attachmentDetails=data.attachments;
             })
             .catch((error) =>{
-                console.log("Error:"+error);
+                console.log("Error:"+error); 
             });
         },
     },

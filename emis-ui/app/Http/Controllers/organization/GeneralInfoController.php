@@ -421,7 +421,7 @@ class GeneralInfoController extends Controller
         return $response_data;
     }
 
-    public function getOrgProfile($type="",$id=""){
+    public function getOrgProfile($id=""){
         // dd($id);
         $type=$this->getAccessLevel();
         //dd($type);
@@ -698,6 +698,8 @@ class GeneralInfoController extends Controller
             'entranceGate'              =>  $request['entranceGate'],
             'disasterArea'              =>  $request['disasterArea'],
             'gate_type'                 =>  $request['gate_type'],
+            'busno'                     =>  $request['busno'],
+            'schoolbus'                 =>  $request['schoolbus'],
             'user_id'                   =>  $this->userId(),
             'org_id'                    =>  $this->getWrkingAgencyId()
         ];

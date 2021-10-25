@@ -14,7 +14,7 @@
             </div>           
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <table id="term-result-view-table" cellspacing="0" width="100%" class="stripe table-bordered order-column">
+                    <table id="term-result-view-table" style="width:100%" class="stripe cell-border order-column">
                         <thead>
                             <tr>
                                 <th>Roll No.
@@ -79,6 +79,7 @@
     },
     methods:{
        async loadStudentAssessments(){
+         var printCounter = 0;
          let uri = 'academics/loadStudentAssessments'
             uri += ('?aca_assmt_term_id='+this.aca_assmt_term_id+'&aca_sub_id='+this.aca_sub_id+'&OrgClassStreamId='+this.OrgClassStreamId+'&classId='+this.classId)
 
@@ -99,28 +100,42 @@
                 }
              }  
             setTimeout(function(){
+                $('#term-result-view-table').append('<caption style="caption-side: bottom">Term Result</caption>');
                 $("#term-result-view-table").DataTable({
-                        "responsive": false,
-                        "autoWidth": true,
-                        scrollY:        "300px",
-                        scrollX:        true,
-                        scrollCollapse: true,
-                        paging:         false,
-                        searching: false,
-                        fixedColumns:   {
-                            leftColumns: 2
+                    scrollY: "300px",
+                    paging:  false,
+                    scrollX: true,
+                    scrollCollapse: true,
+                    fixedColumns:   {
+                        leftColumns: 2
+                    },
+                    columnDefs: [
+                        { width: 50, targets: 0},
+                        { width: 200, targets: 1},
+                        { width: 100, targets: 2},
+                    ],  
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copy',
+                        {
+                            extend: 'excel', 
+                            messageTop: 'Class '+this.class_stream_section+ ' '+'Term '+this.term+' '+'Subject '+this.subject
                         },
-                        columnDefs: [
-                            { width: 50, targets: 0},
-                            { width: 200, targets: 1},
-                            { width: 100, targets: 2},
-                        ],
-                        dom: 'Bfrtip',
-                        buttons: [
-                            'print'
-                        ]
-                        
-                    }); 
+                        {
+                            extend: 'pdf',
+                            messageTop: 'Class '+this.class_stream_section+ ' '+'Term '+this.term+' '+'Subject '+this.subject
+                        },
+                        {
+                            extend: 'print',
+                            messageTop: function () {
+                                printCounter++;
+                                return 'Printed '+printCounter+' times';
+                            },
+                            messageBottom: null
+                        }
+                    ]
+                   
+                }); 
             }, 300);  
        }
     },
@@ -154,12 +169,12 @@
     },
     mounted(){ 
         this.loadStudentAssessments()
-
-    },
+    }
+    
  }
 </script>
 <style scoped>
-   th, td { white-space: nowrap; }
+    th, td { white-space: nowrap; }
     div.dataTables_wrapper {
         width: 100%;
         margin: 0 auto;

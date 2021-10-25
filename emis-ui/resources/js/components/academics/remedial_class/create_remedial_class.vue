@@ -36,12 +36,12 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>From Date:<span class="text-danger">*</span></label> 
-                    <input v-model="form.from_date" type="date" name="from_date" id="from_date" class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
+                    <input placeholder="dd/mm/yyyy" type="text" name="from_date" id="from_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
                     <has-error :form="form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>To Date:<span class="text-danger">*</span></label> 
-                    <input v-model="form.to_date" type="date" name="to_date" id="to_date" class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('to_date') }" @change="remove_err('to_date')" />
+                    <input placeholder="dd/mm/yyyy" type="text" name="to_date" id="to_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('to_date') }" @change="remove_err('to_date')" />
                     <has-error :form="form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -72,7 +72,7 @@
                                 <td>
                                     <input v-model="form.std_student_id" :value="item.std_student_id" class="ml-2 form-check-input" type="checkbox">
                                 </td>
-                                <td>{{ index + 1 }}</td>
+                                <td>{{ item.roll_no }}</td>
                                 <td>{{ item.Name }}</td>
                             </tr>
                         </tbody>
@@ -127,14 +127,15 @@
                     let classes = response.data
                     classes.forEach(item => {
                         let CombineClassStreamSection =[]
+                        CombineClassStreamSection['class_stream_section'] = item.class
                         if(item.stream && item.section){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.stream+' '+item.section
-                        }else if(item.stream){
+                        }
+                        if(item.stream){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.stream
-                        } else if(item.section){
+                        } 
+                        if(item.section){
                             CombineClassStreamSection['class_stream_section'] = item.class+' '+item.section
-                        }else{
-                            CombineClassStreamSection['class_stream_section'] = item.class
                         }
                         CombineClassStreamSection["org_class_id"] = item.org_class_id;
                         CombineClassStreamSection["org_stream_id"] = item.org_stream_id;
@@ -145,6 +146,7 @@
                         classStreamSectionArray.push(object)
                     });
                     this.class_list = classStreamSectionArray
+                    console.log(this.class_list)
                 })
                 .catch(function(e){
                     if(e.toString().includes("500")){
@@ -195,6 +197,7 @@
                 this.getSubjectTeachers = teacherList
             },
             getStudents(){
+                this.studentList = [];
                 if($('#class_stream_section_id').val()==''){
                     let errorMessage = "This field is required"
                     $('#error_class').text(errorMessage);
@@ -222,6 +225,7 @@
                             aa['CidNo'] = item.CidNo
                             aa['Name'] = item.Name
                             aa['std_student_id'] = item.std_student_id
+                            aa['roll_no'] = item.roll_no
                             aa['is_present'] = 1
                             const obj = {...aa};
                             this.studentList.push(obj);
@@ -235,13 +239,20 @@
                 });
             },
             save(){
-             axios.post('/academics/saveRemedialClass', {org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],data:this.form})
-                 .then(() => {
+             this.form.from_date =this.formatYYYYMMDD($('#from_date').val())
+             this.form.to_date = this.formatYYYYMMDD($('#to_date').val())
+             axios.post('/academics/saveRemedialClass', {
+                 org_class_id:this.class_stream_section_id[1],
+                 org_stream_id:this.class_stream_section_id[2],
+                 org_section_id:this.class_stream_section_id[3],
+                 class_stream_section:this.class_stream_section_id[4],
+                 data:this.form
+                 }).then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    // this.$router.push('/create-class-teacher');
+                    this.$router.push('/list-remedial-class');
                 }).catch(function(errors){
                     if(errors.response.status === 422){
                         Swal.fire({

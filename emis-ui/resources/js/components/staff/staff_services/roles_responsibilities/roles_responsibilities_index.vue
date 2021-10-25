@@ -3,7 +3,7 @@
         <div class="card card-primary card-outline">
             <div class="card-header pb-1 mb-0 pt-0 mt-0 bg-white">
                 <span class="card-title">
-                    <b>Employment Roles & Responsibilities</b>
+                    <b>Additional Roles & Responsibilities</b>
                 </span>
                 <span class="fa-pull-right pt-1">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="showadprocess('list_roles_responsibilities')" id="listnewbtn"><i class="fa fa-list"></i> List</button>

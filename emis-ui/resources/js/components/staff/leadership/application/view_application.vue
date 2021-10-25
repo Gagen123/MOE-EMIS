@@ -12,11 +12,11 @@
                     <div class="row form-group">
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Application Start Date:</label>
-                            <span class="text-blue text-bold">{{post_detail.from_date}}</span>
+                            <span class="text-blue text-bold">{{reverseDate1(post_detail.from_date)}}</span>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                             <label>Application End Date:</label>
-                            <span class="text-blue text-bold">{{post_detail.to_date}}</span>
+                            <span class="text-blue text-bold">{{reverseDate1(post_detail.to_date)}}</span>
                         </div>
                     </div>
                     <div class="row form-group">

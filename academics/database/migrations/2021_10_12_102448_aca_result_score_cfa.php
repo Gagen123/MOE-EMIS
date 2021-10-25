@@ -21,8 +21,10 @@ class AcaResultScoreCfa extends Migration
             $table->char('aca_sub_id', 36)->index();
             $table->char('aca_rating_type_id', 36)->index();
             $table->string('assessment_area', 100);
+            $table->string('dzo_name', 1000)->nullable();
             $table->tinyInteger('score')->nullable()->default(null);
             $table->string('score_description', 500)->nullable()->default(null);
+            $table->string('dzo_name_score_description', 500)->nullable()->default(null);
             $table->string('sub_category_code', 10);
             $table->integer('display_order');
             $table->char('created_by', 36)->nullable();

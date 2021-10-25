@@ -5,7 +5,7 @@
                 <label class="mb-0.5">Name: <span class="text-blue text-bold">{{staffList.staff_name}}</span></label>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label class="mb-0.5">Promotion Type: <span class="text-blue text-bold">{{staffList.PromotionTypeID}}</span></label>
+                <label class="mb-0.5">Promotion Type: <span class="text-blue text-bold">{{staffList.protype}}</span></label>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label class="mb-0.5">Effective Date: <span class="text-blue text-bold">{{staffList.EffectiveDate}}</span></label>
@@ -30,7 +30,7 @@
                 <label class="mb-0.5">By Order No: <span class="text-blue text-bold">{{staffList.ByOrderNo}}</span></label>
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label class="mb-0.5">By Order Date: <span class="text-blue text-bold">{{staffList.ByOrderDate}}</span></label>
+                <label class="mb-0.5">By Order Date: <span class="text-blue text-bold">{{reverseDate1(staffList.ByOrderDate)}}</span></label>
             </div>
         </div>
         <div class="form-group row">
@@ -42,17 +42,6 @@
             </div>
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label class="mb-0.5">Joining Order No: <span class="text-blue text-bold">{{staffList.JoiningOrderNo}}</span></label>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label class="mb-0.5">Is Promotion: <span class="text-blue text-bold">{{staffList.IsPromotion = 1 ? 'Yes':'No'}}</span></label>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label class="mb-0.5">Is Qualify: <span class="text-blue text-bold">{{staffList.IsQualify = 1 ? 'Yes':'No'}}</span></label>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                <label class="mb-0.5">Is Spl Request: <span class="text-blue text-bold">{{staffList.IsSplRequest = 1 ? 'Yes':'No'}}</span></label>
             </div>
         </div>
     </div>

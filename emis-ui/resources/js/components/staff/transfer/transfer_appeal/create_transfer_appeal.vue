@@ -69,10 +69,10 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id">
-                                <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.transfer_type_id">{{ item.aplication_number }}: ({{ item.transferType }})</option>
+                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id" @click="IdentifyTransferType('transfer_type_id')">
+                                <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.transfer_type_id">{{ item.aplication_number }}: ({{ item.transferType }})  </option>
                             </select>
-                        <has-error :form="form" field="aplication_number"></has-error>
+                        <has-error :form="form" field="transfer_type_id"></has-error>
                             </div>
                         </div>
                          <div class="form-group row">
@@ -114,11 +114,11 @@
                                 </table>
                             </div>
                         </div>
-                        <div  class="row form-group fa-pull-right">
+                    </div>
+                     <div  class="row form-group fa-pull-right">
                          <div v-if="button" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Apply </button>
+                            <button type="submit" id="button" class="btn btn-primary" @click="shownexttab('submit')"> <i class="fa fa-save"></i>Appeal </button>
                          </div>
-                        </div>
                     </div>
                     <hr>
                  </div>
@@ -156,11 +156,13 @@ export default {
                 current_date:'',
                 aplication_number:'',
                 status:'Submitted',
+                actionType:'add',
                 remarks:'',
                 transfer_appeal:'',
                 submitterroleid:'',
-                submitted_to:'',
-                service_name:'transfer appeal',
+                // submitted_to:'',
+                transferType:'',
+                // service_name:'transfer appeal',
                 attachments:
                 [],
                 ref_docs:[],
@@ -201,6 +203,7 @@ export default {
                     let data = response.data;
                     this.applicationNo =  data;
                     this.form.aplication_number = data[0].aplication_number;
+                    
                 })
                 .catch(function (error){
                 console.log(error);
@@ -217,16 +220,16 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
-            axios.get(uri)
-            .then(response =>{
-                this.form.type_id = response.data.data[0].id;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-        
+        // LoadTransferType(uri = 'masters/loadStaffTransferMasters/appeal'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data=response.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
+      
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/transfer_appeal')
            .then((response) => {
@@ -290,10 +293,12 @@ export default {
                         formData.append('type_id', this.form.type_id);
                         formData.append('transfer_type_id', this.form.transfer_type_id);
                         formData.append('name', this.form.name);
+                        formData.append('actionType', this.form.actionType);
                         formData.append('user_id', this.form.user_id);
-                        formData.append('submitted_to', this.form.submitted_to);
+                        // formData.append('submitted_to', this.form.submitted_to);
                         formData.append('submitterroleid', this.form.submitterroleid);
                         formData.append('aplication_number', this.form.aplication_number);
+                        formData.append('transferType', this.form.transferType);
                         formData.append('status', this.form.status);
                         formData.append('service_name', this.form.service_name);
                         formData.append('description', this.form.description);
@@ -301,7 +306,7 @@ export default {
                             formData.append('attachments[]', this.form.ref_docs[i].attachment);
                             formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
                         }
-                        axios.post('/staff/transfer/SaveTransferAppeal', formData, config)
+                        axios.post('staff/transfer/SaveTransferAppeal', formData, config)
                         .then((response) =>{
                             if(response.data!=""){
                                Swal.fire({
@@ -338,73 +343,11 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
-
-        profile_details(){
-            axios.get('common/getSessionDetail')
-            .then(response => {
-                this.form.name = response.data.data.Full_Name;
-                this.LoadApplicationDetailsByUserId(response.data.data.User_Id);
-                this.form.user_id = response.data.data.User_Id;
-            })
-            .catch(errors =>{
-                console.log(errors)
-            });
-        },
-         getSubmitterId(id){
-            let uri ='staff/transfer/getSubmitterId/'+id;
-            axios.get(uri)
+        
+         getTransferTypeName(transferTypeId){
+            axios.get('staff/transfer/getTransferTypeName/'+transferTypeId)
             .then(response =>{
-                if(response.data==""||response.data==null){
-                   Swal.fire({
-                        text: "Sorry! Transfer configuration in your role is not configure. Please contact Administrator for further information",
-                        icon: 'error',
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Okay!',
-                        
-                        })
-                    $('#form_details').hide();
-                    $('#action').hide();
-                    this.$router.push('/intra_transfer');
-                }
-                else{
-                     this.form.Submitter_id=data.Submitter_id;
-                }
-
-                
-                
-            })
-            .catch(function (error){
-                console.log("Error:"+error)
-            });
-
-        },
-        loadtransferType(uri = 'masters/loadStaffMasters/appeal'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response.data.data;
-                this.getTransfer_details(response.data.data[0].id);
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
-         getTransfer_details(id){
-            axios.get('staff/transfer/checkEligibilityForTransfer/'+id)
-            .then(response =>{
-                let data = response.data.data;
-                if(data!=null && data!="null" && data!=""){
-                    this.form.submitted_to=data;
-                }
-                else{
-                    Swal.fire({
-                        title: 'No Transfer Configuration ! ',
-                        text: "Sorry! System cannot find transfer configuration for this role. Please contact system administrator",
-                        icon: 'error',
-                    });
-                    $('#form_details').hide();
-                    $('#applyId').hide();
-                }
+                this.form.transferType=response.data[0].transferType;
             })
             .catch(function (error){
                 console.log(error);
@@ -419,6 +362,7 @@ export default {
             }
             if(id=="transfer_type_id"){
                 this.form.transfer_type_id=$('#transfer_type_id').val();
+                this.getTransferTypeName(this.form.transfer_type_id);
                
 
             }
@@ -445,10 +389,8 @@ export default {
         Fire.$on('changefunction',(id)=> {
         this.changefunction(id);
         });
-        this.profile_details();
-        this.loadtransferType();
         this.loadtransferwindow();
-        this.LoadTransferType();
+        // this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
         this.loadTransferAppealDetails();
 
@@ -460,7 +402,10 @@ export default {
         .then(response => {
             this.form.submitterroleid = response.data.data.roles[0].Id;
             this.form.staff_id=response.data.data['staff_id'];
-            this.getSubmitterId(this.form.submitterroleid);
+            this.form.name = response.data.data.Full_Name;
+            this.LoadApplicationDetailsByUserId(response.data.data.User_Id);
+            this.form.user_id = response.data.data.User_Id;
+            
         })
     },
 }
