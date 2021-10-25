@@ -69,10 +69,10 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id" @change="remove_error('transfer_type_id')" @click="IdentifyTransferType('transfer_type_id')">
+                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id" @change="remove_error('transfer_type_id')"  @click="IdentifyTransferType('transfer_type_id')">
                                 <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.transfer_type_id">{{ item.aplication_number }}: ({{ item.transferType }})  </option>
-                                <has-error :form="form" field="transfer_type_id"></has-error>
                             </select>
+                             <has-error :form="form" field="transfer_type_id"></has-error>
                             </div>
                         </div>
                          <div class="form-group row">

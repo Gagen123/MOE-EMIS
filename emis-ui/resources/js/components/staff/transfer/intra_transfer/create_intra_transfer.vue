@@ -456,20 +456,21 @@ export default {
                         .then((response) =>{
                             if(response!="" && response!="No Screen"){
                                 this.form.id=response.data.data.id;
+                                this.change_tab(nextclass)
                                 this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Application for Transfer has been submitted for further action'
+                                    
                                 });
                             }
                         })
                         .catch((error) => {
-                            this.change_tab(nextclass);
-                            if(error.response.data.description=='You need to provide the description' && error.response.data.reason_id=='Please select transfer reason'){
-                                 this.form.errors.errors = error.response.data;
-                            }
+                            error.response.data.description=='You need to provide the description' && error.response.data.reason_id=='Please select transfer reason'
+                            this.form.errors.errors = error.response.data;
                             
                             })
+                            
                     }
                     else{
                     Swal.fire({
