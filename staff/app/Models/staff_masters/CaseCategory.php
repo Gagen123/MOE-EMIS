@@ -1,18 +1,18 @@
 <?php
 
 namespace App\Models\staff_masters;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
-class ProjectDonerAgency extends Model
+use Illuminate\Database\Eloquent\Model;
+class CaseCategory extends Model
 {
     use HasFactory, Uuid;
-    protected $table="master_stf_project_doner_agency";
+    protected $table="master_case_category";//master_staff_offence_severity
     public $timestamps = false;
     protected $fillable = [
         'id',
-        'doner_agency_id',
         'name',
+        'type',
         'code',
         'description',
         'status',

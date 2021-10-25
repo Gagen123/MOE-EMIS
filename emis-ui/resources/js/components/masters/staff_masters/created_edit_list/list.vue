@@ -6,7 +6,7 @@
                     <th style="width:5%">SL#</th>
                     <th style="width:20%">Name</th>
                     <th style="width:10%">Code</th>
-                    <th style="width:25%">Description</th> 
+                    <th style="width:25%">Description</th>
                     <th style="width:10%">Status</th>
                     <th style="width:20%">Created Date</th>
                     <th style="width:10%">Action</th>
@@ -19,7 +19,7 @@
                     <td>{{ item.code}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ reverseDateTime(item.created_at) }}</td>
                     <td>
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>

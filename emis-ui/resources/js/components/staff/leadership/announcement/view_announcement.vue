@@ -110,6 +110,9 @@
                                     <th>Position Level</th>
                                     <th>Type</th>
                                     <th>Status</th>
+                                    <th>Feedback Score</th>
+                                    <th>Interview Score</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -123,6 +126,9 @@
                                     <td>
                                         {{data.org_id=='External Application'? 'Out of Ministry': 'Within Ministry'}}
                                     </td>
+                                    <td> {{data.status}} </td>
+                                    <td> {{data.totalwatage}} </td>
+                                    <td> {{data.interniew_score}} </td>
                                     <td> {{data.status}} </td>
                                 </tr>
                             </tbody>

@@ -56,4 +56,9 @@ class ZestController extends Controller{
         return $response_data;
     }
 
+    public function loadLeaveDetails($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadLeaveDetails/'.$param);
+        return $response_data;
+    }
+
 }

@@ -10,6 +10,9 @@
                             <th>Dzongkhag/Thromde</th>
                             <th>Working Agency</th>
                             <th>Name</th>
+                            <th>EID</th>
+                            <th>Position Title</th>
+                            <th>Position Level</th>
                             <th>Course</th>
                             <th>StartDate</th>
                             <th>EndDate</th>
@@ -24,6 +27,9 @@
                             <td>{{ training.dzongkhag }}</td>
                             <td>{{ training.working_agency }}</td>
                             <td>{{ training.staff_name }}</td>
+                            <td>{{ training.emp_id }}</td>
+                            <td>{{ training.position_title_name }}</td>
+                            <td>{{ training.positionlevel }}</td>
                             <td>{{ training.Course }}</td>
                             <td>{{ training.StartDate }}</td>
                             <td>{{ training.EndDate }}</td>

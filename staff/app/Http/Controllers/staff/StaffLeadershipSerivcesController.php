@@ -161,18 +161,36 @@ class StaffLeadershipSerivcesController extends Controller{
             if($attachments!=null && $attachments!=""){
                 $respomse_data->attachments=$attachments;
             }
-            $app=DB::table('staff_applicable_applicant AS a')
-            ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
-            ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
-            ->select('p.id AS position_title_id','p.name AS position_title','l.id AS level_id','l.name AS position_level')
-            ->where('a.leadership_id',$respomse_data->id)
-            ->get();
-            $respomse_data->applicable_applicant=$app;
+
+            // $app=DB::table('staff_applicable_applicant AS a')
+            // ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
+            // ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
+            // ->select('p.id AS position_title_id','p.name AS position_title','l.id AS level_id','l.name AS position_level')
+            // ->where('a.leadership_id',$respomse_data->id)
+            // ->get();
+            // $respomse_data->applicable_applicant=$app;
 
             //load application detials against the post announced
             $applicant=LeadershipApplication::where('leadership_id',$id)->get();
             if($applicant!=null && $applicant!="" && sizeof($applicant)>0){
                 foreach($applicant as $app){
+                    $wat=0;
+                    $response_data=FeedbackProviderDetails::where('application_number',$app->application_number)->where('status','Deleted')->get();
+                    return $response_data;
+                    if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                        foreach($response_data as $data){
+                            $answers=FeedbackModel::where('feedback_provider_id',$app->id)->get();
+                            if($answers!=null && $answers!="" && sizeof($answers)>0){
+                                foreach($answers as $ans){
+                                    $ansmod=Answer::where('id',$ans->answer)->first();
+                                    $wat+=$ansmod->watage;
+                                }
+                            }
+                            $app->totalwatage=$wat;
+                            $app->toatalquestion=sizeof($answers);
+                        }
+                    }
+
                     if($app->org_id!="External Application"){
                         $staffDetail=PersonalDetails::where('id',$app->staff_id)->first();
                         if($staffDetail!=null && $staffDetail!=""){
@@ -631,7 +649,6 @@ class StaffLeadershipSerivcesController extends Controller{
                                 'created_by'    =>  $request->user_id,
                                 'created_at'    =>  date('Y-m-d h:i:s'),
                             ];
-                            dd($ans_data);
                             Answer::create($ans_data);
                         }
                         else{

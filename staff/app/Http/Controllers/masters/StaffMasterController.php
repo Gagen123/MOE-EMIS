@@ -111,6 +111,11 @@ class StaffMasterController extends Controller{
             'description'       =>  $request->description,
             'status'            =>  $request->status,
         ];
+        if(isset($request->carryforward)){
+            $master_data = $master_data+[
+                'carryforward'   =>  $request->carryforward,
+            ];
+        }
         if(isset($request->code)){
             $master_data = $master_data+[
                 'code'   =>  $request->code,
@@ -211,7 +216,6 @@ class StaffMasterController extends Controller{
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
 
-
         if($request['action_type']=="edit"){
             $data =$data +[
                 'updated_by'                =>  $request['user_id'],
@@ -300,6 +304,16 @@ class StaffMasterController extends Controller{
         }
         else if(strpos($type,'allwith')!==false){
             return $this->successResponse($model::with(explode('__',$type)[1])->get());
+        }
+        else if(strpos($type,'setconditions')!==false){
+            $condition=explode('__',$type);
+            $result=$model::query();
+            foreach($condition as $con){
+                if($con!="setconditions"){
+                    $result->where(explode('!',$con)[0],explode('!',$con)[1]);
+                }
+            }
+            return $this->successResponse($result->get());
         }
         else if(strpos($type,'byid')!==false){
             return $this->successResponse($model::where(explode('__',$type)[1],explode('__',$type)[2])->first());
@@ -562,7 +576,7 @@ class StaffMasterController extends Controller{
     }
 
 
-//transfer 
+//transfer
     public function saveTransferConfigMasters(Request $request){
         $rules = [
             'transfer_type_id' =>  'required',

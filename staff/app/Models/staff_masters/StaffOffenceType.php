@@ -12,6 +12,7 @@ class StaffOffenceType extends Model
     protected $fillable = [
         'id',
         'name',
+        'type',
         'code',
         'description',
         'status',

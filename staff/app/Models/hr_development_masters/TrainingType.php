@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Models\staff_masters;
+namespace App\Models\hr_development_masters;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\Uuid;
-use Illuminate\Database\Eloquent\Model;
-class StaffOffenceSeverity extends Model
-{
+class TrainingType extends Model{
     use HasFactory, Uuid;
-    protected $table="master_staff_offence_severity";
+    protected $table="master_training_type";
     public $timestamps = false;
     protected $fillable = [
         'id',

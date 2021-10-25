@@ -30,7 +30,8 @@
                             <th>Year</th>
                             <th>Month</th>
                             <th>Remarks</th>
-                            <th class="pl-5 ml-5 pr-5 ml-5 text-center">Action</th>
+                            <th>Submitted Date</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,7 @@
                             <td>{{ item.year}}</td>
                             <td>{{ months[item.month]}}</td>
                             <td>{{ item.remarks}}</td>
+                            <td>{{ reverseDateTime(item.created_at)}}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)"> <span class="fa fa-eye"></span> View</a>
                             </td>

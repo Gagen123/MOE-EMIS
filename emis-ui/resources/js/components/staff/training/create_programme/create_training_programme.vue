@@ -8,11 +8,11 @@
                             <label class="mb-0.5">Programme Details </label>
                         </a>
                     </li>
-                    <li class="nav-item eligibility-tab" @click="shownexttab('eligibility-tab')">
+                    <!-- <li class="nav-item eligibility-tab" @click="shownexttab('eligibility-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Eligibility & Nomination </label>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="card-body pt-0 mt-1">
@@ -34,7 +34,7 @@
                                     <has-error :form="form" field="course_title"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                    <label class="mb-0.5">Organized By (Department/Division):<i class="text-danger">*</i></label>
+                                    <label class="mb-0.5">Organizer:<i class="text-danger">*</i></label>
                                     <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.agencyName }}</option>
@@ -53,12 +53,12 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
-                                    <input type="date" class="form-control" @change="remove_err('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" v-model="form.start_date" id="start_date"/>
+                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_err('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" id="start_date"/>
                                     <has-error :form="form" field="start_date"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
-                                    <input type="date" class="form-control" @change="remove_err('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" v-model="form.end_date" id="end_date"/>
+                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_err('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" id="end_date"/>
                                     <has-error :form="form" field="end_date"></has-error>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                 </div>
                             </div>
 
-                            <span id="professional_development_section" style="display:none">
+                            <span id="professional_development_section">
                                 <hr/>
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -254,7 +254,8 @@
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button>
+                                    <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
+                                    <!-- <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button> -->
                                 </div>
                             </div>
                         </div>
@@ -523,7 +524,7 @@ export default {
                 $('#'+field_id+'_err').html('');
             }
         },
-        onChangeFileUpload(e){ 
+        onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
                 this.form.ref_docs.push({file_name:$('#file_name'+currentcount).val(),attachment:e.target.files[0]});
@@ -968,7 +969,7 @@ export default {
         }
     },
 
-    mounted() {
+    async mounted() {
         this.count=1,
         this.loaddraftDetails();
         $('[data-toggle="tooltip"]').tooltip();
@@ -983,13 +984,24 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadHrDevelopmentMasters('active_training_type_list');
-        this.loadHrDevelopmentMasters('active_related_programme_list');
+        this.trainingtypeList =  await this.loadstaffMasters('active','TrainingType');
+        this.relatedProgrammeList =  await this.loadstaffMasters('all','RelatedProgramme');
         this.loadorganizerList();
         this.loadHrDevelopmentMasters('active_nature_of_participant_list');
         this.loadHrDevelopmentMasters('active_target_group_list');
         this.loadHrDevelopmentMasters('active_financial_source_list');
+        this.loadHrDevelopmentMasters('active_category_list');
+        this.loadHrDevelopmentMasters('active_donor_list');
+        this.loadstudy_countryList();
+        this.loadcoursemode();
+        this.loadHrDevelopmentMasters('active_degree_list');
+        this.loadsubjectList();
+        this.loadHrDevelopmentMasters('active_programme_level_list');
+        this.loadHrDevelopmentMasters('active_programme_type_list');
+        this.loadHrDevelopmentMasters('active_course_type_list');
+
         this.loadroleList();
+
 
     },
 }
