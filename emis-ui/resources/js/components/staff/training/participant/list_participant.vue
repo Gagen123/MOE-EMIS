@@ -7,8 +7,6 @@
                     <th>Training Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
-                    <th>Nomination Start Date</th>
-                    <th>Nomination End Date</th>
                     <th class="pl-5 pr-5">Action</th>
                 </tr>
             </thead>
@@ -16,16 +14,9 @@
 
                 <tr v-for="(training, index) in staffList" :key="index" >
                     <td>{{ index + 1 }} </td>
-                    <!-- <td>{{ training.with_program.course_title }}</td>
-                    <td>{{ training.with_program.start_date }}</td>
-                    <td>{{ training.with_program.end_date }}</td>
-                    <td>{{ training.with_program.nomination_start_date }}</td>
-                    <td>{{ training.with_program.nomination_end_date }}</td> -->
                     <td>{{ training.course_title }}</td>
-                    <td>{{ training.start_date }}</td>
-                    <td>{{ training.end_date }}</td>
-                    <td>{{ training.nomination_start_date }}</td>
-                    <td>{{ training.nomination_end_date }}</td>
+                    <td>{{ reverseDate1(training.start_date) }}</td>
+                    <td>{{ reverseDate1(training.end_date) }}</td>
                     <td>
                         <!-- <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,'view')">Veiw</a>
                         <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(training.with_program.id,training.sequence)">Open</a> -->

@@ -355,4 +355,9 @@ class HrDevelopmentController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/getprogramOpenDetail');
         return $response_data;
     }
+
+    public function checkProgramAccess(){
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/checkProgramAccess/'.$this->userId());
+        return $response_data;
+    }
 }
