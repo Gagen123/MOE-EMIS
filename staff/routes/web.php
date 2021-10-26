@@ -239,6 +239,15 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->post('/loadTeacherNumbers', 'staff\ProjectionIndicatorController@loadTeacherNumbers');
             $router->post('/loadTeacherNationality', 'staff\ProjectionIndicatorController@loadTeacherNationality');
         });
+
+        $router->group(['prefix' => 'staffOfficeorderController'], function () use ($router) {
+            $router->post('/submitApplication', ['uses' => 'staff\StaffOfficeorderController@submitApplication']);
+            $router->get('/checkOngoingApplication/{type}', ['uses' => 'staff\StaffOfficeorderController@checkOngoingApplication']);
+            $router->get('/loadCreatedApplication/{type}', ['uses' => 'staff\StaffOfficeorderController@loadCreatedApplication']);
+            $router->get('/loadCreatedApplicationForVerification/{type}', ['uses' => 'staff\StaffOfficeorderController@loadCreatedApplicationForVerification']);
+            $router->get('/loadDetForVerification/{id}', ['uses' => 'staff\StaffOfficeorderController@loadDetForVerification']);
+            $router->post('/verifyApprove', ['uses' => 'staff\StaffOfficeorderController@verifyApprove']);
+        });
     });
 
     $router->group(['prefix' => 'loadstaff'], function () use ($router) {
@@ -276,6 +285,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadSubstaff', ['uses' => 'staff\SubstitutionController@loadSubstaff']);
         $router->get('/getEditSubstitutedList/{subid}', ['uses' => 'staff\SubstitutionController@getEditSubstitutedList']);
     });
+
     $router->group(['prefix' => 'zest'], function () use ($router) {
         $router->post('/saveAppointmentDetails', ['uses' => 'staff\ZestController@saveAppointmentDetails']);
         $router->get('/loadappointment', ['uses' => 'staff\ZestController@loadappointment']);

@@ -504,63 +504,65 @@ class HrDevelopmentController extends Controller{
     }
 
     public function saveParticipant(Request $request){
-        $rules = [
-            'programId'             =>  'required',
-            'participant'           =>  'required',
-            'contact'               =>  'required',
-            'email'                 =>  'required',
-            'nature_of_participant' =>  'required',
-        ];
-        $customMessages = [
-            'programId.required'              => 'Please select nomination start date',
-            'participant.required'            => 'Please select nomination end date',
-            'contact.required'                => 'Please select this field',
-            'email.required'                  => 'This field is required',
-            'nature_of_participant.required'  => 'This field is required',
-        ];
-
-        $this->validate($request, $rules,$customMessages);
-        if($request->action_type=="add"){
-            $request_data =[
-                'program_id'                =>  $request->programId,
-                'org_id'                    =>  $request->org_id,
-                'dzo_id'                    =>  $request->dzo_id,
-                'participant_id'            =>  $request->participant,
-                'contact'                   =>  $request->contact,
-                'email'                     =>  $request->email,
-                'nature_of_participant'     =>  $request->nature_of_participant,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
+        if($request->partifipant_from!="Excel"){
+            $rules = [
+                'programId'             =>  'required',
+                'participant'           =>  'required',
+                'contact'               =>  'required',
+                'email'                 =>  'required',
+                'nature_of_participant' =>  'required',
             ];
-            $response_data= Participant::create($request_data);
-        }
-        else{
-            $request_data =[
-                'org_id'                    =>  $request->org_id,
-                'dzo_id'                    =>  $request->dzo_id,
-                'participant_id'            =>  $request->participant,
-                'contact'                   =>  $request->contact,
-                'email'                     =>  $request->email,
-                'nature_of_participant'     =>  $request->nature_of_participant,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
+            $customMessages = [
+                'programId.required'              => 'Please select nomination start date',
+                'participant.required'            => 'Please select nomination end date',
+                'contact.required'                => 'Please select this field',
+                'email.required'                  => 'This field is required',
+                'nature_of_participant.required'  => 'This field is required',
             ];
-            $act_det = Participant::where ('id', $request->id)->first();
-            // dd($request->id);
-            $act_det->fill($request_data);
-            $response_data=$act_det->save();
-            $response_data= Participant::where('id',$request->id)->first();
-        }
-        if(!$request->attachment_details==null){
-            foreach($request->attachment_details as $att){
-                $doc_data =[
-                    'parent_id'                        =>  $response_data->id,
-                    'attachment_for'                   =>  'Participant',
-                    'path'                             =>  $att['path'],
-                    'original_name'                    =>  $att['name'],
+            $this->validate($request, $rules,$customMessages);
+            if($request->action_type=="add"){
+                $request_data =[
+                    'program_id'                =>  $request->programId,
+                    'org_id'                    =>  $request->org_id,
+                    'dzo_id'                    =>  $request->dzo_id,
+                    'participant_id'            =>  $request->participant,
+                    'contact'                   =>  $request->contact,
+                    'email'                     =>  $request->email,
+                    'nature_of_participant'     =>  $request->nature_of_participant,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
                 ];
-                $doc = DocumentDetails::create($doc_data);
+                $response_data= Participant::create($request_data);
             }
+            else{
+                $request_data =[
+                    'org_id'                    =>  $request->org_id,
+                    'dzo_id'                    =>  $request->dzo_id,
+                    'participant_id'            =>  $request->participant,
+                    'contact'                   =>  $request->contact,
+                    'email'                     =>  $request->email,
+                    'nature_of_participant'     =>  $request->nature_of_participant,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                $act_det = Participant::where ('id', $request->id)->first();
+                $act_det->fill($request_data);
+                $response_data=$act_det->save();
+                $response_data= Participant::where('id',$request->id)->first();
+            }
+            if(!$request->attachment_details==null){
+                foreach($request->attachment_details as $att){
+                    $doc_data =[
+                        'parent_id'                        =>  $response_data->id,
+                        'attachment_for'                   =>  'Participant',
+                        'path'                             =>  $att['path'],
+                        'original_name'                    =>  $att['name'],
+                    ];
+                    $doc = DocumentDetails::create($doc_data);
+                }
+            }
+        }else{
+
         }
         return $this->successResponse($response_data, Response::HTTP_CREATED);
     }
