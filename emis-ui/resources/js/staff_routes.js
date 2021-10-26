@@ -1031,7 +1031,70 @@ const routes = [
         // },
 
     { path: '/leave_verification',name:'leave_verification', component: require('./components/staff/leave_services/apply_leave/leave_verification.vue').default },
+    //office orders routes
+    { path:'/office_orders',
+    component: require('./components/staff/office_orders/office_orders_index.vue').default,
+        children:[
+            { path: '/', name:'office_orders', component: require('./components/staff/office_orders/office_orders_list.vue').default },
+            { path: '/transfer_order',
+                component: require('./components/staff/office_orders/transfer_order/transfer_order_index.vue').default,
+                children:[
+                    { path: '/', name:'transfer_order',  component: require('./components/staff/office_orders/transfer_order/list_transfer_order.vue').default },
+                    { path: '/list_transfer_order',name:'list_transfer_order',  component: require('./components/staff/office_orders/transfer_order/list_transfer_order.vue').default },
+                    { path: '/create_transfer_order',name:'create_transfer_order', component: require('./components/staff/office_orders/transfer_order/create_transfer_order.vue').default },
+                    { path: '/edit_transfer_order', name:'edit_transfer_order', component: require('./components/staff/office_orders/transfer_order/edit_transfer_order.vue').default },
+                    { path: '/view_transfer_order', name:'view_transfer_order', component: require('./components/staff/office_orders/transfer_order/view_transfer_order.vue').default },
+                    { path: '/transfer_order_acknowledgement', name:'transfer_order_acknowledgement', component: require('./components/staff/office_orders/transfer_order/transfer_order_acknowledgement.vue').default },
+                    { path: '/list_transfer_order_for_verification',name:'list_transfer_order_for_verification',  component: require('./components/staff/office_orders/transfer_order/list_transfer_order_for_verification.vue').default },
+                    { path: '/verify_transfer_order',name:'verify_transfer_order',  component: require('./components/staff/office_orders/transfer_order/verify_transfer_order.vue').default },
 
+                ],
+            },
+            { path: '/transfer_cancellation_order',
+                component: require('./components/staff/office_orders/transfer_cancellation_order/transfer_cancellation_order_index.vue').default,
+                children:[
+                    { path: '/', name:'transfer_cancellation_order',  component: require('./components/staff/office_orders/transfer_cancellation_order/list_transfer_cancellation_order.vue').default },
+                    { path: '/list_transfer_cancellation_order',name:'list_transfer_cancellation_order',  component: require('./components/staff/office_orders/transfer_cancellation_order/list_transfer_cancellation_order.vue').default },
+                    { path: '/create_transfer_cancellation_order',name:'create_transfer_cancellation_order', component: require('./components/staff/office_orders/transfer_cancellation_order/create_transfer_cancellation_order.vue').default },
+                    { path: '/edit_transfer_cancellation_order', name:'edit_transfer_cancellation_order', component: require('./components/staff/office_orders/transfer_cancellation_order/edit_transfer_cancellation_order.vue').default },
+                    { path: '/view_transfer_cancellation_order', name:'view_transfer_cancellation_order', component: require('./components/staff/office_orders/transfer_cancellation_order/view_transfer_cancellation_order.vue').default },
+                    { path: '/transfer_cancellation_order_acknowledgement', name:'transfer_cancellation_order_acknowledgement', component: require('./components/staff/office_orders/transfer_cancellation_order/transfer_cancellation_order_acknowledgement.vue').default },
+                    { path: '/list_transfer_cancellation_order_for_verification',name:'list_transfer_cancellation_order_for_verification',  component: require('./components/staff/office_orders/transfer_cancellation_order/list_transfer_cancellation_order_for_verification.vue').default },
+                    { path: '/verify_transfer_cancellation_order',name:'verify_transfer_cancellation_order',  component: require('./components/staff/office_orders/transfer_cancellation_order/verify_transfer_cancellation_order.vue').default },
+
+                ],
+            },
+
+            { path: '/noc',
+                component: require('./components/staff/office_orders/noc/noc_index.vue').default,
+                children:[
+                    { path: '/', name:'noc',  component: require('./components/staff/office_orders/noc/list_noc.vue').default },
+                    { path: '/list_noc',name:'list_noc',  component: require('./components/staff/office_orders/noc/list_noc.vue').default },
+                    { path: '/create_noc',name:'create_noc', component: require('./components/staff/office_orders/noc/create_noc.vue').default },
+                    { path: '/edit_noc', name:'edit_noc', component: require('./components/staff/office_orders/noc/edit_noc.vue').default },
+                    { path: '/view_noc', name:'view_noc', component: require('./components/staff/office_orders/noc/view_noc.vue').default },
+                    { path: '/noc_acknowledgement', name:'noc_acknowledgement', component: require('./components/staff/office_orders/noc/noc_acknowledgement.vue').default },
+                    { path: '/list_noc_for_verification',name:'list_noc_for_verification',  component: require('./components/staff/office_orders/noc/list_noc_for_verification.vue').default },
+                    { path: '/verify_noc',name:'verify_noc',  component: require('./components/staff/office_orders/noc/verify_noc.vue').default },
+                ],
+            },
+
+            { path: '/employment_statement',
+                component: require('./components/staff/office_orders/employment_statement/employment_statement_index.vue').default,
+                children:[
+                    { path: '/', name:'employment_statement',  component: require('./components/staff/office_orders/employment_statement/list_employment_statement.vue').default },
+                    { path: '/list_employment_statement',name:'list_employment_statement',  component: require('./components/staff/office_orders/employment_statement/list_employment_statement.vue').default },
+                    { path: '/create_employment_statement',name:'create_employment_statement', component: require('./components/staff/office_orders/employment_statement/create_employment_statement.vue').default },
+                    { path: '/edit_employment_statement', name:'edit_employment_statement', component: require('./components/staff/office_orders/employment_statement/edit_employment_statement.vue').default },
+                    { path: '/view_employment_statement', name:'view_employment_statement', component: require('./components/staff/office_orders/employment_statement/view_employment_statement.vue').default },
+                    { path: '/employment_statement_acknowledgement', name:'employment_statement_acknowledgement', component: require('./components/staff/office_orders/employment_statement/employment_statement_acknowledgement.vue').default },
+                    { path: '/list_employment_statement_for_verification',name:'list_employment_statement_for_verification',  component: require('./components/staff/office_orders/employment_statement/list_employment_statement_for_verification.vue').default },
+                    { path: '/verify_employment_statement',name:'verify_employment_statement',  component: require('./components/staff/office_orders/employment_statement/verify_employment_statement.vue').default },
+                ],
+            },
+
+        ]
+    },
     //Leadership Selection
     { path:'/staff_leadership_selection_index',
         component: require('./components/staff/leadership/leadership_index.vue').default,

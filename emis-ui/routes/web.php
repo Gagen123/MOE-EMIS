@@ -682,6 +682,17 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadSubstaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadSubstaff'])->name('loadSubstaff');
         Route::get('/getEditSubstitutedList/{subid}', [App\Http\Controllers\staff\SubstitutionController::class, 'getEditSubstitutedList'])->name('getEditSubstitutedList');
     });
+
+    //Office Orders
+    Route::prefix('staffOfficeorderController')->group(function (){
+        Route::post('/submitApplication', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'submitApplication'])->name('submitApplication');
+        Route::get('/checkOngoingApplication/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'checkOngoingApplication'])->name('checkOngoingApplication');
+        Route::get('/loadCreatedApplication/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadCreatedApplication'])->name('loadCreatedApplication');
+        Route::get('/loadCreatedApplicationForVerification/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadCreatedApplicationForVerification'])->name('loadCreatedApplicationForVerification');
+        Route::get('/loadDetForVerification/{id}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadDetForVerification'])->name('loadDetForVerification');
+        Route::post('/verifyApprove', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'verifyApprove'])->name('verifyApprove');
+
+    });
 });
 Route::prefix('common')->group(function () {
     Route::get('/getEnvValues/{param}', [App\Http\Controllers\CommonController::class, 'getEnvValues'])->name('getEnvValues');

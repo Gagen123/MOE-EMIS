@@ -136,7 +136,8 @@ class CommonController extends Controller
     public function getSessionDetail($applicationId = "")
     {
         if (Session::get('User_Details') != "") {
-            return ['data' => Session::get('User_Details')];
+            $sessiondata=Session::get('User_Details');
+            return ['data' => $sessiondata,'hrdRole'=>env('HRD_ROLE_ID')];
         } else {
             $redirection_url = config('services.login.base_uri') . 'logout';
             return redirect()->away($redirection_url);
