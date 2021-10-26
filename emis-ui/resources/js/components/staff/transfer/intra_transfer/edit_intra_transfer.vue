@@ -53,9 +53,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Preferences</th>
-                                            <th>Select School</th>
+                                        <th style="width:20%">SlNo</th>
+                                        <th style="width:30%">Preferences</th>
+                                        <th style="width:50%">Select School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,9 +106,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Specialization</th>
-                                            <th>Subjects</th>
+                                        <th style="width:20%">SlNo</th>
+                                        <th style="width:30%"> Specialization</th>
+                                        <th style="width:50%">Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>

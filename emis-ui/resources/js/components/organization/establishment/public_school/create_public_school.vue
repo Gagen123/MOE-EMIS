@@ -47,11 +47,11 @@
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
-                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name" />
+                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" npm class="form-control" id="proposedName" placeholder="Proposed Name" />
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                       <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
@@ -427,7 +427,7 @@ export default {
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes!',
-                        }).then((result) => {
+                      applyselect2  }).then((result) => {
                         if (result.isConfirmed) {
                             let clasArray=[];
                             $("input[name='attachment']:checked").each( function () {
@@ -455,7 +455,7 @@ export default {
 
                                 formData.append('screenId', this.screenId);
                                 formData.append('SysRoleId', this.SysRoleId);
-                                formData.append('Sequence', this.Sequence);
+                                formData.append('SequencsaveprivatepublicschoolEstablishmente', this.Sequence);
                                 formData.append('Status_Name', this.Status_Name);
 
                                 axios.post('organization/saveUploadedFiles', formData, config)
@@ -477,7 +477,7 @@ export default {
                                         }
                                     }
                                 })
-                                .catch((error) => {
+                                .catch(() => {
                                     this.applyselect2();
                                     this.change_tab('file-tab');
                                     console.log("Error:"+error);

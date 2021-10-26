@@ -40,9 +40,9 @@
             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label class="mb-0.5">Audit Clearance No: <span class="text-blue text-bold">{{staffList.AuditClearanceNo}}</span></label>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+            <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                 <label class="mb-0.5">Joining Order No: <span class="text-blue text-bold">{{staffList.JoiningOrderNo}}</span></label>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

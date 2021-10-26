@@ -816,7 +816,16 @@ export default {
                         })
                         .catch((err) => {
                             console.log("Error:"+err);
+                            if(err.response.data.class=='Select the class'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class or streams!',
+                            })
+                            }
+                            
                             this.applyselect2();
+
                         })
                     }
                 });

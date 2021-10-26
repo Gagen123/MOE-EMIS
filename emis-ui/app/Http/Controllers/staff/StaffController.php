@@ -93,7 +93,7 @@ class StaffController extends Controller{
             'description'      =>  'required',
             'doner_agency'     =>  'required',
             'field'            =>  'required',
-            'type'             =>  'required',
+            // 'type'             =>  'required',
             'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
@@ -107,7 +107,7 @@ class StaffController extends Controller{
             'description.required'        => 'This field is required',
             'doner_agency.required'       => 'This field is required',
             'field.required'              => 'This field is required',
-            'type.required'               => 'This field is required',
+            // 'type.required'               => 'This field is required',
             'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
@@ -132,7 +132,7 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loadStaffQualification/'.$staff_id);
         //dd($response_data);
         return $response_data;
-       
+
     }
 
     public function savenominationDetails(Request $request){

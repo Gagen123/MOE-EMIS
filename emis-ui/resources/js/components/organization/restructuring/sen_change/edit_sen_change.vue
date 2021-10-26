@@ -186,7 +186,7 @@ export default {
 
                     })
                     .catch(function (error) {
-                        console.log("Error:"+error);
+                        this.form.errors.errors = error.response.data;
                     });
                 }
             });

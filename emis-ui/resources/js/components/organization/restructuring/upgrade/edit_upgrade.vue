@@ -453,8 +453,9 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error on submit:"+err)
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.form.errors.errors = error.response.data;
                         })
                     }
                 });

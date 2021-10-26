@@ -244,7 +244,8 @@ class AdministrationController extends Controller
     }
     //commented by tshewang to fix master data 
     //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
-    public function loadStaffTransferMasters($param = ""){
+    public function loadStaffTransferMasters($param = "")
+    {
         $global_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffTransferMasters/' . $param);
         return $global_masters;
     }
@@ -256,15 +257,17 @@ class AdministrationController extends Controller
 
     public function saveAcademicMasters(Request $request)
     {
-        if ($request['record_type'] == 'main_subject') {
+        if ($request['record_type'] == 'teacher_subject') {
             $rules = [
                 'name'    =>  'required',
                 'code' => 'required',
+                'is_special_educational_needs' => 'required',
                 'status'    =>  'required',
             ];
             $customMessages = [
                 'name.required' => 'This field is required',
                 'code.required' => 'This field is required',
+                'is_special_educational_needs.required' => 'This field is required',
                 'status.required' => 'This field is required',
             ];
         }

@@ -7,7 +7,7 @@
                     <th >Application No.</th>
                     <th >Application For</th>
                     <th >Status</th>
-                    <th >Action</th>
+                    <!-- <th >Action</th> -->
                 </tr>
             </thead>
             <tbody id="tbody">
@@ -16,10 +16,10 @@
                     <td>{{ item.application_no}}</td>
                     <td>Merger of Public School</td>
                     <td>{{ item.status}}</td>
-                    <td>
+                    <!-- <td>
                         <a href="#"  class="btn btn-success btn-sm text-white" @click="showview(item)"><i class="fas fa-eye"></i > View</a>
                         <a href="#" v-if="item.status=='submitted' || item.status=='Submitted'" class="btn btn-info btn-sm text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
-                    </td>
+                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -52,12 +52,12 @@ export default {
                 }); 
             }, 3000);  
         },
-        showedit(data){
-            this.$router.push({name:'#',params: {data:data}});
-        },
-        showview(data){
-            this.$router.push({name:'#',params: {data:data}});
-        },
+        // showedit(data){
+        //     this.$router.push({name:'merger_edit',params: {data:data}});
+        // },
+        // showview(data){
+        //     this.$router.push({name:'#',params: {data:data}});
+        // },
     },
     mounted(){
         this.loadDataList();

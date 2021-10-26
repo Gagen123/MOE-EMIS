@@ -6,13 +6,18 @@
         <div class="container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
-                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                        <span :class="item.screen_icon"></span>
                        {{ item.screen_name}}
                     </router-link>
                 </li>
             </ul>
             <ul class="nav nav-pills mb-2 developemntEnv" role="tablist">
+                <li class="nav-item active pr-1">
+                    <router-link to="/open_programme" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
+                        Open Programme
+                    </router-link>
+                </li>
                 <li class="nav-item active pr-1">
                     <router-link to="/programme_index" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         Programme

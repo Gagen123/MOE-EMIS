@@ -44,12 +44,6 @@
                     </div>
                 </div>  
                   <div class="row form-group">
-                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label class="required">Is Special Educational Needs (SEN) :</label>
-                        <br> 
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="1" /> Yes</label>
-                        <label><input v-model="form.is_special_educational_needs"  type="radio" value="0" /> No</label>
-                    </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
@@ -78,7 +72,6 @@ export default {
                 display_order:'',
                 status: 1,
                 assessed_by_class_teacher:0,
-                is_special_educational_needs:0,
                 record_type:'subject',
                 action_type:'add',
             })

@@ -556,6 +556,10 @@ Route::prefix('staff')->group(function () {
         Route::post('/submitParticipants', [App\Http\Controllers\staff\HrDevelopmentController::class, 'submitParticipants'])->name('submitParticipants');
         Route::post('/updateParticipant', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateParticipant'])->name('updateParticipant');
         Route::post('/updateapplication', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateapplication'])->name('updateapplication');
+        Route::post('/saveprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramOpenDetail'])->name('saveprogramOpenDetail');
+        Route::get('/getprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getprogramOpenDetail'])->name('getprogramOpenDetail');
+        Route::get('/checkProgramAccess', [App\Http\Controllers\staff\HrDevelopmentController::class, 'checkProgramAccess'])->name('checkProgramAccess');
+
     });
 
     // Transfer route
@@ -732,7 +736,7 @@ Route::prefix('loadCommons')->group(function () {
     Route::get('/loadStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffList'])->name('loadStaffList');
     Route::get('/loadFewDetailsStaffList/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadFewDetailsStaffList'])->name('loadFewDetailsStaffList');
     Route::get('/viewStaffDetails/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
-    Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'viewStaffDetails'])->name('viewStaffDetails');
+    Route::get('/checkAttendanceDetailsByDate/{year}/{month}', [App\Http\Controllers\common_services\LoadStaffController::class, 'checkAttendanceDetailsByDate'])->name('checkAttendanceDetailsByDate');
     Route::get('/getLoginUser', [App\Http\Controllers\common_services\LoadStaffController::class, 'getLoginUser'])->name('getLoginUser');
     Route::get('/loadStaffCountDetail/{type}/{parent_id}', [App\Http\Controllers\common_services\LoadStaffController::class, 'loadStaffCountDetail'])->name('loadStaffCountDetail');
 
