@@ -292,7 +292,7 @@ class StaffController extends Controller{
         $rules = [
             'nomi_cid'          =>  'required',
             'nomi_name'         =>  'required',
-            'nomi_desig'        =>  'required',
+            // 'nomi_desig'        =>  'required',
             'nomi_address'      =>  'required',
             'nomi_contact'      =>  'required',
             'nomi_email'        =>  'required',
@@ -301,7 +301,7 @@ class StaffController extends Controller{
         $customMessages = [
             'nomi_name.required'            => 'This field is required',
             'nomi_cid.required'             => 'This field is required',
-            'nomi_desig.required'           => 'This field is required',
+            // 'nomi_desig.required'           => 'This field is required',
             'nomi_address.required'         => 'This field is required',
             'nomi_email.required'           => 'This field is required',
             'nomi_relation.required'        => 'Relationship field is required',

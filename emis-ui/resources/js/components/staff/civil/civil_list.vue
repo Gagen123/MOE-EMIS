@@ -59,7 +59,7 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Emp Id</th>
+                            <th>Emp ID</th>
                             <th>Name</th>
                             <th>Sex</th>
                             <th>Position Title</th>

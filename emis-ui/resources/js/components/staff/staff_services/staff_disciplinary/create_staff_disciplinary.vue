@@ -131,7 +131,7 @@ export default {
             })
             .catch(function (error){
                 console.log("Error: "+error)
-            });
+            }); 
         },
         loadoffenceTypeList(type){
             axios.get("masters/loadStaffMasters/"+type)
