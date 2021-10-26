@@ -407,7 +407,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;

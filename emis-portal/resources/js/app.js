@@ -5,7 +5,7 @@
  */
 
 require('./bootstrap');
-
+require('./common');
 window.Vue = require('vue');
 import moment from 'moment';
 window.Fire = new Vue();

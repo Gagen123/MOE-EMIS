@@ -47,11 +47,11 @@
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Proposed Name:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
-                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" @change="remove_error('proposedName')" class="form-control" id="proposedName" placeholder="Proposed Name" />
+                                <input type="text" v-model="form.proposedName" :class="{ 'is-invalid': form.errors.has('proposedName') }" npm class="form-control" id="proposedName" placeholder="Proposed Name" />
                                 <has-error :form="form" field="proposedName"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                       <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Propose Level:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <select name="level" id="level" v-model="form.level" :class="{ 'is-invalid': form.errors.has('level') }" class="form-control select2" @change="remove_error('level')">
@@ -81,7 +81,7 @@
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Chiwog:<span class="text-danger">*</span></label>
                             <div class="col-lg-4 col-md-4 col-sm-4">
                                 <select v-model="form.chiwog" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('chiwog') }" class="form-control select2" name="chiwog" id="chiwog">
-                                    <option value="">--- Please Select ---</option>
+                                    <option value="" selected>--- Please Select ---</option>
                                     <option v-for="(item, index) in villageList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
                                 <has-error :form="form" field="chiwog"></has-error>
@@ -172,7 +172,7 @@
                     <div class="tab-pane fade tab-content-details" id="file-tab" role="tabpanel" aria-labelledby="basicdetails">
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0">Upload the Required Documents<span class="text-danger">*</span></label>
+                                <label class="mb-0">Upload the Required Documents ({{validfile()}})<span class="text-danger">*</span> </label>
                             </div>
                         </div><br>
                         <div class="card">
@@ -188,11 +188,11 @@
                                         <tbody>
                                             <tr id="record1" v-for='(att, index) in file_form.fileUpload' :key="index">
                                                 <td>
-                                                    <input type="text" class="form-control" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <input type="text" class="form-control"  @change="remove_error('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" @change="remove_error('attach'+(index+1))" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -260,7 +260,7 @@ export default {
                 level:'',
                 dzongkhag:this.dzongkhag,
                 gewog:'',
-                chiwog:'0',
+                chiwog:'',
                 proposedLocation:'',
                 geopoliticallyLocated:'0',
                 senSchool:'0',
@@ -323,8 +323,8 @@ export default {
             }
             this.villageList =await this.loadvillageList(gewogId);
             if(vil_id!=""){
-                this.form.chiwog=draft.chiwogId;
-                $('#chiwog').val(draft.chiwogId).trigger('change');;
+                this.form.chiwog=vil_id;
+                $('#chiwog').val(vil_id).trigger('change');;
             }
         },
 
@@ -417,6 +417,7 @@ export default {
                 if(nextclass=="final-tab"){
                     status="Are you sure you wish to submit this application for further approval ? ";
                     message="Application for new Establishment has been submitted for approval. System Generated application number for this transaction is: ";
+                    subform=this.validateFileform();
                 }
                 if(subform){
                     Swal.fire({
@@ -426,7 +427,7 @@ export default {
                         confirmButtonColor: '#3085d6',
                         cancelButtonColor: '#d33',
                         confirmButtonText: 'Yes!',
-                        }).then((result) => {
+                      applyselect2  }).then((result) => {
                         if (result.isConfirmed) {
                             let clasArray=[];
                             $("input[name='attachment']:checked").each( function () {
@@ -454,7 +455,7 @@ export default {
 
                                 formData.append('screenId', this.screenId);
                                 formData.append('SysRoleId', this.SysRoleId);
-                                formData.append('Sequence', this.Sequence);
+                                formData.append('SequencsaveprivatepublicschoolEstablishmente', this.Sequence);
                                 formData.append('Status_Name', this.Status_Name);
 
                                 axios.post('organization/saveUploadedFiles', formData, config)
@@ -476,10 +477,11 @@ export default {
                                         }
                                     }
                                 })
-                                .catch((error) => {
+                                .catch(() => {
                                     this.applyselect2();
                                     this.change_tab('file-tab');
                                     console.log("Error:"+error);
+                                    this.form.errors.errors = error.response.data.errors;
                                 })
                             }
                             else{
@@ -525,7 +527,14 @@ export default {
                         }
                     })
                     .catch((err) => {
-                        console.log("Error:"+err)
+                        console.log("Error:"+err);
+                        if(err.response.status === 422){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable class!',
+                            })
+                        }
                     })
                 }else{
                     this.change_tab(nextclass);
@@ -533,6 +542,24 @@ export default {
             }
         },
 
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.file_form.fileUpload.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
+        },
         loadpendingdetails(type){
             axios.get('organization/loaddraftApplication/'+type)
               .then(response => {

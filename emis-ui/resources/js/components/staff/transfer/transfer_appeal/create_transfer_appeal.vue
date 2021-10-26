@@ -69,16 +69,17 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <label class="mb-0.5">Transfer Type:<i class="text-danger">*</i></label>
                              <br/>
-                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id" @click="IdentifyTransferType('transfer_type_id')">
+                            <select v-model="form.transfer_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('transfer_type_id') }" class="form-control select2" name="transfer_type_id" id="transfer_type_id" @change="remove_error('transfer_type_id')"  @click="IdentifyTransferType('transfer_type_id')">
                                 <option v-for="(item, index) in applicationNo" :key="index" v-bind:value="item.transfer_type_id">{{ item.aplication_number }}: ({{ item.transferType }})  </option>
                             </select>
-                        <has-error :form="form" field="transfer_type_id"></has-error>
+                             <has-error :form="form" field="transfer_type_id"></has-error>
                             </div>
                         </div>
                          <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Reason for seeking transfer appeal:<i class="text-danger">*</i></label>
-                                <textarea class="form-control" v-model="form.description" id="description"></textarea>
+                                <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description')}" @change="remove_error('description')"  id="description"></textarea>
+                                <has-error :form="form" field="description"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -220,15 +221,15 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        LoadTransferType(uri = 'masters/loadStaffMasters/appeal'){
-            axios.get(uri)
-            .then(response =>{
-                let data=response.data.data;
-            })
-            .catch(function (error){
-                console.log(error);
-            });
-        },
+        // LoadTransferType(uri = 'masters/loadStaffTransferMasters/appeal'){
+        //     axios.get(uri)
+        //     .then(response =>{
+        //         let data=response.data.data;
+        //     })
+        //     .catch(function (error){
+        //         console.log(error);
+        //     });
+        // },
       
         loadtransferwindow(){
             axios.get('masters/loadGlobalMasters/transfer_appeal')
@@ -270,6 +271,24 @@ export default {
             .catch((error) => {
                 console.log("Error."+error);
             });
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         shownexttab(nextclass){
             // if(this.form.transfer_appeal== ""|| this.form.transfer_appeal== null){
@@ -320,7 +339,8 @@ export default {
                             }
                         })
                         .catch((error) => {
-                            console.log("Errors:"+error)
+                           this.form.errors.errors = error.response.data;
+                           this.validateFileform();
                         });
                     }
                 });
@@ -390,7 +410,7 @@ export default {
         this.changefunction(id);
         });
         this.loadtransferwindow();
-        this.LoadTransferType();
+        // this.LoadTransferType();
         this.LoadApplicationDetailsByUserId();
         this.loadTransferAppealDetails();
 

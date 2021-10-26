@@ -1,7 +1,8 @@
 <template>
     <div>
         <form>
-            <div class="form-group row">
+            <search />
+            <!-- <div class="form-group row">
                 <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
                     <label class="mb-0">Organization Type : <i class="text-danger">*</i></label>
                     <select class="form-control select2" name="organization_type_id" id="organization_type_id">
@@ -37,21 +38,17 @@
                     <span class="text-danger" id="org_id_err"></span>
                 </div>
             </div>
+             -->
             <div class="form-group row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
                     <select v-model="resp_form.staff" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('staff') }" class="form-control select2" name="staff" id="staff">
-                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
+                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.emp_id }} : {{ item.name }}, {{item.position_title_name}}, {{item.positionlevel}}</option>
                     </select>
                     <has-error :form="resp_form" field="staff"></has-error>
                 </div>
             </div>
             <div class="row form-group">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Offence Date:<span class="text-danger">*</span></label>
-                    <input class="form-control" v-model="resp_form.offence_date" :class="{ 'is-invalid': resp_form.errors.has('offence_date') }" id="date" @change="remove_error('offence_date')" type="date">
-                    <has-error :form="resp_form" field="offence_date"></has-error>
-                </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Offence Type:<span class="text-danger">*</span></label>
                     <select class="form-control select2" id="offence_type_id" v-model="resp_form.offence_type_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_type_id') }">
@@ -60,11 +57,18 @@
                     <has-error :form="resp_form" field="offence_type_id"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Offence severity:<span class="text-danger">*</span></label>
-                    <select class="form-control select2" id="offence_severity_id" v-model="resp_form.offence_severity_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_severity_id') }">
-                        <option v-for="(item, index) in offenceSeverityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    <label>Case Type:<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="case_type" v-model="resp_form.case_type" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('case_type') }">
+                        <option v-for="(item, index) in CaseTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="resp_form" field="offence_type_id"></has-error>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label>Case Category:<span class="text-danger">*</span></label>
+                    <select class="form-control select2" id="case_category" v-model="resp_form.case_category" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('case_category') }">
+                        <option v-for="(item, index) in CaseCategoryList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                    </select>
+                    <has-error :form="resp_form" field="case_category"></has-error>
                 </div>
             </div>
             <div class="form-group row">
@@ -76,14 +80,12 @@
             </div>
             <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Action Taken:<span class="text-danger">*</span></label>
-                    <select class="form-control select2" id="offence_action_id" v-model="resp_form.offence_action_id" :class="{ 'is-invalid select2 select2-hidden-accessible': resp_form.errors.has('offence_action_id') }">
-                        <option v-for="(item, index) in offenceActionList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
-                    </select>
-                    <has-error :form="resp_form" field="offence_action_id"></has-error>
+                    <label>Offence Date:<span class="text-danger">*</span></label>
+                    <input class="form-control popupDatepicker" type="text" autocomplete="off" :class="{ 'is-invalid': resp_form.errors.has('offence_date') }" id="offence_date">
+                    <has-error :form="resp_form" field="offence_date"></has-error>
                 </div>
                 <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12">
-                    <label class="mb-0.5">Description of Action Taken:</label>
+                    <label class="mb-0.5">Remarks:</label>
                     <textarea @change="remove_error('description_on_action')" class="form-control" v-model="resp_form.description_on_action" :class="{ 'is-invalid': resp_form.errors.has('description_on_action') }" name="description_on_action" id="description_on_action"></textarea>
                     <has-error :form="resp_form" field="description_on_action"></has-error>
                 </div>
@@ -96,26 +98,29 @@
     </div>
 </template>
 <script>
+import search from "../../searchpage.vue";
 export default {
+    components: {
+        search,
+    },
     data(){
         return {
             dzongkhagList:[],
             dzo_id:'',
             departmentList:[],
             orgList:[],
-
             screen_id:'',
             staffList:[],
             offenceTypeList:[],
-            offenceSeverityList:[],
-            offenceActionList:[],
+            CaseTypeList:[],
+            CaseCategoryList:[],
             resp_form: new form({
                 id:'',
                 staff: '',
                 offence_date:'',
                 offence_type_id:'',
-                offence_severity_id:'',
-                offence_action_id:'',
+                case_type:'',
+                case_category:'',
                 offence_description:'',
                 description_on_action:'',
                 action_type:'add',
@@ -123,34 +128,17 @@ export default {
         }
     },
     methods: {
-        loadStaffList(uri='loadCommons/loadStaffList/userdzongkhagwise/NA'){
-            axios.get(uri)
-            .then(response => {
-                let data = response.data.data;
-                this.staffList =  data;
-            })
-            .catch(function (error){
-                console.log("Error: "+error)
-            }); 
-        },
-        loadoffenceTypeList(type){
-            axios.get("masters/loadStaffMasters/"+type)
-            .then(response => {
-                let data = response.data.data;
-                if(type=="all_active_staff_offence_type_List"){
-                    this.offenceTypeList =  data;
-                }
-                if(type=="all_active_staff_offence_severity_List"){
-                    this.offenceSeverityList =  data;
-                }
-                if(type=="all_active_staff_offence_action_List"){
-                    this.offenceActionList =  data;
-                }
-            })
-            .catch(function (error) {
-                console.log("Error:"+error)
-            });
-        },
+        // loadStaffList(uri='loadCommons/loadStaffList/userdzongkhagwise/NA'){
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response.data.data;
+        //         this.staffList =  data;
+        //     })
+        //     .catch(function (error){
+        //         console.log("Error: "+error)
+        //     });
+        // },
+
         loadStaffList(uri='loadCommons/loadStaffList/userdzongkhagwise/NA'){
             axios.get(uri)
             .then(response => {
@@ -171,39 +159,45 @@ export default {
             if(type=="reset"){
                 this.resp_form.staff= '';
                 this.resp_form.offence_type_id='';
-                this.resp_form.offence_severity_id='';
-                this.resp_form.offence_action_id= '';
+                this.resp_form.case_type='';
+                this.resp_form.case_category= '';
                 this.resp_form.offence_description= '';
                 this.resp_form.description_on_action= '';
             }
             if(type=="save"){
-                this.resp_form.post('staff/staffServices/saveStaffDisaplinary')
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    });
-                    this.applyselect();
-                    this.$router.push({name:'list_staff_disciplinary',query: {data:this.screen_id}});
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText:'No',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.resp_form.offence_date=this.formatYYYYMMDD($('#offence_date').val());
+                        this.resp_form.post('staff/staffServices/saveStaffDisaplinary')
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            });
+                            this.applyselect();
+                            this.$router.push({name:'list_staff_disciplinary',query: {data:this.screen_id}});
+                        })
+                        .catch(() => {
+                            console.log("Error:")
+                        })
+                    }
                 })
-                .catch(() => {
-                    console.log("Error:")
-                })
+
             }
 		},
         applyselect(){
-            if(!$('#staff').attr('class').includes('select2-hidden-accessible')){
-                $('#staff').addClass('select2-hidden-accessible');
-            }
-            if(!$('#offence_type_id').attr('class').includes('select2-hidden-accessible')){
-                $('#offence_type_id').addClass('select2-hidden-accessible');
-            }
-            if(!$('#offence_severity_id').attr('class').includes('select2-hidden-accessible')){
-                $('#offence_severity_id').addClass('select2-hidden-accessible');
-            }
-            if(!$('#offence_action_id').attr('class').includes('select2-hidden-accessible')){
-                $('#offence_action_id').addClass('select2-hidden-accessible');
-            }
+            this.applyselect2field('staff');
+            this.applyselect2field('offence_type_id');
+            this.applyselect2field('case_type');
+            this.applyselect2field('case_category');
         },
 
         async changefunction(id){
@@ -249,12 +243,16 @@ export default {
             if(id=="offence_type_id"){
                 this.resp_form.offence_type_id=$('#offence_type_id').val();
             }
-            if(id=="offence_severity_id"){
-                this.resp_form.offence_severity_id=$('#offence_severity_id').val();
+            if(id=="case_type"){
+                this.resp_form.case_type=$('#case_type').val();
             }
-            if(id=="offence_action_id"){
-                this.resp_form.offence_action_id=$('#offence_action_id').val();
+            if(id=="case_category"){
+                this.resp_form.case_category=$('#case_category').val();
             }
+        },
+        async loadRespectiveDataData(org_id){
+            this.staffList = [];
+            this.staffList=await this.staffOrgwise(org_id);
         },
 
     },
@@ -273,10 +271,14 @@ export default {
             this.changefunction(id);
         });
 
-        this.loadStaffList();
-        this.loadoffenceTypeList('all_active_staff_offence_type_List');
-        this.loadoffenceTypeList('all_active_staff_offence_severity_List');
-        this.loadoffenceTypeList('all_active_staff_offence_action_List');
+        Fire.$on('loadRespectiveDataData',(id)=>{
+            this.loadRespectiveDataData(id);
+        });
+
+        // this.loadStaffList();
+        this.offenceTypeList =  await this.loadstaffMasters('active','StaffOffenceType');
+        this.CaseTypeList =  await this.loadstaffMasters('active','CaseType');
+        this.CaseCategoryList =  await this.loadstaffMasters('active','CaseCategory');
         this.screen_id=this.$route.query.data;
     },
 

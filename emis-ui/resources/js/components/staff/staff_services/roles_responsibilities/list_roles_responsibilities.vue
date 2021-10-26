@@ -8,6 +8,7 @@
                             <th>SL#</th>
                             <th>Name</th>
                             <th>Responsibility</th>
+                            <th>year</th>
                             <th>Remarks</th>
                             <th class="pl-5 ml-5 pr-5 ml-5">Action</th>
                         </tr>
@@ -17,6 +18,7 @@
                             <td>{{ index+1}}</td>
                             <td><span v-if="item.staff!=null">{{ item.staff.emp_id}}:{{ item.staff.name}}</span></td>
                             <td>{{ item.type.name}}</td>
+                            <td>{{ item.year}}</td>
                             <td>{{ item.remarks}}</td>
                             <td>
                                 <a href="#" class="btn btn-success btn-sm btn-flat text-white" @click="loadeditpage(item)">Edit</a>

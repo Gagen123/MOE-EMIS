@@ -14,7 +14,7 @@ use App\Models\masters\ClassAssessmentFrequency;
 use App\Models\masters\ClassAssessmentFrequencyHistory;
 use App\Models\masters\ClassSubjectAssessment;
 use App\Models\masters\ClassSubjectAssessmentHistory;
-use App\Models\masters\MainSubject;
+use App\Models\masters\TeacherSubject;
 use App\Models\masters\PromotionRule;
 use App\Models\masters\RatingType;
 use App\Models\masters\ReasonsForAbsent;
@@ -35,7 +35,7 @@ class AcademicMastersController extends Controller
 
     public function saveAcademicMasters(Request $request)
     {
-        if ($request['record_type'] == 'main_subject') {
+        if ($request['record_type'] == 'teacher_subject') {
             $rules = [
                 'status'    =>  'required',
             ];
@@ -43,7 +43,8 @@ class AcademicMastersController extends Controller
                 'status.required' => 'This field is required',
             ];
             if ($request['action_type'] == 'add') {
-                $new_rules = array('name' => 'required|unique:aca_main_subject', 'code' => 'required|unique:aca_main_subject');
+                $new_rules = array('name' => 'required|unique:aca_teacher_subject', 'code' => 'required|unique:aca_teacher_subject');
+                $new_rules = array('name' => 'required|unique:aca_teacher_subject', 'code' => 'required|unique:aca_teacher_subject');
                 $final_rules = array_merge($rules, $new_rules);
                 $new_customMessages = array('name.required' => 'This field is required', 'code' => 'This field is required');
                 $final_customMessages = array_merge($customMessages, $new_customMessages);
@@ -51,32 +52,30 @@ class AcademicMastersController extends Controller
                 $data = [
                     'name' => $request['name'],
                     'code' => $request['code'],
+                    'is_special_educational_needs' =>  $request['is_special_educational_needs'],
                     'status' => $request['status'],
                     'created_by' =>  $request['user_id'],
                     'created_at' =>   date('Y-m-d h:i:s')
                 ];
-                $responsedata = MainSubject::create($data);
+                $responsedata = TeacherSubject::create($data);
             }
-            try {
-                if ($request['action_type'] == "edit") {
-                    $new_rules = array('name' => 'required', 'code' => 'required');
-                    $final_rules = array_merge($rules, $new_rules);
-                    $new_customMessages = array('name.required' => 'This field is required', 'code' => 'This field is required');
-                    $final_customMessages = array_merge($customMessages, $new_customMessages);
-                    $this->validate($request, $final_rules, $final_customMessages);
+            if ($request['action_type'] == "edit") {
+                $new_rules = array('name' => 'required', 'code' => 'required');
+                $final_rules = array_merge($rules, $new_rules);
+                $new_customMessages = array('name.required' => 'This field is required', 'code' => 'This field is required');
+                $final_customMessages = array_merge($customMessages, $new_customMessages);
+                $this->validate($request, $final_rules, $final_customMessages);
 
-                    $data = MainSubject::find($request['id']);
-                    $messs_det = 'name:' . $data->name . '; code:' . $data->code . '; status:' . $data->status;
-                    $procid = DB::select("CALL " . $this->audit_table . ".emis_audit_proc('" . $this->database . "','aca_main_subject','" . $request['id'] . "','" . $messs_det . "','" . $request['user_id'] . "','Edit')");
-                    $data->name = $request['name'];
-                    $data->code = $request['code'];
-                    $data->status = $request['status'];
-                    $data->created_at = date('Y-m-d h:i:s');
-                    $data->update();
-                    $responsedata = $data;
-                }
-            } catch (Exception $e) {
-                dd($e);
+                $data = TeacherSubject::find($request['id']);
+                $messs_det = 'name:' . $data->name . '; code:' . $data->code . '; is_special_educational_needs:' . $data->is_special_educational_needs .  '; status:' . $data->status;
+                $procid = DB::select("CALL " . $this->audit_table . ".emis_audit_proc('" . $this->database . "','aca_teacher_subject','" . $request['id'] . "','" . $messs_det . "','" . $request['user_id'] . "','Edit')");
+                $data->name = $request['name'];
+                $data->code = $request['code'];
+                $data->is_special_educational_needs = $request['is_special_educational_needs'];
+                $data->status = $request['status'];
+                $data->created_at = date('Y-m-d h:i:s');
+                $data->update();
+                $responsedata = $data;
             }
         }
         // dd($request);
@@ -104,18 +103,13 @@ class AcademicMastersController extends Controller
                     'code'  =>  $request['code'],
                     'aca_sub_category_id' => $request['aca_sub_category_id'],
                     'assessed_by_class_teacher' =>  $request['assessed_by_class_teacher'],
-                    'is_special_educational_needs' =>  $request['is_special_educational_needs'],
                     'dzo_name' => $request['dzo_name'],
                     'display_order' => $request['display_order'],
                     'status'    =>  $request['status'],
                     'created_by' =>  $request['user_id'],
                     'created_at' =>   date('Y-m-d h:i:s'),
                 ];
-                try {
-                    $responsedata = Subject::create($data);
-                } catch (Exception $e) {
-                    dd($e);
-                }
+                $responsedata = Subject::create($data);
             }
             if ($request['action_type'] == "edit") {
                 $rules = [
@@ -142,7 +136,6 @@ class AcademicMastersController extends Controller
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
-                $data->is_special_educational_needs = $request['is_special_educational_needs'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->update();
@@ -238,7 +231,7 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
                 $data = [
                     'aca_sub_id' => $request['aca_sub_id'],
-                    'aca_rating_type_id' => $request['aca_rating_type_id'],
+                    'is_descriptive' => $request['is_descriptive'],
                     'aca_assmnt_type' => $request['aca_assmnt_type'],
                     'name'  =>  $request['name'],
                     'dzo_name'  =>  $request['dzo_name'],
@@ -275,9 +268,9 @@ class AcademicMastersController extends Controller
                 $this->validate($request, $rules,  $customMessages);
 
                 $data = AssessmentArea::find($request['id']);
-                $messs_det = 'aca_sub_id:' . $data->aca_sub_id . '; aca_assmnt_type:' . $data->aca_assmnt_type . '; aca_rating_type_id:' . $data->aca_rating_type_id . '; display_order' . $data->display_order . '; name' . $data->name . '; code' . $data->code . '; status:' . $data->status;
+                $messs_det = 'aca_sub_id:' . $data->aca_sub_id . '; is_descriptive:' . $data->is_descriptive . '; aca_assmnt_type:' . $data->aca_assmnt_type . '; display_order' . $data->display_order . '; name' . $data->name . '; code' . $data->code . '; status:' . $data->status;
                 $procid = DB::select("CALL " . $this->audit_table . ".emis_audit_proc('" . $this->database . "','aca_assessment_area','" . $request['id'] . "','" . $messs_det . "','" . $request['user_id'] . "','Edit')");
-                $data->aca_rating_type_id = $request['aca_rating_type_id'];
+                $data->is_descriptive = $request['is_descriptive'];
                 $data->aca_assmnt_type = $request['aca_assmnt_type'];
                 $data->name = $request['name'];
                 $data->dzo_name = $request['dzo_name'];
@@ -356,12 +349,7 @@ class AcademicMastersController extends Controller
                     'created_by'        =>  $request['user_id'],
                     'created_at'        =>   date('Y-m-d h:i:s'),
                 ];
-                // dd($data);
-                //  try{  
                 $responsedata = TeachingSubject::create($data);
-                //   }catch(Exception $e){
-                //     dd($e);
-                //  }
             }
             if ($request['action_type'] == "edit") {
                 $rules = [
@@ -413,16 +401,16 @@ class AcademicMastersController extends Controller
     }
     public function loadAcademicMasters($param = "")
     {
-        if ($param == "all_main_subject") {
-            $main_subject = DB::select('SELECT id,name,code,status FROM aca_main_subject');
+        if ($param == "all_teacher_subject") {
+            $main_subject = DB::select('SELECT id,name,code,is_special_educational_needs,status FROM aca_teacher_subject ORDER BY code');
             return $this->successResponse($main_subject);
         }
-        if ($param == "all_active_main_subject") {
-            $main_subject = DB::select('SELECT id,name,code,status FROM aca_main_subject WHERE status = 1');
+        if ($param == "all_active_teacher_subject") {
+            $main_subject = DB::select('SELECT id,name,code,is_special_educational_needs,status FROM aca_teacher_subject WHERE status = 1');
             return $this->successResponse($main_subject);
         }
         if ($param == "all_subject") {
-            $subject = DB::select('SELECT t1.id,t1.name,t1.code,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
+            $subject = DB::select('SELECT t1.id,t1.name,t1.code,t1.assessed_by_class_teacher,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
             return $this->successResponse($subject);
         }
         // if($param == "subjectDropdown"){
@@ -431,7 +419,7 @@ class AcademicMastersController extends Controller
         // }
 
         if ($param == "all_active_subject") {
-            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,is_special_educational_needs,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
+            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject);
         }
         if ($param == "all_active_subject_category") {
@@ -439,12 +427,12 @@ class AcademicMastersController extends Controller
             return $this->successResponse($active_subject_category);
         }
         if ($param == "all_sub_subject") {
-            $subject = DB::select("SELECT t1.id, t1.aca_sub_id, t2.id AS aca_sub_category_id,t1.status,t1.name AS sub_subeject_name,t1.code,t1.dzo_name,t3.dzo_name AS dzo_subject,t1.assessed_by_class_teacher,t1.is_special_educational_needs,t1.display_order, t3.name AS sub_name, t2.name AS sub_category_name
+            $subject = DB::select("SELECT t1.id, t1.aca_sub_id, t2.id AS aca_sub_category_id,t1.status,t1.name AS sub_subeject_name,t1.code,t1.dzo_name,t3.dzo_name AS dzo_subject,t1.assessed_by_class_teacher,t1.display_order, t3.name AS sub_name, t2.name AS sub_category_name
                   FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id JOIN aca_subject t3 ON t1.aca_sub_id= t3.id ORDER BY display_order");
             return $this->successResponse($subject);
         }
         if ($param == "all_active_subject_and_sub_subject") {
-            $Activesubject = DB::select('SELECT id,aca_sub_category_id,name FROM aca_subject  WHERE status = 1 ORDER BY display_order');
+            $Activesubject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,display_order FROM aca_subject  WHERE status = 1 ORDER BY display_order');
             return $this->successResponse($Activesubject);
         }
 
@@ -455,10 +443,11 @@ class AcademicMastersController extends Controller
             return $this->successResponse(DB::select('SELECT id,aca_rating_type_id, name,dzo_name, score FROM aca_rating WHERE status=1'));
         }
         if ($param == "all_assessment_area") {
-            $assessment_area = DB::select("SELECT t1.id,t1.display_order,CASE t1.aca_assmnt_type WHEN 0 THEN 'Continuous Assessment' WHEN 1 THEN 'Term Examination' ELSE 'Others (Personal Traits, SUPW, Non-Academic Subject)' END AS aca_assmnt_type_name,t1.aca_assmnt_type, t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id,
-                t1.aca_rating_type_id, t3.name AS rating_type_name, t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 
-             JOIN aca_subject t2 ON t1.aca_sub_id = t2.id 
-             LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id = t3.id ORDER BY t1.display_order");
+            $assessment_area = DB::select("SELECT t1.id,t1.display_order,t1.is_descriptive,
+                CASE t1.aca_assmnt_type WHEN 0 THEN 'Continuous Assessment' WHEN 1 THEN 'Term Examination' ELSE 'Others (Personal Traits, SUPW, Non-Academic Subject)' END AS aca_assmnt_type_name,
+                t1.aca_assmnt_type,t2.name AS sub_name,t2.dzo_name AS sub_dzo_name, t1.aca_sub_id,
+             t1.name AS assessment_area_name,t1.dzo_name AS area_dzo_name, t1.code,t1.status FROM aca_assessment_area t1 
+             JOIN aca_subject t2 ON t1.aca_sub_id = t2.id ORDER BY t1.display_order");
             return $this->successResponse($assessment_area);
         }
         if ($param == "all_assessment_frequency") {
@@ -594,17 +583,19 @@ class AcademicMastersController extends Controller
     }
     public function loadclassSubjectAssessment($term_id, $sub_id, $class_id, $stream_id = "")
     {
-        $query = 'SELECT (t2.id IS NOT NULL) AS assmt_area_selected,t1.id AS aca_assmt_area_id, t1.name AS assessment_area, t1.dzo_name, trim(t2.weightage)+0 AS weightage, t3.input_type, IFNULL(t2.display_order,t1.display_order) AS display_order
-        FROM aca_assessment_area t1 LEFT JOIN aca_subject tt ON (t1.aca_sub_id=tt.aca_sub_id or t1.aca_sub_id=tt.id)
-            LEFT JOIN aca_rating_type t3 ON t1.aca_rating_type_id=t3.id
-            LEFT JOIN aca_class_subject_assessment t2 ON t1.id=t2.aca_assmt_area_id AND t1.aca_sub_id = t2.aca_sub_id AND t2.aca_sub_id = ? AND t2.aca_assmt_term_id = ? AND t2.org_class_id =? ';
-        $params = [$sub_id, $term_id, $class_id];
+        $query = "SELECT (t3.id IS NOT NULL) AS assmt_area_selected,t2.id AS aca_assmt_area_id,t2.name AS assessment_area, t2.dzo_name, trim(t3.weightage)+0 AS weightage, IF(t2.is_descriptive=1,2,t4.input_type) AS input_type, IFNULL(t3.display_order,t2.display_order) AS display_order
+        FROM aca_class_subject t1 JOIN aca_assessment_area t2 ON t1.aca_sub_id=t2.aca_sub_id JOIN aca_rating_type t4 ON t1.aca_rating_type_id=t4.id
+            LEFT JOIN aca_class_subject_assessment t3 ON t2.id=t3.aca_assmt_area_id AND t1.aca_sub_id = t3.aca_sub_id AND t1.org_class_id = t3.org_class_id
+                AND (t1.org_stream_id = t3.org_stream_id OR (t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL)) AND t3.aca_assmt_term_id = ?
+            WHERE t1.aca_sub_id = ? AND t1.org_class_id = ? ";
+        $params =  [$term_id, $sub_id, $class_id];
         if ($stream_id) {
-            $query .= ' AND t2.org_stream_id = ?';
+            $query .= ' AND t1.org_stream_id = ?';
             array_push($params, $stream_id);
         }
+        // AND t2.org_class_id =?
         array_push($params, $sub_id);
-        return $this->successResponse(DB::select($query . ' WHERE IFNULL(tt.id,t1.aca_sub_id) = ? ORDER BY assmt_area_selected DESC,display_order', $params));
+        return $this->successResponse(DB::select($query . ' ORDER BY assmt_area_selected DESC,display_order', $params));
     }
     public function saveclassSubjectAssessment(Request $request)
     {

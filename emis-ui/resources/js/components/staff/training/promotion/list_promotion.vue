@@ -15,7 +15,7 @@
                             <th>Position Title</th>
                             <th>Position Level</th>
                             <th>Last Date of Promotion</th>
-                           
+
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -25,12 +25,12 @@
                             <td>{{ promotion.dzongkhag }}</td>
                             <td>{{ promotion.working_agency }}</td>
                             <td>{{ promotion.staff_name }}</td>
-                            <td>{{ promotion.PromotionTypeID }}</td>
+                            <td>{{ promotion.protype }}</td>
                             <td>{{ promotion.superstructure }}</td>
                             <td>{{ promotion.position_title_name }}</td>
                             <td>{{ promotion.positionlevel }}</td>
-                            <td>{{ promotion.EffectiveDate }}</td>
-                          
+                            <td>{{ reverseDate1(promotion.EffectiveDate) }}</td>
+
                             <td>
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(promotion)">Veiw</a>
                             </td>

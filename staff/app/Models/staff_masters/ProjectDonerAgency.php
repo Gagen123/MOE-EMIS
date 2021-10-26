@@ -13,6 +13,7 @@ class ProjectDonerAgency extends Model
         'id',
         'doner_agency_id',
         'name',
+        'description',
         'code',
         'description',
         'status',
@@ -21,4 +22,7 @@ class ProjectDonerAgency extends Model
         'updated_by',
         'updated_at'
     ];
+    public function donor(){
+        return $this->belongsTo(donor::class, 'doner_agency_id')->select('id','name');
+    }
 }

@@ -19,7 +19,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('level') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
@@ -77,14 +77,14 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label> <div class="card-header p-0 border-bottom-0">
-                <ul class="nav nav-tabs" id="tabhead">
-                    <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
-                        <a class="nav-link active" data-toggle="pill" role="tab">
-                            <label class="mb-0.5">Change for Proprietor</label>
-                        </a>
-                    </li>
-                </ul>
-            </div>Mobile No:</label>
+                                    <ul class="nav nav-tabs" id="tabhead">
+                                        <li class="nav-item organization-tab" @click="shownexttab('organization-tab')">
+                                            <a class="nav-link active" data-toggle="pill" role="tab">
+                                                <label class="mb-0.5">Change for Proprietor</label>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    </div>Mobile No:</label>
                                         <span class="text-blue text-bold">{{proprietor_details.mobileNo}}</span>
                                     </div>
                                 </div>
@@ -154,7 +154,7 @@
                                                     <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" @change="remove_error('attach'+(index+1))" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -337,8 +337,10 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                         })
 
                     }
@@ -371,6 +373,24 @@ export default {
                  this.getorgdetials($('#organizationId').val());
             }
 
+        },
+          validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         getLevel(uri = '/organization/getLevelInDropdown'){
             axios.get(uri)
@@ -466,21 +486,22 @@ export default {
 
 
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+             this.applyselect2field('organizationId');
+            // if(!$('#level').attr('class').includes('select2-hidden-accessible')){
+            //     $('#level').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+            //     $('#dzongkhag').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#gewog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#chiwog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+            //     $('#locationType').addClass('select2-hidden-accessible');
+            // }
         },
         getAttachmentType(type){
             this.form.attachments=[];

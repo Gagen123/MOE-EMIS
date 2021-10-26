@@ -72,14 +72,10 @@ export default {
         });
         this.loadDataList();
         this.dt =  $("#nominaiton-table").DataTable();
-
     },
     watch: {
-        data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#nominaiton-table").DataTable()
-            });
+        loadDataList() {
+            this.loadDataList('nominaiton-table');
         }
     },
 }

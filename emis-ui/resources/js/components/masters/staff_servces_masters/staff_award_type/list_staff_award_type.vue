@@ -22,7 +22,7 @@
                     <td>{{ item.description}}</td>
                     <td>{{ item.status==  1 ? "Active" : "Inactive" }}</td>
                     <td>{{ item.type}}</td>
-                    <td>{{ item.created_at }}</td>
+                    <td>{{ reverseDateTime(item.created_at) }}</td>
                     <td v-if="item.type=='MOE'">
                         <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
                     </td>

@@ -13,6 +13,7 @@ class StaffAttendance extends Model
         'id',
         'year',
         'month',
+        'total_work_day',
         'remarks',
         'org_id',
         'dzongkhag_id',

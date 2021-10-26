@@ -446,8 +446,8 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error on submit:"+err)
+                        .catch((error) => {
+                              this.form.errors.errors = error.response.data;
                         })
                     }
                 });
@@ -567,7 +567,6 @@ export default {
 
    async mounted() {
         this.orgList =await this.orgListUnderUserDzongkhag();
-        this.getOrgList();
         this.loadactivedzongkhagList();
         this.getClass();
         this.getStream();

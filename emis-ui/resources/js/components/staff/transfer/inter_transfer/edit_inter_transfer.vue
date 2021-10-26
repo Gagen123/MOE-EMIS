@@ -53,11 +53,11 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th >Preferences</th>
-                                            <th >Dzongkhag/Thromde</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%">Preferences</th>
+                                            <th style="width:50%">Dzongkhag/Thromde</th>
                                         </tr>
-                                    </thead>approvedDetails
+                                    </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
@@ -101,13 +101,65 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <label class="mb-0.5">Subject specialization</label>
+                                <table id="participant-table" class="table w-100 table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%">Specialization</th>
+                                            <th style="width:50%">Select Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td class="mb-0.5">Specialization Subject</td>
+                                            <td>
+                                                <select v-model="form.spSubject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spSubject') }" class="form-control select2" name="spSubject" id="spSubject">
+                                                    <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="spSubject"></has-error>
+                                                <span class="text-danger" id="spSubject_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Optional Teaching Subject 1</td>
+                                            <td>
+                                                <select v-model="form.optional1sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional1sub') }" class="form-control select2" name="optional1sub" id="optional1sub">
+                                                  <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional1sub"></has-error>
+                                                <span class="text-danger" id="optional1sub_err"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Optional Teaching Subject 2</td>
+                                            <td>
+                                                <select v-model="form.optional2sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional2sub') }" class="form-control select2" name="optional2sub" id="optional2sub">
+                                                   <option value=""> -- Select-- </option>
+                                                    <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                                </select>
+                                                <has-error :form="form" field="optional2sub"></has-error>
+                                               <span class="text-danger" id="optional2sub_err"></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <label class="mb-0.5">Current Organization Details</label>
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th style="width:10%">SlNo</th>
-                                            <th style="width:20%">Dzongkhag/Thromde</th>
-                                            <th style="width:30%">School</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30">Preferences</th>
+                                            <th style="width:50">Dzongkhag/Thromde</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -229,6 +281,7 @@ export default {
             t_warning_message:'',
             staffList:'',
             reasonList:'',
+            subjectList:[],
             undertakingList:[],
             dzongkhagList:[],
             dzoArray:{},
@@ -261,6 +314,9 @@ export default {
                 preference_dzongkhag1:'',
                 preference_dzongkhag2:'',
                 preference_dzongkhag3:'',
+                spSubject:'',
+                optional1sub:'',
+                optional2sub:'',
                 attachments:[],
                 ref_docs:[],
             })
@@ -346,7 +402,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -385,7 +441,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -397,7 +453,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/inter'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data.id;
@@ -452,6 +508,9 @@ export default {
                             formData.append('preference_dzongkhag1', this.form.preference_dzongkhag1);
                             formData.append('preference_dzongkhag2', this.form.preference_dzongkhag2);
                             formData.append('preference_dzongkhag3', this.form.preference_dzongkhag3);
+                            formData.append('spSubject', this.form.spSubject);
+                            formData.append('optional1sub', this.form.optional1sub);
+                            formData.append('optional2sub', this.form.optional2sub);
                             for(let i=0;i<this.form.ref_docs.length;i++){
                                 formData.append('attachments[]', this.form.ref_docs[i].attachment);
                                 formData.append('attachmentname[]', this.form.ref_docs[i].file_name);
@@ -530,16 +589,22 @@ export default {
                 let data = response.data.data;
                 for(let i=0;i<data.preferences.length;i++){
                     if(i==0){
+                        this.form.spSubject              =   data.preferences[i].subject_id;
                         this.form.preference_dzongkhag1     =   data.preferences[i].dzongkhag_id;
                         $('#preference_dzongkhag1').val(data.preferences[i].dzongkhag_id).trigger('change');
+                        $('#spSubject').val(data.preferences[i].subject_id).trigger('change');
                     }
                     if(i==1){
+                        this.form.optional1sub           =   data.preferences[i].subject_id;
                         this.form.preference_dzongkhag2     =   data.preferences[i].dzongkhag_id;
                         $('#preference_dzongkhag2').val(data.preferences[i].dzongkhag_id).trigger('change');
+                         $('#optional1sub').val(data.preferences[i].subject_id).trigger('change');
                     }
                     if(i==2){
+                        this.form.optional2sub           =   data.preferences[i].subject_id;
                         this.form.preference_dzongkhag3     =   data.preferences[i].dzongkhag_id;
                         $('#preference_dzongkhag3').val(data.preferences[i].dzongkhag_id).trigger('change');
+                        $('#optional2sub').val(data.preferences[i].subject_id).trigger('change');
                     }
                 }
                 this.draft_attachments=data.documents;
@@ -569,6 +634,15 @@ export default {
             if(id=="preference_dzongkhag3"){
                 this.form.preference_dzongkhag3=$('#preference_dzongkhag3').val();
                 this.checkforselectedval(3);
+            }
+              if(id=="spSubject"){
+                this.form.spSubject=$('#spSubject').val();
+            }
+            if(id=="optional1sub"){
+                this.form.optional1sub=$('#optional1sub').val();
+            }
+            if(id=="optional2sub"){
+                this.form.optional2sub=$('#optional2sub').val();
             }
         },
         checkforselectedval(cout){
@@ -630,6 +704,16 @@ export default {
                 }
             });
         },
+        loadAcademicMasters(uri="masters/loadAcademicMasters/all_active_subject"){
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data.data;
+                this.subjectList = data;
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
         getDraftDetails(){
             axios.get('staff/transfer/getDraftDetails')
             .then(response => {
@@ -667,6 +751,7 @@ export default {
         this.loadstaff();
         this.loadreasons();
         this.loadactivedzongkhagList();
+        this.loadAcademicMasters();
         this.loadundertakingList();
         this.LoadTransferType();
         this.loadOrgList();

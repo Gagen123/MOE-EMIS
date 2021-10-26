@@ -211,7 +211,7 @@ class AdministrationController extends Controller
             'role_action_mapp'          =>  $request['role_action_mapp'],
             'user_id'                   =>  $this->userId()
         ];
-        $response_data = $this->apiService->createData('emis/masters/saveTransferConfigMasters', $data);
+        $response_data = $this->apiService->createData('emis/staff/staffMasterController/saveTransferConfigMasters', $data);
         return $response_data;
     }
 
@@ -228,7 +228,7 @@ class AdministrationController extends Controller
     }
     public function loadAllTransferConfigMasters()
     {
-        $response_data = $this->apiService->listData('emis/masters/loadAllTransferConfigMasters');
+        $response_data = $this->apiService->listData('emis/staff/staffMasterController/loadAllTransferConfigMasters');
         return $response_data;
     }
 
@@ -239,14 +239,14 @@ class AdministrationController extends Controller
     }
     public function loadTransferConfigDetails($id = "")
     {
-        $response_data = $this->apiService->listData('emis/masters/loadTransferConfigDetails/' . $id);
+        $response_data = $this->apiService->listData('emis/staff/staffMasterController/loadTransferConfigDetails/' . $id);
         return $response_data;
     }
     //commented by tshewang to fix master data 
     //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
-    public function loadStaffMasters($param = "")
+    public function loadStaffTransferMasters($param = "")
     {
-        $global_masters = $this->apiService->listData('emis/masters/loadStaffMasters/' . $param);
+        $global_masters = $this->apiService->listData('emis/staff/staffMasterController/loadStaffTransferMasters/' . $param);
         return $global_masters;
     }
     public function loadStaffDropdownMasters($model = "", $parent_id = "")
@@ -257,15 +257,17 @@ class AdministrationController extends Controller
 
     public function saveAcademicMasters(Request $request)
     {
-        if ($request['record_type'] == 'main_subject') {
+        if ($request['record_type'] == 'teacher_subject') {
             $rules = [
                 'name'    =>  'required',
                 'code' => 'required',
+                'is_special_educational_needs' => 'required',
                 'status'    =>  'required',
             ];
             $customMessages = [
                 'name.required' => 'This field is required',
                 'code.required' => 'This field is required',
+                'is_special_educational_needs.required' => 'This field is required',
                 'status.required' => 'This field is required',
             ];
         }

@@ -16,7 +16,7 @@
                     <td>{{ item.status_name }}</td>
                     <td>{{ item.remarks }}</td>
                     <td>{{ item.user_name}} ({{ item.role_name}})</td>
-                    <td>{{ item.action_date }}</td>
+                    <td>{{ reverseDateTime(item.action_date)}}</td>
                 </tr>
             </tbody>
         </table>

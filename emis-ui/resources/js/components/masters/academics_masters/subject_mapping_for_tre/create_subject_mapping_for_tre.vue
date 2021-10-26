@@ -69,7 +69,7 @@ export default {
             }
         },
         getTeacherSubjects(){
-            axios.get('masters/loadAcademicMasters/all_active_main_subject')
+            axios.get('masters/loadAcademicMasters/all_active_teacher_subject')
             .then(response =>{
                 let data = response;
                 this.main_subject = data.data.data;

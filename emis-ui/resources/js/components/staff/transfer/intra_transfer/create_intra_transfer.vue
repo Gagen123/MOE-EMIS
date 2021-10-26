@@ -77,15 +77,16 @@
                                 <label class="mb-0.5">Transfer Reason:<i class="text-danger">*</i></label>
                                 <br/>
                                 <span v-for="(item, key, index) in  reasonList" :key="index">
-                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" :value="item.id"><label class="pr-4"> &nbsp;{{ item.name }}</label>
+                                    <input type="radio" v-model="form.reason_id" :class="{ 'is-invalid': form.errors.has('reason_id') }" @change="remove_error('reason_id')"   :value="item.id"><label class="pr-4" id="reason_id"> &nbsp;{{ item.name }} </label>
                                 </span>
                                 <has-error :form="form" field="reason_id"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <label class="mb-0.5">Brief description for seeking transfer</label>
-                                <textarea class="form-control" v-model="form.description" id="description"></textarea>
+                                <label class="mb-0.5">Brief description for seeking transfer<i class="text-danger">*</i></label>
+                                <textarea class="form-control" v-model="form.description" :class="{ 'is-invalid': form.errors.has('description')}" @change="remove_error('description')"  id="description"></textarea>
+                                <has-error :form="form" field="description"></has-error>
                             </div>
                         </div>
                         <hr>
@@ -103,9 +104,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Preferences</th>
-                                            <th>Select School</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%">Preferences</th>
+                                            <th style="width:50%">Select School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -113,7 +114,7 @@
                                             <td>1</td>
                                             <td>Preferences 1</td>
                                             <td>
-                                                <select v-model="form.preference_school1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school1') }" class="form-control select2" name="preference_school1" id="preference_school1">
+                                                <select v-model="form.preference_school1" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school1') }" class="form-control select2" name="preference_school1" id="preference_school1" @change="remove_error('preference_school1')">
                                                     <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -125,7 +126,7 @@
                                             <td>2</td>
                                             <td>Preferences 2</td>
                                             <td>
-                                                <select v-model="form.preference_school2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school2') }" class="form-control select2" name="preference_school2" id="preference_school2">
+                                                <select v-model="form.preference_school2" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school2') }" class="form-control select2" name="preference_school2" id="preference_school2" @change="remove_error('preference_school2')">
                                                     <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -137,7 +138,7 @@
                                             <td>3</td>
                                             <td>Preferences 3</td>
                                             <td>
-                                                <select v-model="form.preference_school3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school3') }" class="form-control select2" name="preference_school3" id="preference_school3">
+                                                <select v-model="form.preference_school3" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('preference_school3') }" class="form-control select2" name="preference_school3" id="preference_school3" @change="remove_error('preference_school3')">
                                                     <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in SchoolList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -156,9 +157,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Specialization</th>
-                                            <th>Select Subject</th>
+                                            <th style="width:20%">SlNo</th>
+                                            <th style="width:30%"> Specialization</th>
+                                            <th style="width:50%">Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -166,7 +167,7 @@
                                             <td>1</td>
                                             <td class="mb-0.5">Specialization Subject</td>
                                             <td>
-                                                <select v-model="form.spSubject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spSubject') }" class="form-control select2" name="spSubject" id="spSubject">
+                                                <select v-model="form.spSubject" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('spSubject') }" class="form-control select2" name="spSubject" id="spSubject" @change="remove_error('spSubject')">
                                                     <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -178,7 +179,7 @@
                                             <td>2</td>
                                             <td>Optional Teaching Subject 1</td>
                                             <td>
-                                                <select v-model="form.optional1sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional1sub') }" class="form-control select2" name="optional1sub" id="optional1sub">
+                                                <select v-model="form.optional1sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional1sub') }" class="form-control select2" name="optional1sub" id="optional1sub" @change="remove_error('optional1sub')">
                                                   <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -190,7 +191,7 @@
                                             <td>3</td>
                                             <td>Optional Teaching Subject 2</td>
                                             <td>
-                                                <select v-model="form.optional2sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional2sub') }" class="form-control select2" name="optional2sub" id="optional2sub">
+                                                <select v-model="form.optional2sub" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('optional2sub') }" class="form-control select2" name="optional2sub" id="optional2sub" @change="remove_error('optional2sub')">
                                                    <option value=""> -- Select-- </option>
                                                     <option v-for="(item, index) in subjectList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>
@@ -219,7 +220,7 @@
                                                 <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                             </td>
                                             <td>
-                                                <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" >
                                                 <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                             </td>
                                         </tr>
@@ -353,7 +354,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -373,7 +374,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -385,7 +386,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadStaffMasters/intra'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/intra'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data[0].id;
@@ -407,13 +408,25 @@ export default {
                 console.log("Error in retrieving ."+error);
             });
         },
-        validated_final_form(){
+        validated_final_form(){ 
             let returntue=true;
-            if($('#preference_school1').val()==null){
+            if($('#preference_school1').val()==null || $('#reason_id').val()==null ){
                 $('#preference_school1_err').html('Please select this dzongkhag');
+                $('#reason_id_err').html('Please select this dzongkhag');
                 $('#preference_school1').focus();
+                $('#reason_id').focus();
                 $('#preference_school1').addClass('is-invalid');
+                $('#reason_id').addClass('is-invalid');
+
                 returntue=false;
+            }
+            for(let i=0;i<this.reasonList.length;i++){
+                if($('#reason_id'+i).prop('checked')==false){
+                    $('#reason_id_err').html('You need to select the medical reason');
+                    $('#reason_id').focus();
+                    $('#reason_id').addClass('is-invalid');
+                    returntue=false;
+                }
             }
             for(let i=0;i<this.undertakingList.length;i++){
                 if($('#undertaking'+i).prop('checked')==false){
@@ -443,17 +456,21 @@ export default {
                         .then((response) =>{
                             if(response!="" && response!="No Screen"){
                                 this.form.id=response.data.data.id;
+                                this.change_tab(nextclass)
                                 this.$router.push({name:'transfer_acknowledgement',params: {data:message}});
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Application for Transfer has been submitted for further action'
+                                    
                                 });
                             }
                         })
                         .catch((error) => {
-                            console.log("Errors:"+error)
-                        });
-                        this.change_tab(nextclass);
+                            error.response.data.description=='You need to provide the description' && error.response.data.reason_id=='Please select transfer reason'
+                            this.form.errors.errors = error.response.data;
+                            
+                            })
+                            
                     }
                     else{
                     Swal.fire({
@@ -512,8 +529,9 @@ export default {
                                 }
                             })
                             .catch((error) => {
-                                console.log("Errors:"+error)
-                            });
+                                this.form.errors.errors = error.response.data;
+                                this.validateFileform();
+                            })
                         }
                     });
                 }
@@ -666,6 +684,24 @@ export default {
                 console.log("Error:"+error)
             });
 
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
          getTransfer_details(id){
             axios.get('staff/transfer/checkEligibilityForTransfer/'+id)

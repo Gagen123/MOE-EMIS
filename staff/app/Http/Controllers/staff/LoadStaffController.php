@@ -80,7 +80,7 @@ class LoadStaffController extends Controller{
             }
         }
         if($type=="allPrivateStaff"){
-            $personal=PersonalDetails::where('emp_type_id','Private')->where('status','Created')->get();
+            $personal=PersonalDetails::where('emp_type_id','Private')->get();
             if($personal!=null && $personal!="" && sizeof($personal)>0){
                 $personal=$this->getpositiontitle($personal);
             }
@@ -139,7 +139,7 @@ class LoadStaffController extends Controller{
                 //mapping of the position tile, superstructure and childgroup
                 $positions=ChildGroupPosition::where('id', $staff_det->position_title_id)->first();
                 if($positions!=null && $positions!=""){
-                    $posi=PositionTitle::where('id',$staff_det->position_title_id)->first();
+                    $posi=PositionTitle::where('id',$positions->position_title_id)->first();
                     if($posi!=null && $posi!=""){
                         $staff_det->position_title_name=$posi->name;
                         //get position level from position title
@@ -180,8 +180,10 @@ class LoadStaffController extends Controller{
 
     }
 
-    private function getpositiontitle($staff_det){
+    static function getpositiontitle($staff_det){
         foreach($staff_det as $stf){
+            $stf->position_title_name="";
+            $stf->positionlevel="";
             //mapping of the position tile, superstructure and childgroup
             $positions=ChildGroupPosition::where('id', $stf['position_title_id'])->first();
             if($positions!=null && $positions!=""){

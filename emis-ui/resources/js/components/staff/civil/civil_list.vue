@@ -59,10 +59,11 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>Emp ID</th>
                             <th>Name</th>
+                            <th>Emp Id</th>
                             <th>Sex</th>
                             <th>Position Title</th>
+                            <th>Position Level</th>
                             <th>Working Agency</th>
                             <th>Email</th>
                             <th>Contact No.</th>
@@ -72,11 +73,11 @@
                     <tbody>
                         <tr v-for="(item, index) in substaffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.emp_id}}</td>
                             <td>{{ item.name}}</td>
+                            <td>{{ item.emp_id}}</td>
                             <td>{{ genderArray[item.sex_id]}}</td>
-                            <!-- <td>{{ item.position_title.name}}</td> -->
-                            <td>{{ positiontitleList[item.position_title_id]}}</td>
+                            <td>{{ item.position_title_name}}</td>
+                            <td>{{ item.positionlevel }}</td>
                             <td>{{ item.working_agency}}</td>
                             <td>{{ item.email}}</td>
                             <td>{{ item.contact_no}}</td>
@@ -148,7 +149,6 @@ export default {
                 console.log('Error: '+error);
             });
         },
-
         getDepartmentList(type){
             let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
             if(this.accesslevel=="Dzongkhag"){

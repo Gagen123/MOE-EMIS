@@ -17,7 +17,7 @@
                         </thead>
                         <tbody id="tbody">
                             <tr  v-for="(item, index) in remedialClasses" :key="index">
-                                <td> {{ item.class_stream_section}}</td>
+                                <td> {{ item.class}} </td>
                                 <td> {{ item.subject}}</td>
                                 <td>{{item.techer_name}} [{{item.emp_id}}]</td>
                                 <td> {{ item.from_date}}</td>
@@ -53,31 +53,32 @@ export default {
                 let classSections = await axios.get('loadCommons/loadClassStreamSection/userworkingagency/NA').then(response => response.data)
                 let remedialClasses = await axios.get('academics/getRemedialClass').then(response => response.data.data)
                 let teachers = await axios.get('loadCommons/loadFewDetailsStaffList/userworkingagency/NA').then(response => response.data.data);
-               
                 remedialClasses.forEach((item,index) => {
                     classSections.forEach(item1 => {
                         teachers.forEach(item3 => {
-                            if((item.org_class_id == item1.org_class_id && 
-                                (item.org_stream_id == item1.org_stream_id 
-                                || (item.org_stream_id == null && item1.org_stream_id == null) 
-                                || (item.org_stream_id == "" && item1.org_stream_id == "")) 
-                                && (item.org_section_id == item1.org_section_id 
-                                || (item.org_section_id == null && item1.org_section_id == null) 
-                                || (item.org_section_id == "" && item1.org_section_id == "")) && item.stf_staff_id == item3.id)){
-                                    remedialClasses[index]['OrgClassStreamId'] =  item1.OrgClassStreamId 
-                                        if(item1.stream && item1.section){
-                                            remedialClasses[index]['class_stream_section'] = item1.class+' '+item1.stream+' '+item1.section
-                                        }else if(item1.stream){
-                                            remedialClasses[index]['class_stream_section'] = item1.class+' '+item1.stream
-                                        }else if(item1.section){
-                                            remedialClasses[index]['class_stream_section'] = item1.class+' '+item1.section
-                                        }
-                                        else{
-                                            remedialClasses[index]['class_stream_section'] = item.class
-                                        }
-                                    remedialClasses[index]['techer_name'] = item3.name
-                                    remedialClasses[index]['emp_id'] = item3.emp_id
-
+                            const stream_id = item.org_stream_id == null ? "" : item.org_stream_id;
+                            const section_id = item.org_section_id == null ? "" : item.org_section_id;
+                            const stream_id1 = item1.org_stream_id == null ? "" : item1.org_stream_id;
+                            const section_id1 = item1.org_section_id == null ? "" : item1.org_section_id;
+                            if(item.org_class_id == item1.org_class_id
+                                && (stream_id == stream_id1 || (stream_id == "" && stream_id1 == "")) 
+                                && (section_id == section_id1 || (section_id == "" && section_id1 == ""))
+                                && item.stf_staff_id == item3.id)
+                            {
+                                remedialClasses[index]['OrgClassStreamId'] =  item1.OrgClassStreamId 
+                                remedialClasses[index]['org_stream_id'] = stream_id
+                                remedialClasses[index]['org_section_id'] = section_id
+                                if(item1.stream){
+                                    remedialClasses[index]['class'] = item1.class +' '+ item1.stream;
+                                }
+                                if(item1.section){
+                                    remedialClasses[index]['class'] =item1.class +' '+ item1.section;
+                                }
+                                if(item1.stream && item1.section){
+                                    remedialClasses[index]['class'] =item1.class +' '+ item1.section +' '+ item1.section;
+                                }
+                                remedialClasses[index]['techer_name'] = item3.name
+                                remedialClasses[index]['emp_id'] = item3.emp_id
                             }
                         })
                     })

@@ -70,6 +70,11 @@ class StaffController extends Controller{
         if($request->issen=="Yes"){
             $sen=1;
         }
+        $comsub=$request->comp_sub;
+        if($request->emp_type!="Private"){
+            $comsub=$request->comp_sub[0];
+        }
+
         // dd($request->initial_appointment_date,$request->dob);
         $data =[
             'emp_type_id'           =>  $request->emp_type,
@@ -96,7 +101,7 @@ class StaffController extends Controller{
             'position_title_id'     =>  $request->position_title,
             'position_sub_level_id' =>  $request->position_sub_level,
             'working_agency_id'     =>  $request->working_agency_id,
-            'comp_sub_id'           =>  $request->comp_sub[0],
+            'comp_sub_id'           =>  $comsub,
             'elective_sub_id1'      =>  $request->elective_sub1,
             'elective_sub_id2'      =>  $request->elective_sub2,
             'initial_appointment_date' =>  Carbon::parse($request->initial_appointment_date)->format('Y-m-d'),
@@ -166,7 +171,7 @@ class StaffController extends Controller{
             'description'      =>  'required',
             'doner_agency'     =>  'required',
             'field'            =>  'required',
-            'type'             =>  'required',
+            // 'type'             =>  'required',
             'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
@@ -180,7 +185,7 @@ class StaffController extends Controller{
             'description.required'        => 'This field is required',
             'doner_agency.required'       => 'This field is required',
             'field.required'              => 'This field is required',
-            'type.required'               => 'This field is required',
+            // 'type.required'               => 'This field is required',
             'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
@@ -195,7 +200,7 @@ class StaffController extends Controller{
             'personal_id'           =>  $request->personal_id,
             'category'              =>  $request->description,
             'doner_id'              =>  $request->doner_agency,
-            'type'                  =>  $request->type,
+            // 'type'                  =>  $request->type,
             'project_doner_id'      =>  $request->project_doner_agency,
             'field_id'              =>  $request->field,
             'degree_id'             =>  $request->degree,

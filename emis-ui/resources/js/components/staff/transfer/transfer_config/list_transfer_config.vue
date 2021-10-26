@@ -32,7 +32,7 @@ export default {
         }
     },
     methods:{
-        TransferConfigurationList(uri = 'masters/loadAllTransferConfigMasters/'){
+        TransferConfigurationList(uri = 'masters/loadAllTransferConfigMasters'){
             axios.get(uri)
             .then(response => {
                 let data = response.data;

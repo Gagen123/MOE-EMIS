@@ -53,9 +53,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Preferences</th>
-                                            <th>Select School</th>
+                                        <th style="width:20%">SlNo</th>
+                                        <th style="width:30%">Preferences</th>
+                                        <th style="width:50%">Select School</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -106,9 +106,9 @@
                                 <table id="participant-table" class="table w-100 table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>SlNo</th>
-                                            <th>Specialization</th>
-                                            <th>Subjects</th>
+                                        <th style="width:20%">SlNo</th>
+                                        <th style="width:30%"> Specialization</th>
+                                        <th style="width:50%">Select Subject</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -407,7 +407,7 @@ export default {
                 console.log(error);
             });
         },
-        loadreasons(uri = 'masters/loadStaffMasters/active_transfer'){
+        loadreasons(uri = 'masters/loadStaffTransferMasters/active_transfer'){
             axios.get(uri)
             .then(response => {
                 let data = response.data.data;
@@ -446,7 +446,7 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadundertakingList(uri = 'masters/loadStaffMasters/active_transfer_undertakingr'){
+        loadundertakingList(uri = 'masters/loadStaffTransferMasters/active_transfer_undertakingr'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -458,7 +458,7 @@ export default {
                 }
             });
         },
-        LoadTransferType(uri = 'masters/loadGlobalMasters/inter'){
+        LoadTransferType(uri = 'masters/loadStaffTransferMasters/inter'){
             axios.get(uri)
             .then(response =>{
                 this.form.type_id = response.data.data.id;

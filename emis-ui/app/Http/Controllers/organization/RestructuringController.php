@@ -76,7 +76,7 @@ class RestructuringController extends Controller
                     break;
                 }
             case "upgradation" : {
-                $validation = $this->validateChangeInLevel($request);
+                $validation = $this->validateUpgrade($request);
                 $establishment_data = $this->setChangeInLevel($request);
                 break;
             }
@@ -101,12 +101,12 @@ class RestructuringController extends Controller
                 break;
             }
             case "expension_change" : {
-                $validation = $this->validateGeneralChange($request);
+                $validation = $this->validateExpansion($request);
                 $establishment_data = $this->setExtension($request);
                 break;
             }
             case "fee_structure_change" : {
-                $validation = $this->validateGeneralChange($request);
+                $validation = $this->validateFeeStructure($request);
                 $establishment_data = $this->setFeeStructure($request);
                 break;
             }
@@ -116,12 +116,12 @@ class RestructuringController extends Controller
                 break;
             }
             case "stream_change" : {
-                $validation = $this->validateGeneralChange($request);
+                $validation = $this->validateStreamlChange($request);
                 $establishment_data = $this->setchangeofstream($request);
                 break;
             }
             case "all_details" : {
-                    $validation = $this->validateAllChangesFields($request);
+                    $validatioorganizationIdn = $this->validateAllChangesFields($request);
                     $establishment_data = $this->setAllChangesFields($request);
                     break;
                 }
@@ -137,7 +137,6 @@ class RestructuringController extends Controller
         $establishment_data=$establishment_data+[
             'attachment_details'     =>   $attachment_details,
         ];
-        // dd($establishment_data);
         $response_data= $this->apiService->createData('emis/organization/changeDetails/saveBasicChangeDetails', $establishment_data);
         if($request->action_type!="edit"){
             
@@ -411,12 +410,36 @@ class RestructuringController extends Controller
     }
 
     public function saveMerger(Request $request){
+        if($request->newOrgType =="newOrg"){
+            $rules = [  
+                'name1'         =>  'required',
+                'level1'        =>  'required',
+                'location1'     =>  'required',
+                'dzongkhag1'    =>  'required',
+                'gewog1'        =>  'required',
+                'chiwog1'       =>  'required',
+                'class'         =>  'required',
+                
+                
+            ];
+            $customMessages = [
+                'name1.required'        =>  'Name is required',
+                'level1.required'       =>  'Select level',
+                'location1.required'    =>  'Select location',
+                'dzongkhag1.required'   =>  'Select the dzongkhag',
+                'gewog1.required'       =>  'Select the gewog',
+                'chiwog1.required'      =>  'Select the chiwog',
+                'class.required'        =>  'Select the class',
+            ];
+
+        }else{
         $rules = [
-            'newOrgType'      =>  'required',
+            'proposedName'      =>  'required',
         ];
         $customMessages = [
-            'newOrgType.required' =>  'Name is required',
+            'proposedName.required' =>  'proposedName is required',
         ];
+        }
         $this->validate($request, $rules, $customMessages);
         $merger =[
             'orgId1'                   =>       $request['orgId1'],
@@ -827,6 +850,7 @@ class RestructuringController extends Controller
 
     public function saveBifurcation(Request $request){
         $rules = [
+            'parent_id'          =>  'required',
             'name1'              =>  'required',
             'level1'             =>  'required',
             'category1'          =>  'required',
@@ -845,6 +869,7 @@ class RestructuringController extends Controller
             'chiwog1.required'       => 'Chiwog is required',
             'location1.required'     => 'Location Type is required',
             'senSchool1.required'    => 'SEN School is required',
+            'parent_id.required'     => 'Select the organization',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -1076,6 +1101,7 @@ class RestructuringController extends Controller
 
     public function saveReopening(Request $request){
         $rules = [
+            'parent_id'          =>  'required',
             'name1'              =>  'required',
             'level1'             =>  'required',
             'category1'          =>  'required',
@@ -1083,9 +1109,12 @@ class RestructuringController extends Controller
             'gewog1'             =>  'required',
             'chiwog1'            =>  'required',
             'location1'          =>  'required',
+            'location1'          =>  'required',
+            'class'              =>  'required'
             // 'senSchool1'         =>  'required',
         ];
         $customMessages = [
+            'parent_id.required'     => 'Select the organization is required',
             'name1.required'         => 'Name is required',
             'level1.required'        => 'Level is required',
             'category1.required'     => 'Category is required',
@@ -1093,6 +1122,7 @@ class RestructuringController extends Controller
             'gewog1.required'        => 'Gewog is required',
             'chiwog1.required'       => 'Chiwog is required',
             'location1.required'     => 'Location Type is required',
+            'class.required'         => 'class is required',
             // 'senSchool1.required'    => 'SEN School is required',
         ];
         $this->validate($request, $rules, $customMessages);
@@ -1321,30 +1351,66 @@ class RestructuringController extends Controller
         $rules = [
             'proposedName'                =>  'required',
             'initiatedBy'                 =>  'required',
-            'organizationId'              =>  'required'
-        ];
+            'organizationId'              =>  'required',
+            ];
         $customMessages = [
             'proposedName.required'         => 'Proposed Name is required',
             'initiatedBy.required'          => 'Initiated By is required',
-            'organizationId.required'       => 'Organization is required'
-        ];
+            'organizationId.required'       => 'Select Organization is required'
+            ];
         $this->validate($request, $rules, $customMessages);
 
         $validation = array();
         $validation['rules'] = $rules;
         $validation['messages'] = $customMessages;
-
         return ($validation);
     }
 
     private function validateChangeInLevel($request){
         $rules = [
-            // 'level'                       =>  'required',
+            'level'                       =>  'required',
             'organizationId'              =>  'required'
         ];
         $customMessages = [
-            // 'level.required'                => 'New Level is required',
+            'level.required'                => 'New Level is required',
             'organizationId.required'       => 'Organization is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+        return ($validation);
+    }
+    private function validateUpgrade($request){
+        $rules = [
+            'level'                       =>  'required',
+            'organizationId'              =>  'required',
+            'class'                      =>  'required'
+        ];
+        $customMessages = [
+            'level.required'                => 'New Level is required',
+            'organizationId.required'       => 'Organization is required',
+            'class.required'                => 'class is required'
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+        return ($validation);
+    }
+    
+
+    //this is used to validate both SEN and Feeding
+
+    private function validateGeneralChange($request){
+        $rules = [
+            'organizationId'              =>  'required',
+            
+        ];
+        $customMessages = [
+            'organizationId.required'       => 'Organization is required',
         ];
         $this->validate($request, $rules, $customMessages);
 
@@ -1355,14 +1421,61 @@ class RestructuringController extends Controller
         return ($validation);
     }
 
-    //this is used to validate both SEN and Feeding
-
-    private function validateGeneralChange($request){
+    private function validateFeeStructure($request){
         $rules = [
-            'organizationId'              =>  'required'
+            'organizationId'              =>  'required',
+            'fees'                        =>  'required',
+            
         ];
         $customMessages = [
-            'organizationId.required'       => 'Organization is required'
+            'organizationId.required'       => 'Organization is required',
+            'fees.required'                 => 'Propose New Fee is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+    
+    private function validateStreamlChange($request){
+        $rules = [
+            'organizationId'              =>  'required',
+            'streams'                     =>  'required',
+            'changetype'                  =>  'required',
+
+        ];
+        $customMessages = [
+            'organizationId.required'       => 'Organization is required',
+            'streams.required'              => 'streams is required',
+            'changetype.required'           => 'Select changetype',
+        ];
+        $this->validate($request, $rules, $customMessages);
+
+        $validation = array();
+        $validation['rules'] = $rules;
+        $validation['messages'] = $customMessages;
+
+        return ($validation);
+    }
+    
+    private function validateExpansion($request){
+        $rules = [
+            'organizationId'              =>  'required',
+            'category'                    =>  'required',
+            'subCategory'                 =>  'required',
+            'constructionType'            =>  'required',
+            'structureNo'                 =>  'required'
+            
+        ];
+        $customMessages = [
+            'organizationId.required'       => 'Organization Name is required',
+            'category.required'             => 'select category is required',
+            'subCategory.required'          => 'select subCategory is required',
+            'structureNo.required'          => 'structureNo is required',
+            'constructionType.required'     => 'constructionType is required',
         ];
         $this->validate($request, $rules, $customMessages);
 

@@ -36,13 +36,13 @@
             <div class="form-group row">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>From Date:<span class="text-danger">*</span></label> 
-                    <input v-model="form.from_date" type="date" name="from_date" id="from_date" class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
+                    <input v-model="form.from_date" type="text" id="from_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('from_date') }"  @change="remove_err('from_date')" />
                     <has-error :form="form" field="from_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>To Date:<span class="text-danger">*</span></label> 
-                    <input v-model="form.to_date" type="date" name="to_date" id="to_date" class="form-control form-control-sm" :class="{ 'is-invalid': form.errors.has('to_date') }" @change="remove_err('to_date')" />
-                    <has-error :form="form" field="from_date"></has-error>
+                    <input v-model="form.to_date" type="text" name="to_date" id="to_date" class="form-control form-control-sm popupDatepicker" :class="{ 'is-invalid': form.errors.has('to_date') }" @change="remove_err('to_date')" />
+                    <has-error :form="form" field="to_date"></has-error>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Total No. of Hours:<span class="text-danger">*</span></label> 
@@ -92,7 +92,6 @@
     </div>
 </template>
 <script>
-import student_scouts_membersVue from '../../students/StudentExtraCurricular/Scouts/student_scouts_members.vue';
     export default {
         data(){
             return {
@@ -235,18 +234,12 @@ import student_scouts_membersVue from '../../students/StudentExtraCurricular/Sco
                    })
                })
                this.studentList = students
+               console.log(this.studentList)
 
             },
-            getRemedialClassDetail(){
-                 axios.get('academics/getRemedialClassDetail/'+this.form.id)
-                .then(response => {
-                    console.log(response.data.data);
-                })
-                .catch(function (error){
-                    console.log('Error..... '+error)
-                });
-            },
             save(){
+                this.form.from_date = this.formatYYYYMMDD($('#from_date').val());
+                this.form.to_date = this.formatYYYYMMDD($('#to_date').val());
                 axios.post('/academics/saveRemedialClass', {org_class_id:this.class_stream_section_id[1],org_stream_id:this.class_stream_section_id[2],org_section_id:this.class_stream_section_id[3],class_stream_section:this.class_stream_section_id[4],data:this.form})
                  .then(() => {
                     Toast.fire({
@@ -270,11 +263,11 @@ import student_scouts_membersVue from '../../students/StudentExtraCurricular/Sco
             this.class_stream_section_id[1] = this.$route.params.data.org_class_id;
             this.class_stream_section_id[2] = this.$route.params.data.org_stream_id;
             this.class_stream_section_id[3] = this.$route.params.data.org_section_id;
-            this.class_stream_section_id[4] = this.$route.params.data.class_stream_section
+            this.class_stream_section_id[4] = this.$route.params.data.class
             this.form.aca_sub_id = this.$route.params.data.aca_sub_id
             this.form.stf_staff_id = this.$route.params.data.stf_staff_id
-            this.form.from_date = this.$route.params.data.from_date
-            this.form.to_date = this.$route.params.data.to_date
+            this.form.from_date = this.formatDateToddmmyyyy(this.$route.params.data.from_date)
+            this.form.to_date = this.formatDateToddmmyyyy(this.$route.params.data.to_date)
             this.form.time_description = this.$route.params.data.time
             this.form.total_hrs = this.$route.params.data.total_no_of_hours
             this.form.id = this.$route.params.data.id
@@ -293,15 +286,16 @@ import student_scouts_membersVue from '../../students/StudentExtraCurricular/Sco
             const event = new Event("change", { bubbles: true, cancelable: true });
             e.params.data.element.parentElement.dispatchEvent(event);
             });
-            this.getClasses()
-            this.getSubjectByClass()
-            this.getSubjectTeacherBySubId()
-            this.getStudents()
-            this.getRemedialClassDetail()
+            // this.getRemedialClassDetail()
             this.dt = $("#student-table").DataTable({
                 "lengthChange": false,
                 "searching": false,
             })
+            this.getClasses()
+            this.getSubjectByClass()
+            this.getSubjectTeacherBySubId()
+            this.getStudents()
+
         },
         watch: {
         studentList(val) {

@@ -7,7 +7,8 @@
                 </div>
                 <div>
                     <strong>Date: </strong>
-                    <input v-model="attendance_date" type="date" class="form-control form-control-sm mt-1" id="dateInput">
+                    <input :class="{'is-invalid': attendance_dateError }" type="text" id="attendance_date_id" placeholder="dd/mm/yyyy" class="form-control form-control-sm popupDatepicker" @change="remove_error('attendance_date_id','err_id')">
+                    <span id= "err_id" class="text-danger">{{ attendance_dateError }}</span>
                 </div>
             </div>  
             <div v-if="studentList.length" class="form-group row mt-4">
@@ -66,15 +67,24 @@ export default {
             remarks_id:'',
             class_stream_section:'',
             attendance_date:'',
+            attendance_dateError:'',
+            classError:'',
             dt:'',
             action:'edit'
         }
     },
     methods:{
         getStudents(){
-           let uri = 'academics/getStudentsForAttendance'
-           uri += ('?action='+this.action+'&OrgClassStreamId='+this.OrgClassStreamId+'&attendance_date='+this.attendance_date+'&classId='+this.classId)
-           if(this.streamId !== null){
+            this.studentList =[]
+            $('#attendance_date_id').val(this.attendance_date)
+            if(this.attendance_date ==''){
+                this.attendance_dateError = "This field is required"
+            }else if(this.class_stream_section==''){
+                this.classError = "This field is required"
+            }else{
+                let uri = 'academics/getStudentsForAttendance'
+                uri += ('?action='+this.action+'&OrgClassStreamId='+this.OrgClassStreamId+'&attendance_date='+this.formatYYYYMMDD($('#attendance_date_id').val())+'&classId='+this.classId)
+                if(this.streamId !== null){
                     uri += ('&streamId='+this.streamId)
                 }
                 if(this.sectionId !== null){
@@ -93,13 +103,15 @@ export default {
                             }
                         })
                     })
-                   this.studentList = students
+                this.studentList = students
 
                 }).catch(function (error) {
                     if(error.toString().includes("500")){
                         $('#tbody').html('<tr><td colspan="7" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
                     }
                 });
+            }
+            
         },
         loadReasonsForAbsentList(uri = 'masters/loadAcademicMasters/all_active_reasons_for_absent'){
             axios.get(uri)
@@ -113,6 +125,7 @@ export default {
             });
         },
         save(){
+            this.attendance_date = this.formatYYYYMMDD($('#attendance_date_id').val());
             axios.post('academics/saveStudentAttendance', {action:this.action,org_class_id:this.classId,org_stream_id:this.streamId,org_section_id:this.sectionId,class_stream_section:this.class_stream_section,attendance_date:this.attendance_date,data:this.studentList, old_date:this.old_attendance_date})
                 .then(() => {
                     Toast.fire({
@@ -151,7 +164,7 @@ export default {
     }, 
     created() {
         this.class_stream_section =this.$route.params.data.class_stream_section;
-        this.attendance_date = this.$route.params.data.attendance_date;
+        this.attendance_date = this.formatDateToddmmyyyy(this.$route.params.data.attendance_date);
         this.old_attendance_date = this.$route.params.data.attendance_date;
         this.classId=this.$route.params.data.org_class_id;
         this.streamId=this.$route.params.data.org_stream_id;
