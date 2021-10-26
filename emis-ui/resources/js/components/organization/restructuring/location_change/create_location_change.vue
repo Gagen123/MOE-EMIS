@@ -23,8 +23,8 @@
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4">
                             <label>Current Name:</label>
-                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName" @click="remove_error('proposedName')"/>
-                            <span class="text-danger" id="proposedname_err"></span>
+                            <input type="text" readonly :value="organization_details.name"  class="form-control" id="proposedName"/>
+                            <!-- <span class="text-danger" id="proposedname_err"></span> -->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -86,7 +86,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                            <label>Is Co-located with Parent School: <span class="text-danger">*</span></label><br>
+                            <label>Is Co-located with Parent School: </label><br>
                             <label><input  type="radio" v-model="form.coLocatedParent" value="1" tabindex=""/> Yes</label>
                             <label><input  type="radio" v-model="form.coLocatedParent" value="0" tabindex=""/> No</label>
                         </div>
@@ -178,7 +178,7 @@ export default {
                 organization_category:'',
                 dzongkhag:'',
                 gewog:'',
-                chiwog:'0',
+                chiwog:'',
                 locationType:'',
                 coLocatedParent:'',
                 parentSchool:'',

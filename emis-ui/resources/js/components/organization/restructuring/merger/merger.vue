@@ -360,7 +360,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                             <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                                <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
+                                                <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('location1') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
                                                     <option value="">--- Please Select ---</option>
                                                     <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                                 </select>

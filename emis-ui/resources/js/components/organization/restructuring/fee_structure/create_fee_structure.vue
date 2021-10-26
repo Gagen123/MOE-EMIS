@@ -60,8 +60,8 @@
                                         <input type="number" min="1" readonly v-model="organization_details.current_fees"  class="form-control" id="fees"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
-                                        <label>Propose New Fees (Nu):<span class="text-danger">*</span></label>
-                                        <input type="number" min="1" v-model="form.fees"  class="form-control" id="fees" @change="remove_error('fees')"/>
+                                        <label>Propose New Fees (Nu):</label>
+                                        <input type="number" min="1" @change="remove_error('fees')" v-model="form.fees"  class="form-control" id="fees" />
                                     </div>
                                     <has-error :form="form" field="fees"></has-error>
                                 </div>
