@@ -1108,6 +1108,7 @@ const routes = [
                     { path: '/create_announcement',name:'create_announcement', component: require('./components/staff/leadership/announcement/create_announcement.vue').default },
                     { path: '/edit_announcement', name:'edit_announcement', component: require('./components/staff/leadership/announcement/edit_announcement.vue').default },
                     { path: '/view_announcement', name:'view_announcement', component: require('./components/staff/leadership/announcement/view_announcement.vue').default },
+                    { path: '/view_feedback', name:'view_feedback', component: require('./components/staff/leadership/announcement/view_feedback.vue').default },
                 ],
             },
             { path: '/apply_index',
@@ -1202,6 +1203,7 @@ const routes = [
         ]
     },
     { path: '/open_staff_recruitment_verification', name:'open_staff_recruitment_verification', component: require('./components/staff/leadership/verify_approve_leadership_selection_application.vue').default },
+
     //Staff Services
     { path:'/staff_services_index',
         component: require('./components/staff/staff_services/staff_service_index.vue').default,

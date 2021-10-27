@@ -232,6 +232,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
             $router->get('/getFeedbackData/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@getFeedbackData']);
             $router->post('/saveFeedback', ['uses' => 'staff\StaffLeadershipSerivcesController@saveFeedback']);
             $router->get('/updatedVisited/{id}', ['uses' => 'staff\StaffLeadershipSerivcesController@updatedVisited']);
+            $router->post('/updatestatus', ['uses' => 'staff\StaffLeadershipSerivcesController@updatestatus']);
+            $router->get('/loadfeedbackDetials/{param}', ['uses' => 'staff\StaffLeadershipSerivcesController@loadfeedbackDetials']);
         });
 
         //Projections and Indicators

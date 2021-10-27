@@ -671,6 +671,9 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
         Route::post('/saveFeedback', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedback'])->name('saveFeedback');
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
+        Route::post('/updatestatus', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatestatus'])->name('updatestatus');
+        Route::get('/loadfeedbackDetials/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadfeedbackDetials'])->name('loadfeedbackDetials');
+
     });
 
     Route::prefix('substitution')->group(function () {
