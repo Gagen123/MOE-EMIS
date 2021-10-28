@@ -5,7 +5,7 @@
                 <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Food Release:<span class="text-danger">*</span></label> 
-                        <span class="text-blue text-bold">{{form.dateOfrelease}}</span>
+                        <span class="text-blue text-bold">{{reverseDate1(form.dateOfrelease)}}</span>
                     </div>
                      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                        <label class="">Quarter:<span class="text-danger">*</span></label> 
@@ -98,7 +98,9 @@ export default {
             .then((response) => {
                 let data=response.data.data
                 this.form.id=data.id
-                this.form.dateOfrelease=data.dateOfrelease;
+                // this.form.dateOfrelease=data.dateOfrelease;
+                this.form.dateOfrelease         = this.formatDateToddmmyyyy(data.dateOfrelease);
+                $('#dateOfrelease').val(this.formatDateToddmmyyyy(data.dateOfrelease));
                 // this.form.dzongkhag=data.dzongkhag_id;
                 // this.allOrgList(data.dzongkhag_id,data.org_id);
                 // this.form.organizaiton=data.org_id;

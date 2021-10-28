@@ -907,7 +907,7 @@ export default {
 
         /**
          * method to remove fields
-         */
+         */ 
         removeattachment(index){
             if(this.nomination_form.fileUpload.length>1){
                 this.nomination_form.fileUpload.pop();

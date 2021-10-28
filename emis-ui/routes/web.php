@@ -1014,7 +1014,7 @@ Route::prefix('mess_manage')->group(function () {
 
     //  Route::get('/loadStockReceivedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockReceivedList'])->name('loadStockReceivedList');
 
-    Route::post('/saveStockIssuedEdit ', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssued'])->name('saveStockIssued');
+    Route::post('/saveStockIssued ', [App\Http\Controllers\mess_manage\MessManagementController::class, 'saveStockIssued'])->name('saveStockIssued');
     Route::get('/getAvailableStocks/{id}/{type}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'getAvailableStocks'])->name('getAvailableStocks');
     Route::get('/StockIssueEditList/{lssId}', [App\Http\Controllers\mess_manage\MessManagementController::class, 'StockIssueEditList'])->name('StockIssueEditList');
     Route::get('/loadStockIssuedList', [App\Http\Controllers\mess_manage\MessManagementController::class, 'loadStockIssuedList'])->name('loadStockIssuedList');

@@ -7,19 +7,21 @@
                 </span>
                 <span class="fa-pull-right pr-2">
                     <button type="button" class="btn btn-primary text-white btn-sm" @click="loadpage('FoodReleaseList')"><i class="fa fa-list"></i> List</button>
-                    <button type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('FoodReleaseAdd')"><i class="fa fa-plus"></i> Add New </button>
+                    <button  v-if="showadd"  type="button" class="btn btn-dark text-white btn-sm" @click="loadpage('FoodReleaseAdd')"><i class="fa fa-plus"></i> Add New </button>
                 </span>
             </div>
             <div class="card-body">  
                 <router-view></router-view> 
-            </div>
+            </div> 
         </div>
     </div>
-</template>
+</template> 
 <script>
 export default {
     data(){
         return{ 
+             access_level:'',
+             showadd:false,
         } 
     },
     methods:{
@@ -32,6 +34,20 @@ export default {
     },
     
     mounted() {
+        axios.get('common/getSessionDetail')
+        .then(response =>{
+            let data = response.data.data;
+          //  this.form.org_id=data['Agency_Code'];
+            this.access_level = data['acess_level'];
+            if(data['acess_level']=="Ministry"){
+                this.showadd=true;
+            }
+            
+            
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
     },
     
 }

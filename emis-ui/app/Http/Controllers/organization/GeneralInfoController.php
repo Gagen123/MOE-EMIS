@@ -422,7 +422,7 @@ class GeneralInfoController extends Controller
     }
 
     public function getOrgProfile($id=""){
-        // dd($id);
+        // dd($id); 
         $type=$this->getAccessLevel();
         //dd($type);
         $org_details = $this->apiService->listData('emis/common_services/getOrgProfile/'.$id.'/'.$type);

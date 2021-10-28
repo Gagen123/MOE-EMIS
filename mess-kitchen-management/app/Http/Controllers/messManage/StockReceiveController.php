@@ -105,7 +105,15 @@ class StockReceiveController extends Controller{
                 $checkitem=TransactionTable::where('item_id',$facility['id'])->where('procured_type','Central')
                 ->where('organizationId',$request['organizationId'])->first();
                 if($checkitem!=null && $checkitem!=""){
-                    $qty=$quantity+$checkitem->available_qty;
+                    // $balanceqty = $checkitem->available_qty; 
+                    // $issueqty = $checkitem->issue_qty;
+                    // $qty=$quantity+$checkitem->available_qty;
+                    // if($balanceqty > $quantity){
+                    //     $diffqty=
+
+                    // }else{
+
+                    // }
                     $update_data=[
                         'available_qty' => $qty,
                         'updated_by'    => $request->user_id,
