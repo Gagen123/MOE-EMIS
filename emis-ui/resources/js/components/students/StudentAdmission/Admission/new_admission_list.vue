@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="overflow-auto">
         <table id="list-student-left" class="table table-bordered table-striped table-head-fixed">
             <thead>
                 <tr>
@@ -9,6 +9,8 @@
                      <th >CID</th>
                      <th >Gender</th>
                      <th >Type of Admission</th>
+                     <th >From Feeder School?</th>
+                     <th >Is Feeder Student?</th>
                      <th >School Decision</th>
                      <th >Student Decision</th>
                      <th >Action</th>
@@ -36,6 +38,8 @@
                     <td>{{ std.admisiondet.CidNo }}</td>
                     <td>{{ sex_idList[std.admisiondet.CmnSexId] }} </td>
                     <td>{{ std.admisiondet.student_code ? "Transfer" : "New Admission"}}</td>
+                    <td>{{ feederSchoolList.includes(std.admisiondet.OrgOrganizationId) ? "Yes" : "No"}} </td>
+                    <td>{{ feederStudentList.includes(std.admisiondet.id) ? "Yes" : "No"}} </td>
                     <td>{{ std.school_decision }} </td>
                     <td>{{ std.student_decision }} </td>
                     <!-- <td>
@@ -59,6 +63,8 @@ export default {
         return {
             dt:'',
             stdList:[],
+            feederSchoolList:[],
+            feederStudentList:[],
             newAdmissionList:[],
             sex_idList:{},
 
@@ -160,7 +166,7 @@ export default {
         //         this.stdList = data.data;
         //     });
         // },
-        loadStudentAdmissionList(param){
+        loadStudentAdmissionList(){
             this.newAdmissionList =[];
             let uri="";
             uri='students/admission/loadStudentList/admission';
@@ -170,6 +176,28 @@ export default {
                 this.newAdmissionList = data;
             });
         },
+        loadFeederSchools(){
+            this.feederSchoolList =[];
+            let uri="";
+            uri='organization/loadFeedersBySchool';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                this.feederSchoolList = data;
+            });
+        },
+
+        loadFeederStudents(){
+            this.feederStudentList =[];
+            let uri="";
+            uri='organization/loadFeederStudentsBySchool';
+            axios.get(uri)
+            .then(response =>{
+                let data = response.data;
+                this.feederStudentList = data;
+            });
+        },
+
         getorgProfile(org_id){
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
             .then(response => {
@@ -185,9 +213,11 @@ export default {
     },
     mounted() {
         this.loadAllActiveMasters('all_active_gender');
+        this.loadFeederSchools();
+        this.loadFeederStudents();
         this.dt = $("#list-student-left").DataTable();
         // this.loadStudentList('session');
-        this.loadStudentAdmissionList('session');
+        this.loadStudentAdmissionList();
         // $("#list-student-left").DataTable({
         //     "responsive": true,
         //     "autoWidth": false,

@@ -116,7 +116,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
             $router->get('/loadQualificationMarks',['uses' => 'Students\StudentAdmissionController@loadQualificationMarks']);
             $router->get('/loadStudentMarks/{std_code}',['uses' => 'Students\StudentAdmissionController@loadStudentMarks']);
-            $router->get('/loadAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
+            $router->get('/loadAdmissionRequest/{std_id}/{dzo_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
+            $router->get('/getStudentAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentAdmissionRequest']);
             $router->post('/saveSupplementaryStudent',['uses' => 'Students\StudentAdmissionController@saveSupplementaryStudent']);
         });
 
