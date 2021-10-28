@@ -90,6 +90,49 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal fade show" id="participant_modal" aria-modal="true" style="padding-right: 17px;">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Participant To Be Updated</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form class="bootbox-form">
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label>Following are the list of Staff to be updated for this training</label>
+                                        <table id="staff-participant-table" class="table table-bordered text-sm table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>SL#</th>
+                                                    <th>EID</th>
+                                                    <th>Name</th>
+                                                    <th>Nature of Participant</th>
+                                                    <th>Is Exist</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(training, index) in excel_participant_list" :key="index" >
+                                                    <td>{{ index + 1 }} </td>
+                                                    <td>{{ training.eid }}</td>
+                                                    <td>{{ training.name }}</td>
+                                                    <td>{{ training.natureOfParticipant }}</td>
+                                                    <td>{{ training.is_match===1?'Yes':'No' }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer text-right">
+                            <button data-bb-handler="cancel" @click="updateparticipant('Cancel')"  type="button" data-dismiss="modal" class="btn btn-danger">Cancel</button>
+                            <button data-bb-handler="confirm" @click="updateparticipant('Save')" type="button" class="btn btn-primary">Confirm & Save Match Ones</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="modal fade show" id="add_modal" aria-modal="true" style="padding-right: 17px;">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
@@ -114,6 +157,11 @@
                                          <label class="pr-3"> Excel Upload </label>
                                         <span class="text-danger" id="partifipant_from_err"></span>
                                     </div>
+                                </div>
+                                <div class="form-group row" is="excel_note" style="display:none">
+                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        Please attach Excel File which have list of EID in the first row with EID as header
+                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" id="dzongkhag_section" style="display:none">
@@ -172,7 +220,7 @@
                                         <label>Participating as:<span class="text-danger">*</span></label>
                                         <br>
                                         <span v-for="(nature, index) in trainingDetails.nparticipatefortransaction" :key="index" >
-                                            <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature">
+                                            <input type="radio" @change="remove_error('nature_of_participant')" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" id="nature_of_participant" :value="nature.id">
                                             <label class="pr-3"> {{ nature.name  }} </label>
                                         </span><br>
                                         <span class="text-danger" id="nature_of_participant_err"></span>
@@ -181,7 +229,8 @@
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label>Attachment:</label>
-                                        <input type="file"  v-on:change="onChangeFileUpload" class="form-control" id="file">
+                                        <input type="file" @change="remove_error('participantfile')" v-on:change="onChangeFileUpload" class="form-control" id="participantfile">
+                                        <span class="text-danger" id="participantfile_err"></span>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <span v-for="(doc, index) in editdocument" :key="index" :id="'attachment'+index">
@@ -265,13 +314,13 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 <script>
 export default {
     data(){
         return {
+            excel_participant_list:[],
             trainingDetails:[],
             draft_attachments:[],
             nature_of_participantList:[],
@@ -326,6 +375,7 @@ export default {
         },
         onChangeFileUpload(e){
             if(e.target.files[0]!=undefined){
+                 this.form.ref_docs=[];
                 this.form.ref_docs.push({attachment:e.target.files[0]});
             }
             else{
@@ -403,11 +453,50 @@ export default {
                 }
             });
         },
+        updateparticipant(type){
+            Swal.fire({
+                text: "Are you sure you wish to "+type+" this selected file ?",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                cancelButtonText: 'No'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    let uri = 'staff/hrdevelopment/updateExcelfile/'+type;
+                    axios.get(uri)
+                    .then(response => {
+                        let data = response;
+                        if(data.data){
+                            Swal.fire(
+                                'Success!',
+                                'Record has been Updated successfully.',
+                                'success',
+                            );
+                            $('#participant_modal').modal('hide');
+                        }
+                        else{
+                            Swal.fire(
+                                'error!',
+                                'Not able to update this record. Please try again.',
+                                'error',
+                            );
+                        }
+
+                    })
+                    .catch(function (error) {
+                        console.log("Error:"+error);
+                    });
+                }
+            });
+        },
         async showSearch(type){
             $('#dzongkhag_section').hide();
             $('#school_section').hide();
             $('#department_section').hide();
             $('#participantSection').show();
+            $('#excel_note').hide();
             if(type=="School"){
                 $('#dzongkhag_section').show();
                 $('#school_section').show();
@@ -424,8 +513,8 @@ export default {
             }
             if(type=="upload"){
                 $('#participantSection').hide();
+                $('#excel_note').show();
             }
-
         },
         loadeditpage(item,type){
             let pro_id=item.program_id;
@@ -539,16 +628,23 @@ export default {
                 }
                 axios.post('staff/hrdevelopment/saveParticipant', formData, config)
                 .then((response) =>{
-                    this.form.id=response.data.data.id;
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Saved Successfully'
-                    });
-                    this.getParticipantDetails(this.form.programId);
-                    this.form.participant='';
-                    this.form.contact='';
-                    this.form.email='';
-                    this.form.nature_of_participant='';
+                    if(this.form.partifipant_from=="Excel"){
+                        $('#add_modal').modal('hide');
+                        $('#file').val('');
+                        this.excel_participant_list=response.data.data;
+                        $('#participant_modal').modal('show');
+                    }else{
+                        this.form.id=response.data.data.id;
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data Saved Successfully'
+                        });
+                        this.getParticipantDetails(this.form.programId);
+                        this.form.participant='';
+                        this.form.contact='';
+                        this.form.email='';
+                        this.form.nature_of_participant='';
+                    }
                     $('#file').val('');
                     $('#add_modal').modal('hide');
                 })
@@ -569,32 +665,45 @@ export default {
         },
         validateaddform(){
             let retval=true;
-            if($('#participant').val()==""){
-                retval=false;
-            }
-            if($('#participant').val()==""){
-                $('#participant_err').html('Please select participant');
-                $('#participant').focus();
-                $('#participant').addClass('is-invalid');
-                retval=false;
-            }
-            if($('#contact').val()==""){
-                $('#contact_err').html('mention contact number');
-                $('#contact').focus();
-                $('#contact').addClass('is-invalid');
-                retval=false;
-            }
-            if($('#email').val()==""){
-                $('#email_err').html('mention email');
-                $('#email').focus();
-                $('#email').addClass('is-invalid');
-                retval=false;
+            if(this.form.partifipant_from!="Excel"){
+                if($('#participant').val()==""){
+                    retval=false;
+                }
+                if($('#participant').val()==""){
+                    $('#participant_err').html('Please select participant');
+                    $('#participant').focus();
+                    $('#participant').addClass('is-invalid');
+                    retval=false;
+                }
+                if($('#contact').val()==""){
+                    $('#contact_err').html('mention contact number');
+                    $('#contact').focus();
+                    $('#contact').addClass('is-invalid');
+                    retval=false;
+                }
+                if($('#email').val()==""){
+                    $('#email_err').html('mention email');
+                    $('#email').focus();
+                    $('#email').addClass('is-invalid');
+                    retval=false;
+                }
+
+            }else{
+                if($('#participantfile').val()==""){
+                    $('#participantfile_err').html('Please attach xlsx file' );
+                    retval=false;
+                }
+                if($('#participantfile').val()!="" && !this.customfilevalidation($('#participantfile').val(),'xlsx')){
+                    $('#participantfile_err').html('This file is not accepted. Please attach xlsx file' );
+                    retval=false;
+                }
             }
             if($("input[type='radio'][name='nature_of_participant']:checked").val()==undefined){
                 $('#nature_of_participant_err').html('this field is requred');
                 $('#nature_of_participant').addClass('is-invalid');
                 retval=false;
             }
+
             return retval;
         },
 

@@ -559,7 +559,7 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'saveprogramOpenDetail'])->name('saveprogramOpenDetail');
         Route::get('/getprogramOpenDetail', [App\Http\Controllers\staff\HrDevelopmentController::class, 'getprogramOpenDetail'])->name('getprogramOpenDetail');
         Route::get('/checkProgramAccess', [App\Http\Controllers\staff\HrDevelopmentController::class, 'checkProgramAccess'])->name('checkProgramAccess');
-
+        Route::get('/updateExcelfile/{param}', [App\Http\Controllers\staff\HrDevelopmentController::class, 'updateExcelfile'])->name('updateExcelfile');
     });
 
     // Transfer route
@@ -673,6 +673,7 @@ Route::prefix('staff')->group(function () {
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
         Route::post('/updatestatus', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatestatus'])->name('updatestatus');
         Route::get('/loadfeedbackDetials/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadfeedbackDetials'])->name('loadfeedbackDetials');
+
 
     });
 
