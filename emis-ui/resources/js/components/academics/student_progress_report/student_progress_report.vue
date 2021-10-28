@@ -69,7 +69,9 @@
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <strong>Promoted to/Detained in:</strong><span v-if="student_details.promoted"> {{student_details.promoted}}</span> 
+                                <strong>Result:</strong>
+                                <span v-if="student_details.promoted"> Promoted </span> 
+                                <span v-else> Detained </span> 
                             </td>
                         </tr>
                          <tr>

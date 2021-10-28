@@ -975,7 +975,7 @@ Route::prefix('academics')->group(function () {
     Route::get('/getSubjectOfTerm', [App\Http\Controllers\academics\AcademicController::class, 'getSubjectOfTerm'])->name('getSubjectOfTerm');
     Route::get('/getApprovedTerms', [App\Http\Controllers\academics\AcademicController::class, 'getApprovedTerms'])->name('getApprovedTerms');
     Route::get('/getStudentsForProgressReport/{Id}', [App\Http\Controllers\academics\AcademicController::class, 'getStudentsForProgressReport'])->name('getStudentsForProgressReport');
-    Route::get('/getProgressReport/{Id}/{resultId}', [App\Http\Controllers\academics\AcademicController::class, 'getProgressReport'])->name('getProgressReport');
+    Route::get('/getProgressReport/{resultStdId}/{resultId}', [App\Http\Controllers\academics\AcademicController::class, 'getProgressReport'])->name('getProgressReport');
 });
 Route::prefix('spms')->group(function () {
     Route::get('/schoolPerformaceDashboard/{year}', [App\Http\Controllers\spms\SpmsController::class, 'schoolPerformaceDashboard'])->name('schoolPerformaceDashboard');

@@ -32,6 +32,7 @@ class AcaResult extends Migration
             $table->string('class', 255);
             $table->char('org_stream_id', 36)->nullable()->index();
             $table->string('stream', 255)->nullable();
+            $table->unsignedSmallInteger('no_of_students');
             $table->char('org_section_id', 36)->nullable()->index();
             $table->string('section', 255)->nullable();
             $table->char('stf_class_teacher_id', 36)->index();

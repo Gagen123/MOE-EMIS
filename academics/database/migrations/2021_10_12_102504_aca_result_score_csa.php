@@ -26,6 +26,10 @@ class AcaResultScoreCsa extends Migration
             $table->string('assmnt_area_dzo_name', 1000)->nullable();
             $table->unsignedDecimal('ca_score', 6, 2)->nullable();
             $table->unsignedDecimal('exam_score', 6, 2)->nullable();
+            $table->unsignedDecimal('t1_ca_score', 6, 2)->nullable();
+            $table->unsignedDecimal('t1_exam_score', 6, 2)->nullable();
+            $table->unsignedDecimal('t2_ca_score', 6, 2)->nullable();
+            $table->unsignedDecimal('t2_exam_score', 6, 2)->nullable();
             $table->tinyInteger('score')->nullable();
             $table->string('score_description', 500)->nullable();
             $table->string('score_descr_dzo_name', 500)->nullable();

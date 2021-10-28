@@ -76,7 +76,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getSubjectTeacherByclass/{orgId}', ['uses' => 'academic\AcademicController@getSubjectTeacherByclass']);
         $router->get('/getApprovedTerms', ['uses' => 'academic\AcademicController@getApprovedTerms']);
         $router->get('/getStudentsForProgressReport/{Id}', ['uses' => 'academic\AcademicController@getStudentsForProgressReport']);
-        $router->get('/getProgressReport/{Id}/{resultId}', ['uses' => 'academic\AcademicController@getProgressReport']);
+        $router->get('/getProgressReport/{resultStdId}/{resultId}', ['uses' => 'academic\AcademicController@getProgressReport']);
         $router->post('/updateStatus', ['uses' => 'academic\AcademicController@updateStatus']);
         $router->post('/updateResult', ['uses' => 'academic\AcademicController@updateResult']);
 

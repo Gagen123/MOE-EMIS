@@ -24,8 +24,12 @@ class AcaResultStudent extends Migration
             $table->string('cid', 50)->index()->nullable();
             $table->char('admission_no', 36);
             $table->date('dob');
-            $table->string('score_description', 500)->nullable()->default(null);
             $table->unsignedSmallInteger('roll_no');
+            $table->unsignedDecimal('marks_percent', 6, 2);
+            $table->unsignedSmallInteger('position');
+            $table->unsignedSmallInteger('no_of_days_attended');
+            $table->unsignedSmallInteger('instructional_days');
+            $table->unsignedSmallInteger('attendance_percent');
             $table->string('special_award', 500)->nullable();
             $table->string('responsibility', 500)->nullable();
             $table->unsignedTinyInteger('promoted')->nullable()->comment('0-detained, 1-promoted');

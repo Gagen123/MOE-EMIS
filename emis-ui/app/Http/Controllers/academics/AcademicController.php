@@ -675,73 +675,68 @@ class AcademicController extends Controller
     public function updateStatus(Request $request)
     {
         if ($request['action'] == 'approve') {
-            try {
-
-                $orgId = $this->getWrkingAgencyId();
-                $dzonId = '';
-                $gewogId = '';
-                $subject_teacher_ids = '';
-                //school
-                $organization = json_decode($this->apiService->getListData('emis/common_services/loadOrgList/userworkingagency' . '/' . $orgId), true)['data'];
-                if (count($organization)) {
-                    $organization = $organization[0];
-                    $dzonId = $organization['dzongkhagId'];
-                    $gewogId = $organization['gewogId'];
-                    //dzongkhag
-                    $organization['dzongkhag'] = json_decode($this->apiService->getListData('emis/common/getDzoNameById/' . $dzonId), true)['name'];
-                    //gewog
-                    $organization['gewog'] = json_decode($this->apiService->getListData('emis/common/getGewogNameById/' . $gewogId), true)['name'];
-                }
-                //principal
-                $pricipal = json_decode($this->apiService->listData('emis/staff/getPrincipal/' . $orgId), true)['data'];
-
-                $stream_id = $request['item']['org_stream_id'] == null ? '' : $request['item']['org_stream_id'];
-                $section_id = $request['item']['org_section_id'] == null ? '' : $request['item']['org_section_id'];
-
-                //class_teacher
-                $class_teacher_id = $this->getClassTeacherByclass($orgId, $request['item']['org_class_id'], $stream_id, $section_id);
-                $class_teacher = json_decode($this->apiService->listData('emis/staff/getStaffName/' . $class_teacher_id[0]['stf_staff_id']), true)['data'];
-
-                //subject_teacher
-                $subject_teachers_id = $this->getSubjectTeacherByclass($orgId, $request['item']['org_class_id'], $stream_id, $section_id);
-                if (count($subject_teachers_id) > 0) {
-                    $subject_teacher_ids = implode(",", array_column($subject_teachers_id, 'stf_staff_id'));
-                }
-                $subject_teachers = json_decode($this->apiService->listData('emis/staff/getStaffsName?stf_staff_ids=' . $subject_teacher_ids), true)['data'];
-                foreach ($subject_teachers_id as $key => $subject_teacher_id) {
-                    $key1  = array_search($subject_teacher_id['stf_staff_id'], array_column($subject_teachers, 'stf_staff_id'));
-                    $subject_teachers_id[$key]['name'] = $subject_teachers[$key1]['name'];
-                }
-                //student
-                $stduents = $this->getStudents($orgId, $request['item']['OrgClassStreamId'], $request['item']['org_section_id']);
-
-                //award 
-                $awards = ['std_student_id' => '2'];
-                $responsilities = ['chimi' => '2'];
-                $class = [
-                    'class' => $request['item']['class'],
-                    'org_class_id' => $request['item']['org_class_id'],
-                    'stream' => isset($request['item']['stream']) ? $request['item']['stream'] : null,
-                    'org_stream_id' => $request['item']['org_stream_id'],
-                    'section' => isset($request['item']['section']) ? $request['item']['section'] : null,
-                    'org_section_id' => $request['item']['org_section_id'],
-                ];
-                $data = [
-                    'orgnization' => $organization,
-                    'pricipal' => $pricipal,
-                    'class' => $class,
-                    'class_teacher' => $class_teacher,
-                    'subject_teachers' => $subject_teachers_id,
-                    'stduents' => $stduents,
-                    'aca_result_consolidated_id' => $request['item']['aca_result_consolidated_id'],
-                    'awards' => $awards,
-                    'responsilities' => $responsilities,
-                    'action' => 'approve',
-                    'user_id' => $this->userId()
-                ];
-            } catch (Exception $e) {
-                dd($e);
+            $orgId = $this->getWrkingAgencyId();
+            $dzonId = '';
+            $gewogId = '';
+            $subject_teacher_ids = '';
+            //school
+            $organization = json_decode($this->apiService->getListData('emis/common_services/loadOrgList/userworkingagency' . '/' . $orgId), true)['data'];
+            if (count($organization)) {
+                $organization = $organization[0];
+                $dzonId = $organization['dzongkhagId'];
+                $gewogId = $organization['gewogId'];
+                //dzongkhag
+                $organization['dzongkhag'] = json_decode($this->apiService->getListData('emis/common/getDzoNameById/' . $dzonId), true)['name'];
+                //gewog
+                $organization['gewog'] = json_decode($this->apiService->getListData('emis/common/getGewogNameById/' . $gewogId), true)['name'];
             }
+            //principal
+            $pricipal = json_decode($this->apiService->listData('emis/staff/getPrincipal/' . $orgId), true)['data'];
+
+            $stream_id = $request['item']['org_stream_id'] == null ? '' : $request['item']['org_stream_id'];
+            $section_id = $request['item']['org_section_id'] == null ? '' : $request['item']['org_section_id'];
+
+            //class_teacher
+            $class_teacher_id = $this->getClassTeacherByclass($orgId, $request['item']['org_class_id'], $stream_id, $section_id);
+            $class_teacher = json_decode($this->apiService->listData('emis/staff/getStaffName/' . $class_teacher_id[0]['stf_staff_id']), true)['data'];
+
+            //subject_teacher
+            $subject_teachers_id = $this->getSubjectTeacherByclass($orgId, $request['item']['org_class_id'], $stream_id, $section_id);
+            if (count($subject_teachers_id) > 0) {
+                $subject_teacher_ids = implode(",", array_column($subject_teachers_id, 'stf_staff_id'));
+            }
+            $subject_teachers = json_decode($this->apiService->listData('emis/staff/getStaffsName?stf_staff_ids=' . $subject_teacher_ids), true)['data'];
+            foreach ($subject_teachers_id as $key => $subject_teacher_id) {
+                $key1  = array_search($subject_teacher_id['stf_staff_id'], array_column($subject_teachers, 'stf_staff_id'));
+                $subject_teachers_id[$key]['name'] = $subject_teachers[$key1]['name'];
+            }
+            //student
+            $stduents = $this->getStudents($orgId, $request['item']['OrgClassStreamId'], $request['item']['org_section_id']);
+
+            //award 
+            $awards = ['std_student_id' => '2'];
+            $responsilities = ['chimi' => '2'];
+            $class = [
+                'class' => $request['item']['class'],
+                'org_class_id' => $request['item']['org_class_id'],
+                'stream' => isset($request['item']['stream']) ? $request['item']['stream'] : null,
+                'org_stream_id' => $request['item']['org_stream_id'],
+                'section' => isset($request['item']['section']) ? $request['item']['section'] : null,
+                'org_section_id' => $request['item']['org_section_id'],
+            ];
+            $data = [
+                'orgnization' => $organization,
+                'pricipal' => $pricipal,
+                'class' => $class,
+                'class_teacher' => $class_teacher,
+                'subject_teachers' => $subject_teachers_id,
+                'stduents' => $stduents,
+                'aca_result_consolidated_id' => $request['item']['aca_result_consolidated_id'],
+                'awards' => $awards,
+                'responsilities' => $responsilities,
+                'action' => 'approve',
+                'user_id' => $this->userId()
+            ];
         } else {
             $data = $request->all();
         }
@@ -783,9 +778,9 @@ class AcademicController extends Controller
     {
         return $this->apiService->listData('emis/academics/getStudentsForProgressReport/' . $Id);
     }
-    public function getProgressReport($Id, $resultId)
+    public function getProgressReport($resultStdId, $resultId)
     {
-        return $this->apiService->listData('emis/academics/getProgressReport/' . $Id . '/' . $resultId);
+        return $this->apiService->listData('emis/academics/getProgressReport/' . $resultStdId . '/' . $resultId);
     }
     private function getClassTeacherByclass($orgId, $class_id, $stream_id, $section_id)
     {
