@@ -359,6 +359,15 @@ const routes = [
         { path: '/dropout_type_edit', name:'dropout_type_edit', component: require('./components/masters/student_masters/dropout/dropout_type_edit.vue').default },
       ]
     },
+    //Cross check with Chimi Thinley about the start of academic session
+    // { path: '/admission_date_school', component: require('./components/masters/student_masters/admissions/school_admission_date_index.vue').default ,
+    //   children: [
+    //     { path: '', name:'school_admission_date_index', component: require('./components/masters/student_masters/admissions/school_admission_date_list.vue').default },
+    //     { path: '/school_admission_date_list', name:'school_admission_date_list', component: require('./components/masters/student_masters/admissions/school_admission_date_list.vue').default },
+    //     { path: '/school_admission_date_add', name:'school_admission_date_add', component: require('./components/masters/student_masters/admissions/school_admission_date_add.vue').default },
+    //     { path: '/school_admission_date_edit', name:'school_admission_date_edit', component: require('./components/masters/student_masters/admissions/school_admission_date_edit.vue').default },
+    //   ]
+    // },
     // { path: '/spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_index.vue').default ,
     //   children: [
     //     { path: '', name:'spbenefit', component: require('./components/masters/student_masters/spbenefit/spbenefit_list.vue').default },

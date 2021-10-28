@@ -1,11 +1,15 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
+        <div class="callout callout-danger" style="display:none" id="screenPermission">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">
                         <a class="nav-link active" id="basic-tabs-head" data-toggle="pill"  href="#basic-tabs" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">
-                            <label> Basic Details </label>
+                            <label> Basic Details</label>
                         </a>
                     </li>
                     <li class="nav-item guardians-tab"  @click="shownexttab('guardians-tab')">
@@ -661,6 +665,10 @@ export default {
     },
     data() {
         return {
+            org_type:'',
+            schoolAdmissionDateValidation:'',
+            eccdAdmissionDateValidation:'',
+            loop_check:'',
             sex_idList:[],
             dzongkhagList:[],
             std_gewog_list:[],
@@ -689,6 +697,7 @@ export default {
             sectionList:[],
             personal_form: new form({
                 student_id:'',
+                admission_no:'',
                 std_class:'',
                 snationality:'',
                 cid_passport:'',
@@ -795,10 +804,11 @@ export default {
                     });
                 }
                 else{
+                    let age = await this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
                     let check = await this.validateCID($('#'+cid).val());
+                    
                     if(check){
-                        let age = this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
-                        if(this.validateAge(age)){
+                        if(this.loop_check){
                             this.getPersonalDetailsbyCID($('#'+cid).val(),type);
                             let fatherCid="";
                             let motherCid="";
@@ -823,7 +833,7 @@ export default {
                 }
             }            
         },
-        getPersonalDetailsbyCID(cidNo,type){
+        async getPersonalDetailsbyCID(cidNo,type){
             // if(type=="father"){
             //     selected = $("input[type='radio'][name='father_nationality']:checked");
             // }
@@ -834,19 +844,49 @@ export default {
             //     selected = $("input[type='radio'][name='gardain_nationality']:checked");
             // }
             
-            axios.get('getpersonbycid/'+ cidNo)
+            await axios.get('getpersonbycid/'+ cidNo)
             .then(response => {
                 if (response.data) {
                     let personal_detail = response.data;
                     if(type=="AgeValidation"){
                         let dob=personal_detail.dob;
+                        
                         if(dob.includes('-')){
                             dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
                         }
                         if(dob.includes('/')){
                             dob=dob.split('/')[2]+'-'+dob.split('/')[1]+'-'+dob.split('/')[0];
                         }
-                        return dob;
+
+                        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                        
+                        let date1 = new Date(dob);
+                        let date2 = '';
+                        if(this.org_type == 'ECCD'){
+                            date2 = new Date(this.eccdAdmissionDateValidation);
+                        } else {
+                            date2 = new Date(this.schoolAdmissionDateValidation);
+                        }
+
+                        // Discard the time and time-zone information.
+                        const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+                        const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+                        let age = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
+                        
+                        if(this.org_type == 'ECCD'){
+                            if(age <=1096){
+                                this.loop_check = false;
+                            } else {
+                                this.loop_check = true;
+                            }
+                        } else {
+                            if(age <=1825){
+                                this.loop_check = false;
+                            } else {
+                                this.loop_check = true;
+                            }
+                        }
                     }
                     if(type=="std"){
                         this.personal_form.first_name = personal_detail.firstName;
@@ -993,6 +1033,7 @@ export default {
 
             })
             .catch((exception) => {
+                console.log('error log:'+exception);
                 Swal.fire({
                     html: "No data found for matching CID/service down"+exception,
                     icon: 'error'
@@ -1179,10 +1220,50 @@ export default {
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
             .then(response => {
                 this.org_details=response.data.data;
+                this.personal_form.admission_no = this.org_details.abbr_name;
+                if(this.org_details.category.includes('eccd')){
+                    this.org_type='ECCD';
+                } else {
+                    this.org_type='Others';
+                }
+                axios.get('masters/loadGlobalMasters/admission')
+                    .then(response => {
+                        let data = response.data.data;
+                        let from_date = new Date(data.from_date);
+                        let to_date = new Date(data.to_date);
+                        let present_date = new Date();
+                        if(this.org_type == 'Others'){
+                            if(to_date >= present_date && from_date <= present_date){
+                            $('#screenName').html('<b>Application for '+data.screenName);
+                            }else{
+                                $('#screenPermission').show();
+                                $('#mainform').hide();
+                                $('#message').html("The Admission Dates are closed. <br> Thank You!");
+                            }
+                        }
+                        
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    });
             })
             .catch((error) => {  
                 console.log("Error: "+error);
             });
+        },
+
+        loadAdmissionDateValidation(){
+            let uri='masters/loadValidationcondition';
+            axios.get(uri)
+            .then(response => {
+                let data = response.data.data;
+                this.schoolAdmissionDateValidation  = data.date1;
+                this.eccdAdmissionDateValidation  = data.date;
+            })
+            .catch(function (error) {
+                console.log('error: '+error);
+            });
+            
         },
 
         shownexttab(nextclass){
@@ -1198,6 +1279,7 @@ export default {
                 let formData = new FormData();
                 formData.append('snationality', this.personal_form.snationality);
                 formData.append('cid_passport', this.personal_form.cid_passport);
+                formData.append('admission_no', this.personal_form.admission_no);
                 formData.append('first_name', this.personal_form.first_name);
                 formData.append('middle_name', this.personal_form.middle_name);
                 formData.append('last_name', this.personal_form.last_name);
@@ -1736,16 +1818,21 @@ export default {
 
         validateAge(dob){
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+            alert('dob'+dob);
             let date1 = new Date(dob);
-            let date2 = new Date('2022-05-02');
+            let date2 = new Date(this.admissionDateValidation);
             let date3 = new Date();
 
             // Discard the time and time-zone information.
             const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
             const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
             const present_date = Date.UTC(date3.getFullYear(), date3.getMonth(), date3.getDate());
+            alert(dob_date);
+            alert(admission_date);
+            alert(present_date);
 
             let age = Math.floor(((admission_date+present_date) - (present_date+dob_date)) / _MS_PER_DAY);
+            
             
             if(age <=1825){
                 return false;
@@ -1768,6 +1855,7 @@ export default {
         }
     },
     mounted() {
+        this.loadAdmissionDateValidation();
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('all_active_dzongkhag');
         this.loadAllActiveMasters('active_mother_tongue');
@@ -1794,4 +1882,7 @@ export default {
             });
     },
 }
+
+
 </script>
+

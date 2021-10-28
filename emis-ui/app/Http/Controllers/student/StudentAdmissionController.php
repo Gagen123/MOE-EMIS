@@ -55,6 +55,7 @@ class StudentAdmissionController extends Controller{
         $data =[
             'snationality'              =>  $request->snationality,
             'std_class'                 =>  $request->std_class,
+            'admission_no'              =>  $request->admission_no,
             'student_id'                =>  $request->student_id,
             'cid_passport'              =>  $request->cid_passport,
             'first_name'                =>  $request->first_name,

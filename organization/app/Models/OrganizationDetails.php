@@ -13,6 +13,7 @@ class OrganizationDetails extends Model
     protected $fillable = [
         'id',
         'name',
+        'abbr_name',
         'code',
         'organizationType',
         'bifOrgId',

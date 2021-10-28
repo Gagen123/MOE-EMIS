@@ -135,6 +135,7 @@ class StudentAdmissionController extends Controller
 
                 $data =[
                     'StdAdmissionsId'               =>  $response_data->id,
+                    'AdmissionNo'                   =>  $request->admission_no.'/'.date('Y').'/',
                     'Dzongkhagid'                   =>  $request->Dzongkhagid,
                     'OrgOrganizationId'             =>  $request->OrgOrganizationId,
                     'class_id'                      =>  $request->std_class,
@@ -245,6 +246,7 @@ class StudentAdmissionController extends Controller
 
         $data =[
             'StdAdmissionsId'               =>  $request->student_id,
+            'AdmissionNo'                   =>  $request->admission_no.'/'.date('Y').'/',
             'Dzongkhagid'                   =>  $request->dzongkhag,
             'OrgOrganizationId'             =>  $request->school,
             'class_id'                      =>  $request->class,
@@ -253,6 +255,7 @@ class StudentAdmissionController extends Controller
             'Status'                        =>  'Pending',
             'created_by'                    =>  $request->user_id,
         ];
+
         $response_data = StudentAdmissionSchool::create($data);
         return $response_data;
     }
@@ -917,7 +920,14 @@ class StudentAdmissionController extends Controller
      */
 
     public function updateAdmissionRequest(Request $request){
-        //
+        $data = [
+            'status'        =>  $request->actiontype,
+            'remarks'       =>  $request->remarks
+        ];
+
+        $response_data = AdmissionRequest::where('id',$request->id)->update($data);
+
+        return $this->successResponse($response_data);
     }
 
     /**
