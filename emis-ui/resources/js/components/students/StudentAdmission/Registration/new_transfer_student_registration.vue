@@ -1,11 +1,14 @@
 <template>
     <div>
-        <div class="callout callout-danger" style="display:none" id="screenPermission">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="message"></div>
-        </div>
         <div class="card card-primary card-outline card-outline-tabs" id="mainform">
-            <br>
+            <div class="callout callout-info" style="display:none" id="screenPermission1">
+                <h5 class="bg-gradient-info"></h5>
+                <div id="message1"></div>
+            </div>
+            <div class="callout callout-danger" style="display:none" id="screenPermission2">
+                <h5 class="bg-gradient-danger">Sorry!</h5>
+                <div id="message2"></div>
+            </div>
             <div>
                 <div class="form-group row" id="searchemp">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -112,6 +115,7 @@ export default {
             org_type:'',
             schoolAdmissionDateValidation:'',
             eccdAdmissionDateValidation:'',
+            special_case:'0',
             age_check:'',
             student_id:'',
             student_code:'',
@@ -235,11 +239,13 @@ export default {
                         let present_date = new Date();
                         if(this.org_type == 'Others'){
                             if(to_date >= present_date && from_date <= present_date){
-                            $('#screenName').html('<b>Application for '+data.screenName);
+                                $('#screenPermission1').show();
+                                $('#message1').html("The Admission Dates are Open. <br> Thank You!");
+                                this.special_case='0';
                             }else{
-                                $('#screenPermission').show();
-                                $('#mainform').hide();
-                                $('#message').html("The Admission Dates are closed. <br> Thank You!");
+                                $('#screenPermission2').show();
+                                $('#message2').html("The Admission Dates are closed. Only Special Cases will be entertained <br> Thank You!");
+                                this.special_case='1';
                             }
                         }
                         
@@ -267,77 +273,104 @@ export default {
             
         },
         loadAdmissionDetails(){
-            let std_code='transfer-'+$('#student_id').val();
-            let uri = '/students/admission/getStudentDetails/'+std_code;
-			axios.get(uri)
-			.then(response => {
-                let data = response.data.data;
-                if(data != "" && data != null){
-                    let dob = data.DateOfBirth;
-
-                    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-                    
-                    let date1 = new Date(dob);
-                    let date2 = '';
-                    if(this.org_type == 'ECCD'){
-                        date2 = new Date(this.eccdAdmissionDateValidation);
+            if(this.special_case == 1){
+                let std_code=$('#student_id').val();
+                let uri = '/students/getStudentAdmissionRequest/'+std_code;
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    if(data != "" && data != null){
+                        this.std_admission_details = data[0];
+                        this.parents_details = data[0].parents;
+                        this.student_form.student_id = data[0].student_code;
+                        let OrgClassStreamId = data[0].class.OrgClassStreamId;
+                        this.getStudentSchoolDetails(OrgClassStreamId);
+                        
                     } else {
-                        date2 = new Date(this.schoolAdmissionDateValidation);
+                        Swal.fire({
+                        text: "Student with request CID/Student Code was not found",
+                        icon: 'info',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ok!',
+                        });
                     }
+                });
 
-                    // Discard the time and time-zone information.
-                    const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-                    const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+            } else {
+                let std_code='transfer-'+$('#student_id').val();
+                let uri = '/students/admission/getStudentDetails/'+std_code;
+                axios.get(uri)
+                .then(response => {
+                    let data = response.data.data;
+                    if(data != "" && data != null){
+                        let dob = data.DateOfBirth;
 
-                    let age = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
-                    
-                    if(this.org_type == 'ECCD'){
-                        if(age <=1096){
-                            Swal.fire({
-                                text: "Child does not meet the Minimum age requirement for Admission",
-                                icon: 'error',
-                                showCancelButton: false,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Ok!',
-                                });
+                        const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                        
+                        let date1 = new Date(dob);
+                        let date2 = '';
+                        if(this.org_type == 'ECCD'){
+                            date2 = new Date(this.eccdAdmissionDateValidation);
                         } else {
-                            this.std_admission_details = data;
-                            this.parents_details = data.parents;
-                            this.student_form.student_id = data.id;
-                            let OrgClassStreamId = data.class.OrgClassStreamId;
-                            this.getStudentSchoolDetails(OrgClassStreamId);
+                            date2 = new Date(this.schoolAdmissionDateValidation);
                         }
+
+                        // Discard the time and time-zone information.
+                        const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+                        const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+                        let age = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
+                        
+                        if(this.org_type == 'ECCD'){
+                            if(age <=1096){
+                                Swal.fire({
+                                    text: "Child does not meet the Minimum age requirement for Admission",
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Ok!',
+                                    });
+                            } else {
+                                this.std_admission_details = data;
+                                this.parents_details = data.parents;
+                                this.student_form.student_id = data.id;
+                                let OrgClassStreamId = data.class.OrgClassStreamId;
+                                this.getStudentSchoolDetails(OrgClassStreamId);
+                            }
+                        } else {
+                            if(age <=1825){
+                                Swal.fire({
+                                    text: "Child does not meet the Minimum age requirement for Admission",
+                                    icon: 'error',
+                                    showCancelButton: false,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Ok!',
+                                    });
+                            } else {
+                                this.std_admission_details = data;
+                                this.parents_details = data.parents;
+                                this.student_form.student_id = data.id;
+                                let OrgClassStreamId = data.class.OrgClassStreamId;
+                                this.getStudentSchoolDetails(OrgClassStreamId);
+                            }
+                        }
+                        
                     } else {
-                        if(age <=1825){
-                            Swal.fire({
-                                text: "Child does not meet the Minimum age requirement for Admission",
-                                icon: 'error',
-                                showCancelButton: false,
-                                confirmButtonColor: '#3085d6',
-                                cancelButtonColor: '#d33',
-                                confirmButtonText: 'Ok!',
-                                });
-                        } else {
-                            this.std_admission_details = data;
-                            this.parents_details = data.parents;
-                            this.student_form.student_id = data.id;
-                            let OrgClassStreamId = data.class.OrgClassStreamId;
-                            this.getStudentSchoolDetails(OrgClassStreamId);
-                        }
+                        Swal.fire({
+                        text: "Student with request CID/Student Code was not found",
+                        icon: 'info',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ok!',
+                        });
                     }
-                    
-                } else {
-                    Swal.fire({
-                    text: "Student with request CID/Student Code was not found",
-                    icon: 'info',
-                    showCancelButton: false,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ok!',
-                    });
-                }
-			});
+                });
+            }
 		},
         getStudentSchoolDetails(OrgClassStreamId){
             let uri = '/organization/getStudentSchoolDetails/'+ OrgClassStreamId;
@@ -403,24 +436,6 @@ export default {
             .then(response => {
                 let data = response.data.data;
                 this.loadOrgDetails(data['Agency_Code']);
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
-        
-        axios.get('masters/loadGlobalMasters/admission')
-            .then(response => {
-                let data = response.data.data;
-                let from_date = new Date(data.from_date);
-                let to_date = new Date(data.to_date);
-                let present_date = new Date();
-                if(to_date >= present_date && from_date <= present_date){
-                    $('#screenName').html('<b>Application for '+data.screenName);
-                }else{
-                    $('#screenPermission').show();
-                    $('#mainform').hide();
-                    $('#message').html("The Admission Dates are closed. <br> Thank You!");
-                }
             })
             .catch(errors => {
                 console.log(errors)

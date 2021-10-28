@@ -95,6 +95,13 @@ class ProjectionsController extends Controller
         return $dis;
     }
 
+    public function loadFeedersBySchool(){
+        $org_id = $this->getWrkingAgencyId();
+        
+        $dis = $this->apiService->listData('emis/organization/feeder/loadFeedersBySchool/'.$org_id);
+        return $dis;
+    }
+
     public function saveFeederStudents(Request $request){
         $data = $request->all();
         $additional_data = [
@@ -125,6 +132,13 @@ class ProjectionsController extends Controller
         $org_id = $this->getWrkingAgencyId();
 
         $list = $this->apiService->listData('emis/organization/feeder/loadFeederStudents/'.$org_id);
+        return $list;
+    }
+
+    public function loadFeederStudentsBySchool(){
+        $org_id = $this->getWrkingAgencyId();
+
+        $list = $this->apiService->listData('emis/organization/feeder/loadFeederStudentsBySchool/'.$org_id);
         return $list;
     }
 }
