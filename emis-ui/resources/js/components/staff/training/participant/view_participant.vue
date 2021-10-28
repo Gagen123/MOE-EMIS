@@ -98,7 +98,6 @@
                     <table id="dynamic-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>CID/Work Permit No</th>
                                 <th>Dzongkhag</th>
                                 <th>Working Agency</th>
                                 <th>Name</th>
@@ -110,13 +109,12 @@
                         </thead>
                         <tbody>
                             <tr v-for="(item, index) in participant_list" :key="index">
-                                <td>{{ item.staff_details.cid_work_permit}}</td>
-                                <td>{{ dzongkhagArray[item.staff_details.dzongkhagId]}}</td>
-                                <td>{{ item.staff_details.working_agency_name}}</td>
-                                <td>{{ item.staff_details.name}}</td>
+                                <td>{{ item.dzongkhag}}</td>
+                                <td>{{ item.working_agency_name}}</td>
+                                <td>{{ item.staff_name}}</td>
                                 <td>{{ item.contact}}</td>
                                 <td>{{ item.email }}</td>
-                                <td>{{ nature_of_participantListname[item.nature_of_participant]}}</td>
+                                <td>{{ item.participacingas}}</td>
                                 <td>
                                     <span v-for="(doc, index) in item.document" :key="index">
                                         <a href="#" @click="openfile(doc)"> {{ doc.original_name.split('_')[1]}}</a>
@@ -125,13 +123,6 @@
                             </tr>
                         </tbody>
                     </table>
-                    <!-- <div class="form-group row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <label class="mb-0.5">Remarks:</label>
-                            <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
-                            <has-error :form="form" field="remarks"></has-error>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>

@@ -180,91 +180,85 @@ class WorkflowController extends Controller{
 
     public function updateNextNotification(Request $request){
         $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
-        $record_id=$notificationDetails->id;
-        $not_audit_data=[
-            'id'                        =>  $notificationDetails->id,
-            'notification_for'          =>  $notificationDetails->notification_for,
-            'notification_appNo'        =>  $notificationDetails->notification_appNo,
-            'notification_message'      =>  $notificationDetails->notification_message,
-            'notification_type'         =>  $notificationDetails->notification_type,
-            'notification_access_type'  =>  $notificationDetails->notification_access_type,
-            'access_level'              =>  $notificationDetails->access_level,
-            'call_back_link'            =>  $notificationDetails->call_back_link,
-            'created_by'                =>  $notificationDetails->created_by,
-            'created_at'                =>  $notificationDetails->created_at,
-            'updated_by'                =>  $notificationDetails->action_by,
-            'updated_at'                =>  $notificationDetails->udpated_on,
-            'audited_by'                =>  $notificationDetails->action_by,
-            'audited_at'                =>  date('Y-m-d h:i:s'),
-        ];
-        NotificationAudit::create($not_audit_data);
+        if($notificationDetails!=null && $notificationDetails!=""){
+            $record_id=$notificationDetails->id;
+            $not_audit_data=[
+                'id'                        =>  $notificationDetails->id,
+                'notification_for'          =>  $notificationDetails->notification_for,
+                'notification_appNo'        =>  $notificationDetails->notification_appNo,
+                'notification_message'      =>  $notificationDetails->notification_message,
+                'notification_type'         =>  $notificationDetails->notification_type,
+                'notification_access_type'  =>  $notificationDetails->notification_access_type,
+                'access_level'              =>  $notificationDetails->access_level,
+                'call_back_link'            =>  $notificationDetails->call_back_link,
+                'created_by'                =>  $notificationDetails->created_by,
+                'created_at'                =>  $notificationDetails->created_at,
+                'updated_by'                =>  $notificationDetails->action_by,
+                'updated_at'                =>  $notificationDetails->udpated_on,
+                'audited_by'                =>  $notificationDetails->action_by,
+                'audited_at'                =>  date('Y-m-d h:i:s'),
+            ];
+            NotificationAudit::create($not_audit_data);
 
-        $notification_data=[
-            'notification_message'               =>  $request->notification_message,
-            'notification_type'                  =>  $request->notification_type,
-            'notification_access_type'           =>  $request->notification_access_type,
-            'access_level'                       =>  $request->access_level,
-            'call_back_link'                     =>  $request->call_back_link,
-            'updated_by'                         =>  $request->action_by,
-            'updated_at'                         =>  date('Y-m-d h:i:s'),
-        ];
-        Notification::where('notification_appNo',$request->notification_appNo)->update($notification_data);
-        $notification_to=NotificationTo::where('notification_id',$record_id)->get();
-        if($notification_to!=null && $notification_to!="" && sizeof($notification_to)>0){
-            foreach($notification_to as $noti){
-                $not_to_audit_data=[
-                    'id'                        =>  $noti['id'],
-                    'notification_id'           =>  $noti['notification_id'],
-                    'user_role_id'              =>  $noti['user_role_id'],
-                    'access_level'              =>  $noti['access_level'],
-                    'dzo_id'                    =>  $noti['dzo_id'],
-                    'working_agency_id'         =>  $noti['working_agency_id'],
-                    'audited_by'                =>  $request->action_by,
-                    'audited_at'                =>  date('Y-m-d h:i:s'),
-                ];
-                NotificationToAudit::create($not_to_audit_data);
-            }
-        }
-
-        NotificationTo::where('notification_id',$record_id)->delete();
-        // $not_to_data=[
-        //     'notification_id'           =>  $record_id,
-        //     'user_role_id'              =>  $noti['user_role_id'],
-        //     'access_level'              =>  $noti['access_level'],
-        //     'dzo_id'                    =>  $noti['dzo_id'],
-        //     'working_agency_id'         =>  $noti['working_agency_id'],
-        // ];
-        // NotificationTo::create($not_to_data);
-        if(strpos($request->user_role_id,',')!==false){
-            $user_roles=explode(',', $request->user_role_id);
-            foreach($user_roles as $usr){
-                if($usr!=""){
-                    $notification_to_data=[
-                        'notification_id'               =>  $record_id,
-                        'user_role_id'                  =>  $usr,
-                        'dzo_id'                        =>  $request->dzo_id,
-                        'access_level'                  =>  $request->access_level,
-                        'working_agency_id'             =>  $request->working_agency_id,
+            $notification_data=[
+                'notification_message'               =>  $request->notification_message,
+                'notification_type'                  =>  $request->notification_type,
+                'notification_access_type'           =>  $request->notification_access_type,
+                'access_level'                       =>  $request->access_level,
+                'call_back_link'                     =>  $request->call_back_link,
+                'updated_by'                         =>  $request->action_by,
+                'updated_at'                         =>  date('Y-m-d h:i:s'),
+            ];
+            Notification::where('notification_appNo',$request->notification_appNo)->update($notification_data);
+            $notification_to=NotificationTo::where('notification_id',$record_id)->get();
+            if($notification_to!=null && $notification_to!="" && sizeof($notification_to)>0){
+                foreach($notification_to as $noti){
+                    $not_to_audit_data=[
+                        'id'                        =>  $noti['id'],
+                        'notification_id'           =>  $noti['notification_id'],
+                        'user_role_id'              =>  $noti['user_role_id'],
+                        'access_level'              =>  $noti['access_level'],
+                        'dzo_id'                    =>  $noti['dzo_id'],
+                        'working_agency_id'         =>  $noti['working_agency_id'],
+                        'audited_by'                =>  $request->action_by,
+                        'audited_at'                =>  date('Y-m-d h:i:s'),
                     ];
-                    NotificationTo::create($notification_to_data);
+                    NotificationToAudit::create($not_to_audit_data);
                 }
             }
-        }
-        else{
-            $notification_to_data=[
-                'notification_id'               =>  $record_id,
-                'user_role_id'                  =>  $request->user_role_id,
-                'dzo_id'                        =>  $request->dzo_id,
-                'access_level'                  =>  $request->access_level,
-                'working_agency_id'             =>  $request->working_agency_id,
+            NotificationTo::where('notification_id',$record_id)->delete();
+            if(strpos($request->user_role_id,',')!==false){
+                $user_roles=explode(',', $request->user_role_id);
+                foreach($user_roles as $usr){
+                    if($usr!=""){
+                        $notification_to_data=[
+                            'notification_id'               =>  $record_id,
+                            'user_role_id'                  =>  $usr,
+                            'dzo_id'                        =>  $request->dzo_id,
+                            'access_level'                  =>  $request->access_level,
+                            'working_agency_id'             =>  $request->working_agency_id,
+                        ];
+                        NotificationTo::create($notification_to_data);
+                    }
+                }
+            }
+            else{
+                $notification_to_data=[
+                    'notification_id'               =>  $record_id,
+                    'user_role_id'                  =>  $request->user_role_id,
+                    'dzo_id'                        =>  $request->dzo_id,
+                    'access_level'                  =>  $request->access_level,
+                    'working_agency_id'             =>  $request->working_agency_id,
+                ];
+                NotificationTo::create($notification_to_data);
+            }
+            $not_visited=[
+                'notification_id'           =>  $record_id,
+                'user_id'                   =>  $request->action_by,
             ];
-            NotificationTo::create($notification_to_data);
+            NotificationVisited::create($not_visited);
         }
-        $not_visited=[
-            'notification_id'           =>  $record_id,
-            'user_id'                   =>  $request->action_by,
-        ];
-        NotificationVisited::create($not_visited);
+
     }
 
     public function visitedNotification(Request $request){

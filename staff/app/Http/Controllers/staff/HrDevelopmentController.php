@@ -19,6 +19,7 @@ use App\Models\staff\DocumentDetails;
 use App\Models\staff\HrWorkflow;
 use App\Models\staff\Participant;
 use App\Models\staff\ApplicationSequence;
+use App\Models\staff\ParticipantsEID;
 use App\Models\staff\PersonalDetails;
 use App\Models\staff\ProgramApplication;
 use App\Models\staff_masters\ChildGroupPosition;
@@ -504,52 +505,98 @@ class HrDevelopmentController extends Controller{
     }
 
     public function saveParticipant(Request $request){
-        $rules = [
-            'programId'             =>  'required',
-            'participant'           =>  'required',
-            'contact'               =>  'required',
-            'email'                 =>  'required',
-            'nature_of_participant' =>  'required',
-        ];
-        $customMessages = [
-            'programId.required'              => 'Please select nomination start date',
-            'participant.required'            => 'Please select nomination end date',
-            'contact.required'                => 'Please select this field',
-            'email.required'                  => 'This field is required',
-            'nature_of_participant.required'  => 'This field is required',
-        ];
+        if($request->partifipant_from!="Excel"){
+            $rules = [
+                'programId'             =>  'required',
+                'participant'           =>  'required',
+                'contact'               =>  'required',
+                'email'                 =>  'required',
+                'nature_of_participant' =>  'required',
+            ];
+            $customMessages = [
+                'programId.required'              => 'Please select nomination start date',
+                'participant.required'            => 'Please select nomination end date',
+                'contact.required'                => 'Please select this field',
+                'email.required'                  => 'This field is required',
+                'nature_of_participant.required'  => 'This field is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+            if($request->action_type=="add"){
+                $request_data =[
+                    'program_id'                =>  $request->programId,
+                    'org_id'                    =>  $request->org_id,
+                    'dzo_id'                    =>  $request->dzo_id,
+                    'participant_id'            =>  $request->participant,
+                    'contact'                   =>  $request->contact,
+                    'email'                     =>  $request->email,
+                    'nature_of_participant'     =>  $request->nature_of_participant,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                $response_data= Participant::create($request_data);
+            }
+            else{
+                $request_data =[
+                    'org_id'                    =>  $request->org_id,
+                    'dzo_id'                    =>  $request->dzo_id,
+                    'participant_id'            =>  $request->participant,
+                    'contact'                   =>  $request->contact,
+                    'email'                     =>  $request->email,
+                    'nature_of_participant'     =>  $request->nature_of_participant,
+                    'created_by'                =>  $request->user_id,
+                    'created_at'                =>  date('Y-m-d h:i:s')
+                ];
+                $act_det = Participant::where ('id', $request->id)->first();
+                $act_det->fill($request_data);
+                $response_data=$act_det->save();
+                $response_data= Participant::where('id',$request->id)->first();
+            }
 
-        $this->validate($request, $rules,$customMessages);
-        if($request->action_type=="add"){
-            $request_data =[
-                'program_id'                =>  $request->programId,
-                'org_id'                    =>  $request->org_id,
-                'dzo_id'                    =>  $request->dzo_id,
-                'participant_id'            =>  $request->participant,
-                'contact'                   =>  $request->contact,
-                'email'                     =>  $request->email,
-                'nature_of_participant'     =>  $request->nature_of_participant,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
-            ];
-            $response_data= Participant::create($request_data);
-        }
-        else{
-            $request_data =[
-                'org_id'                    =>  $request->org_id,
-                'dzo_id'                    =>  $request->dzo_id,
-                'participant_id'            =>  $request->participant,
-                'contact'                   =>  $request->contact,
-                'email'                     =>  $request->email,
-                'nature_of_participant'     =>  $request->nature_of_participant,
-                'created_by'                =>  $request->user_id,
-                'created_at'                =>  date('Y-m-d h:i:s')
-            ];
-            $act_det = Participant::where ('id', $request->id)->first();
-            // dd($request->id);
-            $act_det->fill($request_data);
-            $response_data=$act_det->save();
-            $response_data= Participant::where('id',$request->id)->first();
+        }else{
+            if($request->participantFile!=null && $request->participantFile!="" && sizeof($request->participantFile)>0){
+                $response_data= ParticipantsEID::where('created_by',$request->user_id)->delete();
+                foreach($request->participantFile as $par){
+                    $is_match=1;
+                    $name="";
+                    $participant_id="";
+                    $contact="";
+                    $email="";
+                    $parsonal=PersonalDetails::where('emp_id',$par)->first();
+                    if($parsonal!=null && $parsonal!=""){
+                        $name=$parsonal->name;
+                        $participant_id=$parsonal->id;
+                        $contact=$parsonal->contact_no;
+                        $email=$parsonal->email;
+                    }else{
+                        $is_match=0;
+                    }
+                    $request_data =[
+                        'eid'                       =>  $par,
+                        'nature_of_participant'     =>  $request->nature_of_participant,
+                        'is_match'                  =>  $is_match,
+                        'name'                      =>  $name,
+                        'program_id'                =>  $request->programId,
+                        'org_id'                    =>  $request->org_id,
+                        'dzo_id'                    =>  $request->dzo_id,
+                        'participant_id'            =>  $participant_id,
+                        'contact'                   =>  $contact,
+                        'email'                     =>  $email,
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data= ParticipantsEID::create($request_data);
+                    $response_data= ParticipantsEID::where('created_by',$request->user_id)->get();
+                    if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                        foreach($response_data as $data){
+                            $nature=NatureOfParticipant::where('id',$data->nature_of_participant)->first();
+                            if($nature!=null && $nature!=""){
+                                $data->natureOfParticipant=$nature->name;
+                            }
+                            $response_data->id= $data->program_id; //for the attachment
+                        }
+                    }
+                }
+            }
         }
         if(!$request->attachment_details==null){
             foreach($request->attachment_details as $att){
@@ -572,7 +619,7 @@ class HrDevelopmentController extends Controller{
             foreach($response_details as $part){
                 $part->StaffID=$part->participant_id;
                 $part->document=DocumentDetails::where('parent_id',$part->id)->get();
-                $parti=NatureOfParticipant::where('id',$part->participant_id)->first();
+                $parti=NatureOfParticipant::where('id',$part->nature_of_participant)->first();
                 if($parti!=null && $parti!=""){
                     $part->participacingas=$parti->name;
                 }
@@ -584,6 +631,10 @@ class HrDevelopmentController extends Controller{
             foreach($response_details as $part){
                 $part->StaffID=$part->participant_id;
                 $part->document=DocumentDetails::where('parent_id',$part->id)->get();
+                $parti=NatureOfParticipant::where('id',$part->nature_of_participant)->first();
+                if($parti!=null && $parti!=""){
+                    $part->participacingas=$parti->name;
+                }
             }
             $response_details=$this->getstaff_positiondirectory($response_details,'Array');
         }
@@ -812,5 +863,32 @@ class HrDevelopmentController extends Controller{
             $response_details=false;
         }
         return $this->successResponse($response_details);
+    }
+
+    public function updateExcelfile($param="",$user_id=""){
+        if($param=="Save"){
+            $parsonal=ParticipantsEID::where('created_by',$user_id)->get();
+            if($parsonal!=null && $parsonal!="" && sizeof($parsonal)>0){
+                foreach($parsonal as $per){
+                    if($per->participant_id!=null && $per->participant_id!=""){
+                        $request_data =[
+                            'program_id'                =>  $per->program_id,
+                            'org_id'                    =>  $per->org_id,
+                            'dzo_id'                    =>  $per->dzo_id,
+                            'participant_id'            =>  $per->participant_id,
+                            'contact'                   =>  $per->contact,
+                            'email'                     =>  $per->email,
+                            'nature_of_participant'     =>  $per->nature_of_participant,
+                            'created_by'                =>  $per->user_id,
+                            'created_at'                =>  date('Y-m-d h:i:s')
+                        ];
+                        $response_data= Participant::create($request_data);
+                    }
+                }
+            }
+        }
+        $parsonal=ParticipantsEID::where('created_by',$user_id)->delete();
+        $response_data= Participant::create($request_data);
+        return $this->successResponse($response_data);
     }
 }

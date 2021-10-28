@@ -5,8 +5,14 @@ use GuzzleHttp\Client;
 use App\Helper\EmisService;
 use App\Traits\ServiceHelper;
 use App\Http\Controllers\Controller;
+use App\Imports\ParticipantImport;
 use Illuminate\Http\Request;
+use App\Imports\UsersImport;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Traits\AuthUser;
+use Exception;
+use Illuminate\Support\Collection;
+use stdClass;
 
 class HrDevelopmentController extends Controller{
     use ServiceHelper;
@@ -180,23 +186,43 @@ class HrDevelopmentController extends Controller{
     }
 
     public function saveParticipant(Request $request){
-        $rules = [
-            'programId'             =>  'required',
-            'participant'           =>  'required',
-            'contact'               =>  'required',
-            'email'                 =>  'required',
-            'nature_of_participant' =>  'required',
-        ];
-        $customMessages = [
-            'programId.required'              => 'Please select nomination start date',
-            'participant.required'            => 'Please select nomination end date',
-            'contact.required'                => 'Please select this field',
-            'email.required'                  => 'This field is required',
-            'nature_of_participant.required'  => 'This field is required',
-        ];
-        $this->validate($request, $rules,$customMessages);
-
         $files = $request->attachments;
+        $participantFile=[];
+        if($request->partifipant_from!="Excel"){
+            $rules = [
+                'programId'             =>  'required',
+                'participant'           =>  'required',
+                'contact'               =>  'required',
+                'email'                 =>  'required',
+                'nature_of_participant' =>  'required',
+            ];
+            $customMessages = [
+                'programId.required'              => 'Please select nomination start date',
+                'participant.required'            => 'Please select nomination end date',
+                'contact.required'                => 'Please select this field',
+                'email.required'                  => 'This field is required',
+                'nature_of_participant.required'  => 'This field is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }else{
+            if($files!=null && $files!=""){
+                try{
+                    if(sizeof($files)>0){
+                        foreach($files as $index => $file){
+                            $file_name = time().'_' .$file->getClientOriginalName();
+                            $theArray = Excel::toArray(new stdClass(), $file);
+                            foreach($theArray[0] as $index =>$file){
+                                if($index!=0){
+                                    array_push($participantFile,$file[0]);
+                                }
+                            }
+                        }
+                    }
+                }catch(Exception $e){
+                    dd('ex: ',$e);
+                }
+            }
+        }
         // dd($files);
         $attachment_details=[];
         $file_store_path=config('services.constant.file_stored_base_path').'HrDevelopmentParticipant';
@@ -228,9 +254,11 @@ class HrDevelopmentController extends Controller{
             'nature_of_participant'     =>  $request->nature_of_participant,
             'attachment_details'        =>  $attachment_details,
             'action_type'               =>  $request->action_type,
+            'partifipant_from'          =>  $request->partifipant_from,
+            'files'                     =>  $files,
+            'participantFile'           =>  $participantFile,
             'user_id'                   =>  $this->userId()
         ];
-        // dd($request_data);
         $response_data= $this->apiService->createData('emis/staff/hrdevelopment/saveParticipant', $request_data);
         return $response_data;
     }
@@ -358,6 +386,15 @@ class HrDevelopmentController extends Controller{
 
     public function checkProgramAccess(){
         $response_data= $this->apiService->listData('emis/staff/hrdevelopment/checkProgramAccess/'.$this->userId());
+        return $response_data;
+    }
+    public function loadfeedbackDetials($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadfeedbackDetials/'.$param);
+        return $response_data;
+    }
+
+    public function updateExcelfile($param=""){
+        $response_data= $this->apiService->listData('emis/staff/hrdevelopment/updateExcelfile/'.$param.'/'.$this->userId());
         return $response_data;
     }
 }
