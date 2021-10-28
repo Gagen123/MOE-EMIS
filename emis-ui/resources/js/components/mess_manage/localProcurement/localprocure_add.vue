@@ -8,6 +8,7 @@
                         <input class="form-control popupDatepicker" name="dateOfprocure" id="dateOfprocure" type="text" 
                         :class="{ 'is-invalid': form.errors.has('dateOfprocure') }" @change="remove_err('dateOfprocure')"  autocomplete="off" >
                         <has-error :form="form" field="dateOfprocure"></has-error>
+                       
                     </div>
                     <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Procurement:<span class="text-danger">*</span></label>
@@ -37,7 +38,7 @@
                                       </select>
                                   </td>
                                   <td>
-                                     <input type="text" name="quantity" class="form-control" v-model="item.quantity">
+                                     <input type="number" name="quantity" class="form-control" v-model="item.quantity">
                                  </td>
                                  <td>
                                 <!-- <select name="unit" id="unit" class="form-control" v-model="item.unit">
@@ -119,7 +120,7 @@ export default {
                 this.restForm();
             }
             if(type=="save"){
-                    this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfprocure').val());
+                    this.form.dateOfprocure=this.formatYYYYMMDD($('#dateOfprocure').val());
                     this.form.post('/mess_manage/saveLocalProcure',this.form)
                     .then(() => {
                     Toast.fire({
@@ -193,7 +194,7 @@ export default {
              if(this.form.local_item.length>1){
                 this.count--;
                 this.form.local_item.splice(index,1);
-            }
+            } 
         },
          selectunit(type,index){
             let itemval=$('#'+type+index).val();
@@ -202,13 +203,13 @@ export default {
  
         loadActiveFoodSourceMaster(uri = 'masters/loadActiveStudentMasters/FoodSourceType'){
             axios.get(uri)
-            .then(response =>{
+            .then(response =>{  
                 let data = response;
-                this.foodSourceList =  data.data;
+                this.foodSourceList =  data.data.data;
             })
             .catch(function (error){
                 console.log(error);
-            });
+            }); 
         },
     },
      mounted() {

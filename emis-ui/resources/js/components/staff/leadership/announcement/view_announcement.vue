@@ -112,7 +112,7 @@
                                     <th>Status</th>
                                     <th>Feedback Score</th>
                                     <th>Interview Score</th>
-                                    <th>Action</th>
+                                    <th class="pl-5 pr-5 mr-5 mr-5">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -129,7 +129,17 @@
                                     <td> {{data.status}} </td>
                                     <td> {{data.totalwatage}} </td>
                                     <td> {{data.interniew_score}} </td>
-                                    <td> {{data.status}} </td>
+                                    <td>
+                                        <span v-if="data.status=='Selected'">
+                                            <button type="button" @click="takeaction(data.id,'withdraw')" name="withdrown" class="btn btn-danger"> <i class="fa fa-times"></i> Withdraw</button>
+                                        </span>
+                                        <span v-else>
+                                            <button type="button" @click="takeaction(data,'view')" name="view" class="btn btn-success"> <i class="fa fa-eye"></i> View</button>
+                                        </span>
+                                        <span v-if="data.status!='Submitted' && data.status!='Notified for Feedback'">
+                                            <button type="button" @click="takeaction(data.id,'feedback')" name="view" class="btn btn-info text-white"><span> <i class="fa fa-edit"></i> Feedback</span></button>
+                                        </span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -147,6 +157,7 @@ export default {
             form: new form({
                 applicant_List:[],
                 id:'',
+                appId:'',
                 position_title:'',
                 feedback:1,
                 interview:1,
@@ -185,8 +196,46 @@ export default {
             .catch((error) =>{
                 console.log("Error: "+error);
             });
+        },
+        takeaction(id,type){
+            if(type=="withdraw"){
+                Swal.fire({
+                    text: "Are you sure you wish to udpate this applicant as withdrawn ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText:'No',
+                    }).then((result) => {
+                    if(result.isConfirmed){
+                        this.form.action_type=type;
+                        this.form.appId=id;
+                        this.form.post('/staff/staffLeadershipSerivcesController/updatestatus')
+                        .then((response) =>{
+                            if(response!=""){
+                                Swal.fire(
+                                    'Success!',
+                                    'Post details has been created and published successfully.',
+                                    'success',
+                                )
+                                this.loadDetials();
+                            }
+                        })
+                        .catch((error) =>{
+                            console.log("Error: "+error);
+                            this.applyselect2();
+                        });
+                    }
+                });
+            }
+            else if(type=="feedback"){
+                this.$router.push({name:"view_feedback",params:{id:id}});
+            }
+            else{
+                this.$router.push({name:"open_staff_recruitment_verification",params:{data:id,type:'open'}});
+            }
         }
-
     },
     mounted(){
         this.form.id=this.$route.params.id;

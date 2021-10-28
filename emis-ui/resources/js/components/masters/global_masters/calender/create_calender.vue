@@ -34,6 +34,9 @@
                                     <option value="Inter Transfer">Transfer Appeal</option>
                                 </template>
                                 <template >
+                                    <option value="Admission (PP)">Admission (PP)</option>
+                                </template>
+                                <template >
                                     <option value="Admission (General)">Admission (General)</option>
                                 </template>
                                 <template >

@@ -325,6 +325,7 @@ export default {
                                     confirmButtonText: 'okay!',
                             });
                             this.applyselect2();
+                            
                             this.$router.push('/list_transfer_appeal');
                             }
                             // }

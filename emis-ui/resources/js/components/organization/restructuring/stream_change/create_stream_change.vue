@@ -138,7 +138,7 @@
                                                             <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                         </td>
                                                         <td>
-                                                            <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" @change="remove_error('attach'+(index+1))">
                                                             <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                         </td>
                                                     </tr>
@@ -349,8 +349,19 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            console.log("Error:"+err)
+                       .catch((error) => {
+                        //    this.applyselect2();
+                           this.form.errors.errors = error.response.data;
+                           if(error.response.data.streams == 'streams is required'){
+                                Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Please select applicable streams!',
+                            })
+                           }
+                           this.validateFileform();
+
+                          
                         })
                     }
                 });
@@ -368,6 +379,24 @@ export default {
             .catch(function (error) {
                 console.log("Erro: "+error)
             });
+        },
+         validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
 
         getGewogList(dzongkhag,gewogId){

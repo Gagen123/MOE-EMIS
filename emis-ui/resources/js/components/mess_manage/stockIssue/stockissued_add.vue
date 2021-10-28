@@ -5,8 +5,12 @@
                 <div class="form-group row">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="">Date of Stock Issued:<span class="text-danger">*</span></label>
-                        <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date"
+                        <!-- <input class="form-control editable_fields" name="dateOfissue" id="dateOfissue" type="date"
                         v-model="form.dateOfissue" :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')">
+                        <has-error :form="form" field="dateOfissue"></has-error> -->
+
+                        <input class="form-control popupDatepicker" name="dateOfissue" id="dateOfissue" type="text" 
+                        :class="{ 'is-invalid': form.errors.has('dateOfissue') }" @change="remove_err('dateOfissue')"  autocomplete="off" >
                         <has-error :form="form" field="dateOfissue"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -150,6 +154,7 @@ export default {
             if(type=="save"){
                // alert(this.form.itemList);
                 this.form.itemList=this.itemList;
+                this.form.dateOfrelease=this.formatYYYYMMDD($('#dateOfissue').val());
                 this.form.post('/mess_manage/saveStockIssued',this.form)
                 .then(() => {
                     Toast.fire({

@@ -1,20 +1,24 @@
 <template>
     <div>
-        <div class="card card-primary card-outline card-outline-tabs">
-            <div class="card-header p-0 border-bottom-0">
+        <div class="callout callout-danger" style="display:none" id="noaccesssection">
+            <h5 class="bg-gradient-danger">Sorry!</h5>
+            <div id="message"></div>
+        </div>
+        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+            <!-- <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item programme-tab" @click="shownexttab('programme-tab')">
                         <a class="nav-link active" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Programme Details </label>
                         </a>
                     </li>
-                    <!-- <li class="nav-item eligibility-tab" @click="shownexttab('eligibility-tab')">
+                    <li class="nav-item eligibility-tab" @click="shownexttab('eligibility-tab')">
                         <a class="nav-link" data-toggle="pill" role="tab">
                             <label class="mb-0.5">Eligibility & Nomination </label>
                         </a>
-                    </li> -->
+                    </li>
                 </ul>
-            </div>
+            </div> -->
             <div class="card-body pt-0 mt-1">
                 <!-- <form id="training_form" class="form-horizontal" enctype="multipart/form-data" action="#" method="post"> -->
                     <div class="tab-content">
@@ -30,18 +34,24 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Course Title:<i class="text-danger">*</i></label>
-                                    <input type="text" class="form-control" @change="remove_err('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
+                                    <input type="text" class="form-control" @change="remove_error('course_title')" :class="{ 'is-invalid' :form.errors.has('course_title') }" v-model="form.course_title" id="course_title"/>
                                     <has-error :form="form" field="course_title"></has-error>
                                 </div>
-                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Organizer:<i class="text-danger">*</i></label>
                                     <select v-model="form.organizer" :class="{ 'is-invalid select2 select2-hidden-accessible' :form.errors.has('organizer') }" class="form-control select2" name="organizer" id="organizer">
                                         <option value=""> --Select--</option>
                                         <option v-for="(item, index) in organizerList" :key="index" v-bind:value="item.id"> {{ item.agencyName }}</option>
                                     </select>
                                     <has-error :form="form" field="organizer"></has-error>
+                                </div> -->
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label class="mb-0.5">Programme Organizer:</label>
                                 </div>
                             </div>
+                            <search />
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Related Programme:</label>
@@ -53,12 +63,12 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Start Date:<i class="text-danger">*</i></label>
-                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_err('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" id="start_date"/>
+                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_error('start_date')" :class="{ 'is-invalid' :form.errors.has('start_date') }" id="start_date"/>
                                     <has-error :form="form" field="start_date"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">End Date:<i class="text-danger">*</i></label>
-                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_err('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" id="end_date"/>
+                                    <input type="text" autocomplete="off" class="form-control popupDatepicker" @change="remove_error('end_date')" :class="{ 'is-invalid' :form.errors.has('end_date') }" id="end_date"/>
                                     <has-error :form="form" field="end_date"></has-error>
                                 </div>
                             </div>
@@ -73,19 +83,19 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Total Estimated Budget:</label>
-                                    <input type="text" class="form-control" @change="remove_err('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
+                                    <input type="text" class="form-control" @change="remove_error('total_budget')" :class="{ 'is-invalid' :form.errors.has('total_budget') }" v-model="form.total_budget" id="total_budget"/>
                                     <has-error :form="form" field="total_budget"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Total Expenditure:</label>
-                                    <input type="text" class="form-control" @change="remove_err('expenditurel_budget')" :class="{ 'is-invalid' :form.errors.has('expenditurel_budget') }" v-model="form.expenditurel_budget" id="expenditurel_budget"/>
+                                    <input type="text" class="form-control" @change="remove_error('expenditurel_budget')" :class="{ 'is-invalid' :form.errors.has('expenditurel_budget') }" v-model="form.expenditurel_budget" id="expenditurel_budget"/>
                                     <has-error :form="form" field="expenditurel_budget"></has-error>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Institute/Venue:<i class="text-danger">*</i></label>
-                                    <input type="text" class="form-control" @change="remove_err('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
+                                    <input type="text" class="form-control" @change="remove_error('vanue')" :class="{ 'is-invalid' :form.errors.has('vanue') }" v-model="form.vanue" id="vanue"/>
                                     <has-error :form="form" field="vanue"></has-error>
                                 </div>
                             </div>
@@ -121,16 +131,29 @@
                                 <div class="form-group row">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0.5">Course Provider:<i class="text-danger">*</i></label>
-                                        <input type="text" class="form-control" @change="remove_err('course_provider')" :class="{ 'is-invalid' :form.errors.has('course_provider') }" v-model="form.course_provider" id="course_provider"/>
+                                        <input type="text" class="form-control" @change="remove_error('course_provider')" :class="{ 'is-invalid' :form.errors.has('course_provider') }" v-model="form.course_provider" id="course_provider"/>
                                         <has-error :form="form" field="course_provider"></has-error>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <label class="mb-0.5">Total Hours:<i class="text-danger">*</i></label>
-                                        <input type="number" class="form-control" @change="remove_err('total_hrs')" :class="{ 'is-invalid' :form.errors.has('total_hrs') }" v-model="form.total_hrs" id="total_hrs"/>
+                                        <label class="mb-0.5">Total Hours:<span id="hrsmandatory"></span></label>
+                                        <input type="number" class="form-control" @change="remove_error('total_hrs')" :class="{ 'is-invalid' :form.errors.has('total_hrs') }" v-model="form.total_hrs" id="total_hrs"/>
                                         <has-error :form="form" field="total_hrs"></has-error>
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <label class="mb-0.5">Nature of participation:<i class="text-danger">*</i></label><br/>
+                                        <span v-for="(nature, index) in nature_of_participantList" :key="index" >
+                                            <input type="checkbox"  @change="remove_error('nature_of_participant'+index)" v-model="form.nature_of_participant" :class="{ 'is-invalid' :form.errors.has('nature_of_participant') }" name="nature_of_participant" :id="'nature_of_participant'+index" :value="nature.id">
+                                            <label class="pr-3"> {{ nature.name  }}</label>
+                                            <has-error v-if="index==nature_of_participantList.length-1"  :form="form" field="nature_of_participant"></has-error>
+                                        </span>
                                     </div>
                                 </div>
                             </span>
+
+                            <!-- for the qualification upgradation -->
                             <span id="qualification_upgradation_section" style="display:none">
                                 <hr/>
                                 <div class="form-group row">
@@ -204,11 +227,16 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                         <label class="mb-0.5">Thesis Title:<i class="text-danger">*</i></label>
-                                        <input type="text" class="form-control" @change="remove_err('thesis_title')" :class="{ 'is-invalid' :form.errors.has('thesis_title') }" v-model="form.thesis_title" id="thesis_title"/>
+                                        <input type="text" class="form-control" @change="remove_error('thesis_title')" :class="{ 'is-invalid' :form.errors.has('thesis_title') }" v-model="form.thesis_title" id="thesis_title"/>
                                         <has-error :form="form" field="thesis_title"></has-error>
                                     </div>
                                 </div>
                             </span>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0">Upload the Required Documents ({{validfile()}})</label>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <table id="dynamic-table" class="table table-bordered table-striped">
@@ -231,11 +259,11 @@
                                             </tr>
                                             <tr id="record1" v-for='(att, index) in form.attachments' :key="index">
                                                 <td>
-                                                    <input type="text" class="form-control" @change="remove_err('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
+                                                    <input type="text" class="form-control" @change="remove_error('file_name'+(index+1))" :class="{ 'is-invalid' :form.errors.has('file_name') }" v-model="att.file_name" :id="'file_name'+(index+1)">
                                                     <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                 </td>
                                                 <td>
-                                                    <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                    <input type="file" class="form-control" @change="remove_error('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
                                                     <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                 </td>
                                             </tr>
@@ -251,10 +279,17 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <label class="mb-0.5">Remarks:</label>
+                                    <textarea v-model="form.remarks" :class="{ 'is-invalid' :form.errors.has('remarks') }" class="form-control" name="remarks" id="remarks"></textarea>
+                                    <has-error :form="form" field="remarks"></has-error>
+                                </div>
+                            </div>
                             <hr>
                             <div class="row form-group fa-pull-right">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <button class="btn btn-primary" @click="shownexttab('final-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
+                                    <button class="btn btn-primary" @click="shownexttab('eligibility-tab')"> <i class="fa fa-save"></i>Save & Apply </button>
                                     <!-- <button class="btn btn-primary" @click="shownexttab('eligibility-tab')">Save & Next <i class="fa fa-arrow-right"></i></button> -->
                                 </div>
                             </div>
@@ -263,12 +298,12 @@
                             <div class="form-group row">
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Nomination Start Date:<i class="text-danger">*</i></label>
-                                    <input type="date" class="form-control" @change="remove_err('nomination_start_date')" :class="{ 'is-invalid' :form.errors.has('nomination_start_date') }" v-model="form.nomination_start_date" id="nomination_start_date"/>
+                                    <input type="date" class="form-control" @change="remove_error('nomination_start_date')" :class="{ 'is-invalid' :form.errors.has('nomination_start_date') }" v-model="form.nomination_start_date" id="nomination_start_date"/>
                                     <has-error :form="form" field="nomination_start_date"></has-error>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0.5">Nomination End Date:<i class="text-danger">*</i></label>
-                                    <input type="date" class="form-control" @change="remove_err('nomination_end_date')" :class="{ 'is-invalid' :form.errors.has('nomination_end_date') }" v-model="form.nomination_end_date" id="nomination_end_date"/>
+                                    <input type="date" class="form-control" @change="remove_error('nomination_end_date')" :class="{ 'is-invalid' :form.errors.has('nomination_end_date') }" v-model="form.nomination_end_date" id="nomination_end_date"/>
                                     <has-error :form="form" field="nomination_end_date"></has-error>
                                 </div>
                             </div>
@@ -369,7 +404,11 @@
     </div>
 </template>
 <script>
+import search from "../../searchpage.vue";
 export default {
+    components: {
+        search,
+    },
     data(){
         return {
             count:1,
@@ -518,12 +557,7 @@ export default {
                 this.form.ref_docs.pop();
             }
         },
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
+
         onChangeFileUpload(e){
             let currentcount=e.target.id.match(/\d+/g)[0];
             if($('#file_name'+currentcount).val()!=""){
@@ -534,56 +568,6 @@ export default {
                 $('#file_name'+currentcount+'_err').html('Please mention file name');
                 $('#'+e.target.id).val('');
             }
-            // this.form.attachments = e.target.files[0];
-            // this.form.attachments = $("#attachments").file[0].name;
-            // this.form.file_size = e.target.files[0].size;
-            // this.form.file_type = e.target.files[0].type;
-        },
-        loadHrDevelopmentMasters(type){
-            let url="masters/loadHrDevelopmentMastersData/"+type;
-            axios.get(url)
-            .then(response => {
-                let data = response.data.data;
-                if(type=="active_training_type_list"){
-                    this.trainingtypeList=data;
-                }
-
-                if(type=="active_related_programme_list"){
-                    this.relatedProgrammeList=data;
-                }
-                if(type=="active_programme_level_list"){
-                    this.programmeLevelList=data;
-                }
-                if(type=="active_programme_type_list"){
-                    this.programmeTypeList=data;
-                }
-                if(type=="active_course_type_list"){
-                    this.courseTypeList=data;
-                }
-                if(type=="active_financial_source_list"){
-                    this.financialSourceList=data;
-                }
-                if(type=="active_category_list"){
-                    this.categoryList=data;
-                }
-                if(type=="active_donor_list"){
-                    this.donor_agencyList=data;
-                }
-                if(type=="active_degree_list"){
-                    this.degreeList=data;
-                }
-                if(type=="active_nature_of_participant_list"){
-                    this.nature_of_participantList=data;
-                }
-                if(type=="active_target_group_list"){
-                    this.target_groupList=data;
-                }
-                //this.loadHrDevelopmentMasters('active_target_group_list');
-
-            })
-            .catch(function (error) {
-                console.log("Error:"+error);
-            });
         },
 
         loadprojectofdonorList(uri = 'masters/loadHrDevelopmentDepedentMastersData/projectdonor/'+$('#donor_agency').val()){
@@ -679,7 +663,7 @@ export default {
                     }
                 });
             }
-            else if(nextclass=="eligibility-tab"){
+            else if(nextclass=="eligibility-tab" && this.validateFileform()){
                 const config = {
                     headers: {
                         'content-type': 'multipart/form-data'
@@ -697,108 +681,118 @@ export default {
                 formData.append('training_type', this.form.training_type);
                 formData.append('training_type_text', $('#training_type option:selected').text());
                 formData.append('course_title', this.form.course_title);
-                formData.append('organizer', this.form.organizer);
+                formData.append('organizer', $('#org_id').val());
                 formData.append('related_programme', this.form.related_programme);
-                formData.append('start_date', this.form.start_date);
-                formData.append('end_date', this.form.end_date);
+                formData.append('start_date', this.formatYYYYMMDD($('#start_date').val()));
+                formData.append('end_date', this.formatYYYYMMDD($('#end_date').val()));
 
-                if($('#training_type option:selected').text().toLowerCase().includes('qualification upgrad')){
-                    formData.append('category', this.form.category);
-                    formData.append('donor_agency', this.form.donor_agency);
-                    formData.append('projectofdonor', this.form.projectofdonor);
-                    formData.append('study_country', this.form.study_country);
-                    formData.append('coursemode', this.form.coursemode);
-                    formData.append('degree', this.form.degree);
-                    formData.append('subject1', this.form.subject1);
-                    formData.append('subject2', this.form.subject2);
-                    formData.append('thesis_title', this.form.thesis_title);
-                }
-                if($('#training_type option:selected').text().toLowerCase().includes('professional development')){
+                // if($('#training_type option:selected').text().toLowerCase().includes('qualification upgrad')){
+                //     formData.append('category', this.form.category);
+                //     formData.append('donor_agency', this.form.donor_agency);
+                //     formData.append('projectofdonor', this.form.projectofdonor);
+                //     formData.append('study_country', this.form.study_country);
+                //     formData.append('coursemode', this.form.coursemode);
+                //     formData.append('degree', this.form.degree);
+                //     formData.append('subject1', this.form.subject1);
+                //     formData.append('subject2', this.form.subject2);
+                //     formData.append('thesis_title', this.form.thesis_title);
+                // }
+                //if($('#training_type option:selected').text().toLowerCase().includes('professional development')){
                     formData.append('programme_level', this.form.programme_level);
                     formData.append('programme_type', this.form.programme_type);
                     formData.append('course_type', this.form.course_type);
                     formData.append('course_provider', this.form.course_provider);
                     formData.append('vanue', this.form.vanue);
                     formData.append('total_budget', this.form.total_budget);
+                    formData.append('expenditurel_budget', this.form.expenditurel_budget);
                     formData.append('total_hrs', this.form.total_hrs);
                     formData.append('financial_source', this.form.financial_source);
-                }
+                //}
                 formData.append('status', this.form.status);
 
-                formData.append('nomination_start_date', this.form.nomination_start_date);
-                formData.append('nomination_end_date', this.form.nomination_end_date);
+                // formData.append('nomination_start_date', this.form.nomination_start_date);
+                // formData.append('nomination_end_date', this.form.nomination_end_date);
                 formData.append('nature_of_participant', this.form.nature_of_participant);
-                formData.append('target_group', this.form.target_group);
-                formData.append('org_level', this.form.org_level);
+                // formData.append('target_group', this.form.target_group);
+                // formData.append('org_level', this.form.org_level);
                 formData.append('remarks', this.form.remarks);
 
                 // this.form.post('/staff/saveprogramDetails', formData, config)
-                axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
-                .then((response) => {
-                    this.form.id=response.data.data.id;//need to check the id
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Data Saved Successfully'
-                    });
-                    $('.select2').select2();
-                    $('.select2').select2({
-                        theme: 'bootstrap4'
-                    });
-                })
-                .catch((error) => {
-                    this.change_tab('programme-tab');
-                    if(!$('#training_type').attr('class').includes('select2-hidden-accessible')){
-                        $('#training_type').addClass('select2-hidden-accessible');
+                Swal.fire({
+                    text: "Are you sure you wish to save and publish training ?",
+                    icon: 'info',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    cancelButtonText:'No',
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios.post('/staff/hrdevelopment/saveprogramDetails', formData, config)
+                        .then((response) => {
+                            // this.form.id=response.data.data.id;//need to check the id
+                            // Toast.fire({
+                            //     icon: 'success',
+                            //     title: 'Data Saved Successfully'
+                            // });
+                            // $('.select2').select2();
+                            // $('.select2').select2({
+                            //     theme: 'bootstrap4'
+                            // });
+                            if(response!=null && response!=""){
+                                Swal.fire(
+                                    'Success!',
+                                    'Details has been saved successfully.',
+                                    'success',
+                                )
+                                this.$router.push('/list_programme');
+                            }
+                        })
+                        .catch((error) => {
+                            // this.change_tab('programme-tab');
+                            console.log("Errorss:"+error.response.data.error);
+                            this.form.errors.errors = error.response.data;
+                            this.applyselect2();
+                        });
+                        // this.change_tab(nextclass);
                     }
-                    if(!$('#programme_level').attr('class').includes('select2-hidden-accessible')){
-                        $('#programme_level').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#organizer').attr('class').includes('select2-hidden-accessible')){
-                        $('#organizer').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#programme_type').attr('class').includes('select2-hidden-accessible')){
-                        $('#programme_type').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#course_type').attr('class').includes('select2-hidden-accessible')){
-                        $('#course_type').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#course_type').attr('class').includes('select2-hidden-accessible')){
-                        $('#course_type').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#financial_source').attr('class').includes('select2-hidden-accessible')){
-                        $('#financial_source').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#category').attr('class').includes('select2-hidden-accessible')){
-                        $('#category').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#donor_agency').attr('class').includes('select2-hidden-accessible')){
-                        $('#donor_agency').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#projectofdonor').attr('class').includes('select2-hidden-accessible')){
-                        $('#projectofdonor').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#study_country').attr('class').includes('select2-hidden-accessible')){
-                        $('#study_country').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#coursemode').attr('class').includes('select2-hidden-accessible')){
-                        $('#coursemode').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#degree').attr('class').includes('select2-hidden-accessible')){
-                        $('#degree').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#subject1').attr('class').includes('select2-hidden-accessible')){
-                        $('#subject1').addClass('select2-hidden-accessible');
-                    }
-                    if(!$('#subject2').attr('class').includes('select2-hidden-accessible')){
-                        $('#subject2').addClass('select2-hidden-accessible');
-                    }
-                    console.log("Errorss:"+error)
                 });
-                this.change_tab(nextclass);
             }
-            else{
-                this.change_tab(nextclass);
+        },
+        validateFileform(){
+            let returnvariable=true;
+            if(this.filecount>1){
+                for(let i=0;i<this.filecount;i++){
+                    if($('#file_name'+(i+1)).val()==""){
+                        $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                        returnvariable=false;
+                    }
+                    if($('#attach'+(i+1)).val()==""){
+                        $('#attach'+(i+1)+'_err').html('Please mention file');
+                        returnvariable=false;
+                    }
+                    if($('#attach'+(i+1)).val()!=undefined && $('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                        $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                        returnvariable=false;
+                    }
+                }
             }
+            return returnvariable;
+
+        },
+        applyselect2(){
+            this.applyselect2field('training_type');
+            this.applyselect2field('organizer');
+            this.applyselect2field('financial_source');
+            this.applyselect2field('programme_level');
+            this.applyselect2field('programme_type');
+            this.applyselect2field('course_type');
+
+            // this.applyselect2field('coursemode');
+            // this.applyselect2field('study_country');
+            // this.applyselect2field('projectofdonor');
+            // this.applyselect2field('donor_agency');
+            // this.applyselect2field('category');
         },
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
@@ -812,45 +806,35 @@ export default {
                 this.loaddraftDetails();
             }
         },
-        async pullQualificationData(){
-            this.loadHrDevelopmentMasters('active_category_list');
-            this.loadHrDevelopmentMasters('active_donor_list');
-            this.loadstudy_countryList();
-            this.loadcoursemode();
-            this.loadHrDevelopmentMasters('active_degree_list');
-            this.loadsubjectList();
-        },
-        pullPDPData(){
-            this.loadHrDevelopmentMasters('active_programme_level_list');
-            this.loadHrDevelopmentMasters('active_programme_type_list');
-            this.loadHrDevelopmentMasters('active_course_type_list');
 
-        },
         displayfields(type_id){
-            $('#qualification_upgradation_section').hide();
-            $('#professional_development_section').hide();
+            // $('#qualification_upgradation_section').hide();
+            // $('#professional_development_section').hide();
             if($('#'+type_id+' option:selected').text()=='--Select--'){
-                this.pullPDPData();
-                this.pullQualificationData();
-                setTimeout(function(){
-                    if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
-                        $('#qualification_upgradation_section').show();
-                    }
-                    if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
-                        $('#professional_development_section').show();
-                    }
-                    this.form.training_type_text=$('#'+type_id+' option:selected').text();
-                }, 3000);
+               $('#hrsmandatory').html('');
+                // setTimeout(function(){
+                //     if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
+                //         $('#qualification_upgradation_section').show();
+                //     }
+                //     if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
+                //         $('#professional_development_section').show();
+                //     }
+                //     this.form.training_type_text=$('#'+type_id+' option:selected').text();
+                // }, 3000);
             }
             else{
-                this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
-                if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
-                    this.pullQualificationData();
-                    $('#qualification_upgradation_section').show();
-                }
+                this.form.training_type_text=$('#'+type_id+' option:selected').text();
+                // this.form.training_type_text=$('#'+type_id+' option:selected').text().toLowerCase();
+                // if($('#'+type_id+' option:selected').text().toLowerCase().includes('qualification upgrad')){
+                //     this.pullQualificationData();
+                //     $('#qualification_upgradation_section').show();
+                // }
                 if($('#'+type_id+' option:selected').text().toLowerCase().includes('professional development')){
-                    this.pullPDPData();
-                    $('#professional_development_section').show();
+                    // $('#professional_development_section').show();
+                    $('#hrsmandatory').html('<i class="text-danger">*</i>');
+                }
+                else{
+                    $('#hrsmandatory').html('');
                 }
             }
         },
@@ -901,12 +885,12 @@ export default {
             if(id=="degree"){
                 this.form.degree=$('#degree').val();
             }
-            if(id=="subject1"){
-                this.form.subject1=$('#subject1').val();
-            }
-            if(id=="subject2"){
-                this.form.subject2=$('#subject2').val();
-            }
+            // if(id=="subject1"){
+            //     this.form.subject1=$('#subject1').val();
+            // }
+            // if(id=="subject2"){
+            //     this.form.subject2=$('#subject2').val();
+            // }
         },
         loaddraftDetails(){
              axios.get('staff/hrdevelopment/loadDraftDetails')
@@ -915,7 +899,7 @@ export default {
                 if(data!=null){
                     this.form.id=data.id;
                     this.form.training_type=data.training_type;
-                    this.displayfields('training_type');
+                    // this.displayfields('training_type');
                     this.form.course_title=data.course_title;
                     this.form.organizer=data.organizer;
                     this.form.related_programme=data.related_programme;
@@ -966,10 +950,30 @@ export default {
             .catch((error) => {
                 console.log("Error......"+error);
             });
+        },
+        async loadmasters(){
+            this.trainingtypeList =  await this.loadstaffMasters('active','hr_development_masters___TrainingType');
+            this.relatedProgrammeList =  await this.loadstaffMasters('all','hr_development_masters___RelatedProgramme');
+            this.nature_of_participantList =  await this.loadstaffMasters('all','hr_development_masters___NatureOfParticipant');
+            // this.target_groupList =  await this.loadstaffMasters('all','hr_development_masters___TargetGroup');
+            this.financialSourceList =  await this.loadstaffMasters('all','hr_development_masters___FinancialSource');
+            // this.categoryList =  await this.loadstaffMasters('all','hr_development_masters___Category');
+            // this.donor_agencyList =  await this.loadstaffMasters('all','hr_development_masters___Donor');
+            // this.degreeList =  await this.loadstaffMasters('all','hr_development_masters___Degree');
+            this.programmeLevelList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeLevel');
+            this.programmeTypeList =  await this.loadstaffMasters('all','hr_development_masters___ProgrammeType');
+            this.courseTypeList =  await this.loadstaffMasters('all','hr_development_masters___CourseType');
+            this.coursemodeList =  await this.loadstaffMasters('all','CourseMode');
+            this.loadorganizerList();
+            this.loadstudy_countryList();
+            // this.loadcoursemode();
+            // this.loadsubjectList();
+            // this.loadroleList();
         }
     },
 
     async mounted() {
+        let valid=false;
         this.count=1,
         this.loaddraftDetails();
         $('[data-toggle="tooltip"]').tooltip();
@@ -984,25 +988,20 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.trainingtypeList =  await this.loadstaffMasters('active','TrainingType');
-        this.relatedProgrammeList =  await this.loadstaffMasters('all','RelatedProgramme');
-        this.loadorganizerList();
-        this.loadHrDevelopmentMasters('active_nature_of_participant_list');
-        this.loadHrDevelopmentMasters('active_target_group_list');
-        this.loadHrDevelopmentMasters('active_financial_source_list');
-        this.loadHrDevelopmentMasters('active_category_list');
-        this.loadHrDevelopmentMasters('active_donor_list');
-        this.loadstudy_countryList();
-        this.loadcoursemode();
-        this.loadHrDevelopmentMasters('active_degree_list');
-        this.loadsubjectList();
-        this.loadHrDevelopmentMasters('active_programme_level_list');
-        this.loadHrDevelopmentMasters('active_programme_type_list');
-        this.loadHrDevelopmentMasters('active_course_type_list');
-
-        this.loadroleList();
-
-
+        axios.get('staff/hrdevelopment/checkProgramAccess')
+        .then((response) => {
+            valid=response.data.data;
+            if(valid){
+                this.loadmasters();
+            }else{
+                $('#noaccesssection').show();
+                $('#mainform').hide();
+                $('#message').html('There is no configuration for you to access this page. Plese contact responsible person to open this page for you. Thank you!');
+            }
+        })
+        .catch((error) => {
+            console.log("Error......"+error);
+        });
     },
 }
 </script>

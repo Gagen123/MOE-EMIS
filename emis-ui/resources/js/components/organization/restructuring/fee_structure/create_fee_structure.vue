@@ -19,7 +19,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Organization Name:<span class="text-danger">*</span></label>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
+                                    <select name="organizationId" v-model="form.organizationId" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('organizationId') }" id="organizationId" class="form-control select2" @change="remove_error('organizationId')">
                                         <option value="">--- Please Select ---</option>
                                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                     </select>
@@ -60,9 +60,10 @@
                                         <input type="number" min="1" readonly v-model="organization_details.current_fees"  class="form-control" id="fees"/>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-4 pt-3">
-                                        <label>Propose New Fees (Nu):<span class="text-danger">*</span></label>
-                                        <input type="number" min="1" v-model="form.fees"  class="form-control" id="fees"/>
+                                        <label>Propose New Fees (Nu):</label>
+                                        <input type="number" min="1" @change="remove_error('fees')" v-model="form.fees"  class="form-control" id="fees" />
                                     </div>
+                                    <has-error :form="form" field="fees"></has-error>
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -80,7 +81,7 @@
                                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                                     </td>
                                                     <td>
-                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" @change="remove_error('attach'+(index+1))" :id="'attach'+(index+1)">
                                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                     </td>
                                                 </tr>
@@ -228,8 +229,10 @@ export default {
                                 }
                             }
                         })
-                        .catch((err) => {
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                         })
                     }
                 });
@@ -265,6 +268,24 @@ export default {
 
 
         },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
+        },
         getorgdetials(org_id){
             axios.get('loadCommons/loadOrgDetails/Orgbyid/'+org_id)
             .then(response => {
@@ -277,21 +298,22 @@ export default {
         },
 
         applyselect2(){
-            if(!$('#level').attr('class').includes('select2-hidden-accessible')){
-                $('#level').addClass('select2-hidden-accessible');
-            }
-            if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
-                $('#dzongkhag').addClass('select2-hidden-accessible');
-            }
-            if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
-                $('#gewog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
-                $('#chiwog').addClass('select2-hidden-accessible');
-            }
-            if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
-                $('#locationType').addClass('select2-hidden-accessible');
-            }
+             this.applyselect2field('organizationId');
+            // if(!$('#level').attr('class').includes('select2-hidden-accessible')){
+            //     $('#level').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#dzongkhag').attr('class').includes('select2-hidden-accessible')){
+            //     $('#dzongkhag').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#gewog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#gewog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#chiwog').attr('class').includes('select2-hidden-accessible')){
+            //     $('#chiwog').addClass('select2-hidden-accessible');
+            // }
+            // if(!$('#locationType').attr('class').includes('select2-hidden-accessible')){
+            //     $('#locationType').addClass('select2-hidden-accessible');
+            // }
         },
         loadproposedBy(uri = 'masters/organizationMasterController/loadOrganizaitonmasters/active/ProposedBy'){
             axios.get(uri)

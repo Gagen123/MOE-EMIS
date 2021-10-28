@@ -41,7 +41,7 @@
                                              <select v-model="form.country" :class="{'is-invalid': form.errors.has('country') }" class="form-control select2" name="country" id="country">
                                                 <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                                             </select>
-                                            <has-error :form="form" field=""></has-error>
+                                            <has-error :form="form" field="country"></has-error>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
                                             <label>Address:</label>
@@ -85,7 +85,7 @@
                                                             <span class="text-danger" :id="'file_name'+(index+1)+'_err'"></span>
                                                         </td>
                                                         <td>
-                                                            <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                                            <input type="file" class="form-control" @change="remove_err('attach'+(index+1))" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" >
                                                             <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                                         </td>
                                                     </tr>
@@ -225,7 +225,7 @@ export default {
                             title: 'No dont have privileged to submit this application. Please contact system administrator'
                         });
                     }
-                    if(response!="" && response!="No Screen"){
+                if(response!="" && response!="No Screen"){
                         let message="Application details has been submitted for approval. System Generated application number for this transaction is: <b>"+response.data.data.notification_appNo+'.</b><br> Use this application number to track your application status. <br><b>Thank You !</b>';
                         this.$router.push({name:'expert_recuritment_acknowledgement',params: {data:message}});
                         Toast.fire({
@@ -235,6 +235,10 @@ export default {
                     }
                 }
                  })
+              .catch((err) => {
+                this.form.errors.errors = err.response.data;
+                this.validateFileform();
+            })
             }
             })
         },
@@ -261,6 +265,24 @@ export default {
             .catch(errors => {
                 console.log(errors)
             });
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
         loadScreenDetails(){
             axios.get('organizationApproval/getScreenId/Expatriate Recuritment__'+1)

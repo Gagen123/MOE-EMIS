@@ -14,7 +14,7 @@
                 <div class="form-group row">
                     <label class="col-lg-3 col-md-3 col-sm-3 col-form-label">Select School:<span class="text-danger">*</span></label>
                     <div class="col-lg-6 col-md-6 col-sm-6">
-                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
+                    <select name="parent_id" id="parent_id" v-model="form.parent_id" :class="{ 'is-invalid select2 select2-hidden-accessible': form.errors.has('parent_id') }" class="form-control select2" @change="getCategory(),remove_error('parent_id')">
                         <option value="">--- Please Select ---</option>
                         <option v-for="(item, index) in orgList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
@@ -135,7 +135,7 @@
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-md-4 col-sm-4 col-form-label">Location Category:<span class="text-danger">*</span></label>
                                     <div class="col-lg-6 col-md-6 col-sm-6 pt-2">
-                                        <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('locationType') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
+                                        <select name="locationCategory" v-model="form.location1" :class="{ 'is-invalid': form.errors.has('location1') }" id="location1" class="form-control editable_fields" @change="remove_error('location1')">
                                             <option value="">--- Please Select ---</option>
                                             <option v-for="(item, index) in locationList1" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                         </select>
@@ -240,7 +240,7 @@
                                         <span class="text-danger" :id="'fileName'+(index+1)+'_err'"></span>
                                     </td>
                                     <td>
-                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)">
+                                        <input type="file" name="attachments" class="form-control application_attachment" v-on:change="onChangeFileUpload" :id="'attach'+(index+1)" @change="remove_error('attach'+(index+1))">
                                         <span class="text-danger" :id="'attach'+(index+1)+'_err'"></span>
                                     </td>
                                 </tr>
@@ -690,9 +690,10 @@ export default {
                             }
 
                         })
-                        .catch((er) => {
-                            console.log("Error:"+er);
-                            this.form.errors.errors = err.response.data.errors;
+                        .catch((error) => {
+                            this.applyselect2();
+                            this.form.errors.errors = error.response.data;
+                            this.validateFileform();
                      })
                     }
                 });
@@ -713,6 +714,9 @@ export default {
             $('.tab-content-details').hide();
             $('#'+nextclass).show().removeClass('fade');
         },
+          applyselect2(){
+            this.applyselect2field('parent_id');
+          },
         getOrgDetails(id){
             axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+id)
             .then((response) => {
@@ -726,6 +730,24 @@ export default {
             .catch((error) =>{
                 console.log("Error:"+error);
             });
+        },
+        validateFileform(){
+            let returnvariable=true;
+            for(let i=0;i<this.form.attachments.length;i++){
+                if($('#file_name'+(i+1)).val()==""){
+                    $('#file_name'+(i+1)+'_err').html('Please mention file name');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()==""){
+                    $('#attach'+(i+1)+'_err').html('Please mention file');
+                    returnvariable=false;
+                }
+                if($('#attach'+(i+1)).val()!="" && !this.isvalidfile($('#attach'+(i+1)).val())){
+                    $('#attach'+(i+1)+'_err').html('This file is not accepted. The accepted files are: ' +this.validfile());
+                    returnvariable=false;
+                }
+            }
+            return returnvariable;
         },
     
         //loading the screen id

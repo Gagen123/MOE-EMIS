@@ -16,7 +16,7 @@
                     <tbody>
                          <tr v-for="(item, index) in stockissued_list" :key="index">
                             <td> {{index + 1}}</td>
-                            <td> {{item.dateOfissue}}</td>
+                            <td> {{reverseDate1(item.dateOfissue)}}</td>
                             <td> {{itemList[item.item]}}</td>
                             <td> {{item.quantity}}</td>
                             <td> {{unitList[item.unit]}}
@@ -24,7 +24,7 @@
                               <!-- <div class="btn-group btn-group-sm">
                                   <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewstockissue(item)"><i class="fas fa-eye"></i ></a>
                               </div> -->
-                              <div class="btn-group btn-group-sm">
+                              <div v-if="showedit" class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewStockIssuedList(item)"><i class="fas fa-edit"></i ></a>
                                </div>
                             </td>
@@ -100,7 +100,8 @@ export default {
             itemissue_list:'',
             itemList:{},
             unitList:{},
-            dt:''
+            dt:'',
+            showedit:false,
         }
     },
     methods: {
@@ -165,6 +166,26 @@ export default {
         this.loadActiveUnitList();
         this.loadStockIssuedList();
         this.dt =  $("#stockissued-table").DataTable();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            let roleName="";
+            for(let i=0;i<data['roles'].length;i++){
+                if(i==data['roles'].length-1){
+                    roleName+=data['roles'][i].roleName;
+                }
+                else{
+                    roleName+=data['roles'][i].roleName+', ';
+                }
+            }
+            if(roleName.toLowerCase().includes('mess')){
+                this.showedit=true;
+            }
+
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
 
     },
     watch: {

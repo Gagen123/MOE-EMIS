@@ -17,13 +17,13 @@
                     <tbody>
                          <tr v-for="(item, index) in localprocure_list" :key="index">
                             <td> {{index + 1}}</td>
-                            <td> {{item.dateOfprocure}}</td>
+                            <td> {{reverseDate1(item.dateOfprocure)}}</td>
                             <td> {{itemList[item.item]}}</td>
                             <td> {{item.quantity}}</td>
                             <td> {{unitArray[item.unit]}} </td>
                             <td> {{item.amount}}</td>
                             <td>
-                              <div class="btn-group btn-group-sm">
+                              <div v-if="showedit" class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><i class="fas fa-edit"></i></a>
                                </div>
                             </td>
@@ -43,7 +43,8 @@ export default {
             itemList:{},
             unitList:[],
             unitArray:{},
-            dt:''
+            dt:'',
+            showedit:false,
         }
     },
     methods: {
@@ -97,6 +98,26 @@ export default {
         this.loadActiveUnitList();
         this.loadLocalProcure();
         this.dt =  $("#localprocure-table").DataTable();
+        axios.get('common/getSessionDetail')
+        .then(response => {
+            let data = response.data.data;
+            let roleName="";
+            for(let i=0;i<data['roles'].length;i++){
+                if(i==data['roles'].length-1){
+                    roleName+=data['roles'][i].roleName;
+                }
+                else{
+                    roleName+=data['roles'][i].roleName+', ';
+                }
+            }
+            if(roleName.toLowerCase().includes('mess')){
+                this.showedit=true;
+            }
+
+        })
+        .catch(errors =>{
+            console.log(errors)
+        });
 
     },
      watch: {

@@ -588,10 +588,10 @@
                             </router-link>
                         </li>
                         <li class="nav-item" id="staff_services_index">
-                            <router-link to="/staff_second_seperation" class="nav-link">
+                            <router-link to="/office_orders" class="nav-link">
                                 <p>
                                 <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Secondment/Separation
+                                    Office Orders
                                 </p>
                             </router-link>
                         </li>

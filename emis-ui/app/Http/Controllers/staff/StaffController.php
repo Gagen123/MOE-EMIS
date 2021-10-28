@@ -93,7 +93,7 @@ class StaffController extends Controller{
             'description'      =>  'required',
             'doner_agency'     =>  'required',
             'field'            =>  'required',
-            'type'             =>  'required',
+            // 'type'             =>  'required',
             'degree'           =>  'required',
             'coursemode'       =>  'required',
             'coursetitle'      =>  'required',
@@ -107,7 +107,7 @@ class StaffController extends Controller{
             'description.required'        => 'This field is required',
             'doner_agency.required'       => 'This field is required',
             'field.required'              => 'This field is required',
-            'type.required'               => 'This field is required',
+            // 'type.required'               => 'This field is required',
             'degree.required'             => 'This field is required',
             'coursemode.required'         => 'This field is required',
             'coursetitle.required'        => 'This field is required',
@@ -132,14 +132,14 @@ class StaffController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/loadStaffQualification/'.$staff_id);
         //dd($response_data);
         return $response_data;
-       
+
     }
 
     public function savenominationDetails(Request $request){
         $rules = [
             'nomi_cid'          =>  'required',
             'nomi_name'         =>  'required',
-            'nomi_desig'        =>  'required',
+            // 'nomi_desig'        =>  'required',
             'nomi_address'      =>  'required',
             'nomi_contact'      =>  'required',
             'nomi_email'        =>  'required',
@@ -148,7 +148,7 @@ class StaffController extends Controller{
         $customMessages = [
             'nomi_name.required'            => 'This field is required',
             'nomi_cid.required'             => 'This field is required',
-            'nomi_desig.required'           => 'This field is required',
+            // 'nomi_desig.required'           => 'This field is required',
             'nomi_address.required'         => 'This field is required',
             'nomi_email.required'           => 'This field is required',
             'nomi_relation.required'        => 'Relationship field is required',

@@ -48,10 +48,10 @@ export default {
     },
     mounted(){
         this.loadqualificationtype();
-        this.dt =  $("#working-agency-table").DataTable()
+        this.dt =  $("#working-agency-table").DataTable();
     },
     watch: {
-        qualificationTypeList(val) {
+        qualificationTypeList() {
             this.applydatatable('working-agency-table');
         }
     },

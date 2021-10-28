@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th >SL#</th>
+                    <th >Country</th>
                     <th >Institute</th>
                     <th >Description</th>
                     <th >Code</th>
@@ -15,6 +16,7 @@
             <tbody>
                 <tr v-for="(item, index) in qualificationTypeList" :key="index">
                     <td>{{ index + 1 }}</td>
+                    <td>{{ countryArray[item.country_id]}}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.description}}</td>
                     <td>{{ item.code}}</td>
@@ -32,6 +34,7 @@
 export default {
     data(){
         return{
+            countryArray:{},
             qualificationTypeList:[],
             dt:'',
         }
@@ -45,7 +48,19 @@ export default {
         },
     },
     mounted(){
-        this.loadqualificationtype();
+        let uri = 'masters/loadGlobalMasters/all_country';
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            // this.countryList =  data.data.data;
+            for(let i=0;i<data.data.data.length;i++){
+                this.countryArray[data.data.data[i].id] = data.data.data[i].country_name;
+            }
+            this.loadqualificationtype();
+        })
+        .catch(function (error) {
+            console.log('error: '+error);
+        });
         this.dt =  $("#working-agency-table").DataTable()
     },
     watch: {

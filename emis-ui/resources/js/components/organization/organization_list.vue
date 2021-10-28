@@ -96,7 +96,7 @@ export default {
         this.dt =  $("#register-table").DataTable();
         axios.get('common/getSessionDetail')
         .then(response => {
-            let data = response.data.data;
+            let data = response.data.data; 
             if(data['acess_level']=="Org"){
                 this.loadOrganizationList('userworkingagency/allData');
             }

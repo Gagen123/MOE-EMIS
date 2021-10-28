@@ -39,16 +39,6 @@ export default {
         }
     },
     methods: {
-        loadDataList(){
-            axios.get('/staff/staffLeadershipSerivcesController/loadAllPosts')
-            .then((response) =>{
-                let data=response.data.data;
-                this.data_list=data;
-            })
-            .catch((error) =>{
-                console.log("Error: "+error);
-            });
-        },
         loadeditpage(itme){
             this.$router.push({name:"edit_announcement",params:{id:itme.id}});
         },
@@ -70,16 +60,19 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-        this.loadDataList();
+        axios.get('/staff/staffLeadershipSerivcesController/loadAllPosts')
+        .then((response) =>{
+            let data=response.data.data;
+            this.data_list=data;
+        })
+        .catch((error) =>{
+            console.log("Error: "+error);
+        });
         this.dt =  $("#nominaiton-table").DataTable();
-
     },
     watch: {
-        data_list(val) {
-            this.dt.destroy();
-            this.$nextTick(() => {
-                this.dt =  $("#nominaiton-table").DataTable()
-            });
+        data_list() {
+            this.applydatatable('nominaiton-table');
         }
     },
 }
