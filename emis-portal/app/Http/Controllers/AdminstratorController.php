@@ -33,6 +33,17 @@ class AdminstratorController extends Controller
         return  response()->json($person);
     }
 
+    public function getDOIData($id){
+        $person = json_decode($this->apiService->listData('getDOIData/'. $id));
+        if($person->data->hasdata){
+            $response_data = $person->data->citizenDetail;
+            return  response()->json($response_data);
+        }else {
+            return response()->json('Student detail not found. Please check workpermit number and try again.', 404);
+        }
+        return  response()->json($person);
+    }
+
     /**
      * Get the details of the Student by std_id
      * Will refer to std_student table

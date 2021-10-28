@@ -714,18 +714,19 @@ export default {
             if(type=="std"){
                 cid=  $('#cid').val();
             }
-            this.getPersonalDetailsbyCID(cid,type);
-            let fatherCid="";
-            let motherCid="";
-            if(type=='std'){
-                axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
-                .then(response => {
-                    fatherCid=response.data[0].fatherCID;
-                    motherCid=response.data[0].motherCID;
-                    this.getPersonalDetailsbyCID(fatherCid,'father');
-                    this.getPersonalDetailsbyCID(motherCid,'mother');
-                });
-            }
+            this.getDOIData(cid);
+            // this.getPersonalDetailsbyCID(cid,type);
+            // let fatherCid="";
+            // let motherCid="";
+            // if(type=='std'){
+            //     axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
+            //     .then(response => {
+            //         fatherCid=response.data[0].fatherCID;
+            //         motherCid=response.data[0].motherCID;
+            //         this.getPersonalDetailsbyCID(fatherCid,'father');
+            //         this.getPersonalDetailsbyCID(motherCid,'mother');
+            //     });
+            // }
         },
         getPersonalDetailsbyCID(cid,type){
             axios.get('adminstratorController/getpersonbycid/'+ cid)
@@ -822,6 +823,13 @@ export default {
 
                     }
                 }
+            });
+        },
+
+        getDOIData(workpermitNo){
+            axios.get('adminstratorController/getDOIData/'+ workpermitNo)
+            .then(res => {
+                alert(res);
             });
         },
 

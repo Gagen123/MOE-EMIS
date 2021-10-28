@@ -306,6 +306,10 @@ try {
                     }
                     return returnt;
                 }
+            },
+            downloadsample(type){
+                let uri = 'common/downloadSampleFiles/'+type;
+                window.location=uri;
             }
         },
     })
