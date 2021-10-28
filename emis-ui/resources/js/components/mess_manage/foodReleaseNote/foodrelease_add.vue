@@ -421,12 +421,17 @@ export default {
             this.count++;
             this.form.attachments.push({file_name:'', attachment:''});
         },
-        remove(){
+        // remove(){
+        //     if(this.form.attachments.length>1){
+        //         if(this.count>this.require_count){
+        //             this.count--;
+        //             this.form.attachments.pop();
+        //         }
+        //     }
+        // },
+        remove(index){
             if(this.form.attachments.length>1){
-                if(this.count>this.require_count){
-                    this.count--;
-                    this.form.attachments.pop();
-                }
+                this.form.attachments.pop();
             }
         },
         changefunction(id){

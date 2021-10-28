@@ -59,6 +59,7 @@ class StockIssuedController extends Controller
               //  dd($qty);
                 $update_data=[
                     'available_qty' => $qty,
+                    'issue_qty'     => $quantity,
                     'updated_by'    => $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                 ];
@@ -101,6 +102,7 @@ class StockIssuedController extends Controller
             $qty=$checkitem->available_qty-($quantity+$damagequantity);
                 $update_data=[
                     'available_qty' => $qty,
+                    'issue_qty'     => $quantity,
                     'updated_by'    => $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                 ];
@@ -177,11 +179,11 @@ class StockIssuedController extends Controller
                 
                 $tr_data=[
                     'available_qty'  => $update_tr_qty,
-                    'differenceqty'  => $qty_diff,
+                    'issue_qty'      => $qty_to_update_stock,
                     'updated_by'     => $request->user_id,
                     'updated_at'     =>  date('Y-m-d h:i:s'),
                 ];
-             //   dd($tr_data);
+                // dd($tr_data);
                 $update_Issue= TransactionTable::where('item_id', $current_stock_data->item_id)->where('procured_type',$current_stock_data->category)->update($tr_data);
                
             }else{
@@ -203,6 +205,7 @@ class StockIssuedController extends Controller
                 $update_tr_qty=  ($stock_qty+ $qty_diff)-$dmage_diff;
                 $tr_data=[
                     'available_qty' => $update_tr_qty,
+                    'issue_qty'     => $qty_to_update_stock,
                     'updated_by'    => $request->user_id,
                     'updated_at'    =>  date('Y-m-d h:i:s'),
                 ];

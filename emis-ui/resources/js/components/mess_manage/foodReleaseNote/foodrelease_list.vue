@@ -17,7 +17,7 @@
                     <tbody>
                         <tr v-for="(item, index) in foodrelease_list" :key="index">
                             <td> {{index + 1}}</td>
-                            <td> {{item.dateOfrelease}}</td>
+                            <td> {{reverseDate1(item.dateOfrelease)}}</td>
                             <!-- <td> {{dzongkhagList[item.dzongkhag]}}</td>
                             <td> {{orgList[item.organization]}}{{orgList}}</td> -->
                             <td> {{quarterList[item.quarter_id]}}</td>
@@ -27,7 +27,7 @@
 
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="FoodReleaseView(item)"><i class="fas fa-eye"></i ></a>
                                </div>
-                               <div class="btn-group btn-group-sm">
+                               <div v-if="access_level === 'Ministry' || access_level === 'Dzongkhag'" class="btn-group btn-group-sm">
                                     <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="viewFoodReleaseList(item)"><i class="fas fa-edit"></i ></a>
 
                                </div>
@@ -53,7 +53,7 @@
                             <div class="form-group row">
                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="font-weight-normal">Date of Release: </label>
-                                 <span class="text-indigo-600">{{displayItem.dateOfrelease}}</span>
+                                 <span class="text-indigo-600">{{reverseDate1(displayItem.dateOfrelease)}}</span>
                                 </div>
                                 <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                  <label class="font-weight-normal">Dzongkhag Name: </label>
@@ -120,7 +120,8 @@ export default {
             quarterList:{},
             quarterList:[],
             orgList:[],
-            dt:''
+            dt:'',
+            access_level:'',
 
         }
     },
@@ -283,12 +284,15 @@ export default {
             if(data['acess_level']=="Ministry"){
                 this.loadFoodReleaseList('NA','All');
             }
+            this.form.org_id=data['Agency_Code'];
+            this.access_level = data['acess_level']; 
         })
         .catch(errors =>{
             console.log(errors)
         });
 
         this.dt =  $("#foodrelease-table").DataTable();
+
 
     },
     watch: {

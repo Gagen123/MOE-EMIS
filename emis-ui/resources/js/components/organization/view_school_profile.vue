@@ -375,8 +375,9 @@
             //         console.log(errors)
             //     });
             // },
-            getorgProfile(rogId,type){
-                axios.get('organization/getOrgProfile/'+type+'/'+rogId)
+            getorgProfile(rogId){
+               // alert(rogId);
+                axios.get('organization/getOrgProfile/'+rogId)
                 .then(response => {
                     let data = response.data.data;
                     this.form.vission=data.vission;

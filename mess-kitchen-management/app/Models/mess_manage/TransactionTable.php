@@ -19,6 +19,7 @@ class TransactionTable extends Model
         'item_id',
         'procured_type',
         'available_qty',
+        'issue_qty',
         'created_by',
         'updated_by',
         'created_at',

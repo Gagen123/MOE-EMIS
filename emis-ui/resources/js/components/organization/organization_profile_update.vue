@@ -46,7 +46,7 @@
                                             <label>Objective</label>
                                             <textarea v-model="form.objective" class="form-control" id="vission"></textarea>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <hr>
                                     <div class="row form-group fa-pull-right">
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

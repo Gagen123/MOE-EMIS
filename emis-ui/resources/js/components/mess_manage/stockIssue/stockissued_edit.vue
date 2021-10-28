@@ -198,7 +198,9 @@ export default {
             axios.get('mess_manage/StockIssueEditList/' +lssId)
             .then((response) =>{
                 let data=response.data.data;
-                this.form.dateOfissue           =    data.dateOfissue;
+                this.form.dateOfissue         = this.formatDateToddmmyyyy(data.dateOfissue);
+                $('#dateOfissue').val(this.formatDateToddmmyyyy(data.dateOfissue));
+                // this.form.dateOfissue           =    data.dateOfissue;
                 this.form.quarter               =    data.quarter_id;
                 this.form.category              =    data.category;
                 this.form.item_id               =    data.item_id;
