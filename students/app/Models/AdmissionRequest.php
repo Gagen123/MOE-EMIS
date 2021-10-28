@@ -20,6 +20,8 @@ class AdmissionRequest extends Model
         'stream',
         'dateOfapply',
         'reasons',
+        'remarks',
+        'status',
         'snationality',
         'created_at',
         'updated_at'

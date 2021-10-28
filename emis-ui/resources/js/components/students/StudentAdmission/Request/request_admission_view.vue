@@ -149,17 +149,17 @@ export default {
                             }
                         }
                         let formData = new FormData();
-                        formData.append('id', this.form.id);
+                        formData.append('id', this.std_admission_details.AdmissionRequestId);
                         formData.append('actiontype', nextclass);
                         formData.append('remarks', this.form.remarks);
-                        axios.post('organization/updateBifurcationApplication', formData, config)
+                        axios.post('students/updateAdmissionRequest', formData, config)
                         .then((response) => {
                             if(response!=""){
                                 Toast.fire({
                                     icon: 'success',
                                     title: 'Application details has been updated.'
                                 });
-                                this.$router.push({path:'/tasklist'});
+                                this.$router.push({path:'/student_admission_request'});
                             }
                         })
                         .catch((err) => {
