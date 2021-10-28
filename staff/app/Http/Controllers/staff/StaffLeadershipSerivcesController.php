@@ -148,7 +148,7 @@ class StaffLeadershipSerivcesController extends Controller{
 
     public function loadDetials($id=""){
         $respomse_data=LeadershipDetails::where('id',$id)->first();
-        if($respomse_data!=""){
+        if($respomse_data!=null && $respomse_data!=""){
             $selection_type=LeadershipType::where('id',$respomse_data->selection_type)->first();
             if($selection_type!=null && $selection_type!=""){
                 $respomse_data->selection_type_name=$selection_type->name;
@@ -161,7 +161,6 @@ class StaffLeadershipSerivcesController extends Controller{
             if($attachments!=null && $attachments!=""){
                 $respomse_data->attachments=$attachments;
             }
-
             // $app=DB::table('staff_applicable_applicant AS a')
             // ->join('master_stf_position_title AS p', 'p.id', '=', 'a.role_id')
             // ->join('master_stf_position_level AS l', 'l.id', '=', 'p.position_level_id')
@@ -176,7 +175,6 @@ class StaffLeadershipSerivcesController extends Controller{
                 foreach($applicant as $app){
                     $wat=0;
                     $response_data=FeedbackProviderDetails::where('application_number',$app->application_number)->where('status','Deleted')->get();
-                    return $response_data;
                     if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
                         foreach($response_data as $data){
                             $answers=FeedbackModel::where('feedback_provider_id',$app->id)->get();
@@ -1064,6 +1062,69 @@ class StaffLeadershipSerivcesController extends Controller{
         }
         // dd(explode($id,'__')[0]);
         return FeedbackProviderDetails::where('id',explode('__',$id)[0])->update($app_details);
+    }
+
+    public function updatestatus(Request $request){
+        $app_details = [
+            'updated_at'             =>  date('Y-m-d h:i:s'),
+            'updated_by'             =>  $request->user_id,
+            'status'                 =>  'Withdrawn',
+        ];
+        LeadershipApplication::where('id',$request->appId)->update($app_details);
+        $response_data=LeadershipApplication::where('id',$request->appId)->first();
+        return $response_data;
+    }
+
+    public function loadfeedbackDetials($param=""){
+        $response_data=LeadershipApplication::where('id',$param)->first();
+        if($response_data!=null && $response_data!=""){
+            if($response_data->org_id!="External Application"){
+                $staffDetail=PersonalDetails::where('id',$response_data->staff_id)->first();
+                if($staffDetail!=null && $staffDetail!=""){
+                    $response_data->eid=$staffDetail->emp_id;
+                    $positions=ChildGroupPosition::where('id', $staffDetail->position_title_id)->first();
+                    if($positions!=null && $positions!=""){
+                        //get position title from mapping
+                        $posi=PositionTitle::where('id',$positions->position_title_id)->first();
+                        if($posi!=null && $posi!=""){
+                            $response_data->positiontitle=$posi->name;
+                            //get position level from position title
+                            $posiLev=PositionLevel::where('id',$posi->position_level_id)->first();
+                            if($posiLev!=null && $posiLev!=""){
+                                $response_data->positionlevel=$posiLev->name;
+                            }
+                        }
+                    }
+                }
+            }
+            $feedback_data=FeedbackProviderDetails::where('application_number',$response_data->application_number)->get();
+            $total_va=0;
+            if($feedback_data!=null && $feedback_data!="" && sizeof($feedback_data)>0){
+                foreach($feedback_data as $data){
+                    $cate=FeedbackCategory::where('id',$data->feedback_type)->first();
+                    $data->feedcat=$cate->name;
+                    $answers=FeedbackModel::where('feedback_provider_id',$data->id)->get();
+                    $avscore=0;
+                    if($answers!=null && $answers!="" && sizeof($answers)>0){
+                        foreach($answers as $ans){
+                            $question=Question::where('id',$ans->questionId)->first();
+                            $ans->question=$question->name;
+                            $ansmod=Answer::where('id',$ans->answer)->first();
+                            $ans->ans=$ansmod->name;
+                            $ans->rate=$ansmod->watage;
+                            $avscore+=$ansmod->watage;
+                        }
+                        $data->ansQuest=$answers;
+                        $avscore=$avscore/sizeof($answers);
+                        $data->avscore=$avscore;
+                    }
+                    $total_va+=$avscore;
+                }
+            }
+            $response_data->tot_av=$total_va/sizeof($feedback_data);
+            $response_data->feedback=$feedback_data;
+        }
+        return $response_data;
     }
 
 }

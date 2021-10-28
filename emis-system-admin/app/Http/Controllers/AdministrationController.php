@@ -250,6 +250,10 @@ class AdministrationController extends Controller{
         if($param=="all_transfer_type_list"){
             return $this->successResponse(Calender::all());
         }
+        if($param=="admission"){
+            return $this->successResponse(Calender::where('type','LIKE','Admission (General)')->first());
+            //return $this->successResponse(Calender::where('type','LIKE','Admission%')->get());
+        }
         if($param=="all_country"){
             return $this->successResponse(Country::all());
         }

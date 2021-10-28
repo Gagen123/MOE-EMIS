@@ -395,6 +395,24 @@ class OrganizationApprovalController extends Controller{
     }
 
     public function saveLocationChange(Request $request){
+        $rules = [
+            'parentSchool'            =>  'required',
+            'organizationId'          =>  'required',
+            'gewog'                   =>  'required',
+            'chiwog'                  =>  'required',
+            'locationType'            =>  'required',
+            'coLocatedParent'         =>  'required',
+
+        ];
+        $customMessages = [
+            'parentSchool.required'    => 'Parent School is required',
+            'organizationId.required'  => 'OrganizationId is required',
+            'gewog.required'           => 'Gewog School is required',
+            'chiwog.required'          => 'Chiwog School is required',
+            'locationType.required'    => 'location Type is required',
+            'coLocatedParent.required' => 'Co-Location with parent is required',
+        ];
+        $this->validate($request, $rules, $customMessages);
         $application_number = $request->application_number;
         $files = $request->attachments;
         $filenames = $request->attachmentname;

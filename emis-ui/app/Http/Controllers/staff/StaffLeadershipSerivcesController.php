@@ -598,5 +598,16 @@ class StaffLeadershipSerivcesController extends Controller{
         $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/updatedVisited/'.$id);
         return $response_data;
     }
+    public function updatestatus(Request $request){
+        $request['user_id'] = $this->userId();
+        $response_data= $this->apiService->createData('emis/staff/staffLeadershipSerivcesController/updatestatus', $request->all());
+        return $response_data;
+    }
+
+    public function loadfeedbackDetials($param=""){
+        $response_data= $this->apiService->listData('emis/staff/staffLeadershipSerivcesController/loadfeedbackDetials/'.$param);
+        return $response_data;
+    }
+    
 
 }
