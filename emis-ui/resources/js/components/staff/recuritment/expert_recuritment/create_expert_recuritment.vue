@@ -41,7 +41,7 @@
                                              <select v-model="form.country" :class="{'is-invalid': form.errors.has('country') }" class="form-control select2" name="country" id="country">
                                                 <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                                             </select>
-                                            <has-error :form="form" field=""></has-error>
+                                            <has-error :form="form" field="country"></has-error>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
                                             <label>Address:</label>

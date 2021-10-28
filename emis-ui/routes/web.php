@@ -671,6 +671,9 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadexistingData/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadexistingData'])->name('loadexistingData');
         Route::post('/saveFeedback', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'saveFeedback'])->name('saveFeedback');
         Route::get('/updatedVisited/{id}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatedVisited'])->name('updatedVisited');
+        Route::post('/updatestatus', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'updatestatus'])->name('updatestatus');
+        Route::get('/loadfeedbackDetials/{param}', [App\Http\Controllers\staff\StaffLeadershipSerivcesController::class, 'loadfeedbackDetials'])->name('loadfeedbackDetials');
+
     });
 
     Route::prefix('substitution')->group(function () {
@@ -681,6 +684,17 @@ Route::prefix('staff')->group(function () {
         Route::post('/saveStaffSubstituted', [App\Http\Controllers\staff\SubstitutionController::class, 'saveStaffSubstituted'])->name('saveStaffSubstituted');
         Route::get('/loadSubstaff', [App\Http\Controllers\staff\SubstitutionController::class, 'loadSubstaff'])->name('loadSubstaff');
         Route::get('/getEditSubstitutedList/{subid}', [App\Http\Controllers\staff\SubstitutionController::class, 'getEditSubstitutedList'])->name('getEditSubstitutedList');
+    });
+
+    //Office Orders
+    Route::prefix('staffOfficeorderController')->group(function (){
+        Route::post('/submitApplication', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'submitApplication'])->name('submitApplication');
+        Route::get('/checkOngoingApplication/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'checkOngoingApplication'])->name('checkOngoingApplication');
+        Route::get('/loadCreatedApplication/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadCreatedApplication'])->name('loadCreatedApplication');
+        Route::get('/loadCreatedApplicationForVerification/{type}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadCreatedApplicationForVerification'])->name('loadCreatedApplicationForVerification');
+        Route::get('/loadDetForVerification/{id}', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'loadDetForVerification'])->name('loadDetForVerification');
+        Route::post('/verifyApprove', [App\Http\Controllers\staff\StaffOfficeorderController::class, 'verifyApprove'])->name('verifyApprove');
+
     });
 });
 Route::prefix('common')->group(function () {

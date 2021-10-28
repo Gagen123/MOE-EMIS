@@ -180,21 +180,23 @@ class HrDevelopmentController extends Controller{
     }
 
     public function saveParticipant(Request $request){
-        $rules = [
-            'programId'             =>  'required',
-            'participant'           =>  'required',
-            'contact'               =>  'required',
-            'email'                 =>  'required',
-            'nature_of_participant' =>  'required',
-        ];
-        $customMessages = [
-            'programId.required'              => 'Please select nomination start date',
-            'participant.required'            => 'Please select nomination end date',
-            'contact.required'                => 'Please select this field',
-            'email.required'                  => 'This field is required',
-            'nature_of_participant.required'  => 'This field is required',
-        ];
-        $this->validate($request, $rules,$customMessages);
+        if($request->partifipant_from!="Excel"){
+            $rules = [
+                'programId'             =>  'required',
+                'participant'           =>  'required',
+                'contact'               =>  'required',
+                'email'                 =>  'required',
+                'nature_of_participant' =>  'required',
+            ];
+            $customMessages = [
+                'programId.required'              => 'Please select nomination start date',
+                'participant.required'            => 'Please select nomination end date',
+                'contact.required'                => 'Please select this field',
+                'email.required'                  => 'This field is required',
+                'nature_of_participant.required'  => 'This field is required',
+            ];
+            $this->validate($request, $rules,$customMessages);
+        }
 
         $files = $request->attachments;
         // dd($files);
@@ -228,6 +230,8 @@ class HrDevelopmentController extends Controller{
             'nature_of_participant'     =>  $request->nature_of_participant,
             'attachment_details'        =>  $attachment_details,
             'action_type'               =>  $request->action_type,
+            'partifipant_from'          =>  $request->partifipant_from,
+            'files'                     =>  $files,
             'user_id'                   =>  $this->userId()
         ];
         // dd($request_data);
