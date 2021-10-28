@@ -36,7 +36,7 @@ class AdminstratorController extends Controller
     public function getDOIData($id){
         $person = json_decode($this->apiService->listData('getDOIData/'. $id));
         if($person->data->hasdata){
-            $response_data = $person->data->citizenDetail;
+            $response_data = $person->data->studentDetail;
             return  response()->json($response_data);
         }else {
             return response()->json('Student detail not found. Please check workpermit number and try again.', 404);
