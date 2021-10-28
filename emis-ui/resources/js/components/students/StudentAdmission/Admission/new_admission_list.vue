@@ -166,7 +166,7 @@ export default {
         //         this.stdList = data.data;
         //     });
         // },
-        loadStudentAdmissionList(param){
+        loadStudentAdmissionList(){
             this.newAdmissionList =[];
             let uri="";
             uri='students/admission/loadStudentList/admission';
@@ -217,7 +217,7 @@ export default {
         this.loadFeederStudents();
         this.dt = $("#list-student-left").DataTable();
         // this.loadStudentList('session');
-        this.loadStudentAdmissionList('session');
+        this.loadStudentAdmissionList();
         // $("#list-student-left").DataTable({
         //     "responsive": true,
         //     "autoWidth": false,

@@ -48,6 +48,8 @@ use Illuminate\Support\Facades\Route;
     Route::prefix('adminstratorController')->group(function () {
         Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
         Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getpersonbycid'])->name('getpersonbycid');
+        Route::get('/getDOIData/{id}', [App\Http\Controllers\AdminstratorController::class, 'getDOIData'])->name('getDOIData');
+
     });
 
     Route::prefix('admissions')->group(function () {
@@ -93,7 +95,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/loadClassBySubjectTeacher', [App\Http\Controllers\ResultViewController::class, 'loadClassBySubjectTeacher'])->name('loadClassBySubjectTeacher');
         Route::get('/loadStudentAssessmentList', [App\Http\Controllers\ResultViewController::class, 'loadStudentAssessmentList'])->name('loadStudentAssessmentList');
         Route::get('/LoadResultByStudentId/{std_id}', [App\Http\Controllers\ResultViewController::class, 'LoadResultByStudentId'])->name('LoadResultByStudentId');
-        
+
         // Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });
 
