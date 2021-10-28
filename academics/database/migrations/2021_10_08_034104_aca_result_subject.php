@@ -20,9 +20,10 @@ class AcaResultSubject extends Migration
             $table->char('aca_result_id', 36)->index();
             $table->char('aca_sub_id', 36)->index();
             $table->string('subject', 100);
-            $table->string('dzo_name', 1000)->nullable();
+            $table->string('sub_dzo_name', 1000)->nullable();
             $table->char('combined_sub_id', 36)->nullable()->index();
             $table->string('combined_subject', 100)->nullable();
+            $table->string('combd_sub_dzo_name', 100)->nullable();
             $table->string('sub_category_code', 10)->index();
             $table->string('sub_category', 100);
             $table->char('teacher_id', 36)->index();

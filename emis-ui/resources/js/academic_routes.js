@@ -164,9 +164,7 @@ const routes = [
                     { path: '', name:'student-progress-report', component:require('./components/academics/student_progress_report/list_student_progress_report.vue').default},
                     { path: '/list-student-progress-report', name:'list_student_progress_report', component:require('./components/academics/student_progress_report/list_student_progress_report.vue').default},
                     { path: '/view-student-progress-report', name:'view_student_progress_report', component:require('./components/academics/student_progress_report/view_student_progress_report.vue').default},
-                    { path: '/student-progress-report-cfa', name: 'student_progress_report_cfa', component: require('./components/academics/student_progress_report/student_progress_report_cfa.vue').default },
-                    { path: '/student-progress-report-rsa', name: 'student_progress_report_csa', component: require('./components/academics/student_progress_report/student_progress_report_csa.vue').default },
-
+                    { path: '/student-progress-report', name: 'student_progress_report', component: require('./components/academics/student_progress_report/student_progress_report.vue').default },
                 ]
             },
 
