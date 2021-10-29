@@ -244,12 +244,15 @@ Route::prefix('organization')->group(function () {
     //routes for Feeder School
     Route::post('/saveFeeders', [App\Http\Controllers\organization\ProjectionsController::class, 'saveFeeders'])->name('saveFeeders');
     Route::get('/loadFeeders', [App\Http\Controllers\organization\ProjectionsController::class, 'loadFeeders'])->name('loadFeeders');
+    Route::get('/loadFeedersBySchool', [App\Http\Controllers\organization\ProjectionsController::class, 'loadFeedersBySchool'])->name('loadFeedersBySchool');
 
     //routes for Feeder School
     Route::post('/saveFeederStudents', [App\Http\Controllers\organization\ProjectionsController::class, 'saveFeederStudents'])->name('saveFeederStudents');
     Route::post('/editFeederStudents', [App\Http\Controllers\organization\ProjectionsController::class, 'editFeederStudents'])->name('editFeederStudents');
     Route::get('/listParentSchool', [App\Http\Controllers\organization\ProjectionsController::class, 'listParentSchool'])->name('listParentSchool');
     Route::get('/loadFeederStudents', [App\Http\Controllers\organization\ProjectionsController::class, 'loadFeederStudents'])->name('loadFeederStudents');
+    Route::get('/loadFeederStudentsBySchool', [App\Http\Controllers\organization\ProjectionsController::class, 'loadFeederStudentsBySchool'])->name('loadFeederStudentsBySchool');
+
 
     //routes for disasters information
     //   Route::post('/saveDisasterInformation', [App\Http\Controllers\organization\DisasterController::class, 'saveDisasterInformation'])->name('saveDisasterInformation');
@@ -482,6 +485,7 @@ Route::prefix('staff')->group(function () {
         Route::get('/loadPromotionDetails/{id}', [App\Http\Controllers\staff\ZestController::class, 'loadPromotionDetails'])->name('loadPromotionDetails');
         Route::get('/loadLongTermTraining/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLongTermTraining'])->name('loadLongTermTraining');
         Route::get('/loadLeaveDetails/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadLeaveDetails'])->name('loadLeaveDetails');
+        Route::get('/loadSubstitution/{param}', [App\Http\Controllers\staff\ZestController::class, 'loadSubstitution'])->name('loadSubstitution');
 
     });
 
@@ -704,6 +708,8 @@ Route::prefix('common')->group(function () {
     Route::get('/getscreens/{type}', [App\Http\Controllers\CommonController::class, 'getscreens'])->name('getscreens');
 
     Route::get('/viewFiles/{full_path}', [App\Http\Controllers\CommonController::class, 'viewFiles'])->name('viewFiles');
+    Route::get('/downloadSampleFiles/{type}', [App\Http\Controllers\CommonController::class, 'downloadSampleFiles'])->name('downloadSampleFiles');
+
     Route::get('/deleteFile/{full_path}/{id}', [App\Http\Controllers\CommonController::class, 'deleteFile'])->name('deleteFile');
     Route::get('/getApplicationDetials/{applicationId}', [App\Http\Controllers\CommonController::class, 'getApplicationDetials'])->name('getApplicationDetials');
     Route::get('/getTaskList/{type}', [App\Http\Controllers\CommonController::class, 'getTaskList'])->name('getTaskList');
@@ -794,6 +800,8 @@ Route::prefix('students')->group(function () {
         Route::get('/getSenStudentList', [App\Http\Controllers\student\ExternalDataImputController::class, 'getSenStudentList']);
         Route::get('/loadInstitues/{param}/{model}', [App\Http\Controllers\student\ExternalDataImputController::class, 'loadInstitues']);
         Route::post('/saveImported', [App\Http\Controllers\student\ExternalDataImputController::class, 'saveImported']);
+        Route::get('/updateExcelfile/{type}/{model}', [App\Http\Controllers\student\ExternalDataImputController::class, 'updateExcelfile']);
+
     });
 
     Route::post('/reportStudents', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'reportStudents'])->name('reportStudents');
@@ -805,6 +813,7 @@ Route::prefix('students')->group(function () {
     Route::get('/loadAboardList/{orgId}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAboardList'])->name('loadAboardList');
     Route::post('/updateAdmissionRequest', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'updateAdmissionRequest'])->name('updateAdmissionRequest');
     Route::get('/loadAdmissionRequest/{std_id}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'loadAdmissionRequest'])->name('loadAdmissionRequest');
+    Route::get('/getStudentAdmissionRequest/{std_id}', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'getStudentAdmissionRequest'])->name('getStudentAdmissionRequest');
     Route::post('/saveStudentAboard', [App\Http\Controllers\student\StudentAdmissionRelatedController::class, 'saveStudentAboard'])->name('saveStudentAboard');
 
     Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\common_services\GeneralStudentController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
@@ -1089,3 +1098,4 @@ Route::prefix('projections')->group(function () {
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getpersonbycid'])->name('getpersonbycid');
 Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
+Route::get('/getDOIData/{id}', [App\Http\Controllers\AdministrationController::class, 'getDOIData'])->name('getDOIData');

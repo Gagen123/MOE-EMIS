@@ -261,6 +261,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/viewStaffDetails/{type}/{id}', ['uses' => 'staff\LoadStaffController@viewStaffDetails']);
         $router->get('/loadFewDetailsStaffListBySubject', ['uses' => 'staff\LoadStaffController@loadFewDetailsStaffListBySubject']);
         $router->get('/loadStaffCountDetail/{type}/{id}', ['uses' => 'staff\LoadStaffController@loadStaffCountDetail']);
+        $router->get('/loadDepartmentCheif/{orgId}', ['uses' => 'staff\LoadStaffController@loadDepartmentCheif']);
+
     });
 
     //Staff Update Services
@@ -299,6 +301,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
         $router->get('/loadLongTermTraining/{param}', ['uses' => 'staff\ZestController@loadLongTermTraining']);
         $router->get('/loadLeaveDetails/{param}', ['uses' => 'staff\ZestController@loadLeaveDetails']);
+        $router->get('/loadSubstitution/{param}', ['uses' => 'staff\ZestController@loadSubstitution']);
 
     });
 });

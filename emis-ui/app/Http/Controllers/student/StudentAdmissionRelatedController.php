@@ -172,7 +172,13 @@ class StudentAdmissionRelatedController extends Controller
      */
 
     public function loadAdmissionRequest($std_id=""){
-        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id);
+        $dzo_id = $this->getUserDzoId();
+        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id.'/'.$dzo_id);
+        return $response_data;
+    }
+
+    public function getStudentAdmissionRequest($std_id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getStudentAdmissionRequest/'.$std_id);
         return $response_data;
     }
 

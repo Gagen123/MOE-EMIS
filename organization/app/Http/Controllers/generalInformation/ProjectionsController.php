@@ -120,6 +120,23 @@ class ProjectionsController extends Controller
         return $feeder;
     }
 
+    public function loadFeedersBySchool($org_id=""){
+        $feeder = DB::table('organization_feeder')
+                        ->select('organization_feeder.feederschool as feeder_school')
+                        ->where('organization_feeder.parentschool', $org_id)
+                        ->groupBy('organization_feeder.feederschool')
+                        ->get();
+        return $feeder;
+    }
+
+    public function loadFeederStudentsBySchool($org_id=""){
+        $students = DB::table('organization_feeder_students')
+                        ->select('organization_feeder_students.StdStudentId')
+                        ->where('organization_feeder_students.parentschool', $org_id)
+                        ->get();
+        return $students;
+    }
+
     public function saveFeederStudents(Request $request){
         $data = $request->all();
         unset($data['user_id']);
