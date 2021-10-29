@@ -707,7 +707,7 @@ export default {
             this.applicationdetails=data;
             this.taskDet=response.data.app_stage;
             this.applicationOrgdetails=data.org_details;
-            if(this.applicationdetails.org_level.toLowerCase().includes('higher')){
+            if(this.applicationdetails.org_level!=undefined && this.applicationdetails.org_level.toLowerCase().includes('higher')){
                 this.streamSection=true;
             }
             if(data.attachments!=undefined && data.attachments!=""){
@@ -744,7 +744,6 @@ export default {
                     this.Sequence=data.Sequence;
                     this.Status_Name=data.Status_Name;
                     $('#attname').html(data.Name);
-                    this.getAttachmentType(data.Name.replaceAll(" ", "_"));
                     this.form.update_type=data.Name.replaceAll(" ", "_");
                     $('#update_btn_level').html(data.Name);
                     $('#updateBtn').show();
@@ -763,12 +762,6 @@ export default {
                 if(i==1){
                     $('#attachment_name'+i).html('Notify for Tentative Date of Feasibility Study');
                     $('#attname').html('Feasibility Study Report');
-                    if(status_id==3 && !this.feasibilityReport && this.access_level=="Dzongkhag"){
-                        this.getAttachmentType('Update_Feasibility_Study_Report');
-                    }
-                    if(status_id==7 && this.access_level=="Dzongkhag"){
-                        this.getAttachmentType('Update_Final_Assessment');
-                    }
                 }
                 if(i==3){
                     $('#attachment_name'+i).html('Sector Clearances');

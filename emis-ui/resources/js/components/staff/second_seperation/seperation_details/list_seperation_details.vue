@@ -60,30 +60,26 @@
                     <thead>
                         <tr>
                             <th>Sl#</th>
-                            <th>StaffID</th>
-                            <th>RefNo</th>
                             <th>Name</th>
-                            <!-- <th>Position Title</th> -->
+                            <th>EID</th>
+                            <th>Position Title</th>
+                            <th>Position Level</th>
+                            <th>Working Address</th>
                             <th>Seperation Type</th>
                             <th>Effective Date</th>
-                            <th>Approved Date</th>
-
-                            <!-- <th>Working Agency</th> -->
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in staffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.StaffID}}</td>
-                            <td>{{ item.RefNo}}</td>
-                            <td>{{ item.staffName}}</td>
-                            <!-- <td>{{ positiontitleList[item.staff_detials.position_title_id]}}</td> -->
+                            <td>{{ item.staff_name}}</td>
+                            <td>{{ item.emp_id}}</td>
+                            <td>{{ item.position_title_name}}</td>
+                            <td>{{ item.positionlevel}}</td>
+                            <td>{{ item.working_agency}}</td>
                             <td v-if="item.type!=null">{{ item.type.mastertypename }}</td>
                             <td v-else></td>
-                            <td>{{ item.EffectiveDate}}</td>
-                            <td>{{ item.ApprovedDate}}</td>
-
-                            <!-- <td>{{ item.staff_detials.working_agency}}</td> -->
+                            <td>{{ reverseDateTime(item.EffectiveDate)}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -115,78 +111,7 @@ export default {
         loadeditpage(staff){
             this.$router.push({name:"edit_seperation_details",query:{data:staff}});
 		},
-        loadactiveSeperationListList(uri="staff/loadStaffMasters/active/SeperationMaster"){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.seperationList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
 
-        loadpositionTitleList(uri = 'staff/loadStaffMasters/active/PositionTitle'){
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                for(let i=0;i<data.data.data.length;i++){
-                    this.positiontitleList[data.data.data[i].id] = data.data.data[i].name;
-                }
-            })
-            .catch(function (error){
-                console.log('Error: '+error);
-            });
-        },
-        getDepartmentList(type){
-            let uri = 'loadCommons/loadHeaquarterList/all_ministry_departments/'+type.toLowerCase();
-            if(this.accesslevel=="Dzongkhag"){
-                uri = 'loadCommons/loadHeaquarterList/user_dzongkhag/user_dzongkhag';
-            }
-            axios.get(uri)
-            .then(response =>{
-                let data = response;
-                this.departmentList = data.data.data;
-            })
-            .catch(function (error){
-                console.log("Error getDepartmentList:"+error)
-            });
-        },
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="dzongkhag_id"){
-                $('#organization_type').val('ALL').trigger('change');
-                // this.orgList=await this.schoolList($('#dzongkhag_id').val());
-            }
-
-            if(id=="organization_type"){
-                $('#department').val('ALL').trigger('change');
-                this.departmentList =[];
-                if($('#dzongkhag_id').val()==""){
-                    $('#dzongkhag_id_err').html('Please select dzongkhag');
-                    $('#organization_type').val('ALL').trigger('change');
-                }
-                else{
-                    if($('#organization_type').val()=="Ministry" || $('#organization_type').val()=="Dzongkhag"){
-                        this.getDepartmentList($('#organization_type').val());
-                        $('#departmentdiv').show();
-                    }
-                    else{
-                        this.orgList=await this.schoolList($('#dzongkhag_id').val());
-                        $('#departmentdiv').hide();
-                    }
-                }
-            }
-            if(id=="department"){
-                this.orgList=await this.getdepartmentList($('#department').val());
-            }
-        },
         async loaddata(){
             this.staffList=[];
             if($('#org_id').val()!="ALL"){
@@ -198,44 +123,10 @@ export default {
         }
     },
     async mounted(){
-        // this.dzongkhagList= await this.loadactivedzongkhags();
-        // this.loadpositionTitleList();
-        // this.loadactiveSeperationListList();
-        // $('.select2').select2();
-        // $('.select2').select2({
-        //     theme: 'bootstrap4'
-        // });
-        // $('.select2').on('select2:select', function (el){
-        //     Fire.$emit('changefunction',$(this).attr('id'));
-        // });
-
-        // Fire.$on('changefunction',(id)=> {
-        //     this.changefunction(id);
-        // });
-        // axios.get('common/getSessionDetail')
-        // .then(response =>{
-        //     let data = response.data.data;
-            // if(data['acess_level']=="Org"){
-            //     this.loadstff('userOrgWiseCivilServent/ALL_TYPE');
-            // }
-            // if(data['acess_level']=="Dzongkhag"){
-            //     this.loadstff('userDzoWiseCivilServent/ALL_TYPE');
-            // }
-            // if(data['acess_level']=="Ministry"){
-            //     this.loadstff('allCivilServent/ALL_TYPE');
-            //     this.showedit=true;
-            // }
-
-            //axios.get('staff/staffSepSecController/loadSecondment/all/Seperation')
-
-        // })
-        // .catch(errors => {
-        //     console.log(errors)
-        // });
         axios.get('staff/zest/loadSeperation')
         .then((response) => {
             this.staffList =  response.data.data;
-            })
+        })
         .catch((error) => {
             console.log("Error."+error);
         });

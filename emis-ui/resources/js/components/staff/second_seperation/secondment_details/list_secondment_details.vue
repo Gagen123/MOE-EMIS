@@ -61,27 +61,24 @@
                         <tr>
                             <th>Sl#</th>
                             <th>Name</th>
-                            <th>Type</th>
-                            <th>Office Order No</th>
-                            <th>Office Order Date</th>
-                            <th>Approved Date</th>
+                            <th>EID</th>
+                            <th>Position Title</th>
+                            <th>Position Level</th>
+                            <th>Working Address</th>
                             <th>Effective Date</th>
-                            <!-- <th>Working Agency</th> -->
                             <th class="pr-4 pl-5">Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in staffList" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ item.staffName}}</td>
-                            <td>{{ item.Type }}</td>
-                            <td>{{ item.OfficeOrderNo }}</td>
-                            <td>{{ item.OfficeOrderDate}}</td>
-                            <td>{{ item.ApprovedDate}}</td>
-                            <td>{{ item.EffectiveDate}}</td>
-                            <!-- <td>{{ item.staff_detials.working_agency}}</td> -->
+                            <td>{{ item.staff_name}}</td>
+                            <td>{{ item.emp_id}}</td>
+                            <td>{{ item.position_title_name}}</td>
+                            <td>{{ item.positionlevel}}</td>
+                            <td>{{ item.working_agency}}</td>
+                            <td>{{ reverseDateTime(item.EffectiveDate)}}</td>
                             <td>
-                                <!-- <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadeditpage(item)"><span class="fa fa-edit"></span> Edit</a> -->
                                 <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="loadviewpage(item)"><span class="fa fa-eye"></span> View</a>
                             </td>
                         </tr>
