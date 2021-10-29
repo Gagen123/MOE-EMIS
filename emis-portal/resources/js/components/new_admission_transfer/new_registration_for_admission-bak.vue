@@ -5,11 +5,7 @@
                 <td colspan="2"><b>New Student Registration Form</b></td>
             </tr>
         </table>
-        <div class="callout callout-danger" style="display:none" id="screenPermission">
-            <h5 class="bg-gradient-danger">Sorry!</h5>
-            <div id="message"></div>
-        </div>
-        <div class="card card-primary card-outline card-outline-tabs" id="mainform">
+        <div class="card card-primary card-outline card-outline-tabs">
             <div class="card-header p-0 border-bottom-0">
                 <ul class="nav nav-tabs" id="tabhead">
                     <li class="nav-item basic-tabs" @click="shownexttab('basic-tabs')">
@@ -712,7 +708,7 @@ export default {
         onChangeFileUpload(e){
             this.student_form.attachments = e.target.files[0];
         },
-        async getChildDetailsbyCID(cid,type){
+        getChildDetailsbyCID(cid,type){
             if(this.student_form.snationality==""){
                 $('#snationality_err').html('Please select nationality');
                 $('#'+cid).val('');
@@ -723,31 +719,24 @@ export default {
             if(this.student_form.snationality=="Bhutanese"){
                 // this.student_form.cid_passport = cid;
                 cid=$('#'+cid).val();
-                let check = await this.validateCID(cid);
-                if(check){
-                    this.student_form.cid_passport =cid;
-                    this.getPersonalDetailsbyCID(cid,type);
-                    let fatherCid="";
-                    let motherCid="";
-                    if(type=='std'){
-                        axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
-                        .then(response => {
-                            let data=response.data.data.parentDetail[0];
-                            fatherCid=data.fatherCID;
-                            if(fatherCid!=null && fatherCid!=""){
-                                this.getPersonalDetailsbyCID(fatherCid,'father');
-                            }
-                            motherCid=data.motherCID;
-                            if(motherCid!=null && motherCid!=""){
-                                this.getPersonalDetailsbyCID(motherCid,'mother');
-                            }
-                        });
-                    }
-                } else {
-                    let text = 'CID has already been registered in the system';
-                    this.showErrorMsg(text);
+                this.student_form.cid_passport =cid;
+                this.getPersonalDetailsbyCID(cid,type);
+                let fatherCid="";
+                let motherCid="";
+                if(type=='std'){
+                    axios.get('adminstratorController/getchildDetailsOncid/'+ cid)
+                    .then(response => {
+                        let data=response.data.data.parentDetail[0];
+                        fatherCid=data.fatherCID;
+                        if(fatherCid!=null && fatherCid!=""){
+                            this.getPersonalDetailsbyCID(fatherCid,'father');
+                        }
+                        motherCid=data.motherCID;
+                        if(motherCid!=null && motherCid!=""){
+                            this.getPersonalDetailsbyCID(motherCid,'mother');
+                        }
+                    });
                 }
-                
             }else if(this.student_form.snationality=="Foreign"){
                 cid=$('#'+cid).val();
                 this.getDOIDetails(cid);
@@ -942,18 +931,6 @@ export default {
             });
         },
 
-        async validateCID(cid){
-            let returntype=true;
-            await axios.get('adminstratorController/getstudentdetailsbyCid/'+cid)
-            .then(response => {
-                let data = response.data.data;
-                if(data != null){
-                    returntype=false;
-                } 
-            });
-            return returntype;
-        },
-
          getdzongkhagList(uri ='masters/loadGlobalMasters/all_active_dzongkhag'){
               axios.get(uri)
               .then(Response =>{
@@ -1143,9 +1120,6 @@ export default {
         },
 
         shownexttab(nextclass){
-            if(nextclass=="basic-tabs"){
-                this.changetab('basic-tabs');
-            }
             if(nextclass=="guardians-tab"){
                 const config = {
                     headers: {
@@ -1523,34 +1497,6 @@ export default {
                 console.log('error: '+error);
             });
         },
-        getstudentPersonalDetails(type){
-            axios.get('/admissions/getStudentDetailsFromPortal/'+type)
-                .then(response => {
-                let data = response.data;
-                if(data != ""){
-                    $('#message').html('You are already registered in the system. <br> Thank you!');
-                    $('#screenPermission').show();
-                    $('#mainform').hide();
-                }
-                else{
-                    $('#mainform').show();
-                    $('#screenPermission').hide();
-                }
-            });
-        },
-        showErrorMsg(text){
-            Swal.fire({
-                html: text,
-                icon: 'error'
-            });
-            $('#first_name').prop('readonly',true);
-            $('#middle_name').prop('readonly',true);
-            $('#last_name').prop('readonly',true);
-            $('#dob').prop('readonly',true);
-            $('#dzongkhag').prop('disabled',true);
-            $('#gewog').prop('disabled',true);
-            $('#village_id').prop('disabled',true);
-        }
 
     },
 
@@ -1565,20 +1511,6 @@ export default {
 
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
-        });
-
-        axios.get('getSessionDetail')
-        .then(response => {
-            let data = response.data.data;
-            this.std_id=data['std_id'];
-            let user_type=data['user_type'];
-            if(data['user_type']!="Parent"){
-                this.is_student=true;
-            }
-            this.getstudentPersonalDetails(user_type);
-        })
-        .catch(errors => {
-            console.log(errors)
         });
 
         let cid=this.$route.query.cid;
