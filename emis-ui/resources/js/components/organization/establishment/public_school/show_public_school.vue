@@ -53,7 +53,7 @@
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                                     <label class="mb-0">Level:</label>
-                                    <span class="text-blue text-bold">{{applicationdetails.level}}</span>
+                                    <span class="text-blue text-bold">{{applicationdetails.org_level}}</span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -127,7 +127,7 @@
                                     <tbody>
                                         <tr v-for='(item,count) in class_section' :key="count+1">
                                             <td>{{count+1 }} </td>
-                                            <td>{{calssArray[item.classId] }} </td>
+                                            <td>{{item.class }} </td>
                                             <td class="isstream" style="display:none">  {{streamArray[item.streamId]}}</td>
                                             <td class="notstream" style="display:none"> </td>
                                              <td>
@@ -328,7 +328,7 @@ export default {
                 this.applicationdetails=data;
                 this.application_number=this.applicationdetails.application_no;
                 this.applicationOrgdetails=data.org_details;
-                if(this.applicationdetails.level.toLowerCase().includes('higher')){
+                if(this.applicationdetails.org_level!=undefined && this.applicationdetails.org_level.toLowerCase().includes('higher')){
                     this.isstream=true;
                     $('.isstream').show();
                 }
@@ -359,6 +359,7 @@ export default {
                         })
                     }
                 }
+                this.getClassStream();
             })
             .catch((error) => {
                 console.log("Error: "+error);
@@ -390,13 +391,31 @@ export default {
             });
         },
         getClassStream:function(){
-            axios.get('/masters/loadClassStreamMapping')
-              .then(response => {
-                this.classStreamList = response.data.data;
-                let data = response.data.data;
-
-                //this.calssArray[data[i].id] = data[i].name;
-            });
+            let level=this.applicationdetails.org_level;
+            if(level!=undefined){
+                if(level.toLowerCase().includes('middle')){
+                    level="10";
+                }
+                else if(level.toLowerCase().includes('lower')){
+                    level="8";
+                }
+                else if(level.toLowerCase().includes('primary') || level.toLowerCase().includes('ecr')){
+                    level="6";
+                    $('.multiageclass').prop('disabled',false);
+                }
+                else{
+                    level="12";
+                    $('.strm_clas').show();
+                }
+                axios.get('/masters/loadClassStreamMapping/'+level)
+                .then(response => {
+                    this.classStreamList = response.data.data;
+                    let data = response.data.data;
+                    for(let i=0;i<data.length;i++){
+                        this.calssArray[data[i].id] = data[i].class;
+                    }
+                });
+            }
         },
 
         /**
@@ -438,9 +457,9 @@ export default {
         this.application_number=this.$route.query.id;
         this.loadproposedBy();
         this.getLocation();
-        this.getClassStream();
-        this.getClass();
-        this.getstream();
+
+        // this.getClass();
+        // this.getstream();
         this.loadestablishmentapplicationdetails(this.$route.query.id);
     }
 }

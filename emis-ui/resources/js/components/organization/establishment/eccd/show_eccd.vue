@@ -542,7 +542,8 @@ export default {
         }
     },
     methods:{
-
+        applyselect2(){
+        },
         getteamVerificationList(){
             axios.get('organizationApproval/loadTeamVerificationList/'+this.search.id)
             .then(response => {
