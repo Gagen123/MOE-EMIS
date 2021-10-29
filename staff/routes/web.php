@@ -301,6 +301,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/loadPromotionDetails/{id}', ['uses' => 'staff\ZestController@loadPromotionDetails']);
         $router->get('/loadLongTermTraining/{param}', ['uses' => 'staff\ZestController@loadLongTermTraining']);
         $router->get('/loadLeaveDetails/{param}', ['uses' => 'staff\ZestController@loadLeaveDetails']);
+        $router->get('/loadSubstitution/{param}', ['uses' => 'staff\ZestController@loadSubstitution']);
 
     });
 });

@@ -163,7 +163,7 @@
                                 </tr>
                             </template>
                         </tbody>
-                        <tr>
+                        <!-- <tr>
                             <td colspan="12" class="text-right text-bold averate_score_bg">
                                 <span id="average_text">
                                     Average Total Score
@@ -172,7 +172,7 @@
                             <td class="text-bold">
                                 <span>{{basic_detials.average_score}}</span>
                             </td>
-                        </tr>
+                        </tr> -->
                     </table>
                 </div>
             </div>

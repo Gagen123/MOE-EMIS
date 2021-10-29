@@ -40,6 +40,11 @@ class ZestController extends Controller{
         return $response_data;
     }
 
+    public function loadSubstitution($param=""){
+        $response_data= $this->apiService->listData('emis/staff/zest/loadSubstitution/'.$param);
+        return $response_data;
+    }
+
 
     public function loadPromotion($param=""){
         $response_data= $this->apiService->listData('emis/staff/zest/loadPromotion/'.$param);
