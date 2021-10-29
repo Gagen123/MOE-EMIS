@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th style="width:5%">SL#</th>
-                    <th style="width:20%">erms for Health</th>
+                    <th style="width:20%">Terms for Health</th>
                     <th style="width:10%">Code</th>
                     <th style="width:25%">Description</th>
                     <th style="width:10%">Status</th>

@@ -18,33 +18,33 @@
                                 <input type="hidden" class="form-control" v-model="form.id" id="id"/>
                                     <div class="form-group row">
                                         <div class="col-lg-10 col-md-10 col-sm-10">
-                                            <label>Passport/Emigration Number:</label>
+                                            <label>Passport/Emigration Number:<i class="text-danger">*</i></label>
                                                 <input type="text" class="form-control"  :class="{ 'is-invalid': form.errors.has('passport') }" id="passport" v-model="form.passport" placeholder="Passport/Emigration Number">
                                                 <has-error :form="form" field="passport"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6">
-                                          <label>Full Name:</label>
+                                          <label>Full Name:<i class="text-danger">*</i></label>
                                             <input type="text" class="form-control"  :class="{ 'is-invalid': form.errors.has('name') }" id="name" v-model="form.name">
                                             <has-error :form="form" field="name"></has-error>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6">
-                                          <label>Date of Birth:</label>
+                                          <label>Date of Birth:<i class="text-danger">*</i></label>
                                             <input type="date" class="form-control" :class="{ 'is-invalid': form.errors.has('dob') }" id="dob" v-model="form.dob">
                                             <has-error :form="form" field="dob"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <div class="col-lg-6 col-md-6 col-sm-6">
-                                            <label>Country:</label>
+                                            <label>Country:<i class="text-danger">*</i></label>
                                              <select v-model="form.country" :class="{'is-invalid': form.errors.has('country') }" class="form-control select2" name="country" id="country">
                                                 <option v-for="(item, index) in countryList" :key="index" v-bind:value="item.id">{{ item.country_name }}</option>
                                             </select>
                                             <has-error :form="form" field="country"></has-error>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
-                                            <label>Address:</label>
+                                            <label>Address:<i class="text-danger">*</i></label>
                                             <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('address') }" id="address" v-model="form.address">
                                             <has-error :form="form" field="address"></has-error>
                                         </div>
@@ -52,13 +52,13 @@
                                     <div class="form-group row">
 
                                         <div class="col-lg-6 col-md-6 col-sm-6 ">
-                                            <label>Email Address:</label>
+                                            <label>Email Address:<i class="text-danger">*</i></label>
                                             <input type="text" class="form-control" :class="{ 'is-invalid': form.errors.has('email') }" id="email" v-model="form.email">
                                             <has-error :form="form" field="email"></has-error>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-sm-6">
-                                            <label>Contact Number:</label>
+                                            <label>Contact Number:<i class="text-danger">*</i></label>
                                             <input type="number" class="form-control" :class="{ 'is-invalid': form.errors.has('contact_number') }" id="contact_number" v-model="form.contact_number">
                                             <has-error :form="form" field="contact_number"></has-error>
                                         </div>
