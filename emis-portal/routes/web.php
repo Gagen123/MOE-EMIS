@@ -49,6 +49,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
         Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getpersonbycid'])->name('getpersonbycid');
         Route::get('/getDOIData/{id}', [App\Http\Controllers\AdminstratorController::class, 'getDOIData'])->name('getDOIData');
+        Route::get('/getstudentdetailsbyCid/{cid}', [App\Http\Controllers\AdminstratorController::class, 'getstudentdetailsbyCid'])->name('getstudentdetailsbyCid');
 
     });
 

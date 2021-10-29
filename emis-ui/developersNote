@@ -134,6 +134,9 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
     //Fatal error: Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in vendor\illuminate\database\Eloquent\Model.php
 
 
+    
+
+
 
 
 

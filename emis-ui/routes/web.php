@@ -1098,3 +1098,4 @@ Route::prefix('projections')->group(function () {
 Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'dashboard'])->name('dashboard');
 Route::get('/getpersonbycid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getpersonbycid'])->name('getpersonbycid');
 Route::get('/getchildDetailsOncid/{cid}', [App\Http\Controllers\AdministrationController::class, 'getchildDetailsOncid'])->name('getchildDetailsOncid');
+Route::get('/getDOIData/{id}', [App\Http\Controllers\AdministrationController::class, 'getDOIData'])->name('getDOIData');

@@ -831,7 +831,17 @@ export default {
                         this.showErrorMsg(text);
                     }
                 }
-            }            
+            } else if(selectedVal.includes('Foreign')){
+                cid=$('#'+cid).val();
+                let check = await this.validateCID(cid);
+                if(check){
+                    this.getDOIDetails(cid);
+                } else {
+                    let text = 'Immigration No/ID No has already been registered in the system';
+                    this.showErrorMsg(text);
+                }
+                
+            }         
         },
         async getPersonalDetailsbyCID(cidNo,type){
             // if(type=="father"){
@@ -1038,6 +1048,52 @@ export default {
                     html: "No data found for matching CID/service down"+exception,
                     icon: 'error'
                 });
+            });
+        },
+
+        getDOIDetails(cid){
+            axios.get('getDOIData/'+ cid)
+            .then(res => {
+                if(JSON.stringify(res.data)!='{}'){
+                    let student_detail = res.data;
+                    if(student_detail.FullName.includes(' ')){
+                        for(let i =0;i<student_detail.FullName.split(' ').length;i++){
+                            if(i==0){
+                                this.personal_form.first_name = student_detail.FullName.split(' ')[i];
+                                $('#first_name').prop('readonly',true);
+                            }
+                            if(student_detail.FullName.split(' ').length >2){
+                                if(i==1){
+                                this.personal_form.middle_name = student_detail.FullName.split(' ')[i];
+                                $('#middle_name').prop('readonly',true);
+                                }
+                                if(i==2){
+                                    this.personal_form.last_name = student_detail.FullName.split(' ')[i];
+                                    $('#last_name').prop('readonly',true);
+                                }
+                            } else {
+                                if(i==1){
+                                    this.personal_form.last_name = student_detail.FullName.split(' ')[i];
+                                    $('#last_name').prop('readonly',true);
+                                }
+                            }
+                            
+                        }
+                    }else{
+                        this.personal_form.first_name = student_detail.FullName;
+                        $('#first_name').prop('readonly',true);
+                    }
+                    this.personal_form.dob = student_detail.dob;
+                    $('#dob').prop('readonly',true);
+
+                    for(let i=0; i<this.sex_idList.length;i++){
+                        if(this.sex_idList[i].name.toLowerCase()==student_detail.Gender.toLowerCase()){
+                            $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                            this.personal_form.sex_id =  this.sex_idList[i].id;
+                            $('#sex_id').prop('disabled',true);
+                        }
+                    }
+                }
             });
         },
 
