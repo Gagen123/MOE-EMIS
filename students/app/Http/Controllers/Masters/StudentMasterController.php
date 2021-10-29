@@ -117,7 +117,7 @@ class StudentMasterController extends Controller
                 'UnitId'                   =>  $request->unit_id,
             ];
         }
-        
+
         if($request->model=="CeaRole"){
             $master_data = [
                 'Name'                     =>  $request->name,
@@ -150,7 +150,7 @@ class StudentMasterController extends Controller
                 'Unit_id'                       =>  $request->unit_id,
             ];
         }
-        
+
         if($request->model=="CeaScoutSectionLevel" || $request->model=="CeaScoutBadge" ){
             $master_data = [
                 'Name'                     =>  $request->name,
@@ -160,7 +160,7 @@ class StudentMasterController extends Controller
                 'CeaScoutSectionId'        =>  $request->scout_type,
             ];
         }
-        
+
         if($request->model=="OffenceType"|| $request->model=="DisciplinaryActionTaken"){
             $master_data = [
                 'Name'                   =>  $request->name,
@@ -180,7 +180,7 @@ class StudentMasterController extends Controller
             } catch(\Illuminate\Database\QueryException $ex ){
                 dd($ex);
             }
-            
+
         }
         if($request->action_type=="edit"){
             $Finalmaster_data =$master_data+[
@@ -202,7 +202,7 @@ class StudentMasterController extends Controller
         // else if($request->action_type=="edit"){
         //     $response_data = $this->updateData($request,$data, $databaseModel);
         // }
-        
+
 
     }
 
@@ -222,7 +222,7 @@ class StudentMasterController extends Controller
                 'id'                 =>  $request['id'],
                 'updated_by'         =>  $request->user_id,
                 'created_at'         =>  date('Y-m-d h:i:s')
-                
+
             ];
             $stcrcv = SubjectMarks::where('id', $id)->update($subjectlist);
             return $this->successResponse($stcrcv, Response::HTTP_CREATED);
@@ -256,7 +256,7 @@ class StudentMasterController extends Controller
                 'created_at'         =>  date('Y-m-d h:i:s')
                 );
                 SubjectMarks::create($data);
-                
+
             }
 
         }
@@ -291,7 +291,7 @@ class StudentMasterController extends Controller
             'no_months'                 =>  $request->no_months,
             'no_months1'                =>  $request->no_months1,
         ];
-        
+
         $existing_data=AdmissionValidationModel::first();
         if($existing_data!=null && $existing_data!=""){
             $response_data = AdmissionValidationModel::first();
@@ -362,7 +362,7 @@ class StudentMasterController extends Controller
         else if($type == 'active'){
             return $this->successResponse($model::where('status',1)->get());
         }
-        
+
     }
 
     // old code of phuntsho sir to load student master
@@ -415,7 +415,7 @@ class StudentMasterController extends Controller
      * method to list students masters of active records for dropdown
     */
     public function loadActiveStudentMasters($param=""){
-       
+
         if($param == 'program_teacher_roles'){
             $status = '1';
             $assigned_to = '1';
@@ -448,7 +448,7 @@ class StudentMasterController extends Controller
         }else if($param == 'program_item_central' || $param == 'program_item_local'){
             $databaseModel=$this->extractRequestInformation($request=NULL, 'program_item_central', $type='Model');
             $modelName = "App\\Models\\Masters\\"."$databaseModel";
-            
+
             $model = new $modelName();
             if($param == 'program_item_central'){
                 $data = $model::where('status',1)->where('Central',1)->get();
@@ -482,9 +482,9 @@ class StudentMasterController extends Controller
         return $this->successResponse($model::where('id',$id)->first());
 
     }
-    public function loadActiveProgramLists($typeId){ 
+    public function loadActiveProgramLists($typeId){
         return $this->successResponse(CeaProgram::where ('CeaProgrammeTypeId',$typeId)->get());
- 
+
     }
 
     /**
@@ -494,7 +494,7 @@ class StudentMasterController extends Controller
     private function insertData($data, $databaseModel){
         $modelName = "App\\Models\\Masters\\"."$databaseModel";
         $model = new $modelName();
-        
+
         $response_data = $model::create($data);
 
         return $response_data;
@@ -640,7 +640,7 @@ class StudentMasterController extends Controller
                     if($type =='data'){
                         $additional_data = [
                             'CeaProgrammeId' => $request->program,
-                            'AssignedTo'=> $request->assigned_to, 
+                            'AssignedTo'=> $request->assigned_to,
                             'remarks'=> $request->remarks
                         ];
                         $data = $data + $additional_data;
@@ -805,5 +805,5 @@ class StudentMasterController extends Controller
     public function loadActiveFoodSourceMaster(){
          return FoodSourceType::where('status',1)->get();
     }
-    
+
 }

@@ -24,10 +24,10 @@ class StudentMasterController extends Controller{
     }
     public function saveStreamSubject(Request $request){
         $rules = [
-            
+
         ];
         $customMessages = [
-            
+
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -176,12 +176,12 @@ class StudentMasterController extends Controller{
         $awards = $this->apiService->listData('emis/masters/students/getActionTaken/'.$id);
         return $awards;
     }
-    
+
     public function loadActiveFoodSourceMaster(){
         // dd('m here');
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveFoodSourceMaster');
          return $student_masters;
     }
-    
+
 
 }
