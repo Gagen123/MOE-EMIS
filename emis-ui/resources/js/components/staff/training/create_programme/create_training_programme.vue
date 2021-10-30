@@ -950,7 +950,7 @@ export default {
             .catch((error) => {
                 console.log("Error......"+error);
             });
-        },
+        },  
         async loadmasters(){
             this.trainingtypeList =  await this.loadstaffMasters('active','hr_development_masters___TrainingType');
             this.relatedProgrammeList =  await this.loadstaffMasters('all','hr_development_masters___RelatedProgramme');

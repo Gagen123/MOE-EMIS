@@ -17,6 +17,7 @@ class StudentMasterController extends Controller{
     }
 
     public function saveStudentMasters(Request $request){
+        //dd('m here');
         $data = $request->all();
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
