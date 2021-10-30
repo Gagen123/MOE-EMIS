@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\student;
-use GuzzleHttp\Client;
-use App\Helper\EmisService;
-use App\Traits\ServiceHelper;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Helper\EmisService;
+use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
-
-class StudentMasterController extends Controller{
+class StudentMasterCont extends Controller
+{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
@@ -182,6 +182,4 @@ class StudentMasterController extends Controller{
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveFoodSourceMaster');
          return $student_masters;
     }
-
-
 }

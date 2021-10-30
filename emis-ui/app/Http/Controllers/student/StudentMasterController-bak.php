@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\AuthUser;
 
-class StudentMasterController extends Controller{
+class StudentMasterControllerBack extends Controller{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
@@ -39,7 +39,7 @@ class StudentMasterController extends Controller{
             'recordtype'     =>  $request->record_type,
             'user_id'        => $this->userId()
         ];
-        
+
         if($request->record_type == 'student_awards'){
             $additional_data = [
                 'award_type_id' => $request->award_type_id,
@@ -105,10 +105,10 @@ class StudentMasterController extends Controller{
     }
     public function saveStreamSubject(Request $request){
         $rules = [
-            
+
         ];
         $customMessages = [
-            
+
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -121,7 +121,7 @@ class StudentMasterController extends Controller{
         $response_data= $this->apiService->createData('emis/masters/students/saveStreamSubject', $data);
         return $response_data;
     }
-    
+
     public function saveValidationcondition(Request $request){
         $rules = [
             'date'          =>  'required',
@@ -181,6 +181,7 @@ class StudentMasterController extends Controller{
     }
 
     public function loadStudentMasters($param=""){
+        dd('ddd');
         $student_masters = $this->apiService->listData('emis/masters/students/loadStudentMasters/'.$param);
         return $student_masters;
     }
@@ -252,8 +253,8 @@ class StudentMasterController extends Controller{
         $awards = $this->apiService->listData('emis/masters/students/getActionTaken/'.$id);
         return $awards;
     }
-    
-    
+
+
     public function saveFoodSourceType(Request $request){
         //dd($request);
         $rules = [
@@ -281,7 +282,7 @@ class StudentMasterController extends Controller{
         return $response_data;
 
     }
-   
+
     public function loadfoodSourceList(){
         // dd('m here');
          $student_masters = $this->apiService->listData('emis/masters/students/loadfoodSourceList');

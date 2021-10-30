@@ -65,7 +65,7 @@ class StudentAdmissionRelatedController extends Controller
 
         $students = DB::table('std_student')
                 ->join('std_student_class_stream', 'std_student.id','=','std_student_class_stream.StdStudentId')
-                ->select('std_student.Name', 'std_student.id', 'std_student.student_code', 
+                ->select('std_student.Name', 'std_student.id', 'std_student.student_code',
                         'std_student_class_stream.OrgClassStreamId', 'std_student_class_stream.SectionDetailsId')
                 ->where('OrgOrganizationId', $org_id)
                 ->where('IsRejoined', '0')
@@ -128,10 +128,23 @@ class StudentAdmissionRelatedController extends Controller
         $id =$param;
 
         $students = DB::table('std_student')
+                ->join('std_student_class_stream','std_student.id','std_student_class_stream.StdStudentId')
+                ->select('std_student_class_stream.OrgClassStreamId','std_student_class_stream.SectionDetailsId','std_student_class_stream.academicYear',
+                        'std_student.id','std_student.Name','std_student.student_code','std_student.CidNo','std_student.OrgOrganizationId' )
                 ->where('std_student.OrgOrganizationId', $id)
                 ->where('IsTransferred', '1')
                 ->get();
+        return $this->successResponse($students);
+    }
 
+    public function loadStudentTransfersDetail($id){
+        $students = DB::table('std_student')
+            ->join('std_student_class_stream','std_student.id','std_student_class_stream.StdStudentId')
+            ->select('std_student_class_stream.OrgClassStreamId','std_student_class_stream.SectionDetailsId','std_student_class_stream.academicYear',
+                    'std_student.id','std_student.Name','std_student.student_code','std_student.CidNo','std_student.OrgOrganizationId' )
+            ->where('std_student.id', $id)
+            ->where('IsTransferred', '1')
+            ->get();
         return $this->successResponse($students);
     }
 

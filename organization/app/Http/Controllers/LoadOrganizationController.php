@@ -24,6 +24,7 @@ use App\Models\generalInformation\Projection;
 use App\Models\generalInformation\OrganizationCompoundDetail;
 use App\Models\generalInformation\ConnectivityModel;
 use App\Models\Masters\Location;
+use App\Models\Masters\Stream;
 use Exception;
 
 class LoadOrganizationController extends Controller
@@ -711,6 +712,29 @@ class LoadOrganizationController extends Controller
             ->where('id', $id)
             ->first();
         return $this->successResponse($response_data);
+    }
+
+    public function getOrgClassStreamSectionbySecId($id){
+        $response_det=SectionDetails::where('id',$id)->first();
+        if($response_det!=null && $response_det!=""){
+            $classStream=OrganizationClassStream::where('id',$response_det->classSectionId)->first();
+            if($classStream!=null && $classStream!=""){
+                if($classStream->classId!=null && $classStream->classId!=""){
+                    $classdet=Classes::where('id',$classStream->classId)->first();
+                    if($classdet!=null && $classdet!=""){
+                        $response_det->class=$classdet->class;
+                    }
+                }
+                if($classStream->streamId!=null && $classStream->streamId!=""){
+                    $secdet=Stream::where('id',$classStream->streamId)->first();
+                    if($secdet!=null && $secdet!=""){
+                        $response_det->stream=$secdet->name;
+                    }
+                }
+            }
+        }
+
+        return $this->successResponse($response_det);
     }
 
     public function loadStreamList($id)

@@ -8,32 +8,32 @@
                     <th >Student Code</th>
                     <th >Class</th>
                     <th >Section</th>
-                    <th >Action</th> 
+                    <th >Action</th>
                 </tr>
             </thead>
             <tbody id="tbody">
                 <tr v-for="(item, index) in dataList" :key="index">
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
-                    <td>{{ item.StdStudentId}}</td>
-                    <td>{{ }}</td>
-                    <td>{{ }}</td>
+                    <td>{{ item.student_code}}</td>
+                    <td>{{ item.class_det.class}}</td>
+                    <td>{{ item.class_det.section}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
-                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>
+                            <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-print"></i > Print TC</a>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>      
+    </div>
 </template>
 <script>
 export default {
     data(){
         return{
             org_id:'2',
-            dataList:[], 
+            dataList:[],
         }
     },
     methods:{
@@ -52,11 +52,11 @@ export default {
                 $("#transfer-list-table").DataTable({
                     "responsive": true,
                     "autoWidth": true,
-                }); 
-            }, 3000);  
+                });
+            }, 3000);
         },
         showedit(data){
-            this.$router.push({name:'edit_transfer_student',params: {data:data}});
+            this.$router.push({name:'edit_transfer_student',query: {data:data}});
         },
     },
     mounted(){

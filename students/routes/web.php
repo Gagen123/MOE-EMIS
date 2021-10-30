@@ -176,6 +176,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/loadUnreportedStudents/{org_id}', ['uses' => 'Students\StudentAdmissionRelatedController@loadUnreportedStudents']);
         $router->post('/saveStudentTransfer',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentTransfer']);
         $router->get('/loadStudentTransfers/{param}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfers']);
+        $router->get('/loadStudentTransfersDetail/{id}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentTransfersDetail']);
         $router->post('/saveStudentWhereabouts',['uses' => 'Students\StudentAdmissionRelatedController@saveStudentWhereabouts']);
         $router->get('/loadStudentWhereabouts/{param1}', ['uses' => 'Students\StudentAdmissionRelatedController@loadStudentWhereabouts']);
 
