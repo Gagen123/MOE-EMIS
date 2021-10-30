@@ -261,6 +261,7 @@ export default {
 					icon: 'success',
 					title: 'you have applied successfully'
 				})
+				location.reload();
 			})
 			.catch(()=>{console.log("Error.....")})
 		},
@@ -470,7 +471,7 @@ export default {
                 this.is_student=true;
             }
             this.getstudentPersonalDetails(user_type);
-			this.student_form.student_id=data.id;
+			this.student_form.student_id=data.std_id;
 			this.loadAdmissionRequest(data['std_id']);
         })
         .catch(errors => {

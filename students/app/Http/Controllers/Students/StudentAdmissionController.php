@@ -133,9 +133,11 @@ class StudentAdmissionController extends Controller
                 ];
                 $response_data = std_admission::create($data);
 
+                $admission_number = $this->generateAdmissionNo($request->admission_no);
+                
                 $data =[
                     'StdAdmissionsId'               =>  $response_data->id,
-                    'AdmissionNo'                   =>  $request->admission_no.'/'.date('Y').'/',
+                    'AdmissionNo'                   =>  $admission_number,
                     'Dzongkhagid'                   =>  $request->Dzongkhagid,
                     'OrgOrganizationId'             =>  $request->OrgOrganizationId,
                     'class_id'                      =>  $request->std_class,
@@ -244,9 +246,11 @@ class StudentAdmissionController extends Controller
         ];
         $this->validate($request, $rules, $customMessages);
 
+        $admission_number = $this->generateAdmissionNo($request->admission_no);
+        
         $data =[
             'StdAdmissionsId'               =>  $request->student_id,
-            'AdmissionNo'                   =>  $request->admission_no.'/'.date('Y').'/',
+            'AdmissionNo'                   =>  $admission_number,
             'Dzongkhagid'                   =>  $request->dzongkhag,
             'OrgOrganizationId'             =>  $request->school,
             'class_id'                      =>  $request->class,
@@ -951,8 +955,17 @@ class StudentAdmissionController extends Controller
      * For EMIS Portal
      */
 
-    public function loadAdmissionRequest($std_id=""){
-        if($std_id == 0){
+    public function loadAdmissionRequest($std_id="", $dzo_id=""){
+        if($dzo_id != 0){
+            $response_data = DB::table('request_for_admissions')
+                                ->join('admission_request_files','request_for_admissions.id','=', 'admission_request_files.AdmissionRequestId')
+                                ->join('std_student','std_student.student_code','=', 'request_for_admissions.StdStudentId')
+                                ->join('std_student_class_stream','std_student_class_stream.StdStudentId','=', 'std_student.id')
+                                ->select('request_for_admissions.*', 'admission_request_files.*', 'std_student_class_stream.OrgClassStreamId',
+                                            'std_student.name', 'std_student.student_code', 'std_student.OrgOrganizationId')
+                                ->where('request_for_admissions.dzongkhag', $dzo_id)
+                                ->get();
+        } else if($std_id == 0){
             $response_data = DB::table('request_for_admissions')
                                 ->join('admission_request_files','request_for_admissions.id','=', 'admission_request_files.AdmissionRequestId')
                                 ->join('std_student','std_student.student_code','=', 'request_for_admissions.StdStudentId')
@@ -971,6 +984,21 @@ class StudentAdmissionController extends Controller
                                 ->where('request_for_admissions.StdStudentId', $std_id)
                                 ->get();
         }
+
+        return $this->successResponse($response_data);
+    }
+
+    public function getStudentAdmissionRequest($std_id=""){
+        $response_data = DB::table('request_for_admissions')
+                            ->join('admission_request_files','request_for_admissions.id','=', 'admission_request_files.AdmissionRequestId')
+                            ->join('std_student','std_student.student_code','=', 'request_for_admissions.StdStudentId')
+                            ->join('std_student_class_stream','std_student_class_stream.StdStudentId','=', 'std_student.id')
+                            ->select('request_for_admissions.*', 'admission_request_files.*', 'std_student_class_stream.OrgClassStreamId',
+                                        'std_student.name as Name', 'std_student.student_code', 'std_student.OrgOrganizationId',
+                                        'std_student.CmnSexId', 'std_student.DateOfBirth')
+                            ->where('request_for_admissions.StdStudentId', $std_id)
+                            ->where('request_for_admissions.status', 'Approved')
+                            ->get();
         
 
         return $this->successResponse($response_data);
@@ -1046,6 +1074,25 @@ class StudentAdmissionController extends Controller
             return false;
         }
 
+    }
+
+    /**
+     * Function to generate Admission No
+     */
+
+    private function generateAdmissionNo($admission_no){
+        $admission_check = $admission_no.'/'.date('Y');
+        
+        $response_data = DB::table('std_admissions_schools')
+                                ->select('AdmissionNo')
+                                ->where('std_admissions_schools.AdmissionNo', 'LIKE', '%'.$admission_check.'%')
+                                ->orderBy('AdmissionNo', 'desc')
+                                ->first();
+        $temp = $response_data->AdmissionNo;
+        $temp_var = explode('/', $temp);
+        $num = (int)$temp_var[2]+1;
+        
+        return ($admission_check.'/00'.$num);
     }
 
     /**

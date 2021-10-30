@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Students;
 
 use App\Http\Controllers\Controller;
 use App\Models\ExternalData\AbroadStudentDetails;
+use App\Models\ExternalData\InstitutionData;
 use App\Models\ExternalData\RubCollegeDetails;
 use App\Models\ExternalData\RubStaffDetails;
 use App\Models\ExternalData\RubStudentDetails;
@@ -20,24 +21,43 @@ class ExternalDataImputController extends Controller
         date_default_timezone_set('Asia/Dhaka');
     }
     public function saveImported(Request $request){
-        if($request->action_type=="add"){
-            if($request->type == "institutes"){
-                $rules = [
-                    'collegeName'               => 'required',
-                    'dzongkhag'                 => 'required',
-                    'remarks'                   => 'required',
-                    'institutes_type'           => 'required',
-                    'own_by'                    => 'required',
+        if($request->input_type=="Excel"){
+            if($request->file_data!=null && $request->file_data!="" && sizeof($request->file_data)>0){
+                $response_data= InstitutionData::where('created_by',$request->user_id)->delete();
+                foreach($request->file_data as $par){
+                    $request_data =[
+                        'name'                      =>  $par[0],
+                        'dzongkhag'                 =>  $par[1],
+                        'institution_type'          =>  $par[2],
+                        'own_by'                    =>  $par[3],
+                        'remarks'                   =>  $request->remarks,
+                        'file_path'                  =>  $request->file_path,
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data= InstitutionData::create($request_data);
+                    return $response_data= InstitutionData::where('created_by',$request->user_id)->get();
+                }
+            }
+        }else{
+            if($request->action_type=="add"){
+                if($request->type == "institutes"){
+                    $rules = [
+                        'collegeName'               => 'required',
+                        'dzongkhag'                 => 'required',
+                        'remarks'                   => 'required',
+                        'institutes_type'           => 'required',
+                        'own_by'                    => 'required',
 
-                ];
-                $customMessages = [
-                    'collegeName.required'     => 'This field is required',
-                    'dzongkhag.required'       => 'This field is required',
-                    'remarks.required'         => 'This field is required',
-                    'institutes_type.required' => 'This field is required',
-                    'own_by.required'          => 'This field is required',
-                ];
-                $this->validate($request, $rules, $customMessages);
+                    ];
+                    $customMessages = [
+                        'collegeName.required'     => 'This field is required',
+                        'dzongkhag.required'       => 'This field is required',
+                        'remarks.required'         => 'This field is required',
+                        'institutes_type.required' => 'This field is required',
+                        'own_by.required'          => 'This field is required',
+                    ];
+                    $this->validate($request, $rules, $customMessages);
                     $collegeDetails =[
                         'collegeName'           => $request->collegeName,
                         'institutes_type'       => $request->institutes_type,
@@ -51,183 +71,185 @@ class ExternalDataImputController extends Controller
                     ];
                     $response_data=RubCollegeDetails::create($collegeDetails);
                     return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "staff"){
-                $staffDetails =[
-                    'institute_id'             => $request->institutes_id,
-                    'year'                     => $request->year,
-                    'staffMale'                => $request->staffMale,
-                    'staffFemale'              => $request->staffFemale,
-                    'staffTotal'               => $request->staffTotal,
-                    'remarks'                  =>  $request->remarks,
-                    'created_by'               =>  $request->user_id,
-                    'created_at'               =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = RubStaffDetails::create($staffDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "student"){
-                $institutes_id  = $request['institutes_id'];
-                $user_id  = $request['user_id'];
-                $studentDetails = [
-                    'institute_id'              =>  $institutes_id,
-                    'studentMale'               =>  $request['studentMale'],
-                    'studentFemale'             =>  $request['studentFemale'],
-                    'studentTotal'              =>  $request['studentTotal'],
-                    'addAs'                     => $request->addAs,
-                    'created_by'                =>  $user_id,
-                    'created_at'                =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = RubStudentDetails::create($studentDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "abroad_student"){
-                $user_id  = $request['user_id'];
-                $studentDetails = [
-                    'year'                        =>  $request['year'],
-                    'AbstudentMale'               =>  $request['AbstudentMale'],
-                    'AbstudentFemale'             =>  $request['AbstudentFemale'],
-                    'AbstudentTotal'              =>  $request['AbstudentTotal'],
-                    'created_by'                  =>  $user_id,
-                    'created_at'                  =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = AbroadStudentDetails::create($studentDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else{
-                $modelName = "App\\Models\\ExternalData\\"."$request->model";
-                $model = new $modelName();
-                $response_data="";
-                if($request->model=="NsbModel" || $request->model=="CensusModel"){
-                    $request_data = [
-                        'year'                          =>  $request['year'],
-                        'male'                          =>  $request['male'],
-                        'female'                        =>  $request['female'],
-                    ];
                 }
-                if($request->model=="NsbModel"){
+                else if($request->type == "staff"){
+                    $staffDetails =[
+                        'institute_id'             => $request->institutes_id,
+                        'year'                     => $request->year,
+                        'staffMale'                => $request->staffMale,
+                        'staffFemale'              => $request->staffFemale,
+                        'staffTotal'               => $request->staffTotal,
+                        'remarks'                  =>  $request->remarks,
+                        'created_by'               =>  $request->user_id,
+                        'created_at'               =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = RubStaffDetails::create($staffDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else if($request->type == "student"){
+                    $institutes_id  = $request['institutes_id'];
+                    $user_id  = $request['user_id'];
+                    $studentDetails = [
+                        'institute_id'              =>  $institutes_id,
+                        'studentMale'               =>  $request['studentMale'],
+                        'studentFemale'             =>  $request['studentFemale'],
+                        'studentTotal'              =>  $request['studentTotal'],
+                        'addAs'                     => $request->addAs,
+                        'created_by'                =>  $user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = RubStudentDetails::create($studentDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else if($request->type == "abroad_student"){
+                    $user_id  = $request['user_id'];
+                    $studentDetails = [
+                        'year'                        =>  $request['year'],
+                        'AbstudentMale'               =>  $request['AbstudentMale'],
+                        'AbstudentFemale'             =>  $request['AbstudentFemale'],
+                        'AbstudentTotal'              =>  $request['AbstudentTotal'],
+                        'created_by'                  =>  $user_id,
+                        'created_at'                  =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = AbroadStudentDetails::create($studentDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else{
+                    $modelName = "App\\Models\\ExternalData\\"."$request->model";
+                    $model = new $modelName();
+                    $response_data="";
+                    if($request->model=="NsbModel" || $request->model=="CensusModel"){
+                        $request_data = [
+                            'year'                          =>  $request['year'],
+                            'male'                          =>  $request['male'],
+                            'female'                        =>  $request['female'],
+                        ];
+                    }
+                    if($request->model=="NsbModel"){
+                        $request_data=$request_data+[
+                            'age_group'                      =>  $request['agegroup'],
+                        ];
+                    }
+                    if($request->model=="CensusModel"){
+                        $request_data=$request_data+[
+                            'age'                      =>  $request['age'],
+                        ];
+                    }
                     $request_data=$request_data+[
-                        'age_group'                      =>  $request['agegroup'],
+                        'created_by'                    =>  $request['user_id'],
+                        'created_at'                    =>  date('Y-m-d h:i:s')
                     ];
+                    $response_data = $model::create($request_data);
                 }
-                if($request->model=="CensusModel"){
+            }
+
+            if($request->action_type=="edit"){
+                if($request->type == "institutes"){
+                    $rules = [
+                        'collegeName'               => 'required',
+                        'dzongkhag'                 => 'required',
+                        'remarks'                   => 'required',
+                        'institutes_type'           => 'required',
+                        'own_by'                    => 'required',
+
+                    ];
+                    $customMessages = [
+                        'collegeName.required'     => 'This field is required',
+                        'dzongkhag.required'       => 'This field is required',
+                        'remarks.required'         => 'This field is required',
+                        'institutes_type.required' => 'This field is required',
+                        'own.required'             => 'This field is required',
+                    ];
+                    $this->validate($request, $rules, $customMessages);
+                    $collegeDetails =[
+                        'id'                    => $request->id,
+                        'remarks'               => $request->remarks,
+                        'own_by'                => $request->own_by,
+                        'status'                => $request->status,
+                        'collegeName'           => $request->collegeName,
+                        'institutes_type'       => $request->institutes_type,
+                        'dzongkhag'             => $request->dzongkhag,
+                        'updated_by'            => $request->user_id,
+                        'org_id'                => $request->working_agency_id,
+                        'updated_at'            =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = RubCollegeDetails::where('id',$request->id,)->update($collegeDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else if($request->type == "staff"){
+                    $staffDetails =[
+                        'id'                       => $request->id,
+                        'institute_id'             => $request->institutes_id,
+                        'year'                     => $request->year,
+                        'staffMale'                => $request->staffMale,
+                        'staffFemale'              => $request->staffFemale,
+                        'staffTotal'               => $request->staffTotal,
+                        'updated_by'               =>  $request->user_id,
+                        'updated_at'               =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = RubStaffDetails::where('id',$request->id,)->update($staffDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else if($request->type == "student"){
+                    $studentDetails = [
+                        'id'                        => $request->id,
+                        'institute_id'              =>  $request->institutes_id,
+                        'studentMale'               =>  $request['studentMale'],
+                        'studentFemale'             =>  $request['studentFemale'],
+                        'studentTotal'              =>  $request['studentTotal'],
+                        'addAs'                     =>  $request->addAs,
+                        'created_by'                =>  $request->user_id,
+                        'created_at'                =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = RubStudentDetails::where('id',$request->id,)->update($studentDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else if($request->type == "abroad_student"){
+                    $user_id  = $request['user_id'];
+                    $studentDetails = [
+                        'id'                          => $request->id,
+                        'year'                        =>  $request['year'],
+                        'AbstudentMale'               =>  $request['AbstudentMale'],
+                        'AbstudentFemale'             =>  $request['AbstudentFemale'],
+                        'AbstudentTotal'              =>  $request['AbstudentTotal'],
+                        'created_by'                  =>  $user_id,
+                        'created_at'                  =>  date('Y-m-d h:i:s')
+                    ];
+                    $response_data = AbroadStudentDetails::where('id',$request->id,)->update($studentDetails);
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
+                }
+                else{
+                    $modelName = "App\\Models\\ExternalData\\"."$request->model";
+                    $model = new $modelName();
+                    $response_data="";
+                    if($request->model=="NsbModel" || $request->model=="CensusModel"){
+                        $request_data = [
+                            'year'                          =>  $request['year'],
+                            'male'                          =>  $request['male'],
+                            'female'                        =>  $request['female'],
+                        ];
+                    }
+                    if($request->model=="NsbModel"){
+                        $request_data=$request_data+[
+                            'age_group'                     =>  $request['agegroup'],
+                        ];
+                    }
+                    if($request->model=="CensusModel"){
+                        $request_data=$request_data+[
+                            'age'                     =>  $request['age'],
+                        ];
+                    }
                     $request_data=$request_data+[
-                        'age'                      =>  $request['age'],
+                        'updated_by'                    =>  $request['user_id'],
+                        'updated_at'                    =>  date('Y-m-d h:i:s')
                     ];
+                    $model::where('id',$request->id)->update($request_data);
+                    $response_data = $model::where('id',$request->id)->first();
+                    return $this->successResponse($response_data, Response::HTTP_CREATED);
                 }
-                $request_data=$request_data+[
-                    'created_by'                    =>  $request['user_id'],
-                    'created_at'                    =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = $model::create($request_data);
             }
         }
 
-        if($request->action_type=="edit"){
-            if($request->type == "institutes"){
-                $rules = [
-                    'collegeName'               => 'required',
-                    'dzongkhag'                 => 'required',
-                    'remarks'                   => 'required',
-                    'institutes_type'           => 'required',
-                    'own_by'                    => 'required',
-
-                ];
-                $customMessages = [
-                    'collegeName.required'     => 'This field is required',
-                    'dzongkhag.required'       => 'This field is required',
-                    'remarks.required'         => 'This field is required',
-                    'institutes_type.required' => 'This field is required',
-                    'own.required'             => 'This field is required',
-                ];
-                $this->validate($request, $rules, $customMessages);
-                $collegeDetails =[
-                    'id'                    => $request->id,
-                    'remarks'               => $request->remarks,
-                    'own_by'                => $request->own_by,
-                    'status'                => $request->status,
-                    'collegeName'           => $request->collegeName,
-                    'institutes_type'       => $request->institutes_type,
-                    'dzongkhag'             => $request->dzongkhag,
-                    'updated_by'            => $request->user_id,
-                    'org_id'                => $request->working_agency_id,
-                    'updated_at'            =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = RubCollegeDetails::where('id',$request->id,)->update($collegeDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "staff"){
-                $staffDetails =[
-                    'id'                       => $request->id,
-                    'institute_id'             => $request->institutes_id,
-                    'year'                     => $request->year,
-                    'staffMale'                => $request->staffMale,
-                    'staffFemale'              => $request->staffFemale,
-                    'staffTotal'               => $request->staffTotal,
-                    'updated_by'               =>  $request->user_id,
-                    'updated_at'               =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = RubStaffDetails::where('id',$request->id,)->update($staffDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "student"){
-                $studentDetails = [
-                    'id'                        => $request->id,
-                    'institute_id'              =>  $request->institutes_id,
-                    'studentMale'               =>  $request['studentMale'],
-                    'studentFemale'             =>  $request['studentFemale'],
-                    'studentTotal'              =>  $request['studentTotal'],
-                    'addAs'                     =>  $request->addAs,
-                    'created_by'                =>  $request->user_id,
-                    'created_at'                =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = RubStudentDetails::where('id',$request->id,)->update($studentDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else if($request->type == "abroad_student"){
-                $user_id  = $request['user_id'];
-                $studentDetails = [
-                    'id'                          => $request->id,
-                    'year'                        =>  $request['year'],
-                    'AbstudentMale'               =>  $request['AbstudentMale'],
-                    'AbstudentFemale'             =>  $request['AbstudentFemale'],
-                    'AbstudentTotal'              =>  $request['AbstudentTotal'],
-                    'created_by'                  =>  $user_id,
-                    'created_at'                  =>  date('Y-m-d h:i:s')
-                ];
-                $response_data = AbroadStudentDetails::where('id',$request->id,)->update($studentDetails);
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-            else{
-                $modelName = "App\\Models\\ExternalData\\"."$request->model";
-                $model = new $modelName();
-                $response_data="";
-                if($request->model=="NsbModel" || $request->model=="CensusModel"){
-                    $request_data = [
-                        'year'                          =>  $request['year'],
-                        'male'                          =>  $request['male'],
-                        'female'                        =>  $request['female'],
-                    ];
-                }
-                if($request->model=="NsbModel"){
-                    $request_data=$request_data+[
-                        'age_group'                     =>  $request['agegroup'],
-                    ];
-                }
-                if($request->model=="CensusModel"){
-                    $request_data=$request_data+[
-                        'age'                     =>  $request['age'],
-                    ];
-                }
-                $request_data=$request_data+[
-                    'updated_by'                    =>  $request['user_id'],
-                    'updated_at'                    =>  date('Y-m-d h:i:s')
-                ];
-                $model::where('id',$request->id)->update($request_data);
-                $response_data = $model::where('id',$request->id)->first();
-                return $this->successResponse($response_data, Response::HTTP_CREATED);
-            }
-        }
     }
     public function loadProjectionStaffList($type="",$dzo_id=""){
         dd($dzo_id);
@@ -251,7 +273,7 @@ class ExternalDataImputController extends Controller
 
     }
 
-     public function loadInstitues($type="",$model=""){
+    public function loadInstitues($type="",$model=""){
         // if($param=="all_institutes"){
         //     return $this->successResponse(RubCollegeDetails::all());
         // }
@@ -279,5 +301,34 @@ class ExternalDataImputController extends Controller
             return $this->successResponse($response_data);
         }
 
+    }
+
+    public function updateExcelfile($type="",$model=""){
+        $mod=explode('__',$model)[0];
+        $modelName = "App\\Models\\ExternalData\\".$mod."";
+        $user_id=explode('__',$model)[1];
+        $getmodel = new $modelName();
+        if($type=="Save"){
+            $result_data=$getmodel::where('created_by',$user_id)->get();
+            if($result_data!=null && $result_data!="" && sizeof($result_data)>0){
+                if(explode('__',$model)[0]=="InstitutionData"){
+                    foreach($result_data as $data){
+                        $collegeDetails =[
+                            'collegeName'           => $data->name,
+                            'institutes_type'       => $data->institution_type,
+                            'dzongkhag'             => $data->dzongkhag,
+                            'own_by'                => $data->own_by,
+                            'status'                => $data->status,
+                            'remarks'               => $data->remarks,
+                            'created_by'            => $data->created_by,
+                            'created_at'            => date('Y-m-d h:i:s')
+                        ];
+                        $response_data=RubCollegeDetails::create($collegeDetails);
+                    }
+                }
+            }
+            $response_data=$getmodel::where('created_by',$user_id)->delete();
+        }
+        return $this->successResponse($response_data);
     }
 }

@@ -455,7 +455,7 @@ export default {
 
                                 formData.append('screenId', this.screenId);
                                 formData.append('SysRoleId', this.SysRoleId);
-                                formData.append('SequencsaveprivatepublicschoolEstablishmente', this.Sequence);
+                                formData.append('Sequence', this.Sequence);
                                 formData.append('Status_Name', this.Status_Name);
 
                                 axios.post('organization/saveUploadedFiles', formData, config)

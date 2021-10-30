@@ -610,49 +610,56 @@ export default {
             // let numberOfMonths;
             let isvalid=true;
             let messages="";
-            if(type=="ECCD"){
-                let date1=new Date(this.eccddob);
-                // let year1=date1.getFullYear();
-                // let month1=date1.getMonth();
-                // if(month1===0){ //Have to take into account
-                //     month1++;
-                //     month2++;
-                // }
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
-                // numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
-                // if(this.eccdmonth>numberOfMonths){
-                //     isvalid=false;
-                // }
-                if(date1<dob){
-                    isvalid=false;
-                }
-                messages="You need to attend atleast "+this.eccdmonth+' months old to get register. You will attend that month only at '+this.y;
-            }
-            else{
-                let date1=new Date(this.ppdob);
-                // let year1=date1.getFullYear();
-                // let month1=date1.getMonth();
-                // if(month1===0){ //Have to take into account
-                //     month1++;
-                //     month2++;
-                // }
-               // numberOfMonths = (year2 - year1) * 12 + (month2 - month1) - 1;//excluding both month1 and month2
-                // numberOfMonths = (year2 - year1) * 12 + (month2 - month1);//include either of the months
-                //numberOfMonths = (year2 - year1) * 12 + (month2 - month1)+1;//include both of the months
-                if(dob< date1){
-                    isvalid=false;
-                }
-                messages="You need to attend atleast "+this.ppmonth+' months old to get register. You are eligible to register only at the total month of '+this.ppmonth;
-            }
-            if(isvalid){
+            if(this.is_student){
                 $('#selectschool').show();
                 $('#validationmessages').hide();
-            }else{
-                $('#dzo_Section').hide();
-                $('#seatAvailable').hide();
-                $('#validation_message').html(messages);
-                $('#validationmessages').show();
+            } else {
+                if(type=="ECCD"){
+                    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                    let dob=this.std_admission_details.DateOfBirth;
+                    let date1 = new Date(dob);
+                    let date2 = new Date(this.eccddob);
+
+                    // Discard the time and time-zone information.
+                    const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+                    const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+                    let eecdage = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
+                    if(eecdage <=1096){
+                        messages="You need to attained the minimum required age";
+                        $('#dzo_Section').hide();
+                        $('#seatAvailable').hide();
+                        $('#selectschool').hide();
+                        $('#validation_message').html(messages);
+                        $('#validationmessages').show();
+                    } else {
+                        $('#selectschool').show();
+                        $('#validationmessages').hide();
+                    }
+                }
+                else{
+                    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+                    let dob=this.std_admission_details.DateOfBirth;
+                    let date1 = new Date(dob);
+                    let date2 = new Date(this.ppdob);
+
+                    // Discard the time and time-zone information.
+                    const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+                    const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+                    let ppage = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
+                    if(ppage <=1825){
+                        messages="You need to attained the minimum required age";
+                        $('#dzo_Section').hide();
+                        $('#seatAvailable').hide();
+                        $('#selectschool').hide();
+                        $('#validation_message').html(messages);
+                        $('#validationmessages').show();
+                    } else {
+                        $('#selectschool').show();
+                        $('#validationmessages').hide();
+                    }
+                }
             }
         }
     },

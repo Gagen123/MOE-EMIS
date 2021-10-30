@@ -275,8 +275,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveFeederStudents', 'generalInformation\ProjectionsController@saveFeederStudents');
             $router->post('/editFeederStudents', 'generalInformation\ProjectionsController@editFeederStudents');
             $router->get('/loadFeeders/{dzoId}', 'generalInformation\ProjectionsController@loadFeeders');
+            $router->get('/loadFeedersBySchool/{org_id}', 'generalInformation\ProjectionsController@loadFeedersBySchool');
             $router->get('/listParentSchool/{org_id}', 'generalInformation\ProjectionsController@listParentSchool');
             $router->get('/loadFeederStudents/{org_id}', 'generalInformation\ProjectionsController@loadFeederStudents');
+            $router->get('/loadFeederStudentsBySchool/{org_id}', 'generalInformation\ProjectionsController@loadFeederStudentsBySchool');
         });
 
         //newly added routs ends here
@@ -512,5 +514,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/getClassByType/{type}', ['uses' => 'LoadOrganizationController@getClassByType']);
         $router->get('/getClassById/{id}', ['uses' => 'LoadOrganizationController@getClassById']);
         $router->get('/getStudentSchoolDetails/{OrgClassId}', ['uses' => 'LoadOrganizationController@getStudentSchoolDetails']);
+        $router->get('/getOrgClassStreamSectionbySecId/{id}', ['uses' => 'LoadOrganizationController@getOrgClassStreamSectionbySecId']);
     });
 });

@@ -12,9 +12,11 @@ use App\Models\staff\ZestLongTermTraining;
 use App\Models\staff\ZestPromotion;
 use App\Models\staff\ZestSecondment;
 use App\Models\staff\ZestSeperation;
+use App\Models\staff\ZestSubstitution;
 use App\Models\staff_masters\ChildGroupPosition;
 use App\Models\staff_masters\FundingAgency;
 use App\Models\staff_masters\PositionLevel;
+use App\Models\staff_masters\PositionSubLevel;
 use App\Models\staff_masters\PositionTitle;
 use App\Models\staff_masters\PromotionModel;
 use App\Models\staff_masters\SuperStructure;
@@ -203,13 +205,7 @@ class ZestController extends Controller{
     public function loadSeperation(){
         $response_data=ZestSeperation::with('type')->get();
         if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
-            foreach($response_data as $sep){
-                $sep->staffName='';
-                $staff=PersonalDetails::where('id',$sep['StaffID'])->first();
-                if($staff!=null && $staff!=""){
-                    $sep->staffName=$staff->name;
-                }
-            }
+            $response_data=$this->getstaff_positiondirectory($response_data,'Array');
         }
         return $this->successResponse($response_data);
     }
@@ -217,6 +213,9 @@ class ZestController extends Controller{
     public function loadSecondment($param=""){
         if(strpos($param,'Limit')!==false){
             $response_data=ZestSecondment::with('type')->take(explode('__',$param)[1])->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+            }
         }
         if(strpos($param,'byOrdId')!==false){
             $orgId=explode('__',$param)[1];
@@ -228,14 +227,51 @@ class ZestController extends Controller{
                 }
             }
             $response_data=ZestSecondment::wherein('StaffID',$staffIds)->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+            }
         }
-        if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
-            foreach($response_data as $sep){
-                $sep->staffName='';
-                $staff=PersonalDetails::where('id',$sep['StaffID'])->first();
-                if($staff!=null && $staff!=""){
-                    $sep->staffName=$staff->name;
+        return $this->successResponse($response_data);
+    }
+
+    public function loadSubstitution($param=""){
+        if(strpos($param,'Limit')!==false){
+            $response_data=ZestSubstitution::join('stf_staff','stf_staff.emp_id', '=', 'zest_substitution_details.EID')->take(explode('__',$param)[1])
+            ->get(['zest_substitution_details.*', 'stf_staff.zest_staff_id as StaffID']);
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                $response_data=$this->getstaff_positiondirectory($response_data,'Array');
+            }
+        }
+        if(strpos($param,'by_id')!==false){
+            $staffid=explode('__',$param)[1];
+            $response_data=ZestSubstitution::where('ID',$staffid)->first();
+            if($response_data!=null && $response_data!=""){
+                $response_data=$this->getstaff_positiondirectory($response_data,'Single');
+                $person=PersonalDetails::where('emp_id',$response_data->For_EID)->first();
+                if($person!=null && $person!=""){
+                    $person=$this->getstaff_positiondirectory($person,'Single');
+                    $response_data->substitutee_det=$person;
                 }
+            }
+        }
+        if(strpos($param,'byOrdId')!==false){
+            $orgId=explode('__',$param)[1];
+            $staffIds=[];
+            $person=PersonalDetails::where('working_agency_id',$orgId)->get();
+            if($person!=null && $person!="" && sizeof($person)>0){
+                foreach($person as $per){
+                    array_push($staffIds,$per['emp_id']);
+                }
+            }
+            $response_data=ZestSubstitution::wherein('EID',$staffIds)->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $emp){
+                    $person=PersonalDetails::where('emp_id',$emp->EID)->first();
+                    if($person!=null && $person!=""){
+                        $emp->StaffID=$person->zest_staff_id;
+                    }
+                }
+                $response_data=$this->getstaff_positiondirectory($response_data,'Array');
             }
         }
         return $this->successResponse($response_data);
@@ -297,6 +333,10 @@ class ZestController extends Controller{
                 $response_data->staff_name=$person->name;
                 $response_data->emp_id=$person->emp_id;
                 $response_data->working_agency_id=$person->working_agency_id;
+                $posisubLev=PositionSubLevel::where('id',$person->position_sub_level_id)->first();
+                if($posisubLev!=null && $posisubLev!=""){
+                    $response_data->position_sub_level_id=$posisubLev->name;
+                }
             }
             $superstructure=SuperStructure::where('id',$response_data->SuperStructureID)->first();
             if($superstructure!=null && $superstructure!=""){
@@ -315,6 +355,7 @@ class ZestController extends Controller{
                     }
                 }
             }
+
         }else{
             foreach($response_data as $res){
                 $sup=SuperStructure::where('id',$res->SuperStructureID)->first();
@@ -324,6 +365,7 @@ class ZestController extends Controller{
                 $person=PersonalDetails::where('zest_staff_id',$res->StaffID)->first();
                 if($person!=null && $person!=""){
                     $res->staff_name=$person->name;
+                    $res->emp_id=$person->emp_id;
                     $res->working_agency_id=$person->working_agency_id;
                     $res->position_title_name='';
                     $res->positionlevel='';

@@ -177,7 +177,6 @@ class WorkflowController extends Controller{
 
         return $this->successResponse($notificationDetails, Response::HTTP_CREATED);
     }
-
     public function updateNextNotification(Request $request){
         $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->first();
         if($notificationDetails!=null && $notificationDetails!=""){
@@ -258,15 +257,12 @@ class WorkflowController extends Controller{
             ];
             NotificationVisited::create($not_visited);
         }
-
     }
-
     public function visitedNotification(Request $request){
-        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)
-        ->get();
+        $notificationDetails = Notification::where('notification_appNo',$request->notification_appNo)->get();
         if($notificationDetails!=null && $notificationDetails!=""){
             foreach($notificationDetails as $not){
-                $id=    NotificationVisited::where('notification_id',$not->id)->where('user_id',$request->action_by)->first();
+                $id=NotificationVisited::where('notification_id',$not->id)->where('user_id',$request->action_by)->first();
                 if($id==""){
                     $not_visited=[
                         'notification_id'           =>  $not->id,

@@ -65,14 +65,14 @@
                     <div class="row form-group">
                         <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                             <label class="required" >Supporting Documents: </label>
-                            <a href="#" @click="openfile(std_admission_details.fileName, std_admission_details.filePath)" class="fa fa-eye"> View</a>
+                            <a href="#" @click="openfile(std_admission_details.fileName, std_admission_details.filePath)" class="fa fa-eye"> Download</a>
                         </div>
                     </div>
                 </div>
                 <hr>
                 <div class="row form-group">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <label>Remarks:</label>
+                        <label>Remarks:<span class="text-danger">*</span></label>
                         <textarea class="form-control" @change="remove_error('remarks')" v-model="form.remarks" id="remarks"></textarea>
                         <span class="text-danger" id="remarks_err"></span>
                     </div>

@@ -888,7 +888,6 @@ class HrDevelopmentController extends Controller{
             }
         }
         $parsonal=ParticipantsEID::where('created_by',$user_id)->delete();
-        $response_data= Participant::create($request_data);
         return $this->successResponse($response_data);
     }
 }

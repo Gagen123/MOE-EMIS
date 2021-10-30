@@ -19,7 +19,7 @@ class StudentAdmissionRelatedController extends Controller
     }
 
     public function reportStudents(Request $request){
-        
+
         $rules = [
             'date'               => 'required'
         ];
@@ -28,7 +28,7 @@ class StudentAdmissionRelatedController extends Controller
             'date.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'date'             => $request->date,
@@ -48,7 +48,7 @@ class StudentAdmissionRelatedController extends Controller
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
         // }
-        
+
     }
 
     /**
@@ -62,7 +62,7 @@ class StudentAdmissionRelatedController extends Controller
     }
 
     public function saveStudentTransfer(Request $request){
-        
+
         $rules = [
             'student'               => 'required',
             'last_class_attended'               => 'required',
@@ -77,7 +77,7 @@ class StudentAdmissionRelatedController extends Controller
             'reasons.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'date'             => $request->date,
@@ -96,7 +96,7 @@ class StudentAdmissionRelatedController extends Controller
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
         // // }
-        
+
     }
 
     public function loadStudentTransfers($param=""){
@@ -105,8 +105,13 @@ class StudentAdmissionRelatedController extends Controller
         return $data;
     }
 
+    public function loadStudentTransfersDetail($id=""){
+        $data = $this->apiService->listData('emis/students/loadStudentTransfersDetail/'.$id);
+        return $data;
+    }
+
     public function saveStudentWhereabouts(Request $request){
-        
+
         $rules = [
             'student'               => 'required',
             'last_class_attended'               => 'required',
@@ -125,7 +130,7 @@ class StudentAdmissionRelatedController extends Controller
             'current_address.required'     => 'This field is required',
         ];
         $this->validate($request, $rules, $customMessages);
-        
+
         $data =[
             'id'               => $request->id,
             'date'             => $request->date,
@@ -147,7 +152,7 @@ class StudentAdmissionRelatedController extends Controller
         // catch(GuzzleHttp\Exception\ClientException $e){
         //     return $e;
         // }
-        
+
     }
 
     public function loadStudentWhereabouts($param=""){
@@ -167,17 +172,23 @@ class StudentAdmissionRelatedController extends Controller
 
     /**
      * load the list of admission requests
-     * 
+     *
      * std_id = 0 to get all requests
      */
 
     public function loadAdmissionRequest($std_id=""){
-        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id);
+        $dzo_id = $this->getUserDzoId();
+        $response_data= $this->apiService->listData('emis/students/admission/loadAdmissionRequest/'.$std_id.'/'.$dzo_id);
+        return $response_data;
+    }
+
+    public function getStudentAdmissionRequest($std_id=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getStudentAdmissionRequest/'.$std_id);
         return $response_data;
     }
 
     ///Student Residing Aboard
-    //load function 
+    //load function
     public function loadAboardList($orgId=""){
         if($orgId=="null" || $orgId==""){
             $orgId=$this->getWrkingAgencyId();
@@ -185,7 +196,7 @@ class StudentAdmissionRelatedController extends Controller
         $loadlist = $this->apiService->listData('emis/students/loadAboardList/'.$orgId);
         return $loadlist;
     }
-    //save function 
+    //save function
     public function saveStudentAboard(Request $request){
         $rules = [
             'cid_passport'            =>  'required',
@@ -223,12 +234,12 @@ class StudentAdmissionRelatedController extends Controller
             'middle_name'                =>  $request->middle_name,
             'last_name'                  =>  $request->last_name,
             'dob'                        =>  $request->dob,
-            'sex_id'                     =>  $request->sex_id, 
+            'sex_id'                     =>  $request->sex_id,
             'mother_tongue'              =>  $request->mother_tongue,
             'status'                     =>  $request->status,
-            'fulladdress'                =>  $request->fulladdress, 
-            'country'                    =>  $request->country,        
-            'city'                       =>  $request->city,            
+            'fulladdress'                =>  $request->fulladdress,
+            'country'                    =>  $request->country,
+            'city'                       =>  $request->city,
             'id'                         =>  $request->id,
             'phone'                      =>  $request->phone,
             'user_id'                    =>  $this->userId()
