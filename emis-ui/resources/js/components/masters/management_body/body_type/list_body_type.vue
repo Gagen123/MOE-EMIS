@@ -40,7 +40,7 @@ export default {
         },
     },
     async mounted(){
-        alert('dd');
+      //  alert('dd');
         this.bodyTypeList =  await this.loadstaffMasters('all','MgmntBodyType');
         this.dt =  $("#working-agency-table").DataTable();
     },
