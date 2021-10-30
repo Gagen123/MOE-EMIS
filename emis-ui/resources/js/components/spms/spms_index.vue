@@ -4,13 +4,21 @@
             <li class="form-inline "><h6 class="pt-1">SPMS</h6></li>
         </ol>
         <div class="container-fluid">
-            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
+            <ul class="nav nav-pills mb-2" role="tablist" id="production">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                       <span :class="item.screen_icon"></span>
+                       {{ item.screen_name}}
+                    </router-link>
+                </li>
+            </ul>
+            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
+                <!-- <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                         <span :class="item.screen_icon"></span> 
                         {{ item.screen_name}}
                     </router-link>
-                </li>
+                </li> -->
              
                 <li class="nav-item active pr-1" @click="activatelink('annual_school_plan')">
                     <router-link id="annual_school_plan" to="/annual-school-plan" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >

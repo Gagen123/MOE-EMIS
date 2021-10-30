@@ -116,7 +116,8 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
 
             $router->get('/loadQualificationMarks',['uses' => 'Students\StudentAdmissionController@loadQualificationMarks']);
             $router->get('/loadStudentMarks/{std_code}',['uses' => 'Students\StudentAdmissionController@loadStudentMarks']);
-            $router->get('/loadAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
+            $router->get('/loadAdmissionRequest/{std_id}/{dzo_id}',['uses' => 'Students\StudentAdmissionController@loadAdmissionRequest']);
+            $router->get('/getStudentAdmissionRequest/{std_id}',['uses' => 'Students\StudentAdmissionController@getStudentAdmissionRequest']);
             $router->post('/saveSupplementaryStudent',['uses' => 'Students\StudentAdmissionController@saveSupplementaryStudent']);
         });
 
@@ -137,6 +138,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
             $router->post('/saveImported', ['uses' => 'Students\ExternalDataImputController@saveImported']);
             //projection route for teacher
             $router->get('/loadProjectionStaffList/{type}/{dzo_id}', ['uses' => 'Students\ExternalDataImputController@loadProjectionStaffList']);
+            $router->get('/updateExcelfile/{type}/{model}', ['uses' => 'Students\ExternalDataImputController@updateExcelfile']);
         });
 
         //Validate student data
@@ -226,7 +228,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->get('/getHealthBmiDetails/{param}', ['uses' => 'Students\StudentHealthController@getHealthBmiDetails']);
         $router->get('/getBmiDetails/{id}', ['uses' => 'Students\StudentHealthController@getBmiDetails']);
         $router->get('/loadresult/{months}/{gender}/{bmi}', ['uses' => 'Students\StudentHealthController@loadresult']);
-        
+
         $router->get('/loadHealthSummary/{data}', ['uses' => 'Students\StudentHealthController@loadHealthSummary']);
 
         $router->post('/saveStudentProject', ['uses' => 'Students\StudentProjectController@saveStudentProject']);
@@ -271,7 +273,7 @@ $router->group(['prefix' => 'students_api/v1'], function () use ($router) {
         $router->post('/saveProgramInventory', ['uses' => 'Students\StudentProgramController@saveProgramInventory']);
         $router->get('/loadProgramInventory/{param}', ['uses' => 'Students\StudentProgramController@loadProgramInventory']);
         $router->get('/loadInventoryDetials/{param}', ['uses' => 'Students\StudentProgramController@loadInventoryDetials']);
-       
+
         $router->get('/loadAboardList/{orgId}', ['uses' => 'Students\StudentAdmissionRelatedController@loadAboardList']);
 
         $router->post('/saveStudentAboard', ['uses' => 'Students\StudentAdmissionRelatedController@saveStudentAboard']);

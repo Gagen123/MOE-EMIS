@@ -288,4 +288,16 @@ class LoadStaffController extends Controller{
         return $this->successResponse($response_data);
     }
 
+    // method to get organization and departmetn chief
+    public function loadDepartmentCheif($orgId=""){
+        $staffs = DB::table('stf_staff')
+        ->join('master_child_group_position', 'stf_staff.position_title_id', '=', 'master_child_group_position.id')
+        ->join('master_stf_position_title', 'master_child_group_position.position_title_id', '=', 'master_stf_position_title.id')
+        ->selectRaw('stf_staff.id,stf_staff.emp_id,stf_staff.comp_sub_id,stf_staff.elective_sub_id1,stf_staff.elective_sub_id2,stf_staff.name')
+        ->where('master_stf_position_title.name','like','Chief')
+        ->orWhereIn('stf_staff.working_agency_id',$orgId)
+        ->get();
+        return $this->successResponse($staffs);
+    }
+
 }

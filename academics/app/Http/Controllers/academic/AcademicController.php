@@ -1609,92 +1609,92 @@ class AcademicController extends Controller
     }
     public function getProgressReport($resultStdId, $resultId)
     {
-        try {
-            $org_and_class_details = DB::select("SELECT transcript_format,term_number,term_name,school_name,gewog,dzongkhag,CONCAT(class,IFNULL(CONCAT(' ',stream),'')) AS class,section,no_of_students,stf_class_tecaher_name,stf_principal_name FROM aca_result WHERE id = ?", [$resultId]);
-            $student_details = DB::select('SELECT id,aca_result_id,roll_no,name,student_code,cid,admission_no,dob,marks_percent,position,no_of_days_attended,instructional_days,attendance_percent,special_award,responsibility,promoted,general_comment FROM aca_result_student WHERE id = ?', [$resultStdId]);
-            $personal_characteristics = DB::select("SELECT t2.name AS rating, t2.dzo_name AS dzo_name_rating,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.code = 1");
-            $rating_type = DB::select('SELECT t2.name AS rating, t2.dzo_name AS dzo_name_rating,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.code = 2');
-            $org_and_class_details = count($org_and_class_details) > 0 ? $org_and_class_details[0] : false;
-            $student_details = count($student_details) > 0 ? $student_details[0] : false;
-            $academic_result = [];
-            $academic_result_descriptive = [];
-            $non_academic_result = [];
-            $others_result = [];
-            $maxNoOfAssessmentAreas = 0;
-            $maxNoOfAssmntAreasDescriptive = 0;
-            if ($org_and_class_details) {
-                if ($org_and_class_details->transcript_format == 1) { //CFA
-                    $academic_result_raw = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description,t1.rating_type_code,t2.teacher
+        $org_and_class_details = DB::select("SELECT transcript_format,term_number,term_name,school_name,gewog,dzongkhag,CONCAT(class,IFNULL(CONCAT(' ',stream),'')) AS class,section,no_of_students,stf_class_tecaher_name,stf_principal_name FROM aca_result WHERE id = ?", [$resultId]);
+        $student_details = DB::select('SELECT id,aca_result_id,roll_no,name,student_code,cid,admission_no,dob,t1_marks_percent,t1_position,t1_no_of_days_attended,
+                t1_instructional_days,t1_attendance_percent,t2_marks_percent,t2_position,t2_no_of_days_attended,
+                marks_percent,position,no_of_days_attended,instructional_days,attendance_percent,special_award,responsibility,promoted,general_comment 
+            FROM aca_result_student WHERE id = ?', [$resultStdId]);
+        $personal_characteristics = DB::select("SELECT t2.name AS rating, t2.dzo_name AS dzo_name_rating,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.code = 1");
+        $rating_type = DB::select('SELECT t2.name AS rating, t2.dzo_name AS dzo_name_rating,t2.description FROM aca_rating_type t1 JOIN aca_rating t2 ON t1.id = t2.aca_rating_type_id WHERE t1.code = 2');
+        $org_and_class_details = count($org_and_class_details) > 0 ? $org_and_class_details[0] : false;
+        $student_details = count($student_details) > 0 ? $student_details[0] : false;
+        $academic_result = [];
+        $academic_result_descriptive = [];
+        $non_academic_result = [];
+        $others_result = [];
+        $maxNoOfAssessmentAreas = 0;
+        $maxNoOfAssmntAreasDescriptive = 0;
+        if ($org_and_class_details) {
+            if ($org_and_class_details->transcript_format == 1) { //CFA
+                $academic_result_raw = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description,t1.rating_type_code,t2.teacher
                     FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
                     WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 1 ORDER BY t1.display_order', [$resultId, $resultStdId]);
 
-                    $non_academic_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
+                $non_academic_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
                     FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
                     WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 2 ORDER BY t1.display_order', [$resultId, $resultStdId]);
 
-                    $others_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
+                $others_result = DB::select('SELECT t2.subject,t1.assessment_area,t1.score_description 
                     FROM aca_result_score_cfa t1 JOIN aca_result_subject t2 ON t1.aca_sub_id = t2.aca_sub_id AND t2.aca_result_id = ?
                     WHERE t1.aca_result_student_id = ? AND t2.sub_category_code = 3 ORDER BY t1.display_order', [$resultId, $resultStdId]);
 
 
-                    foreach ($academic_result_raw as $result) {
-                        $newItem = ['assessment_area' => $result->assessment_area, 'assmnt_area_dzo' => null, 'score_description' => $result->score_description, "score_dzo" => null];
-                        if ($result->rating_type_code == 4) {
-                            if (array_key_exists($result->subject, $academic_result_descriptive)) {
-                                array_push($academic_result_descriptive[$result->subject]["scores"], $newItem,);
-                            } else {
-                                $academic_result_descriptive[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
-                            }
+                foreach ($academic_result_raw as $result) {
+                    $newItem = ['assessment_area' => $result->assessment_area, 'assmnt_area_dzo' => null, 'score_description' => $result->score_description, "score_dzo" => null];
+                    if ($result->rating_type_code == 4) {
+                        if (array_key_exists($result->subject, $academic_result_descriptive)) {
+                            array_push($academic_result_descriptive[$result->subject]["scores"], $newItem,);
                         } else {
-                            if (array_key_exists($result->subject, $academic_result)) {
-                                array_push($academic_result[$result->subject]["scores"], $newItem);
-                            } else {
-                                $academic_result[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
-                            }
+                            $academic_result_descriptive[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
+                        }
+                    } else {
+                        if (array_key_exists($result->subject, $academic_result)) {
+                            array_push($academic_result[$result->subject]["scores"], $newItem);
+                        } else {
+                            $academic_result[$result->subject] = ["sub_dzo" => null, "scores" => [$newItem], "sub_teacher" => $result->teacher];
                         }
                     }
-                    foreach ($academic_result_descriptive as $result1) {
-                        $maxNoOfAssmntAreasDescriptive = max($maxNoOfAssmntAreasDescriptive, count($result1["scores"]));
-                    }
-                    foreach ($academic_result as $result2) {
-                        $maxNoOfAssessmentAreas = max($maxNoOfAssessmentAreas, count($result2["scores"]));
-                    }
-                } elseif ($org_and_class_details->transcript_format == 2) { //CSA
-                    if ($org_and_class_details->term_number == 0) { //Final result
-                        $academic_result = DB::select('SELECT t1.subject,t1.sub_dzo_name,t1_ca_score, t1_exam_score, t2_ca_score, t2_exam_score
+                }
+                foreach ($academic_result_descriptive as $result1) {
+                    $maxNoOfAssmntAreasDescriptive = max($maxNoOfAssmntAreasDescriptive, count($result1["scores"]));
+                }
+                foreach ($academic_result as $result2) {
+                    $maxNoOfAssessmentAreas = max($maxNoOfAssessmentAreas, count($result2["scores"]));
+                }
+            } elseif ($org_and_class_details->transcript_format == 2) { //CSA
+                if ($org_and_class_details->term_number == 0) { //Final result
+                    $academic_result = DB::select('SELECT t1.subject,t1.sub_dzo_name,TRIM(t1_ca_score)+0 AS t1_ca_score,TRIM(t1_exam_score)+0 AS t1_exam_score, TRIM(t2_ca_score)+0 AS t2_ca_score, TRIM(t2_exam_score)+0 AS t2_exam_score
                         FROM aca_result_score_csa t1
                     WHERE t1.aca_result_student_id = ? AND t1.sub_category_code = 1 ORDER BY t1.display_order', [$resultStdId]);
-                    } else { //Term result
-                        $academic_result = DB::select('SELECT t1.subject,t1.sub_dzo_name,ca_score, exam_score
+                } else { //Term result
+                    $academic_result = DB::select('SELECT t1.subject,t1.sub_dzo_name,ca_score, exam_score
                         FROM aca_result_score_csa t1
                     WHERE t1.aca_result_student_id = ? AND t1.sub_category_code = 1 ORDER BY t1.display_order', [$resultStdId]);
-                    }
-                    $non_academic_result = DB::select('SELECT t1.subject,t1.assessment_area,t1.score_description 
+                }
+                $non_academic_result = DB::select('SELECT t1.subject,t1.assessment_area,t1.score_description 
                      FROM aca_result_score_csa t1 
                     WHERE t1.aca_result_student_id = ? AND t1.sub_category_code = 2 ORDER BY t1.display_order',  [$resultStdId]);
-                    $others_result = DB::select('SELECT t1.subject,t1.assessment_area,t1.score_description 
+                $others_result = DB::select('SELECT t1.subject,t1.assessment_area,t1.score_description 
                         FROM aca_result_score_csa t1 
                     WHERE t1.aca_result_student_id = ? AND t1.sub_category_code = 3 ORDER BY t1.display_order', [$resultStdId]);
-                }
-            } else {
-                return $this->errorResponse('Result not found.', Response::HTTP_NOT_FOUND);
             }
-            return $this->successResponse([
-                'maxNoOfAssessmentAreas' => $maxNoOfAssessmentAreas,
-                'maxNoOfAssmntAreasDescriptive' => $maxNoOfAssmntAreasDescriptive,
-                'academic_result_descriptive' => $academic_result_descriptive,
-                'org_and_class_details' => $org_and_class_details,
-                'student_details' => $student_details,
-                'academic_result' => $academic_result,
-                'non_academic_result' => $non_academic_result,
-                'others_result' => $others_result,
-                'personal_characteristics' => $personal_characteristics,
-                'rating_type' => $rating_type,
-            ]);
-        } catch (Exception $e) {
-            dd($e);
+        } else {
+            return $this->errorResponse('Result not found.', Response::HTTP_NOT_FOUND);
         }
+        return $this->successResponse([
+            'maxNoOfAssessmentAreas' => $maxNoOfAssessmentAreas,
+            'maxNoOfAssmntAreasDescriptive' => $maxNoOfAssmntAreasDescriptive,
+            'academic_result_descriptive' => $academic_result_descriptive,
+            'org_and_class_details' => $org_and_class_details,
+            'student_details' => $student_details,
+            'academic_result' => $academic_result,
+            'non_academic_result' => $non_academic_result,
+            'others_result' => $others_result,
+            'personal_characteristics' => $personal_characteristics,
+            'rating_type' => $rating_type,
+        ]);
     }
+
     private function passFail($orgId, $classId, $streamId, $sectionId)
     {
         $inner_pass_fail_query = "SELECT t4.std_student_id,t6.aca_sub_id,t8.aca_promotion_sub_group_id,IF(t7.input_type=1,(SUM(IF(t5.aca_assmnt_type=0,t4.score,0))/SUM(IF(t5.aca_assmnt_type=0,t51.weightage,0)))*100>=t6.pass_score AND (SUM(IF(t5.aca_assmnt_type=1,t4.score,0))/SUM(IF(t5.aca_assmnt_type=1,t51.weightage,0)))*100>=t6.pass_score,ROUND(AVG(t4.score))>=t6.pass_score) AS passed
@@ -1729,5 +1729,72 @@ class AcademicController extends Controller
 
 
         return DB::select($pass_fail_query, $pass_fail_param);
+    }
+    public function getScoresForSpms($year, $org_class_id, $previous_org_class_id)
+    {
+        $pass_percent = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
+            FROM aca_result_student t1 
+                JOIN aca_result t2 ON t1.aca_result_id = t2.id 
+            WHERE t2.academic_year = ? AND t2.org_class_id = ? AND t2.term_number = 0
+            GROUP BY t2.org_id,t2.school_name", [$year, $org_class_id]);
+        $pass_percent_previous_class = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
+            FROM aca_result_student t1 
+                JOIN aca_result t2 ON t1.aca_result_id = t2.id 
+            WHERE t2.academic_year = ? AND t2.org_class_id = ? AND t2.term_number = 0
+            GROUP BY t2.org_id,t2.school_name", [$year, $previous_org_class_id]);
+
+        $non_stem_national_mean = DB::select("SELECT 
+            ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/(COUNT(DISTINCT t2.id) * COUNT(DISTINCT t1.subject)),2) AS national_mean
+            FROM aca_result_score_csa t1 
+                JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
+                JOIN aca_result t3 ON t2.aca_result_id = t3.id 
+            WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 0", [$year, $org_class_id]);
+
+        $non_stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
+            ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/COUNT(DISTINCT t2.id),2) AS subject_wise_mean
+            FROM aca_result_score_csa t1 
+                JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
+                JOIN aca_result t3 ON t2.aca_result_id = t3.id 
+            WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 0
+            GROUP BY t3.org_id,t1.subject";
+
+        $non_stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00)/COUNT(DISTINCT t2.subject)),2) AS non_stem_mean
+        FROM ($non_stem_mean_inner_query) t1
+        GROUP BY t1.org_id", [$year, $org_class_id]);
+
+        $stem_national_mean = DB::select("SELECT 
+            ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/(COUNT(DISTINCT t2.id) * COUNT(DISTINCT t1.subject)),2) AS national_mean
+            FROM aca_result_score_csa t1 
+                JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
+                JOIN aca_result t3 ON t2.aca_result_id = t3.id 
+            WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 1", [$year, $org_class_id]);
+
+        $stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
+            ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/COUNT(DISTINCT t2.id),2) AS subject_wise_mean
+            FROM aca_result_score_csa t1 
+                JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
+                JOIN aca_result t3 ON t2.aca_result_id = t3.id 
+            WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 1
+            GROUP BY t3.org_id,t1.subject";
+
+        $stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00)/COUNT(DISTINCT t2.subject)),2) AS stem_mean
+        FROM ($non_stem_mean_inner_query) t1
+        GROUP BY t1.org_id", [$year, $org_class_id]);
+
+        //(count(*) * sum(x * y) - sum(x) * sum(y)) / 
+        //(sqrt(count(*) * sum(x * x) - sum(x) * sum(x)) * sqrt(count(*) * sum(y * y) - sum(y) * sum(y))) 
+        //AS correlation
+        // x = (IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))
+        // y = (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))
+        $correlation = DB::select("SELECT t3.org_id,
+                (count(DISTINCT t2.id) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)) * (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) - sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00)))) / 
+                (sqrt(count(DISTINCT t2.id) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)) * (IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) - sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)))) * sqrt(count(*) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00)) * (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) - sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))))) 
+                AS correlation
+            FROM aca_result_score_csa t1 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
+                JOIN aca_result t3 ON t2.aca_result_id = t3.id 
+            WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0
+            GROUP BY t3.org_id");
+
+        return $this->successResponse(['']);
     }
 }

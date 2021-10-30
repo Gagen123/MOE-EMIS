@@ -62,7 +62,7 @@
                                             <div class="row form-group">
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                                                     <label>Date of Birth:<span class="text-danger">*</span></label>
-                                                    <input type="date" class="form-control" @change="removeerror('dob')" :class="{ 'is-invalid': student_form.errors.has('dob') }" id="dob" v-model="student_form.dob" placeholder="Date of Birth">
+                                                    <input type="text" class="form-control" @change="removeerror('dob')" :class="{ 'is-invalid': student_form.errors.has('dob') }" id="dob" v-model="student_form.dob" placeholder="Date of Birth">
                                                     <has-error :form="student_form" field="dob"></has-error>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -737,7 +737,47 @@ export default {
                         }
                     });
                 }
+            }else if(this.student_form.snationality=="Foreign"){
+                cid=$('#'+cid).val();
+                this.getDOIDetails(cid);
             }
+        },
+        getDOIDetails(cid){
+            axios.get('adminstratorController/getDOIData/'+ cid)
+            .then(res => {
+                if(JSON.stringify(res.data)!='{}'){
+                    let student_detail = res.data;
+                    if(student_detail.FullName.includes(' ')){
+                        for(let i =0;i<student_detail.FullName.split(' ').length;i++){
+                            if(i==0){
+                                this.student_form.first_name = student_detail.FullName.split(' ')[i];
+                                $('#first_name').prop('readonly',true);
+                            }
+                            if(i==1){
+                                this.student_form.middle_name = student_detail.FullName.split(' ')[i];
+                                $('#middle_name').prop('readonly',true);
+                            }
+                            if(i==2){
+                                this.student_form.last_name = student_detail.FullName.split(' ')[i];
+                                $('#last_name').prop('readonly',true);
+                            }
+                        }
+                    }else{
+                        this.student_form.first_name = student_detail.FullName;
+                        $('#first_name').prop('readonly',true);
+                    }
+                    this.student_form.dob = student_detail.dob;
+                    $('#dob').prop('readonly',true);
+
+                    for(let i=0; i<this.sex_idList.length;i++){
+                        if(this.sex_idList[i].name.toLowerCase()==student_detail.Gender.toLowerCase()){
+                            $('#sex_id').val(this.sex_idList[i].id).trigger('change');
+                            this.student_form.sex_id =  this.sex_idList[i].id;
+                            $('#sex_id').prop('disabled',true);
+                        }
+                    }
+                }
+            });
         },
         getPersonalDetailsbyCID(cid,type){
             axios.get('adminstratorController/getpersonbycid/'+ cid)

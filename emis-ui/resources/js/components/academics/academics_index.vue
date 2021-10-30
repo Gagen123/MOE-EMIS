@@ -4,14 +4,15 @@
             <li class="form-inline "><h6 class="pt-1">ACADEMICS</h6></li>
         </ol>
         <div class="ml-2 container-fluid">
-            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
+            <ul class="nav nav-pills mb-2" role="tablist" id="production">
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
-                        <span :class="item.screen_icon"></span> 
-                        {{ item.screen_name}}
+                       <span :class="item.screen_icon"></span>
+                       {{ item.screen_name}}
                     </router-link>
                 </li>
-
+            </ul>
+            <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
                 <li class="nav-item active pr-1" @click="activatelink('class_teacher')">
                     <router-link id="class_teacher" to="/class-teacher" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Class Teacher
@@ -69,39 +70,34 @@
 </template>
 <script>
 export default {
-    components: {
+       components: {
     },
     data() {
         return {
             menubar:[],
-            sub_mod_id:'',
+            menu_id:'',
         }
     },
     methods: {
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        },
-		getmenus(sub_mod_id){
-            let uri = 'get_screens_on_submodules/module/'+sub_mod_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar = data.data;  
-            })
-            .catch(function (error) { 
-                console.log("Error:"+error)
-            });
+        populate_pate(data,action){
+            this.$router.push({name:data,query: {data:action}});
         },
     },
-    async mounted() {
-        let routeparam=this.$route.query.data;
-        this.sub_mod_id=routeparam;
-        this.getmenus(routeparam);
+    async mounted(){
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
         if(env=="Production"){
             $('.developemntEnv').hide();
         }
+
     },
     
 }

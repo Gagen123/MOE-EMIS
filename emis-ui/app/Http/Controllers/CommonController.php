@@ -18,20 +18,21 @@ class CommonController extends Controller
     use ServiceHelper;
     use AuthUser;
     public $apiService;
-    public function __construct(EmisService $apiService)
-    {
+    public function __construct(EmisService $apiService){
         $this->apiService = $apiService;
     }
-    public function getRoles($param = "")
-    {
+    public function getRoles($param = ""){
         $system = $this->apiService->listData('system/get_roles/' . $param);
         return $system;
     }
 
-    public function viewFiles($full_path = "")
-    {
+    public function viewFiles($full_path = ""){
         $full_path = str_replace('SSS', '/', $full_path);
         return response()->download($full_path);
+    }
+
+    public function downloadSampleFiles($type = ""){
+        return response()->download(env('SAMPLE_LOCATION').'/'.$type);
     }
 
     public function deleteFile($full_path = "", $id = "")

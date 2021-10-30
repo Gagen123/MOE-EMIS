@@ -25,6 +25,16 @@ class AcaResultStudent extends Migration
             $table->char('admission_no', 36);
             $table->date('dob');
             $table->unsignedSmallInteger('roll_no');
+            $table->unsignedDecimal('t1_marks_percent', 6, 2);
+            $table->unsignedSmallInteger('t1_position');
+            $table->unsignedSmallInteger('t1_no_of_days_attended');
+            $table->unsignedSmallInteger('t1_instructional_days');
+            $table->unsignedSmallInteger('t1_attendance_percent');
+            $table->unsignedDecimal('t2_marks_percent', 6, 2);
+            $table->unsignedSmallInteger('t2_position');
+            $table->unsignedSmallInteger('t2_no_of_days_attended');
+            $table->unsignedSmallInteger('t2_instructional_days');
+            $table->unsignedSmallInteger('t2_attendance_percent');
             $table->unsignedDecimal('marks_percent', 6, 2);
             $table->unsignedSmallInteger('position');
             $table->unsignedSmallInteger('no_of_days_attended');

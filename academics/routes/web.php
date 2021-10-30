@@ -79,7 +79,7 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getProgressReport/{resultStdId}/{resultId}', ['uses' => 'academic\AcademicController@getProgressReport']);
         $router->post('/updateStatus', ['uses' => 'academic\AcademicController@updateStatus']);
         $router->post('/updateResult', ['uses' => 'academic\AcademicController@updateResult']);
-
+        $router->get('/getScoresForSpms/{year}/{org_class_id}/{previous_org_class_id}', ['uses' => 'academic\AcademicController@getScoresForSpms']);
 
         //Emis portal used for pulling the result of the student
         $router->get('/LoadResultByStudentId/{std_id}', ['uses' => 'academic\AcademicController@LoadResultByStudentId']);

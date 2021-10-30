@@ -11,6 +11,7 @@
                             <th>Parameter</th>
                             <th>Output Indicator</th>
                             <th>Means of Verification (MoV)</th>
+                            <th>Weighting</th>
                             <th>Status</th>
                             <th>Action</th> 
                         </tr>
@@ -23,6 +24,7 @@
                             <td>{{ item.parameter }} </td>
                             <td>{{ item.name }} </td>
                             <td>{{ item.mov }} </td>
+                            <td>{{ item.weighting }} </td>
                             <td>{{ item.status ==  1 ? "Active" : "Inactive" }}</td>
                             <td>
                                 <div class="btn-group btn-group-sm">
