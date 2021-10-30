@@ -249,8 +249,10 @@ class LoadStaffController extends Controller{
                     COUNT(CASE WHEN sex_id = '353db3f5-1b97-406b-88ba-a68dbe53b2aa' THEN 1 END)AS MaleSportInst,
                     COUNT(CASE WHEN sex_id = '86164859-5be8-4ac8-8b40-7616d222229e' THEN 1 END) AS FemaleSportInst,
                     COUNT(id) AS TotalSportsInst
-                FROM `stf_staff`
-                WHERE `position_title_id` ='315b2020-fd17-4f0c-a643-15b603ff1f08'
+                FROM `stf_staff` s
+                JOIN `master_stf_position_title` l ON l.id = s.position_title_id 
+                WHERE l.code IN ('17.760.10','17.760.16	','17.760.17','17.760.18','17.760.01',
+                '17.760.02','17.760.05','17.760.06','17.760.07')
                 AND `working_agency_id`= '".$id."'");
             }
             // if($type=="staffCountMinistry"){

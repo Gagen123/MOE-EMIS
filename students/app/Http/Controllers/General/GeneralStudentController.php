@@ -191,7 +191,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Function to sort Students by Name based on gender
-     * 
+     *
      * This function is used only by loadStudentBySectionForRollNo
      */
 
@@ -219,7 +219,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Get the student list by class
-     * 
+     *
      * This function gets all the basic details such as feeding, scholarship etc.
      * If you want only student and class, create another function
      */
@@ -269,7 +269,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Load student list by gender
-     * 
+     *
      * Takes class, stream and section as parameter separated by __ (double underscore)
      * We get the gender from master and pass it as an argument in an array
      */
@@ -311,8 +311,8 @@ class GeneralStudentController extends Controller
 
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id, t1.Name, t1.student_code, t1.DateOfBirth, t1.CmnSexId,
                             t2.OrgClassStreamId, t2.SectionDetailsId
-                    FROM std_student t1 
-                    LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId 
+                    FROM std_student t1
+                    LEFT JOIN std_student_class_stream t2 ON t1.id = t2.StdStudentId
                     WHERE t1.OrgOrganizationId = ? AND t2.OrgClassStreamId = ? AND t2.SectionDetailsId = ? ";
 
         $params = [$org_id, $class_details[0], $class_details[2]];
@@ -326,7 +326,7 @@ class GeneralStudentController extends Controller
     }
 
     /**
-     * Get Student List by orgid and org classstreamId 
+     * Get Student List by orgid and org classstreamId
      */
 
     public function getStudentList($orgId, $orgClassStreamId)
@@ -342,9 +342,9 @@ class GeneralStudentController extends Controller
 
     public function getStudents($org_id, Request $request)
     {
-        $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id,t1.student_code,t1.DateOfBirth AS dob,t1.Name,t2.roll_no, t1.CidNo, t3.OrgClassStreamId, t3.SectionDetailsId 
-            FROM std_student t1 
-            JOIN student_rollnumbers t2 ON t1.id = t2.std_id 
+        $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id,t1.student_code,t1.DateOfBirth AS dob,t1.Name,t2.roll_no, t1.CidNo, t3.OrgClassStreamId, t3.SectionDetailsId
+            FROM std_student t1
+            JOIN student_rollnumbers t2 ON t1.id = t2.std_id
             JOIN std_student_class_stream t3 ON t1.id = t3.StdStudentId WHERE t1.IsTransferred  = 0 AND t1.OrgOrganizationId = ? AND t3.OrgClassStreamId = ?";
         $params = [$org_id, $request->OrgClassStreamId];
 
@@ -359,7 +359,7 @@ class GeneralStudentController extends Controller
     /**
      * For Profile
      * Get Student, Parents, Roles and Responsibilities and Programme/Club Membership of the Student
-     * 
+     *
      * id is the student id
      */
 
@@ -422,7 +422,7 @@ class GeneralStudentController extends Controller
 
     /**
      * Load the student information e.g. no. of boys and girls
-     * 
+     *
      * $param takes the value such as general, SEN etc
      */
 

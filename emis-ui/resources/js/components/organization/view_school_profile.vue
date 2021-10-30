@@ -23,7 +23,7 @@
                             <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
                                 <div class="form-group row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                                        <strong><i class="fas fa-file-alt mr-1"></i> Mission</strong>
+                                        <strong><i class="fas fa-file-alt mr-1"></i> Mission mission</strong>
                                         <p class="text-muted">
                                             {{form.mission}}
                                         </p>
@@ -104,7 +104,7 @@
                                                  
                                                 
                                                    <tr>
-                                                       <td>Category</td>
+                                                       <td>Category{{existing_details.category}}</td>
                                                        <td>{{existing_details.category == 'public_ecr' ? "ECR" : existing_details.category == 'public_school' ? "Public School" : existing_details.category == 'private_school' ? "Private School" : existing_details.category == 'public_eccd' ? "Public ECCD" : "Private ECCD" }}</td>
                                                    </tr>
                                               </tbody>
@@ -121,32 +121,37 @@
                                                 <!-- <tbody v-if="std_data"> -->
                                                 <tbody>
                                                     <tr>
-                                                        <td>Longitude</td>
-                                                        <td>{{loc_details.longitude}}</td>
+                                                        <td>Longitude</td> 
+                                                        <td><span v-if="loc_details!=null && loc_details.longitude!=null  && loc_details.longitude!=undefined">{{loc_details.longitude}}</span></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Lattitude</td>
-                                                        <td>{{loc_details.latitude}}</td>
+                                                        <td><span v-if="loc_details!=null && loc_details.latitude!=null  && loc_details.latitude!=undefined">{{loc_details.latitude}}</span></td>
                                                     </tr>
                                                     <tr>
                                                         <td>Altitude</td>
-                                                        <td>{{loc_details.altitude}}</td>
+                                                         <td><span v-if="loc_details!=null && loc_details.altitude!=null  && loc_details.altitude!=undefined">{{loc_details.altitude}}</span></td>
+                                                        <!-- <td>{{loc_details.altitude}}</td> -->
                                                     </tr>
                                                     <tr>
                                                         <td>School Contact No</td>
-                                                        <td>{{contactdetail.phone}}</td>
+                                                         <td><span v-if="contactdetail!=null && contactdetail.phone!=null  && contactdetail.phone!=undefined">{{contactdetail.phone}}</span></td>
+                                                        <!-- <td>{{contactdetail.phone}}</td> -->
                                                     </tr>
                                                     <tr>
                                                     <td>Mail ID</td>
-                                                        <td>{{contactdetail.email}}</td>
+                                                     <td><span v-if="contactdetail!=null && contactdetail.email!=null  && contactdetail.email!=undefined">{{contactdetail.email}}</span></td>
+                                                        <!-- <td>{{contactdetail.email}}</td> -->
                                                     </tr>
                                                     <tr>
                                                     <td>Website Link</td>
-                                                        <td>{{contactdetail.website}}</td>
+                                                     <td><span v-if="contactdetail!=null && contactdetail.website!=null  && contactdetail.website!=undefined">{{contactdetail.website}}</span></td>
+                                                        <!-- <td>{{contactdetail.website}}</td> -->
                                                     </tr>
                                                     <tr>
                                                     <td>Facebook Link</td>
-                                                        <td>{{contactdetail.facebookLink}}</td>
+                                                      <td><span v-if="contactdetail!=null && contactdetail.facebookLink!=null  && contactdetail.facebookLink!=undefined">{{contactdetail.facebookLink}}</span></td>
+                                                        <!-- <td>{{contactdetail.facebookLink}}</td> -->
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -445,21 +450,25 @@
                 });
             },
             loadPriviousOrgDetails(org_id){
+              //  alert(org_id)
                 axios.get('loadCommons/loadOrgDetails/fullOrgDetbyid/'+org_id)
                 .then(response => {
-                   
+                     alert(JSON.stringify(response.data));
+
                     this.existing_details=response.data.data;
                     this.contactdetail=response.data.data.contactDetails;
                     this.loc_details=response.data.data.loc_details;
 
                    // alert(this.loc_details);
                     this.std_data=true;
-                    let mapid=response.data.data.locationDetials.googleMapPath;
-                    mapid=mapid.replace('width="600"','width="450"');
-                    mapid=mapid.replace('height="450"','height="300"');
-                    mapid=mapid.replace('width="800"','width="450"');
-                    mapid=mapid.replace('height="600"','height=300"');
-                    $("#preview_sec").html(mapid);
+                    if(response.data.data.locationDetials.googleMapPath!=null && response.data.data.locationDetials.googleMapPath!=undefined){
+                        let mapid=response.data.data.locationDetials.googleMapPath;
+                        mapid=mapid.replace('width="600"','width="450"');
+                        mapid=mapid.replace('height="450"','height="300"');
+                        mapid=mapid.replace('width="800"','width="450"');
+                        mapid=mapid.replace('height="600"','height=300"');
+                        $("#preview_sec").html(mapid);
+                    }
                     
                     // this.getgewog(response.data.data.dzongkhagId,response.data.data.gewogId);
                     // this.getVillage(response.data.data.gewogId,response.data.data.chiwogId);
@@ -486,6 +495,7 @@
 
         },
         mounted(){
+            
             this.getLevel();
             this.loadGenderArrayList();
             if(this.$route.query.org_id!=undefined && this.$route.query.org_id!=""){

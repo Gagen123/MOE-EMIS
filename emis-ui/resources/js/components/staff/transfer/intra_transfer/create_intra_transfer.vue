@@ -392,8 +392,6 @@ export default {
                 this.form.type_id = response.data.data[0].id;
                 this.getTransfer_details(response.data.data[0].id)
                 this.getSubmitterId(response.data.data[0].id)
-
-
             })
             .catch(function (error){
                 console.log(error);
@@ -470,7 +468,6 @@ export default {
                             this.form.errors.errors = error.response.data;
                             
                             })
-                            
                     }
                     else{
                     Swal.fire({
@@ -482,7 +479,6 @@ export default {
                         })
                     }
                 }
-                
                 else if(nextclass=="final-tab"){
                 if(this.validated_final_form()){
                     Swal.fire({
@@ -554,9 +550,7 @@ export default {
                     confirmButtonText: 'okay!',
                     })
                 } 
-
         },
-        
         change_tab(nextclass){
             $('#tabhead >li >a').removeClass('active');
             $('#tabhead >li >a >span').addClass('bg-gradient-secondary text-white');
@@ -608,7 +602,7 @@ export default {
                         this.t_warning=true;
                     }
                     else if(diffInDays<=0){
-                        $('#err_message').html("<b>Sorry!</b><br> Tranfer period is over for this year");
+                        $('#err_message').html("<b>Sorry!</b><br>Tranfer period is over for this year");
                         $('#invalidsection').show();
                         $('#t_form_details').hide();
                     }

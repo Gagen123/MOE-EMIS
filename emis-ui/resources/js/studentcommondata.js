@@ -50,7 +50,7 @@ try {
                     console.log(error);
                 });
             },
-    
+
 
             loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
                 axios.get(uri)

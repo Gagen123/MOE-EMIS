@@ -376,7 +376,7 @@ class StudentAdmissionController extends Controller{
     /**
      * to load the list of students for admission from the portal
      */
-    
+
     public function loadStudentAdmissionList(){
         $org_id = $this->getWrkingAgencyId();
         $student_list = $this->apiService->listData('emis/students/admission/loadStudentList/'.$org_id);
@@ -429,7 +429,7 @@ class StudentAdmissionController extends Controller{
 
     /**
      * Saving the Details of the transfer students
-     * 
+     *
      * The WEB BFF Route used is the same used by the portal
      */
 
@@ -452,11 +452,11 @@ class StudentAdmissionController extends Controller{
         $request['dateOfapply']=date('Y-m-d');
 
         $data = $request->all();
-        
+
         $response_data= $this->apiService->createData('emis/students/admission/saveorgclassDetails', $data);
         return $response_data;
     }
-    
+
     /**
      * Validate the CID of a student to ensure that duplicate CID is not being entered
      */

@@ -1,7 +1,7 @@
 <template>
     <div>
         <form class="bootbox-form">
-            <div class="row form-group">
+            <!-- <div class="row form-group">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">CID:<i class="text-danger">*</i></label>
                     <input v-model="form.cid" :class="{ 'is-invalid': form.errors.has('cid') }" type="text" id="cid" class="form-control" @change="remove_err('cid')">
@@ -69,6 +69,51 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button type="button" class="btn btn-primary" @click="submitDetails()"> <i class="fa fa-save"></i>Save </button>
                 </div>
+            </div> -->
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Name: <span class="text-blue text-bold">{{emp_idList.staff_name}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">EID: <span class="text-blue text-bold">{{emp_idList.EID}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Appointment Date: <span class="text-blue text-bold">{{emp_idList.Appointment_Date}}</span></label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Title: <span class="text-blue text-bold">{{emp_idList.Position_Title}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Level: <span class="text-blue text-bold">{{emp_idList.Position_Level}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Sub Level: <span class="text-blue text-bold">{{emp_idList.Sub_Level}}</span></label>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Substituted for: <span class="text-blue text-bold">{{emp_idList.substitutee_det.name}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">EID: <span class="text-blue text-bold">{{emp_idList.substitutee_det.emp_id}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Appointment Date: <span class="text-blue text-bold">{{emp_idList.substitutee_det.initial_appointment_date}}</span></label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Title: <span class="text-blue text-bold">{{emp_idList.substitutee_det.Position_Title}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Position Level: <span class="text-blue text-bold">{{emp_idList.substitutee_det.Position_Level}}</span></label>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <label class="mb-0.5">Sub Level: <span class="text-blue text-bold">{{emp_idList.substitutee_det.position_sub_level_id}}</span></label>
+                </div>
             </div>
         </form>
     </div>
@@ -77,179 +122,15 @@
 export default {
     data(){
         return {
-            sex_idList:[],
-            dzongkhagList:[],
-            form: new form({
-                id:'',
-                cid:'',
-                name:'',
-                dob:'',
-                gender:'',
-                dzongkhag:'',
-                contact:'',
-                email:'',
-                qualification:'',
-                action_type:'edit',
-            }),
+            emp_idList:[],
         }
     },
-    methods: {
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
 
-        async changefunction(id){
-            if($('#'+id).val()!=""){
-                $('#'+id).removeClass('is-invalid select2');
-                $('#'+id+'_err').html('');
-                $('#'+id).addClass('select2');
-            }
-            if(id=="gender"){
-                this.form.gender=$('#gender').val();
-            }
-            if(id=="dzongkhag"){
-                this.form.dzongkhag=$('#dzongkhag').val();
-            }
-        },
-
-        submitDetails(){
-            if(this.validateform()){
-                Swal.fire({
-                    text: "Are you sure you wish to save this staff details ?",
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
-                    }).then((result) => {
-                    if (result.isConfirmed) {
-                        this.form.post('staff/substitution/savestaff')
-                        .then((response)=> {
-                            Swal.fire(
-                                'Success!',
-                                'Details has been saved successfully.',
-                                'success',
-                            )
-                            this.$router.push('/list_substitute');
-                        })
-                        .catch((error) => {
-                            console.log("Error shownexttab:"+error)
-                        });
-                    }
-                });
-            }
-        },
-        validateform(){
-            let returntype=true;
-            if($('#cid').val()==""){
-                $('#cid_err').html('Please provide CID');
-                returntype=false;
-            }
-            if($('#name').val()==""){
-                $('#name_err').html('Please provide name of the person');
-                returntype=false;
-            }
-            if($('#contact').val()==""){
-                $('#contact_err').html('Please provide contact number');
-                returntype=false;
-            }
-            return returntype;
-        },
-        getDetailsbyCID(){
-            if (this.form.cid.length == 11){
-                axios.get('getpersonbycid/'+ this.form.cid)
-                .then(response => {
-                    this.ciderror = '';
-                    let personal_detail = response.data;
-                    if (personal_detail!=""){
-                        let fullname=personal_detail.firstName;
-                        if(personal_detail.middleName!=null && personal_detail.middleName!="null" && personal_detail.middleName!=""){
-                            fullname=fullname+' '+personal_detail.middleName;
-                        }
-                        if(personal_detail.lastName!=null && personal_detail.lastName!="null" && personal_detail.lastName!=""){
-                            fullname=fullname+' '+personal_detail.lastName;
-                        }
-                        $('#cid').prop('disabled',true);
-                        this.form.name = fullname;
-                        $('#name').prop('disabled',true);
-                        this.form.dob =personal_detail.dob;
-                        $('#dob').prop('disabled',true);
-
-                        if(personal_detail.gender=="M"){
-                            personal_detail.gender="male";
-                        }
-                        else if(personal_detail.gender=="F"){
-                            personal_detail.gender="female";
-                        }
-                        else{
-                            personal_detail.gender="others";
-                        }
-                        for(let i=0; i<this.sex_idList.length;i++){
-                            if(this.sex_idList[i].name.toLowerCase()==personal_detail.gender){
-                                $('#gender').val(this.sex_idList[i].id).trigger('change');
-                                this.form.gender = this.sex_idList[i].id;
-                            }
-                        }
-                        $('#gender').prop('disabled',true);
-                        this.form.dzongkhag = personal_detail.dzongkhagId;
-                        $('#dzongkhag').val(personal_detail.dzongkhagId).trigger('change');
-                        $('#dzongkhag').prop('disabled',true);
-                    }else{
-                        this.ciderror = 'Invalid CID.';
-                        Swal.fire({
-                            html: "No data found for matching CID",
-                            icon: 'info'
-                        });
-                    }
-                })
-                .catch((e) => {
-                    this.ciderror = 'Invalid CID / service down.';
-                    Swal.fire({
-                        html: "No data found for matching CID/service down"+e,
-                        icon: 'error'
-                    });
-                });
-            }
-        },
-    },
     async mounted(){
-        this.sex_idList =  await this.loadactiveGlobalList('all_active_gender');
-        this.dzongkhagList =await this.loadactivedzongkhags();
-        $('.select2').select2();
-        $('.select2').select2({
-            theme: 'bootstrap4'
-        });
-        $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id'));
-        });
-
-        Fire.$on('changefunction',(id)=>{
-            this.changefunction(id);
-        });
-        axios.get('staff/substitution/loadStaff/by_id__'+this.$route.params.data.id+'/SubstitutionModel')
+        axios.get('staff/zest/loadSubstitution/by_id__'+this.$route.params.data.Id)
         .then((response) => {
-            let data=response.data;
-            if(data!=null && data!=""){
-                this.form.id = data.id;
-                this.form.cid = data.cid;
-                $('#cid').prop('disabled',true);
-                this.form.name = data.name;
-                $('#name').prop('disabled',true);
-                this.form.dob = data.dob;
-                $('#dob').prop('disabled',true);
-                this.form.gender = data.gender;
-                $('#gender').val(data.gender).trigger('change');
-                $('#gender').prop('disabled',true);
-                this.form.dzongkhag = data.dzongkhag;
-                $('#dzongkhag').val(data.dzongkhag).trigger('change');
-                $('#dzongkhag').prop('disabled',true);
-                this.form.qualification = data.qualification;
-                this.form.contact = data.contact;
-                this.form.email = data.email;
-            }
+            let data=response.data.data;
+            this.emp_idList=data;
         })
         .catch((error) => {
             console.log("Error......"+error);

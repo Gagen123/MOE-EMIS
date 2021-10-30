@@ -3,7 +3,15 @@
         <ol class="mb-1 ml-xl-n4 mr-xl-n2" style="background-color:#E5E5E5">
             <li class="form-inline "><h5>Student Health</h5></li>
         </ol>
-        <ul class="nav nav-pills mb-2" id="mainmenu" role="tablist">
+        <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
+            <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
+                <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                    <span :class="item.screen_icon"></span>
+                    {{ item.screen_name}}
+                </router-link>
+            </li>
+        </ul>
+        <ul class="nav nav-pills mb-2 developemntEnv" id="mainmenu" role="tablist">
             <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                 <router-link :to="{name: item.route, query: {data: item.screen_id } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                     <span :class="item.screen_icon"></span> {{ item.screen_name}}
@@ -45,145 +53,26 @@
 </template>
 <script>
 export default {
-     components: {
-    },
-    data() {
-        return {
+    data(){
+        return{
             menubar:[],
-            menu_id:'',
         }
     },
-    methods: {
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        },
-        getmenus(){
-            let uri = 'get_screens_on_submodules/submodule/'+this.menu_id
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.menubar =  data.data;
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-        },
+    async mounted(){
+        let uri = 'get_screens_on_submodules/submodule/'+this.$route.query.data;
+        axios.get(uri)
+        .then(response => {
+            let data = response;
+            this.menubar =  data.data;
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
         
-    },
-    mounted() {
-        let routeparam=this.$route.query.data;
-        this.menu_id=routeparam;
-        this.getmenus();
+        let env=await this.getEnvValues('VUE_APP_ENV_TYPE');
+        if(env=="Production"){
+         $('.developemntEnv').hide();
+        }
     },
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--<template>
-    <div>
-        <ol class="bg-primary mb-2">
-            <li class="pl-2 text-white"><b><h5>Mess Management</h5></b></li>
-        </ol>
-        <ul class="nav nav-pills mb-3" id="mainmenu" role="tablist">
-            <li class="nav-item active pr-1" @click="activatelink('stockreceipt')">
-                <router-link id="stockreceipt" to="/stockreceipt">
-
-                    <div class="info-box bg-success">
-                        <span class="info-box-icon"><i class="fa fa-user-friends"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-number">Stock Receipt</span>
-                            <div class="progress"> 
-                                <div class="progress-bar" style="width: 1000%"></div>
-                            </div>
-                            <span class="progress-description">
-                                Open Link
-                            </span>
-                        </div>
-                    </div> 
-                </router-link>
-            </li> 
-            <li class="nav-item pr-1"  @click="activatelink('programme')">
-                <router-link id="programme" to="/programme">
-                    <div class="info-box bg-gradient-teal">
-                        <span class="info-box-icon"><i class="fa fa-user-clock"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-number">Stock Issue</span>
-                            <div class="progress"> 
-                                <div class="progress-bar" style="width: 1000%"></div>
-                            </div>
-                            <span class="progress-description">
-                                Open Link
-                            </span>
-                        </div>
-                    </div> 
-                </router-link>
-            </li> 
-            <li class="nav-item pr-1" @click="activatelink('localprocurement')">
-               <router-link to="/localprocurement" id="localprocurement">
-                    <div class="info-box bg-secondary">
-                        <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-number">Local Procurement</span>
-                            <div class="progress"> 
-                                <div class="progress-bar" style="width: 1000%"></div>
-                            </div>
-                            <span class="progress-description">
-                                Open Link
-                            </span>
-                        </div>
-                    </div> 
-                </router-link>
-            </li>
-            <li class="nav-item pr-1" @click="activatelink('foodreleasenote')">
-               <router-link to="/foodreleasenote" id="foodreleasenote">
-                    <div class="info-box bg-secondary">
-                        <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
-                        <div class="info-box-content">
-                            <span class="info-box-number">Food Release Note</span>
-                            <div class="progress"> 
-                                <div class="progress-bar" style="width: 1000%"></div>
-                            </div>
-                            <span class="progress-description">
-                                Open Link
-                            </span>
-                        </div>
-                    </div> 
-                </router-link>
-            </li>
-
-
-
-
-
-
-        </ul>
-        <router-view></router-view>
-    </div>
-</template>
-<script>
-export default {
-    methods: {
-        activatelink(btnid){
-            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
-            $('#'+btnid).addClass('btn-primary text-white');
-        }
-    }
-}
-</script>-->

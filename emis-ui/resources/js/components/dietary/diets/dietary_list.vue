@@ -4,8 +4,8 @@
             <thead>
                 <tr>
                     <th>SL#</th>
-                    <th>Created Date</th>
-                    <th>Average Scores</th>
+                    <th>Date</th>
+                    <th>Scores</th>
                     <th>Remarks</th>
                     <th>Status</th>
                     <th>Action</th>
@@ -14,8 +14,8 @@
             <tbody v-if="showmess">
                 <tr v-for="(itm, index) in dietaryList" :key="index">
                     <td> {{index + 1}}</td>
-                    <td> {{itm.created_at}}</td>
-                    <td> {{itm.average_score}}</td>
+                    <td> {{itm.record_date}}</td>
+                    <td> {{itm.total_score}}</td>
                     <td> {{itm.remarks}}</td>
                     <td> {{itm.status}}</td>
                     <td>
@@ -32,8 +32,8 @@
             <tbody v-if="showprincipaltask">
                 <tr v-for="(itm, index) in dietaryList" :key="index">
                     <td> {{index + 1}}</td>
-                    <td> {{itm.created_at}}</td>
-                    <td> {{itm.average_score}}</td>
+                    <td> {{itm.record_date}}</td>
+                    <td> {{itm.total_score}}</td>
                     <td> {{itm.remarks}}</td>
                     <td> {{itm.status}}</td>
                     <td>

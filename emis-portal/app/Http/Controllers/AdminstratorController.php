@@ -45,6 +45,15 @@ class AdminstratorController extends Controller
     }
 
     /**
+     * Get student details by CID
+     */
+
+    public function getstudentdetailsbyCid($cid=""){
+        $response_data= $this->apiService->listData('emis/students/admission/getstudentdetailsbyCid/'.$cid);
+        return $response_data;
+    }
+
+    /**
      * Get the details of the Student by std_id
      * Will refer to std_student table
      */

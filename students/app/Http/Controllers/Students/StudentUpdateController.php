@@ -379,7 +379,6 @@ class StudentUpdateController extends Controller
      */
 
     private function loadStudentCidDetails($org_id){
-
         $students = DB::table('std_student')
                 ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
                 ->select('std_student.Name','std_student.student_code', 'std_student.CidNo','std_student_history.id', 'std_student_history.StdStudentId',

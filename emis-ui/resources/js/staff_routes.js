@@ -541,6 +541,16 @@ const routes = [
                 ],
             },
 
+            { path: '/scout_leaders',
+                component: require('./components/masters/staff_servces_masters/case_type/case_type_index.vue').default,
+                children:[
+                { path: '/',name:'scout_leaders', component: require('./components/masters/staff_servces_masters/case_type/list_case_type.vue').default },
+                { path: '/list_case_type',name:'list_case_type', component: require('./components/masters/staff_servces_masters/case_type/list_case_type.vue').default },
+                { path: '/create_case_type',name:'create_case_type', component: require('./components/masters/staff_servces_masters/case_type/create_case_type.vue').default },
+                { path: '/edit_case_type', name:'edit_case_type', component: require('./components/masters/staff_servces_masters/case_type/edit_case_type.vue').default },
+                ],
+            },
+
         ]
     },
     //STAFF PROFILE (Detailed Profile)

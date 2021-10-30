@@ -31,27 +31,23 @@ export default {
     data(){
         return{
             bodyTypeList:[],
+            dt:'',
         }
     },
     methods:{
-       loadmanagementbodytypeList(uri = 'masters/loadStaffMasters/all_mgmn_body_type'){
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                this.bodyTypeList =  data.data.data;
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
         showedit(data){
             this.$router.push({name:'edit_body_type',params: {data:data}});
         },
     },
-    mounted(){
-        this.loadmanagementbodytypeList();
+    async mounted(){
+      //  alert('dd');
+        this.bodyTypeList =  await this.loadstaffMasters('all','MgmntBodyType');
+        this.dt =  $("#working-agency-table").DataTable();
+    },
+    watch: {
+        bodyTypeList(){
+            this.applydatatable('working-agency-table');
+        }
     },
 }
 </script>

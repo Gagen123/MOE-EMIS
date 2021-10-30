@@ -84,6 +84,7 @@ class OrganizationApprovalController extends Controller{
     }
 
     public function saveUploadedFiles(Request $request){
+        return $request;
         $application_number = $request->application_number;
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -199,7 +200,7 @@ class OrganizationApprovalController extends Controller{
         return $loadOrgApplications;
     }
 
-    public function loadEstbDetailsForView($appNo=""){
+    public function loadEstbDetailsForView($appNo="",$type=""){
         // dd($this->apiService->listData('emis/organization/organizationApproval/loadEstbDetailsForVerification/'.$appNo));
         $loadOrganizationDetails = json_decode($this->apiService->listData('emis/organization/organizationApproval/loadEstbDetailsForVerification/'.$appNo));
         $current_status=$this->apiService->listData('emis/common/getTaskDetials/'.$appNo);
