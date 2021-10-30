@@ -178,7 +178,7 @@
                                 <div class="row form-group">
                                     <label>Merge To School/ECR/ECCD 1:</label>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                                        <input type="radio" name="org1" v-model="form.newOrgType" value="org1" id="org1" @click="showNewOrg('org1')">
+                                        <input type="radio" name="org1" v-model="form.newOrgType" value="org1" id="org1" @click="showNewOrg('org1')" checked=" "  >
                                     </div>
                                 </div>
                                 <div class="row form-group">
@@ -187,12 +187,14 @@
                                         <input type="radio" name="org2" v-model="form.newOrgType" value="org2" id="org2" @click="showNewOrg('org2')">
                                     </div>
                                 </div>  
-                                <div class="row form-group" >
+
+                                <!-- uncomment for the third option of new org -->
+                                <!-- <div class="row form-group" >
                                     <label>Merge To New Organization: &nbsp;&nbsp;&nbsp;</label>
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 ">
                                         <input type="radio" name="newOrg" v-model="form.newOrgType" value="newOrg" id="newOrg" @click="showNewOrg('newOrg')">
                                     </div>
-                                </div>  
+                                </div>   -->
                             </div> 
                         </div>
                         <hr>
@@ -831,7 +833,7 @@ export default {
                 });
             }
             else{
-                if(this.form.orgId2!="" && this.form.orgId1!=""){
+                if(this.form.orgId2!="" && this.form.orgId1!="" && this.form.newOrgType!=""){
                     this.change_tab(nextclass);
                 }
                 else{
