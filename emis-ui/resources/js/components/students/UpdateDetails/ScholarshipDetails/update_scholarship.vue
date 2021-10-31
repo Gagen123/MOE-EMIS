@@ -22,8 +22,8 @@
             <div class="row">
                 <div class="col-sm-6">
                     <label class="rp-3">Scholarship Type:</label><br>
-                    <label><input  type="checkbox" v-model="student_form.scholarhship" name="scholarhship" id="needy" value="1" tabindex=""/> Yes</label>
-                    <label><input  type="checkbox" v-model="student_form.scholarhship" name="scholarhship" id="needy" value="0" tabindex=""/> No</label>
+                     <label><input  type="radio" v-model="student_form.scholarhship" name="scholarhship" id="needy" value="1" tabindex=""/> Yes</label>
+                    <label><input  type="radio" v-model="student_form.scholarhship" name="scholarhship" id="needy" value="0" tabindex=""/> No</label>
                     <has-error :form="student_form" field="scholarhship"></has-error>
                 </div>
             </div>

@@ -21,9 +21,9 @@
             <div class="form-group row">
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label class="mb-0.5">Change Address For:<i class="text-danger">*</i></label>
-                    <select name="change_for" class="form-control" v-model="student_form.change_for">
+                    <select name="change_for" class="form-control" v-model="student_form.change_for" id="change_for">
                         <option value="">--- Please Select ---</option>
-                        <option value="Father">Father</option>
+                        <option value="Father">Father</option> 
                         <option value="Mother">Mother</option>
                     </select>
                     <has-error :form="student_form" field="change_for"></has-error>

@@ -72,7 +72,7 @@
                         SEN Detail
                     </router-link>
                 </li>
-                 <li class="nav-item pr-1" @click="activatelink('updated_bifcurcation_students_index')">
+                 <!-- <li class="nav-item pr-1" @click="activatelink('updated_bifcurcation_students_index')">
                     <router-link to="/updated_bifcurcation_students_index" id="update_std_sen" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0">
                         <span class="fa fa-user-check"></span>
                        Bifcurcation Students
@@ -83,7 +83,7 @@
                         <span class="fa fa-user-check"></span>
                         Merge Students
                     </router-link>
-                </li>
+                </li> -->
                 
             </ul>
             <router-view></router-view>

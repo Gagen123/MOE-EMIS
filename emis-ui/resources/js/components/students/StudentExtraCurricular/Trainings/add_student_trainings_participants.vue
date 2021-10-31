@@ -151,11 +151,11 @@ export default {
                 console.log("Error:"+error)
             });
         },
-        loadTrainingList(uri='students/listStudentTrainings/NA'){
+        loadTrainingList(uri='masters/loadActiveStudentMasters/CeaTrainingType'){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.trainingList =  data.data.data;
+                let data = response.data.data;
+                this.trainingList = data;
             })
             .catch(function (error) {
                 console.log("Error:"+error)

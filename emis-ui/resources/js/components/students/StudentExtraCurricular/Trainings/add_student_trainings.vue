@@ -92,8 +92,8 @@ export default {
         loadActiveProgramList(uri="masters/loadActiveStudentMasters/CeaProgram"){
             axios.get(uri)
             .then(response => {
-                let data = response;
-                this.programList =  data.data;
+                let data = response.data.data;
+                this.programList =  data;
             })
             .catch(function (error) {
                 console.log("Error......"+error)
