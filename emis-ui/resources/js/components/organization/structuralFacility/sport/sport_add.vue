@@ -5,7 +5,7 @@
                 <div class="form-group row"> 
                  <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Facility:<span class="text-danger">*</span></label>
                     <div class="col-lg-8 col-md-8 col-sm-8">
-                        <select name="facility" id="facility" class="form-control " @change="getSubFacilityDropdown(),remove_err('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
+                        <select name="facility" id="facility" class="form-control " @change="getSubFacilityDropdown(),remove_error('facility')" :class="{ 'is-invalid': form.errors.has('facility') }" v-model="form.facility">
                             <option value="">--- Please Select ---</option>
                             <option v-for="(item, index) in facilityList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         </select>
@@ -15,7 +15,7 @@
                  <div class="form-group row"> 
                     <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No.of Facility:<span class="text-danger">*</span></label>
                     <div class="col-lg-8 col-md-8 col-sm-8">
-                        <input name="no_of_facility" class="form-control" v-model="form.no_of_facility" :class="{ 'is-invalid': form.errors.has('no_of_facility') }" id="no_of_facility" @change="remove_err('no_of_facility')" type="number">
+                        <input name="no_of_facility" class="form-control" v-model="form.no_of_facility" :class="{ 'is-invalid': form.errors.has('no_of_facility') }" id="no_of_facility" @change="remove_error('no_of_facility')" type="number">
                         <has-error :form="form" field="no_of_facility"></has-error>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                               <tr id="record1" v-for='(item, index) in form.items_received' :key="index">
                                   <td>{{index+1}}</td>
                                   <td>
-                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_err('type'), showfield('type')">
+                                        <select name="type" id="type" class="form-control editable_fields" v-model="item.type " :class="{ 'is-invalid': form.errors.has('type') }" @change="remove_error('type'), showfield('type')">
                                          <option v-for="(item, index) in facilitySubList" :key="index" v-bind:value="item.id">{{ item.typeName }}</option>
                                       </select>
                                   </td>
@@ -183,11 +183,11 @@ export default {
          * method to get quarter in dropdown
          */
         
-        remove_err(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-            }
-        },
+        // remove_err(field_id){
+        //     if($('#'+field_id).val()!=""){
+        //         $('#'+field_id).removeClass('is-invalid');
+        //     }
+        // },
         remove_error(field_id){
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');

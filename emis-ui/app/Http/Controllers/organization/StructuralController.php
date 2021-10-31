@@ -25,11 +25,11 @@ class StructuralController extends Controller
     public function saveSport(Request $request){
         $rules = [
             'facility'                   =>  'required',
-            
+            'no_of_facility'             =>  'required',
         ];
         $customMessages = [
             'facility.required'          => 'Facility is required',
-            
+            'no_of_facility.required'    => 'No of facility is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $sport =[
@@ -120,14 +120,20 @@ class StructuralController extends Controller
         $rules = [
             'category'                   =>  'required',
             'subCategory'                =>  'required',
-         //   'yearOfConstruction'         =>  'required',
-            // 'presentCondition'           =>  'required',
+            'constructionType'           =>  'required',
+            'structureNo'                =>  'required',
+            'noOfFloor'                  =>  'required',
+            'totalCapacity'              =>   'required',
+            'presentCondition'           => 'presentCondition'
         ];
         $customMessages = [
             'category.required'                 => 'Category is required',
             'subCategory.required'              => 'Sub Category is required',
-           // 'yearOfConstruction.required'       => 'Year of Construction is required',
-            // 'presentCondition.required'         => 'Present Condition of Structure is required',
+            'constructionType.required'         => 'Construction type is required',
+            'structureNo.required'              => ' Structure No is required',
+            'noOfFloor.required'                => 'No of floors is required',
+            'totalCapacity.required'            => 'Total Capacity is required',
+            'presentCondition.required'         => 'Present Condition is required'
         ];
         $this->validate($request, $rules, $customMessages);
 
