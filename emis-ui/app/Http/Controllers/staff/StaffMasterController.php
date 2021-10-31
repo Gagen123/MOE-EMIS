@@ -30,10 +30,10 @@ class StaffMasterController extends Controller{
         $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request->all());
         return $response_data;
     }
- 
-    public function loadStaffMasters($type="",$Pstudent=""){
+
+    public function loadStaffMasters($type="",$model=""){
         $response_data= $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/'.$type.'/'.$model);
-       
+
         return $response_data;
     }
     // public function loadStaffTransferMasters($param = "")
