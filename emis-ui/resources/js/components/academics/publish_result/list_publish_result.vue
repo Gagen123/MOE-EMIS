@@ -47,10 +47,10 @@
                             </td>
                             <td>
                                 <div v-if="item.class_teacher_finalized && !item.approved"  class="btn-group btn-group-sm">
-                                    <button class="btn btn-info btn-sm btn-flat text-white" to="" @click="updateStatus('approve',item)"><i class="fa fa-check-circle mr-1"></i > Approve </button>
+                                    <button class="btn btn-info btn-sm btn-flat text-white" @click="updateStatus('approve',item)"><i class="fa fa-check-circle mr-1"></i > Approve </button>
                                 </div> 
                                  <div v-if="item.approved && !item.published" class="btn-group btn-group-sm">
-                                    <div class="btn btn-info btn-sm btn-flat text-white" @click="updateStatus('publish',item.aca_result_consolidated_id)"><i class="fas fa-cloud-upload-alt"></i > Publish </div>
+                                    <button class="btn btn-info btn-sm btn-flat text-white" @click="updateStatus('publish',item.aca_result_consolidated_id)"><i class="fas fa-cloud-upload-alt"></i > Publish </button>
                                 </div>
 
                                 <div class="btn-group btn-group-sm">
@@ -175,7 +175,7 @@ export default {
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/updateStatus',{action,approve,item})
+                        axios.post('academics/updateStatus',{action,approve,item})
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',
@@ -199,7 +199,7 @@ export default {
                 confirmButtonText: 'Yes',
                 }).then((result) => {
                     if(result.isConfirmed) {
-                        axios.post('/academics/updateStatus',{action,publish,item:not_published})
+                        axios.post('academics/updateStatus',{action,publish,item:not_published})
                             .then(() => {
                                 Toast.fire({
                                     icon: 'success',

@@ -88,6 +88,7 @@ class AcademicMastersController extends Controller
                     'display_order' => 'required',
                     'status'    =>  'required',
                     'assessed_by_class_teacher' => 'required',
+                    'is_stem' => 'required',
                 ];
                 $customMessages = [
                     'display_order.required' => 'This field is required',
@@ -96,6 +97,7 @@ class AcademicMastersController extends Controller
                     'aca_sub_category_id.required' => 'This field is required',
                     'status.required' => 'This field is required',
                     'assessed_by_class_teacher' => 'required',
+                    'is_stem.required' => 'This field is required',
                 ];
                 $this->validate($request, $rules,  $customMessages);
                 $data = [
@@ -103,6 +105,7 @@ class AcademicMastersController extends Controller
                     'code'  =>  $request['code'],
                     'aca_sub_category_id' => $request['aca_sub_category_id'],
                     'assessed_by_class_teacher' =>  $request['assessed_by_class_teacher'],
+                    'is_stem' =>  $request['is_stem'],
                     'dzo_name' => $request['dzo_name'],
                     'display_order' => $request['display_order'],
                     'status'    =>  $request['status'],
@@ -126,16 +129,18 @@ class AcademicMastersController extends Controller
                     'display_order.required' => 'This field is required',
                     'status.required' => 'This field is required',
                     'assessed_by_class_teacher.required' => 'This field is required',
+                    'is_stem.required' => 'This field is required',
                 ];
                 $this->validate($request, $rules,  $customMessages);
                 $data = Subject::find($request['id']);
-                $messs_det = 'name:' . $data->name . '; code:' . $data->code . '; aca_sub_category_id:' . $data->aca_sub_category_id . '; assessed_by_class_teacher:' . $data->assessed_by_class_teacher . '; is_special_educational_needs:' . $data->is_special_educational_needs . '; display_order:' . $data->display_order . '; status:' . $data->status;
+                $messs_det = 'name:' . $data->name . '; code:' . $data->code . '; aca_sub_category_id:' . $data->aca_sub_category_id . '; assessed_by_class_teacher:' . $data->assessed_by_class_teacher . '; is_stem:' . $data->is_stem . '; is_special_educational_needs:' . $data->is_special_educational_needs . '; display_order:' . $data->display_order . '; status:' . $data->status;
                 $procid = DB::select("CALL " . $this->audit_table . ".emis_audit_proc('" . $this->database . "','aca_subject','" . $request['id'] . "','" . $messs_det . "','" . $request['user_id'] . "','Edit')");
                 $data->name = $request['name'];
                 $data->code = $request['code'];
                 $data->aca_sub_category_id = $request['aca_sub_category_id'];
                 $data->dzo_name = $request['dzo_name'];
                 $data->assessed_by_class_teacher = $request['assessed_by_class_teacher'];
+                $data->is_stem = $request['is_stem'];
                 $data->display_order = $request['display_order'];
                 $data->status = $request['status'];
                 $data->update();
@@ -410,7 +415,7 @@ class AcademicMastersController extends Controller
             return $this->successResponse($main_subject);
         }
         if ($param == "all_subject") {
-            $subject = DB::select('SELECT t1.id,t1.name,t1.code,t1.assessed_by_class_teacher,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
+            $subject = DB::select('SELECT t1.id,t1.name,t1.code,t1.assessed_by_class_teacher,t1.is_stem,t1.dzo_name,t1.status,t1.display_order,t2.name AS sub_category_name,t2.id AS aca_sub_category_id FROM aca_subject t1 JOIN aca_subject_category t2 ON t1.aca_sub_category_id = t2.id WHERE aca_sub_id IS NULL ORDER BY display_order');
             return $this->successResponse($subject);
         }
         // if($param == "subjectDropdown"){
@@ -419,7 +424,7 @@ class AcademicMastersController extends Controller
         // }
 
         if ($param == "all_active_subject") {
-            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,status,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
+            $active_subject = DB::select('SELECT id,aca_sub_category_id,name,dzo_name,is_stem,status,display_order FROM aca_subject WHERE aca_sub_id IS NULL AND status = 1 ORDER BY display_order');
             return $this->successResponse($active_subject);
         }
         if ($param == "all_active_subject_category") {

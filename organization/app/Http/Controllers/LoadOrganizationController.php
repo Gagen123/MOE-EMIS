@@ -372,7 +372,7 @@ class LoadOrganizationController extends Controller
 
     public function loadOrgDetails($type = "", $id = "")
     {
-        
+
         $response_data = "";
         if ($type == "Orgbyid" || $type == "user_logedin_dzo_id") {
             $response_data = OrganizationDetails::where('id', $id)->first();
@@ -466,11 +466,47 @@ class LoadOrganizationController extends Controller
         return $this->successResponse($response_data);
     }
 
+    public function loadOrgStatus($id = ""){
+        $status=1;
+        $response_data = OrganizationDetails::where('id', $id)->first();
+        if ($response_data!=null && $response_data!="") {
+            if($response_data->status==1 || $response_data->status=='Active'){
+                $status=1;
+            }else{
+                $status=0;
+            }
+        }else{
+            $response_data = HeadQuaterDetails::where('id', $id)->first();
+            if($response_data->status==1 || $response_data->status=='Active'){
+                $status=1;
+            }else{
+                $status=0;
+            }
+        }
+        if ($response_data!=null && $response_data!="" && $status==1) {
+            $status=1;
+        }else{
+            $status==2;
+        }
+        return $this->successResponse($status);
+    }
+
     public function loadHeaquarterList($type = "", $id = "")
     {
         $response_data = "";
         if ($type == "all_ministry_departments") {
-            $response_data = DepartmentModel::where('type', $id)->get();
+            $department = DepartmentModel::where('type', $id)->get();
+            if($department!=null && $department!="" && sizeof($department)>0){
+                $response_data=[];
+                foreach($department as $res){
+                    $data = HeadQuaterDetails::where('departmentId', $res->id)->get(['id','agencyName as name']);
+                    if($data!=null && $data!="" && sizeof($data)>0){
+                        foreach($data as $d){
+                            array_push($response_data,$d);
+                        }
+                    }
+                }
+            }
         }
         if ($type == "user_dzongkhag") {
             $response_data = DepartmentModel::where('dzo_id', $id)->get();
@@ -478,6 +514,15 @@ class LoadOrganizationController extends Controller
 
         if ($type == "dzongkhag_department") {
             $response_data = DepartmentModel::where('dzo_id', $id)->where('type', 'dzongkhag')->get();
+        }
+
+        if ($type == "dzongkhag_offices") {
+            $response_data = DepartmentModel::where('dzo_id', $id)->where('type', 'dzongkhag')->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $res){
+                    $response_data = HeadQuaterDetails::where('departmentId', $res->id)->get(['id','agencyName as name']);
+                }
+            }
         }
 
         if ($type == "details_by_id") {

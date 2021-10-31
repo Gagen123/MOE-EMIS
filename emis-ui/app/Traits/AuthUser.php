@@ -5,7 +5,7 @@ namespace App\Traits;
 use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Session;
 
-trait AuthUser
+trait       AuthUser
 {
     /**
      * Send a request to any service

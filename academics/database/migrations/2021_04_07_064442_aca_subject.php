@@ -23,6 +23,7 @@ class AcaSubject extends Migration
             $table->string('code', 10)->index();
             $table->string('dzo_name', 1000)->nullable();
             $table->unsignedTinyInteger('assessed_by_class_teacher')->index()->default(0);
+            $table->unsignedTinyInteger('is_stem')->index()->default(0);
             $table->unsignedTinyInteger('display_order')->index();
             $table->unsignedTinyInteger('status')->index()->default(1)->comment('0-Disabled');
             $table->string('created_by', 36)->index();
