@@ -8,6 +8,7 @@
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                         
                     </select>
+
                     <has-error :form="form" field="financialInformationId"></has-error>
                 </div> 
             </div>
@@ -15,14 +16,15 @@
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label class="mb-1">Amount:<i class="text-danger">*</i></label>
-                        <input type="text" @change="remove_error('amount')" v-model="form.amount" :class="{ 'is-invalid': form.errors.has('amount') }" class="form-control" name="amount" id="amount" >
+                        <input type="number" @change="remove_error('amount')" v-model="form.amount" :class="{ 'is-invalid': form.errors.has('amount') }" class="form-control" name="amount" id="amount" autocomplete="off">
                         <has-error :form="form" field="amount"></has-error>
                     </div> 
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.date" :class="{ 'is-invalid': form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <input class="form-control popupDatepicker"  :class="{ 'is-invalid': form.errors.has('date') }" id="date" @change="remove_err('date')" type="text">
                     <has-error :form="form" field="date"></has-error>
+                    
                 </div>
             </div>
             <div class="form-group row">
@@ -34,7 +36,7 @@
             </div>
             <div class="card-footer text-right">
                 <button type="button" @click="formaction('reset')" class="btn btn-flat btn-sm btn-danger"><i class="fa fa-redo"></i> Reset</button>
-                <button type="button" v-on:click="submitForm" class="btn btn-success"> <i class="fas fa-save"></i> Save</button>
+                <button type="button" @click="formaction('save')" class="btn btn-flat btn-sm btn-primary"><i class="fa fa-save"></i> Save</button>
             </div>
         </form>
     </div>
@@ -65,32 +67,55 @@ export default {
             });
 
         },
-        submitForm(){
-            const config = {
-                headers: {
-                    'content-type': 'multipart/form-data'
-                }
-                }
-                // this.$Progress.start();
-                let formData = new FormData(); 
-                formData.append('financialInformationId', this.form.financialInformationId);
-                formData.append('amount', this.form.amount);
-                formData.append('date', this.form.date);
-                formData.append('remarks', this.form.remarks);
-                axios.post('/organization/saveFinancialInfo',formData,config)
-                .then(()=>{
+        formaction: function(type){ 
+            if(type=="reset"){
+                this.form.amount= '';
+                this.form.date= '';
+                this.form.financialInformationId= '';
+                this.form.remarks= '';
+            }
+            if(type=="save"){
+                this.form.date=this.formatYYYYMMDD($('#date').val());
+                this.form.post('/organization/saveFinancialInfo',this.form)
+                    .then(() => {
                     Toast.fire({
                         icon: 'success',
                         title: 'Data  saved successfully'
-                    });
+                    })
                     this.$router.push('/list_financial_info');
                 })
-                .catch(()=>{console.log("Error.....")})
+                .catch(() => {
+                    console.log("Error......")
+                })
+            }
+		},
+        
+        // submitForm(){
+        //     const config = {
+        //         headers: {
+        //             'content-type': 'multipart/form-data'
+        //         }
+        //         }
+        //         // this.$Progress.start();
+        //         let formData = new FormData(); 
+        //         formData.append('financialInformationId', this.form.financialInformationId);
+        //         formData.append('amount', this.form.amount);
+        //         formData.append('date', this.form.date);
+        //         formData.append('remarks', this.form.remarks);
+        //         axios.post('/organization/saveFinancialInfo',formData,config)
+        //         .then(()=>{
+        //             Toast.fire({
+        //                 icon: 'success',
+        //                 title: 'Data  saved successfully'
+        //             });
+        //             this.$router.push('/list_financial_info');
+        //         })
+        //         .catch(()=>{console.log("Error.....")})
             
 
-        },
+        // },
     
-        remove_error(field_id){
+        remove_error(field_id){ 
             if($('#'+field_id).val()!=""){
                 $('#'+field_id).removeClass('is-invalid');
                 $('#'+field_id+'_err').html('');

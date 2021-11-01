@@ -29,7 +29,7 @@
                     </div>
                 </div>
                     <div class="row form-group">
-                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12"> 
                         <label>Usable Nos.:<span class="text-danger">*</span></label> 
                            <input name="usable" class="form-control" v-model="form.usable" :class="{ 'is-invalid': form.errors.has('usable') }" id="usable" @change="remove_err('usable')" type="number">
                             <has-error :form="form" field="usable"></has-error>
@@ -47,7 +47,7 @@
             </div>
         </form>
     </div>
-</template>
+</template>     
 
 <script>
 export default {

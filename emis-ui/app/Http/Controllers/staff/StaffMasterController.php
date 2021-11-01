@@ -16,6 +16,7 @@ class StaffMasterController extends Controller{
     }
 
     public function saveStaffMasters(Request $request){
+        // dd($request);
         $rules = [
             'name'                  =>  'required',
             'status'                =>  'required',
@@ -28,6 +29,7 @@ class StaffMasterController extends Controller{
 
         $request['user_id'] = $this->userId();
         $response_data= $this->apiService->createData('emis/staff/staffMasterController/saveStaffMasters', $request->all());
+        // dd( $response_data);
         return $response_data;
     }
 

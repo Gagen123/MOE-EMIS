@@ -33,7 +33,7 @@
                 </tr> -->
                 <tr v-for="(std, count) in newAdmissionList" :key="count">
                     <td>{{ count + 1 }} </td>
-                    <td>{{ std.admisiondet.student_code}}</td>
+                    <td>{{ std.admisiondet.student_code ? std.admisiondet.student_code : ""}}</td>
                     <td>{{ std.admisiondet.FirstName }} {{ std.admisiondet.LastName }} {{std.admisiondet.Name}} </td>
                     <td>{{ std.admisiondet.CidNo }}</td>
                     <td>{{ sex_idList[std.admisiondet.CmnSexId] }} </td>

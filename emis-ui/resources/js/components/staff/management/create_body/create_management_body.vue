@@ -123,7 +123,7 @@
                                         <tr v-for="(item, index) in staffcomposition_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.name}}</td>
-                                            <td>{{ designationArray[item.designation]}}</td>
+                                            <td>{{ item.designation}}</td>
                                             <td>{{ item.phone}}</td>
                                             <td>{{ item.email}}</td>
                                             <td>{{ item.address}}</td>
@@ -162,7 +162,7 @@
                                         <tr v-for="(item, index) in nonstaffcomposition_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.name}}</td>
-                                            <td>{{ designationArray[item.designation]}}</td>
+                                            <td>{{ item.designation}}</td>
                                             <td>{{ item.phone}}</td>
                                             <td>{{ item.email}}</td>
                                             <td>{{ item.address}}</td>
@@ -201,7 +201,7 @@
                                         <tr v-for="(item, index) in studentcomposition_list" :key="index">
                                             <td>{{ index+1}}</td>
                                             <td>{{ item.name}}</td>
-                                            <td>{{ designationArray[item.designation]}}</td>
+                                            <td>{{ item.designation}}</td>
                                             <td>{{ item.phone}}</td>
                                             <td>{{ item.email}}</td>
                                             <td>{{ item.address}}</td>
@@ -459,7 +459,9 @@ export default {
                 this.studentcomposition_list=[];
                 this.nonstaffcomposition_list=[];
                 let data = response.data.data.members;
+              
                 for(let i=0;i<data.length;i++){
+                    // alert(data.length);
                     if(data[i].emptye=="Staff"){
                         this.staffcomposition_list.push(data[i]);
                     }
@@ -597,27 +599,27 @@ export default {
                 $('#'+fieldId).removeClass('is-invalid');
             }
         },
-        loadmanagmentBodyList(type){
-            let uri = 'masters/loadStaffMasters/'+type;
-            axios.get(uri)
-            .then(response => {
-                let data = response;
-                if(type=="all_active_mgmn_body_type"){
-                    this.management_body_list =  data.data.data;
-                }
-                if(type=="all_active_mgmn_desig"){
-                    this.designationList =  data.data.data;
-                    for(let i=0;i<data.data.data.length;i++){
-                        this.designationArray[data.data.data[i].id] = data.data.data[i].name;
-                    }
-                }
-            })
-            .catch(function (error) {
-                if(error.toString().includes("500")){
-                    $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
-                }
-            });
-        },
+        // loadmanagmentBodyList(type){
+        //     let uri = 'masters/loadStaffMasters/'+type;
+        //     axios.get(uri)
+        //     .then(response => {
+        //         let data = response;
+        //         if(type=="all_active_mgmn_body_type"){
+        //             this.management_body_list =  data.data.data;
+        //         }
+        //         if(type=="all_active_mgmn_desig"){
+        //             this.designationList =  data.data.data;
+        //             for(let i=0;i<data.data.data.length;i++){
+        //                 this.designationArray[data.data.data[i].id] = data.data.data[i].name;
+        //             }
+        //         }
+        //     })
+        //     .catch(function (error) {
+        //         if(error.toString().includes("500")){
+        //             $('#tbody').html('<tr><td colspan="6" class="text-center text-danger text-bold">This server down. Please try later</td></tr>');
+        //         }
+        //     });
+        // },
         loadStaffList(uri = 'staff/loadStaff/workingagency'){
             axios.get(uri)
             .then(response => {
@@ -631,9 +633,10 @@ export default {
             });
         },
     },
-    mounted(){
-        this.loadmanagmentBodyList('all_active_mgmn_body_type');
-        this.loadmanagmentBodyList('all_active_mgmn_desig');
+    async mounted(){
+        this.management_body_list =  await this.loadstaffMasters('active','MgmntBodyType');
+        this.designationList =  await this.loadstaffMasters('active','MgmnDesignation');
+       
         this.loadStaffList();
     },
 

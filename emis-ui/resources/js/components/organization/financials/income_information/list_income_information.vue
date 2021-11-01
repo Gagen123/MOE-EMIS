@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.amountGenerated}}</td>
-                    <td>{{ item.date}}</td>
+                    <td>{{ reverseDate1(item.date)}}</td>
                     <td>{{ item.remarks}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">

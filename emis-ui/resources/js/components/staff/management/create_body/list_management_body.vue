@@ -16,7 +16,8 @@
                     <tbody>
                         <tr v-for="(item, index) in staffcomposition_list" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ management_body_list[item.body_type_id]}}</td>
+                            <!-- <td>{{ management_body_list[item.body_type_id]}}</td> -->
+                            <td>{{ item.body_type_id}}</td>
                             <td>{{ item.from_date}}</td>
                             <td>{{ item.to_date}}</td>
                             <td>{{ item.remarks}}</td>
@@ -43,8 +44,8 @@ export default {
         loadgenderList(uri = 'staff/managementBody/loadcreatedManagementBodyComposition'){
             axios.get(uri)
             .then(response => {
-                let data = response.data.data;
-                this.staffcomposition_list = data;
+                let data = response;
+                this.staffcomposition_list = data.data;
             })
             .catch(function (error){
                console.log('Error: '+error);
@@ -68,8 +69,9 @@ export default {
         }
     },
     mounted() {
-        this.loadmanagmentBodyList();
         this.loadgenderList();
+        this.loadmanagmentBodyList();
+        
         $("#managment-table").DataTable({
             "responsive": true,
             "autoWidth": true,

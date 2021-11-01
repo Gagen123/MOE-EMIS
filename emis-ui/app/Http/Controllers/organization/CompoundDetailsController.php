@@ -25,6 +25,24 @@ class CompoundDetailsController extends Controller
     public function saveSchoolCompundDetails(Request $request){
            //   $file = $request->attachments;
     //    dd($file);
+    $rules = [
+        'thramno'               =>  'required',
+        'plotno'                =>  'required',
+        'sizecompound'          =>  'required',
+        'status'                =>  'required',
+        'statusofplay'          =>  'required',
+       
+
+    ];
+    $customMessages = [
+        'thramno.required'                  => 'thramno is required',
+        'plotno.required'                   => 'plotno is required',
+        'sizecompound.required'             => 'sizecompound is required',
+        'status.required'                   => 'agriculturalarea is required',
+        'statusofplay.required'             => 'Select Play ground area status is required',
+    ];
+    $this->validate($request, $rules, $customMessages);
+    
         $files = $request->attachments;
         $filenames = $request->attachmentname;
         $attachment_details=[];
