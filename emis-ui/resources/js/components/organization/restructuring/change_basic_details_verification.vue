@@ -566,7 +566,7 @@ export default {
 
                             axios.post('organization/updateChangeBasicDetailApplication', formData, config)
                             .then((response) => {
-                                if(response!=""){
+                                if(response==""){
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
