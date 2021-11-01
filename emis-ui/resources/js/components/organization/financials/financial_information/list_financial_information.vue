@@ -16,7 +16,7 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.name}}</td>
                     <td>{{ item.amount}}</td>
-                    <td>{{ item.date}}</td>
+                    <td>{{ reverseDate1(item.date)}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-edit"></i > Edit</a>

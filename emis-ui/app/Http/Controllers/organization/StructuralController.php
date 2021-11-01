@@ -25,12 +25,13 @@ class StructuralController extends Controller
     public function saveSport(Request $request){
         $rules = [
             'facility'                   =>  'required',
-            
+            'no_of_facility'             =>  'required',
         ];
         $customMessages = [
             'facility.required'          => 'Facility is required',
-            
+            'no_of_facility.required'    => 'No of facility is required',
         ];
+
         $this->validate($request, $rules, $customMessages);
         $sport =[
             'organizationId'                        =>  $this->getWrkingAgencyId(),
@@ -120,16 +121,26 @@ class StructuralController extends Controller
         $rules = [
             'category'                   =>  'required',
             'subCategory'                =>  'required',
-         //   'yearOfConstruction'         =>  'required',
-            // 'presentCondition'           =>  'required',
+            'constructionType'           =>  'required',
+            'structureNo'                =>  'required',
+            'noOfFloor'                  =>  'required',
+          //  'totalCapacity'              =>  'required',
+            'presentCondition'           =>  'required',
+            'design'                     =>  'required'
         ];
         $customMessages = [
             'category.required'                 => 'Category is required',
             'subCategory.required'              => 'Sub Category is required',
-           // 'yearOfConstruction.required'       => 'Year of Construction is required',
-            // 'presentCondition.required'         => 'Present Condition of Structure is required',
+            'constructionType.required'         => 'Construction type is required',
+            'structureNo.required'              => ' Structure No is required',
+            'noOfFloor.required'                => 'No of floors is required',
+          //  'totalCapacity.required'            => 'Total Capacity is required',
+            'presentCondition.required'         => 'Present Condition is required',
+            'design.required'                   => 'Designed by is required'
         ];
-        $this->validate($request, $rules, $customMessages);
+      
+        $this->validate($request, $rules,$customMessages);
+     
 
         $infrastructure =[
             'organizationId'            =>  $this->getWrkingAgencyId(),
@@ -334,13 +345,15 @@ class StructuralController extends Controller
             'structuretype'                   =>  'required',
             'constructionType'                =>  'required',
             'yearOfConstruction'              =>  'required',
-            // 'presentCondition'           =>  'required',
+            'noOfFloor'                       =>  'required',
+            'design'                          =>  'required',
         ];
         $customMessages = [
             'structuretype.required'                 => 'Structure Type is required',
             'constructionType.required'              => 'Construction Type is required',
             'yearOfConstruction.required'            => 'Year of Construction is required',
-            // 'presentCondition.required'         => 'Present Condition of Structure is required',
+            'noOfFloor.required'                     => 'No of floors is required',
+            'design.required'                        => 'Designed by is required'
         ];
         $this->validate($request, $rules, $customMessages);
 

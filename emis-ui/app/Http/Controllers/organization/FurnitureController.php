@@ -52,7 +52,7 @@ class FurnitureController extends Controller
             'actiontype'                =>  $request['action_type'],
             'id'                        =>  $request['id'],
             'user_id'                   =>  $this->userId()
-        ];
+        ]; 
       // dd($loc);
         try{
             $response_data= $this->apiService->createData('emis/organization/furniture/saveFurniture', $loc);

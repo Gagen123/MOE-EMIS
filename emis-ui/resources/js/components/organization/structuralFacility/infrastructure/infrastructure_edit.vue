@@ -30,7 +30,7 @@
                                 <has-error :form="form" field="subCategory"></has-error>
                             </div>
                         </div>
-                        <div class="form-group row">
+                       <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Type of Construction:<span class="text-danger" >*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
                                 <select name="constructionType" id="constructionType" class="form-control editable_fields" v-model="form.constructionType" :class="{ 'is-invalid': form.errors.has('constructionType') }" @change="remove_err('constructionType')">
@@ -43,9 +43,9 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No. of Structure :<span class="text-danger">*</span></label>
                             <div class="col-lg-8 col-md-8 col-sm-8">
-                                <input class="form-control editable_fields " id="structureNo" type="text" v-model="form.structureNo" @change="getfields('structureNo')">
+                                <input class="form-control editable_fields " id="structureNo" name="structureNo" type="text" v-model="form.structureNo" :class="{ 'is-invalid': form.errors.has('structureNo') }" @change="remove_err('structureNo'), getfields('structureNo')  ">
+                                 <has-error :form="form" field="structureNo"></has-error>
                             </div>
-                           
                         </div>
                         <div class="form-group row">
                             <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" v-for='(yr, index) in form.yearofconstructinNo' :key="index">
@@ -66,7 +66,7 @@
                         <p>
                         <div class="form-group row">
                             
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area (Sq. meter):<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area (Sq. meter):<span class="text-danger"></span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
                             </div>
@@ -74,7 +74,8 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No of Floors:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
+                                <input class="form-control editable_fields" name="noOfFloor" id="noOfFloor" type="number" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('noOfFloor') }" @change="remove_err('noOfFloor')">
+                                 <has-error :form="form" field="noOfFloor"></has-error>
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity: </label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -88,12 +89,13 @@
                                 <label><input v-model="form.presentCondition"  type="radio" value="0" /> Not Usable</label>
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Designed By:<span class="text-danger">*</span></label>
-                            <div class="col-lg-3 col-md-3 col-sm-3">
-                                <select name="design" id="design" class="form-control" v-model="form.design">
+                           <div class="col-lg-3 col-md-3 col-sm-3">
+                                <select name="design" id="design" class="form-control" v-model="form.design" :class="{ 'is-invalid': form.errors.has('design') }" @change="remove_err('design')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
-                            </div>
+                                <has-error :form="form" field="design"></has-error>
+                            </div> 
                         </div>
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Ramp Access on Ground Floor:<span class="text-danger">*</span></label>

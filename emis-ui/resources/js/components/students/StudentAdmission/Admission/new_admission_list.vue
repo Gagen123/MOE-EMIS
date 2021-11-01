@@ -33,7 +33,7 @@
                 </tr> -->
                 <tr v-for="(std, count) in newAdmissionList" :key="count">
                     <td>{{ count + 1 }} </td>
-                    <td>{{ std.admisiondet.student_code}}</td>
+                    <td>{{ std.admisiondet.student_code ? std.admisiondet.student_code : ""}}</td>
                     <td>{{ std.admisiondet.FirstName }} {{ std.admisiondet.LastName }} {{std.admisiondet.Name}} </td>
                     <td>{{ std.admisiondet.CidNo }}</td>
                     <td>{{ sex_idList[std.admisiondet.CmnSexId] }} </td>
@@ -195,7 +195,7 @@ export default {
             .then(response =>{
                 let data = response.data;
                 this.feederStudentList = data;
-            });
+            });  
         },
 
         getorgProfile(org_id){
@@ -227,7 +227,6 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response =>{
             let data = response.data.data;
-            this.form.org_id=data['Agency_Code'];
             this.getorgProfile(data['Agency_Code']);
         })
         .catch(errors =>{

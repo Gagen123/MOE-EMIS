@@ -32,6 +32,7 @@ class std_admission extends Model{
         'Address',
         'Status',
         'DateOfApply',
+        'class_id',
         'Remarks',
         'created_by',
         'created_at',

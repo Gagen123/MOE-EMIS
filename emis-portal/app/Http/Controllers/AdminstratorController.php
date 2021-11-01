@@ -156,5 +156,8 @@ class AdminstratorController extends Controller
     //     return $itemList;
 
     // }
+    public function loadClassAge(){
+        return $this->apiService->getListData('emis/common_services/loadClassAge');
+    }
 
 }

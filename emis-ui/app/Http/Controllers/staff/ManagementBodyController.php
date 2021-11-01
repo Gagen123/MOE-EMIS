@@ -156,6 +156,7 @@ class ManagementBodyController extends Controller{
     }
 
     public function loadManagementBodyComposition($id=""){
+        //dd($id);
         $response_data= $this->apiService->listData('emis/staff/managementBody/loadManagementBodyComposition/'.$id);
         return $response_data;
     }

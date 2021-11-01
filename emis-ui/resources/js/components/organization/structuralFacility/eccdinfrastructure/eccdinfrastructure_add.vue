@@ -17,7 +17,7 @@
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in structureType" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                                 </select>
-                                <has-error :form="form" field="category"></has-error>
+                                <has-error :form="form" field="structuretype"></has-error>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -47,7 +47,7 @@
                                 v-model="form.yearOfConstruction" :class="{ 'is-invalid': form.errors.has('yearOfConstruction') }" @change="remove_err('yearOfConstruction')">
                                 <has-error :form="form" field="yearOfConstruction"></has-error>
                             </div>
-                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area:<span class="text-danger">*</span></label>
+                            <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Plinth Area:<span class="text-danger"></span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <input class="form-control editable_fields " id="plintchArea" type="text" v-model="form.plintchArea">
                             </div>
@@ -55,7 +55,8 @@
                         <div class="form-group row">
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">No of Floors:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor">
+                                <input class="form-control editable_fields " id="noOfFloor" type="number" v-model="form.noOfFloor" :class="{ 'is-invalid': form.errors.has('noOfFloor') }" @change="remove_err('noOfFloor')">
+                                <has-error :form="form" field="noOfFloor"></has-error>
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Total Capacity: </label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
@@ -70,9 +71,10 @@
                             </div>
                             <label class="col-lg-2 col-md-2 col-sm-2 col-form-label">Designed By:<span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-md-3 col-sm-3">
-                                <select name="design" id="design" class="form-control" v-model="form.design">
+                                <select name="design" id="design" class="form-control editable_fields" v-model="form.design" :class="{ 'is-invalid': form.errors.has('design') }" @change="remove_err('design')">
                                     <option value="">--- Please Select ---</option>
                                     <option v-for="(item, index) in designerList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
+                                    <has-error :form="form" field="design"></has-error>
                                 </select>
                             </div>
                         </div>

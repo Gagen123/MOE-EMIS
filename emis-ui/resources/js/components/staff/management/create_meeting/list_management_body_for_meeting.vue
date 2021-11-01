@@ -15,7 +15,7 @@
                     <tbody>
                         <tr v-for="(item, index) in staffcomposition" :key="index">
                             <td>{{ index+1}}</td>
-                            <td>{{ managementbodylist[item.body_type_id]}}</td>
+                            <td>{{ item.body_type_id}}</td>
                             <td>{{ item.from_date}}</td>
                             <td>{{ item.to_date}}</td>
                             <td>
@@ -41,8 +41,8 @@ export default {
         loadComposition(uri = 'staff/managementBody/loadcreatedManagementBodyComposition'){
             axios.get(uri)
             .then(response => {
-                let data = response.data.data;
-                this.staffcomposition = data;
+                let data = response;
+                this.staffcomposition = data.data;
             }).catch(function (error){console.log('Error: '+error);});
         },
         loadmgmnbodytype(){

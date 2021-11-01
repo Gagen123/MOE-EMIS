@@ -13,8 +13,8 @@
                 </div>
                 <div class="row form-group">
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" >
-                    <label class="mb-1">What is the type of road nearest to your school:<i class="text-danger">*</i></label>
-                    <select v-model="form.road_typeyes" class="form-control" name="road_typeyes" id="road_typeyes">
+                    <label class="mb-1">What is the type of road nearest to your school:<span class="text-danger">*</span></label>
+                    <select v-model="form.road_typeyes"  @change="removeerror('road_typeyes')" :class="{ 'is-invalid': form.errors.has('road_typeyes') }" class="form-control" name="road_typeyes" id="road_typeyes">
                         <option v-for="(item, index) in roadTypeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
                     <has-error :form="form" field="road_typeyes"></has-error>
@@ -27,9 +27,9 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-8">
-                        <label><input  type="radio" v-model="form.connectedtoroad" value="1" tabindex="" @click="showtextbox('Yes')"/> Yes</label>
-                        <label><input  type="radio" v-model="form.connectedtoroad" value="0" tabindex="" @click="showtextbox('No')"/> No</label>
-                        <has-error :form="form" field="connectedtoroad"></has-error>
+                        <label><input  type="radio" v-model="form.connectedtoroad" value="1"  @click="showtextbox('Yes')"/> Yes</label>
+                        <label><input  type="radio" v-model="form.connectedtoroad" value="0"  @click="showtextbox('No')"/> No</label>
+                        <!-- <has-error :form="form" field="connectedtoroad"></has-error> -->
                     </div>
                     <!-- <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12" style="display:none" id="roadtypeyes">
                         <label class="mb-1">Type of Road:<i class="text-danger">*</i></label>
@@ -69,7 +69,7 @@
                  <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                      <label><input  type="radio" v-model="form.connectedtointernet" value="1" tabindex="" @click="showtextboxI('connected')"/> Yes</label>
                      <label><input  type="radio" v-model="form.connectedtointernet" value="0" tabindex="" @click="showtextboxI('notconnected')"/> No</label>
-                     <has-error :form="form" field="connectedtointernet"></has-error>
+                     <!-- <has-error :form="form" field="connectedtointernet"></has-error> -->
                    </div>
                 </div>
                 
@@ -204,7 +204,7 @@
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                       <label><input  type="radio" v-model="form.electricity" value="1" tabindex=""  @click="showtextboxE('yes')" /> Yes</label>
                       <label><input  type="radio" v-model="form.electricity" value="0" tabindex="" @click="showtextboxE('no')"/> No</label>
-                      <has-error :form="form" field="electricity"></has-error>
+                      <!-- <has-error :form="form" field="electricity"></has-error> -->
                    </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="display:none" id="electricity">
                        <label>Source of Electricity<span class="text-danger">*</span></label>
@@ -249,11 +249,11 @@ export default {
             form: new form({
                 id: '', 
                 org_id:'',
-                connectedtoroad:'', 
+                connectedtoroad:'0', 
                 road_typeyes: '',
                 road_typeno: '',
                 hqdistance:'',
-                connectedtointernet:'',
+                connectedtointernet:'0',
                 connectiontype: '',
                 serviceprovider: '',
                 speedbandwidth: '',
@@ -263,7 +263,7 @@ export default {
                 sharedconnection:'',
                 connectionsharedtype:'',
                 internetAccessible:[],
-                electricity:'',
+                electricity:'0',
                 electricitysubstation:'',
                 electricitysource:'',
                
@@ -333,7 +333,8 @@ export default {
         },
 
         updateconnectivity(){
-                this.form.post('organization/saveConnectivityDetails')
+              this.form.post('/organization/saveConnectivityDetails',this.form)
+                // this.form.post('organization/saveConnectivityDetails')
                 .then((response) => {
                     Toast.fire({
                         icon: 'success',

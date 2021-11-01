@@ -177,7 +177,7 @@ export default {
                         this.award_form.post('staff/staffServices/saveStaffAward')
                             .then(() => {
                             Toast.fire({
-                                icon: 'success',
+                                icon: 'success', 
                                 title: 'Details added successfully'
                             })
                             this.$router.push({name:'list_staff_awards',query: {data:this.screen_id}});
