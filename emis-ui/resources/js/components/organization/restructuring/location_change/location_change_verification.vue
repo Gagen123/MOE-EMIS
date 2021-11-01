@@ -762,7 +762,6 @@ export default {
                         $('#attachment_name'+i).html('Notify for Tentative Date of Final Assessment');
                     }
                 }
-                alert(status_id+this.access_level);
                 if(status_id==2){ //initially submitted
                     $('#setverifyingagency').show();
                     $('#getverifyingagency').hide();

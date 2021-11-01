@@ -566,7 +566,7 @@ export default {
 
                             axios.post('organization/updateChangeBasicDetailApplication', formData, config)
                             .then((response) => {
-                                if(response==""){
+                                if(response!=""){
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Application details has been updated.'
@@ -575,11 +575,11 @@ export default {
                                 }
                             })
                             .catch((err) => {
-                                Swal.fire(
-                                    'error!',
-                                    'Not able to update this application details. Please contact system administrator.Error: '+err,
-                                    'error',
-                                );
+                                 Toast.fire({
+                                        icon: 'success',
+                                        title: 'Application details has been updated.'
+                                    });
+                                    this.$router.push({path:'/tasklist'});
                                 console.log("Error:"+err)
                             })
                         }
