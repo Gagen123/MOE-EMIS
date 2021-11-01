@@ -501,7 +501,7 @@
                             <router-link to="/school_details_update" class="nav-link">
                                 <p>
                                     <i class="fa fa-angle-double-right nav-icon"></i>
-                                    Annual Detail Update
+                                     Organization Data Update
                                 </p>
                             </router-link>
                         </li>

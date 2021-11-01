@@ -7,6 +7,8 @@ use App\Models\staff\StaffManagementMeetingMinutes;
 use App\Models\staff\ManagementBodyComposition;
 use App\Models\staff\StaffManagementMeeting;
 use App\Models\staff\ManagementBodyDetails;
+use App\Models\staff_masters\MgmntBodyType;
+use App\Models\staff_masters\MgmnDesignation;
 use App\Models\staff\DocumentDetails;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -186,7 +188,7 @@ class ManagementBodyController extends Controller{
     }
 
     public function saveResolutions(Request $request){
-        dd($request);
+       // dd($request);
         // $rules = [
         //     'minutes'        =>'required',
         // ];
@@ -224,7 +226,7 @@ class ManagementBodyController extends Controller{
         $_members = ManagementBodyComposition::select(
                         'stf_mgmn_body_composition.id',
                         'stf_mgmn_body_composition.address',
-                        'stf_mgmn_body_composition.designation',
+                        'master_mgmn_designation.name as designation',
                         'stf_mgmn_body_composition.email',
                         'stf_mgmn_body_composition.emptye',
                         'stf_mgmn_body_composition.from_date',
@@ -234,7 +236,8 @@ class ManagementBodyController extends Controller{
                         'stf_mgmn_body_composition.to_date',
                         'staff_management_meeting_members.id as meeting_member_id'
                     )
-                    ->leftJoin('staff_management_meeting_members', 'stf_mgmn_body_composition.id', '=', 'staff_management_meeting_members.member_id')
+                    ->leftJoin('staff_management_meeting_members','staff_management_meeting_members.member_id', '=',  'stf_mgmn_body_composition.id')
+                    ->leftjoin('master_mgmn_designation','stf_mgmn_body_composition.designation', '=','master_mgmn_designation.id')
                     ->where('management_id',$id)->get();
 
         $data = array_merge(['meeting' => $_meeting], ['members' => $_members]);
@@ -255,8 +258,17 @@ class ManagementBodyController extends Controller{
     }
 
     public function loadcreatedManagementBodyComposition($param=""){
-        return $this->successResponse(ManagementBodyDetails::where('org_id',explode('SSS',$param)[1])->where('status','created')->get());
-
+        //dd($param);
+        // return $this->successResponse(ManagementBodyDetails::where('org_id',explode('SSS',$param)[1])->where('status','created')->get());
+       
+            $equi = DB::table('stf_mgmn_body_details as a')
+                ->select('a.id as id', 'b.name as body_type_id', 'a.from_date as from_date','a.to_date','a.remarks')
+                ->join('master_mgmn_body_type as b', 'b.id', '=', 'a.body_type_id')
+                ->where('a.org_id',explode('SSS',$param)[1])
+                ->where('a.status','created')
+                ->get();
+            return $equi;
+        
     }
 
     public function loadcurrentbaord($id=""){

@@ -24,11 +24,11 @@ class ConnectivityController extends Controller
     public function saveConnectivityDetails(Request $request){
    //     dd('from UI');
         $rules = [
-            'connectedtoroad'          =>  'required',
-          //  'road_typeyes'             =>  'required',
+           // 'connectedtoroad'            =>  'required',
+            'road_typeyes'               =>  'required',
           // 'road_typeno'              =>  'required',
-            'hqdistance'                 =>  'required',
-            'connectedtointernet'        =>  'required',
+            'hqdistance'                    =>  'required',
+            'connectedtointernet'           =>  'required',
          //   'connectiontype'             =>  'required',
          //   'serviceprovider'            =>  'required',
          //   'speedbandwidth'             =>  'required',
@@ -39,13 +39,13 @@ class ConnectivityController extends Controller
          //   'connectionsharedtype'       =>  'required',
           //  'sharedspeed'        =>  'required',
          //   'internetAccessible'             =>  'required',
-            'electricity'        =>  'required',
+            'electricity'                   =>  'required',
             'electricitysubstation'         =>  'required',
 
         ];
 
         $customMessages = [
-            'connectedtoroad.required'         => 'This is required',
+            'road_typeyes.required'            => 'This is required',
             'hqdistance.required'              => 'field is required',
             'connectedtointernet.required'     => 'this is required',
             // 'sharedconnection'                 => 'This is required',

@@ -124,7 +124,7 @@ export default {
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes!',
+                    confirmButtonText: 'Yes!',  
                     cancelButtonText: 'No',
                     }).then((result) => {
                     if (result.isConfirmed) {
@@ -215,7 +215,7 @@ export default {
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
+ 
         this.loadStaffList();
         this.responsibilityList =  await this.loadstaffMasters('active','StaResponsiblity');
         this.screen_id=this.$route.query.data;

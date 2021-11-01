@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="form.date" :class="{ 'is-invalid': form.errors.has('date') }" id="date" @change="remove_error('date')" type="date">
+                    <input class="form-control  popupDatepicker"  :class="{ 'is-invalid': form.errors.has('date') }" id="date" @change="remove_error('date')" type="text">
                     <has-error :form="form" field="date"></has-error>
                 </div>
             </div>
@@ -98,6 +98,7 @@ export default {
                 this.form.remarks= '';
             }
             if(type=="save"){
+                 this.form.date=this.formatYYYYMMDD($('#date').val());
                 this.form.post('/organization/saveIncomeinfo',this.form)
                     .then(() => {
                     Toast.fire({

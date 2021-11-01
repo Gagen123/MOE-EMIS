@@ -4,8 +4,8 @@
             <div class="card-body">
                 <div class="form-group row"> 
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                        <label >Thram No:<span class="text-danger">*</span> </label>
-                        <input type="text" class="form-control" @change="removeerror('thramno')" :class="{ 'is-invalid': form.errors.has('thramno') }" id="thramno" v-model="form.thramno" placeholder="thramno">
+                        <label >Thram No:<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" @change="removeerror('thramno')" :class="{ 'is-invalid': form.errors.has('thramno') }" id="thramno" name= "thramno" v-model="form.thramno" placeholder="thramno">
                         <has-error :form="form" field="thramno"></has-error>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
