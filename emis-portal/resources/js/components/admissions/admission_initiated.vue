@@ -163,12 +163,12 @@
 
                                     </td>
                                 </tr>
-                                <tr>
+                                <!-- <tr>
                                     <td colspan='5'>
                                         <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
                                         @click="addMore()"><i class="fa fa-plus"></i> Save & Add</button>
                                     </td>
-                                </tr>
+                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -176,7 +176,9 @@
                 <hr>
                 <div class="row form-group fa-pull-right" id="finalbtn" style="display:none">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <button class="btn btn-flat btn-primary" @click="submitDetail()"> <i class="fa fa-save"></i> submit</button>
+                        <!-- <button class="btn btn-flat btn-primary" @click="submitDetail()"> <i class="fa fa-save"></i> submit</button> -->
+                        <button type="button" class="btn btn-flat btn-sm btn-primary" id="addMore"
+                                        @click="addMore()"><i class="fa fa-plus"></i> Save & Add</button>
                     </div>
                 </div>
             </div>
@@ -560,6 +562,11 @@ export default {
             var type;
             if(this.is_student){
                 type = this.std_class;
+                if(this.std_class=="Age 5"){
+                    type="PP";
+                }else{
+                     type="ECCD";
+                }
             } else{
                 type=$('input[name="registrationType"]:checked').val();
             }

@@ -8,7 +8,7 @@
                         <option v-for="(item, index) in studentList" :key="index" v-bind:value="item.id">{{ item.Name }} ({{item.student_code}})</option>
                     </select>
                     <has-error :form="student_form" field="student"></has-error>
-                </div> 
+                </div>
             </div>
             <div class="row">
                 <div class="col-sm-4">
@@ -16,11 +16,11 @@
                         <label class="mb-1">Last Class Attended:<i class="text-danger">*</i></label>
                         <input type="text" @change="remove_error('last_class_attended')" v-model="student_form.last_class_attended" :class="{ 'is-invalid': student_form.errors.has('last_class_attended') }" class="form-control" name="last_class_attended" id="last_class_attended" >
                         <has-error :form="student_form" field="last_class_attended"></has-error>
-                    </div> 
+                    </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
-                    <label>Date of Leaving:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="student_form.date" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <label>Date of Leaving:<span class="text-danger">*</span></label>
+                    <input class="form-control popupDatepicker" autocomplete="off" :class="{ 'is-invalid': student_form.errors.has('date') }" id="date" @change="remove_err('date')" type="text">
                     <has-error :form="student_form" field="date"></has-error>
                 </div>
             </div>
@@ -57,7 +57,7 @@ export default {
     },
     methods: {
         //need to get the organisation id and pass it as a parameter
-        
+
         loadStudentList(uri='students/loadStudentList/'+this.org_id){
             axios.get(uri)
             .then(response => {
@@ -69,12 +69,7 @@ export default {
                 console.log("Error......"+error)
             });
         },
-        remove_error(field_id){
-            if($('#'+field_id).val()!=""){
-                $('#'+field_id).removeClass('is-invalid');
-                $('#'+field_id+'_err').html('');
-            }
-        },
+
         formaction: function(type){
             if(type=="reset"){
                 this.student_form.student= '';
@@ -82,6 +77,7 @@ export default {
                 this.student_form.status= 1;
             }
             if(type=="save"){
+                this.student_form.date=this.formatYYYYMMDD($('#date').val());
                 this.student_form.post('/students/saveStudentTransfer',this.student_form)
                     .then(() => {
                     Toast.fire({
@@ -95,7 +91,7 @@ export default {
                 })
             }
 		},
-        async changefunction(id){
+        changefunction(id){
             if($('#'+id).val()!=""){
                 $('#'+id).removeClass('is-invalid select2');
                 $('#'+id+'_err').html('');
@@ -113,15 +109,14 @@ export default {
             theme: 'bootstrap4'
         });
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
-
         this.loadStudentList();
     },
-    
+
 }
 </script>

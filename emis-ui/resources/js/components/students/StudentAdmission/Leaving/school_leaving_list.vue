@@ -16,8 +16,8 @@
                     <td>{{ index + 1 }}</td>
                     <td>{{ item.Name}}</td>
                     <td>{{ item.student_code}}</td>
-                    <td>{{ item.class_det.class}}</td>
-                    <td>{{ item.class_det.section}}</td>
+                    <td>{{ item.class_det!=null?item.class_det.class:''}}</td>
+                    <td>{{ item.class_det!=null ? item.class_det.section:''}}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="#" class="btn btn-info btn-sm btn-flat text-white" @click="showedit(item)"><i class="fas fa-print"></i > Print TC</a>
