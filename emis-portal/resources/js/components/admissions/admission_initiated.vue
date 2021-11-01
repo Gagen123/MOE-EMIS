@@ -89,7 +89,7 @@
                             <label class="required" >Admission For:<span class="text-danger">*</span></label>
                             <input type="radio" name="registrationType" @change="getParentSchoolDzo()" @click="showsection('ParentSchool')" value="ParentSchool" id="existing" class="ml-4"> Transfer to Parent School
                             <input type="radio" name="registrationType" @change="getdzongkhagList('Student')" @click="showsection('NonParentSchool')" value="NonParentSchool" id="existing" class="ml-4"> Transfer to Non-Parent School <br>
-                             <small><i>(*Note: If present school is registered as a feeder school, then Parent School guarantees admission)</i></small>
+                            <small><i>(*Note: If present school is registered as a feeder school, then Parent School guarantees admission)</i></small>
                         </div>
                     </div>
                 </template>
@@ -211,7 +211,7 @@ export default {
             eccdmonth:'',
             response_data:[],
             //prefedined an array of the classes
-            class_array:['PP', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'],
+            class_array:['Age 1','Age 2','Age 3','Age 4','Age 5','PP', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'],
             student_form: new form({
                 id:'',
                 seats:0,
@@ -565,6 +565,11 @@ export default {
             }
 
             this.schoolList=[];
+
+            //added if condition by tshewang to get school list, once student type is chaged to student. school list is not appearing as type is empty
+            if(type==""){
+                type="PP";
+            }
             let uri = '/organizations/loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
             try{
                 axios.get(uri).then(response => {

@@ -1732,25 +1732,27 @@ class AcademicController extends Controller
     }
     public function getScoresForSpms($year, $org_class_id, $previous_org_class_id)
     {
-        $pass_percent = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
+        try {
+
+            $pass_percent = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
             FROM aca_result_student t1 
                 JOIN aca_result t2 ON t1.aca_result_id = t2.id 
             WHERE t2.academic_year = ? AND t2.org_class_id = ? AND t2.term_number = 0
             GROUP BY t2.org_id,t2.school_name", [$year, $org_class_id]);
-        $pass_percent_previous_class = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
+            $pass_percent_previous_class = DB::select("SELECT t2.org_id,t2.school_name, ROUND(100*(COUNT(IF(t1.promoted,t1.id,null))/COUNT(t1.id)),2) AS pass_percent
             FROM aca_result_student t1 
                 JOIN aca_result t2 ON t1.aca_result_id = t2.id 
             WHERE t2.academic_year = ? AND t2.org_class_id = ? AND t2.term_number = 0
             GROUP BY t2.org_id,t2.school_name", [$year, $previous_org_class_id]);
 
-        $non_stem_national_mean = DB::select("SELECT 
+            $non_stem_national_mean = DB::select("SELECT 
             ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/(COUNT(DISTINCT t2.id) * COUNT(DISTINCT t1.subject)),2) AS national_mean
             FROM aca_result_score_csa t1 
                 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
                 JOIN aca_result t3 ON t2.aca_result_id = t3.id 
             WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 0", [$year, $org_class_id]);
 
-        $non_stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
+            $non_stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
             ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/COUNT(DISTINCT t2.id),2) AS subject_wise_mean
             FROM aca_result_score_csa t1 
                 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
@@ -1758,18 +1760,18 @@ class AcademicController extends Controller
             WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 0
             GROUP BY t3.org_id,t1.subject";
 
-        $non_stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00)/COUNT(DISTINCT t2.subject)),2) AS non_stem_mean
+            $non_stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00))/COUNT(DISTINCT t1.subject),2) AS non_stem_mean
         FROM ($non_stem_mean_inner_query) t1
         GROUP BY t1.org_id", [$year, $org_class_id]);
 
-        $stem_national_mean = DB::select("SELECT 
+            $stem_national_mean = DB::select("SELECT 
             ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/(COUNT(DISTINCT t2.id) * COUNT(DISTINCT t1.subject)),2) AS national_mean
             FROM aca_result_score_csa t1 
                 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
                 JOIN aca_result t3 ON t2.aca_result_id = t3.id 
             WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 1", [$year, $org_class_id]);
 
-        $stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
+            $stem_mean_inner_query = "SELECT t3.org_id,t1.subject,
             ROUND(SUM(IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_ca_score,0.00)+IFNULL(t1.t2_exam_score,0.00))/COUNT(DISTINCT t2.id),2) AS subject_wise_mean
             FROM aca_result_score_csa t1 
                 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
@@ -1777,24 +1779,37 @@ class AcademicController extends Controller
             WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0 AND t1.is_stem = 1
             GROUP BY t3.org_id,t1.subject";
 
-        $stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00)/COUNT(DISTINCT t2.subject)),2) AS stem_mean
-        FROM ($non_stem_mean_inner_query) t1
+            $stem_mean = DB::select("SELECT t1.org_id,ROUND(SUM(IFNULL(t1.subject_wise_mean,0.00))/COUNT(DISTINCT t1.subject),2) AS stem_mean
+        FROM ($stem_mean_inner_query) t1
         GROUP BY t1.org_id", [$year, $org_class_id]);
 
-        //(count(*) * sum(x * y) - sum(x) * sum(y)) / 
-        //(sqrt(count(*) * sum(x * x) - sum(x) * sum(x)) * sqrt(count(*) * sum(y * y) - sum(y) * sum(y))) 
-        //AS correlation
-        // x = (IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))
-        // y = (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))
-        $correlation = DB::select("SELECT t3.org_id,
+            //(count(*) * sum(x * y) - sum(x) * sum(y)) / 
+            //(sqrt(count(*) * sum(x * x) - sum(x) * sum(x)) * sqrt(count(*) * sum(y * y) - sum(y) * sum(y))) 
+            //AS correlation
+            // x = (IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))
+            // y = (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))
+            $correlation = DB::select("SELECT t3.org_id,
                 (count(DISTINCT t2.id) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)) * (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) - sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00)))) / 
                 (sqrt(count(DISTINCT t2.id) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)) * (IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) - sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00))) * sum((IFNULL(t1.t1_ca_score,0.00)+IFNULL(t1.t2_ca_score,0.00)))) * sqrt(count(*) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00)) * (IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) - sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))) * sum((IFNULL(t1.t1_exam_score,0.00)+IFNULL(t1.t2_exam_score,0.00))))) 
                 AS correlation
             FROM aca_result_score_csa t1 JOIN aca_result_student t2 ON t1.aca_result_student_id=t2.id 
                 JOIN aca_result t3 ON t2.aca_result_id = t3.id 
             WHERE t3.academic_year = ? AND t3.org_class_id = ? AND t3.term_number = 0
-            GROUP BY t3.org_id");
-
-        return $this->successResponse(['']);
+            GROUP BY t3.org_id", [$year, $org_class_id]);
+            return $this->successResponse(
+                [
+                    'pass_percent' => $pass_percent,
+                    'pass_percent_previous_class' => $pass_percent_previous_class,
+                    'non_stem_national_mean' => $non_stem_national_mean,
+                    'non_stem_mean' => $non_stem_mean,
+                    'stem_national_mean' => $stem_national_mean,
+                    'non_stem_mean' => $non_stem_mean,
+                    'stem_mean' => $stem_mean,
+                    'correlation' => $correlation,
+                ]
+            );
+        } catch (Exception $e) {
+            dd($e);
+        }
     }
 }

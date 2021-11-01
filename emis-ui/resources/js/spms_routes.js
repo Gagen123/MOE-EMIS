@@ -60,26 +60,26 @@ const routes = [
       [
             { path: '/',name:'spms', component: require('./components/spms/spms_list.vue').default},
 
-            { path: '/school-performance', component: require('./components/spms/school_performance/school_performance_index.vue').default,
+            { path: '/non-academic-school-performance', component: require('./components/spms/school_performance/school_performance_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
-                    { path: '/school-performance-dashboard',name:'school_performance_dashboard', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
-                    { path: '/list-school-performance', name: 'list_school_performance', component: require('./components/spms/school_performance/list_school_performance.vue').default },
-                    { path: '/view-school-performance', name: 'view_school_performance', component: require('./components/spms/school_performance/view_school_performance.vue').default },
-                    { path: '/create-school-performance', name: 'create_school_performance', component: require('./components/spms/school_performance/create_school_performance.vue').default },
-                    { path: '/edit-school-performance', name: 'edit_school_performance', component: require('./components/spms/school_performance/edit_school_performance.vue').default },
+                    { path: '', name:'non-academic-school-performance', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
+                    { path: '/non-academic-school-performance-dashboard',name:'school_performance_dashboard', component: require('./components/spms/school_performance/school_performance_dashboard.vue').default },
+                    { path: '/list-non-academic-school-performance', name: 'list_school_performance', component: require('./components/spms/school_performance/list_school_performance.vue').default },
+                    { path: '/view-non-academic-school-performance', name: 'view_school_performance', component: require('./components/spms/school_performance/view_school_performance.vue').default },
+                    { path: '/create-non-academic-school-performance', name: 'create_school_performance', component: require('./components/spms/school_performance/create_school_performance.vue').default },
+                    { path: '/edit-non-academic-school-performance', name: 'edit_school_performance', component: require('./components/spms/school_performance/edit_school_performance.vue').default },
                 ]
                 
             },
-            { path: '/school-performance-academic', component: require('./components/spms/school_performance_academic/school_performance_academic_index.vue').default,
+            { path: '/academic-school-performance', component: require('./components/spms/school_performance_academic/school_performance_academic_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/school_performance_academic/school_performance_academic.vue').default },
+                    { path: '', name:'academic-school-performance',component: require('./components/spms/school_performance_academic/school_performance_academic.vue').default },
                     { path: '/school-performance-academic',name:'school_performance_academic', component: require('./components/spms/school_performance_academic/school_performance_academic.vue').default },
                 ]
             },
             { path: '/annual-school-plan', component: require('./components/spms/school_plan/school_plan_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/school_plan/container.vue').default },
+                    { path: '', name:'annual-school-plan',component: require('./components/spms/school_plan/container.vue').default },
                     { path: '/lists-annual-school-plan',name:'lists_annual_school_plan', component: require('./components/spms/school_plan/container.vue').default },
                     { path: '/list-annual-school-plan',name:'list_annual_school_plan', component: require('./components/spms/school_plan/list_school_plan.vue').default },
                     { path: '/view-annual-school-plan', name: 'view_annual_school_plan', component: require('./components/spms/school_plan/view_school_plan.vue').default },
@@ -90,7 +90,7 @@ const routes = [
             },
             { path: '/agency-input-form', component: require('./components/spms/agency_input_form/agency_input_form_index.vue').default,
                 children: [
-                    { path: '', component: require('./components/spms/agency_input_form/list_agency_input_form.vue').default },
+                    { path: '', name:'agency-input-form',component: require('./components/spms/agency_input_form/list_agency_input_form.vue').default },
                     { path: '/list-agency-input-form',name:'list_agency_input_form', component: require('./components/spms/agency_input_form/list_agency_input_form.vue').default },
                     { path: '/create-agency-input-form', name: 'create_agency_input_form', component: require('./components/spms/agency_input_form/create_agency_input_form.vue').default },
                     { path: '/edit-agency-input-form', name: 'edit_agency_input_form', component: require('./components/spms/agency_input_form/edit_agency_input_form.vue').default },

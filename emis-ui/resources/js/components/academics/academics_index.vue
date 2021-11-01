@@ -5,15 +5,15 @@
         </ol>
         <div class="ml-2 container-fluid">
             <ul class="nav nav-pills mb-2" role="tablist" id="production">
-                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
-                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
+                <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index" @click="activatelink(item.route)">
+                    <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()" :id="item.route">
                        <span :class="item.screen_icon"></span>
                        {{ item.screen_name}}
                     </router-link>
                 </li>
             </ul>
             <ul class="nav nav-pills mb-2 developemntEnv" id="mainmenu" role="tablist">
-                <li class="nav-item active pr-1" @click="activatelink('class_teacher')">
+                <li class="nav-item active pr-1">
                     <router-link id="class_teacher" to="/class-teacher" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        Class Teacher
                     </router-link>
@@ -79,6 +79,10 @@ export default {
         }
     },
     methods: {
+        activatelink(btnid){
+            $('#mainmenu >li >router-link >a').removeClass('btn-primary text-white');
+            $('#'+btnid).addClass('btn-primary text-white');
+        },
         populate_pate(data,action){
             this.$router.push({name:data,query: {data:action}});
         },
