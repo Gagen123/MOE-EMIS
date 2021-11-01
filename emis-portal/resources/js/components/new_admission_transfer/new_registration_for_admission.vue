@@ -122,6 +122,14 @@
                                     <input type="file" name="attachments" class="form-control" v-on:change="onChangeFileUpload" id="attachment">
                                     <has-error :form="student_form" field="attachments"></has-error>
                                 </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <label>Class:  <span class="text-danger">*</span></label>
+                                    <select v-model="school_form.s_class" :class="{ 'is-invalid select2 select2-hidden-accessible': school_form.errors.has('s_class') }" class="form-control select2" name="s_class" id="s_class">
+                                        <option value=""> --Select--</option>
+                                        <option v-for="(item, index) in s_classList" :key="index" v-bind:value="item.class">{{ item.class }}</option>
+                                    </select>
+                                    <has-error :form="school_form" field="s_class"></has-error>
+                                </div>
                             </div>
                             <!-- <hr>
                              <div class="form-group">
@@ -747,7 +755,7 @@ export default {
                     let text = 'CID has already been registered in the system';
                     this.showErrorMsg(text);
                 }
-                
+
             }else if(this.student_form.snationality=="Foreign"){
                 cid=$('#'+cid).val();
                 this.getDOIDetails(cid);
@@ -949,7 +957,7 @@ export default {
                 let data = response.data.data;
                 if(data != null){
                     returntype=false;
-                } 
+                }
             });
             return returntype;
         },
@@ -987,12 +995,8 @@ export default {
             }
           },
          getclassList(id){
-            let orgId=$('#school').val();
-                if(id!=""){
-                orgId=id;
-            }
             this.classList = [];
-              axios.get('/masters/loadClassStreamSection/school/' +orgId)
+              axios.get('/masters/loadClassAge')
               .then(Response =>{
                 let data = Response.data.data;
                 this.s_classList = data;
@@ -1166,7 +1170,7 @@ export default {
                 formData.append('village_id', this.student_form.village_id);
                 formData.append('s_dzongkhag', this.school_form.s_dzongkhag);
                 // formData.append('s_school', this.school_form.s_school);
-                // formData.append('s_class', this.school_form.s_class);
+                formData.append('s_class', $('#s_class').val());
                 formData.append('type','new');
                 formData.append('attachments', this.student_form.attachments);
                 formData.append('Status', 'pending');
@@ -1527,7 +1531,7 @@ export default {
             axios.get('/admissions/getStudentDetailsFromPortal/'+type)
                 .then(response => {
                 let data = response.data;
-                if(data != ""){
+                if((typeof data === 'object') ||(data=="  " && data.trim() !=null && data.trim() != "")){
                     $('#message').html('You are already registered in the system. <br> Thank you!');
                     $('#screenPermission').show();
                     $('#mainform').hide();

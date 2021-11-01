@@ -20,6 +20,7 @@ class Subject extends Model
         'aca_sub_category_id',
         'display_order',
         'assessed_by_class_teacher',
+        'is_stem',
         'status',
         'created_by',
         'created_at',

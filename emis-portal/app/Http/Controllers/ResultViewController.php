@@ -41,7 +41,7 @@ class ResultViewController extends Controller
                 if((!$class_subject['is_elective']) || ($class_subject['is_elective'] && in_array($class_subject['aca_sub_id'], array_column($optional_subject_org_wise,'aca_sub_id')))){
                     array_push($selected_subjects,$class_subject);
                 }
-               
+
             }
         return $selected_subjects;
     }

@@ -20,7 +20,8 @@ class AcaResult extends Migration
             $table->smallInteger('academic_year')->index();
             $table->unsignedTinyInteger('transcript_format')->index()->default(1)->comment('0 - NA ,1 - key stage I ( CFA -subjects as rows), 2 - key stage II-V (CSA- subjects as columns)');
             $table->unsignedTinyInteger('term_number');
-            $table->string('term_name', 50);
+            $table->string('term_name', 100);
+            $table->string('term_dzo_name', 100);
             $table->char('org_id', 36)->index();
             $table->string('school_name', 50);
             $table->unsignedSmallInteger('gewog_id')->index();
@@ -31,6 +32,7 @@ class AcaResult extends Migration
             $table->string('class', 255);
             $table->char('org_stream_id', 36)->nullable()->index();
             $table->string('stream', 255)->nullable();
+            $table->unsignedSmallInteger('no_of_students');
             $table->char('org_section_id', 36)->nullable()->index();
             $table->string('section', 255)->nullable();
             $table->char('stf_class_teacher_id', 36)->index();

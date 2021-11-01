@@ -33,6 +33,7 @@ class StaffMasterController extends Controller{
 
     public function loadStaffMasters($type="",$model=""){
         $response_data= $this->apiService->listData('emis/staff/staffMasterController/loadStaffMasters/'.$type.'/'.$model);
+
         return $response_data;
     }
     // public function loadStaffTransferMasters($param = "")

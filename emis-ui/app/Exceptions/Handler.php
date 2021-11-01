@@ -92,8 +92,8 @@ class Handler extends ExceptionHandler
         }
 
         if (env('APP_DEBUG', true)) {
-            return response($exception->getResponse()->getBody()->getContents(), Response::HTTP_UNPROCESSABLE_ENTITY);
-            // return parent::render($request, $exception);
+            // return response( Response::HTTP_UNPROCESSABLE_ENTITY);
+            return parent::render($request, $exception);
         }
         return response('Unexpected error. Try later', Response::HTTP_INTERNAL_SERVER_ERROR);
     }

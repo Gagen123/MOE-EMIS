@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Controllers\student;
-use GuzzleHttp\Client;
-use App\Helper\EmisService;
-use App\Traits\ServiceHelper;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Helper\EmisService;
+use App\Traits\ServiceHelper;
 use App\Traits\AuthUser;
-
-class StudentMasterController extends Controller{
+class StudentMasterCont extends Controller
+{
     use ServiceHelper;
     use AuthUser;
     public $apiService;
@@ -17,6 +17,7 @@ class StudentMasterController extends Controller{
     }
 
     public function saveStudentMasters(Request $request){
+        //dd('m here');
         $data = $request->all();
         $response_data= $this->apiService->createData('emis/masters/students/saveStudentMasters', $data);
         return $response_data;
@@ -24,10 +25,10 @@ class StudentMasterController extends Controller{
     }
     public function saveStreamSubject(Request $request){
         $rules = [
-            
+
         ];
         $customMessages = [
-            
+
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -176,12 +177,10 @@ class StudentMasterController extends Controller{
         $awards = $this->apiService->listData('emis/masters/students/getActionTaken/'.$id);
         return $awards;
     }
-    
+
     public function loadActiveFoodSourceMaster(){
         // dd('m here');
          $student_masters = $this->apiService->listData('emis/masters/students/loadActiveFoodSourceMaster');
          return $student_masters;
     }
-    
-
 }

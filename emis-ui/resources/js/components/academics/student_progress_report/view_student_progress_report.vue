@@ -58,11 +58,7 @@ export default {
             })
         },
         showedit(data){
-            if(this.transcript_format == 1){
-                this.$router.push({name:'student_progress_report_cfa',params: {data:data}});
-            }else if(this.transcript_format == 2){
-                this.$router.push({name:'student_progress_report_csa',params: {data:data}});
-            }
+            this.$router.push({name:'student_progress_report',params: {data:data,transcript_format:this.transcript_format}});
         },
     },
     mounted(){ 

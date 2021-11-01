@@ -21,7 +21,7 @@ export default {
         }
     },
     methods:{
-        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Academic'){
+        loadguidelieList(uri = 'masters/all_active_dropdowns/guidelines/Staff'){
             axios.get(uri)
             .then(response => {
                 let data = response;
@@ -34,6 +34,7 @@ export default {
         showedit(data){
             this.$router.push({name:'student_type_edit',params: {data:data}});
         },
+
     },
     mounted(){
         this.loadguidelieList();

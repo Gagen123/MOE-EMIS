@@ -45,6 +45,12 @@
                 </div>  
                   <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label class="required">Is Stem:</label>
+                        <br> 
+                        <label><input v-model="form.is_stem"  type="radio" value="1" /> Yes</label>
+                        <label><input v-model="form.is_stem"  type="radio" value="0" /> No</label>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -72,6 +78,7 @@ export default {
                 display_order:'',
                 status: 1,
                 assessed_by_class_teacher:0,
+                is_stem:0,
                 record_type:'subject',
                 action_type:'add',
             })

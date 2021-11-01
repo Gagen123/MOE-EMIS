@@ -134,6 +134,18 @@ stf_relationship table created - talk to Tshewang (nominations table might suffi
     //Fatal error: Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes) in vendor\illuminate\database\Eloquent\Model.php
 
 
+<<<<<<< HEAD
+2021-10-28:
+    issue type: token issue
+    //if one encounters issue related to invalid token particulary when installing composer
+    solution 
+    generate new token key from your respective github account 
+    copy the newly generated key to your auth.json file, which you will probably find in the following folder C:\Users\yourPCuserfilename\AppData\Roaming\Composer( for windows only) and paste it. this should solve your issue.
+=======
+    
+
+
+>>>>>>> 747a79f6a78ca92c23f9aacdb3b98342d687d8e2
 
 
 

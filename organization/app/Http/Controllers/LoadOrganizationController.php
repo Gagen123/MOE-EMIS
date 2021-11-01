@@ -24,6 +24,7 @@ use App\Models\generalInformation\Projection;
 use App\Models\generalInformation\OrganizationCompoundDetail;
 use App\Models\generalInformation\ConnectivityModel;
 use App\Models\Masters\Location;
+use App\Models\Masters\Stream;
 use Exception;
 
 class LoadOrganizationController extends Controller
@@ -371,6 +372,7 @@ class LoadOrganizationController extends Controller
 
     public function loadOrgDetails($type = "", $id = "")
     {
+
         $response_data = "";
         if ($type == "Orgbyid" || $type == "user_logedin_dzo_id") {
             $response_data = OrganizationDetails::where('id', $id)->first();
@@ -464,11 +466,47 @@ class LoadOrganizationController extends Controller
         return $this->successResponse($response_data);
     }
 
+    public function loadOrgStatus($id = ""){
+        $status=1;
+        $response_data = OrganizationDetails::where('id', $id)->first();
+        if ($response_data!=null && $response_data!="") {
+            if($response_data->status==1 || $response_data->status=='Active'){
+                $status=1;
+            }else{
+                $status=0;
+            }
+        }else{
+            $response_data = HeadQuaterDetails::where('id', $id)->first();
+            if($response_data->status==1 || $response_data->status=='Active'){
+                $status=1;
+            }else{
+                $status=0;
+            }
+        }
+        if ($response_data!=null && $response_data!="" && $status==1) {
+            $status=1;
+        }else{
+            $status==2;
+        }
+        return $this->successResponse($status);
+    }
+
     public function loadHeaquarterList($type = "", $id = "")
     {
         $response_data = "";
         if ($type == "all_ministry_departments") {
-            $response_data = DepartmentModel::where('type', $id)->get();
+            $department = DepartmentModel::where('type', $id)->get();
+            if($department!=null && $department!="" && sizeof($department)>0){
+                $response_data=[];
+                foreach($department as $res){
+                    $data = HeadQuaterDetails::where('departmentId', $res->id)->get(['id','agencyName as name']);
+                    if($data!=null && $data!="" && sizeof($data)>0){
+                        foreach($data as $d){
+                            array_push($response_data,$d);
+                        }
+                    }
+                }
+            }
         }
         if ($type == "user_dzongkhag") {
             $response_data = DepartmentModel::where('dzo_id', $id)->get();
@@ -476,6 +514,15 @@ class LoadOrganizationController extends Controller
 
         if ($type == "dzongkhag_department") {
             $response_data = DepartmentModel::where('dzo_id', $id)->where('type', 'dzongkhag')->get();
+        }
+
+        if ($type == "dzongkhag_offices") {
+            $response_data = DepartmentModel::where('dzo_id', $id)->where('type', 'dzongkhag')->get();
+            if($response_data!=null && $response_data!="" && sizeof($response_data)>0){
+                foreach($response_data as $res){
+                    $response_data = HeadQuaterDetails::where('departmentId', $res->id)->get(['id','agencyName as name']);
+                }
+            }
         }
 
         if ($type == "details_by_id") {
@@ -511,6 +558,14 @@ class LoadOrganizationController extends Controller
             WHERE t1.organizationId  = ?', [$id]);
             return $section;
         }
+    }
+
+    public function loadClassAge(){
+        $response_data = DB::table('classes')
+            ->select('classes.*')
+            ->orderBy('classes.displayOrder', 'asc')
+            ->get();
+        return $this->successResponse($response_data);
     }
     //added by Tshewang to get organizaiton ids for projection and indicator
     public function loadClassStreamSectionIds($organizationType = "", $category = "", $dzoId = "")
@@ -695,6 +750,9 @@ class LoadOrganizationController extends Controller
 
     public function getOrgClassStreamByOrg($org_id, $class_name)
     {
+        if(strpos($class_name,'20')){
+            $class_name=str_replace('%20',' ',$class_name);
+        }
         $response_data = DB::table('organization_class_streams')
             ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
             ->select('organization_class_streams.id')
@@ -711,6 +769,29 @@ class LoadOrganizationController extends Controller
             ->where('id', $id)
             ->first();
         return $this->successResponse($response_data);
+    }
+
+    public function getOrgClassStreamSectionbySecId($id){
+        $response_det=SectionDetails::where('id',$id)->first();
+        if($response_det!=null && $response_det!=""){
+            $classStream=OrganizationClassStream::where('id',$response_det->classSectionId)->first();
+            if($classStream!=null && $classStream!=""){
+                if($classStream->classId!=null && $classStream->classId!=""){
+                    $classdet=Classes::where('id',$classStream->classId)->first();
+                    if($classdet!=null && $classdet!=""){
+                        $response_det->class=$classdet->class;
+                    }
+                }
+                if($classStream->streamId!=null && $classStream->streamId!=""){
+                    $secdet=Stream::where('id',$classStream->streamId)->first();
+                    if($secdet!=null && $secdet!=""){
+                        $response_det->stream=$secdet->name;
+                    }
+                }
+            }
+        }
+
+        return $this->successResponse($response_det);
     }
 
     public function loadStreamList($id)

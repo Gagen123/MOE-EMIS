@@ -54,6 +54,11 @@
                 </div> 
                 <div class="row form-group">
                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                        <label>Weighting.:<span class="text-danger">*</span></label>
+                        <input class="form-control form-control-sm text-right" v-model="form.weighting" :class="{ 'is-invalid': form.errors.has('weighting') }" id="weighting" @change="remove_err('weighting')" type="number">
+                        <has-error :form="form" field="weighting"></has-error>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                         <label class="required">Status:</label>
                         <br>
                         <label><input v-model="form.status"  type="radio" value="1" /> Active</label>
@@ -80,6 +85,7 @@ export default {
                 name: '',
                 mov:'',
                 sequence_no:'',
+                weighting:'',
                 spm_parameter_id:'',
                 status:1,
                 record_type:'indicator',
@@ -163,6 +169,7 @@ export default {
         this.form.spm_parameter_id = this.$route.params.data.spm_parameter_id
         this.form.sequence_no = this.$route.params.data.sequence_no
         this.form.name = this.$route.params.data.name
+        this.form.weighting = this.$route.params.data.weighting
         this.form.status = this.$route.params.data.status
     },
 }
