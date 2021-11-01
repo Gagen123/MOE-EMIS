@@ -121,7 +121,7 @@
                                         {{item.organization.name}}
                                     </td>
                                     <td>
-                                        {{item.class.class}}
+                                        {{item.class_id.includes('Age')?item.class_id:item.class.class}}
                                     </td>
                                     <td>{{item.school_decision}} </td>
                                     <td>{{item.student_decision}} </td>
@@ -147,7 +147,7 @@
                                         <has-error :form="student_form" field="dzongkhag"></has-error>
                                     </td>
                                     <td>
-                                        <select v-model="student_form.school" :class="{ 'is-invalid': student_form.errors.has('school') }" @change="getclassList('school'),removeerror('school')" class="form-control" name="school" id="school">
+                                        <select v-model="student_form.school" :class="{ 'is-invalid': student_form.errors.has('school') }" @change="removeerror('school')" class="form-control" name="school" id="school">
                                             <option value="">--- Please Select---</option>
                                             <option v-for="(item, index) in schoolList" :key="index" v-bind:value="item.id">{{item.name}}</option>
                                         </select>
@@ -160,7 +160,7 @@
                                         <!-- <span>{{student_form.seats}}</span> -->
                                     </td>
                                     <td>
-                                        
+
                                     </td>
                                 </tr>
                                 <tr>
@@ -179,7 +179,7 @@
                         <button class="btn btn-flat btn-primary" @click="submitDetail()"> <i class="fa fa-save"></i> submit</button>
                     </div>
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -326,14 +326,14 @@ export default {
                 for(let i=0;i<data.length;i++){
                     this.dzongkhagArray[data[i].id] = data[i].name;
                 }
-                $('#dzongkhag').prop('disabled',false);  
+                $('#dzongkhag').prop('disabled',false);
             }).catch(error => console.log(error));
         },
 
         getParentSchoolDzo(){
             this.student_form.dzongkhag = this.parent_school_dzongkhag;
-            $('#dzongkhag').prop('disabled',true);                
-            this.getParentSchoolList(this.org_id); 
+            $('#dzongkhag').prop('disabled',true);
+            this.getParentSchoolList(this.org_id);
         },
 
         getstudentPersonalDetails(type){
@@ -343,7 +343,7 @@ export default {
                 if(data != ""){
                     this.std_admission_details=data;
                     this.org_id = this.std_admission_details.OrgOrganizationId;
-                    
+
                     //Function to load the school list as per feeders
                     if(type == 'Student'){
                         let uri2 ='organizations/loadOrganizationDetailsbyOrgId/'+this.org_id;
@@ -357,7 +357,7 @@ export default {
                             this.getStudentClass(data.id);
                             this.getParentSchoolList(this.org_id);
                         }).catch(error => console.log(error));
-                        
+
                         this.student_form.student_id=data.id;
                         this.loadadmissions();
                         let AdmissionType='ParentSchool';
@@ -365,6 +365,7 @@ export default {
                         $("input[name=registrationType][value=" + AdmissionType + "]").prop('checked', true);
                     } else {
                         this.student_form.student_id=data.id;
+                        this.std_class=data.class_id;
                         this.loadadmissions();
                         this.student_form.admission_type=data.AdmissionType;
                         $("input[name=registrationType][value=" + data.AdmissionType + "]").prop('checked', true);
@@ -562,7 +563,7 @@ export default {
             } else{
                 type=$('input[name="registrationType"]:checked').val();
             }
-            
+
             this.schoolList=[];
             let uri = '/organizations/loadSchoolList/'+ $('#'+dzo_id).val()+'/'+type;
             try{
@@ -638,6 +639,28 @@ export default {
                     }
                 }
                 else{
+                    axios.get('masters/loadGlobalMasters/admission')
+                    .then(response => {
+                        let data = response.data.data;
+                        let from_date = new Date(data.from_date);
+                        let to_date = new Date(data.to_date);
+                        let present_date = new Date();
+                        if(to_date >= present_date && from_date <= present_date){
+                            $('#selectschool').show();
+                            $('#validationmessages').hide();
+                        }else{
+                            let messages="The Admission Dates are closed. <br> Thank You!";
+                            $('#dzo_Section').hide();
+                            $('#seatAvailable').hide();
+                            $('#selectschool').hide();
+                            $('#validation_message').html(messages);
+                            $('#validationmessages').show();
+                        }
+                    })
+                    .catch(errors => {
+                        console.log(errors)
+                    });
+
                     const _MS_PER_DAY = 1000 * 60 * 60 * 24;
                     let dob=this.std_admission_details.DateOfBirth;
                     let date1 = new Date(dob);
@@ -664,6 +687,8 @@ export default {
         }
     },
     mounted() {
+
+
         axios.get('getSessionDetail')
         .then(response => {
             let data = response.data.data;

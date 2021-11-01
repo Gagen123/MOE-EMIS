@@ -493,6 +493,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         $router->get('/loadOrgDetails/{type}/{id}', ['uses' => 'LoadOrganizationController@loadOrgDetails']);
         $router->get('/loadOrgStatus/{id}', ['uses' => 'LoadOrganizationController@loadOrgStatus']);
         $router->get('/loadClassStreamSection/{type}/{id}', ['uses' => 'LoadOrganizationController@loadClassStreamSection']);
+        $router->get('/loadClassAge', ['uses' => 'LoadOrganizationController@loadClassAge']);
+
         $router->get('/loadClassStreamSectionIds/{organizationType}/{category}/{dzoId}', ['uses' => 'LoadOrganizationController@loadClassStreamSectionIds']);
 
         $router->get('/getClassStreamSection/{params}/{org_id}', ['uses' => 'LoadOrganizationController@getClassStreamSection']);

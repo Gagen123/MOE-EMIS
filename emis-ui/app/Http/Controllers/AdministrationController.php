@@ -242,7 +242,7 @@ class AdministrationController extends Controller
         $response_data = $this->apiService->listData('emis/staff/staffMasterController/loadTransferConfigDetails/' . $id);
         return $response_data;
     }
-    //commented by tshewang to fix master data 
+    //commented by tshewang to fix master data
     //Gagen uncommented since other master like transfer type are not working and for time being i have uncommented it
     public function loadStaffTransferMasters($param = "")
     {
@@ -1300,7 +1300,7 @@ class AdministrationController extends Controller
         }
         return  response()->json($person);
     }
-    
+
     public function loadQuater(Request $request)
     {
         //  return('from UI');
