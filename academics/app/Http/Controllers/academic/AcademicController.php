@@ -1287,14 +1287,18 @@ class AcademicController extends Controller
         return $this->successResponse(1, Response::HTTP_CREATED);
     }
     //Written by gagen to pull the result into the emis portal
-    public function LoadResultByStudentId($std_id)
-    {
-        return $this->successResponse(DB::select('SELECT a.org_class_id, a.org_stream_id, a.org_stream_id, a.class_stream_section,a.published, b.std_student_id, b.result AS result 
-            FROM aca_result_consolidated AS a 
-            JOIN aca_result_consolidated_detail AS b
-            ON a.id = b.aca_result_consolidated_id 
-            WHERE b.std_student_id = ?', [$std_id]));
+    public function LoadFinalResultByStudentId($std_code){
+            return $this->successResponse(DB::select('SELECT a.student_code ,a.roll_no, a.marks_percent, a.position, a.promoted, b.subject,b.ca_score,b.exam_score,b.score,b.t1_ca_score,b.t1_exam_score,b.t2_exam_score,b.t2_ca_score,b.sub_dzo_name,c.term_dzo_name,c.academic_year,c.term_name,d.published,a.marks_percent,a.position,a.t1_position,a.t2_position
+            FROM aca_result_student AS a 
+            JOIN aca_result_score_csa AS b ON a.id = b.aca_result_student_id 
+            JOIN `aca_result` AS c ON c.id = a.aca_result_id
+            LEFT JOIN `aca_result_consolidated` AS d ON c.aca_result_consolidated_id = d.id
+            WHERE a.student_code = "'.$std_code.'" AND c.term_name="Final Result" AND d.published="1"
+            GROUP BY a.student_code ,a.roll_no, a.marks_percent, a.position, a.promoted, b.subject,b.ca_score,b.exam_score,b.score,b.t1_ca_score,b.t1_exam_score,b.t2_exam_score,b.t2_ca_score,c.term_dzo_name,c.academic_year,c.term_name,b.sub_dzo_name,d.published,a.marks_percent,a.position,a.t1_position,a.t2_position'));
+            
     }
+
+
     private function getRating()
     {
         return DB::select('SELECT aca_rating_type_id, name, score FROM aca_rating WHERE status=1 ORDER BY score');

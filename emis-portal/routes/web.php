@@ -95,7 +95,7 @@ use Illuminate\Support\Facades\Route;
         Route::get('/loadClassStreamSection/{type}/{parent_id}', [App\Http\Controllers\ResultViewController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/loadClassBySubjectTeacher', [App\Http\Controllers\ResultViewController::class, 'loadClassBySubjectTeacher'])->name('loadClassBySubjectTeacher');
         Route::get('/loadStudentAssessmentList', [App\Http\Controllers\ResultViewController::class, 'loadStudentAssessmentList'])->name('loadStudentAssessmentList');
-        Route::get('/LoadResultByStudentId/{std_id}', [App\Http\Controllers\ResultViewController::class, 'LoadResultByStudentId'])->name('LoadResultByStudentId');
+        Route::get('/LoadFinalResultByStudentId/{std_code}', [App\Http\Controllers\ResultViewController::class, 'LoadFinalResultByStudentId'])->name('LoadFinalResultByStudentId');
 
         // Route::post('/somefunction', [App\Http\Controllers\StudentPortal\AcademicsController::class, 'somefunction'])->name('somefunction');
     });

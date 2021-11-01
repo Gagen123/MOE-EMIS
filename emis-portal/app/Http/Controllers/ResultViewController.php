@@ -45,8 +45,7 @@ class ResultViewController extends Controller
             }
         return $selected_subjects;
     }
-    public function LoadResultByStudentId($std_id){
-        return $this->apiService->getListData('emis/academics/LoadResultByStudentId/'.$std_id);
+    public function LoadFinalResultByStudentId($std_code){
+        return $this->apiService->getListData('emis/academics/LoadFinalResultByStudentId/'.$std_code);
     }
-
-}
+    }

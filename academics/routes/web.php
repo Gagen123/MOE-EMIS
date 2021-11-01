@@ -82,6 +82,8 @@ $router->group(['prefix' => 'api/v1'], function () use ($router) {
         $router->get('/getScoresForSpms/{year}/{org_class_id}/{previous_org_class_id}', ['uses' => 'academic\AcademicController@getScoresForSpms']);
 
         //Emis portal used for pulling the result of the student
-        $router->get('/LoadResultByStudentId/{std_id}', ['uses' => 'academic\AcademicController@LoadResultByStudentId']);
+        $router->get('/LoadFinalResultByStudentId/{std_code}', ['uses' => 'academic\AcademicController@LoadFinalResultByStudentId']);
+        $router->get('/LoadTermIResultByStudentId/{std_code}', ['uses' => 'academic\AcademicController@LoadTermIResultByStudentId']);
+        $router->get('/LoadTermIIResultByStudentId/{std_code}', ['uses' => 'academic\AcademicController@LoadTermIIResultByStudentId']);
     });
 });
