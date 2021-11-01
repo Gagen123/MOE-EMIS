@@ -4,7 +4,7 @@
             <div class="card-body">
                 <div class="row form-group">
                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                        <label>Division:</label> 
+                        <label>Working Agency:</label> 
                            <input class="form-control form-control-sm" type="text" v-model="form.name" readonly>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -55,6 +55,7 @@ export default {
     data() {
         return {
             acess_level:'',
+            staff_id:'',
             form: new form({
                 name:'',
                 org_division_id:'',
@@ -72,21 +73,6 @@ export default {
                $('#'+id).removeClass('is-invalid select2');
                $('#'+id).addClass('select2');
             }
-        },
-        getorgName(orgId,accessLevel){
-            let type="Headquarterbyid";
-            if(accessLevel=="Org"){
-                type="Orgbyid";
-            }
-            axios.get('loadCommons/loadOrgDetails/'+type+'/'+orgId)
-            .then(response => {
-                let data = response.data.data;
-                this.form.name=data['name'];
-                this.form.org_division_id=data['id'];
-            })
-            .catch(errors => {
-                console.log(errors)
-            });
         },
 		save(){
             this.form.post('/spms/saveAgencyInputForm',this.form)
@@ -106,8 +92,27 @@ export default {
         axios.get('common/getSessionDetail')
             .then(response => {
                 let data = response.data.data;
-                this.getorgName(data['Agency_Code'],data['acess_level']);
-                this.acess_level = data['acess_level']
+                let roleName="";
+                for(let i=0;i<data['roles'].length;i++){
+                    if(i==data['roles'].length-1){
+                        roleName+=data['roles'][i].roleName;
+                    }
+                    else{
+                        roleName+=data['roles'][i].roleName+', ';
+                    }
+                }
+                this.roles=roleName;
+                this.staff_id=data['staff_id'];
+                this.acess_level = data['acess_level'];
+                this.form.org_division_id = data['Agency_Code'];
+
+                let uri = 'loadCommons/viewStaffDetails/by_id/'+this.staff_id;
+                axios.get(uri)
+                .then(response =>{
+                    let data = response.data.data;
+                    console.log(data);
+                    this.form.name=data['working_agency'];
+                })
             })
             .catch(errors => {
                 console.log(errors)

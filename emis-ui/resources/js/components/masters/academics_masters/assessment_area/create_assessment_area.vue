@@ -91,7 +91,7 @@ export default {
         }
     },
     methods: {
-        loadSubList(uri = 'masters/loadAcademicMasters/all_active_subject'){
+        loadSubList(uri = 'masters/loadAcademicMasters/all_active_subject_and_sub_subject'){
             axios.get(uri)
             .then(response => {
                 let data = response;

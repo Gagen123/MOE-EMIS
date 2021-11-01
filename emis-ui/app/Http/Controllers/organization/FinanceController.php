@@ -66,13 +66,15 @@ class FinanceController extends Controller
     public function saveFinancialInfo(Request $request){
        // dd($request);
         $rules = [
+            'financialInformationId'            =>   'required',
             'amount'                            =>  'required',
             'date'                              =>  'required',
             
         ];
         $customMessages = [
-            'amount.required'                   => 'amount is required',
-            'date.required'                     => 'date is required',
+            'financialInformationId.required'           => 'Type is Required',
+            'amount.required'                           => 'amount is required',
+            'date.required'                             => 'date is required',
         ];
         $this->validate($request, $rules, $customMessages);
         $data =[
@@ -144,17 +146,18 @@ class FinanceController extends Controller
         public function updateFinancialInfo(Request $request){
             // dd($request);
             $rules = [
+                'type'                              =>  'required',
                 'amount'                            =>  'required',
                 'date'                              =>  'required',
-                'remarks'                           =>  'required',
+               // 'remarks'                           =>  'required',
                 // 'incomeFacilitiesId'             =>  'incomeFacilitiesId',
                 
             ];
             $customMessages = [
                 'amount.required'                   => 'amount is required',
                 'date.required'                     => 'date is required',
-                'remarks.required'                  => 'remarks is required',
-                // 'incomeFacilitiesId.required'    => 'incomeFacilitiesId is required',
+               // 'remarks.required'                  => 'remarks is required',
+                'type.required'                     => 'Type  is required',
             ];
             $this->validate($request, $rules, $customMessages);
             $data =[
@@ -163,8 +166,9 @@ class FinanceController extends Controller
                 'date'                              =>  $request['date'],
                 'remarks'                           =>  $request['remarks'],
                 'id'                                =>  $request['id'],
-                // 'incomeFacilitiesId'             =>  $request['incomeFacilitiesId'],
+                 'type'                             =>  $request['type'],
             ];
+           // dd($data);
              $response_data= $this->apiService->createData('emis/organization/finance/updateFinancialInfo', $data );
              return $response_data;
             }
@@ -181,7 +185,11 @@ class FinanceController extends Controller
         $orgId = $this->getWrkingAgencyId();
         $data = $this->apiService->listData('emis/organization/finance/loadIncomeInformation/'. $orgId);
         return $data;
-      
+    }
+    public function getFinancialInfoEdit($finId=""){
+        // dd('m here');
+        $finDetails = $this->apiService->listData('emis/organization/finance/getFinancialInfoEdit/'.$finId);
+        return $finDetails;
     }
 
    

@@ -7,7 +7,7 @@
                     <select v-model="finacial_form.type" :class="{ 'is-invalid select2 select2-hidden-accessible': finacial_form.errors.has('type') }" class="form-control select2" name="type" id="type">
                         <option v-for="(item, index) in typeList" :key="index" v-bind:value="item.id">{{ item.name }}</option>
                     </select>
-                    <has-error :form="finacial_form" field=""></has-error>
+                    <has-error :form="finacial_form" field="type"></has-error>
                 </div> 
             </div>
             <div class="row">
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
                     <label>Date:<span class="text-danger">*</span></label> 
-                    <input class="form-control" v-model="finacial_form.date" :class="{ 'is-invalid': finacial_form.errors.has('date') }" id="date" @change="remove_err('date')" type="date">
+                    <input class="form-control popupDatepicker"  :class="{ 'is-invalid': finacial_form.errors.has('date') }" id="date" @change="remove_err('date')" type="text">
                     <has-error :form="finacial_form" field="date"></has-error>
                 </div>
             </div>
@@ -61,7 +61,7 @@ export default {
             axios.get('masters/organizationMasterController/loadFinacialtype')
             .then(response => {
                 let data = response;
-                this.typeList =  data.data.data[0];
+                this.typeList =  data.data.data;
                 // alert(JSON.stringify(data.data.data[0].name))
             })
             .catch(function (error) {
@@ -70,6 +70,7 @@ export default {
 
         },
         updateForm(){
+            this.finacial_form.date=this.formatYYYYMMDD($('#date').val());
             const config = {
                 headers: {
                     'content-type': 'multipart/form-data'
@@ -81,7 +82,7 @@ export default {
                 formData.append('id', this.finacial_form.id);
                 formData.append('type', this.finacial_form.type);
                 formData.append('amount', this.finacial_form.amount);
-                formData.append('date', this.finacial_form.date);
+                formData.append('date', this.finacial_form.date); 
                 formData.append('remarks', this.finacial_form.remarks);
                 
                 axios.post('/organization/updateFinancialInfo',formData,config)
@@ -111,6 +112,31 @@ export default {
                 $('#'+id+'_err').html('');
                 $('#'+id).addClass('select2');
             }
+            if(id=="type"){
+                this.finacial_form.type=$('#type').val();
+            }
+        },
+
+
+        getfinancialInformation(finId){
+           // alert (this.finacial_form.id );
+            axios.get('organization/getFinancialInfoEdit/'+finId)
+            .then((response) => {  
+                let data=response.data.data;
+                this.finacial_form.type                    =    data.financialInformationId;
+                $('#type').val(data.financialInformationId).trigger('change');
+                this.loadtypeList();
+                this.finacial_form.amount                  =    data.amount;
+                this.finacial_form.date                    =    this.formatDateToddmmyyyy(data.date);
+                $('#date').val(this.formatDateToddmmyyyy(data.date));
+                // this.finacial_form.date                    =    data.date;
+                this.finacial_form.remarks                 =    data.remarks;
+                this.finacial_form.id                      =    data.id;
+               
+            })
+            .catch((error) =>{  
+                console.log("Error:"+error);
+            }); 
         },
     },
      mounted() {
@@ -131,15 +157,15 @@ export default {
     },
     created() {
     this.loadtypeList();
+    this.getfinancialInformation(this.$route.params.data.id);
+   
     this.updateForm();
-    this.finacial_form.id=this.$route.params.data.id;
-    this.finacial_form.type=this.$route.params.data.type;
-    this.finacial_form.amount=this.$route.params.data.amount;
-    this.finacial_form.date = this.$route.params.data.date;
-    this.finacial_form.remarks =this.$route.params.data.status;
-  
-
-       
+   
+    // this.finacial_form.id=this.$route.params.data.id;
+    // this.finacial_form.type=this.$route.params.data.type;
+    // this.finacial_form.amount=this.$route.params.data.amount;
+    // this.finacial_form.date = this.$route.params.data.date;
+    // this.finacial_form.remarks =this.$route.params.data.status;
   },
     
 }

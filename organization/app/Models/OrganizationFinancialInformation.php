@@ -18,7 +18,7 @@ class OrganizationFinancialInformation extends Model
         'financialInformationId',
         'amount',
         'date',
-        'status'
+        'remarks'
     ];
 
 }

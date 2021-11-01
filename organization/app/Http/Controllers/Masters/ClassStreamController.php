@@ -122,7 +122,6 @@ class ClassStreamController extends Controller
             ->orderBy('classes.displayOrder', 'asc')
             ->get();
         }
-
         return $this->successResponse($data, Response::HTTP_CREATED);
     }
 
