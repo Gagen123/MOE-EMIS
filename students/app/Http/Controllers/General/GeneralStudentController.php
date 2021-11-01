@@ -342,6 +342,7 @@ class GeneralStudentController extends Controller
 
     public function getStudents($org_id, Request $request)
     {
+
         $query = "SELECT t1.OrgOrganizationId AS org_id, t1.id AS std_student_id,t1.student_code,t1.DateOfBirth AS dob,t1.Name,t2.roll_no, t1.CidNo, t3.OrgClassStreamId, t3.SectionDetailsId
             FROM std_student t1
             JOIN student_rollnumbers t2 ON t1.id = t2.std_id

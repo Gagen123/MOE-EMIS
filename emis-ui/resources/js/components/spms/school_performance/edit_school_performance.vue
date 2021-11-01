@@ -90,7 +90,7 @@ export default {
                         icon: 'success',
                         title: 'Data saved successfully.'
                     })
-                    this.$router.push('/school-performance-dashboard');
+                    this.$router.push('/non-academic-school-performance-dashboard');
                 }).catch(function(errors){
                     if(errors.response.status === 422){
                         Swal.fire({
@@ -119,7 +119,7 @@ export default {
                                     icon: 'success',
                                     title: 'Data saved successfully.'
                                 })
-                                this.$router.push('/school-performance-dashboard');
+                                this.$router.push('/non-academic-school-performance-dashboard');
                             }).catch(function(errors){
                                 if(errors.response.status === 422){
                                     Swal.fire({

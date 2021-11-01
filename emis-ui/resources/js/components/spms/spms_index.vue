@@ -8,7 +8,7 @@
                 <li class="nav-item active pr-1"  v-for="(item, index) in menubar" :key="index">
                     <router-link :to="{name: item.route, query: {data: item.actions } }" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0"  onclick="afterclick()">
                        <span :class="item.screen_icon"></span>
-                       {{ item.screen_name}}
+                       {{ item.screen_name}} - {{item.route}}
                     </router-link>
                 </li>
             </ul>
@@ -31,12 +31,12 @@
                     </router-link>
                </li>
                 <li class="nav-item active pr-1" @click="activatelink('school_performance')">
-                    <router-link id="school_performance" to="/school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                    <router-link id="school_performance" to="/non-academic-school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        School Performance (Non-Academic)
                     </router-link>
                 </li>
                 <li class="nav-item active pr-1" @click="activatelink('school_performance_academic')">
-                    <router-link id="school_performance_academic" to="/school-performance-academic" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
+                    <router-link id="school_performance_academic" to="/academic-school-performance" class="btn btn-outline-primary btn-sm pb-0 pl-1 pr-1 pt-0" >
                        School Performance (Academic)
                     </router-link>
                 </li>

@@ -646,11 +646,12 @@ class AcademicMastersController extends Controller
     }
     public function loadPromotionRule($class_id, $stream_id = "")
     {
-        $query = 'SELECT t1.aca_sub_id, t2.name AS subject,t2.dzo_name AS sub_dzo_name,t3.id AS promotion_rule_id,t3.aca_promotion_sub_group_id 
+        $query = 'SELECT t1.aca_sub_id, IF(t4.aca_sub_id,t4.name,t2.name) AS subject,t2.dzo_name AS sub_dzo_name,t3.id AS promotion_rule_id,t3.aca_promotion_sub_group_id 
             FROM aca_class_subject t1 
             JOIN aca_subject t2 ON t1.aca_sub_id=t2.id 
             LEFT JOIN aca_promotion_rule t3 ON t2.id = t3.aca_sub_id AND t1.org_class_id=t3.org_class_id AND ((t1.org_stream_id IS NULL AND t3.org_stream_id IS NULL) OR t1.org_stream_id = t3.org_stream_id)
-            WHERE t2.aca_sub_id IS NULL AND t1.org_class_id = ?';
+            LEFT JOIN aca_subject t4 ON t2.id = t4.aca_sub_id
+            WHERE t1.org_class_id = ?';
         $params = [$class_id];
         if ($stream_id) {
             $query .= ' AND t1.org_stream_id = ?';
