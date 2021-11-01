@@ -124,9 +124,9 @@
                                     </td>
                                     <td style="width:15%"><label>Feeding Modality:<span class="text-danger">*</span></label></td>
                                     <td style="width:35%">
-                                        <input  type="checkbox" v-model="class_form.feeding" id="feeding1" value="1" tabindex=""/> One Meal
-                                        <input  type="checkbox" v-model="class_form.feeding" id="feeding2" value="2" tabindex=""/> Two Meals
-                                        <input  type="checkbox" v-model="class_form.feeding" id="feeding3" value="3" tabindex=""/> Three Meals
+                                        <input  type="radio" v-model="class_form.meal_type" id="feeding1" value="1" tabindex=""/> One Meal
+                                        <input  type="radio" v-model="class_form.meal_type" id="feeding2" value="2" tabindex=""/> Two Meals
+                                        <input  type="radio" v-model="class_form.meal_type" id="feeding3" value="3" tabindex=""/> Three Meals
                                     </td>
                                 </tr>
                                 <tr>
@@ -148,7 +148,7 @@
                                 <tr>
                                     <td style="width:15%"><label>Diet Type:<span class="text-danger">*</span></label></td>
                                     <td colspan="3" style="width:35%">
-                                        <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegetarian" id="feeding_type"> Vegetarian 
+                                        <input type="radio" name="feeding_type" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" v-model="class_form.feeding_type" value="Vegetarian" id="feeding_type"> Vegetarian
                                         <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Non-Vegetarian" id="feeding_type1"> Non-Vegetarian
                                         <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('feeding_type') }" name="feeding_type" v-model="class_form.feeding_type" value="Eggetarian" id="feeding_type2"> Eggetarian
                                         <has-error :form="class_form" field="feeding_type"></has-error>
@@ -156,14 +156,14 @@
                                 </tr>
                                 <tr>
                                     <td colspan="3" style="width:65%">
-                                        <label> 
-                                            Do you think the children/student has a disability? (Eg: difficulty seeing, hearing, walking, 
-                                            learning or remembering, focusing, with fine motor skills, self care, being understood, controlling behavior, 
-                                            socializing or playing) 
+                                        <label>
+                                            Do you think the children/student has a disability? (Eg: difficulty seeing, hearing, walking,
+                                            learning or remembering, focusing, with fine motor skills, self care, being understood, controlling behavior,
+                                            socializing or playing)
                                         </label>
                                     </td>
                                     <td style="width:35%">
-                                         <input type="radio" name="disability" :class="{ 'is-invalid': class_form.errors.has('disability') }" v-model="class_form.disability" value="Yes" id="no_meals1"> Yes 
+                                         <input type="radio" name="disability" :class="{ 'is-invalid': class_form.errors.has('disability') }" v-model="class_form.disability" value="Yes" id="no_meals1"> Yes
                                         <input type="radio" class="ml-4" :class="{ 'is-invalid': class_form.errors.has('disability') }" name="disability" v-model="class_form.disability" value="No" id="no_meals2"> No
                                         <has-error :form="class_form" field="disability"></has-error>
                                     </td>
@@ -218,6 +218,7 @@ export default {
                 disability:'',
                 special_benifit:[],
                 scholarship:[],
+                student_code:'',
                 feeding_type:'', isNeedy:0, feeding:[],
                 meal_type:'', no_meals:'', student_type:'', section:'', stream:'', class:'',class_stream_id:'',
             }),
@@ -232,7 +233,7 @@ export default {
         removeerror(fieldid){
 			if($('#'+fieldid).val()!=""){
 				$('#'+fieldid).removeClass('is-invalid');
-				$('#'+errid).html(''); 
+				$('#'+errid).html('');
 			}
 		},
 
@@ -279,7 +280,7 @@ export default {
 			for(let i=0;i<data.length;i++){
                     this.dzongkhagArray[data[i].id] = data[i].name;
                 }
-                $('#dzongkhag').prop('disabled',false);  
+                $('#dzongkhag').prop('disabled',false);
             }).catch(error => console.log(error));
 
 		},
@@ -384,6 +385,9 @@ export default {
                     confirmButtonText: 'Yes!',
                     }).then((result) => {
                     if (result.isConfirmed){
+                        this.class_form.id = this.student_id;
+                        this.class_form.student_code = this.student_code;
+                        this.class_form.student_type = 'Regular';
                         this.class_form.post('/students/admission/saveAdmitStudent',this.class_form)
                         .then((response) =>{
                             Toast.fire({
@@ -419,12 +423,14 @@ export default {
                 $('#'+id).addClass('select2');
             }
             if(id=="student_type"){
-                alert($('#student_type').val());
                 this.class_form.student_type=$('#student_type').val();
+            }
+            if(id=="class"){
+                this.class_form.class=$('#class').val();
             }
         },
     },
-    mounted() { 
+    mounted() {
         this.loadAllActiveMasters('all_country');
         this.loadAllActiveMasters('all_active_gender');
         this.loadAllActiveMasters('active_mother_tongue');
@@ -434,19 +440,19 @@ export default {
         this.getdzongkhagList();
         this.loadGenderList();
         this.loadClassList();
-      
+
         $('.select2').select2();
         $('.select2').on('select2:select', function (el){
-            Fire.$emit('changefunction',$(this).attr('id')); 
+            Fire.$emit('changefunction',$(this).attr('id'));
         });
-        
+
         Fire.$on('changefunction',(id)=> {
             this.changefunction(id);
         });
         this.student_id = this.$route.params.data.id;
         this.student_code = this.$route.params.data.std_code;
         this.loadAdmissionDetails(this.$route.params.data.id, this.$route.params.data.std_code);
-        
+
     }
 }
 </script>

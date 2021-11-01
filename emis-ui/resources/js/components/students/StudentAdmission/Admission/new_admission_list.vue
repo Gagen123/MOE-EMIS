@@ -195,7 +195,7 @@ export default {
             .then(response =>{
                 let data = response.data;
                 this.feederStudentList = data;
-            });
+            });  
         },
 
         getorgProfile(org_id){
@@ -227,7 +227,6 @@ export default {
         axios.get('common/getSessionDetail')
         .then(response =>{
             let data = response.data.data;
-            this.form.org_id=data['Agency_Code'];
             this.getorgProfile(data['Agency_Code']);
         })
         .catch(errors =>{

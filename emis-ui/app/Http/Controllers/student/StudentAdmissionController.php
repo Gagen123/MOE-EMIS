@@ -311,9 +311,15 @@ class StudentAdmissionController extends Controller{
         ];
 
         $this->validate($request, $rules, $customMessages);
+        $request['user_id'] = $this->userId();
+        $request['OrgOrganizationId'] = $this->getWrkingAgencyId();
         $data = $request->all();
+        $response_data= json_decode($this->apiService->createData('emis/students/admission/saveAdmitStudent', $data));
 
-        $response_data= $this->apiService->createData('emis/students/admission/saveAdmitStudent', $data);
+        //added by tshewang to update in portal user to student
+        if(isset($response_data->FirstName) && $response_data->FirstName!=null){
+            $response=$this->apiService->createData('emis/students/admission/updatePortalUser', $response_data);
+        }
         return $response_data;
     }
 
