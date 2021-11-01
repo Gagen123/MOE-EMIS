@@ -661,7 +661,7 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label class="mb-0.5">Staff:<i class="text-danger">*</i></label>
                                     <select v-model="search.staff_id" :class="{ 'is-invalid select2 select2-hidden-accessible': search.errors.has('staff_id') }" class="form-control select2" name="staff_id" id="staff_id">
-                                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title.name}}</option>
+                                        <option v-for="(item, index) in staffList" :key="index" v-bind:value="item.id">{{ item.cid_work_permit }} : {{ item.name }}, {{item.position_title_name}}</option>
                                     </select>
                                     <has-error :form="search" field="staff_id"></has-error>
                                 </div>
@@ -1290,7 +1290,7 @@ export default {
             this.changefunction(id);
         });
         this.loadestablishmentapplicationdetails(this.$route.params.data.application_number,this.$route.params.type);
-        this.departmentList=await this.getDepartmentListbydzo('Ministry','all_ministry_departments');
+        this.departmentList=await this.getDepartmentListbydzo('department_master','department_master');
     }
 }
 </script>

@@ -508,8 +508,12 @@ class LoadOrganizationController extends Controller
                 }
             }
         }
+
         if ($type == "user_dzongkhag") {
             $response_data = DepartmentModel::where('dzo_id', $id)->get();
+        }
+        if ($type == "department_master") {
+            $response_data = DepartmentModel::where('type', 'ministry')->get();
         }
 
         if ($type == "dzongkhag_department") {

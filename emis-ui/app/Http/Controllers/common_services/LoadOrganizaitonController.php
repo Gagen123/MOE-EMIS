@@ -86,6 +86,11 @@ class LoadOrganizaitonController extends Controller
         if ($type == "all_dzongkhag_headquarters") {
             $param = 2;
         }
+        //list headquarters of all dzongkhg
+        if ($type == "department_master") {
+            $param = $parent_id;
+        }
+
 
         //list all departments at ministry
         if ($type == "all_ministry_departments") {

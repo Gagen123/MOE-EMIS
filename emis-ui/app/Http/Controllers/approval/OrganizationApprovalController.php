@@ -84,7 +84,6 @@ class OrganizationApprovalController extends Controller{
     }
 
     public function saveUploadedFiles(Request $request){
-        return $request;
         $application_number = $request->application_number;
         $files = $request->attachments;
         $filenames = $request->attachmentname;
@@ -250,7 +249,9 @@ class OrganizationApprovalController extends Controller{
                     $response_data=$response_data->data;
                     $vteam->name=$response_data->name;
                     $vteam->cid=$response_data->cid_work_permit;
-                    $vteam->po_title=$response_data->position_title;
+                    if(isset($response_data->position_title_name)){
+                        $vteam->po_title=$response_data->position_title_name;
+                    }
                 }
             }
         }

@@ -103,6 +103,9 @@ try {
                 if(type=="Dzongkhag"){
                     uri = 'loadCommons/loadHeaquarterList/user_dzongkhag/'+dzoId;
                 }
+                if(type=="department_master"){
+                    uri = 'loadCommons/loadHeaquarterList/department_master/NA';
+                }
                 try{
                     return  axios.get(uri).then(response => { return response.data.data});
                 }catch(e){
