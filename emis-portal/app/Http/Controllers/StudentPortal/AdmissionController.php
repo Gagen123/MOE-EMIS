@@ -55,7 +55,6 @@ class AdmissionController extends Controller
         $request['user_id']=$this->userId();
         $request['file_path']= $path;
         $data = $request->all();
-        // dd($data);
         $response_data= $this->apiService->createData('emis/students/admission/saveStudentDetailsFromPortal', $data);
         return $response_data;
     }
@@ -346,7 +345,7 @@ class AdmissionController extends Controller
     public function saveAdmissionRequest(Request $request){
         $rules = [
             'dzongkhag'               => 'required',
-            
+
         ];
         $customMessages = [
             'dzongkhag.required'        => 'This field is required',

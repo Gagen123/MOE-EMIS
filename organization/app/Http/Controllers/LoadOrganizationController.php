@@ -559,6 +559,14 @@ class LoadOrganizationController extends Controller
             return $section;
         }
     }
+
+    public function loadClassAge(){
+        $response_data = DB::table('classes')
+            ->select('classes.*')
+            ->orderBy('classes.displayOrder', 'asc')
+            ->get();
+        return $this->successResponse($response_data);
+    }
     //added by Tshewang to get organizaiton ids for projection and indicator
     public function loadClassStreamSectionIds($organizationType = "", $category = "", $dzoId = "")
     {
@@ -742,6 +750,9 @@ class LoadOrganizationController extends Controller
 
     public function getOrgClassStreamByOrg($org_id, $class_name)
     {
+        if(strpos($class_name,'20')){
+            $class_name=str_replace('%20',' ',$class_name);
+        }
         $response_data = DB::table('organization_class_streams')
             ->join('classes', 'organization_class_streams.classId', '=', 'classes.id')
             ->select('organization_class_streams.id')

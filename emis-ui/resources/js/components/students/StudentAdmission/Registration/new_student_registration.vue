@@ -304,7 +304,7 @@
                                         <input type="radio" value="Bhutanese" v-model="guardian_form.mother_nationality" @click="showmothersidentity('bhutanese')" name="mother_nationality" id="mother_nationality" checked> Bhutanese
                                         <input type="radio" value="Foreign" v-model="guardian_form.mother_nationality" @click="showmothersidentity('foreign')" name="mother_nationality" id="mother_nationality1"> Non-Bhutanese
                                     </div>
-                                    
+
                                 </div>
                                 <div class="row form-group">
                                     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
@@ -806,7 +806,7 @@ export default {
                 else{
                     let age = await this.getPersonalDetailsbyCID($('#'+cid).val(),'AgeValidation');
                     let check = await this.validateCID($('#'+cid).val());
-                    
+
                     if(check){
                         if(this.loop_check){
                             this.getPersonalDetailsbyCID($('#'+cid).val(),type);
@@ -840,8 +840,8 @@ export default {
                     let text = 'Immigration No/ID No has already been registered in the system';
                     this.showErrorMsg(text);
                 }
-                
-            }         
+
+            }
         },
         async getPersonalDetailsbyCID(cidNo,type){
             // if(type=="father"){
@@ -853,14 +853,14 @@ export default {
             // if(type=="gardain"){
             //     selected = $("input[type='radio'][name='gardain_nationality']:checked");
             // }
-            
+
             await axios.get('getpersonbycid/'+ cidNo)
             .then(response => {
                 if (response.data) {
                     let personal_detail = response.data;
                     if(type=="AgeValidation"){
                         let dob=personal_detail.dob;
-                        
+
                         if(dob.includes('-')){
                             dob=dob.split('-')[2]+'-'+dob.split('-')[1]+'-'+dob.split('-')[0];
                         }
@@ -869,7 +869,7 @@ export default {
                         }
 
                         const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-                        
+
                         let date1 = new Date(dob);
                         let date2 = '';
                         if(this.org_type == 'ECCD'){
@@ -883,7 +883,7 @@ export default {
                         const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
 
                         let age = Math.floor((admission_date-dob_date) / _MS_PER_DAY);
-                        
+
                         if(this.org_type == 'ECCD'){
                             if(age <=1096){
                                 this.loop_check = false;
@@ -1077,7 +1077,7 @@ export default {
                                     $('#last_name').prop('readonly',true);
                                 }
                             }
-                            
+
                         }
                     }else{
                         this.personal_form.first_name = student_detail.FullName;
@@ -1297,13 +1297,13 @@ export default {
                                 $('#message').html("The Admission Dates are closed. <br> Thank You!");
                             }
                         }
-                        
+
                     })
                     .catch(errors => {
                         console.log(errors)
                     });
             })
-            .catch((error) => {  
+            .catch((error) => {
                 console.log("Error: "+error);
             });
         },
@@ -1319,7 +1319,7 @@ export default {
             .catch(function (error) {
                 console.log('error: '+error);
             });
-            
+
         },
 
         shownexttab(nextclass){
@@ -1867,14 +1867,14 @@ export default {
                 let data = response.data.data;
                 if(data != null){
                     returntype=false;
-                } 
+                }
             });
             return returntype;
         },
 
         validateAge(dob){
             const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-            alert('dob'+dob);
+            
             let date1 = new Date(dob);
             let date2 = new Date(this.admissionDateValidation);
             let date3 = new Date();
@@ -1883,16 +1883,13 @@ export default {
             const dob_date = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
             const admission_date = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
             const present_date = Date.UTC(date3.getFullYear(), date3.getMonth(), date3.getDate());
-            alert(dob_date);
-            alert(admission_date);
-            alert(present_date);
 
             let age = Math.floor(((admission_date+present_date) - (present_date+dob_date)) / _MS_PER_DAY);
-            
-            
+
+
             if(age <=1825){
                 return false;
-            } 
+            }
             return true;
         },
 

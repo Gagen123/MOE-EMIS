@@ -34,7 +34,7 @@ use Illuminate\Support\Facades\Route;
 
         Route::get('/getOrgList/{dzoId}/{orgType}', [App\Http\Controllers\AdminstratorController::class, 'getOrgList'])->name('getOrgList');
         Route::get('/getHssSchoolList/{dzo_id}', [App\Http\Controllers\AdminstratorController::class, 'getHssSchoolList'])->name('getHssSchoolList');
-
+        Route::get('/loadClassAge', [App\Http\Controllers\AdminstratorController::class, 'loadClassAge'])->name('loadClassAge');
         Route::get('/loadClassStreamSection/{type}/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'loadClassStreamSection'])->name('loadClassStreamSection');
         Route::get('/getStreamByclassId/{classId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByclassId'])->name('getStreamByclassId');
         Route::get('/getStreamByOrgId/{orgId}', [App\Http\Controllers\AdminstratorController::class, 'getStreamByOrgId'])->name('getStreamByOrgId');
