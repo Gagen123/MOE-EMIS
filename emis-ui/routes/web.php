@@ -269,6 +269,7 @@ Route::prefix('organization')->group(function () {
     Route::post('/saveIncomeinfo', [App\Http\Controllers\organization\FinanceController::class, 'saveIncomeinfo'])->name('saveIncomeinfo');
     Route::post('/updateIncomeinfo', [App\Http\Controllers\organization\FinanceController::class, 'updateIncomeinfo'])->name('updateIncomeinfo');
     Route::get('/loadFinancialInformation', [App\Http\Controllers\organization\FinanceController::class, 'loadFinancialInformation'])->name('loadFinancialInformation');
+    Route::get('/getFinancialInfoEdit/{finId}', [App\Http\Controllers\organization\FinanceController::class, 'getFinancialInfoEdit'])->name('getFinancialInfoEdit');
 
 
     //connectivity

@@ -255,6 +255,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
             $router->post('/saveFinancialInformation', 'generalInformation\FinanceController@saveFinancialInformation');
             $router->post('/updateFinancialInfo', 'generalInformation\FinanceController@updateFinancialInfo');
             $router->get('/loadFinancialInformation/{orgId}', 'generalInformation\FinanceController@loadFinancialInformation');
+            $router->get('/getFinancialInfoEdit/{finId}', 'generalInformation\FinanceController@getFinancialInfoEdit');
         });
 
         //Class Projections
