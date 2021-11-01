@@ -345,13 +345,15 @@ class StructuralController extends Controller
             'structuretype'                   =>  'required',
             'constructionType'                =>  'required',
             'yearOfConstruction'              =>  'required',
-            // 'presentCondition'           =>  'required',
+            'noOfFloor'                       =>  'required',
+            'design'                          =>  'required',
         ];
         $customMessages = [
             'structuretype.required'                 => 'Structure Type is required',
             'constructionType.required'              => 'Construction Type is required',
             'yearOfConstruction.required'            => 'Year of Construction is required',
-            // 'presentCondition.required'         => 'Present Condition of Structure is required',
+            'noOfFloor.required'                     => 'No of floors is required',
+            'design.required'                        => 'Designed by is required'
         ];
         $this->validate($request, $rules, $customMessages);
 
