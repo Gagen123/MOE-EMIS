@@ -71,7 +71,6 @@ class StudentHealthController extends Controller
     */
 
     public function addSupplementationRecords(Request $request){
-
         $rules = [
             'term_id'                       => 'required',
             'date'                          => 'required',
@@ -105,16 +104,20 @@ class StudentHealthController extends Controller
         unset($data['std_screened']);
 
         $response_data = StudentHealthSupplementation::create($data);
+        // dd( $response_data,$std_screened);
+        // return $response_data;
         $lastInsertId = $response_data->id;
 
         //insert students that are not given
-        foreach($std_screened as $key => $value){
-            $data = [
-                'StdHealthSupplementationId'    => $lastInsertId,
-                'StdStudentId'                  => $value,
-                'status'                        => 'Not Given'
-            ];
-            StudentSupplementation::create($data);
+        if($std_screened !=null && $std_screened !=""){
+            foreach($std_screened as $key => $value){
+                $data = [
+                    'StdHealthSupplementationId'    => $lastInsertId,
+                    'StdStudentId'                  => $value,
+                    'status'                        => 'Not Given'
+                ];
+                StudentSupplementation::create($data);
+            }
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
@@ -197,7 +200,10 @@ class StudentHealthController extends Controller
             'std_screened'                          => $request->std_screened,
             'std_referred'                          => $request->std_referred,
         ];
+      
 
+            $response_data = StudentHealthScreening::create($data);
+       
         $std_ids = $data['std_id'];
         $std_screened = $data['std_screened'];
         $std_referred = $data['std_referred'];
@@ -205,20 +211,18 @@ class StudentHealthController extends Controller
         unset($data['std_id']);
         unset($data['std_screened']);
         unset($data['std_referred']);
-
-
-        $response_data = StudentHealthScreening::create($data);
         $lastInsertId = $response_data->id;
 
         //insert students that are not screened
-        foreach($std_screened as $key => $value){
-            $screened_data = [
-                'StdHealthScreeningId'  => $lastInsertId,
-                'StdStudentId'          => $value,
-                'screening_status'      => 'Not Screened'
-            ];
-            StudentScreening::create($screened_data);
-        }
+        if($std_screened!=null && $std_screened!=""){
+            foreach($std_screened as $key => $value){
+                $screened_data = [
+                    'StdHealthScreeningId'  => $lastInsertId,
+                    'StdStudentId'          => $value,
+                    'screening_status'      => 'Not Screened'
+                ];
+                StudentScreening::create($screened_data);
+            }
 
         //insert referred students
         foreach($std_referred as $key => $value){
@@ -229,10 +233,11 @@ class StudentHealthController extends Controller
                 'referral_status'      => 'Referred'
             ];
             StudentScreening::create($screened_data);
-        }
+         }
+       }
 
-        return $this->successResponse($response_data, Response::HTTP_CREATED);
-
+        // return $this->successResponse($response_data, Response::HTTP_CREATED);
+        return $response_data;
     }
 
     /**
@@ -908,13 +913,15 @@ class StudentHealthController extends Controller
         $lastInsertId = $response_data->id;
 
         //insert students that are given
-        foreach($std_vaccinated as $key => $value){
-            $vaccination_data = [
-                'StdHealthVaccinationId'    => $lastInsertId,
-                'StdStudentId'              => $value,
-                'status'                    => 'vaccinated'
-            ];
-            StudentVaccination::create($vaccination_data);
+        if($std_vaccinated!=null && $std_vaccinated!=""){
+            foreach($std_vaccinated as $key => $value){
+                $vaccination_data = [
+                    'StdHealthVaccinationId'    => $lastInsertId,
+                    'StdStudentId'              => $value,
+                    'status'                    => 'vaccinated'
+                ];
+                StudentVaccination::create($vaccination_data);
+            }
         }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);

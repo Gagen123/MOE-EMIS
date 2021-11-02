@@ -329,9 +329,9 @@ export default {
                     if(stream_id == ''){
                         route = class_id+'__'+"NULL"+'__'+section_id;
                     }
-                    axios.get('/students/studentListByGender/'+route+'__'+$('#vaccination').val())
+                    axios.get('/students/loadStudentBySection/'+route)
                         .then((response) => {
-                            this.studentList = response.data.data;  
+                            this.studentList = response.data;  
                     })
                     .catch(() => {
                         consoele.log("Error:"+e)

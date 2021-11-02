@@ -20,7 +20,8 @@ class StudentUpdateController extends Controller{
     }
 
     public function saveStudentUpdates(Request $request){
-
+        dd($request);
+        dd($request->scholarship);
         $record_type = $request->record_type;
 
         $rules = [
@@ -144,6 +145,7 @@ class StudentUpdateController extends Controller{
                     $additional_messages=[
                         'scholarship.required'  => 'This field is required'
                     ];
+                    dd($request->scholarship);
                     $additional_data = [
                         'scholarship'   => $request->scholarship
                     ];

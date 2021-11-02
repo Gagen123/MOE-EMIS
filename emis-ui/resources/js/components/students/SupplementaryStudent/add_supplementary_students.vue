@@ -211,6 +211,7 @@ export default {
                     confirmButtonText: 'Ok!',
                     });
                 }
+                // this.$router.push('/list_supplementary_students')
 			});
 		},
         getStudentSchoolDetails(OrgClassStreamId){
@@ -233,6 +234,7 @@ export default {
                         confirmButtonText: 'Ok!',
                         });
                     }
+                    //  this.$router.push('/list_supplementary_students');
                 });
             }catch(e){
                 console.log('error loadactivedzongkhags '+e);
@@ -250,16 +252,27 @@ export default {
         },
         saveForm: function(type){
             if(type=="save"){
-                this.student_form.post('/students/admission/saveSupplementaryStudent',this.student_form)
-                    .then(() => {
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Details added successfully'
-                    })
-                    this.$router.push('/list_supplementary_students');
-                })
-                .catch(() => {
-                    console.log("Error......")
+                Swal.fire({
+                    title: 'Are you sure you wish to submit this form ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes!',
+                    }).then((result) =>{
+                    if (result.isConfirmed){
+                        this.student_form.post('/students/admission/saveSupplementaryStudent',this.student_form)
+                            .then(() => {
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Details added successfully'
+                            })
+                            this.$router.push('/list_supplementary_students');
+                        })
+                        .catch(() => {
+                            console.log("Error......")
+                        })
+                    }
                 })
             }
 		},

@@ -95,12 +95,23 @@ export default {
             }
             if(type=="save"){
                 this.student_form.post('/students/saveStudentUpdates',this.student_form)
-                    .then(() => {
-                    Toast.fire({
+                  .then((response) =>{
+                    if(response.data.data==null){
+                         Swal.fire({
+                        text: "Sorry! Your Feeding Modality is not mapped to you",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        })  
+                    }
+                    else{
+                        Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/updated_dietary_list');
+                    }
+                     this.$router.push('/updated_dietary_list');
                 })
                 .catch(() => {
                     console.log("Error......")

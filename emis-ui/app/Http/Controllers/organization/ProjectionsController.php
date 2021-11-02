@@ -137,7 +137,6 @@ class ProjectionsController extends Controller
 
     public function loadFeederStudentsBySchool(){
         $org_id = $this->getWrkingAgencyId();
-
         $list = $this->apiService->listData('emis/organization/feeder/loadFeederStudentsBySchool/'.$org_id);
         return $list;
     }

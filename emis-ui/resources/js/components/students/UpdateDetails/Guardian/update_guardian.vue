@@ -410,12 +410,23 @@ export default {
             }
             if(type=="save"){
                 this.student_form.post('/students/saveStudentUpdates',this.student_form)
-                    .then(() => {
-                    Toast.fire({
+                .then((response) =>{
+                    if(response.data.data==null){
+                         Swal.fire({
+                        text: "Sorry! Your Guardian details is not mapped to you",
+                        icon: 'error',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Okay!',
+                        })  
+                    }
+                    else{
+                        Toast.fire({
                         icon: 'success',
                         title: 'Details added successfully'
                     })
-                    this.$router.push('/update_std_guardian');
+                    }
+                     this.$router.push('/update_std_guardian');
                 })
                 .catch(() => {
                     console.log("Error......")

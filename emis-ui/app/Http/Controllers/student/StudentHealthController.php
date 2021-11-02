@@ -23,6 +23,7 @@ class StudentHealthController extends Controller
     */
 
     public function addSupplementationRecords(Request $request){
+        // dd($request);
         $rules = [
             'term_id'                       => 'required',
             'date'                          => 'required',
@@ -90,13 +91,13 @@ class StudentHealthController extends Controller
             'user_id'                       =>  $this->userId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/updateHealthSupplementationRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*
@@ -133,13 +134,13 @@ class StudentHealthController extends Controller
             'user_id'               =>  $this->userId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/addHealthScreeningRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadHealthScreeningRecords($param=""){
@@ -212,13 +213,13 @@ class StudentHealthController extends Controller
             'user_id'               =>  $this->userId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/updateHealthScreeningRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*
@@ -252,13 +253,13 @@ class StudentHealthController extends Controller
             'organization_id'  => $this->getWrkingAgencyId(),
             'user_id'          => $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/addBmiRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /*
@@ -283,13 +284,13 @@ class StudentHealthController extends Controller
             'weight'       => $request->weight,
             'user_id'      => $this->userId()
         ];
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/updateBmiRecord', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     public function loadBmiSummary(){
@@ -416,13 +417,13 @@ class StudentHealthController extends Controller
             'user_id'               =>  $this->userId()
         ];
 
-        try{
+        // try{
             $response_data= $this->apiService->createData('emis/students/addVaccinationRecords', $data);
             return $response_data;
-        }
-        catch(GuzzleHttp\Exception\ClientException $e){
-            return $e;
-        }
+        // }
+        // catch(GuzzleHttp\Exception\ClientException $e){
+        //     return $e;
+        // }
     }
 
     /**

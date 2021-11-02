@@ -1310,7 +1310,6 @@ class StudentAdmissionController extends Controller
         $id = $request->id;
 
         $data =[
-            'id '               => $request->id,
             'StdStudentId '     => $request->student_id,
             'retakeCA'          => $request->retakeCA,
             'AcademicYear'      => date('Y'),
@@ -1319,12 +1318,16 @@ class StudentAdmissionController extends Controller
             // 'created_at',
             // 'updated_at'
         ];
-
         if( $id != null){
             $response_data = SupplementaryStudent::where('id', $id)->update($data);
 
         }else{
-            $response_data = SupplementaryStudent::create($data);
+            try{
+                $response_data = SupplementaryStudent::create($data);
+            }catch(\Illuminate\Database\QueryException $ex){
+                dd($ex);
+            }
+            
          }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);

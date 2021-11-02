@@ -20,7 +20,6 @@ class StudentUpdateController extends Controller
     }
 
     public function saveStudentUpdates(Request $request){
-
         $record_type = $request->record_type;
 
         $data =[
@@ -151,168 +150,217 @@ class StudentUpdateController extends Controller
 
     private function updateStudentContactDetails($data){
         $student_detail=StudentGuardianDetails::where('StdStudentId',$data['student'])->get()->toArray();
+        // dd($student_detail);
         $previousValue = "";
         $new_data = [];
-        
-        if($data['address'] != null){
-            $previousValue .= $student_detail[0]['WorkAddress'];
-            $new_address = [
-                'WorkAddress' => $data['address']
-            ];
-            $new_data = $new_data + $new_address;
-        }
-        if($data['contact'] != null){
-            $previousValue .= '/'.$student_detail[0]['ContactNo'];
-            $new_contact = [
-                'ContactNo' => $data['contact']
-            ];
-            $new_data = $new_data + $new_contact;
-        }
-        if($data['email'] != null){
-            $previousValue .= '/'.$student_detail[0]['Email'];
-            $new_email = [
-                'Email' => $data['email']
-            ];
-            $new_data = $new_data + $new_email;
-        }
-        
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Change in Parent Contact',
-            'previousValue' =>  $previousValue,
-            'Remarks'       =>  $data['Remarks']
-        ];
+        if($student_detail!=null && $student_detail!=""){
+            if($data['action_type']=='add'){
+                if($data['address'] != null){
+                    $previousValue .= $student_detail[0]['WorkAddress'];
+                    $new_address = [
+                        'WorkAddress' => $data['address']
+                    ];
+                    $new_data = $new_data + $new_address;
+                }
+                if($data['contact'] != null){
+                    $previousValue .= '/'.$student_detail[0]['ContactNo'];
+                    $new_contact = [
+                        'ContactNo' => $data['contact']
+                    ];
+                    $new_data = $new_data + $new_contact;
+                }
+                if($data['email'] != null){
+                    $previousValue .= '/'.$student_detail[0]['Email'];
+                    $new_email = [
+                        'Email' => $data['email']
+                    ];
+                    $new_data = $new_data + $new_email;
+                }
+                $student_history =[
+                    'StdStudentId'  =>  $data['student'],
+                    'date'          =>  $data['date'],
+                    'historyFor'    =>  'Change in Parent Contact',
+                    'previousValue' =>  $previousValue,
+                    'Remarks'       =>  $data['Remarks']
+                ];
+                    $history = $this->insertStudentHistory($student_history);
+                }
+                $student = StudentGuardianDetails::where('StdStudentId', $data['student'])->where('Relationship', $data['change_for'])->update($new_data);
 
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
-        }
+            }
+        else{
+            return null;
+            // $new_rec = [
+            //     'StdStudentId' => $data['student'],
+            //     'Relationship' => $data['change_for']
+            // ];
+            // $new_data = $new_data + $new_rec;
+            // $student = StudentGuardianDetails::create($new_data);
 
-        $student = StudentGuardianDetails::where('StdStudentId', $data['student'])->where('Relationship', $data['change_for'])->update($new_data);
+        }
         return $this->successResponse($student);
     }
 
     private function updateParentsMaritialStatus($data){
         $student_detail=StudentGuardianDetails::where('StdStudentId',$data['student'])->get()->toArray();
-        
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Parents Maritial Status Change',
-            'previousValue' =>  $student_detail[0]['MaritialStatus'],
-            'Remarks'       =>  $data['Remarks']
-        ];
 
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
+        //added if condition since it is giving the issue when the studentId is not there in studentguardian tables
+        if($student_detail!=null && $student_detail!=""){
+            $student_history =[
+                'StdStudentId'  =>  $data['student'],
+                'date'          =>  $data['date'],
+                'historyFor'    =>  'Parents Maritial Status Change',
+                'previousValue' =>  $student_detail[0]['MaritialStatus'],
+                'Remarks'       =>  $data['Remarks']
+            ];
+    
+            if($data['action_type']=='add'){
+                $history = $this->insertStudentHistory($student_history);
+            }
+    
+            $new_data = [
+                'MaritialStatus' => $data['maritial_status']
+            ];
+    
+            $student = StudentGuardianDetails::where('StdStudentId',$data['student'])->update($new_data);
         }
-
-        $new_data = [
-            'MaritialStatus' => $data['maritial_status']
-        ];
-
-        $student = StudentGuardianDetails::where('StdStudentId',$data['student'])->update($new_data);
+        else{
+            return null;
+        }
+       
         return $this->successResponse($student);
     }
 
     private function updateStudentGuardianDetails($data){
         $students = Student::where('id',$data['id'])->update($data);
-        return $students;
+        if($students!=null && $students!=""){
+            return $students;
+        }
+        else {
+            return null;
+        }
     }
 
     private function updateStudentSenDetails($data){
         $student_detail=Student::where('id',$data['student'])->get('isSen')->toArray();
+            if($student_detail!=""|| $student_detail!=""){
+                $student_history =[
+                    'StdStudentId'  =>  $data['student'],
+                    'date'          =>  $data['date'],
+                    'historyFor'    =>  'Student SEN Change',
+                    'previousValue' =>  $student_detail[0]['isSen'],
+                    'Remarks'       =>  $data['Remarks']
+                ];
         
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Student SEN Change',
-            'previousValue' =>  $student_detail[0]['isSen'],
-            'Remarks'       =>  $data['Remarks']
-        ];
-
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
-        }
-
-        $new_data = [
-            'isSen' => $data['sen']
-        ];
-
-        $student = Student::where('id',$data['student'])->update($new_data);
+                if($data['action_type']=='add'){
+                    $history = $this->insertStudentHistory($student_history);
+                }
+        
+                $new_data = [
+                    'isSen' => $data['sen']
+                ];
+        
+                $student = Student::where('id',$data['student'])->update($new_data);
+            }
+            else{
+                return null;
+            }
+       
         return $this->successResponse($student);
     }
 
     private function updateStudentFeedingDetails($data){
         $student_detail=Student::where('id',$data['student'])->get('noOfMeals')->toArray();
-        
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Student Feeding Change',
-            'previousValue' =>  $student_detail[0]['noOfMeals'],
-            'Remarks'       =>  $data['Remarks']
-        ];
-
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
+        if($student_detail!=null && $student_detail!=""){
+            $student_history =[
+                'StdStudentId'  =>  $data['student'],
+                'date'          =>  $data['date'],
+                'historyFor'    =>  'Student Feeding Change',
+                'previousValue' =>  $student_detail[0]['noOfMeals'],
+                'Remarks'       =>  $data['Remarks']
+            ];
+    
+            if($data['action_type']=='add'){
+                $history = $this->insertStudentHistory($student_history);
+            }
+    
+            $new_data = [
+                'noOfMeals' => $data['feeding']
+            ];
+    
+            $student = Student::where('id',$data['student'])->update($new_data);
         }
-
-        $new_data = [
-            'noOfMeals' => $data['feeding']
-        ];
-
-        $student = Student::where('id',$data['student'])->update($new_data);
+        else{
+            return null;
+        }
+        
         return $this->successResponse($student);
     }
 
     private function updateStudentDietaryDetails($data){
         $student_detail=Student::where('id',$data['student'])->get('dietType')->toArray();
-        
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Student Dietary Change',
-            'previousValue' =>  $student_detail[0]['dietType'],
-            'Remarks'       =>  $data['Remarks']
-        ];
-
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
+        if($student_detail!=null && $student_detail!=""){
+            $student_history =[
+                'StdStudentId'  =>  $data['student'],
+                'date'          =>  $data['date'],
+                'historyFor'    =>  'Student Dietary Change',
+                'previousValue' =>  $student_detail[0]['dietType'],
+                'Remarks'       =>  $data['Remarks']
+            ];
+    
+            if($data['action_type']=='add'){
+                $history = $this->insertStudentHistory($student_history);
+            }
+    
+            $new_data = [
+                'dietType' => $data['diet']
+            ];
+    
+            $student = Student::where('id',$data['student'])->update($new_data);
         }
-
-        $new_data = [
-            'dietType' => $data['diet']
-        ];
-
-        $student = Student::where('id',$data['student'])->update($new_data);
+        else{
+            return null;
+        }
+        
         return $this->successResponse($student);
     }
 
     private function updateStudentNeedyDetails($data){
         $student_detail=Student::where('id',$data['student'])->get('isNeedy')->toArray();
-        
-        $student_history =[
-            'StdStudentId'  =>  $data['student'],
-            'date'          =>  $data['date'],
-            'historyFor'    =>  'Student Needy Status Change',
-            'previousValue' =>  $student_detail[0]['isNeedy'],
-            'Remarks'       =>  $data['Remarks']
-        ];
-
-        if($data['action_type']=='add'){
-            $history = $this->insertStudentHistory($student_history);
+        if( $student_detail!=null &&  $student_detail!=""){
+            $student_history =[
+                'StdStudentId'  =>  $data['student'],
+                'date'          =>  $data['date'],
+                'historyFor'    =>  'Student Needy Status Change',
+                'previousValue' =>  $student_detail[0]['isNeedy'],
+                'Remarks'       =>  $data['Remarks']
+            ];
+    
+            if($data['action_type']=='add'){
+                $history = $this->insertStudentHistory($student_history);
+            }
+    
+            $new_data = [
+                'isNeedy' => $data['needy']
+            ];
+            $student = Student::where('id',$data['student'])->update($new_data);
         }
-
-        $new_data = [
-            'isNeedy' => $data['needy']
-        ];
-
-        $student = Student::where('id',$data['student'])->update($new_data);
+        else{
+            return null;
+        }
         return $this->successResponse($student);
     }
 
     private function updateStudentScholarshipDetails($data){
+        $student_history =[
+            'StdStudentId'  =>  $data['student'],
+            'date'          =>  $data['date'],
+            'historyFor'    =>  'Student Scholarship Details',
+            'Remarks'       =>  $data['Remarks']
+        ];
+        if($data['action_type']=='add'){
+            $history = $this->insertStudentHistory($student_history);
+        }
         $students = Student::where('id',$data['id'])->update($data);
         return $students;
     }
@@ -390,6 +438,19 @@ class StudentUpdateController extends Controller
 
         return $students;
     }
+      private function loadStudentScholarshipDetails($org_id){
+        $students = DB::table('std_student')
+                ->join('std_student_history', 'std_student.id', '=', 'std_student_history.StdStudentId')
+                ->select('std_student.Name','std_student.student_code', 'std_student.CidNo','std_student_history.id', 'std_student_history.StdStudentId',
+                            'std_student_history.historyFor','std_student_history.previousValue', 'std_student_history.Remarks', 'std_student_history.date')
+                ->where('std_student.OrgOrganizationId', $org_id)
+                ->where('historyFor', 'Student Scholarship Details')
+                ->get();
+
+        return $students;
+    }
+
+
 
     private function loadStudentContactDetails($org_id){
 

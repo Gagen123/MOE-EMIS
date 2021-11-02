@@ -173,6 +173,7 @@ export default {
             axios.get(uri)
             .then(response =>{
                 let data = response.data;
+                // alert(JSON.stringify(data));
                 this.newAdmissionList = data;
             });
         },

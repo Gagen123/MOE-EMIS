@@ -594,5 +594,10 @@ class StudentAdmissionController extends Controller{
         return $response_data;
     }
 
+    public function loadSupplementaryStudent(){
+        $student_list = $this->apiService->listData('emis/students/admission/getstudentGuardainClassDetails');
+        return $student_list;
+    }
+
 
 }
