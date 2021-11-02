@@ -21,14 +21,14 @@ class StudentAwardController extends Controller
     public function saveStudentAward(Request $request){
         
         $rules = [
-            'student'       => 'required',
+            // 'student'       => 'required',
             'award_given_by'=> 'required',
             'award_type_id' => 'required',
             'place'         => 'required',
             'date'          => 'required'
         ];
         $customMessages = [
-            'student.required'          => 'This field is required',
+            // 'student.required'          => 'This field is required',
             'award_given_by.required'   => 'This field is required',
             'award_type_id.required'    => 'This field is required',
             'place.required'            => 'This field is required',
