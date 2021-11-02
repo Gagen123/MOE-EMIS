@@ -9,8 +9,8 @@
                                 <span class="card-title pt-2 mb-0">
                                         <b>Student Disciplinary Actions Taken</b>
                                     </span>
-                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('ActionTakenList')"><i class="fa fa-list"></i> List</button>
-                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('ActionTakenAdd')"><i class="fa fa-plus"></i> Add New</button>
+                                <button type="button" class="btn btn-flat bg-secondary btn-sm"  @click="loadpage('action_taken_list')"><i class="fa fa-list"></i> List</button>
+                                <button type="button" class="btn btn-flat bg-blue btn-sm" @click="loadpage('action_taken_add')"><i class="fa fa-plus"></i> Add New</button>
                             </div>
                             <router-view></router-view>
                         </div>
