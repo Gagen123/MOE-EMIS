@@ -57,14 +57,14 @@ class StudentAwardController extends Controller
 
         }else{
             $rules = [
-                // 'student'       => 'required',
+                'student'       => 'required',
                 'award_given_by'=> 'required',
                 'award_type_id' => 'required',
                 'place'         => 'required',
                 'date'          => 'required'
             ];
             $customMessages = [
-                // 'student.required'          => 'This field is required',
+                'student.required'          => 'This field is required',
                 'award_given_by.required'   => 'This field is required',
                 'award_type_id.required'    => 'This field is required',
                 'place.required'            => 'This field is required',
@@ -84,17 +84,9 @@ class StudentAwardController extends Controller
                 'recordtype'        =>  $request->recordtype, 
                 //'user_id'           => $this->user_id() 
             ];
-              try{
                 $response_data = CeaStudentAward::create($data);
-            }
-            catch(GuzzleHttp\Exception\ClientException $e){
-                return $e;
-            }
                 return $response_data;
 
-            
-            //   dd( $data);  
-            // $response_data = CeaStudentAward::create($data);
          }
 
         return $this->successResponse($response_data, Response::HTTP_CREATED);
